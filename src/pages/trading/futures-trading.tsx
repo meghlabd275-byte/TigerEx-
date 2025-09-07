@@ -4,11 +4,17 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  DollarSign, 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
   BarChart3,
   Wallet,
   ArrowUpDown,
@@ -18,7 +24,7 @@ import {
   AlertTriangle,
   Target,
   Zap,
-  Shield
+  Shield,
 } from 'lucide-react';
 
 interface FuturesContract {
@@ -54,7 +60,13 @@ interface FuturesOrder {
   id: string;
   symbol: string;
   side: 'buy' | 'sell';
-  type: 'market' | 'limit' | 'stop' | 'take_profit' | 'stop_market' | 'take_profit_market';
+  type:
+    | 'market'
+    | 'limit'
+    | 'stop'
+    | 'take_profit'
+    | 'stop_market'
+    | 'take_profit_market';
   quantity: number;
   price?: number;
   stopPrice?: number;
@@ -66,11 +78,14 @@ interface FuturesOrder {
 }
 
 const FuturesTradingPage: React.FC = () => {
-  const [selectedContract, setSelectedContract] = useState<FuturesContract | null>(null);
+  const [selectedContract, setSelectedContract] =
+    useState<FuturesContract | null>(null);
   const [contracts, setContracts] = useState<FuturesContract[]>([]);
   const [positions, setPositions] = useState<FuturesPosition[]>([]);
   const [orders, setOrders] = useState<FuturesOrder[]>([]);
-  const [orderType, setOrderType] = useState<'market' | 'limit' | 'stop' | 'take_profit'>('limit');
+  const [orderType, setOrderType] = useState<
+    'market' | 'limit' | 'stop' | 'take_profit'
+  >('limit');
   const [orderSide, setOrderSide] = useState<'buy' | 'sell'>('buy');
   const [orderQuantity, setOrderQuantity] = useState('');
   const [orderPrice, setOrderPrice] = useState('');
@@ -95,7 +110,7 @@ const FuturesTradingPage: React.FC = () => {
         openInterest: 1234567.89,
         fundingRate: 0.0001,
         nextFundingTime: '2024-01-15T16:00:00Z',
-        maxLeverage: 125
+        maxLeverage: 125,
       },
       {
         symbol: 'ETHUSDT',
@@ -108,7 +123,7 @@ const FuturesTradingPage: React.FC = () => {
         openInterest: 987654.32,
         fundingRate: -0.0002,
         nextFundingTime: '2024-01-15T16:00:00Z',
-        maxLeverage: 100
+        maxLeverage: 100,
       },
       {
         symbol: 'BTCUSD_PERP',
@@ -121,7 +136,7 @@ const FuturesTradingPage: React.FC = () => {
         openInterest: 456789.12,
         fundingRate: 0.0003,
         nextFundingTime: '2024-01-15T16:00:00Z',
-        maxLeverage: 125
+        maxLeverage: 125,
       },
       {
         symbol: 'ADAUSDT',
@@ -134,8 +149,8 @@ const FuturesTradingPage: React.FC = () => {
         openInterest: 123456.78,
         fundingRate: 0.0001,
         nextFundingTime: '2024-01-15T16:00:00Z',
-        maxLeverage: 75
-      }
+        maxLeverage: 75,
+      },
     ];
 
     const mockPositions: FuturesPosition[] = [
@@ -144,29 +159,29 @@ const FuturesTradingPage: React.FC = () => {
         symbol: 'BTCUSDT',
         side: 'long',
         size: 0.5,
-        entryPrice: 44500.00,
+        entryPrice: 44500.0,
         markPrice: 45234.56,
         leverage: 10,
-        margin: 2225.00,
+        margin: 2225.0,
         unrealizedPnl: 367.28,
         roe: 16.51,
-        liquidationPrice: 40050.00,
-        marginRatio: 0.15
+        liquidationPrice: 40050.0,
+        marginRatio: 0.15,
       },
       {
         id: 'pos-002',
         symbol: 'ETHUSDT',
         side: 'short',
         size: 2.0,
-        entryPrice: 2900.00,
+        entryPrice: 2900.0,
         markPrice: 2834.12,
         leverage: 5,
-        margin: 1160.00,
+        margin: 1160.0,
         unrealizedPnl: 131.76,
         roe: 11.36,
-        liquidationPrice: 3480.00,
-        marginRatio: 0.08
-      }
+        liquidationPrice: 3480.0,
+        marginRatio: 0.08,
+      },
     ];
 
     const mockOrders: FuturesOrder[] = [
@@ -176,12 +191,12 @@ const FuturesTradingPage: React.FC = () => {
         side: 'buy',
         type: 'limit',
         quantity: 0.1,
-        price: 44000.00,
+        price: 44000.0,
         filled: 0,
         status: 'pending',
         reduceOnly: false,
         timeInForce: 'GTC',
-        createdAt: '2024-01-15T14:30:00Z'
+        createdAt: '2024-01-15T14:30:00Z',
       },
       {
         id: 'order-002',
@@ -189,13 +204,13 @@ const FuturesTradingPage: React.FC = () => {
         side: 'sell',
         type: 'stop',
         quantity: 1.0,
-        stopPrice: 2750.00,
+        stopPrice: 2750.0,
         filled: 0,
         status: 'pending',
         reduceOnly: true,
         timeInForce: 'GTC',
-        createdAt: '2024-01-15T14:25:00Z'
-      }
+        createdAt: '2024-01-15T14:25:00Z',
+      },
     ];
 
     setContracts(mockContracts);
@@ -214,15 +229,18 @@ const FuturesTradingPage: React.FC = () => {
       type: orderType,
       quantity: parseFloat(orderQuantity),
       price: orderType === 'limit' ? parseFloat(orderPrice) : undefined,
-      stopPrice: (orderType === 'stop' || orderType === 'take_profit') ? parseFloat(stopPrice) : undefined,
+      stopPrice:
+        orderType === 'stop' || orderType === 'take_profit'
+          ? parseFloat(stopPrice)
+          : undefined,
       filled: 0,
       status: 'pending',
       reduceOnly: reduceOnly,
       timeInForce: 'GTC',
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
 
-    setOrders(prev => [newOrder, ...prev]);
+    setOrders((prev) => [newOrder, ...prev]);
     setOrderQuantity('');
     setOrderPrice('');
     setStopPrice('');
@@ -230,14 +248,14 @@ const FuturesTradingPage: React.FC = () => {
   };
 
   const handleClosePosition = (positionId: string) => {
-    setPositions(prev => prev.filter(pos => pos.id !== positionId));
+    setPositions((prev) => prev.filter((pos) => pos.id !== positionId));
     alert(`Position ${positionId} closed successfully`);
   };
 
   const handleCancelOrder = (orderId: string) => {
-    setOrders(prev => 
-      prev.map(order => 
-        order.id === orderId 
+    setOrders((prev) =>
+      prev.map((order) =>
+        order.id === orderId
           ? { ...order, status: 'cancelled' as const }
           : order
       )
@@ -245,28 +263,27 @@ const FuturesTradingPage: React.FC = () => {
   };
 
   const handleAdjustLeverage = (symbol: string, newLeverage: number) => {
-    setPositions(prev => 
-      prev.map(pos => 
-        pos.symbol === symbol 
-          ? { ...pos, leverage: newLeverage }
-          : pos
+    setPositions((prev) =>
+      prev.map((pos) =>
+        pos.symbol === symbol ? { ...pos, leverage: newLeverage } : pos
       )
     );
     alert(`Leverage for ${symbol} adjusted to ${newLeverage}x`);
   };
 
   const toggleFavorite = (symbol: string) => {
-    setFavorites(prev => 
-      prev.includes(symbol) 
-        ? prev.filter(s => s !== symbol)
+    setFavorites((prev) =>
+      prev.includes(symbol)
+        ? prev.filter((s) => s !== symbol)
         : [...prev, symbol]
     );
   };
 
-  const filteredContracts = contracts.filter(contract => 
-    contract.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    contract.baseAsset.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    contract.quoteAsset.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredContracts = contracts.filter(
+    (contract) =>
+      contract.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contract.baseAsset.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contract.quoteAsset.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const getChangeColor = (change: number) => {
@@ -279,10 +296,14 @@ const FuturesTradingPage: React.FC = () => {
 
   const getOrderStatusColor = (status: string) => {
     switch (status) {
-      case 'filled': return 'bg-green-100 text-green-800';
-      case 'cancelled': return 'bg-red-100 text-red-800';
-      case 'partially_filled': return 'bg-yellow-100 text-yellow-800';
-      default: return 'bg-blue-100 text-blue-800';
+      case 'filled':
+        return 'bg-green-100 text-green-800';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800';
+      case 'partially_filled':
+        return 'bg-yellow-100 text-yellow-800';
+      default:
+        return 'bg-blue-100 text-blue-800';
     }
   };
 
@@ -292,7 +313,10 @@ const FuturesTradingPage: React.FC = () => {
     return 'text-red-600';
   };
 
-  const totalUnrealizedPnl = positions.reduce((sum, pos) => sum + pos.unrealizedPnl, 0);
+  const totalUnrealizedPnl = positions.reduce(
+    (sum, pos) => sum + pos.unrealizedPnl,
+    0
+  );
   const totalMargin = positions.reduce((sum, pos) => sum + pos.margin, 0);
 
   return (
@@ -300,7 +324,9 @@ const FuturesTradingPage: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900">Futures Trading</h1>
-          <p className="text-gray-600 mt-2">Trade cryptocurrency futures with up to 125x leverage</p>
+          <p className="text-gray-600 mt-2">
+            Trade cryptocurrency futures with up to 125x leverage
+          </p>
         </div>
 
         {/* Account Summary */}
@@ -310,7 +336,9 @@ const FuturesTradingPage: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <Wallet className="h-5 w-5 text-blue-600" />
                 <div>
-                  <div className="text-2xl font-bold text-blue-600">$12,345.67</div>
+                  <div className="text-2xl font-bold text-blue-600">
+                    $12,345.67
+                  </div>
                   <div className="text-sm text-gray-600">Futures Balance</div>
                 </div>
               </div>
@@ -322,7 +350,9 @@ const FuturesTradingPage: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <Target className="h-5 w-5 text-purple-600" />
                 <div>
-                  <div className="text-2xl font-bold text-purple-600">${totalMargin.toFixed(2)}</div>
+                  <div className="text-2xl font-bold text-purple-600">
+                    ${totalMargin.toFixed(2)}
+                  </div>
                   <div className="text-sm text-gray-600">Total Margin</div>
                 </div>
               </div>
@@ -334,8 +364,11 @@ const FuturesTradingPage: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <TrendingUp className="h-5 w-5 text-green-600" />
                 <div>
-                  <div className={`text-2xl font-bold ${getPnlColor(totalUnrealizedPnl)}`}>
-                    {totalUnrealizedPnl >= 0 ? '+' : ''}${totalUnrealizedPnl.toFixed(2)}
+                  <div
+                    className={`text-2xl font-bold ${getPnlColor(totalUnrealizedPnl)}`}
+                  >
+                    {totalUnrealizedPnl >= 0 ? '+' : ''}$
+                    {totalUnrealizedPnl.toFixed(2)}
                   </div>
                   <div className="text-sm text-gray-600">Unrealized PnL</div>
                 </div>
@@ -348,7 +381,9 @@ const FuturesTradingPage: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <Shield className="h-5 w-5 text-orange-600" />
                 <div>
-                  <div className="text-2xl font-bold text-orange-600">{positions.length}</div>
+                  <div className="text-2xl font-bold text-orange-600">
+                    {positions.length}
+                  </div>
                   <div className="text-sm text-gray-600">Open Positions</div>
                 </div>
               </div>
@@ -383,8 +418,8 @@ const FuturesTradingPage: React.FC = () => {
                     <div
                       key={contract.symbol}
                       className={`p-3 cursor-pointer hover:bg-gray-50 border-l-2 ${
-                        selectedContract?.symbol === contract.symbol 
-                          ? 'border-l-blue-500 bg-blue-50' 
+                        selectedContract?.symbol === contract.symbol
+                          ? 'border-l-blue-500 bg-blue-50'
                           : 'border-l-transparent'
                       }`}
                       onClick={() => setSelectedContract(contract)}
@@ -397,15 +432,17 @@ const FuturesTradingPage: React.FC = () => {
                               toggleFavorite(contract.symbol);
                             }}
                             className={`${
-                              favorites.includes(contract.symbol) 
-                                ? 'text-yellow-500' 
+                              favorites.includes(contract.symbol)
+                                ? 'text-yellow-500'
                                 : 'text-gray-400'
                             }`}
                           >
                             <Star className="h-4 w-4" />
                           </button>
                           <div>
-                            <div className="font-semibold text-sm">{contract.symbol}</div>
+                            <div className="font-semibold text-sm">
+                              {contract.symbol}
+                            </div>
                             <div className="text-xs text-gray-500">
                               {contract.contractType} • {contract.maxLeverage}x
                             </div>
@@ -415,8 +452,11 @@ const FuturesTradingPage: React.FC = () => {
                           <div className="font-semibold text-sm">
                             ${contract.price.toLocaleString()}
                           </div>
-                          <div className={`text-xs ${getChangeColor(contract.change24h)}`}>
-                            {contract.change24h >= 0 ? '+' : ''}{contract.change24h.toFixed(2)}%
+                          <div
+                            className={`text-xs ${getChangeColor(contract.change24h)}`}
+                          >
+                            {contract.change24h >= 0 ? '+' : ''}
+                            {contract.change24h.toFixed(2)}%
                           </div>
                         </div>
                       </div>
@@ -435,34 +475,47 @@ const FuturesTradingPage: React.FC = () => {
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
-                      <h2 className="text-2xl font-bold">{selectedContract.symbol}</h2>
-                      <Badge variant="outline">{selectedContract.contractType}</Badge>
+                      <h2 className="text-2xl font-bold">
+                        {selectedContract.symbol}
+                      </h2>
+                      <Badge variant="outline">
+                        {selectedContract.contractType}
+                      </Badge>
                       <div className="text-3xl font-bold">
                         ${selectedContract.price.toLocaleString()}
                       </div>
-                      <div className={`flex items-center space-x-1 ${getChangeColor(selectedContract.change24h)}`}>
+                      <div
+                        className={`flex items-center space-x-1 ${getChangeColor(selectedContract.change24h)}`}
+                      >
                         {selectedContract.change24h >= 0 ? (
                           <TrendingUp className="h-5 w-5" />
                         ) : (
                           <TrendingDown className="h-5 w-5" />
                         )}
                         <span className="font-semibold">
-                          {selectedContract.change24h >= 0 ? '+' : ''}{selectedContract.change24h.toFixed(2)}%
+                          {selectedContract.change24h >= 0 ? '+' : ''}
+                          {selectedContract.change24h.toFixed(2)}%
                         </span>
                       </div>
                     </div>
                     <div className="flex items-center space-x-6 text-sm">
                       <div>
                         <div className="text-gray-500">24h Volume</div>
-                        <div className="font-semibold">${(selectedContract.volume24h / 1000000).toFixed(1)}M</div>
+                        <div className="font-semibold">
+                          ${(selectedContract.volume24h / 1000000).toFixed(1)}M
+                        </div>
                       </div>
                       <div>
                         <div className="text-gray-500">Open Interest</div>
-                        <div className="font-semibold">${(selectedContract.openInterest / 1000).toFixed(1)}K</div>
+                        <div className="font-semibold">
+                          ${(selectedContract.openInterest / 1000).toFixed(1)}K
+                        </div>
                       </div>
                       <div>
                         <div className="text-gray-500">Funding Rate</div>
-                        <div className={`font-semibold ${getChangeColor(selectedContract.fundingRate)}`}>
+                        <div
+                          className={`font-semibold ${getChangeColor(selectedContract.fundingRate)}`}
+                        >
                           {(selectedContract.fundingRate * 100).toFixed(4)}%
                         </div>
                       </div>
@@ -479,7 +532,9 @@ const FuturesTradingPage: React.FC = () => {
                   <div className="text-center">
                     <BarChart3 className="h-16 w-16 text-gray-400 mx-auto mb-4" />
                     <div className="text-gray-500">Advanced Futures Chart</div>
-                    <div className="text-sm text-gray-400">Real-time price action and indicators</div>
+                    <div className="text-sm text-gray-400">
+                      Real-time price action and indicators
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -488,8 +543,18 @@ const FuturesTradingPage: React.FC = () => {
             {/* Positions and Orders */}
             <Tabs defaultValue="positions" className="space-y-4">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="positions">Positions ({positions.length})</TabsTrigger>
-                <TabsTrigger value="orders">Orders ({orders.filter(o => o.status !== 'filled' && o.status !== 'cancelled').length})</TabsTrigger>
+                <TabsTrigger value="positions">
+                  Positions ({positions.length})
+                </TabsTrigger>
+                <TabsTrigger value="orders">
+                  Orders (
+                  {
+                    orders.filter(
+                      (o) => o.status !== 'filled' && o.status !== 'cancelled'
+                    ).length
+                  }
+                  )
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="positions">
@@ -497,14 +562,25 @@ const FuturesTradingPage: React.FC = () => {
                   <CardContent className="p-0">
                     <div className="space-y-2">
                       {positions.map((position) => (
-                        <div key={position.id} className="p-4 border-b last:border-b-0 hover:bg-gray-50">
+                        <div
+                          key={position.id}
+                          className="p-4 border-b last:border-b-0 hover:bg-gray-50"
+                        >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-4">
-                              <Badge className={position.side === 'long' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}>
+                              <Badge
+                                className={
+                                  position.side === 'long'
+                                    ? 'bg-green-100 text-green-800'
+                                    : 'bg-red-100 text-red-800'
+                                }
+                              >
                                 {position.side.toUpperCase()}
                               </Badge>
                               <div>
-                                <div className="font-semibold">{position.symbol}</div>
+                                <div className="font-semibold">
+                                  {position.symbol}
+                                </div>
                                 <div className="text-sm text-gray-600">
                                   Size: {position.size} • {position.leverage}x
                                 </div>
@@ -514,42 +590,61 @@ const FuturesTradingPage: React.FC = () => {
                             <div className="flex items-center space-x-6 text-sm">
                               <div className="text-center">
                                 <div className="text-gray-500">Entry Price</div>
-                                <div className="font-semibold">${position.entryPrice.toFixed(2)}</div>
+                                <div className="font-semibold">
+                                  ${position.entryPrice.toFixed(2)}
+                                </div>
                               </div>
                               <div className="text-center">
                                 <div className="text-gray-500">Mark Price</div>
-                                <div className="font-semibold">${position.markPrice.toFixed(2)}</div>
+                                <div className="font-semibold">
+                                  ${position.markPrice.toFixed(2)}
+                                </div>
                               </div>
                               <div className="text-center">
                                 <div className="text-gray-500">PnL</div>
-                                <div className={`font-semibold ${getPnlColor(position.unrealizedPnl)}`}>
-                                  {position.unrealizedPnl >= 0 ? '+' : ''}${position.unrealizedPnl.toFixed(2)}
+                                <div
+                                  className={`font-semibold ${getPnlColor(position.unrealizedPnl)}`}
+                                >
+                                  {position.unrealizedPnl >= 0 ? '+' : ''}$
+                                  {position.unrealizedPnl.toFixed(2)}
                                 </div>
                               </div>
                               <div className="text-center">
                                 <div className="text-gray-500">ROE</div>
-                                <div className={`font-semibold ${getPnlColor(position.roe)}`}>
-                                  {position.roe >= 0 ? '+' : ''}{position.roe.toFixed(2)}%
+                                <div
+                                  className={`font-semibold ${getPnlColor(position.roe)}`}
+                                >
+                                  {position.roe >= 0 ? '+' : ''}
+                                  {position.roe.toFixed(2)}%
                                 </div>
                               </div>
                               <div className="text-center">
-                                <div className="text-gray-500">Margin Ratio</div>
-                                <div className={`font-semibold ${getMarginRatioColor(position.marginRatio)}`}>
+                                <div className="text-gray-500">
+                                  Margin Ratio
+                                </div>
+                                <div
+                                  className={`font-semibold ${getMarginRatioColor(position.marginRatio)}`}
+                                >
                                   {(position.marginRatio * 100).toFixed(2)}%
                                 </div>
                               </div>
                             </div>
 
                             <div className="flex space-x-2">
-                              <Button 
-                                size="sm" 
+                              <Button
+                                size="sm"
                                 variant="outline"
-                                onClick={() => handleAdjustLeverage(position.symbol, position.leverage === 10 ? 20 : 10)}
+                                onClick={() =>
+                                  handleAdjustLeverage(
+                                    position.symbol,
+                                    position.leverage === 10 ? 20 : 10
+                                  )
+                                }
                               >
                                 Adjust Leverage
                               </Button>
-                              <Button 
-                                size="sm" 
+                              <Button
+                                size="sm"
                                 variant="destructive"
                                 onClick={() => handleClosePosition(position.id)}
                               >
@@ -573,56 +668,90 @@ const FuturesTradingPage: React.FC = () => {
                 <Card>
                   <CardContent className="p-0">
                     <div className="space-y-2">
-                      {orders.filter(order => order.status !== 'filled' && order.status !== 'cancelled').map((order) => (
-                        <div key={order.id} className="p-4 border-b last:border-b-0 hover:bg-gray-50">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-4">
-                              <Badge className={order.side === 'buy' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}>
-                                {order.side.toUpperCase()}
-                              </Badge>
-                              <div>
-                                <div className="font-semibold">{order.symbol}</div>
-                                <div className="text-sm text-gray-600">
-                                  {order.type} • {order.quantity} • {order.reduceOnly ? 'Reduce Only' : 'Open'}
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="flex items-center space-x-6 text-sm">
-                              <div className="text-center">
-                                <div className="text-gray-500">Quantity</div>
-                                <div className="font-semibold">{order.quantity}</div>
-                              </div>
-                              {order.price && (
-                                <div className="text-center">
-                                  <div className="text-gray-500">Price</div>
-                                  <div className="font-semibold">${order.price.toFixed(2)}</div>
-                                </div>
-                              )}
-                              {order.stopPrice && (
-                                <div className="text-center">
-                                  <div className="text-gray-500">Stop Price</div>
-                                  <div className="font-semibold">${order.stopPrice.toFixed(2)}</div>
-                                </div>
-                              )}
-                              <div className="text-center">
-                                <Badge className={getOrderStatusColor(order.status)}>
-                                  {order.status.replace('_', ' ')}
+                      {orders
+                        .filter(
+                          (order) =>
+                            order.status !== 'filled' &&
+                            order.status !== 'cancelled'
+                        )
+                        .map((order) => (
+                          <div
+                            key={order.id}
+                            className="p-4 border-b last:border-b-0 hover:bg-gray-50"
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-4">
+                                <Badge
+                                  className={
+                                    order.side === 'buy'
+                                      ? 'bg-green-100 text-green-800'
+                                      : 'bg-red-100 text-red-800'
+                                  }
+                                >
+                                  {order.side.toUpperCase()}
                                 </Badge>
+                                <div>
+                                  <div className="font-semibold">
+                                    {order.symbol}
+                                  </div>
+                                  <div className="text-sm text-gray-600">
+                                    {order.type} • {order.quantity} •{' '}
+                                    {order.reduceOnly ? 'Reduce Only' : 'Open'}
+                                  </div>
+                                </div>
                               </div>
-                            </div>
 
-                            <Button 
-                              size="sm" 
-                              variant="outline"
-                              onClick={() => handleCancelOrder(order.id)}
-                            >
-                              Cancel
-                            </Button>
+                              <div className="flex items-center space-x-6 text-sm">
+                                <div className="text-center">
+                                  <div className="text-gray-500">Quantity</div>
+                                  <div className="font-semibold">
+                                    {order.quantity}
+                                  </div>
+                                </div>
+                                {order.price && (
+                                  <div className="text-center">
+                                    <div className="text-gray-500">Price</div>
+                                    <div className="font-semibold">
+                                      ${order.price.toFixed(2)}
+                                    </div>
+                                  </div>
+                                )}
+                                {order.stopPrice && (
+                                  <div className="text-center">
+                                    <div className="text-gray-500">
+                                      Stop Price
+                                    </div>
+                                    <div className="font-semibold">
+                                      ${order.stopPrice.toFixed(2)}
+                                    </div>
+                                  </div>
+                                )}
+                                <div className="text-center">
+                                  <Badge
+                                    className={getOrderStatusColor(
+                                      order.status
+                                    )}
+                                  >
+                                    {order.status.replace('_', ' ')}
+                                  </Badge>
+                                </div>
+                              </div>
+
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleCancelOrder(order.id)}
+                              >
+                                Cancel
+                              </Button>
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                      {orders.filter(order => order.status !== 'filled' && order.status !== 'cancelled').length === 0 && (
+                        ))}
+                      {orders.filter(
+                        (order) =>
+                          order.status !== 'filled' &&
+                          order.status !== 'cancelled'
+                      ).length === 0 && (
                         <div className="p-8 text-center text-gray-500">
                           No open orders
                         </div>
@@ -642,14 +771,26 @@ const FuturesTradingPage: React.FC = () => {
                 <CardTitle className="text-lg">Place Order</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Tabs value={orderSide} onValueChange={(value) => setOrderSide(value as 'buy' | 'sell')}>
+                <Tabs
+                  value={orderSide}
+                  onValueChange={(value) =>
+                    setOrderSide(value as 'buy' | 'sell')
+                  }
+                >
                   <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="buy" className="text-green-600">Long</TabsTrigger>
-                    <TabsTrigger value="sell" className="text-red-600">Short</TabsTrigger>
+                    <TabsTrigger value="buy" className="text-green-600">
+                      Long
+                    </TabsTrigger>
+                    <TabsTrigger value="sell" className="text-red-600">
+                      Short
+                    </TabsTrigger>
                   </TabsList>
                 </Tabs>
 
-                <Select value={orderType} onValueChange={(value) => setOrderType(value as any)}>
+                <Select
+                  value={orderType}
+                  onValueChange={(value) => setOrderType(value as any)}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -661,9 +802,13 @@ const FuturesTradingPage: React.FC = () => {
                   </SelectContent>
                 </Select>
 
-                {(orderType === 'limit' || orderType === 'stop' || orderType === 'take_profit') && (
+                {(orderType === 'limit' ||
+                  orderType === 'stop' ||
+                  orderType === 'take_profit') && (
                   <div>
-                    <label className="block text-sm font-medium mb-1">Price (USDT)</label>
+                    <label className="block text-sm font-medium mb-1">
+                      Price (USDT)
+                    </label>
                     <Input
                       type="number"
                       placeholder="0.00"
@@ -675,7 +820,9 @@ const FuturesTradingPage: React.FC = () => {
 
                 {(orderType === 'stop' || orderType === 'take_profit') && (
                   <div>
-                    <label className="block text-sm font-medium mb-1">Stop Price (USDT)</label>
+                    <label className="block text-sm font-medium mb-1">
+                      Stop Price (USDT)
+                    </label>
                     <Input
                       type="number"
                       placeholder="0.00"
@@ -698,7 +845,9 @@ const FuturesTradingPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-1">Leverage: {leverage}x</label>
+                  <label className="block text-sm font-medium mb-1">
+                    Leverage: {leverage}x
+                  </label>
                   <input
                     type="range"
                     min="1"
@@ -728,24 +877,30 @@ const FuturesTradingPage: React.FC = () => {
                   <div className="flex justify-between">
                     <span>Margin Required:</span>
                     <span>
-                      {orderQuantity && orderPrice 
+                      {orderQuantity && orderPrice
                         ? `${((parseFloat(orderQuantity) * parseFloat(orderPrice)) / leverage).toFixed(2)} USDT`
-                        : '0.00 USDT'
-                      }
+                        : '0.00 USDT'}
                     </span>
                   </div>
                 </div>
 
-                <Button 
+                <Button
                   className={`w-full ${
-                    orderSide === 'buy' 
-                      ? 'bg-green-600 hover:bg-green-700' 
+                    orderSide === 'buy'
+                      ? 'bg-green-600 hover:bg-green-700'
                       : 'bg-red-600 hover:bg-red-700'
                   }`}
                   onClick={handlePlaceOrder}
-                  disabled={!orderQuantity || ((orderType === 'limit' || orderType === 'stop' || orderType === 'take_profit') && !orderPrice)}
+                  disabled={
+                    !orderQuantity ||
+                    ((orderType === 'limit' ||
+                      orderType === 'stop' ||
+                      orderType === 'take_profit') &&
+                      !orderPrice)
+                  }
                 >
-                  {orderSide === 'buy' ? 'Open Long' : 'Open Short'} {selectedContract?.baseAsset}
+                  {orderSide === 'buy' ? 'Open Long' : 'Open Short'}{' '}
+                  {selectedContract?.baseAsset}
                 </Button>
               </CardContent>
             </Card>
@@ -765,17 +920,25 @@ const FuturesTradingPage: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Total Margin</span>
-                  <span className="font-semibold">${totalMargin.toFixed(2)}</span>
+                  <span className="font-semibold">
+                    ${totalMargin.toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Unrealized PnL</span>
-                  <span className={`font-semibold ${getPnlColor(totalUnrealizedPnl)}`}>
-                    {totalUnrealizedPnl >= 0 ? '+' : ''}${totalUnrealizedPnl.toFixed(2)}
+                  <span
+                    className={`font-semibold ${getPnlColor(totalUnrealizedPnl)}`}
+                  >
+                    {totalUnrealizedPnl >= 0 ? '+' : ''}$
+                    {totalUnrealizedPnl.toFixed(2)}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Margin Mode</span>
-                  <Select value={marginType} onValueChange={(value) => setMarginType(value as any)}>
+                  <Select
+                    value={marginType}
+                    onValueChange={(value) => setMarginType(value as any)}
+                  >
                     <SelectTrigger className="w-24 h-6">
                       <SelectValue />
                     </SelectTrigger>
@@ -799,7 +962,10 @@ const FuturesTradingPage: React.FC = () => {
                   <AlertTriangle className="h-5 w-5 text-orange-600 mt-0.5" />
                   <div className="text-sm text-orange-800">
                     <div className="font-semibold mb-1">Risk Warning</div>
-                    <div>Futures trading involves substantial risk of loss. Only trade with funds you can afford to lose.</div>
+                    <div>
+                      Futures trading involves substantial risk of loss. Only
+                      trade with funds you can afford to lose.
+                    </div>
                   </div>
                 </div>
               </CardContent>

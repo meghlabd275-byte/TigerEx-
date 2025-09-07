@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  TrendingUpIcon, 
-  ShieldCheckIcon, 
-  GlobeAltIcon, 
+import {
+  TrendingUpIcon,
+  ShieldCheckIcon,
+  GlobeAltIcon,
   CurrencyDollarIcon,
   ChartBarIcon,
   CogIcon,
@@ -13,7 +13,7 @@ import {
   LightningBoltIcon,
   StarIcon,
   ArrowRightIcon,
-  PlayIcon
+  PlayIcon,
 } from '@heroicons/react/24/outline';
 
 interface CryptoPrice {
@@ -25,108 +25,138 @@ interface CryptoPrice {
 
 const BinanceStyleLanding: React.FC = () => {
   const [cryptoPrices, setCryptoPrices] = useState<CryptoPrice[]>([
-    { symbol: 'BTC/USDT', price: '43,250.00', change: '+1,250.00', changePercent: '+2.98%' },
-    { symbol: 'ETH/USDT', price: '2,650.00', change: '+85.50', changePercent: '+3.34%' },
-    { symbol: 'BNB/USDT', price: '315.80', change: '+12.30', changePercent: '+4.05%' },
-    { symbol: 'SOL/USDT', price: '98.45', change: '+5.20', changePercent: '+5.58%' },
-    { symbol: 'ADA/USDT', price: '0.4850', change: '+0.0250', changePercent: '+5.43%' },
-    { symbol: 'MATIC/USDT', price: '0.8920', change: '+0.0420', changePercent: '+4.94%' },
+    {
+      symbol: 'BTC/USDT',
+      price: '43,250.00',
+      change: '+1,250.00',
+      changePercent: '+2.98%',
+    },
+    {
+      symbol: 'ETH/USDT',
+      price: '2,650.00',
+      change: '+85.50',
+      changePercent: '+3.34%',
+    },
+    {
+      symbol: 'BNB/USDT',
+      price: '315.80',
+      change: '+12.30',
+      changePercent: '+4.05%',
+    },
+    {
+      symbol: 'SOL/USDT',
+      price: '98.45',
+      change: '+5.20',
+      changePercent: '+5.58%',
+    },
+    {
+      symbol: 'ADA/USDT',
+      price: '0.4850',
+      change: '+0.0250',
+      changePercent: '+5.43%',
+    },
+    {
+      symbol: 'MATIC/USDT',
+      price: '0.8920',
+      change: '+0.0420',
+      changePercent: '+4.94%',
+    },
   ]);
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const heroSlides = [
     {
-      title: "Trade Crypto Like a Pro",
-      subtitle: "Access 2000+ trading pairs with ultra-low fees",
-      image: "/images/hero-trading.jpg",
-      cta: "Start Trading"
+      title: 'Trade Crypto Like a Pro',
+      subtitle: 'Access 2000+ trading pairs with ultra-low fees',
+      image: '/images/hero-trading.jpg',
+      cta: 'Start Trading',
     },
     {
-      title: "Earn Up to 20% APY",
-      subtitle: "Flexible savings and staking rewards",
-      image: "/images/hero-earn.jpg",
-      cta: "Start Earning"
+      title: 'Earn Up to 20% APY',
+      subtitle: 'Flexible savings and staking rewards',
+      image: '/images/hero-earn.jpg',
+      cta: 'Start Earning',
     },
     {
-      title: "Copy Top Traders",
-      subtitle: "Follow successful strategies automatically",
-      image: "/images/hero-copy.jpg",
-      cta: "Copy Trade"
-    }
+      title: 'Copy Top Traders',
+      subtitle: 'Follow successful strategies automatically',
+      image: '/images/hero-copy.jpg',
+      cta: 'Copy Trade',
+    },
   ];
 
   const tradingFeatures = [
     {
       icon: <TrendingUpIcon className="w-8 h-8" />,
-      title: "Spot Trading",
-      description: "Trade 2000+ crypto pairs with advanced order types",
-      link: "/trade/spot"
+      title: 'Spot Trading',
+      description: 'Trade 2000+ crypto pairs with advanced order types',
+      link: '/trade/spot',
     },
     {
       icon: <ChartBarIcon className="w-8 h-8" />,
-      title: "Futures Trading",
-      description: "USD-M & COIN-M perpetuals with up to 125x leverage",
-      link: "/trade/futures"
+      title: 'Futures Trading',
+      description: 'USD-M & COIN-M perpetuals with up to 125x leverage',
+      link: '/trade/futures',
     },
     {
       icon: <CurrencyDollarIcon className="w-8 h-8" />,
-      title: "Margin Trading",
-      description: "Cross & isolated margin trading with portfolio margin",
-      link: "/trade/margin"
+      title: 'Margin Trading',
+      description: 'Cross & isolated margin trading with portfolio margin',
+      link: '/trade/margin',
     },
     {
       icon: <UserGroupIcon className="w-8 h-8" />,
-      title: "Copy Trading",
-      description: "Follow top traders and copy their strategies",
-      link: "/copy-trading"
+      title: 'Copy Trading',
+      description: 'Follow top traders and copy their strategies',
+      link: '/copy-trading',
     },
     {
       icon: <GlobeAltIcon className="w-8 h-8" />,
-      title: "P2P Trading",
-      description: "Buy & sell crypto with 25+ payment methods",
-      link: "/p2p"
+      title: 'P2P Trading',
+      description: 'Buy & sell crypto with 25+ payment methods',
+      link: '/p2p',
     },
     {
       icon: <StarIcon className="w-8 h-8" />,
-      title: "Options Trading",
-      description: "European & American options with Greeks",
-      link: "/trade/options"
-    }
+      title: 'Options Trading',
+      description: 'European & American options with Greeks',
+      link: '/trade/options',
+    },
   ];
 
   const earnProducts = [
     {
-      title: "Flexible Savings",
-      apy: "Up to 8%",
-      description: "Earn interest on your crypto holdings",
-      risk: "Low Risk"
+      title: 'Flexible Savings',
+      apy: 'Up to 8%',
+      description: 'Earn interest on your crypto holdings',
+      risk: 'Low Risk',
     },
     {
-      title: "Fixed Savings",
-      apy: "Up to 12%",
-      description: "Lock your crypto for higher returns",
-      risk: "Low Risk"
+      title: 'Fixed Savings',
+      apy: 'Up to 12%',
+      description: 'Lock your crypto for higher returns',
+      risk: 'Low Risk',
     },
     {
-      title: "DeFi Staking",
-      apy: "Up to 20%",
-      description: "Stake popular PoS tokens",
-      risk: "Medium Risk"
+      title: 'DeFi Staking',
+      apy: 'Up to 20%',
+      description: 'Stake popular PoS tokens',
+      risk: 'Medium Risk',
     },
     {
-      title: "Liquidity Farming",
-      apy: "Up to 50%",
-      description: "Provide liquidity to earn rewards",
-      risk: "High Risk"
-    }
+      title: 'Liquidity Farming',
+      apy: 'Up to 50%',
+      description: 'Provide liquidity to earn rewards',
+      risk: 'High Risk',
+    },
   ];
 
   const platformStats = [
-    { label: "Registered Users", value: "150M+" },
-    { label: "Countries Served", value: "180+" },
-    { label: "Trading Pairs", value: "2000+" },
-    { label: "24h Volume", value: "$50B+" }
+    { label: 'Registered Users', value: '150M+' },
+    { label: 'Countries Served', value: '180+' },
+    { label: 'Trading Pairs', value: '2000+' },
+    { label: '24h Volume', value: '$50B+' },
   ];
 
   useEffect(() => {
@@ -142,10 +172,17 @@ const BinanceStyleLanding: React.FC = () => {
       <div className="bg-yellow-400 dark:bg-yellow-500 py-2 overflow-hidden">
         <div className="flex animate-scroll">
           {cryptoPrices.map((crypto, index) => (
-            <div key={index} className="flex items-center space-x-4 mx-8 whitespace-nowrap">
-              <span className="font-semibold text-gray-900">{crypto.symbol}</span>
+            <div
+              key={index}
+              className="flex items-center space-x-4 mx-8 whitespace-nowrap"
+            >
+              <span className="font-semibold text-gray-900">
+                {crypto.symbol}
+              </span>
               <span className="font-bold text-gray-900">{crypto.price}</span>
-              <span className="text-green-600 font-medium">{crypto.changePercent}</span>
+              <span className="text-green-600 font-medium">
+                {crypto.changePercent}
+              </span>
             </div>
           ))}
         </div>
@@ -189,16 +226,24 @@ const BinanceStyleLanding: React.FC = () => {
                   </h3>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600 dark:text-gray-400">BTC/USDT</span>
+                      <span className="text-gray-600 dark:text-gray-400">
+                        BTC/USDT
+                      </span>
                       <div className="text-right">
-                        <div className="font-bold text-gray-900 dark:text-white">$43,250.00</div>
+                        <div className="font-bold text-gray-900 dark:text-white">
+                          $43,250.00
+                        </div>
                         <div className="text-green-500 text-sm">+2.98%</div>
                       </div>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600 dark:text-gray-400">ETH/USDT</span>
+                      <span className="text-gray-600 dark:text-gray-400">
+                        ETH/USDT
+                      </span>
                       <div className="text-right">
-                        <div className="font-bold text-gray-900 dark:text-white">$2,650.00</div>
+                        <div className="font-bold text-gray-900 dark:text-white">
+                          $2,650.00
+                        </div>
                         <div className="text-green-500 text-sm">+3.34%</div>
                       </div>
                     </div>
@@ -245,7 +290,8 @@ const BinanceStyleLanding: React.FC = () => {
               Complete Trading Suite
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-              Access all the tools you need to trade, earn, and grow your crypto portfolio
+              Access all the tools you need to trade, earn, and grow your crypto
+              portfolio
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -283,7 +329,8 @@ const BinanceStyleLanding: React.FC = () => {
               Earn Crypto Rewards
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-              Put your crypto to work and earn passive income with our range of earning products
+              Put your crypto to work and earn passive income with our range of
+              earning products
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -299,11 +346,15 @@ const BinanceStyleLanding: React.FC = () => {
                   <h3 className="text-lg font-bold text-gray-900 dark:text-white">
                     {product.title}
                   </h3>
-                  <span className={`px-2 py-1 rounded text-xs font-medium ${
-                    product.risk === 'Low Risk' ? 'bg-green-100 text-green-800' :
-                    product.risk === 'Medium Risk' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
-                  }`}>
+                  <span
+                    className={`px-2 py-1 rounded text-xs font-medium ${
+                      product.risk === 'Low Risk'
+                        ? 'bg-green-100 text-green-800'
+                        : product.risk === 'Medium Risk'
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-red-100 text-red-800'
+                    }`}
+                  >
                     {product.risk}
                   </span>
                 </div>
@@ -342,7 +393,8 @@ const BinanceStyleLanding: React.FC = () => {
                       Bank-Level Security
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400">
-                      95% of funds stored in cold storage with multi-signature protection
+                      95% of funds stored in cold storage with multi-signature
+                      protection
                     </p>
                   </div>
                 </div>
@@ -390,16 +442,28 @@ const BinanceStyleLanding: React.FC = () => {
                 </div>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-700">
-                    <span className="text-gray-600 dark:text-gray-400">Cold Storage</span>
-                    <span className="font-semibold text-gray-900 dark:text-white">95%</span>
+                    <span className="text-gray-600 dark:text-gray-400">
+                      Cold Storage
+                    </span>
+                    <span className="font-semibold text-gray-900 dark:text-white">
+                      95%
+                    </span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-700">
-                    <span className="text-gray-600 dark:text-gray-400">Uptime</span>
-                    <span className="font-semibold text-gray-900 dark:text-white">99.99%</span>
+                    <span className="text-gray-600 dark:text-gray-400">
+                      Uptime
+                    </span>
+                    <span className="font-semibold text-gray-900 dark:text-white">
+                      99.99%
+                    </span>
                   </div>
                   <div className="flex justify-between items-center py-2">
-                    <span className="text-gray-600 dark:text-gray-400">Response Time</span>
-                    <span className="font-semibold text-gray-900 dark:text-white">0.3ms</span>
+                    <span className="text-gray-600 dark:text-gray-400">
+                      Response Time
+                    </span>
+                    <span className="font-semibold text-gray-900 dark:text-white">
+                      0.3ms
+                    </span>
                   </div>
                 </div>
               </div>
@@ -420,7 +484,8 @@ const BinanceStyleLanding: React.FC = () => {
               Start Your Crypto Journey Today
             </h2>
             <p className="text-xl text-white opacity-90 mb-8 max-w-2xl mx-auto">
-              Join millions of users worldwide and experience the future of cryptocurrency trading
+              Join millions of users worldwide and experience the future of
+              cryptocurrency trading
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button className="bg-white text-yellow-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors">

@@ -5,10 +5,10 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { 
-  Coins, 
-  Plus, 
-  Search, 
+import {
+  Coins,
+  Plus,
+  Search,
   Eye,
   CheckCircle,
   XCircle,
@@ -21,7 +21,7 @@ import {
   Star,
   Globe,
   Shield,
-  Zap
+  Zap,
 } from 'lucide-react';
 
 interface TokenApplication {
@@ -35,7 +35,14 @@ interface TokenApplication {
   totalSupply: number;
   circulatingSupply: number;
   marketCap: number;
-  category: 'defi' | 'gaming' | 'nft' | 'infrastructure' | 'meme' | 'utility' | 'other';
+  category:
+    | 'defi'
+    | 'gaming'
+    | 'nft'
+    | 'infrastructure'
+    | 'meme'
+    | 'utility'
+    | 'other';
   status: 'submitted' | 'under_review' | 'approved' | 'rejected' | 'listed';
   submittedBy: string;
   submittedAt: string;
@@ -80,7 +87,8 @@ interface ListingCriteria {
 const ListingManagerDashboard: React.FC = () => {
   const [applications, setApplications] = useState<TokenApplication[]>([]);
   const [criteria, setCriteria] = useState<ListingCriteria[]>([]);
-  const [selectedApplication, setSelectedApplication] = useState<TokenApplication | null>(null);
+  const [selectedApplication, setSelectedApplication] =
+    useState<TokenApplication | null>(null);
   const [selectedTab, setSelectedTab] = useState('overview');
   const [searchTerm, setSearchTerm] = useState('');
   const [reviewNotes, setReviewNotes] = useState('');
@@ -108,26 +116,26 @@ const ListingManagerDashboard: React.FC = () => {
           whitepaper: 'whitepaper.pdf',
           audit: 'audit_report.pdf',
           legalOpinion: 'legal_opinion.pdf',
-          teamKyc: 'team_kyc.pdf'
+          teamKyc: 'team_kyc.pdf',
         },
         socialMedia: {
           twitter: '@defiprotocol',
           telegram: 't.me/defiprotocol',
           discord: 'discord.gg/defiprotocol',
-          medium: '@defiprotocol'
+          medium: '@defiprotocol',
         },
         teamInfo: {
           teamSize: 15,
           foundedYear: 2022,
-          headquarters: 'Singapore'
+          headquarters: 'Singapore',
         },
         technicalInfo: {
           consensusAlgorithm: 'Proof of Stake',
           blockTime: 12,
-          tps: 1000
+          tps: 1000,
         },
         riskScore: 25,
-        complianceScore: 85
+        complianceScore: 85,
       },
       {
         id: 'app-002',
@@ -147,20 +155,20 @@ const ListingManagerDashboard: React.FC = () => {
         listingFee: 30000,
         documents: {
           whitepaper: 'gaming_whitepaper.pdf',
-          audit: 'security_audit.pdf'
+          audit: 'security_audit.pdf',
         },
         socialMedia: {
           twitter: '@gaminguniverse',
           telegram: 't.me/gaminguniverse',
-          discord: 'discord.gg/gaminguniverse'
+          discord: 'discord.gg/gaminguniverse',
         },
         teamInfo: {
           teamSize: 25,
           foundedYear: 2021,
-          headquarters: 'United States'
+          headquarters: 'United States',
         },
         riskScore: 35,
-        complianceScore: 75
+        complianceScore: 75,
       },
       {
         id: 'app-003',
@@ -184,27 +192,27 @@ const ListingManagerDashboard: React.FC = () => {
           whitepaper: 'infra_whitepaper.pdf',
           audit: 'comprehensive_audit.pdf',
           legalOpinion: 'legal_compliance.pdf',
-          teamKyc: 'team_verification.pdf'
+          teamKyc: 'team_verification.pdf',
         },
         socialMedia: {
           twitter: '@infranetwork',
           telegram: 't.me/infranetwork',
           discord: 'discord.gg/infranetwork',
-          medium: '@infranetwork'
+          medium: '@infranetwork',
         },
         teamInfo: {
           teamSize: 50,
           foundedYear: 2020,
-          headquarters: 'Switzerland'
+          headquarters: 'Switzerland',
         },
         technicalInfo: {
           consensusAlgorithm: 'Delegated Proof of Stake',
           blockTime: 3,
-          tps: 10000
+          tps: 10000,
         },
         riskScore: 15,
-        complianceScore: 95
-      }
+        complianceScore: 95,
+      },
     ];
 
     const mockCriteria: ListingCriteria[] = [
@@ -214,7 +222,7 @@ const ListingManagerDashboard: React.FC = () => {
         description: 'Evaluation of technical merit and innovation',
         weight: 25,
         minScore: 70,
-        category: 'technical'
+        category: 'technical',
       },
       {
         id: 'criteria-002',
@@ -222,7 +230,7 @@ const ListingManagerDashboard: React.FC = () => {
         description: 'Regulatory compliance and legal documentation',
         weight: 30,
         minScore: 80,
-        category: 'legal'
+        category: 'legal',
       },
       {
         id: 'criteria-003',
@@ -230,7 +238,7 @@ const ListingManagerDashboard: React.FC = () => {
         description: 'Viability and sustainability of business model',
         weight: 20,
         minScore: 65,
-        category: 'business'
+        category: 'business',
       },
       {
         id: 'criteria-004',
@@ -238,7 +246,7 @@ const ListingManagerDashboard: React.FC = () => {
         description: 'Community engagement and adoption metrics',
         weight: 15,
         minScore: 60,
-        category: 'community'
+        category: 'community',
       },
       {
         id: 'criteria-005',
@@ -246,8 +254,8 @@ const ListingManagerDashboard: React.FC = () => {
         description: 'Team experience and track record',
         weight: 10,
         minScore: 70,
-        category: 'business'
-      }
+        category: 'business',
+      },
     ];
 
     setApplications(mockApplications);
@@ -255,14 +263,14 @@ const ListingManagerDashboard: React.FC = () => {
   }, []);
 
   const handleApproveApplication = (applicationId: string) => {
-    setApplications(prev => 
-      prev.map(app => 
-        app.id === applicationId 
-          ? { 
-              ...app, 
+    setApplications((prev) =>
+      prev.map((app) =>
+        app.id === applicationId
+          ? {
+              ...app,
               status: 'approved',
               reviewedBy: 'Listing Manager',
-              reviewedAt: new Date().toISOString()
+              reviewedAt: new Date().toISOString(),
             }
           : app
       )
@@ -273,14 +281,14 @@ const ListingManagerDashboard: React.FC = () => {
   const handleRejectApplication = (applicationId: string) => {
     const reason = prompt('Please provide a reason for rejection:');
     if (reason) {
-      setApplications(prev => 
-        prev.map(app => 
-          app.id === applicationId 
-            ? { 
-                ...app, 
+      setApplications((prev) =>
+        prev.map((app) =>
+          app.id === applicationId
+            ? {
+                ...app,
                 status: 'rejected',
                 reviewedBy: 'Listing Manager',
-                reviewedAt: new Date().toISOString()
+                reviewedAt: new Date().toISOString(),
               }
             : app
         )
@@ -290,11 +298,9 @@ const ListingManagerDashboard: React.FC = () => {
   };
 
   const handleListToken = (applicationId: string) => {
-    setApplications(prev => 
-      prev.map(app => 
-        app.id === applicationId 
-          ? { ...app, status: 'listed' }
-          : app
+    setApplications((prev) =>
+      prev.map((app) =>
+        app.id === applicationId ? { ...app, status: 'listed' } : app
       )
     );
     alert(`Token ${applicationId} has been listed successfully`);
@@ -302,24 +308,37 @@ const ListingManagerDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'submitted': return 'bg-blue-100 text-blue-800';
-      case 'under_review': return 'bg-yellow-100 text-yellow-800';
-      case 'approved': return 'bg-green-100 text-green-800';
-      case 'rejected': return 'bg-red-100 text-red-800';
-      case 'listed': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'submitted':
+        return 'bg-blue-100 text-blue-800';
+      case 'under_review':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'approved':
+        return 'bg-green-100 text-green-800';
+      case 'rejected':
+        return 'bg-red-100 text-red-800';
+      case 'listed':
+        return 'bg-purple-100 text-purple-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'defi': return 'bg-blue-100 text-blue-800';
-      case 'gaming': return 'bg-green-100 text-green-800';
-      case 'nft': return 'bg-purple-100 text-purple-800';
-      case 'infrastructure': return 'bg-orange-100 text-orange-800';
-      case 'meme': return 'bg-pink-100 text-pink-800';
-      case 'utility': return 'bg-indigo-100 text-indigo-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'defi':
+        return 'bg-blue-100 text-blue-800';
+      case 'gaming':
+        return 'bg-green-100 text-green-800';
+      case 'nft':
+        return 'bg-purple-100 text-purple-800';
+      case 'infrastructure':
+        return 'bg-orange-100 text-orange-800';
+      case 'meme':
+        return 'bg-pink-100 text-pink-800';
+      case 'utility':
+        return 'bg-indigo-100 text-indigo-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -329,30 +348,44 @@ const ListingManagerDashboard: React.FC = () => {
     return 'text-red-600';
   };
 
-  const filteredApplications = applications.filter(app => 
-    app.tokenName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    app.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    app.submittedBy.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    app.category.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredApplications = applications.filter(
+    (app) =>
+      app.tokenName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      app.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      app.submittedBy.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      app.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const stats = {
     totalApplications: applications.length,
-    pendingReview: applications.filter(a => a.status === 'submitted' || a.status === 'under_review').length,
-    approved: applications.filter(a => a.status === 'approved').length,
-    listed: applications.filter(a => a.status === 'listed').length,
-    rejected: applications.filter(a => a.status === 'rejected').length,
-    totalListingFees: applications.reduce((sum, app) => sum + app.listingFee, 0),
-    avgRiskScore: applications.reduce((sum, app) => sum + app.riskScore, 0) / applications.length,
-    avgComplianceScore: applications.reduce((sum, app) => sum + app.complianceScore, 0) / applications.length
+    pendingReview: applications.filter(
+      (a) => a.status === 'submitted' || a.status === 'under_review'
+    ).length,
+    approved: applications.filter((a) => a.status === 'approved').length,
+    listed: applications.filter((a) => a.status === 'listed').length,
+    rejected: applications.filter((a) => a.status === 'rejected').length,
+    totalListingFees: applications.reduce(
+      (sum, app) => sum + app.listingFee,
+      0
+    ),
+    avgRiskScore:
+      applications.reduce((sum, app) => sum + app.riskScore, 0) /
+      applications.length,
+    avgComplianceScore:
+      applications.reduce((sum, app) => sum + app.complianceScore, 0) /
+      applications.length,
   };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Listing Manager Dashboard</h1>
-          <p className="text-gray-600 mt-2">Manage token listing applications and criteria</p>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Listing Manager Dashboard
+          </h1>
+          <p className="text-gray-600 mt-2">
+            Manage token listing applications and criteria
+          </p>
         </div>
 
         {/* Listing Statistics */}
@@ -362,7 +395,9 @@ const ListingManagerDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <FileText className="h-5 w-5 text-blue-600" />
                 <div>
-                  <div className="text-2xl font-bold text-blue-600">{stats.totalApplications}</div>
+                  <div className="text-2xl font-bold text-blue-600">
+                    {stats.totalApplications}
+                  </div>
                   <div className="text-sm text-gray-600">Total Apps</div>
                 </div>
               </div>
@@ -374,7 +409,9 @@ const ListingManagerDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <Clock className="h-5 w-5 text-yellow-600" />
                 <div>
-                  <div className="text-2xl font-bold text-yellow-600">{stats.pendingReview}</div>
+                  <div className="text-2xl font-bold text-yellow-600">
+                    {stats.pendingReview}
+                  </div>
                   <div className="text-sm text-gray-600">Pending</div>
                 </div>
               </div>
@@ -386,7 +423,9 @@ const ListingManagerDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <CheckCircle className="h-5 w-5 text-green-600" />
                 <div>
-                  <div className="text-2xl font-bold text-green-600">{stats.approved}</div>
+                  <div className="text-2xl font-bold text-green-600">
+                    {stats.approved}
+                  </div>
                   <div className="text-sm text-gray-600">Approved</div>
                 </div>
               </div>
@@ -398,7 +437,9 @@ const ListingManagerDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <Coins className="h-5 w-5 text-purple-600" />
                 <div>
-                  <div className="text-2xl font-bold text-purple-600">{stats.listed}</div>
+                  <div className="text-2xl font-bold text-purple-600">
+                    {stats.listed}
+                  </div>
                   <div className="text-sm text-gray-600">Listed</div>
                 </div>
               </div>
@@ -410,7 +451,9 @@ const ListingManagerDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <XCircle className="h-5 w-5 text-red-600" />
                 <div>
-                  <div className="text-2xl font-bold text-red-600">{stats.rejected}</div>
+                  <div className="text-2xl font-bold text-red-600">
+                    {stats.rejected}
+                  </div>
                   <div className="text-sm text-gray-600">Rejected</div>
                 </div>
               </div>
@@ -436,7 +479,9 @@ const ListingManagerDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <Shield className="h-5 w-5 text-orange-600" />
                 <div>
-                  <div className="text-2xl font-bold text-orange-600">{stats.avgRiskScore.toFixed(0)}</div>
+                  <div className="text-2xl font-bold text-orange-600">
+                    {stats.avgRiskScore.toFixed(0)}
+                  </div>
                   <div className="text-sm text-gray-600">Avg Risk</div>
                 </div>
               </div>
@@ -448,7 +493,9 @@ const ListingManagerDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <Star className="h-5 w-5 text-indigo-600" />
                 <div>
-                  <div className="text-2xl font-bold text-indigo-600">{stats.avgComplianceScore.toFixed(0)}</div>
+                  <div className="text-2xl font-bold text-indigo-600">
+                    {stats.avgComplianceScore.toFixed(0)}
+                  </div>
                   <div className="text-sm text-gray-600">Avg Compliance</div>
                 </div>
               </div>
@@ -456,10 +503,16 @@ const ListingManagerDashboard: React.FC = () => {
           </Card>
         </div>
 
-        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
+        <Tabs
+          value={selectedTab}
+          onValueChange={setSelectedTab}
+          className="space-y-6"
+        >
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="applications">Applications ({stats.totalApplications})</TabsTrigger>
+            <TabsTrigger value="applications">
+              Applications ({stats.totalApplications})
+            </TabsTrigger>
             <TabsTrigger value="criteria">Listing Criteria</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
           </TabsList>
@@ -473,14 +526,19 @@ const ListingManagerDashboard: React.FC = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {applications.slice(0, 5).map((app) => (
-                      <div key={app.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div
+                        key={app.id}
+                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                      >
                         <div className="flex items-center space-x-3">
                           <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
                             {app.symbol.charAt(0)}
                           </div>
                           <div>
                             <div className="font-semibold">{app.tokenName}</div>
-                            <div className="text-sm text-gray-600">{app.symbol} • {app.submittedBy}</div>
+                            <div className="text-sm text-gray-600">
+                              {app.symbol} • {app.submittedBy}
+                            </div>
                           </div>
                         </div>
                         <div className="text-right">
@@ -503,25 +561,44 @@ const ListingManagerDashboard: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {['defi', 'gaming', 'infrastructure', 'nft', 'utility', 'meme'].map((category) => {
-                      const count = applications.filter(app => app.category === category).length;
-                      const percentage = applications.length > 0 ? (count / applications.length) * 100 : 0;
+                    {[
+                      'defi',
+                      'gaming',
+                      'infrastructure',
+                      'nft',
+                      'utility',
+                      'meme',
+                    ].map((category) => {
+                      const count = applications.filter(
+                        (app) => app.category === category
+                      ).length;
+                      const percentage =
+                        applications.length > 0
+                          ? (count / applications.length) * 100
+                          : 0;
                       return (
-                        <div key={category} className="flex items-center justify-between">
+                        <div
+                          key={category}
+                          className="flex items-center justify-between"
+                        >
                           <div className="flex items-center space-x-2">
                             <Badge className={getCategoryColor(category)}>
                               {category.toUpperCase()}
                             </Badge>
-                            <span className="text-sm text-gray-600">{count} applications</span>
+                            <span className="text-sm text-gray-600">
+                              {count} applications
+                            </span>
                           </div>
                           <div className="flex items-center space-x-2">
                             <div className="w-20 bg-gray-200 rounded-full h-2">
-                              <div 
-                                className="bg-blue-600 h-2 rounded-full" 
+                              <div
+                                className="bg-blue-600 h-2 rounded-full"
                                 style={{ width: `${percentage}%` }}
                               ></div>
                             </div>
-                            <span className="text-sm font-semibold">{percentage.toFixed(1)}%</span>
+                            <span className="text-sm font-semibold">
+                              {percentage.toFixed(1)}%
+                            </span>
                           </div>
                         </div>
                       );
@@ -555,7 +632,10 @@ const ListingManagerDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {filteredApplications.map((app) => (
-                    <Card key={app.id} className="hover:shadow-md transition-shadow">
+                    <Card
+                      key={app.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
@@ -563,19 +643,26 @@ const ListingManagerDashboard: React.FC = () => {
                               {app.symbol.charAt(0)}
                             </div>
                             <div>
-                              <div className="font-semibold text-lg">{app.tokenName} ({app.symbol})</div>
+                              <div className="font-semibold text-lg">
+                                {app.tokenName} ({app.symbol})
+                              </div>
                               <div className="text-sm text-gray-600">
                                 {app.blockchain} • {app.submittedBy}
                               </div>
                               <div className="flex items-center space-x-4 mt-1">
-                                <Badge className={getCategoryColor(app.category)}>
+                                <Badge
+                                  className={getCategoryColor(app.category)}
+                                >
                                   {app.category}
                                 </Badge>
                                 <span className="text-xs text-gray-500">
-                                  Market Cap: ${(app.marketCap / 1000000).toFixed(1)}M
+                                  Market Cap: $
+                                  {(app.marketCap / 1000000).toFixed(1)}M
                                 </span>
                                 <span className="text-xs text-gray-500">
-                                  Supply: {(app.circulatingSupply / 1000000).toFixed(0)}M
+                                  Supply:{' '}
+                                  {(app.circulatingSupply / 1000000).toFixed(0)}
+                                  M
                                 </span>
                               </div>
                             </div>
@@ -586,17 +673,27 @@ const ListingManagerDashboard: React.FC = () => {
                               <div className="text-lg font-bold text-green-600">
                                 ${(app.listingFee / 1000).toFixed(0)}K
                               </div>
-                              <div className="text-xs text-gray-500">Listing Fee</div>
+                              <div className="text-xs text-gray-500">
+                                Listing Fee
+                              </div>
                             </div>
                             <div className="text-center">
-                              <div className={`text-lg font-bold ${getRiskColor(app.riskScore)}`}>
+                              <div
+                                className={`text-lg font-bold ${getRiskColor(app.riskScore)}`}
+                              >
                                 {app.riskScore}
                               </div>
-                              <div className="text-xs text-gray-500">Risk Score</div>
+                              <div className="text-xs text-gray-500">
+                                Risk Score
+                              </div>
                             </div>
                             <div className="text-center">
-                              <div className="text-lg font-bold text-blue-600">{app.complianceScore}</div>
-                              <div className="text-xs text-gray-500">Compliance</div>
+                              <div className="text-lg font-bold text-blue-600">
+                                {app.complianceScore}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                Compliance
+                              </div>
                             </div>
                           </div>
 
@@ -611,35 +708,40 @@ const ListingManagerDashboard: React.FC = () => {
                             </div>
 
                             <div className="flex flex-col space-y-2">
-                              <Button 
-                                size="sm" 
+                              <Button
+                                size="sm"
                                 variant="outline"
                                 onClick={() => setSelectedApplication(app)}
                               >
                                 <Eye className="h-4 w-4 mr-1" />
                                 Review
                               </Button>
-                              {app.status === 'submitted' || app.status === 'under_review' ? (
+                              {app.status === 'submitted' ||
+                              app.status === 'under_review' ? (
                                 <>
-                                  <Button 
+                                  <Button
                                     size="sm"
-                                    onClick={() => handleApproveApplication(app.id)}
+                                    onClick={() =>
+                                      handleApproveApplication(app.id)
+                                    }
                                     className="bg-green-600 hover:bg-green-700"
                                   >
                                     <CheckCircle className="h-4 w-4 mr-1" />
                                     Approve
                                   </Button>
-                                  <Button 
-                                    size="sm" 
+                                  <Button
+                                    size="sm"
                                     variant="destructive"
-                                    onClick={() => handleRejectApplication(app.id)}
+                                    onClick={() =>
+                                      handleRejectApplication(app.id)
+                                    }
                                   >
                                     <XCircle className="h-4 w-4 mr-1" />
                                     Reject
                                   </Button>
                                 </>
                               ) : app.status === 'approved' ? (
-                                <Button 
+                                <Button
                                   size="sm"
                                   onClick={() => handleListToken(app.id)}
                                   className="bg-purple-600 hover:bg-purple-700"
@@ -673,14 +775,23 @@ const ListingManagerDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {criteria.map((criterion) => (
-                    <Card key={criterion.id} className="hover:shadow-md transition-shadow">
+                    <Card
+                      key={criterion.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex-1">
-                            <div className="font-semibold text-lg">{criterion.name}</div>
-                            <div className="text-sm text-gray-600 mt-1">{criterion.description}</div>
+                            <div className="font-semibold text-lg">
+                              {criterion.name}
+                            </div>
+                            <div className="text-sm text-gray-600 mt-1">
+                              {criterion.description}
+                            </div>
                             <div className="flex items-center space-x-4 mt-2">
-                              <Badge className={getCategoryColor(criterion.category)}>
+                              <Badge
+                                className={getCategoryColor(criterion.category)}
+                              >
                                 {criterion.category}
                               </Badge>
                               <span className="text-sm text-gray-500">
@@ -694,12 +805,20 @@ const ListingManagerDashboard: React.FC = () => {
 
                           <div className="flex items-center space-x-4">
                             <div className="text-center">
-                              <div className="text-2xl font-bold text-blue-600">{criterion.weight}%</div>
-                              <div className="text-xs text-gray-500">Weight</div>
+                              <div className="text-2xl font-bold text-blue-600">
+                                {criterion.weight}%
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                Weight
+                              </div>
                             </div>
                             <div className="text-center">
-                              <div className="text-2xl font-bold text-green-600">{criterion.minScore}</div>
-                              <div className="text-xs text-gray-500">Min Score</div>
+                              <div className="text-2xl font-bold text-green-600">
+                                {criterion.minScore}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                Min Score
+                              </div>
                             </div>
                           </div>
 
@@ -730,12 +849,18 @@ const ListingManagerDashboard: React.FC = () => {
                   <div className="space-y-4">
                     <div className="flex justify-between">
                       <span className="text-gray-600">This Month:</span>
-                      <span className="font-semibold">{applications.length} applications</span>
+                      <span className="font-semibold">
+                        {applications.length} applications
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Approval Rate:</span>
                       <span className="font-semibold text-green-600">
-                        {((stats.approved / stats.totalApplications) * 100).toFixed(1)}%
+                        {(
+                          (stats.approved / stats.totalApplications) *
+                          100
+                        ).toFixed(1)}
+                        %
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -760,48 +885,67 @@ const ListingManagerDashboard: React.FC = () => {
                   <div className="space-y-4">
                     <div>
                       <div className="flex justify-between mb-2">
-                        <span className="text-sm font-medium">Low Risk (0-30)</span>
+                        <span className="text-sm font-medium">
+                          Low Risk (0-30)
+                        </span>
                         <span className="text-sm">
-                          {applications.filter(app => app.riskScore < 30).length} tokens
+                          {
+                            applications.filter((app) => app.riskScore < 30)
+                              .length
+                          }{' '}
+                          tokens
                         </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-green-600 h-2 rounded-full" 
-                          style={{ 
-                            width: `${(applications.filter(app => app.riskScore < 30).length / applications.length) * 100}%` 
+                        <div
+                          className="bg-green-600 h-2 rounded-full"
+                          style={{
+                            width: `${(applications.filter((app) => app.riskScore < 30).length / applications.length) * 100}%`,
                           }}
                         ></div>
                       </div>
                     </div>
                     <div>
                       <div className="flex justify-between mb-2">
-                        <span className="text-sm font-medium">Medium Risk (30-60)</span>
+                        <span className="text-sm font-medium">
+                          Medium Risk (30-60)
+                        </span>
                         <span className="text-sm">
-                          {applications.filter(app => app.riskScore >= 30 && app.riskScore < 60).length} tokens
+                          {
+                            applications.filter(
+                              (app) => app.riskScore >= 30 && app.riskScore < 60
+                            ).length
+                          }{' '}
+                          tokens
                         </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-yellow-600 h-2 rounded-full" 
-                          style={{ 
-                            width: `${(applications.filter(app => app.riskScore >= 30 && app.riskScore < 60).length / applications.length) * 100}%` 
+                        <div
+                          className="bg-yellow-600 h-2 rounded-full"
+                          style={{
+                            width: `${(applications.filter((app) => app.riskScore >= 30 && app.riskScore < 60).length / applications.length) * 100}%`,
                           }}
                         ></div>
                       </div>
                     </div>
                     <div>
                       <div className="flex justify-between mb-2">
-                        <span className="text-sm font-medium">High Risk (60+)</span>
+                        <span className="text-sm font-medium">
+                          High Risk (60+)
+                        </span>
                         <span className="text-sm">
-                          {applications.filter(app => app.riskScore >= 60).length} tokens
+                          {
+                            applications.filter((app) => app.riskScore >= 60)
+                              .length
+                          }{' '}
+                          tokens
                         </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-red-600 h-2 rounded-full" 
-                          style={{ 
-                            width: `${(applications.filter(app => app.riskScore >= 60).length / applications.length) * 100}%` 
+                        <div
+                          className="bg-red-600 h-2 rounded-full"
+                          style={{
+                            width: `${(applications.filter((app) => app.riskScore >= 60).length / applications.length) * 100}%`,
                           }}
                         ></div>
                       </div>
@@ -819,7 +963,10 @@ const ListingManagerDashboard: React.FC = () => {
             <div className="bg-white rounded-lg p-6 max-w-6xl max-h-[90vh] overflow-y-auto w-full mx-4">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold">Application Review</h2>
-                <Button variant="outline" onClick={() => setSelectedApplication(null)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setSelectedApplication(null)}
+                >
                   Close
                 </Button>
               </div>
@@ -828,34 +975,77 @@ const ListingManagerDashboard: React.FC = () => {
                 <div>
                   <h3 className="font-semibold mb-4">Token Information</h3>
                   <div className="space-y-3">
-                    <div><strong>Name:</strong> {selectedApplication.tokenName}</div>
-                    <div><strong>Symbol:</strong> {selectedApplication.symbol}</div>
-                    <div><strong>Blockchain:</strong> {selectedApplication.blockchain}</div>
-                    <div><strong>Contract:</strong> {selectedApplication.contractAddress}</div>
-                    <div><strong>Category:</strong> 
-                      <Badge className={`ml-2 ${getCategoryColor(selectedApplication.category)}`}>
+                    <div>
+                      <strong>Name:</strong> {selectedApplication.tokenName}
+                    </div>
+                    <div>
+                      <strong>Symbol:</strong> {selectedApplication.symbol}
+                    </div>
+                    <div>
+                      <strong>Blockchain:</strong>{' '}
+                      {selectedApplication.blockchain}
+                    </div>
+                    <div>
+                      <strong>Contract:</strong>{' '}
+                      {selectedApplication.contractAddress}
+                    </div>
+                    <div>
+                      <strong>Category:</strong>
+                      <Badge
+                        className={`ml-2 ${getCategoryColor(selectedApplication.category)}`}
+                      >
                         {selectedApplication.category}
                       </Badge>
                     </div>
-                    <div><strong>Total Supply:</strong> {selectedApplication.totalSupply.toLocaleString()}</div>
-                    <div><strong>Circulating Supply:</strong> {selectedApplication.circulatingSupply.toLocaleString()}</div>
-                    <div><strong>Market Cap:</strong> ${selectedApplication.marketCap.toLocaleString()}</div>
+                    <div>
+                      <strong>Total Supply:</strong>{' '}
+                      {selectedApplication.totalSupply.toLocaleString()}
+                    </div>
+                    <div>
+                      <strong>Circulating Supply:</strong>{' '}
+                      {selectedApplication.circulatingSupply.toLocaleString()}
+                    </div>
+                    <div>
+                      <strong>Market Cap:</strong> $
+                      {selectedApplication.marketCap.toLocaleString()}
+                    </div>
                   </div>
                 </div>
 
                 <div>
                   <h3 className="font-semibold mb-4">Team & Project Info</h3>
                   <div className="space-y-3">
-                    <div><strong>Team Size:</strong> {selectedApplication.teamInfo.teamSize}</div>
-                    <div><strong>Founded:</strong> {selectedApplication.teamInfo.foundedYear}</div>
-                    <div><strong>Headquarters:</strong> {selectedApplication.teamInfo.headquarters}</div>
-                    <div><strong>Website:</strong> 
-                      <a href={selectedApplication.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline ml-1">
+                    <div>
+                      <strong>Team Size:</strong>{' '}
+                      {selectedApplication.teamInfo.teamSize}
+                    </div>
+                    <div>
+                      <strong>Founded:</strong>{' '}
+                      {selectedApplication.teamInfo.foundedYear}
+                    </div>
+                    <div>
+                      <strong>Headquarters:</strong>{' '}
+                      {selectedApplication.teamInfo.headquarters}
+                    </div>
+                    <div>
+                      <strong>Website:</strong>
+                      <a
+                        href={selectedApplication.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline ml-1"
+                      >
                         {selectedApplication.website}
                       </a>
                     </div>
-                    <div><strong>Whitepaper:</strong> 
-                      <a href={selectedApplication.whitepaper} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline ml-1">
+                    <div>
+                      <strong>Whitepaper:</strong>
+                      <a
+                        href={selectedApplication.whitepaper}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline ml-1"
+                      >
                         View Document
                       </a>
                     </div>
@@ -869,17 +1059,23 @@ const ListingManagerDashboard: React.FC = () => {
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span>Risk Score:</span>
-                      <span className={`font-semibold ${getRiskColor(selectedApplication.riskScore)}`}>
+                      <span
+                        className={`font-semibold ${getRiskColor(selectedApplication.riskScore)}`}
+                      >
                         {selectedApplication.riskScore}/100
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span>Compliance Score:</span>
-                      <span className="font-semibold text-green-600">{selectedApplication.complianceScore}/100</span>
+                      <span className="font-semibold text-green-600">
+                        {selectedApplication.complianceScore}/100
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span>Listing Fee:</span>
-                      <span className="font-semibold">${selectedApplication.listingFee.toLocaleString()}</span>
+                      <span className="font-semibold">
+                        ${selectedApplication.listingFee.toLocaleString()}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -887,15 +1083,22 @@ const ListingManagerDashboard: React.FC = () => {
                 <div>
                   <h3 className="font-semibold mb-4">Documents</h3>
                   <div className="space-y-2">
-                    {Object.entries(selectedApplication.documents).map(([type, filename]) => (
-                      <div key={type} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                        <span className="capitalize">{type.replace(/([A-Z])/g, ' $1')}</span>
-                        <Button size="sm" variant="outline">
-                          <Eye className="h-4 w-4 mr-1" />
-                          View
-                        </Button>
-                      </div>
-                    ))}
+                    {Object.entries(selectedApplication.documents).map(
+                      ([type, filename]) => (
+                        <div
+                          key={type}
+                          className="flex items-center justify-between p-2 bg-gray-50 rounded"
+                        >
+                          <span className="capitalize">
+                            {type.replace(/([A-Z])/g, ' $1')}
+                          </span>
+                          <Button size="sm" variant="outline">
+                            <Eye className="h-4 w-4 mr-1" />
+                            View
+                          </Button>
+                        </div>
+                      )
+                    )}
                   </div>
                 </div>
               </div>
@@ -911,9 +1114,10 @@ const ListingManagerDashboard: React.FC = () => {
               </div>
 
               <div className="flex justify-end space-x-4">
-                {selectedApplication.status === 'submitted' || selectedApplication.status === 'under_review' ? (
+                {selectedApplication.status === 'submitted' ||
+                selectedApplication.status === 'under_review' ? (
                   <>
-                    <Button 
+                    <Button
                       onClick={() => {
                         handleApproveApplication(selectedApplication.id);
                         setSelectedApplication(null);
@@ -923,7 +1127,7 @@ const ListingManagerDashboard: React.FC = () => {
                       <CheckCircle className="h-4 w-4 mr-2" />
                       Approve Application
                     </Button>
-                    <Button 
+                    <Button
                       variant="destructive"
                       onClick={() => {
                         handleRejectApplication(selectedApplication.id);
@@ -935,7 +1139,7 @@ const ListingManagerDashboard: React.FC = () => {
                     </Button>
                   </>
                 ) : selectedApplication.status === 'approved' ? (
-                  <Button 
+                  <Button
                     onClick={() => {
                       handleListToken(selectedApplication.id);
                       setSelectedApplication(null);
@@ -946,9 +1150,7 @@ const ListingManagerDashboard: React.FC = () => {
                     List Token
                   </Button>
                 ) : null}
-                <Button variant="outline">
-                  Request More Info
-                </Button>
+                <Button variant="outline">Request More Info</Button>
               </div>
             </div>
           </div>

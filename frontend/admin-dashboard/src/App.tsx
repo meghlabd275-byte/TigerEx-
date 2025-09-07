@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline, Box } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -190,7 +195,11 @@ const ProtectedRoute: React.FC<{
     return <Navigate to="/login" replace />;
   }
 
-  if (requiredRole && user?.role !== requiredRole && user?.role !== 'super_admin') {
+  if (
+    requiredRole &&
+    user?.role !== requiredRole &&
+    user?.role !== 'super_admin'
+  ) {
     return <Navigate to="/dashboard" replace />;
   }
 
@@ -208,7 +217,11 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-      <Sidebar open={sidebarOpen} onToggle={handleSidebarToggle} userRole={user?.role} />
+      <Sidebar
+        open={sidebarOpen}
+        onToggle={handleSidebarToggle}
+        userRole={user?.role}
+      />
       <Box
         component="main"
         sx={{

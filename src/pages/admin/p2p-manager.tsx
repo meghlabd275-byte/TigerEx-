@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { 
-  Users, 
-  TrendingUp, 
-  AlertTriangle, 
+import {
+  Users,
+  TrendingUp,
+  AlertTriangle,
   Search,
   MessageSquare,
   Shield,
@@ -17,7 +17,7 @@ import {
   Flag,
   DollarSign,
   Eye,
-  Ban
+  Ban,
 } from 'lucide-react';
 
 interface P2POrder {
@@ -82,7 +82,7 @@ const P2PManagerDashboard: React.FC = () => {
         fiatCurrency: 'USD',
         paymentMethod: 'Bank Transfer',
         status: 'active',
-        createdAt: '2024-01-15T10:30:00Z'
+        createdAt: '2024-01-15T10:30:00Z',
       },
       {
         id: 'p2p-002',
@@ -96,8 +96,8 @@ const P2PManagerDashboard: React.FC = () => {
         paymentMethod: 'PayPal',
         status: 'disputed',
         createdAt: '2024-01-14T15:45:00Z',
-        disputeReason: 'Payment not received'
-      }
+        disputeReason: 'Payment not received',
+      },
     ];
 
     const mockDisputes: P2PDispute[] = [
@@ -111,7 +111,7 @@ const P2PManagerDashboard: React.FC = () => {
         reason: 'Payment not received after 2 hours',
         status: 'open',
         createdAt: '2024-01-15T12:00:00Z',
-        priority: 'high'
+        priority: 'high',
       },
       {
         id: 'dispute-002',
@@ -123,8 +123,8 @@ const P2PManagerDashboard: React.FC = () => {
         reason: 'Wrong payment amount sent',
         status: 'investigating',
         createdAt: '2024-01-14T09:30:00Z',
-        priority: 'medium'
-      }
+        priority: 'medium',
+      },
     ];
 
     const mockMerchants: P2PMerchant[] = [
@@ -137,7 +137,7 @@ const P2PManagerDashboard: React.FC = () => {
         totalVolume: 2500000,
         status: 'active',
         verificationLevel: 'premium',
-        joinedAt: '2023-06-15T00:00:00Z'
+        joinedAt: '2023-06-15T00:00:00Z',
       },
       {
         id: 'merchant-002',
@@ -148,8 +148,8 @@ const P2PManagerDashboard: React.FC = () => {
         totalVolume: 1200000,
         status: 'active',
         verificationLevel: 'verified',
-        joinedAt: '2023-08-20T00:00:00Z'
-      }
+        joinedAt: '2023-08-20T00:00:00Z',
+      },
     ];
 
     setOrders(mockOrders);
@@ -157,10 +157,13 @@ const P2PManagerDashboard: React.FC = () => {
     setMerchants(mockMerchants);
   }, []);
 
-  const handleResolveDispute = (disputeId: string, resolution: 'buyer' | 'seller') => {
-    setDisputes(prev => 
-      prev.map(dispute => 
-        dispute.id === disputeId 
+  const handleResolveDispute = (
+    disputeId: string,
+    resolution: 'buyer' | 'seller'
+  ) => {
+    setDisputes((prev) =>
+      prev.map((dispute) =>
+        dispute.id === disputeId
           ? { ...dispute, status: 'resolved' as const }
           : dispute
       )
@@ -171,9 +174,9 @@ const P2PManagerDashboard: React.FC = () => {
   const handleSuspendMerchant = (merchantId: string) => {
     const reason = prompt('Please provide a reason for suspension:');
     if (reason) {
-      setMerchants(prev => 
-        prev.map(merchant => 
-          merchant.id === merchantId 
+      setMerchants((prev) =>
+        prev.map((merchant) =>
+          merchant.id === merchantId
             ? { ...merchant, status: 'suspended' as const }
             : merchant
         )
@@ -185,9 +188,9 @@ const P2PManagerDashboard: React.FC = () => {
   const handleCancelOrder = (orderId: string) => {
     const reason = prompt('Please provide a reason for cancellation:');
     if (reason) {
-      setOrders(prev => 
-        prev.map(order => 
-          order.id === orderId 
+      setOrders((prev) =>
+        prev.map((order) =>
+          order.id === orderId
             ? { ...order, status: 'cancelled' as const }
             : order
         )
@@ -198,41 +201,58 @@ const P2PManagerDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'completed': return 'bg-blue-100 text-blue-800';
-      case 'cancelled': return 'bg-gray-100 text-gray-800';
-      case 'disputed': return 'bg-red-100 text-red-800';
-      case 'suspended': return 'bg-yellow-100 text-yellow-800';
-      case 'banned': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'active':
+        return 'bg-green-100 text-green-800';
+      case 'completed':
+        return 'bg-blue-100 text-blue-800';
+      case 'cancelled':
+        return 'bg-gray-100 text-gray-800';
+      case 'disputed':
+        return 'bg-red-100 text-red-800';
+      case 'suspended':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'banned':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'text-red-600';
-      case 'medium': return 'text-yellow-600';
-      default: return 'text-green-600';
+      case 'high':
+        return 'text-red-600';
+      case 'medium':
+        return 'text-yellow-600';
+      default:
+        return 'text-green-600';
     }
   };
 
   const stats = {
     totalOrders: orders.length,
-    activeOrders: orders.filter(o => o.status === 'active').length,
-    disputedOrders: orders.filter(o => o.status === 'disputed').length,
+    activeOrders: orders.filter((o) => o.status === 'active').length,
+    disputedOrders: orders.filter((o) => o.status === 'disputed').length,
     totalDisputes: disputes.length,
-    openDisputes: disputes.filter(d => d.status === 'open').length,
+    openDisputes: disputes.filter((d) => d.status === 'open').length,
     totalMerchants: merchants.length,
-    activeMerchants: merchants.filter(m => m.status === 'active').length,
-    totalVolume: orders.reduce((sum, order) => sum + (order.amount * order.price), 0)
+    activeMerchants: merchants.filter((m) => m.status === 'active').length,
+    totalVolume: orders.reduce(
+      (sum, order) => sum + order.amount * order.price,
+      0
+    ),
   };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">P2P Manager Dashboard</h1>
-          <p className="text-gray-600 mt-2">Manage peer-to-peer trading operations and disputes</p>
+          <h1 className="text-3xl font-bold text-gray-900">
+            P2P Manager Dashboard
+          </h1>
+          <p className="text-gray-600 mt-2">
+            Manage peer-to-peer trading operations and disputes
+          </p>
         </div>
 
         {/* P2P Statistics */}
@@ -242,7 +262,9 @@ const P2PManagerDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <TrendingUp className="h-5 w-5 text-blue-600" />
                 <div>
-                  <div className="text-2xl font-bold text-blue-600">{stats.activeOrders}</div>
+                  <div className="text-2xl font-bold text-blue-600">
+                    {stats.activeOrders}
+                  </div>
                   <div className="text-sm text-gray-600">Active Orders</div>
                 </div>
               </div>
@@ -254,7 +276,9 @@ const P2PManagerDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <AlertTriangle className="h-5 w-5 text-red-600" />
                 <div>
-                  <div className="text-2xl font-bold text-red-600">{stats.openDisputes}</div>
+                  <div className="text-2xl font-bold text-red-600">
+                    {stats.openDisputes}
+                  </div>
                   <div className="text-sm text-gray-600">Open Disputes</div>
                 </div>
               </div>
@@ -266,7 +290,9 @@ const P2PManagerDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <Users className="h-5 w-5 text-green-600" />
                 <div>
-                  <div className="text-2xl font-bold text-green-600">{stats.activeMerchants}</div>
+                  <div className="text-2xl font-bold text-green-600">
+                    {stats.activeMerchants}
+                  </div>
                   <div className="text-sm text-gray-600">Active Merchants</div>
                 </div>
               </div>
@@ -288,12 +314,22 @@ const P2PManagerDashboard: React.FC = () => {
           </Card>
         </div>
 
-        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
+        <Tabs
+          value={selectedTab}
+          onValueChange={setSelectedTab}
+          className="space-y-6"
+        >
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="orders">Orders ({stats.totalOrders})</TabsTrigger>
-            <TabsTrigger value="disputes">Disputes ({stats.totalDisputes})</TabsTrigger>
-            <TabsTrigger value="merchants">Merchants ({stats.totalMerchants})</TabsTrigger>
+            <TabsTrigger value="orders">
+              Orders ({stats.totalOrders})
+            </TabsTrigger>
+            <TabsTrigger value="disputes">
+              Disputes ({stats.totalDisputes})
+            </TabsTrigger>
+            <TabsTrigger value="merchants">
+              Merchants ({stats.totalMerchants})
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -305,11 +341,15 @@ const P2PManagerDashboard: React.FC = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {orders.slice(0, 5).map((order) => (
-                      <div key={order.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div
+                        key={order.id}
+                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                      >
                         <div>
                           <div className="font-semibold">{order.userName}</div>
                           <div className="text-sm text-gray-600">
-                            {order.type.toUpperCase()} {order.amount} {order.currency}
+                            {order.type.toUpperCase()} {order.amount}{' '}
+                            {order.currency}
                           </div>
                         </div>
                         <Badge className={getStatusColor(order.status)}>
@@ -327,25 +367,45 @@ const P2PManagerDashboard: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {disputes.filter(d => d.priority === 'high').map((dispute) => (
-                      <div key={dispute.id} className="p-3 bg-red-50 border border-red-200 rounded-lg">
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="font-semibold text-red-800">
-                            {dispute.buyerName} vs {dispute.sellerName}
+                    {disputes
+                      .filter((d) => d.priority === 'high')
+                      .map((dispute) => (
+                        <div
+                          key={dispute.id}
+                          className="p-3 bg-red-50 border border-red-200 rounded-lg"
+                        >
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="font-semibold text-red-800">
+                              {dispute.buyerName} vs {dispute.sellerName}
+                            </div>
+                            <Badge className="bg-red-100 text-red-800">
+                              HIGH
+                            </Badge>
                           </div>
-                          <Badge className="bg-red-100 text-red-800">HIGH</Badge>
+                          <div className="text-sm text-red-700">
+                            {dispute.reason}
+                          </div>
+                          <div className="mt-2 space-x-2">
+                            <Button
+                              size="sm"
+                              onClick={() =>
+                                handleResolveDispute(dispute.id, 'buyer')
+                              }
+                            >
+                              Resolve for Buyer
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() =>
+                                handleResolveDispute(dispute.id, 'seller')
+                              }
+                            >
+                              Resolve for Seller
+                            </Button>
+                          </div>
                         </div>
-                        <div className="text-sm text-red-700">{dispute.reason}</div>
-                        <div className="mt-2 space-x-2">
-                          <Button size="sm" onClick={() => handleResolveDispute(dispute.id, 'buyer')}>
-                            Resolve for Buyer
-                          </Button>
-                          <Button size="sm" variant="outline" onClick={() => handleResolveDispute(dispute.id, 'seller')}>
-                            Resolve for Seller
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
+                      ))}
                   </div>
                 </CardContent>
               </Card>
@@ -372,20 +432,31 @@ const P2PManagerDashboard: React.FC = () => {
 
                 <div className="space-y-4">
                   {orders.map((order) => (
-                    <Card key={order.id} className="hover:shadow-md transition-shadow">
+                    <Card
+                      key={order.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
-                            <div className={`w-3 h-3 rounded-full ${
-                              order.type === 'buy' ? 'bg-green-500' : 'bg-red-500'
-                            }`} />
+                            <div
+                              className={`w-3 h-3 rounded-full ${
+                                order.type === 'buy'
+                                  ? 'bg-green-500'
+                                  : 'bg-red-500'
+                              }`}
+                            />
                             <div>
-                              <div className="font-semibold">{order.userName}</div>
+                              <div className="font-semibold">
+                                {order.userName}
+                              </div>
                               <div className="text-sm text-gray-600">
-                                {order.type.toUpperCase()} {order.amount} {order.currency} @ ${order.price}
+                                {order.type.toUpperCase()} {order.amount}{' '}
+                                {order.currency} @ ${order.price}
                               </div>
                               <div className="text-xs text-gray-500">
-                                Payment: {order.paymentMethod} • {order.fiatCurrency}
+                                Payment: {order.paymentMethod} •{' '}
+                                {order.fiatCurrency}
                               </div>
                             </div>
                           </div>
@@ -406,8 +477,8 @@ const P2PManagerDashboard: React.FC = () => {
                                 View
                               </Button>
                               {order.status === 'active' && (
-                                <Button 
-                                  size="sm" 
+                                <Button
+                                  size="sm"
                                   variant="destructive"
                                   onClick={() => handleCancelOrder(order.id)}
                                 >
@@ -416,7 +487,10 @@ const P2PManagerDashboard: React.FC = () => {
                                 </Button>
                               )}
                               {order.status === 'disputed' && (
-                                <Button size="sm" className="bg-yellow-600 hover:bg-yellow-700">
+                                <Button
+                                  size="sm"
+                                  className="bg-yellow-600 hover:bg-yellow-700"
+                                >
                                   <Flag className="h-4 w-4 mr-1" />
                                   Investigate
                                 </Button>
@@ -440,7 +514,10 @@ const P2PManagerDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {disputes.map((dispute) => (
-                    <Card key={dispute.id} className="border-l-4 border-l-red-500">
+                    <Card
+                      key={dispute.id}
+                      className="border-l-4 border-l-red-500"
+                    >
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between mb-4">
                           <div>
@@ -448,11 +525,14 @@ const P2PManagerDashboard: React.FC = () => {
                               {dispute.buyerName} vs {dispute.sellerName}
                             </div>
                             <div className="text-sm text-gray-600">
-                              Order: {dispute.orderId} • {dispute.amount} {dispute.currency}
+                              Order: {dispute.orderId} • {dispute.amount}{' '}
+                              {dispute.currency}
                             </div>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Badge className={`${getPriorityColor(dispute.priority)} bg-opacity-10`}>
+                            <Badge
+                              className={`${getPriorityColor(dispute.priority)} bg-opacity-10`}
+                            >
                               {dispute.priority.toUpperCase()}
                             </Badge>
                             <Badge className={getStatusColor(dispute.status)}>
@@ -462,28 +542,35 @@ const P2PManagerDashboard: React.FC = () => {
                         </div>
 
                         <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-                          <div className="font-medium mb-1">Dispute Reason:</div>
+                          <div className="font-medium mb-1">
+                            Dispute Reason:
+                          </div>
                           <div className="text-gray-700">{dispute.reason}</div>
                         </div>
 
                         <div className="flex items-center justify-between">
                           <div className="text-sm text-gray-500">
-                            Created: {new Date(dispute.createdAt).toLocaleString()}
+                            Created:{' '}
+                            {new Date(dispute.createdAt).toLocaleString()}
                           </div>
-                          
+
                           {dispute.status === 'open' && (
                             <div className="space-x-2">
-                              <Button 
+                              <Button
                                 size="sm"
-                                onClick={() => handleResolveDispute(dispute.id, 'buyer')}
+                                onClick={() =>
+                                  handleResolveDispute(dispute.id, 'buyer')
+                                }
                                 className="bg-green-600 hover:bg-green-700"
                               >
                                 <CheckCircle className="h-4 w-4 mr-1" />
                                 Resolve for Buyer
                               </Button>
-                              <Button 
+                              <Button
                                 size="sm"
-                                onClick={() => handleResolveDispute(dispute.id, 'seller')}
+                                onClick={() =>
+                                  handleResolveDispute(dispute.id, 'seller')
+                                }
                                 className="bg-blue-600 hover:bg-blue-700"
                               >
                                 <CheckCircle className="h-4 w-4 mr-1" />
@@ -512,7 +599,10 @@ const P2PManagerDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {merchants.map((merchant) => (
-                    <Card key={merchant.id} className="hover:shadow-md transition-shadow">
+                    <Card
+                      key={merchant.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
@@ -520,8 +610,12 @@ const P2PManagerDashboard: React.FC = () => {
                               {merchant.userName.charAt(0)}
                             </div>
                             <div>
-                              <div className="font-semibold text-lg">{merchant.userName}</div>
-                              <div className="text-sm text-gray-600">{merchant.email}</div>
+                              <div className="font-semibold text-lg">
+                                {merchant.userName}
+                              </div>
+                              <div className="text-sm text-gray-600">
+                                {merchant.email}
+                              </div>
                               <div className="flex items-center space-x-4 mt-1">
                                 <span className="text-xs text-gray-500">
                                   {merchant.completedOrders} orders
@@ -530,7 +624,8 @@ const P2PManagerDashboard: React.FC = () => {
                                   {merchant.successRate}% success rate
                                 </span>
                                 <span className="text-xs text-gray-500">
-                                  ${merchant.totalVolume.toLocaleString()} volume
+                                  ${merchant.totalVolume.toLocaleString()}{' '}
+                                  volume
                                 </span>
                               </div>
                             </div>
@@ -538,7 +633,9 @@ const P2PManagerDashboard: React.FC = () => {
 
                           <div className="flex items-center space-x-4">
                             <div className="text-right">
-                              <Badge className={getStatusColor(merchant.status)}>
+                              <Badge
+                                className={getStatusColor(merchant.status)}
+                              >
                                 {merchant.status}
                               </Badge>
                               <div className="text-sm text-gray-500 mt-1">
@@ -552,10 +649,12 @@ const P2PManagerDashboard: React.FC = () => {
                                 View Profile
                               </Button>
                               {merchant.status === 'active' && (
-                                <Button 
-                                  size="sm" 
+                                <Button
+                                  size="sm"
                                   variant="destructive"
-                                  onClick={() => handleSuspendMerchant(merchant.id)}
+                                  onClick={() =>
+                                    handleSuspendMerchant(merchant.id)
+                                  }
                                 >
                                   <Ban className="h-4 w-4 mr-1" />
                                   Suspend

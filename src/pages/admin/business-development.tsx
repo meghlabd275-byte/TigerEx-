@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { 
-  Briefcase, 
-  TrendingUp, 
-  Users, 
+import {
+  Briefcase,
+  TrendingUp,
+  Users,
   Globe,
   Search,
   Plus,
@@ -21,7 +21,7 @@ import {
   BarChart3,
   MapPin,
   Phone,
-  Mail
+  Mail,
 } from 'lucide-react';
 
 interface Partnership {
@@ -30,7 +30,13 @@ interface Partnership {
   contactPerson: string;
   email: string;
   phone: string;
-  type: 'exchange' | 'payment' | 'institutional' | 'technology' | 'marketing' | 'regional';
+  type:
+    | 'exchange'
+    | 'payment'
+    | 'institutional'
+    | 'technology'
+    | 'marketing'
+    | 'regional';
   status: 'prospect' | 'negotiating' | 'active' | 'paused' | 'terminated';
   region: string;
   dealValue: number;
@@ -51,7 +57,13 @@ interface Deal {
   dealName: string;
   value: number;
   currency: string;
-  stage: 'lead' | 'qualified' | 'proposal' | 'negotiation' | 'closed_won' | 'closed_lost';
+  stage:
+    | 'lead'
+    | 'qualified'
+    | 'proposal'
+    | 'negotiation'
+    | 'closed_won'
+    | 'closed_lost';
   probability: number;
   expectedCloseDate: string;
   assignedTo: string;
@@ -94,8 +106,8 @@ const BusinessDevelopmentDashboard: React.FC = () => {
         keyMetrics: {
           volume: 50000000,
           users: 150,
-          revenue: 250000
-        }
+          revenue: 250000,
+        },
       },
       {
         id: 'partner-002',
@@ -111,8 +123,8 @@ const BusinessDevelopmentDashboard: React.FC = () => {
         keyMetrics: {
           volume: 25000000,
           users: 5000,
-          revenue: 125000
-        }
+          revenue: 125000,
+        },
       },
       {
         id: 'partner-003',
@@ -130,9 +142,9 @@ const BusinessDevelopmentDashboard: React.FC = () => {
         keyMetrics: {
           volume: 100000000,
           users: 25000,
-          revenue: 500000
-        }
-      }
+          revenue: 500000,
+        },
+      },
     ];
 
     const mockDeals: Deal[] = [
@@ -147,7 +159,7 @@ const BusinessDevelopmentDashboard: React.FC = () => {
         probability: 75,
         expectedCloseDate: '2024-03-15T00:00:00Z',
         assignedTo: 'Alice Cooper',
-        lastActivity: '2024-01-14T10:30:00Z'
+        lastActivity: '2024-01-14T10:30:00Z',
       },
       {
         id: 'deal-002',
@@ -160,7 +172,7 @@ const BusinessDevelopmentDashboard: React.FC = () => {
         probability: 60,
         expectedCloseDate: '2024-02-28T00:00:00Z',
         assignedTo: 'Bob Wilson',
-        lastActivity: '2024-01-13T15:45:00Z'
+        lastActivity: '2024-01-13T15:45:00Z',
       },
       {
         id: 'deal-003',
@@ -173,8 +185,8 @@ const BusinessDevelopmentDashboard: React.FC = () => {
         probability: 40,
         expectedCloseDate: '2024-06-30T00:00:00Z',
         assignedTo: 'Carol Davis',
-        lastActivity: '2024-01-12T09:20:00Z'
-      }
+        lastActivity: '2024-01-12T09:20:00Z',
+      },
     ];
 
     const mockMetrics: BusinessMetric[] = [
@@ -185,7 +197,7 @@ const BusinessDevelopmentDashboard: React.FC = () => {
         target: 1000000,
         unit: 'USD',
         change: 15.2,
-        period: 'Monthly'
+        period: 'Monthly',
       },
       {
         id: 'metric-002',
@@ -194,7 +206,7 @@ const BusinessDevelopmentDashboard: React.FC = () => {
         target: 15,
         unit: 'count',
         change: 9.1,
-        period: 'Quarterly'
+        period: 'Quarterly',
       },
       {
         id: 'metric-003',
@@ -203,7 +215,7 @@ const BusinessDevelopmentDashboard: React.FC = () => {
         target: 50000000,
         unit: 'USD',
         change: 22.5,
-        period: 'Quarterly'
+        period: 'Quarterly',
       },
       {
         id: 'metric-004',
@@ -212,8 +224,8 @@ const BusinessDevelopmentDashboard: React.FC = () => {
         target: 200000000,
         unit: 'USD',
         change: 8.7,
-        period: 'Monthly'
-      }
+        period: 'Monthly',
+      },
     ];
 
     setPartnerships(mockPartnerships);
@@ -234,10 +246,14 @@ const BusinessDevelopmentDashboard: React.FC = () => {
   };
 
   const handleUpdateDealStage = (dealId: string, newStage: string) => {
-    setDeals(prev => 
-      prev.map(deal => 
-        deal.id === dealId 
-          ? { ...deal, stage: newStage as any, lastActivity: new Date().toISOString() }
+    setDeals((prev) =>
+      prev.map((deal) =>
+        deal.id === dealId
+          ? {
+              ...deal,
+              stage: newStage as any,
+              lastActivity: new Date().toISOString(),
+            }
           : deal
       )
     );
@@ -246,61 +262,97 @@ const BusinessDevelopmentDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'negotiating': return 'bg-yellow-100 text-yellow-800';
-      case 'prospect': return 'bg-blue-100 text-blue-800';
-      case 'paused': return 'bg-orange-100 text-orange-800';
-      case 'terminated': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'active':
+        return 'bg-green-100 text-green-800';
+      case 'negotiating':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'prospect':
+        return 'bg-blue-100 text-blue-800';
+      case 'paused':
+        return 'bg-orange-100 text-orange-800';
+      case 'terminated':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'exchange': return 'bg-purple-100 text-purple-800';
-      case 'payment': return 'bg-blue-100 text-blue-800';
-      case 'institutional': return 'bg-green-100 text-green-800';
-      case 'technology': return 'bg-orange-100 text-orange-800';
-      case 'marketing': return 'bg-pink-100 text-pink-800';
-      case 'regional': return 'bg-indigo-100 text-indigo-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'exchange':
+        return 'bg-purple-100 text-purple-800';
+      case 'payment':
+        return 'bg-blue-100 text-blue-800';
+      case 'institutional':
+        return 'bg-green-100 text-green-800';
+      case 'technology':
+        return 'bg-orange-100 text-orange-800';
+      case 'marketing':
+        return 'bg-pink-100 text-pink-800';
+      case 'regional':
+        return 'bg-indigo-100 text-indigo-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getStageColor = (stage: string) => {
     switch (stage) {
-      case 'lead': return 'bg-gray-100 text-gray-800';
-      case 'qualified': return 'bg-blue-100 text-blue-800';
-      case 'proposal': return 'bg-yellow-100 text-yellow-800';
-      case 'negotiation': return 'bg-orange-100 text-orange-800';
-      case 'closed_won': return 'bg-green-100 text-green-800';
-      case 'closed_lost': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'lead':
+        return 'bg-gray-100 text-gray-800';
+      case 'qualified':
+        return 'bg-blue-100 text-blue-800';
+      case 'proposal':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'negotiation':
+        return 'bg-orange-100 text-orange-800';
+      case 'closed_won':
+        return 'bg-green-100 text-green-800';
+      case 'closed_lost':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
-  const filteredPartnerships = partnerships.filter(partnership => 
-    partnership.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    partnership.contactPerson.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    partnership.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    partnership.region.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredPartnerships = partnerships.filter(
+    (partnership) =>
+      partnership.companyName
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      partnership.contactPerson
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      partnership.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      partnership.region.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const stats = {
     totalPartnerships: partnerships.length,
-    activePartnerships: partnerships.filter(p => p.status === 'active').length,
+    activePartnerships: partnerships.filter((p) => p.status === 'active')
+      .length,
     totalDeals: deals.length,
     pipelineValue: deals.reduce((sum, deal) => sum + deal.value, 0),
-    totalRevenue: partnerships.reduce((sum, p) => sum + (p.keyMetrics.revenue || 0), 0),
-    avgDealSize: deals.length > 0 ? deals.reduce((sum, deal) => sum + deal.value, 0) / deals.length : 0
+    totalRevenue: partnerships.reduce(
+      (sum, p) => sum + (p.keyMetrics.revenue || 0),
+      0
+    ),
+    avgDealSize:
+      deals.length > 0
+        ? deals.reduce((sum, deal) => sum + deal.value, 0) / deals.length
+        : 0,
   };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Business Development Dashboard</h1>
-          <p className="text-gray-600 mt-2">Manage partnerships, deals, and strategic relationships</p>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Business Development Dashboard
+          </h1>
+          <p className="text-gray-600 mt-2">
+            Manage partnerships, deals, and strategic relationships
+          </p>
         </div>
 
         {/* Business Development Statistics */}
@@ -310,7 +362,9 @@ const BusinessDevelopmentDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <Handshake className="h-5 w-5 text-blue-600" />
                 <div>
-                  <div className="text-2xl font-bold text-blue-600">{stats.activePartnerships}</div>
+                  <div className="text-2xl font-bold text-blue-600">
+                    {stats.activePartnerships}
+                  </div>
                   <div className="text-sm text-gray-600">Active Partners</div>
                 </div>
               </div>
@@ -322,7 +376,9 @@ const BusinessDevelopmentDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <Target className="h-5 w-5 text-green-600" />
                 <div>
-                  <div className="text-2xl font-bold text-green-600">{stats.totalDeals}</div>
+                  <div className="text-2xl font-bold text-green-600">
+                    {stats.totalDeals}
+                  </div>
                   <div className="text-sm text-gray-600">Active Deals</div>
                 </div>
               </div>
@@ -384,10 +440,16 @@ const BusinessDevelopmentDashboard: React.FC = () => {
           </Card>
         </div>
 
-        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
+        <Tabs
+          value={selectedTab}
+          onValueChange={setSelectedTab}
+          className="space-y-6"
+        >
           <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="partnerships">Partnerships ({stats.totalPartnerships})</TabsTrigger>
+            <TabsTrigger value="partnerships">
+              Partnerships ({stats.totalPartnerships})
+            </TabsTrigger>
             <TabsTrigger value="deals">Deals ({stats.totalDeals})</TabsTrigger>
             <TabsTrigger value="metrics">Metrics</TabsTrigger>
             <TabsTrigger value="regions">Regions</TabsTrigger>
@@ -402,20 +464,27 @@ const BusinessDevelopmentDashboard: React.FC = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {partnerships.slice(0, 5).map((partnership) => (
-                      <div key={partnership.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div
+                        key={partnership.id}
+                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                      >
                         <div className="flex items-center space-x-3">
                           <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
                             {partnership.companyName.charAt(0)}
                           </div>
                           <div>
-                            <div className="font-semibold">{partnership.companyName}</div>
+                            <div className="font-semibold">
+                              {partnership.companyName}
+                            </div>
                             <div className="text-sm text-gray-600">
                               {partnership.contactPerson} • {partnership.region}
                             </div>
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-semibold">${(partnership.dealValue / 1000000).toFixed(1)}M</div>
+                          <div className="font-semibold">
+                            ${(partnership.dealValue / 1000000).toFixed(1)}M
+                          </div>
                           <Badge className={getStatusColor(partnership.status)}>
                             {partnership.status}
                           </Badge>
@@ -433,7 +502,10 @@ const BusinessDevelopmentDashboard: React.FC = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {deals.slice(0, 5).map((deal) => (
-                      <div key={deal.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div
+                        key={deal.id}
+                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                      >
                         <div>
                           <div className="font-semibold">{deal.dealName}</div>
                           <div className="text-sm text-gray-600">
@@ -441,12 +513,16 @@ const BusinessDevelopmentDashboard: React.FC = () => {
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-semibold">${(deal.value / 1000000).toFixed(1)}M</div>
+                          <div className="font-semibold">
+                            ${(deal.value / 1000000).toFixed(1)}M
+                          </div>
                           <div className="flex items-center space-x-2">
                             <Badge className={getStageColor(deal.stage)}>
                               {deal.stage.replace('_', ' ')}
                             </Badge>
-                            <span className="text-sm text-gray-500">{deal.probability}%</span>
+                            <span className="text-sm text-gray-500">
+                              {deal.probability}%
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -480,7 +556,10 @@ const BusinessDevelopmentDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {filteredPartnerships.map((partnership) => (
-                    <Card key={partnership.id} className="hover:shadow-md transition-shadow">
+                    <Card
+                      key={partnership.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
@@ -488,16 +567,24 @@ const BusinessDevelopmentDashboard: React.FC = () => {
                               {partnership.companyName.charAt(0)}
                             </div>
                             <div>
-                              <div className="font-semibold text-lg">{partnership.companyName}</div>
-                              <div className="text-sm text-gray-600">{partnership.description}</div>
+                              <div className="font-semibold text-lg">
+                                {partnership.companyName}
+                              </div>
+                              <div className="text-sm text-gray-600">
+                                {partnership.description}
+                              </div>
                               <div className="flex items-center space-x-4 mt-2">
                                 <div className="flex items-center space-x-1">
                                   <User className="h-4 w-4 text-gray-500" />
-                                  <span className="text-sm">{partnership.contactPerson}</span>
+                                  <span className="text-sm">
+                                    {partnership.contactPerson}
+                                  </span>
                                 </div>
                                 <div className="flex items-center space-x-1">
                                   <MapPin className="h-4 w-4 text-gray-500" />
-                                  <span className="text-sm">{partnership.region}</span>
+                                  <span className="text-sm">
+                                    {partnership.region}
+                                  </span>
                                 </div>
                               </div>
                             </div>
@@ -508,17 +595,26 @@ const BusinessDevelopmentDashboard: React.FC = () => {
                               <div className="text-2xl font-bold text-green-600">
                                 ${(partnership.dealValue / 1000000).toFixed(1)}M
                               </div>
-                              <div className="text-xs text-gray-500">Deal Value</div>
+                              <div className="text-xs text-gray-500">
+                                Deal Value
+                              </div>
                             </div>
                             <div className="text-center">
                               <div className="text-lg font-bold text-blue-600">
-                                ${((partnership.keyMetrics.revenue || 0) / 1000).toFixed(0)}K
+                                $
+                                {(
+                                  (partnership.keyMetrics.revenue || 0) / 1000
+                                ).toFixed(0)}
+                                K
                               </div>
-                              <div className="text-xs text-gray-500">Monthly Revenue</div>
+                              <div className="text-xs text-gray-500">
+                                Monthly Revenue
+                              </div>
                             </div>
                             <div className="text-center">
                               <div className="text-lg font-bold text-purple-600">
-                                {partnership.keyMetrics.users?.toLocaleString() || 0}
+                                {partnership.keyMetrics.users?.toLocaleString() ||
+                                  0}
                               </div>
                               <div className="text-xs text-gray-500">Users</div>
                             </div>
@@ -530,7 +626,9 @@ const BusinessDevelopmentDashboard: React.FC = () => {
                                 {partnership.type}
                               </Badge>
                               <div className="mt-1">
-                                <Badge className={getStatusColor(partnership.status)}>
+                                <Badge
+                                  className={getStatusColor(partnership.status)}
+                                >
                                   {partnership.status}
                                 </Badge>
                               </div>
@@ -541,10 +639,12 @@ const BusinessDevelopmentDashboard: React.FC = () => {
                                 <Eye className="h-4 w-4 mr-1" />
                                 View
                               </Button>
-                              <Button 
-                                size="sm" 
+                              <Button
+                                size="sm"
                                 variant="outline"
-                                onClick={() => handleEditPartnership(partnership.id)}
+                                onClick={() =>
+                                  handleEditPartnership(partnership.id)
+                                }
                               >
                                 <Edit className="h-4 w-4 mr-1" />
                                 Edit
@@ -578,7 +678,10 @@ const BusinessDevelopmentDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {deals.map((deal) => (
-                    <Card key={deal.id} className="hover:shadow-md transition-shadow">
+                    <Card
+                      key={deal.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
@@ -586,14 +689,21 @@ const BusinessDevelopmentDashboard: React.FC = () => {
                               <Target className="h-5 w-5" />
                             </div>
                             <div>
-                              <div className="font-semibold text-lg">{deal.dealName}</div>
-                              <div className="text-sm text-gray-600">{deal.partnerName}</div>
+                              <div className="font-semibold text-lg">
+                                {deal.dealName}
+                              </div>
+                              <div className="text-sm text-gray-600">
+                                {deal.partnerName}
+                              </div>
                               <div className="flex items-center space-x-4 mt-1">
                                 <span className="text-xs text-gray-500">
                                   Assigned to: {deal.assignedTo}
                                 </span>
                                 <span className="text-xs text-gray-500">
-                                  Expected: {new Date(deal.expectedCloseDate).toLocaleDateString()}
+                                  Expected:{' '}
+                                  {new Date(
+                                    deal.expectedCloseDate
+                                  ).toLocaleDateString()}
                                 </span>
                               </div>
                             </div>
@@ -604,11 +714,17 @@ const BusinessDevelopmentDashboard: React.FC = () => {
                               <div className="text-2xl font-bold text-green-600">
                                 ${(deal.value / 1000000).toFixed(1)}M
                               </div>
-                              <div className="text-xs text-gray-500">Deal Value</div>
+                              <div className="text-xs text-gray-500">
+                                Deal Value
+                              </div>
                             </div>
                             <div className="text-center">
-                              <div className="text-lg font-bold text-blue-600">{deal.probability}%</div>
-                              <div className="text-xs text-gray-500">Probability</div>
+                              <div className="text-lg font-bold text-blue-600">
+                                {deal.probability}%
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                Probability
+                              </div>
                             </div>
                           </div>
 
@@ -628,10 +744,12 @@ const BusinessDevelopmentDashboard: React.FC = () => {
                                 <Edit className="h-4 w-4 mr-1" />
                                 Edit
                               </Button>
-                              <select 
+                              <select
                                 className="text-xs border rounded px-2 py-1"
                                 value={deal.stage}
-                                onChange={(e) => handleUpdateDealStage(deal.id, e.target.value)}
+                                onChange={(e) =>
+                                  handleUpdateDealStage(deal.id, e.target.value)
+                                }
                               >
                                 <option value="lead">Lead</option>
                                 <option value="qualified">Qualified</option>
@@ -658,8 +776,15 @@ const BusinessDevelopmentDashboard: React.FC = () => {
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
                       {metric.name}
-                      <Badge className={metric.change >= 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}>
-                        {metric.change >= 0 ? '+' : ''}{metric.change.toFixed(1)}%
+                      <Badge
+                        className={
+                          metric.change >= 0
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'
+                        }
+                      >
+                        {metric.change >= 0 ? '+' : ''}
+                        {metric.change.toFixed(1)}%
                       </Badge>
                     </CardTitle>
                   </CardHeader>
@@ -667,20 +792,36 @@ const BusinessDevelopmentDashboard: React.FC = () => {
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
                         <span className="text-3xl font-bold">
-                          {metric.unit === 'USD' ? '$' : ''}{metric.value.toLocaleString()}{metric.unit === 'count' ? '' : metric.unit === 'USD' ? '' : ` ${metric.unit}`}
+                          {metric.unit === 'USD' ? '$' : ''}
+                          {metric.value.toLocaleString()}
+                          {metric.unit === 'count'
+                            ? ''
+                            : metric.unit === 'USD'
+                              ? ''
+                              : ` ${metric.unit}`}
                         </span>
                         <span className="text-gray-500">
-                          Target: {metric.unit === 'USD' ? '$' : ''}{metric.target.toLocaleString()}{metric.unit === 'count' ? '' : metric.unit === 'USD' ? '' : ` ${metric.unit}`}
+                          Target: {metric.unit === 'USD' ? '$' : ''}
+                          {metric.target.toLocaleString()}
+                          {metric.unit === 'count'
+                            ? ''
+                            : metric.unit === 'USD'
+                              ? ''
+                              : ` ${metric.unit}`}
                         </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-blue-600 h-2 rounded-full" 
-                          style={{ width: `${Math.min((metric.value / metric.target) * 100, 100)}%` }}
+                        <div
+                          className="bg-blue-600 h-2 rounded-full"
+                          style={{
+                            width: `${Math.min((metric.value / metric.target) * 100, 100)}%`,
+                          }}
                         ></div>
                       </div>
                       <div className="text-sm text-gray-600">
-                        {metric.period} • {((metric.value / metric.target) * 100).toFixed(1)}% of target
+                        {metric.period} •{' '}
+                        {((metric.value / metric.target) * 100).toFixed(1)}% of
+                        target
                       </div>
                     </div>
                   </CardContent>
@@ -691,11 +832,26 @@ const BusinessDevelopmentDashboard: React.FC = () => {
 
           <TabsContent value="regions" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {['North America', 'Europe', 'Asia Pacific', 'Latin America', 'Middle East', 'Africa'].map((region) => {
-                const regionPartnerships = partnerships.filter(p => p.region === region);
-                const regionRevenue = regionPartnerships.reduce((sum, p) => sum + (p.keyMetrics.revenue || 0), 0);
-                const regionVolume = regionPartnerships.reduce((sum, p) => sum + (p.keyMetrics.volume || 0), 0);
-                
+              {[
+                'North America',
+                'Europe',
+                'Asia Pacific',
+                'Latin America',
+                'Middle East',
+                'Africa',
+              ].map((region) => {
+                const regionPartnerships = partnerships.filter(
+                  (p) => p.region === region
+                );
+                const regionRevenue = regionPartnerships.reduce(
+                  (sum, p) => sum + (p.keyMetrics.revenue || 0),
+                  0
+                );
+                const regionVolume = regionPartnerships.reduce(
+                  (sum, p) => sum + (p.keyMetrics.volume || 0),
+                  0
+                );
+
                 return (
                   <Card key={region}>
                     <CardHeader>
@@ -708,20 +864,30 @@ const BusinessDevelopmentDashboard: React.FC = () => {
                       <div className="space-y-3">
                         <div className="flex justify-between">
                           <span className="text-gray-600">Partnerships:</span>
-                          <span className="font-semibold">{regionPartnerships.length}</span>
+                          <span className="font-semibold">
+                            {regionPartnerships.length}
+                          </span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-600">Revenue:</span>
-                          <span className="font-semibold">${(regionRevenue / 1000).toFixed(0)}K</span>
+                          <span className="font-semibold">
+                            ${(regionRevenue / 1000).toFixed(0)}K
+                          </span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-600">Volume:</span>
-                          <span className="font-semibold">${(regionVolume / 1000000).toFixed(1)}M</span>
+                          <span className="font-semibold">
+                            ${(regionVolume / 1000000).toFixed(1)}M
+                          </span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-600">Active:</span>
                           <span className="font-semibold text-green-600">
-                            {regionPartnerships.filter(p => p.status === 'active').length}
+                            {
+                              regionPartnerships.filter(
+                                (p) => p.status === 'active'
+                              ).length
+                            }
                           </span>
                         </div>
                       </div>

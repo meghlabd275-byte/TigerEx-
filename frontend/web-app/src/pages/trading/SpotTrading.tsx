@@ -2,13 +2,13 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
-import { 
-  ChartBarIcon, 
-  ArrowUpIcon, 
+import {
+  ChartBarIcon,
+  ArrowUpIcon,
   ArrowDownIcon,
   ClockIcon,
   CurrencyDollarIcon,
-  ScaleIcon
+  ScaleIcon,
 } from '@heroicons/react/24/outline';
 
 // Components
@@ -30,25 +30,32 @@ import { tradingService } from '../../services/tradingService';
 import { marketDataService } from '../../services/marketDataService';
 
 // Types
-import { TradingPair, OrderBook as OrderBookType, Trade, Order } from '../../types/trading';
+import {
+  TradingPair,
+  OrderBook as OrderBookType,
+  Trade,
+  Order,
+} from '../../types/trading';
 
 const SpotTrading: React.FC = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  
+
   // State
   const [selectedPair, setSelectedPair] = useState<string>('BTCUSDT');
   const [chartTimeframe, setChartTimeframe] = useState<string>('1h');
-  const [activeOrderTab, setActiveOrderTab] = useState<'open' | 'history' | 'trades'>('open');
+  const [activeOrderTab, setActiveOrderTab] = useState<
+    'open' | 'history' | 'trades'
+  >('open');
 
   // Custom hooks
-  const { 
-    currentPrice, 
-    priceChange, 
-    priceChangePercent, 
-    volume24h, 
-    high24h, 
-    low24h 
+  const {
+    currentPrice,
+    priceChange,
+    priceChangePercent,
+    volume24h,
+    high24h,
+    low24h,
   } = useTradingPair(selectedPair);
 
   // WebSocket connection for real-time data
@@ -138,9 +145,12 @@ const SpotTrading: React.FC = () => {
     });
 
     socket.on('trade_update', (data) => {
-      queryClient.setQueryData(['recentTrades', selectedPair], (old: Trade[] = []) => {
-        return [data, ...old.slice(0, 49)]; // Keep last 50 trades
-      });
+      queryClient.setQueryData(
+        ['recentTrades', selectedPair],
+        (old: Trade[] = []) => {
+          return [data, ...old.slice(0, 49)]; // Keep last 50 trades
+        }
+      );
     });
 
     socket.on('ticker_update', (data) => {
@@ -187,38 +197,50 @@ const SpotTrading: React.FC = () => {
   }, [socket, isConnected, selectedPair, user, queryClient]);
 
   // Handle order placement
-  const handlePlaceOrder = useCallback((orderData: any) => {
-    placeOrderMutation.mutate({
-      ...orderData,
-      symbol: selectedPair,
-    });
-  }, [placeOrderMutation, selectedPair]);
+  const handlePlaceOrder = useCallback(
+    (orderData: any) => {
+      placeOrderMutation.mutate({
+        ...orderData,
+        symbol: selectedPair,
+      });
+    },
+    [placeOrderMutation, selectedPair]
+  );
 
   // Handle order cancellation
-  const handleCancelOrder = useCallback((orderId: string) => {
-    cancelOrderMutation.mutate(orderId);
-  }, [cancelOrderMutation]);
+  const handleCancelOrder = useCallback(
+    (orderId: string) => {
+      cancelOrderMutation.mutate(orderId);
+    },
+    [cancelOrderMutation]
+  );
 
   // Memoized components for performance
-  const memoizedChart = useMemo(() => (
-    <TradingChart
-      symbol={selectedPair}
-      timeframe={chartTimeframe}
-      onTimeframeChange={setChartTimeframe}
-    />
-  ), [selectedPair, chartTimeframe]);
+  const memoizedChart = useMemo(
+    () => (
+      <TradingChart
+        symbol={selectedPair}
+        timeframe={chartTimeframe}
+        onTimeframeChange={setChartTimeframe}
+      />
+    ),
+    [selectedPair, chartTimeframe]
+  );
 
-  const memoizedOrderBook = useMemo(() => (
-    <OrderBook
-      data={orderBook}
-      loading={orderBookLoading}
-      onPriceClick={(price) => {
-        // Auto-fill price in order form
-        const event = new CustomEvent('autofillPrice', { detail: { price } });
-        window.dispatchEvent(event);
-      }}
-    />
-  ), [orderBook, orderBookLoading]);
+  const memoizedOrderBook = useMemo(
+    () => (
+      <OrderBook
+        data={orderBook}
+        loading={orderBookLoading}
+        onPriceClick={(price) => {
+          // Auto-fill price in order form
+          const event = new CustomEvent('autofillPrice', { detail: { price } });
+          window.dispatchEvent(event);
+        }}
+      />
+    ),
+    [orderBook, orderBookLoading]
+  );
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -231,18 +253,21 @@ const SpotTrading: React.FC = () => {
                 selectedPair={selectedPair}
                 onPairChange={setSelectedPair}
               />
-              
+
               <PriceDisplay
                 price={currentPrice}
                 change={priceChange}
                 changePercent={priceChangePercent}
                 className="text-2xl font-bold"
               />
-              
+
               <div className="flex items-center space-x-4 text-sm text-gray-400">
                 <div className="flex items-center space-x-1">
                   <ChartBarIcon className="w-4 h-4" />
-                  <span>24h Vol: {volume24h?.toLocaleString()} {selectedPair.replace('USDT', '')}</span>
+                  <span>
+                    24h Vol: {volume24h?.toLocaleString()}{' '}
+                    {selectedPair.replace('USDT', '')}
+                  </span>
                 </div>
                 <div className="flex items-center space-x-1">
                   <ArrowUpIcon className="w-4 h-4 text-green-500" />
@@ -256,12 +281,18 @@ const SpotTrading: React.FC = () => {
             </div>
 
             <div className="flex items-center space-x-2">
-              <div className={`flex items-center space-x-1 px-2 py-1 rounded text-xs ${
-                isConnected ? 'bg-green-900/30 text-green-400' : 'bg-red-900/30 text-red-400'
-              }`}>
-                <div className={`w-2 h-2 rounded-full ${
-                  isConnected ? 'bg-green-400' : 'bg-red-400'
-                }`} />
+              <div
+                className={`flex items-center space-x-1 px-2 py-1 rounded text-xs ${
+                  isConnected
+                    ? 'bg-green-900/30 text-green-400'
+                    : 'bg-red-900/30 text-red-400'
+                }`}
+              >
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    isConnected ? 'bg-green-400' : 'bg-red-400'
+                  }`}
+                />
                 <span>{isConnected ? 'Connected' : 'Disconnected'}</span>
               </div>
             </div>
@@ -273,9 +304,7 @@ const SpotTrading: React.FC = () => {
       <div className="flex h-[calc(100vh-80px)]">
         {/* Left Panel - Chart */}
         <div className="flex-1 flex flex-col border-r border-gray-800">
-          <div className="flex-1 p-4">
-            {memoizedChart}
-          </div>
+          <div className="flex-1 p-4">{memoizedChart}</div>
         </div>
 
         {/* Right Panel - Order Book & Trading */}
@@ -287,10 +316,7 @@ const SpotTrading: React.FC = () => {
 
           {/* Recent Trades */}
           <div className="h-64">
-            <TradeHistory
-              data={recentTrades}
-              loading={tradesLoading}
-            />
+            <TradeHistory data={recentTrades} loading={tradesLoading} />
           </div>
         </div>
 
@@ -311,9 +337,22 @@ const SpotTrading: React.FC = () => {
             <div className="border-b border-gray-800">
               <div className="flex">
                 {[
-                  { key: 'open', label: 'Open Orders', count: userOrders?.filter(o => o.status === 'open').length },
-                  { key: 'history', label: 'Order History', count: userOrders?.length },
-                  { key: 'trades', label: 'Trade History', count: userTrades?.length },
+                  {
+                    key: 'open',
+                    label: 'Open Orders',
+                    count: userOrders?.filter((o) => o.status === 'open')
+                      .length,
+                  },
+                  {
+                    key: 'history',
+                    label: 'Order History',
+                    count: userOrders?.length,
+                  },
+                  {
+                    key: 'trades',
+                    label: 'Trade History',
+                    count: userTrades?.length,
+                  },
                 ].map(({ key, label, count }) => (
                   <button
                     key={key}
@@ -338,13 +377,13 @@ const SpotTrading: React.FC = () => {
             <div className="flex-1 overflow-hidden">
               {activeOrderTab === 'open' && (
                 <OpenOrders
-                  orders={userOrders?.filter(o => o.status === 'open') || []}
+                  orders={userOrders?.filter((o) => o.status === 'open') || []}
                   loading={ordersLoading}
                   onCancelOrder={handleCancelOrder}
                   cancelLoading={cancelOrderMutation.isPending}
                 />
               )}
-              
+
               {activeOrderTab === 'history' && (
                 <OpenOrders
                   orders={userOrders || []}
@@ -352,7 +391,7 @@ const SpotTrading: React.FC = () => {
                   showAll
                 />
               )}
-              
+
               {activeOrderTab === 'trades' && (
                 <TradeHistory
                   data={userTrades}
@@ -375,7 +414,7 @@ const SpotTrading: React.FC = () => {
             <span>•</span>
             <span>24h Volume: ${volume24h?.toLocaleString()}</span>
           </div>
-          
+
           <div className="flex items-center space-x-4">
             <span>Server Time: {new Date().toLocaleTimeString()}</span>
             <span>•</span>

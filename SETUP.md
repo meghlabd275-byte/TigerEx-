@@ -5,12 +5,14 @@ This guide will help you set up and run the TigerEx cryptocurrency exchange plat
 ## 📋 Prerequisites
 
 ### System Requirements
+
 - **Operating System**: Linux (Ubuntu 20.04+), macOS (10.15+), or Windows 10+ with WSL2
 - **RAM**: Minimum 8GB, Recommended 16GB+
 - **Storage**: Minimum 50GB free space
 - **CPU**: Multi-core processor (4+ cores recommended)
 
 ### Required Software
+
 - **Docker**: Version 20.10+
 - **Docker Compose**: Version 2.0+
 - **Node.js**: Version 18.0+
@@ -18,6 +20,7 @@ This guide will help you set up and run the TigerEx cryptocurrency exchange plat
 - **Git**: Latest version
 
 ### Optional Tools
+
 - **Go**: Version 1.19+ (for backend development)
 - **Rust**: Version 1.65+ (for trading engine)
 - **Python**: Version 3.9+ (for analytics and scripts)
@@ -27,12 +30,14 @@ This guide will help you set up and run the TigerEx cryptocurrency exchange plat
 ## 🚀 Quick Start
 
 ### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/meghla121/TigerEx.git
 cd TigerEx
 ```
 
 ### 2. Environment Setup
+
 ```bash
 # Copy environment configuration
 cp .env.example .env
@@ -42,12 +47,14 @@ nano .env
 ```
 
 ### 3. Install Dependencies
+
 ```bash
 # Install all project dependencies
 npm run install:all
 ```
 
 ### 4. Start the Platform
+
 ```bash
 # For development environment
 ./scripts/deploy.sh development
@@ -60,6 +67,7 @@ npm run install:all
 ```
 
 ### 5. Access the Platform
+
 - **Web Application**: http://localhost:3000
 - **Admin Dashboard**: http://localhost:3100
 - **Landing Pages**: http://localhost:3200
@@ -101,6 +109,7 @@ SMTP_PASS=your_email_password
 If you prefer to set up services manually:
 
 #### 1. Database Setup
+
 ```bash
 # Start PostgreSQL
 docker-compose up -d postgres
@@ -113,12 +122,14 @@ npm run seed
 ```
 
 #### 2. Cache and Message Queue
+
 ```bash
 # Start Redis and message queues
 docker-compose up -d redis kafka rabbitmq
 ```
 
 #### 3. Backend Services
+
 ```bash
 # Start all backend services
 docker-compose up -d \
@@ -135,6 +146,7 @@ docker-compose up -d \
 ```
 
 #### 4. Frontend Services
+
 ```bash
 # Start frontend applications
 docker-compose up -d \
@@ -144,6 +156,7 @@ docker-compose up -d \
 ```
 
 #### 5. API Gateway
+
 ```bash
 # Start Nginx API gateway
 docker-compose up -d nginx
@@ -154,6 +167,7 @@ docker-compose up -d nginx
 ### Backend Development
 
 #### Go Services (Auth, Wallet, Blockchain)
+
 ```bash
 cd backend/auth-service
 go mod download
@@ -161,6 +175,7 @@ go run main.go
 ```
 
 #### C++ Trading Engine
+
 ```bash
 cd backend/trading-engine
 mkdir build && cd build
@@ -170,6 +185,7 @@ make
 ```
 
 #### Python Services (KYC, Analytics)
+
 ```bash
 cd backend/kyc-service
 pip install -r requirements.txt
@@ -177,6 +193,7 @@ python main.py
 ```
 
 #### Node.js Services (Notification, Admin)
+
 ```bash
 cd backend/notification-service
 npm install
@@ -186,6 +203,7 @@ npm run dev
 ### Frontend Development
 
 #### Web Application (Next.js)
+
 ```bash
 cd frontend/web-app
 npm install
@@ -193,6 +211,7 @@ npm run dev
 ```
 
 #### Admin Dashboard (React)
+
 ```bash
 cd frontend/admin-dashboard
 npm install
@@ -202,12 +221,14 @@ npm start
 ### Mobile Development
 
 #### Android App
+
 ```bash
 cd mobile/android
 ./gradlew assembleDebug
 ```
 
 #### iOS App
+
 ```bash
 cd mobile/ios
 pod install
@@ -217,6 +238,7 @@ open TigerEx.xcworkspace
 ### Blockchain Development
 
 #### Smart Contracts
+
 ```bash
 cd blockchain/smart-contracts
 npm install
@@ -227,26 +249,31 @@ npx hardhat test
 ## 🧪 Testing
 
 ### Run All Tests
+
 ```bash
 npm test
 ```
 
 ### Backend Tests
+
 ```bash
 npm run test:backend
 ```
 
 ### Frontend Tests
+
 ```bash
 npm run test:frontend
 ```
 
 ### Integration Tests
+
 ```bash
 npm run test:integration
 ```
 
 ### Load Testing
+
 ```bash
 npm run test:load
 ```
@@ -254,10 +281,12 @@ npm run test:load
 ## 📊 Monitoring and Logging
 
 ### Access Monitoring Tools
+
 - **Grafana**: http://localhost:3300 (admin/admin123)
 - **Prometheus**: http://localhost:9090
 
 ### View Logs
+
 ```bash
 # View all service logs
 docker-compose logs -f
@@ -268,6 +297,7 @@ docker-compose logs -f trading-engine
 ```
 
 ### Health Checks
+
 ```bash
 # Check service health
 curl http://localhost:8080/health
@@ -281,6 +311,7 @@ curl http://localhost:3003/health  # Wallet service
 ## 🔒 Security Setup
 
 ### SSL Certificates (Production)
+
 ```bash
 # Generate self-signed certificate (for testing)
 mkdir ssl
@@ -292,6 +323,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 ```
 
 ### Firewall Configuration
+
 ```bash
 # Allow necessary ports
 sudo ufw allow 80    # HTTP
@@ -301,6 +333,7 @@ sudo ufw enable
 ```
 
 ### Database Security
+
 ```bash
 # Secure PostgreSQL
 docker-compose exec postgres psql -U tigerex -c "ALTER USER tigerex PASSWORD 'new_secure_password';"
@@ -312,6 +345,7 @@ docker-compose exec redis redis-cli CONFIG SET requirepass "new_redis_password"
 ## 🚀 Production Deployment
 
 ### Server Requirements
+
 - **CPU**: 8+ cores
 - **RAM**: 32GB+
 - **Storage**: 500GB+ SSD
@@ -319,6 +353,7 @@ docker-compose exec redis redis-cli CONFIG SET requirepass "new_redis_password"
 - **OS**: Ubuntu 20.04 LTS
 
 ### Production Setup
+
 ```bash
 # Clone repository
 git clone https://github.com/meghla121/TigerEx.git
@@ -333,6 +368,7 @@ nano .env
 ```
 
 ### Load Balancer Setup (Optional)
+
 ```bash
 # Install HAProxy
 sudo apt install haproxy
@@ -345,6 +381,7 @@ sudo systemctl restart haproxy
 ```
 
 ### Database Backup
+
 ```bash
 # Automated backup script
 crontab -e
@@ -358,6 +395,7 @@ crontab -e
 ### Common Issues
 
 #### Port Conflicts
+
 ```bash
 # Check port usage
 sudo netstat -tulpn | grep :3000
@@ -367,6 +405,7 @@ sudo kill -9 $(sudo lsof -t -i:3000)
 ```
 
 #### Docker Issues
+
 ```bash
 # Clean Docker system
 docker system prune -a
@@ -378,6 +417,7 @@ docker-compose up -d
 ```
 
 #### Database Connection Issues
+
 ```bash
 # Check PostgreSQL status
 docker-compose exec postgres pg_isready -U tigerex
@@ -390,6 +430,7 @@ npm run migrate
 ```
 
 #### Memory Issues
+
 ```bash
 # Check memory usage
 docker stats
@@ -401,6 +442,7 @@ docker stats
 ### Service-Specific Issues
 
 #### Trading Engine Not Starting
+
 ```bash
 # Check C++ dependencies
 cd backend/trading-engine
@@ -411,6 +453,7 @@ make clean && make
 ```
 
 #### Frontend Build Failures
+
 ```bash
 # Clear npm cache
 npm cache clean --force
@@ -421,6 +464,7 @@ npm install
 ```
 
 #### WebSocket Connection Issues
+
 ```bash
 # Check Nginx WebSocket configuration
 docker-compose exec nginx nginx -t
@@ -432,17 +476,20 @@ docker-compose restart nginx
 ## 📚 Additional Resources
 
 ### Documentation
+
 - [API Documentation](./docs/api.md)
 - [Database Schema](./docs/database.md)
 - [Architecture Guide](./docs/architecture.md)
 - [Security Guide](./docs/security.md)
 
 ### Development Tools
+
 - [Postman Collection](./docs/postman-collection.json)
 - [Database Migrations](./scripts/migrations/)
 - [Test Data](./scripts/test-data/)
 
 ### Community
+
 - [GitHub Issues](https://github.com/meghla121/TigerEx/issues)
 - [Discord Server](https://discord.gg/tigerex)
 - [Telegram Group](https://t.me/tigerex)

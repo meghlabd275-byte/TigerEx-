@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { 
-  Server, 
-  Database, 
-  Code, 
+import {
+  Server,
+  Database,
+  Code,
   GitBranch,
   Search,
   Plus,
@@ -26,7 +26,7 @@ import {
   Zap,
   Settings,
   Terminal,
-  Globe
+  Globe,
 } from 'lucide-react';
 
 interface TradingPair {
@@ -103,7 +103,7 @@ const TechnicalTeamDashboard: React.FC = () => {
         price: 45234.56,
         change24h: 2.34,
         createdAt: '2023-01-15T00:00:00Z',
-        lastUpdated: '2024-01-15T10:30:00Z'
+        lastUpdated: '2024-01-15T10:30:00Z',
       },
       {
         id: 'pair-002',
@@ -115,7 +115,7 @@ const TechnicalTeamDashboard: React.FC = () => {
         price: 2834.12,
         change24h: -1.23,
         createdAt: '2023-01-15T00:00:00Z',
-        lastUpdated: '2024-01-15T10:25:00Z'
+        lastUpdated: '2024-01-15T10:25:00Z',
       },
       {
         id: 'pair-003',
@@ -127,8 +127,8 @@ const TechnicalTeamDashboard: React.FC = () => {
         price: 0.4567,
         change24h: 5.67,
         createdAt: '2023-02-01T00:00:00Z',
-        lastUpdated: '2024-01-15T09:15:00Z'
-      }
+        lastUpdated: '2024-01-15T09:15:00Z',
+      },
     ];
 
     const mockServices: SystemService[] = [
@@ -142,7 +142,7 @@ const TechnicalTeamDashboard: React.FC = () => {
         memory: 67.8,
         uptime: '15d 4h 23m',
         version: 'v2.1.3',
-        lastDeployment: '2024-01-10T14:30:00Z'
+        lastDeployment: '2024-01-10T14:30:00Z',
       },
       {
         id: 'service-002',
@@ -154,7 +154,7 @@ const TechnicalTeamDashboard: React.FC = () => {
         memory: 89.1,
         uptime: '12d 8h 45m',
         version: 'v3.2.1',
-        lastDeployment: '2024-01-12T09:15:00Z'
+        lastDeployment: '2024-01-12T09:15:00Z',
       },
       {
         id: 'service-003',
@@ -166,7 +166,7 @@ const TechnicalTeamDashboard: React.FC = () => {
         memory: 76.3,
         uptime: '25d 12h 18m',
         version: 'v14.9',
-        lastDeployment: '2023-12-20T16:45:00Z'
+        lastDeployment: '2023-12-20T16:45:00Z',
       },
       {
         id: 'service-004',
@@ -178,8 +178,8 @@ const TechnicalTeamDashboard: React.FC = () => {
         memory: 45.6,
         uptime: '2h 15m',
         version: 'v7.0.5',
-        lastDeployment: '2024-01-15T08:00:00Z'
-      }
+        lastDeployment: '2024-01-15T08:00:00Z',
+      },
     ];
 
     const mockBlockchains: BlockchainNetwork[] = [
@@ -193,7 +193,7 @@ const TechnicalTeamDashboard: React.FC = () => {
         nodeCount: 3,
         gasPrice: 25.5,
         lastSync: '2024-01-15T10:30:00Z',
-        rpcEndpoint: 'https://mainnet.infura.io/v3/...'
+        rpcEndpoint: 'https://mainnet.infura.io/v3/...',
       },
       {
         id: 'blockchain-002',
@@ -205,7 +205,7 @@ const TechnicalTeamDashboard: React.FC = () => {
         nodeCount: 2,
         gasPrice: 5.2,
         lastSync: '2024-01-15T10:29:45Z',
-        rpcEndpoint: 'https://bsc-dataseed.binance.org/'
+        rpcEndpoint: 'https://bsc-dataseed.binance.org/',
       },
       {
         id: 'blockchain-003',
@@ -217,8 +217,8 @@ const TechnicalTeamDashboard: React.FC = () => {
         nodeCount: 1,
         gasPrice: 30.8,
         lastSync: '2024-01-15T10:25:00Z',
-        rpcEndpoint: 'https://polygon-rpc.com/'
-      }
+        rpcEndpoint: 'https://polygon-rpc.com/',
+      },
     ];
 
     const mockTokenListings: TokenListing[] = [
@@ -230,7 +230,7 @@ const TechnicalTeamDashboard: React.FC = () => {
         blockchain: 'Ethereum',
         status: 'pending',
         submittedBy: 'DeFi Team',
-        submittedAt: '2024-01-14T15:30:00Z'
+        submittedAt: '2024-01-14T15:30:00Z',
       },
       {
         id: 'listing-002',
@@ -242,7 +242,7 @@ const TechnicalTeamDashboard: React.FC = () => {
         submittedBy: 'Gaming Studio',
         submittedAt: '2024-01-13T10:15:00Z',
         reviewedBy: 'Tech Lead',
-        reviewedAt: '2024-01-14T09:30:00Z'
+        reviewedAt: '2024-01-14T09:30:00Z',
       },
       {
         id: 'listing-003',
@@ -255,8 +255,8 @@ const TechnicalTeamDashboard: React.FC = () => {
         submittedAt: '2024-01-12T14:20:00Z',
         reviewedBy: 'Senior Dev',
         reviewedAt: '2024-01-13T11:45:00Z',
-        deploymentTx: '0xdeployment123456789...'
-      }
+        deploymentTx: '0xdeployment123456789...',
+      },
     ];
 
     setTradingPairs(mockTradingPairs);
@@ -270,13 +270,13 @@ const TechnicalTeamDashboard: React.FC = () => {
   };
 
   const handleTogglePairStatus = (pairId: string) => {
-    setTradingPairs(prev => 
-      prev.map(pair => 
-        pair.id === pairId 
-          ? { 
-              ...pair, 
+    setTradingPairs((prev) =>
+      prev.map((pair) =>
+        pair.id === pairId
+          ? {
+              ...pair,
               status: pair.status === 'active' ? 'inactive' : 'active',
-              lastUpdated: new Date().toISOString()
+              lastUpdated: new Date().toISOString(),
             }
           : pair
       )
@@ -284,14 +284,14 @@ const TechnicalTeamDashboard: React.FC = () => {
   };
 
   const handleRestartService = (serviceId: string) => {
-    setServices(prev => 
-      prev.map(service => 
-        service.id === serviceId 
-          ? { 
-              ...service, 
+    setServices((prev) =>
+      prev.map((service) =>
+        service.id === serviceId
+          ? {
+              ...service,
               status: 'running',
               uptime: '0m',
-              lastDeployment: new Date().toISOString()
+              lastDeployment: new Date().toISOString(),
             }
           : service
       )
@@ -304,14 +304,14 @@ const TechnicalTeamDashboard: React.FC = () => {
   };
 
   const handleApproveToken = (listingId: string) => {
-    setTokenListings(prev => 
-      prev.map(listing => 
-        listing.id === listingId 
-          ? { 
-              ...listing, 
+    setTokenListings((prev) =>
+      prev.map((listing) =>
+        listing.id === listingId
+          ? {
+              ...listing,
               status: 'approved',
               reviewedBy: 'Tech Admin',
-              reviewedAt: new Date().toISOString()
+              reviewedAt: new Date().toISOString(),
             }
           : listing
       )
@@ -320,13 +320,13 @@ const TechnicalTeamDashboard: React.FC = () => {
   };
 
   const handleDeployToken = (listingId: string) => {
-    setTokenListings(prev => 
-      prev.map(listing => 
-        listing.id === listingId 
-          ? { 
-              ...listing, 
+    setTokenListings((prev) =>
+      prev.map((listing) =>
+        listing.id === listingId
+          ? {
+              ...listing,
               status: 'deployed',
-              deploymentTx: `0x${Math.random().toString(16).substr(2, 40)}`
+              deploymentTx: `0x${Math.random().toString(16).substr(2, 40)}`,
             }
           : listing
       )
@@ -340,53 +340,71 @@ const TechnicalTeamDashboard: React.FC = () => {
       case 'running':
       case 'connected':
       case 'approved':
-      case 'deployed': return 'bg-green-100 text-green-800';
+      case 'deployed':
+        return 'bg-green-100 text-green-800';
       case 'inactive':
       case 'stopped':
       case 'disconnected':
-      case 'rejected': return 'bg-red-100 text-red-800';
+      case 'rejected':
+        return 'bg-red-100 text-red-800';
       case 'maintenance':
       case 'syncing':
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'error': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'error':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const getServiceTypeIcon = (type: string) => {
     switch (type) {
-      case 'gateway': return <Globe className="h-5 w-5" />;
-      case 'microservice': return <Server className="h-5 w-5" />;
-      case 'database': return <Database className="h-5 w-5" />;
-      case 'cache': return <Zap className="h-5 w-5" />;
-      case 'queue': return <Network className="h-5 w-5" />;
-      default: return <Server className="h-5 w-5" />;
+      case 'gateway':
+        return <Globe className="h-5 w-5" />;
+      case 'microservice':
+        return <Server className="h-5 w-5" />;
+      case 'database':
+        return <Database className="h-5 w-5" />;
+      case 'cache':
+        return <Zap className="h-5 w-5" />;
+      case 'queue':
+        return <Network className="h-5 w-5" />;
+      default:
+        return <Server className="h-5 w-5" />;
     }
   };
 
-  const filteredTradingPairs = tradingPairs.filter(pair => 
-    pair.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    pair.baseAsset.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    pair.quoteAsset.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredTradingPairs = tradingPairs.filter(
+    (pair) =>
+      pair.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      pair.baseAsset.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      pair.quoteAsset.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const stats = {
     totalPairs: tradingPairs.length,
-    activePairs: tradingPairs.filter(p => p.status === 'active').length,
+    activePairs: tradingPairs.filter((p) => p.status === 'active').length,
     totalServices: services.length,
-    runningServices: services.filter(s => s.status === 'running').length,
-    connectedBlockchains: blockchains.filter(b => b.status === 'connected').length,
-    pendingListings: tokenListings.filter(t => t.status === 'pending').length,
+    runningServices: services.filter((s) => s.status === 'running').length,
+    connectedBlockchains: blockchains.filter((b) => b.status === 'connected')
+      .length,
+    pendingListings: tokenListings.filter((t) => t.status === 'pending').length,
     avgCpuUsage: services.reduce((sum, s) => sum + s.cpu, 0) / services.length,
-    avgMemoryUsage: services.reduce((sum, s) => sum + s.memory, 0) / services.length
+    avgMemoryUsage:
+      services.reduce((sum, s) => sum + s.memory, 0) / services.length,
   };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Technical Team Dashboard</h1>
-          <p className="text-gray-600 mt-2">System management, trading pairs, and blockchain integration</p>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Technical Team Dashboard
+          </h1>
+          <p className="text-gray-600 mt-2">
+            System management, trading pairs, and blockchain integration
+          </p>
         </div>
 
         {/* Technical Statistics */}
@@ -396,7 +414,9 @@ const TechnicalTeamDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <GitBranch className="h-5 w-5 text-blue-600" />
                 <div>
-                  <div className="text-2xl font-bold text-blue-600">{stats.activePairs}</div>
+                  <div className="text-2xl font-bold text-blue-600">
+                    {stats.activePairs}
+                  </div>
                   <div className="text-sm text-gray-600">Active Pairs</div>
                 </div>
               </div>
@@ -408,7 +428,9 @@ const TechnicalTeamDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <Server className="h-5 w-5 text-green-600" />
                 <div>
-                  <div className="text-2xl font-bold text-green-600">{stats.runningServices}</div>
+                  <div className="text-2xl font-bold text-green-600">
+                    {stats.runningServices}
+                  </div>
                   <div className="text-sm text-gray-600">Services Up</div>
                 </div>
               </div>
@@ -420,7 +442,9 @@ const TechnicalTeamDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <Network className="h-5 w-5 text-purple-600" />
                 <div>
-                  <div className="text-2xl font-bold text-purple-600">{stats.connectedBlockchains}</div>
+                  <div className="text-2xl font-bold text-purple-600">
+                    {stats.connectedBlockchains}
+                  </div>
                   <div className="text-sm text-gray-600">Blockchains</div>
                 </div>
               </div>
@@ -432,7 +456,9 @@ const TechnicalTeamDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <Clock className="h-5 w-5 text-orange-600" />
                 <div>
-                  <div className="text-2xl font-bold text-orange-600">{stats.pendingListings}</div>
+                  <div className="text-2xl font-bold text-orange-600">
+                    {stats.pendingListings}
+                  </div>
                   <div className="text-sm text-gray-600">Pending</div>
                 </div>
               </div>
@@ -444,7 +470,9 @@ const TechnicalTeamDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <Cpu className="h-5 w-5 text-red-600" />
                 <div>
-                  <div className="text-2xl font-bold text-red-600">{stats.avgCpuUsage.toFixed(1)}%</div>
+                  <div className="text-2xl font-bold text-red-600">
+                    {stats.avgCpuUsage.toFixed(1)}%
+                  </div>
                   <div className="text-sm text-gray-600">Avg CPU</div>
                 </div>
               </div>
@@ -456,7 +484,9 @@ const TechnicalTeamDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <HardDrive className="h-5 w-5 text-indigo-600" />
                 <div>
-                  <div className="text-2xl font-bold text-indigo-600">{stats.avgMemoryUsage.toFixed(1)}%</div>
+                  <div className="text-2xl font-bold text-indigo-600">
+                    {stats.avgMemoryUsage.toFixed(1)}%
+                  </div>
                   <div className="text-sm text-gray-600">Avg Memory</div>
                 </div>
               </div>
@@ -488,11 +518,19 @@ const TechnicalTeamDashboard: React.FC = () => {
           </Card>
         </div>
 
-        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
+        <Tabs
+          value={selectedTab}
+          onValueChange={setSelectedTab}
+          className="space-y-6"
+        >
           <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="pairs">Trading Pairs ({stats.totalPairs})</TabsTrigger>
-            <TabsTrigger value="services">Services ({stats.totalServices})</TabsTrigger>
+            <TabsTrigger value="pairs">
+              Trading Pairs ({stats.totalPairs})
+            </TabsTrigger>
+            <TabsTrigger value="services">
+              Services ({stats.totalServices})
+            </TabsTrigger>
             <TabsTrigger value="blockchains">Blockchains</TabsTrigger>
             <TabsTrigger value="listings">Token Listings</TabsTrigger>
             <TabsTrigger value="monitoring">Monitoring</TabsTrigger>
@@ -507,7 +545,10 @@ const TechnicalTeamDashboard: React.FC = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {services.slice(0, 5).map((service) => (
-                      <div key={service.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div
+                        key={service.id}
+                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                      >
                         <div className="flex items-center space-x-3">
                           {getServiceTypeIcon(service.type)}
                           <div>
@@ -522,7 +563,8 @@ const TechnicalTeamDashboard: React.FC = () => {
                             {service.status}
                           </Badge>
                           <div className="text-xs text-gray-500 mt-1">
-                            CPU: {service.cpu.toFixed(1)}% • RAM: {service.memory.toFixed(1)}%
+                            CPU: {service.cpu.toFixed(1)}% • RAM:{' '}
+                            {service.memory.toFixed(1)}%
                           </div>
                         </div>
                       </div>
@@ -540,24 +582,36 @@ const TechnicalTeamDashboard: React.FC = () => {
                     <div className="flex items-center space-x-3 p-3 bg-green-50 rounded-lg">
                       <CheckCircle className="h-5 w-5 text-green-600" />
                       <div>
-                        <div className="font-semibold">New trading pair deployed</div>
-                        <div className="text-sm text-gray-600">SOLANA/USDT pair is now live</div>
+                        <div className="font-semibold">
+                          New trading pair deployed
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          SOLANA/USDT pair is now live
+                        </div>
                         <div className="text-xs text-gray-500">2 hours ago</div>
                       </div>
                     </div>
                     <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg">
                       <Code className="h-5 w-5 text-blue-600" />
                       <div>
-                        <div className="font-semibold">System update completed</div>
-                        <div className="text-sm text-gray-600">Matching engine v3.2.1 deployed</div>
+                        <div className="font-semibold">
+                          System update completed
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Matching engine v3.2.1 deployed
+                        </div>
                         <div className="text-xs text-gray-500">4 hours ago</div>
                       </div>
                     </div>
                     <div className="flex items-center space-x-3 p-3 bg-yellow-50 rounded-lg">
                       <AlertTriangle className="h-5 w-5 text-yellow-600" />
                       <div>
-                        <div className="font-semibold">Maintenance scheduled</div>
-                        <div className="text-sm text-gray-600">Database maintenance at 2 AM UTC</div>
+                        <div className="font-semibold">
+                          Maintenance scheduled
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Database maintenance at 2 AM UTC
+                        </div>
                         <div className="text-xs text-gray-500">6 hours ago</div>
                       </div>
                     </div>
@@ -590,7 +644,10 @@ const TechnicalTeamDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {filteredTradingPairs.map((pair) => (
-                    <Card key={pair.id} className="hover:shadow-md transition-shadow">
+                    <Card
+                      key={pair.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
@@ -598,30 +655,44 @@ const TechnicalTeamDashboard: React.FC = () => {
                               {pair.baseAsset.charAt(0)}
                             </div>
                             <div>
-                              <div className="font-semibold text-lg">{pair.symbol}</div>
+                              <div className="font-semibold text-lg">
+                                {pair.symbol}
+                              </div>
                               <div className="text-sm text-gray-600">
                                 {pair.baseAsset} / {pair.quoteAsset}
                               </div>
                               <div className="text-xs text-gray-500">
-                                Created: {new Date(pair.createdAt).toLocaleDateString()}
+                                Created:{' '}
+                                {new Date(pair.createdAt).toLocaleDateString()}
                               </div>
                             </div>
                           </div>
 
                           <div className="flex items-center space-x-6">
                             <div className="text-center">
-                              <div className="text-lg font-bold">${pair.price.toLocaleString()}</div>
+                              <div className="text-lg font-bold">
+                                ${pair.price.toLocaleString()}
+                              </div>
                               <div className="text-xs text-gray-500">Price</div>
                             </div>
                             <div className="text-center">
-                              <div className={`text-lg font-bold ${pair.change24h >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                                {pair.change24h >= 0 ? '+' : ''}{pair.change24h.toFixed(2)}%
+                              <div
+                                className={`text-lg font-bold ${pair.change24h >= 0 ? 'text-green-600' : 'text-red-600'}`}
+                              >
+                                {pair.change24h >= 0 ? '+' : ''}
+                                {pair.change24h.toFixed(2)}%
                               </div>
-                              <div className="text-xs text-gray-500">24h Change</div>
+                              <div className="text-xs text-gray-500">
+                                24h Change
+                              </div>
                             </div>
                             <div className="text-center">
-                              <div className="text-lg font-bold">${pair.volume24h.toLocaleString()}</div>
-                              <div className="text-xs text-gray-500">24h Volume</div>
+                              <div className="text-lg font-bold">
+                                ${pair.volume24h.toLocaleString()}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                24h Volume
+                              </div>
                             </div>
                           </div>
 
@@ -631,8 +702,8 @@ const TechnicalTeamDashboard: React.FC = () => {
                             </Badge>
 
                             <div className="flex space-x-2">
-                              <Button 
-                                size="sm" 
+                              <Button
+                                size="sm"
                                 variant="outline"
                                 onClick={() => handleTogglePairStatus(pair.id)}
                               >
@@ -641,7 +712,9 @@ const TechnicalTeamDashboard: React.FC = () => {
                                 ) : (
                                   <Play className="h-4 w-4 mr-1" />
                                 )}
-                                {pair.status === 'active' ? 'Pause' : 'Activate'}
+                                {pair.status === 'active'
+                                  ? 'Pause'
+                                  : 'Activate'}
                               </Button>
                               <Button size="sm" variant="outline">
                                 <Edit className="h-4 w-4 mr-1" />
@@ -670,7 +743,10 @@ const TechnicalTeamDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {services.map((service) => (
-                    <Card key={service.id} className="hover:shadow-md transition-shadow">
+                    <Card
+                      key={service.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
@@ -678,24 +754,36 @@ const TechnicalTeamDashboard: React.FC = () => {
                               {getServiceTypeIcon(service.type)}
                             </div>
                             <div>
-                              <div className="font-semibold text-lg">{service.name}</div>
+                              <div className="font-semibold text-lg">
+                                {service.name}
+                              </div>
                               <div className="text-sm text-gray-600">
-                                {service.type} • Port {service.port} • {service.version}
+                                {service.type} • Port {service.port} •{' '}
+                                {service.version}
                               </div>
                               <div className="text-xs text-gray-500">
-                                Uptime: {service.uptime} • Last deployed: {new Date(service.lastDeployment).toLocaleDateString()}
+                                Uptime: {service.uptime} • Last deployed:{' '}
+                                {new Date(
+                                  service.lastDeployment
+                                ).toLocaleDateString()}
                               </div>
                             </div>
                           </div>
 
                           <div className="flex items-center space-x-6">
                             <div className="text-center">
-                              <div className="text-lg font-bold text-blue-600">{service.cpu.toFixed(1)}%</div>
+                              <div className="text-lg font-bold text-blue-600">
+                                {service.cpu.toFixed(1)}%
+                              </div>
                               <div className="text-xs text-gray-500">CPU</div>
                             </div>
                             <div className="text-center">
-                              <div className="text-lg font-bold text-green-600">{service.memory.toFixed(1)}%</div>
-                              <div className="text-xs text-gray-500">Memory</div>
+                              <div className="text-lg font-bold text-green-600">
+                                {service.memory.toFixed(1)}%
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                Memory
+                              </div>
                             </div>
                           </div>
 
@@ -705,8 +793,8 @@ const TechnicalTeamDashboard: React.FC = () => {
                             </Badge>
 
                             <div className="flex space-x-2">
-                              <Button 
-                                size="sm" 
+                              <Button
+                                size="sm"
                                 variant="outline"
                                 onClick={() => handleRestartService(service.id)}
                                 disabled={service.status === 'running'}
@@ -747,7 +835,10 @@ const TechnicalTeamDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {blockchains.map((blockchain) => (
-                    <Card key={blockchain.id} className="hover:shadow-md transition-shadow">
+                    <Card
+                      key={blockchain.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
@@ -755,29 +846,42 @@ const TechnicalTeamDashboard: React.FC = () => {
                               {blockchain.symbol.charAt(0)}
                             </div>
                             <div>
-                              <div className="font-semibold text-lg">{blockchain.name}</div>
+                              <div className="font-semibold text-lg">
+                                {blockchain.name}
+                              </div>
                               <div className="text-sm text-gray-600">
                                 {blockchain.type} • {blockchain.nodeCount} nodes
                               </div>
                               <div className="text-xs text-gray-500">
-                                Last sync: {new Date(blockchain.lastSync).toLocaleString()}
+                                Last sync:{' '}
+                                {new Date(blockchain.lastSync).toLocaleString()}
                               </div>
                             </div>
                           </div>
 
                           <div className="flex items-center space-x-6">
                             <div className="text-center">
-                              <div className="text-lg font-bold text-blue-600">{blockchain.blockHeight.toLocaleString()}</div>
-                              <div className="text-xs text-gray-500">Block Height</div>
+                              <div className="text-lg font-bold text-blue-600">
+                                {blockchain.blockHeight.toLocaleString()}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                Block Height
+                              </div>
                             </div>
                             <div className="text-center">
-                              <div className="text-lg font-bold text-green-600">{blockchain.gasPrice.toFixed(1)}</div>
-                              <div className="text-xs text-gray-500">Gas Price (Gwei)</div>
+                              <div className="text-lg font-bold text-green-600">
+                                {blockchain.gasPrice.toFixed(1)}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                Gas Price (Gwei)
+                              </div>
                             </div>
                           </div>
 
                           <div className="flex items-center space-x-4">
-                            <Badge className={getStatusColor(blockchain.status)}>
+                            <Badge
+                              className={getStatusColor(blockchain.status)}
+                            >
                               {blockchain.status}
                             </Badge>
 
@@ -809,7 +913,10 @@ const TechnicalTeamDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {tokenListings.map((listing) => (
-                    <Card key={listing.id} className="hover:shadow-md transition-shadow">
+                    <Card
+                      key={listing.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
@@ -817,15 +924,21 @@ const TechnicalTeamDashboard: React.FC = () => {
                               {listing.symbol.charAt(0)}
                             </div>
                             <div>
-                              <div className="font-semibold text-lg">{listing.tokenName} ({listing.symbol})</div>
+                              <div className="font-semibold text-lg">
+                                {listing.tokenName} ({listing.symbol})
+                              </div>
                               <div className="text-sm text-gray-600">
                                 {listing.blockchain} • {listing.submittedBy}
                               </div>
                               <div className="text-xs text-gray-500">
-                                Contract: {listing.contractAddress.substring(0, 20)}...
+                                Contract:{' '}
+                                {listing.contractAddress.substring(0, 20)}...
                               </div>
                               <div className="text-xs text-gray-500">
-                                Submitted: {new Date(listing.submittedAt).toLocaleDateString()}
+                                Submitted:{' '}
+                                {new Date(
+                                  listing.submittedAt
+                                ).toLocaleDateString()}
                               </div>
                             </div>
                           </div>
@@ -838,9 +951,11 @@ const TechnicalTeamDashboard: React.FC = () => {
                             <div className="flex space-x-2">
                               {listing.status === 'pending' && (
                                 <>
-                                  <Button 
+                                  <Button
                                     size="sm"
-                                    onClick={() => handleApproveToken(listing.id)}
+                                    onClick={() =>
+                                      handleApproveToken(listing.id)
+                                    }
                                     className="bg-green-600 hover:bg-green-700"
                                   >
                                     <CheckCircle className="h-4 w-4 mr-1" />
@@ -853,7 +968,7 @@ const TechnicalTeamDashboard: React.FC = () => {
                                 </>
                               )}
                               {listing.status === 'approved' && (
-                                <Button 
+                                <Button
                                   size="sm"
                                   onClick={() => handleDeployToken(listing.id)}
                                   className="bg-blue-600 hover:bg-blue-700"
@@ -888,23 +1003,29 @@ const TechnicalTeamDashboard: React.FC = () => {
                     <div>
                       <div className="flex justify-between mb-2">
                         <span className="text-sm font-medium">CPU Usage</span>
-                        <span className="text-sm">{stats.avgCpuUsage.toFixed(1)}%</span>
+                        <span className="text-sm">
+                          {stats.avgCpuUsage.toFixed(1)}%
+                        </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-blue-600 h-2 rounded-full" 
+                        <div
+                          className="bg-blue-600 h-2 rounded-full"
                           style={{ width: `${stats.avgCpuUsage}%` }}
                         ></div>
                       </div>
                     </div>
                     <div>
                       <div className="flex justify-between mb-2">
-                        <span className="text-sm font-medium">Memory Usage</span>
-                        <span className="text-sm">{stats.avgMemoryUsage.toFixed(1)}%</span>
+                        <span className="text-sm font-medium">
+                          Memory Usage
+                        </span>
+                        <span className="text-sm">
+                          {stats.avgMemoryUsage.toFixed(1)}%
+                        </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-green-600 h-2 rounded-full" 
+                        <div
+                          className="bg-green-600 h-2 rounded-full"
                           style={{ width: `${stats.avgMemoryUsage}%` }}
                         ></div>
                       </div>
@@ -915,7 +1036,10 @@ const TechnicalTeamDashboard: React.FC = () => {
                         <span className="text-sm">234 MB/s</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div className="bg-purple-600 h-2 rounded-full" style={{ width: '45%' }}></div>
+                        <div
+                          className="bg-purple-600 h-2 rounded-full"
+                          style={{ width: '45%' }}
+                        ></div>
                       </div>
                     </div>
                     <div>
@@ -924,7 +1048,10 @@ const TechnicalTeamDashboard: React.FC = () => {
                         <span className="text-sm">67%</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div className="bg-orange-600 h-2 rounded-full" style={{ width: '67%' }}></div>
+                        <div
+                          className="bg-orange-600 h-2 rounded-full"
+                          style={{ width: '67%' }}
+                        ></div>
                       </div>
                     </div>
                   </div>
@@ -940,21 +1067,27 @@ const TechnicalTeamDashboard: React.FC = () => {
                     <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
                       <div className="flex items-center space-x-2">
                         <AlertTriangle className="h-5 w-5 text-red-600" />
-                        <span className="font-semibold text-red-800">Critical</span>
+                        <span className="font-semibold text-red-800">
+                          Critical
+                        </span>
                       </div>
                       <span className="text-red-600 font-bold">0</span>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
                       <div className="flex items-center space-x-2">
                         <AlertTriangle className="h-5 w-5 text-yellow-600" />
-                        <span className="font-semibold text-yellow-800">Warning</span>
+                        <span className="font-semibold text-yellow-800">
+                          Warning
+                        </span>
                       </div>
                       <span className="text-yellow-600 font-bold">2</span>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
                       <div className="flex items-center space-x-2">
                         <Activity className="h-5 w-5 text-blue-600" />
-                        <span className="font-semibold text-blue-800">Info</span>
+                        <span className="font-semibold text-blue-800">
+                          Info
+                        </span>
                       </div>
                       <span className="text-blue-600 font-bold">5</span>
                     </div>

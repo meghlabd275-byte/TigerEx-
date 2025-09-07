@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
-import { 
+import {
   MagnifyingGlassIcon,
   FunnelIcon,
   ChatBubbleLeftRightIcon,
@@ -11,7 +11,7 @@ import {
   CurrencyDollarIcon,
   UserIcon,
   StarIcon,
-  ExclamationTriangleIcon
+  ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
 
 // Components
@@ -36,7 +36,7 @@ import { P2POrder, P2PTrade, PaymentMethod } from '../../types/p2p';
 const P2PTrading: React.FC = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  
+
   // State
   const [activeTab, setActiveTab] = useState<'buy' | 'sell'>('buy');
   const [selectedCurrency, setSelectedCurrency] = useState('BTC');
@@ -56,14 +56,19 @@ const P2PTrading: React.FC = () => {
   const { socket, isConnected } = useWebSocket('/p2p');
 
   // Queries
-  const { data: p2pOrders, isLoading: ordersLoading, refetch: refetchOrders } = useQuery({
+  const {
+    data: p2pOrders,
+    isLoading: ordersLoading,
+    refetch: refetchOrders,
+  } = useQuery({
     queryKey: ['p2pOrders', activeTab, selectedCurrency, selectedFiat, filters],
-    queryFn: () => p2pService.getOrders({
-      type: activeTab === 'buy' ? 'sell' : 'buy', // Show opposite orders
-      currency: selectedCurrency,
-      fiatCurrency: selectedFiat,
-      ...filters,
-    }),
+    queryFn: () =>
+      p2pService.getOrders({
+        type: activeTab === 'buy' ? 'sell' : 'buy', // Show opposite orders
+        currency: selectedCurrency,
+        fiatCurrency: selectedFiat,
+        ...filters,
+      }),
     refetchInterval: 10000,
   });
 
@@ -107,7 +112,9 @@ const P2PTrading: React.FC = () => {
       refetchOrders();
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Failed to create P2P order');
+      toast.error(
+        error.response?.data?.message || 'Failed to create P2P order'
+      );
     },
   });
 
@@ -131,7 +138,9 @@ const P2PTrading: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ['myP2PTrades'] });
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Failed to mark payment as sent');
+      toast.error(
+        error.response?.data?.message || 'Failed to mark payment as sent'
+      );
     },
   });
 
@@ -169,9 +178,9 @@ const P2PTrading: React.FC = () => {
     });
 
     if (user) {
-      socket.emit('subscribe', { 
+      socket.emit('subscribe', {
         channel: 'p2p_user_updates',
-        userId: user.id 
+        userId: user.id,
       });
 
       socket.on('p2p_trade_update', () => {
@@ -189,40 +198,52 @@ const P2PTrading: React.FC = () => {
     return () => {
       socket.emit('unsubscribe', { channel: 'p2p_orders' });
       if (user) {
-        socket.emit('unsubscribe', { 
+        socket.emit('unsubscribe', {
           channel: 'p2p_user_updates',
-          userId: user.id 
+          userId: user.id,
         });
       }
     };
   }, [socket, isConnected, user, queryClient, refetchOrders]);
 
   // Handle trade initiation
-  const handleInitiateTrade = useCallback((order: P2POrder, amount: number, paymentMethod: string) => {
-    createTradeMutation.mutate({
-      orderId: order.id,
-      amount,
-      paymentMethod,
-    });
-  }, [createTradeMutation]);
+  const handleInitiateTrade = useCallback(
+    (order: P2POrder, amount: number, paymentMethod: string) => {
+      createTradeMutation.mutate({
+        orderId: order.id,
+        amount,
+        paymentMethod,
+      });
+    },
+    [createTradeMutation]
+  );
 
   // Handle order creation
-  const handleCreateOrder = useCallback((orderData: any) => {
-    createOrderMutation.mutate(orderData);
-  }, [createOrderMutation]);
+  const handleCreateOrder = useCallback(
+    (orderData: any) => {
+      createOrderMutation.mutate(orderData);
+    },
+    [createOrderMutation]
+  );
 
   // Filter orders based on search criteria
-  const filteredOrders = p2pOrders?.filter((order: P2POrder) => {
-    if (filters.minAmount && order.minAmount < parseFloat(filters.minAmount)) return false;
-    if (filters.maxAmount && order.maxAmount > parseFloat(filters.maxAmount)) return false;
-    if (filters.onlineOnly && !order.user.isOnline) return false;
-    if (filters.verifiedOnly && !order.user.isVerified) return false;
-    if (filters.paymentMethods.length > 0) {
-      const orderPaymentMethods = order.paymentMethods.map(pm => pm.type);
-      if (!filters.paymentMethods.some(pm => orderPaymentMethods.includes(pm))) return false;
-    }
-    return true;
-  }) || [];
+  const filteredOrders =
+    p2pOrders?.filter((order: P2POrder) => {
+      if (filters.minAmount && order.minAmount < parseFloat(filters.minAmount))
+        return false;
+      if (filters.maxAmount && order.maxAmount > parseFloat(filters.maxAmount))
+        return false;
+      if (filters.onlineOnly && !order.user.isOnline) return false;
+      if (filters.verifiedOnly && !order.user.isVerified) return false;
+      if (filters.paymentMethods.length > 0) {
+        const orderPaymentMethods = order.paymentMethods.map((pm) => pm.type);
+        if (
+          !filters.paymentMethods.some((pm) => orderPaymentMethods.includes(pm))
+        )
+          return false;
+      }
+      return true;
+    }) || [];
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -232,7 +253,7 @@ const P2PTrading: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-6">
               <h1 className="text-2xl font-bold">P2P Trading</h1>
-              
+
               <div className="flex items-center space-x-4">
                 <select
                   value={selectedCurrency}
@@ -240,10 +261,12 @@ const P2PTrading: React.FC = () => {
                   className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm"
                 >
                   {currencies?.map((currency) => (
-                    <option key={currency} value={currency}>{currency}</option>
+                    <option key={currency} value={currency}>
+                      {currency}
+                    </option>
                   ))}
                 </select>
-                
+
                 <select
                   value={selectedFiat}
                   onChange={(e) => setSelectedFiat(e.target.value)}
@@ -265,13 +288,19 @@ const P2PTrading: React.FC = () => {
               >
                 Post Ad
               </button>
-              
-              <div className={`flex items-center space-x-1 px-2 py-1 rounded text-xs ${
-                isConnected ? 'bg-green-900/30 text-green-400' : 'bg-red-900/30 text-red-400'
-              }`}>
-                <div className={`w-2 h-2 rounded-full ${
-                  isConnected ? 'bg-green-400' : 'bg-red-400'
-                }`} />
+
+              <div
+                className={`flex items-center space-x-1 px-2 py-1 rounded text-xs ${
+                  isConnected
+                    ? 'bg-green-900/30 text-green-400'
+                    : 'bg-red-900/30 text-red-400'
+                }`}
+              >
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    isConnected ? 'bg-green-400' : 'bg-red-400'
+                  }`}
+                />
                 <span>{isConnected ? 'Connected' : 'Disconnected'}</span>
               </div>
             </div>
@@ -375,7 +404,7 @@ const P2PTrading: React.FC = () => {
                 <CurrencyDollarIcon className="w-5 h-5 mr-2" />
                 My Orders ({myOrders?.length || 0})
               </h3>
-              
+
               {myOrders?.length === 0 ? (
                 <div className="text-center text-gray-400 py-6">
                   No active orders
@@ -386,16 +415,20 @@ const P2PTrading: React.FC = () => {
                     <div key={order.id} className="bg-gray-800 rounded-lg p-4">
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <div className="font-medium">{order.type.toUpperCase()} {order.currency}</div>
+                          <div className="font-medium">
+                            {order.type.toUpperCase()} {order.currency}
+                          </div>
                           <div className="text-sm text-gray-400">
                             ${order.price} • {order.fiatCurrency}
                           </div>
                         </div>
-                        <div className={`px-2 py-1 rounded text-xs ${
-                          order.status === 'active' 
-                            ? 'bg-green-900/30 text-green-400'
-                            : 'bg-gray-700 text-gray-300'
-                        }`}>
+                        <div
+                          className={`px-2 py-1 rounded text-xs ${
+                            order.status === 'active'
+                              ? 'bg-green-900/30 text-green-400'
+                              : 'bg-gray-700 text-gray-300'
+                          }`}
+                        >
                           {order.status}
                         </div>
                       </div>
@@ -412,53 +445,63 @@ const P2PTrading: React.FC = () => {
             <div>
               <h3 className="text-md font-medium mb-4 flex items-center">
                 <ChatBubbleLeftRightIcon className="w-5 h-5 mr-2" />
-                Active Trades ({myTrades?.filter(t => t.status !== 'completed').length || 0})
+                Active Trades (
+                {myTrades?.filter((t) => t.status !== 'completed').length || 0})
               </h3>
-              
-              {myTrades?.filter(t => t.status !== 'completed').length === 0 ? (
+
+              {myTrades?.filter((t) => t.status !== 'completed').length ===
+              0 ? (
                 <div className="text-center text-gray-400 py-6">
                   No active trades
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {myTrades?.filter(t => t.status !== 'completed').map((trade) => (
-                    <div key={trade.id} className="bg-gray-800 rounded-lg p-4">
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <div className="font-medium">
-                            {trade.type.toUpperCase()} {trade.amount} {trade.currency}
+                  {myTrades
+                    ?.filter((t) => t.status !== 'completed')
+                    .map((trade) => (
+                      <div
+                        key={trade.id}
+                        className="bg-gray-800 rounded-lg p-4"
+                      >
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <div className="font-medium">
+                              {trade.type.toUpperCase()} {trade.amount}{' '}
+                              {trade.currency}
+                            </div>
+                            <div className="text-sm text-gray-400">
+                              with @{trade.counterparty.username}
+                            </div>
                           </div>
+                          <div
+                            className={`px-2 py-1 rounded text-xs ${
+                              trade.status === 'payment_pending'
+                                ? 'bg-yellow-900/30 text-yellow-400'
+                                : trade.status === 'payment_sent'
+                                  ? 'bg-blue-900/30 text-blue-400'
+                                  : 'bg-gray-700 text-gray-300'
+                            }`}
+                          >
+                            {trade.status.replace('_', ' ')}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between mt-3">
                           <div className="text-sm text-gray-400">
-                            with @{trade.counterparty.username}
+                            ${trade.totalAmount} {trade.fiatCurrency}
                           </div>
-                        </div>
-                        <div className={`px-2 py-1 rounded text-xs ${
-                          trade.status === 'payment_pending' 
-                            ? 'bg-yellow-900/30 text-yellow-400'
-                            : trade.status === 'payment_sent'
-                            ? 'bg-blue-900/30 text-blue-400'
-                            : 'bg-gray-700 text-gray-300'
-                        }`}>
-                          {trade.status.replace('_', ' ')}
+                          <button
+                            onClick={() => {
+                              setSelectedTrade(trade);
+                              setShowTradeModal(true);
+                            }}
+                            className="text-orange-400 hover:text-orange-300 text-sm"
+                          >
+                            View Details
+                          </button>
                         </div>
                       </div>
-                      
-                      <div className="flex items-center justify-between mt-3">
-                        <div className="text-sm text-gray-400">
-                          ${trade.totalAmount} {trade.fiatCurrency}
-                        </div>
-                        <button
-                          onClick={() => {
-                            setSelectedTrade(trade);
-                            setShowTradeModal(true);
-                          }}
-                          className="text-orange-400 hover:text-orange-300 text-sm"
-                        >
-                          View Details
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               )}
             </div>
@@ -489,10 +532,17 @@ const P2PTrading: React.FC = () => {
               setShowTradeModal(false);
               setSelectedTrade(null);
             }}
-            onMarkPaymentSent={() => markPaymentSentMutation.mutate(selectedTrade.id)}
-            onConfirmPayment={() => confirmPaymentMutation.mutate(selectedTrade.id)}
-            onCreateDispute={(reason: string) => 
-              createDisputeMutation.mutate({ tradeId: selectedTrade.id, reason })
+            onMarkPaymentSent={() =>
+              markPaymentSentMutation.mutate(selectedTrade.id)
+            }
+            onConfirmPayment={() =>
+              confirmPaymentMutation.mutate(selectedTrade.id)
+            }
+            onCreateDispute={(reason: string) =>
+              createDisputeMutation.mutate({
+                tradeId: selectedTrade.id,
+                reason,
+              })
             }
             loading={{
               markPayment: markPaymentSentMutation.isPending,

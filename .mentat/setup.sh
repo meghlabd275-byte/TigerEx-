@@ -1,5 +1,10 @@
 #!/bin/bash
 
-# Install dependencies for both client and server
-# The root package.json has an install script that handles this
+# Install dependencies for root (Next.js app)
 npm install
+
+# Install dependencies for client (React + Vite)
+cd client && npm install && cd ..
+
+# Install dependencies for server (Express + TypeScript)
+cd server && npm install && cd ..

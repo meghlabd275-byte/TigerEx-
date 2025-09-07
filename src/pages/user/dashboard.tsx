@@ -3,11 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Wallet, 
-  TrendingUp, 
-  TrendingDown, 
-  DollarSign, 
+import {
+  Wallet,
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
   BarChart3,
   Clock,
   ArrowUpDown,
@@ -20,7 +20,7 @@ import {
   Settings,
   Star,
   Gift,
-  Shield
+  Shield,
 } from 'lucide-react';
 
 interface Asset {
@@ -84,7 +84,7 @@ const UserDashboard: React.FC = () => {
         balance: 0.5234,
         usdValue: 23678.45,
         change24h: 2.34,
-        price: 45234.56
+        price: 45234.56,
       },
       {
         symbol: 'ETH',
@@ -92,7 +92,7 @@ const UserDashboard: React.FC = () => {
         balance: 8.9012,
         usdValue: 25234.78,
         change24h: -1.23,
-        price: 2834.12
+        price: 2834.12,
       },
       {
         symbol: 'USDT',
@@ -100,7 +100,7 @@ const UserDashboard: React.FC = () => {
         balance: 12345.67,
         usdValue: 12345.67,
         change24h: 0.01,
-        price: 1.00
+        price: 1.0,
       },
       {
         symbol: 'BNB',
@@ -108,7 +108,7 @@ const UserDashboard: React.FC = () => {
         balance: 45.23,
         usdValue: 13567.89,
         change24h: 3.45,
-        price: 299.87
+        price: 299.87,
       },
       {
         symbol: 'ADA',
@@ -116,8 +116,8 @@ const UserDashboard: React.FC = () => {
         balance: 2345.67,
         usdValue: 1071.23,
         change24h: 5.67,
-        price: 0.4567
-      }
+        price: 0.4567,
+      },
     ];
 
     const mockTransactions: Transaction[] = [
@@ -128,7 +128,7 @@ const UserDashboard: React.FC = () => {
         amount: 5000,
         status: 'completed',
         timestamp: '2024-01-15T10:30:00Z',
-        txHash: '0x1234...abcd'
+        txHash: '0x1234...abcd',
       },
       {
         id: 'tx-002',
@@ -136,7 +136,7 @@ const UserDashboard: React.FC = () => {
         asset: 'BTC',
         amount: 0.1,
         status: 'completed',
-        timestamp: '2024-01-15T09:15:00Z'
+        timestamp: '2024-01-15T09:15:00Z',
       },
       {
         id: 'tx-003',
@@ -145,8 +145,8 @@ const UserDashboard: React.FC = () => {
         amount: 2.5,
         status: 'pending',
         timestamp: '2024-01-15T08:45:00Z',
-        txHash: '0x5678...efgh'
-      }
+        txHash: '0x5678...efgh',
+      },
     ];
 
     const mockOrders: Order[] = [
@@ -159,7 +159,7 @@ const UserDashboard: React.FC = () => {
         price: 45000,
         filled: 0.2,
         status: 'partially_filled',
-        timestamp: '2024-01-15T14:30:00Z'
+        timestamp: '2024-01-15T14:30:00Z',
       },
       {
         id: 'order-002',
@@ -170,8 +170,8 @@ const UserDashboard: React.FC = () => {
         price: 2850,
         filled: 0,
         status: 'pending',
-        timestamp: '2024-01-15T14:25:00Z'
-      }
+        timestamp: '2024-01-15T14:25:00Z',
+      },
     ];
 
     const mockEarnings: Earning[] = [
@@ -183,7 +183,7 @@ const UserDashboard: React.FC = () => {
         apy: 8.5,
         duration: 'Flexible',
         status: 'active',
-        startDate: '2024-01-10T00:00:00Z'
+        startDate: '2024-01-10T00:00:00Z',
       },
       {
         id: 'earn-002',
@@ -194,8 +194,8 @@ const UserDashboard: React.FC = () => {
         duration: '30 days',
         status: 'active',
         startDate: '2024-01-05T00:00:00Z',
-        endDate: '2024-02-04T00:00:00Z'
-      }
+        endDate: '2024-02-04T00:00:00Z',
+      },
     ];
 
     setAssets(mockAssets);
@@ -213,12 +213,16 @@ const UserDashboard: React.FC = () => {
     switch (status) {
       case 'completed':
       case 'filled':
-      case 'active': return 'bg-green-100 text-green-800';
+      case 'active':
+        return 'bg-green-100 text-green-800';
       case 'pending':
-      case 'partially_filled': return 'bg-yellow-100 text-yellow-800';
+      case 'partially_filled':
+        return 'bg-yellow-100 text-yellow-800';
       case 'failed':
-      case 'cancelled': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -238,7 +242,9 @@ const UserDashboard: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-              <p className="text-gray-600 mt-2">Welcome back! Here's your portfolio overview</p>
+              <p className="text-gray-600 mt-2">
+                Welcome back! Here's your portfolio overview
+              </p>
             </div>
             <div className="flex items-center space-x-4">
               <Button variant="outline" size="sm">
@@ -249,8 +255,16 @@ const UserDashboard: React.FC = () => {
                 <Settings className="h-4 w-4 mr-2" />
                 Settings
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setHideBalances(!hideBalances)}>
-                {hideBalances ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setHideBalances(!hideBalances)}
+              >
+                {hideBalances ? (
+                  <Eye className="h-4 w-4" />
+                ) : (
+                  <EyeOff className="h-4 w-4" />
+                )}
               </Button>
             </div>
           </div>
@@ -262,7 +276,9 @@ const UserDashboard: React.FC = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-600">Total Balance</h3>
+                  <h3 className="text-lg font-semibold text-gray-600">
+                    Total Balance
+                  </h3>
                   <div className="text-4xl font-bold text-gray-900">
                     {formatUSD(totalBalance)}
                   </div>
@@ -298,7 +314,9 @@ const UserDashboard: React.FC = () => {
                 <BarChart3 className="h-5 w-5 text-blue-600" />
                 <h3 className="font-semibold">Today's P&L</h3>
               </div>
-              <div className="text-2xl font-bold text-green-600">+$1,234.56</div>
+              <div className="text-2xl font-bold text-green-600">
+                +$1,234.56
+              </div>
               <div className="text-sm text-gray-500">+5.67% from yesterday</div>
             </CardContent>
           </Card>
@@ -312,12 +330,18 @@ const UserDashboard: React.FC = () => {
               <div className="text-2xl font-bold text-purple-600">
                 {formatUSD(earnings.reduce((sum, e) => sum + e.amount, 0))}
               </div>
-              <div className="text-sm text-gray-500">From staking & savings</div>
+              <div className="text-sm text-gray-500">
+                From staking & savings
+              </div>
             </CardContent>
           </Card>
         </div>
 
-        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
+        <Tabs
+          value={selectedTab}
+          onValueChange={setSelectedTab}
+          className="space-y-6"
+        >
           <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="assets">Assets</TabsTrigger>
@@ -336,20 +360,30 @@ const UserDashboard: React.FC = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {assets.slice(0, 5).map((asset) => (
-                      <div key={asset.symbol} className="flex items-center justify-between">
+                      <div
+                        key={asset.symbol}
+                        className="flex items-center justify-between"
+                      >
                         <div className="flex items-center space-x-3">
                           <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
                             {asset.symbol.charAt(0)}
                           </div>
                           <div>
                             <div className="font-semibold">{asset.symbol}</div>
-                            <div className="text-sm text-gray-500">{asset.name}</div>
+                            <div className="text-sm text-gray-500">
+                              {asset.name}
+                            </div>
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-semibold">{formatUSD(asset.usdValue)}</div>
-                          <div className={`text-sm ${getChangeColor(asset.change24h)}`}>
-                            {asset.change24h >= 0 ? '+' : ''}{asset.change24h.toFixed(2)}%
+                          <div className="font-semibold">
+                            {formatUSD(asset.usdValue)}
+                          </div>
+                          <div
+                            className={`text-sm ${getChangeColor(asset.change24h)}`}
+                          >
+                            {asset.change24h >= 0 ? '+' : ''}
+                            {asset.change24h.toFixed(2)}%
                           </div>
                         </div>
                       </div>
@@ -366,19 +400,32 @@ const UserDashboard: React.FC = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {transactions.slice(0, 5).map((tx) => (
-                      <div key={tx.id} className="flex items-center justify-between">
+                      <div
+                        key={tx.id}
+                        className="flex items-center justify-between"
+                      >
                         <div className="flex items-center space-x-3">
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                            tx.type === 'deposit' ? 'bg-green-100 text-green-600' :
-                            tx.type === 'withdrawal' ? 'bg-red-100 text-red-600' :
-                            'bg-blue-100 text-blue-600'
-                          }`}>
-                            {tx.type === 'deposit' ? <Plus className="h-4 w-4" /> :
-                             tx.type === 'withdrawal' ? <Minus className="h-4 w-4" /> :
-                             <ArrowUpDown className="h-4 w-4" />}
+                          <div
+                            className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                              tx.type === 'deposit'
+                                ? 'bg-green-100 text-green-600'
+                                : tx.type === 'withdrawal'
+                                  ? 'bg-red-100 text-red-600'
+                                  : 'bg-blue-100 text-blue-600'
+                            }`}
+                          >
+                            {tx.type === 'deposit' ? (
+                              <Plus className="h-4 w-4" />
+                            ) : tx.type === 'withdrawal' ? (
+                              <Minus className="h-4 w-4" />
+                            ) : (
+                              <ArrowUpDown className="h-4 w-4" />
+                            )}
                           </div>
                           <div>
-                            <div className="font-semibold capitalize">{tx.type}</div>
+                            <div className="font-semibold capitalize">
+                              {tx.type}
+                            </div>
                             <div className="text-sm text-gray-500">
                               {new Date(tx.timestamp).toLocaleDateString()}
                             </div>
@@ -414,7 +461,10 @@ const UserDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {assets.map((asset) => (
-                    <Card key={asset.symbol} className="hover:shadow-md transition-shadow">
+                    <Card
+                      key={asset.symbol}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
@@ -422,35 +472,52 @@ const UserDashboard: React.FC = () => {
                               {asset.symbol.charAt(0)}
                             </div>
                             <div>
-                              <div className="font-semibold text-lg">{asset.symbol}</div>
+                              <div className="font-semibold text-lg">
+                                {asset.symbol}
+                              </div>
                               <div className="text-gray-600">{asset.name}</div>
                             </div>
                           </div>
 
                           <div className="flex items-center space-x-8">
                             <div className="text-center">
-                              <div className="text-sm text-gray-500">Balance</div>
-                              <div className="font-semibold">{formatBalance(asset.balance)}</div>
+                              <div className="text-sm text-gray-500">
+                                Balance
+                              </div>
+                              <div className="font-semibold">
+                                {formatBalance(asset.balance)}
+                              </div>
                             </div>
                             <div className="text-center">
                               <div className="text-sm text-gray-500">Price</div>
-                              <div className="font-semibold">${asset.price.toLocaleString()}</div>
+                              <div className="font-semibold">
+                                ${asset.price.toLocaleString()}
+                              </div>
                             </div>
                             <div className="text-center">
-                              <div className="text-sm text-gray-500">24h Change</div>
-                              <div className={`font-semibold ${getChangeColor(asset.change24h)}`}>
-                                {asset.change24h >= 0 ? '+' : ''}{asset.change24h.toFixed(2)}%
+                              <div className="text-sm text-gray-500">
+                                24h Change
+                              </div>
+                              <div
+                                className={`font-semibold ${getChangeColor(asset.change24h)}`}
+                              >
+                                {asset.change24h >= 0 ? '+' : ''}
+                                {asset.change24h.toFixed(2)}%
                               </div>
                             </div>
                             <div className="text-center">
                               <div className="text-sm text-gray-500">Value</div>
-                              <div className="font-semibold">{formatUSD(asset.usdValue)}</div>
+                              <div className="font-semibold">
+                                {formatUSD(asset.usdValue)}
+                              </div>
                             </div>
                           </div>
 
                           <div className="flex space-x-2">
                             <Button size="sm">Trade</Button>
-                            <Button size="sm" variant="outline">Transfer</Button>
+                            <Button size="sm" variant="outline">
+                              Transfer
+                            </Button>
                           </div>
                         </div>
                       </CardContent>
@@ -468,52 +535,85 @@ const UserDashboard: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {orders.filter(order => order.status !== 'filled' && order.status !== 'cancelled').map((order) => (
-                    <Card key={order.id} className="hover:shadow-md transition-shadow">
-                      <CardContent className="p-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-4">
-                            <Badge className={order.side === 'buy' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}>
-                              {order.side.toUpperCase()}
-                            </Badge>
-                            <div>
-                              <div className="font-semibold">{order.symbol}</div>
-                              <div className="text-sm text-gray-600">
-                                {order.type} • {new Date(order.timestamp).toLocaleString()}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center space-x-6">
-                            <div className="text-center">
-                              <div className="text-sm text-gray-500">Amount</div>
-                              <div className="font-semibold">{order.amount}</div>
-                            </div>
-                            {order.price && (
-                              <div className="text-center">
-                                <div className="text-sm text-gray-500">Price</div>
-                                <div className="font-semibold">${order.price.toFixed(2)}</div>
-                              </div>
-                            )}
-                            <div className="text-center">
-                              <div className="text-sm text-gray-500">Filled</div>
-                              <div className="font-semibold">{order.filled}/{order.amount}</div>
-                            </div>
-                            <div className="text-center">
-                              <Badge className={getStatusColor(order.status)}>
-                                {order.status.replace('_', ' ')}
+                  {orders
+                    .filter(
+                      (order) =>
+                        order.status !== 'filled' &&
+                        order.status !== 'cancelled'
+                    )
+                    .map((order) => (
+                      <Card
+                        key={order.id}
+                        className="hover:shadow-md transition-shadow"
+                      >
+                        <CardContent className="p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-4">
+                              <Badge
+                                className={
+                                  order.side === 'buy'
+                                    ? 'bg-green-100 text-green-800'
+                                    : 'bg-red-100 text-red-800'
+                                }
+                              >
+                                {order.side.toUpperCase()}
                               </Badge>
+                              <div>
+                                <div className="font-semibold">
+                                  {order.symbol}
+                                </div>
+                                <div className="text-sm text-gray-600">
+                                  {order.type} •{' '}
+                                  {new Date(order.timestamp).toLocaleString()}
+                                </div>
+                              </div>
                             </div>
-                          </div>
 
-                          <Button size="sm" variant="outline">
-                            Cancel
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                  {orders.filter(order => order.status !== 'filled' && order.status !== 'cancelled').length === 0 && (
+                            <div className="flex items-center space-x-6">
+                              <div className="text-center">
+                                <div className="text-sm text-gray-500">
+                                  Amount
+                                </div>
+                                <div className="font-semibold">
+                                  {order.amount}
+                                </div>
+                              </div>
+                              {order.price && (
+                                <div className="text-center">
+                                  <div className="text-sm text-gray-500">
+                                    Price
+                                  </div>
+                                  <div className="font-semibold">
+                                    ${order.price.toFixed(2)}
+                                  </div>
+                                </div>
+                              )}
+                              <div className="text-center">
+                                <div className="text-sm text-gray-500">
+                                  Filled
+                                </div>
+                                <div className="font-semibold">
+                                  {order.filled}/{order.amount}
+                                </div>
+                              </div>
+                              <div className="text-center">
+                                <Badge className={getStatusColor(order.status)}>
+                                  {order.status.replace('_', ' ')}
+                                </Badge>
+                              </div>
+                            </div>
+
+                            <Button size="sm" variant="outline">
+                              Cancel
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  {orders.filter(
+                    (order) =>
+                      order.status !== 'filled' && order.status !== 'cancelled'
+                  ).length === 0 && (
                     <div className="text-center py-8 text-gray-500">
                       No open orders
                     </div>
@@ -531,21 +631,34 @@ const UserDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {transactions.map((tx) => (
-                    <Card key={tx.id} className="hover:shadow-md transition-shadow">
+                    <Card
+                      key={tx.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
-                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                              tx.type === 'deposit' ? 'bg-green-100 text-green-600' :
-                              tx.type === 'withdrawal' ? 'bg-red-100 text-red-600' :
-                              'bg-blue-100 text-blue-600'
-                            }`}>
-                              {tx.type === 'deposit' ? <Plus className="h-5 w-5" /> :
-                               tx.type === 'withdrawal' ? <Minus className="h-5 w-5" /> :
-                               <ArrowUpDown className="h-5 w-5" />}
+                            <div
+                              className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                                tx.type === 'deposit'
+                                  ? 'bg-green-100 text-green-600'
+                                  : tx.type === 'withdrawal'
+                                    ? 'bg-red-100 text-red-600'
+                                    : 'bg-blue-100 text-blue-600'
+                              }`}
+                            >
+                              {tx.type === 'deposit' ? (
+                                <Plus className="h-5 w-5" />
+                              ) : tx.type === 'withdrawal' ? (
+                                <Minus className="h-5 w-5" />
+                              ) : (
+                                <ArrowUpDown className="h-5 w-5" />
+                              )}
                             </div>
                             <div>
-                              <div className="font-semibold capitalize">{tx.type}</div>
+                              <div className="font-semibold capitalize">
+                                {tx.type}
+                              </div>
                               <div className="text-sm text-gray-600">
                                 {new Date(tx.timestamp).toLocaleString()}
                               </div>
@@ -597,7 +710,10 @@ const UserDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {earnings.map((earning) => (
-                    <Card key={earning.id} className="hover:shadow-md transition-shadow">
+                    <Card
+                      key={earning.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
@@ -605,26 +721,35 @@ const UserDashboard: React.FC = () => {
                               <Gift className="h-6 w-6" />
                             </div>
                             <div>
-                              <div className="font-semibold">{earning.product}</div>
+                              <div className="font-semibold">
+                                {earning.product}
+                              </div>
                               <div className="text-sm text-gray-600">
                                 {earning.asset} • {earning.duration}
                               </div>
                               <div className="text-xs text-gray-500">
-                                Started: {new Date(earning.startDate).toLocaleDateString()}
+                                Started:{' '}
+                                {new Date(
+                                  earning.startDate
+                                ).toLocaleDateString()}
                               </div>
                             </div>
                           </div>
 
                           <div className="flex items-center space-x-6">
                             <div className="text-center">
-                              <div className="text-sm text-gray-500">Amount</div>
+                              <div className="text-sm text-gray-500">
+                                Amount
+                              </div>
                               <div className="font-semibold">
                                 {formatBalance(earning.amount)} {earning.asset}
                               </div>
                             </div>
                             <div className="text-center">
                               <div className="text-sm text-gray-500">APY</div>
-                              <div className="font-semibold text-green-600">{earning.apy}%</div>
+                              <div className="font-semibold text-green-600">
+                                {earning.apy}%
+                              </div>
                             </div>
                             <div className="text-center">
                               <Badge className={getStatusColor(earning.status)}>
@@ -638,9 +763,7 @@ const UserDashboard: React.FC = () => {
                               Details
                             </Button>
                             {earning.status === 'active' && (
-                              <Button size="sm">
-                                Redeem
-                              </Button>
+                              <Button size="sm">Redeem</Button>
                             )}
                           </div>
                         </div>

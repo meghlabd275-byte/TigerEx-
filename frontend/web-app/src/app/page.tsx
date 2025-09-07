@@ -4,15 +4,15 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { 
-  ChartBarIcon, 
-  CurrencyDollarIcon, 
-  ShieldCheckIcon, 
+import {
+  ChartBarIcon,
+  CurrencyDollarIcon,
+  ShieldCheckIcon,
   GlobeAltIcon,
   ArrowTrendingUpIcon,
   UserGroupIcon,
   BoltIcon,
-  CogIcon
+  CogIcon,
 } from '@heroicons/react/24/outline';
 
 const HomePage = () => {
@@ -20,17 +20,20 @@ const HomePage = () => {
     {
       icon: ChartBarIcon,
       title: 'Advanced Trading',
-      description: 'Professional trading tools with real-time charts and technical indicators',
+      description:
+        'Professional trading tools with real-time charts and technical indicators',
     },
     {
       icon: ShieldCheckIcon,
       title: 'Bank-Level Security',
-      description: '95% cold storage, multi-signature wallets, and advanced encryption',
+      description:
+        '95% cold storage, multi-signature wallets, and advanced encryption',
     },
     {
       icon: BoltIcon,
       title: 'Lightning Fast',
-      description: 'Sub-10ms order execution with high-frequency trading support',
+      description:
+        'Sub-10ms order execution with high-frequency trading support',
     },
     {
       icon: GlobeAltIcon,
@@ -69,7 +72,8 @@ const HomePage = () => {
     },
     {
       title: 'Options Trading',
-      description: 'European and American style options with advanced strategies',
+      description:
+        'European and American style options with advanced strategies',
       icon: '🎯',
     },
     {
@@ -91,19 +95,34 @@ const HomePage = () => {
               </div>
             </div>
             <div className="hidden md:flex items-center space-x-8">
-              <Link href="/markets" className="text-white hover:text-orange-400 transition-colors">
+              <Link
+                href="/markets"
+                className="text-white hover:text-orange-400 transition-colors"
+              >
                 Markets
               </Link>
-              <Link href="/trading" className="text-white hover:text-orange-400 transition-colors">
+              <Link
+                href="/trading"
+                className="text-white hover:text-orange-400 transition-colors"
+              >
                 Trade
               </Link>
-              <Link href="/futures" className="text-white hover:text-orange-400 transition-colors">
+              <Link
+                href="/futures"
+                className="text-white hover:text-orange-400 transition-colors"
+              >
                 Futures
               </Link>
-              <Link href="/p2p" className="text-white hover:text-orange-400 transition-colors">
+              <Link
+                href="/p2p"
+                className="text-white hover:text-orange-400 transition-colors"
+              >
                 P2P
               </Link>
-              <Link href="/earn" className="text-white hover:text-orange-400 transition-colors">
+              <Link
+                href="/earn"
+                className="text-white hover:text-orange-400 transition-colors"
+              >
                 Earn
               </Link>
             </div>
@@ -141,7 +160,7 @@ const HomePage = () => {
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-              Advanced trading platform with institutional-grade security, 
+              Advanced trading platform with institutional-grade security,
               lightning-fast execution, and comprehensive trading tools.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -234,7 +253,8 @@ const HomePage = () => {
               Why Choose TigerEx?
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Built for traders, by traders. Experience the next generation of cryptocurrency trading.
+              Built for traders, by traders. Experience the next generation of
+              cryptocurrency trading.
             </p>
           </motion.div>
 
@@ -271,7 +291,8 @@ const HomePage = () => {
               Ready to Start Trading?
             </h2>
             <p className="text-xl text-gray-300 mb-8">
-              Join millions of traders worldwide and experience the future of cryptocurrency trading.
+              Join millions of traders worldwide and experience the future of
+              cryptocurrency trading.
             </p>
             <Link
               href="/register"
@@ -298,28 +319,112 @@ const HomePage = () => {
             <div>
               <h3 className="text-white font-semibold mb-4">Products</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><Link href="/spot" className="hover:text-white transition-colors">Spot Trading</Link></li>
-                <li><Link href="/futures" className="hover:text-white transition-colors">Futures</Link></li>
-                <li><Link href="/options" className="hover:text-white transition-colors">Options</Link></li>
-                <li><Link href="/p2p" className="hover:text-white transition-colors">P2P</Link></li>
+                <li>
+                  <Link
+                    href="/spot"
+                    className="hover:text-white transition-colors"
+                  >
+                    Spot Trading
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/futures"
+                    className="hover:text-white transition-colors"
+                  >
+                    Futures
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/options"
+                    className="hover:text-white transition-colors"
+                  >
+                    Options
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/p2p"
+                    className="hover:text-white transition-colors"
+                  >
+                    P2P
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
               <h3 className="text-white font-semibold mb-4">Support</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><Link href="/help" className="hover:text-white transition-colors">Help Center</Link></li>
-                <li><Link href="/api" className="hover:text-white transition-colors">API Docs</Link></li>
-                <li><Link href="/fees" className="hover:text-white transition-colors">Fees</Link></li>
-                <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+                <li>
+                  <Link
+                    href="/help"
+                    className="hover:text-white transition-colors"
+                  >
+                    Help Center
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/api"
+                    className="hover:text-white transition-colors"
+                  >
+                    API Docs
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/fees"
+                    className="hover:text-white transition-colors"
+                  >
+                    Fees
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/contact"
+                    className="hover:text-white transition-colors"
+                  >
+                    Contact
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
               <h3 className="text-white font-semibold mb-4">Company</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><Link href="/about" className="hover:text-white transition-colors">About</Link></li>
-                <li><Link href="/careers" className="hover:text-white transition-colors">Careers</Link></li>
-                <li><Link href="/news" className="hover:text-white transition-colors">News</Link></li>
-                <li><Link href="/legal" className="hover:text-white transition-colors">Legal</Link></li>
+                <li>
+                  <Link
+                    href="/about"
+                    className="hover:text-white transition-colors"
+                  >
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/careers"
+                    className="hover:text-white transition-colors"
+                  >
+                    Careers
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/news"
+                    className="hover:text-white transition-colors"
+                  >
+                    News
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/legal"
+                    className="hover:text-white transition-colors"
+                  >
+                    Legal
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>

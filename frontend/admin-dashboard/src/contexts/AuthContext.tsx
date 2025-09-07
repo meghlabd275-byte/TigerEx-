@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  ReactNode,
+} from 'react';
 import { AdminUser, LoginCredentials, AuthResponse } from '../types/auth';
 import { authService } from '../services/authService';
 
@@ -82,7 +88,9 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         error: null,
       };
     case 'UPDATE_USER':
-      const updatedUser = state.user ? { ...state.user, ...action.payload } : null;
+      const updatedUser = state.user
+        ? { ...state.user, ...action.payload }
+        : null;
       if (updatedUser) {
         localStorage.setItem('admin_user', JSON.stringify(updatedUser));
       }
@@ -131,10 +139,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (token && userStr) {
         try {
           const user = JSON.parse(userStr);
-          
+
           // Verify token is still valid
           const isValid = await authService.verifyToken(token);
-          
+
           if (isValid) {
             dispatch({
               type: 'LOGIN_SUCCESS',
@@ -163,12 +171,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (credentials: LoginCredentials): Promise<void> => {
     dispatch({ type: 'LOGIN_START' });
-    
+
     try {
       const response = await authService.login(credentials);
       dispatch({ type: 'LOGIN_SUCCESS', payload: response });
     } catch (error: any) {
-      const errorMessage = error.response?.data?.error || error.message || 'Login failed';
+      const errorMessage =
+        error.response?.data?.error || error.message || 'Login failed';
       dispatch({ type: 'LOGIN_FAILURE', payload: errorMessage });
       throw error;
     }
@@ -197,7 +206,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const hasAnyPermission = (permissions: string[]): boolean => {
     if (!state.user) return false;
     if (state.user.role === 'super_admin') return true;
-    return permissions.some(permission => state.user!.permissions.includes(permission));
+    return permissions.some((permission) =>
+      state.user!.permissions.includes(permission)
+    );
   };
 
   const refreshToken = async (): Promise<void> => {
@@ -220,14 +231,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     if (!state.isAuthenticated || !state.token) return;
 
-    const refreshInterval = setInterval(async () => {
-      try {
-        await refreshToken();
-      } catch (error) {
-        console.error('Automatic token refresh failed:', error);
-        // Token refresh failed, user will be logged out
-      }
-    }, 15 * 60 * 1000); // Refresh every 15 minutes
+    const refreshInterval = setInterval(
+      async () => {
+        try {
+          await refreshToken();
+        } catch (error) {
+          console.error('Automatic token refresh failed:', error);
+          // Token refresh failed, user will be logged out
+        }
+      },
+      15 * 60 * 1000
+    ); // Refresh every 15 minutes
 
     return () => clearInterval(refreshInterval);
   }, [state.isAuthenticated, state.token]);
@@ -244,8 +258,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={contextValue}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };

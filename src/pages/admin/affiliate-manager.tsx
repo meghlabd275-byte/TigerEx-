@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { 
-  Users, 
-  TrendingUp, 
-  DollarSign, 
+import {
+  Users,
+  TrendingUp,
+  DollarSign,
   Search,
   UserPlus,
   Gift,
@@ -17,7 +17,7 @@ import {
   Ban,
   CheckCircle,
   Star,
-  Globe
+  Globe,
 } from 'lucide-react';
 
 interface Affiliate {
@@ -82,7 +82,7 @@ const AffiliateManagerDashboard: React.FC = () => {
         commissionRate: 25,
         status: 'active',
         joinedAt: '2023-01-15T00:00:00Z',
-        region: 'North America'
+        region: 'North America',
       },
       {
         id: 'aff-002',
@@ -97,7 +97,7 @@ const AffiliateManagerDashboard: React.FC = () => {
         commissionRate: 20,
         status: 'active',
         joinedAt: '2023-03-20T00:00:00Z',
-        region: 'Europe'
+        region: 'Europe',
       },
       {
         id: 'aff-003',
@@ -112,8 +112,8 @@ const AffiliateManagerDashboard: React.FC = () => {
         commissionRate: 15,
         status: 'active',
         joinedAt: '2023-06-10T00:00:00Z',
-        region: 'Asia Pacific'
-      }
+        region: 'Asia Pacific',
+      },
     ];
 
     const mockCommissions: Commission[] = [
@@ -122,11 +122,11 @@ const AffiliateManagerDashboard: React.FC = () => {
         affiliateId: 'aff-001',
         affiliateName: 'CryptoInfluencer',
         referralName: 'John Doe',
-        amount: 125.50,
+        amount: 125.5,
         currency: 'USDT',
         type: 'trading',
         status: 'pending',
-        createdAt: '2024-01-15T10:30:00Z'
+        createdAt: '2024-01-15T10:30:00Z',
       },
       {
         id: 'comm-002',
@@ -137,8 +137,8 @@ const AffiliateManagerDashboard: React.FC = () => {
         currency: 'USDT',
         type: 'deposit',
         status: 'paid',
-        createdAt: '2024-01-14T15:45:00Z'
-      }
+        createdAt: '2024-01-14T15:45:00Z',
+      },
     ];
 
     const mockPrograms: ReferralProgram[] = [
@@ -150,7 +150,7 @@ const AffiliateManagerDashboard: React.FC = () => {
         tier: 'bronze',
         minReferrals: 0,
         bonusAmount: 0,
-        status: 'active'
+        status: 'active',
       },
       {
         id: 'prog-002',
@@ -160,8 +160,8 @@ const AffiliateManagerDashboard: React.FC = () => {
         tier: 'platinum',
         minReferrals: 1000,
         bonusAmount: 5000,
-        status: 'active'
-      }
+        status: 'active',
+      },
     ];
 
     setAffiliates(mockAffiliates);
@@ -170,9 +170,9 @@ const AffiliateManagerDashboard: React.FC = () => {
   }, []);
 
   const handleApproveAffiliate = (affiliateId: string) => {
-    setAffiliates(prev => 
-      prev.map(affiliate => 
-        affiliate.id === affiliateId 
+    setAffiliates((prev) =>
+      prev.map((affiliate) =>
+        affiliate.id === affiliateId
           ? { ...affiliate, status: 'active' as const }
           : affiliate
       )
@@ -183,9 +183,9 @@ const AffiliateManagerDashboard: React.FC = () => {
   const handleSuspendAffiliate = (affiliateId: string) => {
     const reason = prompt('Please provide a reason for suspension:');
     if (reason) {
-      setAffiliates(prev => 
-        prev.map(affiliate => 
-          affiliate.id === affiliateId 
+      setAffiliates((prev) =>
+        prev.map((affiliate) =>
+          affiliate.id === affiliateId
             ? { ...affiliate, status: 'suspended' as const }
             : affiliate
         )
@@ -195,9 +195,9 @@ const AffiliateManagerDashboard: React.FC = () => {
   };
 
   const handlePayCommission = (commissionId: string) => {
-    setCommissions(prev => 
-      prev.map(commission => 
-        commission.id === commissionId 
+    setCommissions((prev) =>
+      prev.map((commission) =>
+        commission.id === commissionId
           ? { ...commission, status: 'paid' as const }
           : commission
       )
@@ -207,44 +207,62 @@ const AffiliateManagerDashboard: React.FC = () => {
 
   const getTierColor = (tier: string) => {
     switch (tier) {
-      case 'platinum': return 'bg-purple-100 text-purple-800';
-      case 'gold': return 'bg-yellow-100 text-yellow-800';
-      case 'silver': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-orange-100 text-orange-800';
+      case 'platinum':
+        return 'bg-purple-100 text-purple-800';
+      case 'gold':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'silver':
+        return 'bg-gray-100 text-gray-800';
+      default:
+        return 'bg-orange-100 text-orange-800';
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'suspended': return 'bg-red-100 text-red-800';
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'paid': return 'bg-blue-100 text-blue-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'active':
+        return 'bg-green-100 text-green-800';
+      case 'suspended':
+        return 'bg-red-100 text-red-800';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'paid':
+        return 'bg-blue-100 text-blue-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
-  const filteredAffiliates = affiliates.filter(affiliate => 
-    affiliate.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    affiliate.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    affiliate.referralCode.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredAffiliates = affiliates.filter(
+    (affiliate) =>
+      affiliate.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      affiliate.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      affiliate.referralCode.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const stats = {
     totalAffiliates: affiliates.length,
-    activeAffiliates: affiliates.filter(a => a.status === 'active').length,
+    activeAffiliates: affiliates.filter((a) => a.status === 'active').length,
     totalCommissions: commissions.reduce((sum, c) => sum + c.amount, 0),
-    pendingCommissions: commissions.filter(c => c.status === 'pending').length,
+    pendingCommissions: commissions.filter((c) => c.status === 'pending')
+      .length,
     totalReferrals: affiliates.reduce((sum, a) => sum + a.totalReferrals, 0),
-    monthlyCommissions: affiliates.reduce((sum, a) => sum + a.monthlyCommission, 0)
+    monthlyCommissions: affiliates.reduce(
+      (sum, a) => sum + a.monthlyCommission,
+      0
+    ),
   };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Affiliate Manager Dashboard</h1>
-          <p className="text-gray-600 mt-2">Manage affiliate programs and commissions</p>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Affiliate Manager Dashboard
+          </h1>
+          <p className="text-gray-600 mt-2">
+            Manage affiliate programs and commissions
+          </p>
         </div>
 
         {/* Affiliate Statistics */}
@@ -254,7 +272,9 @@ const AffiliateManagerDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <Users className="h-5 w-5 text-blue-600" />
                 <div>
-                  <div className="text-2xl font-bold text-blue-600">{stats.activeAffiliates}</div>
+                  <div className="text-2xl font-bold text-blue-600">
+                    {stats.activeAffiliates}
+                  </div>
                   <div className="text-sm text-gray-600">Active Affiliates</div>
                 </div>
               </div>
@@ -266,7 +286,9 @@ const AffiliateManagerDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <UserPlus className="h-5 w-5 text-green-600" />
                 <div>
-                  <div className="text-2xl font-bold text-green-600">{stats.totalReferrals}</div>
+                  <div className="text-2xl font-bold text-green-600">
+                    {stats.totalReferrals}
+                  </div>
                   <div className="text-sm text-gray-600">Total Referrals</div>
                 </div>
               </div>
@@ -295,7 +317,9 @@ const AffiliateManagerDashboard: React.FC = () => {
                   <div className="text-2xl font-bold text-orange-600">
                     ${stats.monthlyCommissions.toLocaleString()}
                   </div>
-                  <div className="text-sm text-gray-600">Monthly Commissions</div>
+                  <div className="text-sm text-gray-600">
+                    Monthly Commissions
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -306,7 +330,9 @@ const AffiliateManagerDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <Gift className="h-5 w-5 text-red-600" />
                 <div>
-                  <div className="text-2xl font-bold text-red-600">{stats.pendingCommissions}</div>
+                  <div className="text-2xl font-bold text-red-600">
+                    {stats.pendingCommissions}
+                  </div>
                   <div className="text-sm text-gray-600">Pending Payments</div>
                 </div>
               </div>
@@ -318,7 +344,9 @@ const AffiliateManagerDashboard: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <BarChart3 className="h-5 w-5 text-indigo-600" />
                 <div>
-                  <div className="text-2xl font-bold text-indigo-600">{programs.length}</div>
+                  <div className="text-2xl font-bold text-indigo-600">
+                    {programs.length}
+                  </div>
                   <div className="text-sm text-gray-600">Active Programs</div>
                 </div>
               </div>
@@ -326,10 +354,16 @@ const AffiliateManagerDashboard: React.FC = () => {
           </Card>
         </div>
 
-        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="space-y-6">
+        <Tabs
+          value={selectedTab}
+          onValueChange={setSelectedTab}
+          className="space-y-6"
+        >
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="affiliates">Affiliates ({stats.totalAffiliates})</TabsTrigger>
+            <TabsTrigger value="affiliates">
+              Affiliates ({stats.totalAffiliates})
+            </TabsTrigger>
             <TabsTrigger value="commissions">Commissions</TabsTrigger>
             <TabsTrigger value="programs">Programs</TabsTrigger>
           </TabsList>
@@ -343,20 +377,27 @@ const AffiliateManagerDashboard: React.FC = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {affiliates.slice(0, 5).map((affiliate, index) => (
-                      <div key={affiliate.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div
+                        key={affiliate.id}
+                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                      >
                         <div className="flex items-center space-x-3">
                           <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
                             {index + 1}
                           </div>
                           <div>
-                            <div className="font-semibold">{affiliate.userName}</div>
+                            <div className="font-semibold">
+                              {affiliate.userName}
+                            </div>
                             <div className="text-sm text-gray-600">
                               {affiliate.totalReferrals} referrals
                             </div>
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-semibold">${affiliate.totalCommission.toLocaleString()}</div>
+                          <div className="font-semibold">
+                            ${affiliate.totalCommission.toLocaleString()}
+                          </div>
                           <Badge className={getTierColor(affiliate.tier)}>
                             {affiliate.tier}
                           </Badge>
@@ -374,15 +415,22 @@ const AffiliateManagerDashboard: React.FC = () => {
                 <CardContent>
                   <div className="space-y-4">
                     {commissions.slice(0, 5).map((commission) => (
-                      <div key={commission.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div
+                        key={commission.id}
+                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                      >
                         <div>
-                          <div className="font-semibold">{commission.affiliateName}</div>
+                          <div className="font-semibold">
+                            {commission.affiliateName}
+                          </div>
                           <div className="text-sm text-gray-600">
                             {commission.type} • {commission.referralName}
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-semibold">${commission.amount}</div>
+                          <div className="font-semibold">
+                            ${commission.amount}
+                          </div>
                           <Badge className={getStatusColor(commission.status)}>
                             {commission.status}
                           </Badge>
@@ -418,7 +466,10 @@ const AffiliateManagerDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {filteredAffiliates.map((affiliate) => (
-                    <Card key={affiliate.id} className="hover:shadow-md transition-shadow">
+                    <Card
+                      key={affiliate.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
@@ -426,8 +477,12 @@ const AffiliateManagerDashboard: React.FC = () => {
                               {affiliate.userName.charAt(0)}
                             </div>
                             <div>
-                              <div className="font-semibold text-lg">{affiliate.userName}</div>
-                              <div className="text-sm text-gray-600">{affiliate.email}</div>
+                              <div className="font-semibold text-lg">
+                                {affiliate.userName}
+                              </div>
+                              <div className="text-sm text-gray-600">
+                                {affiliate.email}
+                              </div>
                               <div className="flex items-center space-x-4 mt-1">
                                 <span className="text-xs text-gray-500">
                                   Code: {affiliate.referralCode}
@@ -442,21 +497,33 @@ const AffiliateManagerDashboard: React.FC = () => {
 
                           <div className="flex items-center space-x-6">
                             <div className="text-center">
-                              <div className="text-2xl font-bold text-blue-600">{affiliate.totalReferrals}</div>
-                              <div className="text-xs text-gray-500">Total Referrals</div>
+                              <div className="text-2xl font-bold text-blue-600">
+                                {affiliate.totalReferrals}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                Total Referrals
+                              </div>
                             </div>
                             <div className="text-center">
-                              <div className="text-2xl font-bold text-green-600">{affiliate.activeReferrals}</div>
-                              <div className="text-xs text-gray-500">Active</div>
+                              <div className="text-2xl font-bold text-green-600">
+                                {affiliate.activeReferrals}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                Active
+                              </div>
                             </div>
                             <div className="text-center">
                               <div className="text-2xl font-bold text-purple-600">
                                 ${affiliate.totalCommission.toLocaleString()}
                               </div>
-                              <div className="text-xs text-gray-500">Total Commission</div>
+                              <div className="text-xs text-gray-500">
+                                Total Commission
+                              </div>
                             </div>
                             <div className="text-center">
-                              <div className="text-lg font-bold text-orange-600">{affiliate.commissionRate}%</div>
+                              <div className="text-lg font-bold text-orange-600">
+                                {affiliate.commissionRate}%
+                              </div>
                               <div className="text-xs text-gray-500">Rate</div>
                             </div>
                           </div>
@@ -467,7 +534,9 @@ const AffiliateManagerDashboard: React.FC = () => {
                                 {affiliate.tier}
                               </Badge>
                               <div className="mt-1">
-                                <Badge className={getStatusColor(affiliate.status)}>
+                                <Badge
+                                  className={getStatusColor(affiliate.status)}
+                                >
                                   {affiliate.status}
                                 </Badge>
                               </div>
@@ -483,9 +552,11 @@ const AffiliateManagerDashboard: React.FC = () => {
                                 Edit
                               </Button>
                               {affiliate.status === 'pending' && (
-                                <Button 
+                                <Button
                                   size="sm"
-                                  onClick={() => handleApproveAffiliate(affiliate.id)}
+                                  onClick={() =>
+                                    handleApproveAffiliate(affiliate.id)
+                                  }
                                   className="bg-green-600 hover:bg-green-700"
                                 >
                                   <CheckCircle className="h-4 w-4 mr-1" />
@@ -493,10 +564,12 @@ const AffiliateManagerDashboard: React.FC = () => {
                                 </Button>
                               )}
                               {affiliate.status === 'active' && (
-                                <Button 
-                                  size="sm" 
+                                <Button
+                                  size="sm"
                                   variant="destructive"
-                                  onClick={() => handleSuspendAffiliate(affiliate.id)}
+                                  onClick={() =>
+                                    handleSuspendAffiliate(affiliate.id)
+                                  }
                                 >
                                   <Ban className="h-4 w-4 mr-1" />
                                   Suspend
@@ -521,7 +594,10 @@ const AffiliateManagerDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {commissions.map((commission) => (
-                    <Card key={commission.id} className="hover:shadow-md transition-shadow">
+                    <Card
+                      key={commission.id}
+                      className="hover:shadow-md transition-shadow"
+                    >
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
@@ -529,12 +605,16 @@ const AffiliateManagerDashboard: React.FC = () => {
                               <DollarSign className="h-5 w-5" />
                             </div>
                             <div>
-                              <div className="font-semibold">{commission.affiliateName}</div>
+                              <div className="font-semibold">
+                                {commission.affiliateName}
+                              </div>
                               <div className="text-sm text-gray-600">
                                 Referral: {commission.referralName}
                               </div>
                               <div className="text-xs text-gray-500">
-                                {new Date(commission.createdAt).toLocaleDateString()}
+                                {new Date(
+                                  commission.createdAt
+                                ).toLocaleDateString()}
                               </div>
                             </div>
                           </div>
@@ -544,15 +624,21 @@ const AffiliateManagerDashboard: React.FC = () => {
                               <div className="text-xl font-bold text-green-600">
                                 ${commission.amount}
                               </div>
-                              <div className="text-xs text-gray-500">{commission.currency}</div>
+                              <div className="text-xs text-gray-500">
+                                {commission.currency}
+                              </div>
                             </div>
                             <div className="text-center">
-                              <Badge className={getStatusColor(commission.type)}>
+                              <Badge
+                                className={getStatusColor(commission.type)}
+                              >
                                 {commission.type}
                               </Badge>
                             </div>
                             <div className="text-center">
-                              <Badge className={getStatusColor(commission.status)}>
+                              <Badge
+                                className={getStatusColor(commission.status)}
+                              >
                                 {commission.status}
                               </Badge>
                             </div>
@@ -560,9 +646,11 @@ const AffiliateManagerDashboard: React.FC = () => {
 
                           <div className="flex space-x-2">
                             {commission.status === 'pending' && (
-                              <Button 
+                              <Button
                                 size="sm"
-                                onClick={() => handlePayCommission(commission.id)}
+                                onClick={() =>
+                                  handlePayCommission(commission.id)
+                                }
                                 className="bg-green-600 hover:bg-green-700"
                               >
                                 <CheckCircle className="h-4 w-4 mr-1" />
@@ -597,19 +685,30 @@ const AffiliateManagerDashboard: React.FC = () => {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {programs.map((program) => (
-                    <Card key={program.id} className="border-2 border-dashed border-gray-200 hover:border-blue-300 transition-colors">
+                    <Card
+                      key={program.id}
+                      className="border-2 border-dashed border-gray-200 hover:border-blue-300 transition-colors"
+                    >
                       <CardContent className="p-6">
                         <div className="flex items-center justify-between mb-4">
-                          <h3 className="text-lg font-semibold">{program.name}</h3>
+                          <h3 className="text-lg font-semibold">
+                            {program.name}
+                          </h3>
                           <Badge className={getStatusColor(program.status)}>
                             {program.status}
                           </Badge>
                         </div>
-                        <p className="text-gray-600 mb-4">{program.description}</p>
+                        <p className="text-gray-600 mb-4">
+                          {program.description}
+                        </p>
                         <div className="space-y-2">
                           <div className="flex justify-between">
-                            <span className="text-sm text-gray-500">Commission Rate:</span>
-                            <span className="font-semibold">{program.commissionRate}%</span>
+                            <span className="text-sm text-gray-500">
+                              Commission Rate:
+                            </span>
+                            <span className="font-semibold">
+                              {program.commissionRate}%
+                            </span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-sm text-gray-500">Tier:</span>
@@ -618,12 +717,18 @@ const AffiliateManagerDashboard: React.FC = () => {
                             </Badge>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-sm text-gray-500">Min Referrals:</span>
-                            <span className="font-semibold">{program.minReferrals}</span>
+                            <span className="text-sm text-gray-500">
+                              Min Referrals:
+                            </span>
+                            <span className="font-semibold">
+                              {program.minReferrals}
+                            </span>
                           </div>
                           {program.bonusAmount > 0 && (
                             <div className="flex justify-between">
-                              <span className="text-sm text-gray-500">Bonus:</span>
+                              <span className="text-sm text-gray-500">
+                                Bonus:
+                              </span>
                               <span className="font-semibold text-green-600">
                                 ${program.bonusAmount}
                               </span>
@@ -631,11 +736,19 @@ const AffiliateManagerDashboard: React.FC = () => {
                           )}
                         </div>
                         <div className="mt-4 flex space-x-2">
-                          <Button size="sm" variant="outline" className="flex-1">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="flex-1"
+                          >
                             <Edit className="h-4 w-4 mr-1" />
                             Edit
                           </Button>
-                          <Button size="sm" variant="outline" className="flex-1">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="flex-1"
+                          >
                             <Eye className="h-4 w-4 mr-1" />
                             View
                           </Button>

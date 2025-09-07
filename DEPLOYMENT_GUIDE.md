@@ -7,6 +7,7 @@ TigerEx is a comprehensive, enterprise-grade cryptocurrency exchange platform th
 ### ✅ **COMPLETED FEATURES**
 
 #### 📱 **Mobile Applications**
+
 - **Android App** (Kotlin + Jetpack Compose)
   - Modern Material Design 3 UI
   - Biometric authentication
@@ -23,6 +24,7 @@ TigerEx is a comprehensive, enterprise-grade cryptocurrency exchange platform th
   - Comprehensive portfolio tracking
 
 #### 🌐 **Frontend Applications**
+
 - **Binance-Style Landing Page**
   - Real-time price ticker
   - Modern responsive design
@@ -85,6 +87,7 @@ TigerEx is a comprehensive, enterprise-grade cryptocurrency exchange platform th
    - Trading Pair Management (Port 8093)
 
 #### 🗄️ **Database & Infrastructure**
+
 - PostgreSQL with advanced schemas
 - Redis for caching and real-time data
 - Apache Kafka for message streaming
@@ -95,6 +98,7 @@ TigerEx is a comprehensive, enterprise-grade cryptocurrency exchange platform th
 - Nginx load balancing
 
 #### 🔐 **Security Features**
+
 - JWT authentication
 - Biometric authentication
 - 2FA/MFA support
@@ -104,6 +108,7 @@ TigerEx is a comprehensive, enterprise-grade cryptocurrency exchange platform th
 - Risk management system
 
 #### 🌍 **Blockchain Support**
+
 - **50+ Blockchains Supported**:
   - Ethereum, Bitcoin, Binance Smart Chain
   - Polygon, Avalanche, Solana, Cardano
@@ -111,6 +116,7 @@ TigerEx is a comprehensive, enterprise-grade cryptocurrency exchange platform th
   - And 40+ more networks
 
 #### 💰 **Trading Features**
+
 - **Spot Trading** - 2000+ trading pairs
 - **Margin Trading** - Up to 10x leverage
 - **Futures Trading**:
@@ -123,6 +129,7 @@ TigerEx is a comprehensive, enterprise-grade cryptocurrency exchange platform th
 - **ETF Trading** - Exchange-traded funds
 
 #### 🏦 **Financial Services**
+
 - **Lending & Borrowing** - DeFi protocols
 - **Staking & Earn** - Multiple yield products
 - **Liquidity Mining** - LP token rewards
@@ -130,6 +137,7 @@ TigerEx is a comprehensive, enterprise-grade cryptocurrency exchange platform th
 - **Institutional Services** - Custody & OTC
 
 #### 🛠️ **Admin Features (15+ Admin Roles)**
+
 - Super Admin Dashboard
 - KYC Admin Panel
 - Customer Support System
@@ -147,6 +155,7 @@ TigerEx is a comprehensive, enterprise-grade cryptocurrency exchange platform th
 - Operations Manager System
 
 #### 🔗 **One-Click Deployment Systems**
+
 - **Block Explorer Creation** - EVM, Solana, Bitcoin
 - **Custom Blockchain Deployment** - EVM & Web3
 - **White-Label Exchange** - Institutional solutions
@@ -155,6 +164,7 @@ TigerEx is a comprehensive, enterprise-grade cryptocurrency exchange platform th
 - **Domain Connection** - Automatic SSL & DNS
 
 #### 🤖 **AI-Powered Features**
+
 - Predictive maintenance
 - Automated optimization
 - Risk assessment
@@ -165,6 +175,7 @@ TigerEx is a comprehensive, enterprise-grade cryptocurrency exchange platform th
 ## 🏗️ **Architecture Overview**
 
 ### Technology Stack
+
 - **Backend**: Python, Node.js, Go, Rust, C++, Java, C#
 - **Frontend**: React, Next.js, TypeScript
 - **Mobile**: Kotlin (Android), Swift (iOS)
@@ -176,6 +187,7 @@ TigerEx is a comprehensive, enterprise-grade cryptocurrency exchange platform th
 - **Cloud**: AWS, GCP, Azure compatible
 
 ### Microservices Architecture
+
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Frontend      │    │   Mobile Apps   │    │   Admin Panel   │
@@ -207,6 +219,7 @@ TigerEx is a comprehensive, enterprise-grade cryptocurrency exchange platform th
 ## 📦 **Installation & Deployment**
 
 ### Prerequisites
+
 - Docker & Docker Compose
 - Node.js 18+
 - Python 3.9+
@@ -215,6 +228,7 @@ TigerEx is a comprehensive, enterprise-grade cryptocurrency exchange platform th
 - Kubernetes (optional)
 
 ### Quick Start
+
 ```bash
 # Clone the repository
 git clone <your-repo-url>
@@ -231,7 +245,9 @@ docker-compose -f devops/docker-compose.yml up -d
 ```
 
 ### Environment Variables
+
 Create a `.env` file in the root directory:
+
 ```env
 # Database
 POSTGRES_PASSWORD=your_secure_password
@@ -265,6 +281,7 @@ FIREBASE_PROJECT_ID=your_firebase_project
 ### Mobile App Setup
 
 #### Android
+
 ```bash
 cd mobile/android
 ./gradlew assembleDebug
@@ -273,6 +290,7 @@ adb install app/build/outputs/apk/debug/app-debug.apk
 ```
 
 #### iOS
+
 ```bash
 cd mobile/ios
 xcodebuild -workspace TigerEx.xcworkspace -scheme TigerEx build
@@ -282,24 +300,28 @@ xcodebuild -workspace TigerEx.xcworkspace -scheme TigerEx build
 ## 🚀 **Deployment Options**
 
 ### 1. Docker Deployment (Recommended)
+
 ```bash
 docker-compose -f devops/docker-compose.yml up -d
 ```
 
 ### 2. Kubernetes Deployment
+
 ```bash
 kubectl apply -f devops/kubernetes/
 ```
 
 ### 3. Cloud Deployment
+
 - AWS EKS
-- Google GKE  
+- Google GKE
 - Azure AKS
 - DigitalOcean Kubernetes
 
 ## 📊 **Monitoring & Analytics**
 
 ### Grafana Dashboards
+
 - Trading volume metrics
 - System performance
 - User activity
@@ -307,6 +329,7 @@ kubectl apply -f devops/kubernetes/
 - Risk metrics
 
 ### Prometheus Metrics
+
 - API response times
 - Database performance
 - Cache hit rates
@@ -316,7 +339,9 @@ kubectl apply -f devops/kubernetes/
 ## 🔧 **Configuration**
 
 ### Trading Pairs
+
 Add new trading pairs via the admin panel or API:
+
 ```bash
 curl -X POST http://localhost:8093/trading-pairs \
   -H "Content-Type: application/json" \
@@ -329,7 +354,9 @@ curl -X POST http://localhost:8093/trading-pairs \
 ```
 
 ### Blockchain Integration
+
 Add new blockchains via the Web3 integration service:
+
 ```bash
 curl -X POST http://localhost:8100/blockchains \
   -H "Content-Type: application/json" \
@@ -354,12 +381,14 @@ curl -X POST http://localhost:8100/blockchains \
 ## 📈 **Scaling Guidelines**
 
 ### Horizontal Scaling
+
 - Add more instances of microservices
 - Use load balancers
 - Implement database sharding
 - Use CDN for static assets
 
 ### Vertical Scaling
+
 - Increase CPU/RAM for bottleneck services
 - Optimize database queries
 - Implement caching strategies
@@ -380,6 +409,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## 🆘 **Support**
 
 For support and questions:
+
 - Create an issue on GitHub
 - Join our Discord community
 - Email: support@tigerex.com
@@ -387,18 +417,21 @@ For support and questions:
 ## 🎯 **Roadmap**
 
 ### Phase 1 (Completed)
+
 - ✅ Core trading engine
 - ✅ Mobile applications
 - ✅ Admin systems
 - ✅ Blockchain integration
 
 ### Phase 2 (In Progress)
+
 - 🔄 Advanced DeFi features
 - 🔄 Institutional tools
 - 🔄 AI trading bots
 - 🔄 Cross-chain bridges
 
 ### Phase 3 (Planned)
+
 - 📋 Decentralized governance
 - 📋 Layer 2 solutions
 - 📋 NFT integration
