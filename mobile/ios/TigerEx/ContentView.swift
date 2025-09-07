@@ -1,693 +1,500 @@
 import SwiftUI
 import Combine
-import Foundation
 
-// MARK: - Main Content View
 struct ContentView: View {
     @StateObject private var authManager = AuthenticationManager()
-    @StateObject private var tradingManager = TradingManager()
-    @StateObject private var portfolioManager = PortfolioManager()
-    @StateObject private var notificationManager = NotificationManager()
     
     var body: some View {
         Group {
             if authManager.isAuthenticated {
                 MainTabView()
-                    .environmentObject(authManager)
-                    .environmentObject(tradingManager)
-                    .environmentObject(portfolioManager)
-                    .environmentObject(notificationManager)
             } else {
-                AuthenticationView()
-                    .environmentObject(authManager)
+                LoginView()
             }
         }
-        .onAppear {
-            authManager.checkAuthenticationStatus()
-            notificationManager.requestPermissions()
+        .environmentObject(authManager)
+    }
+}
+
+struct LoginView: View {
+    @EnvironmentObject var authManager: AuthenticationManager
+    @State private var email = ""
+    @State private var password = ""
+    @State private var isLoading = false
+    @State private var showingRegister = false
+    
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 24) {
+                Spacer()
+                
+                // Logo and Title
+                VStack(spacing: 16) {
+                    Text("TigerEx")
+                        .font(.system(size: 48, weight: .bold))
+                        .foregroundColor(.orange)
+                    
+                    Text("Advanced Crypto Trading")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                
+                Spacer()
+                
+                // Login Form
+                VStack(spacing: 16) {
+                    TextField("Email", text: $email)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .keyboardType(.emailAddress)
+                        .autocapitalization(.none)
+                    
+                    SecureField("Password", text: $password)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    
+                    Button(action: login) {
+                        HStack {
+                            if isLoading {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .black))
+                                    .scaleEffect(0.8)
+                            } else {
+                                Text("Login")
+                                    .fontWeight(.semibold)
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .background(Color.orange)
+                        .foregroundColor(.black)
+                        .cornerRadius(10)
+                    }
+                    .disabled(isLoading)
+                    
+                    Button("Don't have an account? Register") {
+                        showingRegister = true
+                    }
+                    .foregroundColor(.blue)
+                }
+                
+                // OAuth Buttons
+                VStack(spacing: 12) {
+                    Divider()
+                        .padding(.vertical)
+                    
+                    Button(action: { authManager.signInWithGoogle() }) {
+                        HStack {
+                            Image(systemName: "globe")
+                            Text("Continue with Google")
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(10)
+                    }
+                    
+                    Button(action: { authManager.signInWithApple() }) {
+                        HStack {
+                            Image(systemName: "applelogo")
+                            Text("Continue with Apple")
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .background(Color.black)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                    }
+                    
+                    Button(action: { authManager.signInWithTelegram() }) {
+                        HStack {
+                            Image(systemName: "paperplane.fill")
+                            Text("Continue with Telegram")
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                    }
+                }
+                
+                Spacer()
+            }
+            .padding(24)
+            .navigationTitle("")
+            .navigationBarHidden(true)
+        }
+        .sheet(isPresented: $showingRegister) {
+            RegisterView()
+        }
+    }
+    
+    private func login() {
+        isLoading = true
+        authManager.signIn(email: email, password: password) { success in
+            isLoading = false
+            if !success {
+                // Handle login error
+            }
         }
     }
 }
 
-// MARK: - Main Tab View
 struct MainTabView: View {
-    @EnvironmentObject var authManager: AuthenticationManager
-    @EnvironmentObject var tradingManager: TradingManager
-    @EnvironmentObject var portfolioManager: PortfolioManager
-    @State private var selectedTab = 0
-    
     var body: some View {
-        TabView(selection: $selectedTab) {
-            // Home/Dashboard
-            DashboardView()
+        TabView {
+            HomeView()
                 .tabItem {
                     Image(systemName: "house.fill")
                     Text("Home")
                 }
-                .tag(0)
             
-            // Markets
-            MarketsView()
-                .tabItem {
-                    Image(systemName: "chart.line.uptrend.xyaxis")
-                    Text("Markets")
-                }
-                .tag(1)
-            
-            // Trading
             TradingView()
                 .tabItem {
-                    Image(systemName: "arrow.left.arrow.right")
+                    Image(systemName: "chart.line.uptrend.xyaxis")
                     Text("Trade")
                 }
-                .tag(2)
             
-            // Portfolio
-            PortfolioView()
+            FuturesView()
                 .tabItem {
-                    Image(systemName: "briefcase.fill")
-                    Text("Portfolio")
+                    Image(systemName: "arrow.up.arrow.down")
+                    Text("Futures")
                 }
-                .tag(3)
             
-            // More
-            MoreView()
+            P2PView()
                 .tabItem {
-                    Image(systemName: "ellipsis")
-                    Text("More")
+                    Image(systemName: "person.2.fill")
+                    Text("P2P")
                 }
-                .tag(4)
+            
+            WalletView()
+                .tabItem {
+                    Image(systemName: "creditcard.fill")
+                    Text("Wallet")
+                }
         }
         .accentColor(.orange)
-        .onAppear {
-            portfolioManager.loadPortfolio()
-            tradingManager.connectWebSocket()
-        }
     }
 }
 
-// MARK: - Dashboard View
-struct DashboardView: View {
-    @EnvironmentObject var portfolioManager: PortfolioManager
-    @EnvironmentObject var tradingManager: TradingManager
-    @State private var showingNotifications = false
+struct HomeView: View {
+    @StateObject private var viewModel = HomeViewModel()
     
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
-                    // Header with balance and notifications
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text("Total Balance")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            Text("$\(portfolioManager.totalBalance, specifier: "%.2f")")
-                                .font(.title)
-                                .fontWeight(.bold)
-                        }
+                    // Portfolio Summary
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Portfolio Value")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
                         
-                        Spacer()
+                        Text("$12,345.67")
+                            .font(.system(size: 32, weight: .bold))
                         
-                        Button(action: { showingNotifications = true }) {
-                            Image(systemName: "bell.fill")
-                                .foregroundColor(.orange)
+                        HStack {
+                            Text("+$234.56")
+                                .foregroundColor(.green)
+                            Text("(+1.95%)")
+                                .foregroundColor(.green)
                         }
+                        .font(.subheadline)
                     }
-                    .padding(.horizontal)
-                    
-                    // Portfolio Performance Card
-                    PortfolioPerformanceCard()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(12)
                     
                     // Quick Actions
-                    QuickActionsView()
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 12) {
+                        QuickActionButton(title: "Trade", color: .orange, icon: "chart.line.uptrend.xyaxis")
+                        QuickActionButton(title: "Futures", color: .purple, icon: "arrow.up.arrow.down")
+                        QuickActionButton(title: "P2P", color: .blue, icon: "person.2.fill")
+                        QuickActionButton(title: "Wallet", color: .green, icon: "creditcard.fill")
+                    }
                     
-                    // Market Overview
-                    MarketOverviewCard()
-                    
-                    // Recent Transactions
-                    RecentTransactionsCard()
-                    
-                    // News & Updates
-                    NewsUpdatesCard()
+                    // Market Data
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Markets")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                        
+                        LazyVStack(spacing: 8) {
+                            ForEach(viewModel.marketData, id: \.symbol) { market in
+                                MarketRow(market: market)
+                            }
+                        }
+                    }
                 }
-                .padding(.vertical)
+                .padding()
             }
             .navigationTitle("TigerEx")
-            .navigationBarTitleDisplayMode(.large)
-            .sheet(isPresented: $showingNotifications) {
-                NotificationsView()
-            }
-        }
-    }
-}
-
-// MARK: - Portfolio Performance Card
-struct PortfolioPerformanceCard: View {
-    @EnvironmentObject var portfolioManager: PortfolioManager
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("Portfolio Performance")
-                    .font(.headline)
-                Spacer()
-                Text("24h")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            
-            HStack {
-                VStack(alignment: .leading) {
-                    Text("P&L")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    HStack {
-                        Text("$\(portfolioManager.totalPnL, specifier: "%.2f")")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .foregroundColor(portfolioManager.totalPnL >= 0 ? .green : .red)
-                        Text("(\(portfolioManager.totalPnLPercentage, specifier: "%.2f")%)")
-                            .font(.caption)
-                            .foregroundColor(portfolioManager.totalPnL >= 0 ? .green : .red)
-                    }
-                }
-                
-                Spacer()
-                
-                // Mini chart placeholder
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color.gray.opacity(0.2))
-                    .frame(width: 100, height: 50)
-                    .overlay(
-                        Text("Chart")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    )
-            }
-        }
-        .padding()
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
-        .padding(.horizontal)
-    }
-}
-
-// MARK: - Quick Actions View
-struct QuickActionsView: View {
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text("Quick Actions")
-                .font(.headline)
-                .padding(.horizontal)
-            
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 16) {
-                    QuickActionButton(
-                        icon: "plus.circle.fill",
-                        title: "Deposit",
-                        color: .green
-                    ) {
-                        // Handle deposit
-                    }
-                    
-                    QuickActionButton(
-                        icon: "minus.circle.fill",
-                        title: "Withdraw",
-                        color: .red
-                    ) {
-                        // Handle withdraw
-                    }
-                    
-                    QuickActionButton(
-                        icon: "arrow.left.arrow.right.circle.fill",
-                        title: "Convert",
-                        color: .blue
-                    ) {
-                        // Handle convert
-                    }
-                    
-                    QuickActionButton(
-                        icon: "person.2.circle.fill",
-                        title: "P2P",
-                        color: .purple
-                    ) {
-                        // Handle P2P
-                    }
-                    
-                    QuickActionButton(
-                        icon: "doc.text.circle.fill",
-                        title: "Copy Trade",
-                        color: .orange
-                    ) {
-                        // Handle copy trading
-                    }
-                }
-                .padding(.horizontal)
+            .refreshable {
+                viewModel.refreshData()
             }
         }
     }
 }
 
 struct QuickActionButton: View {
-    let icon: String
     let title: String
     let color: Color
-    let action: () -> Void
+    let icon: String
     
     var body: some View {
-        Button(action: action) {
-            VStack(spacing: 8) {
-                Image(systemName: icon)
-                    .font(.title2)
-                    .foregroundColor(color)
-                
-                Text(title)
-                    .font(.caption)
-                    .foregroundColor(.primary)
-            }
-            .frame(width: 70, height: 70)
-            .background(Color(.systemBackground))
-            .cornerRadius(12)
-            .shadow(color: .black.opacity(0.1), radius: 3, x: 0, y: 1)
-        }
-    }
-}
-
-// MARK: - Market Overview Card
-struct MarketOverviewCard: View {
-    @EnvironmentObject var tradingManager: TradingManager
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("Market Overview")
-                    .font(.headline)
-                Spacer()
-                NavigationLink("View All", destination: MarketsView())
-                    .font(.caption)
-                    .foregroundColor(.orange)
-            }
+        VStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundColor(color)
             
-            LazyVStack(spacing: 8) {
-                ForEach(tradingManager.topMarkets.prefix(5), id: \.symbol) { market in
-                    MarketRowView(market: market)
-                }
-            }
+            Text(title)
+                .font(.caption)
+                .fontWeight(.medium)
         }
-        .padding()
-        .background(Color(.systemBackground))
+        .frame(height: 60)
+        .frame(maxWidth: .infinity)
+        .background(Color(.systemGray6))
         .cornerRadius(12)
-        .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
-        .padding(.horizontal)
     }
 }
 
-struct MarketRowView: View {
-    let market: Market
+struct MarketRow: View {
+    let market: MarketData
     
     var body: some View {
         HStack {
-            // Coin icon and name
-            HStack(spacing: 8) {
-                AsyncImage(url: URL(string: market.iconURL)) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                } placeholder: {
-                    Circle()
-                        .fill(Color.gray.opacity(0.3))
-                }
-                .frame(width: 24, height: 24)
-                
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(market.symbol)
-                        .font(.caption)
-                        .fontWeight(.medium)
-                    Text(market.name)
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                }
-            }
-            
-            Spacer()
-            
-            // Price and change
-            VStack(alignment: .trailing, spacing: 2) {
-                Text("$\(market.price, specifier: "%.2f")")
-                    .font(.caption)
-                    .fontWeight(.medium)
-                
-                HStack(spacing: 2) {
-                    Image(systemName: market.priceChange >= 0 ? "arrow.up" : "arrow.down")
-                        .font(.caption2)
-                    Text("\(abs(market.priceChangePercentage), specifier: "%.2f")%")
-                        .font(.caption2)
-                }
-                .foregroundColor(market.priceChange >= 0 ? .green : .red)
-            }
-        }
-    }
-}
-
-// MARK: - Recent Transactions Card
-struct RecentTransactionsCard: View {
-    @EnvironmentObject var portfolioManager: PortfolioManager
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("Recent Transactions")
-                    .font(.headline)
-                Spacer()
-                NavigationLink("View All", destination: TransactionHistoryView())
-                    .font(.caption)
-                    .foregroundColor(.orange)
-            }
-            
-            LazyVStack(spacing: 8) {
-                ForEach(portfolioManager.recentTransactions.prefix(3), id: \.id) { transaction in
-                    TransactionRowView(transaction: transaction)
-                }
-            }
-        }
-        .padding()
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
-        .padding(.horizontal)
-    }
-}
-
-struct TransactionRowView: View {
-    let transaction: Transaction
-    
-    var body: some View {
-        HStack {
-            // Transaction type icon
-            Image(systemName: transaction.type.iconName)
-                .foregroundColor(transaction.type.color)
-                .frame(width: 24, height: 24)
-            
-            VStack(alignment: .leading, spacing: 2) {
-                Text(transaction.type.displayName)
-                    .font(.caption)
-                    .fontWeight(.medium)
-                Text(transaction.timestamp.formatted(.dateTime.month().day().hour().minute()))
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-            }
-            
-            Spacer()
-            
-            VStack(alignment: .trailing, spacing: 2) {
-                Text("\(transaction.amount, specifier: "%.6f") \(transaction.symbol)")
-                    .font(.caption)
-                    .fontWeight(.medium)
-                Text("$\(transaction.usdValue, specifier: "%.2f")")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-            }
-        }
-    }
-}
-
-// MARK: - News Updates Card
-struct NewsUpdatesCard: View {
-    @State private var newsItems: [NewsItem] = []
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("News & Updates")
-                    .font(.headline)
-                Spacer()
-                NavigationLink("View All", destination: NewsView())
-                    .font(.caption)
-                    .foregroundColor(.orange)
-            }
-            
-            LazyVStack(spacing: 8) {
-                ForEach(newsItems.prefix(3), id: \.id) { news in
-                    NewsRowView(news: news)
-                }
-            }
-        }
-        .padding()
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
-        .padding(.horizontal)
-        .onAppear {
-            loadNews()
-        }
-    }
-    
-    private func loadNews() {
-        // Mock news data
-        newsItems = [
-            NewsItem(id: "1", title: "Bitcoin reaches new all-time high", summary: "BTC surpasses $50,000 mark", timestamp: Date()),
-            NewsItem(id: "2", title: "Ethereum 2.0 update released", summary: "Major network upgrade completed", timestamp: Date().addingTimeInterval(-3600)),
-            NewsItem(id: "3", title: "TigerEx adds new trading pairs", summary: "10 new altcoins now available", timestamp: Date().addingTimeInterval(-7200))
-        ]
-    }
-}
-
-struct NewsRowView: View {
-    let news: NewsItem
-    
-    var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            RoundedRectangle(cornerRadius: 6)
-                .fill(Color.orange.opacity(0.2))
-                .frame(width: 40, height: 40)
-                .overlay(
-                    Image(systemName: "newspaper")
-                        .foregroundColor(.orange)
-                )
-            
             VStack(alignment: .leading, spacing: 4) {
-                Text(news.title)
+                Text(market.symbol)
+                    .fontWeight(.semibold)
+                
+                Text("Vol: \(market.volume)")
                     .font(.caption)
-                    .fontWeight(.medium)
-                    .lineLimit(2)
-                
-                Text(news.summary)
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                    .lineLimit(1)
-                
-                Text(news.timestamp.formatted(.relative(presentation: .named)))
-                    .font(.caption2)
                     .foregroundColor(.secondary)
             }
             
             Spacer()
+            
+            VStack(alignment: .trailing, spacing: 4) {
+                Text("$\(market.price)")
+                    .fontWeight(.semibold)
+                
+                Text(market.change)
+                    .font(.caption)
+                    .foregroundColor(market.isPositive ? .green : .red)
+            }
         }
-    }
-}
-
-// MARK: - Data Models
-struct Market {
-    let symbol: String
-    let name: String
-    let price: Double
-    let priceChange: Double
-    let priceChangePercentage: Double
-    let volume: Double
-    let iconURL: String
-}
-
-struct Transaction {
-    let id: String
-    let type: TransactionType
-    let symbol: String
-    let amount: Double
-    let usdValue: Double
-    let timestamp: Date
-}
-
-enum TransactionType {
-    case buy, sell, deposit, withdraw, transfer
-    
-    var displayName: String {
-        switch self {
-        case .buy: return "Buy"
-        case .sell: return "Sell"
-        case .deposit: return "Deposit"
-        case .withdraw: return "Withdraw"
-        case .transfer: return "Transfer"
-        }
-    }
-    
-    var iconName: String {
-        switch self {
-        case .buy: return "arrow.up.circle.fill"
-        case .sell: return "arrow.down.circle.fill"
-        case .deposit: return "plus.circle.fill"
-        case .withdraw: return "minus.circle.fill"
-        case .transfer: return "arrow.left.arrow.right.circle.fill"
-        }
-    }
-    
-    var color: Color {
-        switch self {
-        case .buy: return .green
-        case .sell: return .red
-        case .deposit: return .blue
-        case .withdraw: return .orange
-        case .transfer: return .purple
-        }
-    }
-}
-
-struct NewsItem {
-    let id: String
-    let title: String
-    let summary: String
-    let timestamp: Date
-}
-
-// MARK: - Managers (ObservableObject classes)
-class AuthenticationManager: ObservableObject {
-    @Published var isAuthenticated = false
-    @Published var user: User?
-    
-    func checkAuthenticationStatus() {
-        // Check stored authentication token
-        if let token = UserDefaults.standard.string(forKey: "auth_token") {
-            // Validate token with server
-            isAuthenticated = true
-        }
-    }
-    
-    func login(email: String, password: String) async {
-        // Implement login logic
-    }
-    
-    func logout() {
-        UserDefaults.standard.removeObject(forKey: "auth_token")
-        isAuthenticated = false
-        user = nil
-    }
-}
-
-class TradingManager: ObservableObject {
-    @Published var topMarkets: [Market] = []
-    @Published var isConnected = false
-    
-    func connectWebSocket() {
-        // Implement WebSocket connection
-        loadTopMarkets()
-    }
-    
-    private func loadTopMarkets() {
-        // Mock data
-        topMarkets = [
-            Market(symbol: "BTC", name: "Bitcoin", price: 43250.00, priceChange: 1250.00, priceChangePercentage: 2.98, volume: 1234567890, iconURL: ""),
-            Market(symbol: "ETH", name: "Ethereum", price: 2650.00, priceChange: -45.50, priceChangePercentage: -1.69, volume: 987654321, iconURL: ""),
-            Market(symbol: "BNB", name: "Binance Coin", price: 315.75, priceChange: 8.25, priceChangePercentage: 2.68, volume: 456789123, iconURL: ""),
-            Market(symbol: "ADA", name: "Cardano", price: 0.485, priceChange: 0.012, priceChangePercentage: 2.54, volume: 234567890, iconURL: ""),
-            Market(symbol: "SOL", name: "Solana", price: 98.45, priceChange: -2.15, priceChangePercentage: -2.14, volume: 345678901, iconURL: "")
-        ]
-    }
-}
-
-class PortfolioManager: ObservableObject {
-    @Published var totalBalance: Double = 0
-    @Published var totalPnL: Double = 0
-    @Published var totalPnLPercentage: Double = 0
-    @Published var recentTransactions: [Transaction] = []
-    
-    func loadPortfolio() {
-        // Mock data
-        totalBalance = 12450.75
-        totalPnL = 1250.30
-        totalPnLPercentage = 11.15
-        
-        recentTransactions = [
-            Transaction(id: "1", type: .buy, symbol: "BTC", amount: 0.025, usdValue: 1081.25, timestamp: Date()),
-            Transaction(id: "2", type: .sell, symbol: "ETH", amount: 1.5, usdValue: 3975.00, timestamp: Date().addingTimeInterval(-3600)),
-            Transaction(id: "3", type: .deposit, symbol: "USDT", amount: 5000.00, usdValue: 5000.00, timestamp: Date().addingTimeInterval(-7200))
-        ]
-    }
-}
-
-class NotificationManager: ObservableObject {
-    @Published var notifications: [NotificationItem] = []
-    
-    func requestPermissions() {
-        // Request push notification permissions
-    }
-}
-
-struct User {
-    let id: String
-    let email: String
-    let username: String
-}
-
-struct NotificationItem {
-    let id: String
-    let title: String
-    let message: String
-    let timestamp: Date
-    let isRead: Bool
-}
-
-// MARK: - Placeholder Views
-struct AuthenticationView: View {
-    var body: some View {
-        Text("Authentication View")
-    }
-}
-
-struct MarketsView: View {
-    var body: some View {
-        Text("Markets View")
+        .padding()
+        .background(Color(.systemGray6))
+        .cornerRadius(8)
     }
 }
 
 struct TradingView: View {
+    @StateObject private var viewModel = TradingViewModel()
+    
     var body: some View {
-        Text("Trading View")
+        NavigationView {
+            VStack {
+                // Trading Pair Header
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(viewModel.selectedPair)
+                        .font(.title)
+                        .fontWeight(.bold)
+                    
+                    Text("$43,250.00")
+                        .font(.title2)
+                        .foregroundColor(.green)
+                    
+                    Text("+2.45% (+$1,035.50)")
+                        .font(.subheadline)
+                        .foregroundColor(.green)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+                .background(Color(.systemGray6))
+                
+                HStack(spacing: 0) {
+                    // Order Book
+                    VStack(alignment: .leading) {
+                        Text("Order Book")
+                            .font(.headline)
+                            .padding(.horizontal)
+                        
+                        ScrollView {
+                            LazyVStack(spacing: 2) {
+                                ForEach(viewModel.orderBook.sells.prefix(10), id: \.price) { order in
+                                    OrderBookRow(order: order, isBuy: false)
+                                }
+                                
+                                ForEach(viewModel.orderBook.buys.prefix(10), id: \.price) { order in
+                                    OrderBookRow(order: order, isBuy: true)
+                                }
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    
+                    Divider()
+                    
+                    // Order Form
+                    OrderFormView()
+                        .frame(maxWidth: .infinity)
+                }
+                .frame(maxHeight: .infinity)
+            }
+            .navigationTitle("Spot Trading")
+            .navigationBarTitleDisplayMode(.inline)
+        }
     }
 }
 
-struct PortfolioView: View {
+struct OrderBookRow: View {
+    let order: OrderBookEntry
+    let isBuy: Bool
+    
     var body: some View {
-        Text("Portfolio View")
+        HStack {
+            Text(order.price)
+                .font(.caption)
+                .foregroundColor(isBuy ? .green : .red)
+            
+            Spacer()
+            
+            Text(order.amount)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 2)
     }
 }
 
-struct MoreView: View {
+struct OrderFormView: View {
+    @State private var orderType = "Buy"
+    @State private var amount = ""
+    @State private var price = ""
+    
     var body: some View {
-        Text("More View")
+        VStack(spacing: 16) {
+            Text("Place Order")
+                .font(.headline)
+            
+            // Buy/Sell Picker
+            Picker("Order Type", selection: $orderType) {
+                Text("Buy").tag("Buy")
+                Text("Sell").tag("Sell")
+            }
+            .pickerStyle(SegmentedPickerStyle())
+            
+            VStack(spacing: 12) {
+                TextField("Price (USDT)", text: $price)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .keyboardType(.decimalPad)
+                
+                TextField("Amount (BTC)", text: $amount)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .keyboardType(.decimalPad)
+            }
+            
+            Button(action: placeOrder) {
+                Text("\(orderType) BTC")
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 44)
+                    .background(orderType == "Buy" ? Color.green : Color.red)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+            }
+            
+            Spacer()
+        }
+        .padding()
+    }
+    
+    private func placeOrder() {
+        // Implement order placement
     }
 }
 
-struct NotificationsView: View {
-    var body: some View {
-        Text("Notifications View")
+// Additional Views
+struct RegisterView: View { /* Implementation */ }
+struct FuturesView: View { /* Implementation */ }
+struct P2PView: View { /* Implementation */ }
+struct WalletView: View { /* Implementation */ }
+
+// ViewModels and Data Models would be implemented similarly to Android
+class AuthenticationManager: ObservableObject {
+    @Published var isAuthenticated = false
+    
+    func signIn(email: String, password: String, completion: @escaping (Bool) -> Void) {
+        // Implement sign in logic
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.isAuthenticated = true
+            completion(true)
+        }
+    }
+    
+    func signInWithGoogle() { /* Implementation */ }
+    func signInWithApple() { /* Implementation */ }
+    func signInWithTelegram() { /* Implementation */ }
+}
+
+class HomeViewModel: ObservableObject {
+    @Published var marketData: [MarketData] = []
+    @Published var portfolioValue: Double = 0
+    
+    init() {
+        loadMarketData()
+    }
+    
+    func loadMarketData() {
+        // Mock data
+        marketData = [
+            MarketData(symbol: "BTC/USDT", price: "43,250.00", change: "+2.45%", volume: "2.1B", isPositive: true),
+            MarketData(symbol: "ETH/USDT", price: "2,650.00", change: "+1.85%", volume: "1.8B", isPositive: true),
+            MarketData(symbol: "BNB/USDT", price: "315.50", change: "-0.75%", volume: "450M", isPositive: false),
+            MarketData(symbol: "ADA/USDT", price: "0.4850", change: "+3.20%", volume: "320M", isPositive: true)
+        ]
+        portfolioValue = 12345.67
+    }
+    
+    func refreshData() {
+        loadMarketData()
     }
 }
 
-struct TransactionHistoryView: View {
-    var body: some View {
-        Text("Transaction History View")
-    }
+class TradingViewModel: ObservableObject {
+    @Published var selectedPair = "BTC/USDT"
+    @Published var orderBook = OrderBook(
+        buys: [
+            OrderBookEntry(price: "43,248.50", amount: "0.1234"),
+            OrderBookEntry(price: "43,247.25", amount: "0.2567")
+        ],
+        sells: [
+            OrderBookEntry(price: "43,251.25", amount: "0.1567"),
+            OrderBookEntry(price: "43,252.50", amount: "0.2234")
+        ]
+    )
 }
 
-struct NewsView: View {
-    var body: some View {
-        Text("News View")
-    }
+struct MarketData {
+    let symbol: String
+    let price: String
+    let change: String
+    let volume: String
+    let isPositive: Bool
 }
 
-// MARK: - Preview
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
+struct OrderBookEntry {
+    let price: String
+    let amount: String
+}
+
+struct OrderBook {
+    let buys: [OrderBookEntry]
+    let sells: [OrderBookEntry]
+}
+
+#Preview {
+    ContentView()
 }

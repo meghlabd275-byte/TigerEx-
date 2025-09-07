@@ -1,10 +1,9 @@
 import SwiftUI
-import Firebase
-import UserNotifications
+import Combine
+import LocalAuthentication
 
 @main
 struct TigerExApp: App {
-    @StateObject private var appState = AppState()
     @StateObject private var authManager = AuthenticationManager()
     @StateObject private var tradingManager = TradingManager()
     @StateObject private var portfolioManager = PortfolioManager()
@@ -13,20 +12,13 @@ struct TigerExApp: App {
     @StateObject private var themeManager = ThemeManager()
     
     init() {
-        // Configure Firebase
-        FirebaseApp.configure()
-        
-        // Configure appearance
-        configureAppearance()
-        
-        // Request notification permissions
-        requestNotificationPermissions()
+        setupAppearance()
+        setupNotifications()
     }
     
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(appState)
                 .environmentObject(authManager)
                 .environmentObject(tradingManager)
                 .environmentObject(portfolioManager)
@@ -35,177 +27,255 @@ struct TigerExApp: App {
                 .environmentObject(themeManager)
                 .preferredColorScheme(themeManager.colorScheme)
                 .onAppear {
-                    setupApp()
-                }
-                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-                    handleAppBecomeActive()
-                }
-                .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
-                    handleAppWillResignActive()
+                    setupInitialConfiguration()
                 }
         }
     }
     
-    private func configureAppearance() {
+    private func setupAppearance() {
         // Configure navigation bar appearance
-        let navBarAppearance = UINavigationBarAppearance()
-        navBarAppearance.configureWithOpaqueBackground()
-        navBarAppearance.backgroundColor = UIColor.systemBackground
-        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.label]
-        navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label]
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor(named: "PrimaryColor")
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         
-        UINavigationBar.appearance().standardAppearance = navBarAppearance
-        UINavigationBar.appearance().compactAppearance = navBarAppearance
-        UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
         
         // Configure tab bar appearance
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.configureWithOpaqueBackground()
-        tabBarAppearance.backgroundColor = UIColor.systemBackground
+        tabBarAppearance.backgroundColor = UIColor(named: "BackgroundColor")
         
         UITabBar.appearance().standardAppearance = tabBarAppearance
         UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
-        
-        // Configure tint colors
-        UIView.appearance().tintColor = UIColor(named: "AccentColor")
     }
     
-    private func requestNotificationPermissions() {
+    private func setupNotifications() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
-            DispatchQueue.main.async {
-                if granted {
+            if granted {
+                DispatchQueue.main.async {
                     UIApplication.shared.registerForRemoteNotifications()
                 }
             }
         }
     }
     
-    private func setupApp() {
-        // Initialize app state
-        appState.initialize()
-        
-        // Check for biometric authentication
-        if authManager.isLoggedIn && biometricManager.isBiometricEnabled {
-            biometricManager.authenticateWithBiometrics { success in
-                if !success {
-                    authManager.logout()
-                }
-            }
-        }
-        
-        // Start real-time data connections
-        if authManager.isLoggedIn {
-            tradingManager.startRealTimeUpdates()
-            portfolioManager.startRealTimeUpdates()
-        }
-        
-        // Check for app updates
-        checkForAppUpdates()
-    }
-    
-    private func handleAppBecomeActive() {
-        // Resume real-time connections
-        if authManager.isLoggedIn {
-            tradingManager.resumeRealTimeUpdates()
-            portfolioManager.resumeRealTimeUpdates()
-        }
-        
-        // Refresh data
+    private func setupInitialConfiguration() {
+        // Initialize app configuration
         Task {
-            await refreshAppData()
+            await authManager.checkAuthenticationStatus()
+            await tradingManager.initializeMarketData()
+            await portfolioManager.loadPortfolio()
         }
     }
+}
+
+struct ContentView: View {
+    @EnvironmentObject var authManager: AuthenticationManager
+    @EnvironmentObject var biometricManager: BiometricManager
+    @State private var showingSplash = true
     
-    private func handleAppWillResignActive() {
-        // Pause real-time connections to save battery
-        tradingManager.pauseRealTimeUpdates()
-        portfolioManager.pauseRealTimeUpdates()
-        
-        // Enable app lock if configured
-        if biometricManager.isAppLockEnabled {
-            appState.isAppLocked = true
-        }
-    }
-    
-    private func refreshAppData() async {
-        guard authManager.isLoggedIn else { return }
-        
-        await withTaskGroup(of: Void.self) { group in
-            group.addTask {
-                await portfolioManager.refreshPortfolio()
+    var body: some View {
+        Group {
+            if showingSplash {
+                SplashView()
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            withAnimation(.easeInOut(duration: 0.5)) {
+                                showingSplash = false
+                            }
+                        }
+                    }
+            } else if authManager.isAuthenticated {
+                MainTabView()
+            } else {
+                AuthenticationView()
             }
+        }
+        .onAppear {
+            if biometricManager.isBiometricEnabled && authManager.isAuthenticated {
+                biometricManager.authenticateWithBiometrics()
+            }
+        }
+    }
+}
+
+// MARK: - Splash View
+struct SplashView: View {
+    @State private var scale: CGFloat = 0.5
+    @State private var opacity: Double = 0.0
+    
+    var body: some View {
+        ZStack {
+            LinearGradient(
+                colors: [Color("PrimaryColor"), Color("SecondaryColor")],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
             
-            group.addTask {
-                await tradingManager.refreshMarketData()
+            VStack(spacing: 20) {
+                Image("TigerExLogo")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 120, height: 120)
+                    .scaleEffect(scale)
+                    .opacity(opacity)
+                
+                Text("TigerEx")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .opacity(opacity)
+                
+                Text("Advanced Hybrid Crypto Exchange")
+                    .font(.subheadline)
+                    .foregroundColor(.white.opacity(0.8))
+                    .opacity(opacity)
             }
-            
-            group.addTask {
-                await notificationManager.refreshNotifications()
+        }
+        .onAppear {
+            withAnimation(.easeInOut(duration: 1.0)) {
+                scale = 1.0
+                opacity = 1.0
             }
         }
     }
+}
+
+// MARK: - Main Tab View
+struct MainTabView: View {
+    @EnvironmentObject var authManager: AuthenticationManager
+    @State private var selectedTab = 0
     
-    private func checkForAppUpdates() {
-        // Check for app updates from App Store
-        AppUpdateManager.shared.checkForUpdates { updateAvailable in
-            if updateAvailable {
-                DispatchQueue.main.async {
-                    appState.showUpdateAlert = true
+    var body: some View {
+        TabView(selection: $selectedTab) {
+            // Home Tab
+            HomeView()
+                .tabItem {
+                    Image(systemName: "house.fill")
+                    Text("Home")
+                }
+                .tag(0)
+            
+            // Markets Tab
+            MarketsView()
+                .tabItem {
+                    Image(systemName: "chart.line.uptrend.xyaxis")
+                    Text("Markets")
+                }
+                .tag(1)
+            
+            // Trade Tab
+            TradeView()
+                .tabItem {
+                    Image(systemName: "arrow.left.arrow.right")
+                    Text("Trade")
+                }
+                .tag(2)
+            
+            // Futures Tab
+            FuturesView()
+                .tabItem {
+                    Image(systemName: "chart.bar.fill")
+                    Text("Futures")
+                }
+                .tag(3)
+            
+            // Portfolio Tab
+            PortfolioView()
+                .tabItem {
+                    Image(systemName: "briefcase.fill")
+                    Text("Portfolio")
+                }
+                .tag(4)
+            
+            // More Tab
+            MoreView()
+                .tabItem {
+                    Image(systemName: "ellipsis")
+                    Text("More")
+                }
+                .tag(5)
+        }
+        .accentColor(Color("PrimaryColor"))
+    }
+}
+
+// MARK: - Authentication View
+struct AuthenticationView: View {
+    @EnvironmentObject var authManager: AuthenticationManager
+    @State private var showingLogin = true
+    
+    var body: some View {
+        NavigationView {
+            ZStack {
+                LinearGradient(
+                    colors: [Color("PrimaryColor"), Color("SecondaryColor")],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+                
+                VStack(spacing: 30) {
+                    // Logo and Title
+                    VStack(spacing: 16) {
+                        Image("TigerExLogo")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 80, height: 80)
+                        
+                        Text("Welcome to TigerEx")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                        
+                        Text("Advanced Hybrid Crypto Exchange")
+                            .font(.subheadline)
+                            .foregroundColor(.white.opacity(0.8))
+                    }
+                    
+                    Spacer()
+                    
+                    // Authentication Buttons
+                    VStack(spacing: 16) {
+                        if showingLogin {
+                            LoginView()
+                        } else {
+                            RegisterView()
+                        }
+                        
+                        Button(action: {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                showingLogin.toggle()
+                            }
+                        }) {
+                            Text(showingLogin ? "Don't have an account? Sign Up" : "Already have an account? Sign In")
+                                .foregroundColor(.white)
+                                .font(.footnote)
+                        }
+                    }
+                    .padding(.horizontal, 32)
+                    
+                    Spacer()
                 }
             }
         }
     }
 }
 
-// MARK: - App State Management
-class AppState: ObservableObject {
-    @Published var isAppLocked = false
-    @Published var showUpdateAlert = false
-    @Published var isNetworkConnected = true
-    @Published var currentTab: MainTab = .home
-    @Published var showOnboarding = false
+// MARK: - Theme Manager
+class ThemeManager: ObservableObject {
+    @Published var isDarkMode = false
     
-    func initialize() {
-        // Check if first launch
-        if UserDefaults.standard.bool(forKey: "isFirstLaunch") == false {
-            showOnboarding = true
-            UserDefaults.standard.set(true, forKey: "isFirstLaunch")
-        }
-        
-        // Monitor network connectivity
-        NetworkMonitor.shared.startMonitoring { [weak self] isConnected in
-            DispatchQueue.main.async {
-                self?.isNetworkConnected = isConnected
-            }
-        }
-    }
-}
-
-// MARK: - Main Tab Enum
-enum MainTab: String, CaseIterable {
-    case home = "Home"
-    case markets = "Markets"
-    case trading = "Trading"
-    case portfolio = "Portfolio"
-    case profile = "Profile"
-    
-    var icon: String {
-        switch self {
-        case .home: return "house.fill"
-        case .markets: return "chart.line.uptrend.xyaxis"
-        case .trading: return "arrow.left.arrow.right"
-        case .portfolio: return "briefcase.fill"
-        case .profile: return "person.fill"
-        }
+    var colorScheme: ColorScheme? {
+        isDarkMode ? .dark : .light
     }
     
-    var selectedIcon: String {
-        switch self {
-        case .home: return "house.fill"
-        case .markets: return "chart.line.uptrend.xyaxis"
-        case .trading: return "arrow.left.arrow.right"
-        case .portfolio: return "briefcase.fill"
-        case .profile: return "person.fill"
-        }
+    func toggleTheme() {
+        isDarkMode.toggle()
     }
 }

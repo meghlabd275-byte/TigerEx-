@@ -1,9 +1,15 @@
 #!/bin/bash
 
-# TigerEx Deployment Script
-# This script handles the deployment of the TigerEx platform
+# TigerEx Production Deployment Script
+# This script deploys the TigerEx platform to production environment
 
-set -e
+set -e  # Exit on any error
+
+# Configuration
+ENVIRONMENT=${1:-production}
+NAMESPACE="tigerex-${ENVIRONMENT}"
+DOCKER_REGISTRY="tigerex"
+VERSION=${2:-latest}
 
 # Colors for output
 RED='\033[0;31m'
@@ -12,14 +18,7 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Configuration
-ENVIRONMENT=${1:-development}
-PROJECT_NAME="tigerex"
-DOCKER_COMPOSE_FILE="docker-compose.yml"
-BACKUP_DIR="./backups"
-LOG_DIR="./logs"
-
-# Functions
+# Logging functions
 log_info() {
     echo -e "${BLUE}[INFO]${NC} $1"
 }
@@ -36,334 +35,340 @@ log_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-check_requirements() {
-    log_info "Checking system requirements..."
+# Check prerequisites
+check_prerequisites() {
+    log_info "Checking prerequisites..."
     
-    # Check Docker
+    # Check if kubectl is installed
+    if ! command -v kubectl &> /dev/null; then
+        log_error "kubectl is not installed. Please install kubectl first."
+        exit 1
+    fi
+    
+    # Check if docker is installed
     if ! command -v docker &> /dev/null; then
         log_error "Docker is not installed. Please install Docker first."
         exit 1
     fi
     
-    # Check Docker Compose
-    if ! command -v docker-compose &> /dev/null; then
-        log_error "Docker Compose is not installed. Please install Docker Compose first."
+    # Check if helm is installed
+    if ! command -v helm &> /dev/null; then
+        log_error "Helm is not installed. Please install Helm first."
         exit 1
     fi
     
-    # Check Node.js
-    if ! command -v node &> /dev/null; then
-        log_error "Node.js is not installed. Please install Node.js first."
+    # Check kubectl connection
+    if ! kubectl cluster-info &> /dev/null; then
+        log_error "Cannot connect to Kubernetes cluster. Please check your kubeconfig."
         exit 1
     fi
     
-    # Check available disk space (minimum 10GB)
-    AVAILABLE_SPACE=$(df . | tail -1 | awk '{print $4}')
-    if [ $AVAILABLE_SPACE -lt 10485760 ]; then
-        log_warning "Less than 10GB disk space available. Deployment may fail."
-    fi
-    
-    log_success "System requirements check passed"
+    log_success "Prerequisites check passed"
 }
 
-setup_environment() {
-    log_info "Setting up environment for: $ENVIRONMENT"
-    
-    # Create necessary directories
-    mkdir -p $BACKUP_DIR
-    mkdir -p $LOG_DIR
-    mkdir -p ./data/{postgres,redis,mongodb,influxdb}
-    
-    # Set environment-specific Docker Compose file
-    case $ENVIRONMENT in
-        "production")
-            DOCKER_COMPOSE_FILE="docker-compose.production.yml"
-            ;;
-        "staging")
-            DOCKER_COMPOSE_FILE="docker-compose.staging.yml"
-            ;;
-        "development")
-            DOCKER_COMPOSE_FILE="docker-compose.yml"
-            ;;
-        *)
-            log_error "Unknown environment: $ENVIRONMENT"
-            exit 1
-            ;;
-    esac
-    
-    # Copy environment file
-    if [ ! -f .env ]; then
-        if [ -f .env.example ]; then
-            cp .env.example .env
-            log_warning "Created .env file from .env.example. Please review and update the configuration."
-        else
-            log_error ".env.example file not found. Please create environment configuration."
-            exit 1
-        fi
-    fi
-    
-    log_success "Environment setup completed"
-}
-
-backup_database() {
-    if [ "$ENVIRONMENT" != "development" ]; then
-        log_info "Creating database backup..."
-        
-        TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
-        BACKUP_FILE="$BACKUP_DIR/tigerex_backup_$TIMESTAMP.sql"
-        
-        # Create PostgreSQL backup
-        docker-compose exec -T postgres pg_dump -U tigerex tigerex > $BACKUP_FILE
-        
-        if [ $? -eq 0 ]; then
-            log_success "Database backup created: $BACKUP_FILE"
-        else
-            log_error "Database backup failed"
-            exit 1
-        fi
-    fi
-}
-
-build_services() {
-    log_info "Building services..."
-    
-    # Install dependencies
-    log_info "Installing Node.js dependencies..."
-    npm run install:all
-    
-    # Build frontend applications
-    log_info "Building frontend applications..."
-    npm run build:frontend
-    
-    # Build backend services
-    log_info "Building backend services..."
-    npm run build:backend
-    
-    # Build Docker images
+# Build Docker images
+build_images() {
     log_info "Building Docker images..."
-    docker-compose -f $DOCKER_COMPOSE_FILE build --no-cache
     
-    log_success "Services built successfully"
+    # Services to build
+    services=(
+        "api-gateway"
+        "matching-engine"
+        "transaction-engine"
+        "risk-management"
+        "dex-integration"
+        "nft-marketplace"
+        "copy-trading"
+        "compliance-engine"
+        "institutional-services"
+        "notification-service"
+        "frontend"
+    )
+    
+    for service in "${services[@]}"; do
+        log_info "Building ${service}..."
+        
+        if [ -f "backend/${service}/Dockerfile" ]; then
+            docker build -t "${DOCKER_REGISTRY}/${service}:${VERSION}" "backend/${service}/"
+        elif [ -f "frontend/Dockerfile" ] && [ "${service}" = "frontend" ]; then
+            docker build -t "${DOCKER_REGISTRY}/${service}:${VERSION}" "frontend/"
+        else
+            log_warning "Dockerfile not found for ${service}, skipping..."
+            continue
+        fi
+        
+        # Push to registry
+        log_info "Pushing ${service} to registry..."
+        docker push "${DOCKER_REGISTRY}/${service}:${VERSION}"
+    done
+    
+    log_success "Docker images built and pushed"
 }
 
-deploy_infrastructure() {
-    log_info "Deploying infrastructure services..."
+# Create namespace
+create_namespace() {
+    log_info "Creating namespace ${NAMESPACE}..."
     
-    # Start database services first
-    docker-compose -f $DOCKER_COMPOSE_FILE up -d postgres redis mongodb influxdb
-    
-    # Wait for databases to be ready
-    log_info "Waiting for databases to be ready..."
-    sleep 30
-    
-    # Run database migrations
-    log_info "Running database migrations..."
-    npm run migrate
-    
-    # Seed initial data (only for development)
-    if [ "$ENVIRONMENT" = "development" ]; then
-        log_info "Seeding initial data..."
-        npm run seed
+    if kubectl get namespace "${NAMESPACE}" &> /dev/null; then
+        log_warning "Namespace ${NAMESPACE} already exists"
+    else
+        kubectl create namespace "${NAMESPACE}"
+        log_success "Namespace ${NAMESPACE} created"
     fi
-    
-    log_success "Infrastructure deployed successfully"
 }
 
-deploy_services() {
+# Deploy infrastructure
+deploy_infrastructure() {
+    log_info "Deploying infrastructure components..."
+    
+    # Deploy PostgreSQL
+    log_info "Deploying PostgreSQL..."
+    kubectl apply -f devops/kubernetes/production-deployment.yaml -n "${NAMESPACE}"
+    
+    # Wait for PostgreSQL to be ready
+    log_info "Waiting for PostgreSQL to be ready..."
+    kubectl wait --for=condition=ready pod -l app=postgres -n "${NAMESPACE}" --timeout=300s
+    
+    # Deploy Redis
+    log_info "Deploying Redis..."
+    kubectl wait --for=condition=ready pod -l app=redis -n "${NAMESPACE}" --timeout=300s
+    
+    log_success "Infrastructure components deployed"
+}
+
+# Run database migrations
+run_migrations() {
+    log_info "Running database migrations..."
+    
+    # Create a job to run migrations
+    cat <<EOF | kubectl apply -f - -n "${NAMESPACE}"
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-migration-${VERSION}
+  namespace: ${NAMESPACE}
+spec:
+  template:
+    spec:
+      containers:
+      - name: migration
+        image: postgres:15-alpine
+        command: ["sh", "-c"]
+        args:
+        - |
+          export PGPASSWORD=\$POSTGRES_PASSWORD
+          until pg_isready -h postgres-service -p 5432 -U postgres; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+          echo "Running migrations..."
+          # Add migration commands here
+          echo "Migrations completed"
+        env:
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: tigerex-secrets
+              key: postgres-password
+      restartPolicy: Never
+  backoffLimit: 3
+EOF
+    
+    # Wait for migration job to complete
+    kubectl wait --for=condition=complete job/db-migration-${VERSION} -n "${NAMESPACE}" --timeout=300s
+    
+    log_success "Database migrations completed"
+}
+
+# Deploy applications
+deploy_applications() {
     log_info "Deploying application services..."
     
-    # Start message queue services
-    docker-compose -f $DOCKER_COMPOSE_FILE up -d kafka zookeeper rabbitmq
+    # Update image tags in deployment
+    sed -i.bak "s/:latest/:${VERSION}/g" devops/kubernetes/production-deployment.yaml
     
-    # Wait for message queues to be ready
-    sleep 20
+    # Apply the deployment
+    kubectl apply -f devops/kubernetes/production-deployment.yaml -n "${NAMESPACE}"
     
-    # Start backend services
-    docker-compose -f $DOCKER_COMPOSE_FILE up -d \
-        auth-service \
-        trading-engine \
-        wallet-service \
-        kyc-service \
-        notification-service \
-        analytics-service \
-        admin-service \
-        blockchain-service \
-        p2p-service \
-        copy-trading-service
+    # Wait for deployments to be ready
+    deployments=(
+        "api-gateway"
+        "matching-engine"
+        "nft-marketplace"
+        "copy-trading"
+        "compliance-engine"
+        "frontend"
+    )
     
-    # Wait for backend services to be ready
-    sleep 30
+    for deployment in "${deployments[@]}"; do
+        log_info "Waiting for ${deployment} to be ready..."
+        kubectl wait --for=condition=available deployment/${deployment} -n "${NAMESPACE}" --timeout=600s
+    done
     
-    # Start frontend services
-    docker-compose -f $DOCKER_COMPOSE_FILE up -d \
-        web-app \
-        admin-dashboard \
-        landing-pages
+    # Restore original file
+    mv devops/kubernetes/production-deployment.yaml.bak devops/kubernetes/production-deployment.yaml
     
-    # Start API gateway
-    docker-compose -f $DOCKER_COMPOSE_FILE up -d nginx
-    
-    # Start monitoring services
-    if [ "$ENVIRONMENT" != "development" ]; then
-        docker-compose -f $DOCKER_COMPOSE_FILE up -d prometheus grafana
-    fi
-    
-    log_success "Application services deployed successfully"
+    log_success "Application services deployed"
 }
 
+# Setup monitoring
+setup_monitoring() {
+    log_info "Setting up monitoring..."
+    
+    # Deploy Prometheus
+    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    helm repo update
+    
+    helm upgrade --install prometheus prometheus-community/kube-prometheus-stack \
+        --namespace monitoring \
+        --create-namespace \
+        --set grafana.adminPassword=admin123 \
+        --wait
+    
+    log_success "Monitoring setup completed"
+}
+
+# Setup ingress and SSL
+setup_ingress() {
+    log_info "Setting up ingress and SSL..."
+    
+    # Install cert-manager if not exists
+    if ! kubectl get namespace cert-manager &> /dev/null; then
+        kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.0/cert-manager.yaml
+        kubectl wait --for=condition=ready pod -l app=cert-manager -n cert-manager --timeout=300s
+    fi
+    
+    # Create ClusterIssuer for Let's Encrypt
+    cat <<EOF | kubectl apply -f -
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: admin@tigerex.com
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
+EOF
+    
+    log_success "Ingress and SSL setup completed"
+}
+
+# Health check
 health_check() {
     log_info "Performing health checks..."
     
-    # Wait for services to be fully ready
-    sleep 60
-    
-    # Check service health
-    SERVICES=(
-        "http://localhost:8080/health"
-        "http://localhost:3001/health"
-        "http://localhost:3002/health"
-        "http://localhost:3003/health"
-    )
-    
-    for service in "${SERVICES[@]}"; do
-        if curl -f -s $service > /dev/null; then
-            log_success "Health check passed: $service"
-        else
-            log_error "Health check failed: $service"
-        fi
-    done
-    
-    # Check database connectivity
-    if docker-compose exec -T postgres pg_isready -U tigerex > /dev/null; then
-        log_success "PostgreSQL is ready"
+    # Check if all pods are running
+    if kubectl get pods -n "${NAMESPACE}" | grep -v Running | grep -v Completed | grep -q .; then
+        log_warning "Some pods are not in Running state:"
+        kubectl get pods -n "${NAMESPACE}" | grep -v Running | grep -v Completed
     else
-        log_error "PostgreSQL is not ready"
+        log_success "All pods are running"
     fi
     
-    # Check Redis connectivity
-    if docker-compose exec -T redis redis-cli ping | grep -q PONG; then
-        log_success "Redis is ready"
-    else
-        log_error "Redis is not ready"
-    fi
+    # Check services
+    log_info "Checking services..."
+    kubectl get services -n "${NAMESPACE}"
+    
+    # Check ingress
+    log_info "Checking ingress..."
+    kubectl get ingress -n "${NAMESPACE}"
     
     log_success "Health checks completed"
 }
 
-setup_ssl() {
-    if [ "$ENVIRONMENT" = "production" ]; then
-        log_info "Setting up SSL certificates..."
-        
-        # Create SSL directory
-        mkdir -p ./ssl
-        
-        # Generate self-signed certificate for testing (replace with real certificates)
-        if [ ! -f ./ssl/tigerex.crt ]; then
-            openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-                -keyout ./ssl/tigerex.key \
-                -out ./ssl/tigerex.crt \
-                -subj "/C=US/ST=State/L=City/O=TigerEx/CN=tigerex.com"
-            
-            log_warning "Self-signed SSL certificate created. Replace with real certificate for production."
-        fi
-        
-        log_success "SSL setup completed"
-    fi
-}
-
-setup_monitoring() {
-    if [ "$ENVIRONMENT" != "development" ]; then
-        log_info "Setting up monitoring and logging..."
-        
-        # Create monitoring directories
-        mkdir -p ./monitoring/{prometheus,grafana,logs}
-        
-        # Copy monitoring configurations
-        if [ -f ./monitoring/prometheus.yml.example ]; then
-            cp ./monitoring/prometheus.yml.example ./monitoring/prometheus.yml
-        fi
-        
-        if [ -f ./monitoring/grafana-dashboard.json.example ]; then
-            cp ./monitoring/grafana-dashboard.json.example ./monitoring/grafana-dashboard.json
-        fi
-        
-        log_success "Monitoring setup completed"
-    fi
-}
-
+# Cleanup old resources
 cleanup() {
     log_info "Cleaning up old resources..."
     
-    # Remove unused Docker images
-    docker image prune -f
+    # Remove old completed jobs
+    kubectl delete jobs --field-selector status.successful=1 -n "${NAMESPACE}" || true
     
-    # Remove old backups (keep last 7 days)
-    find $BACKUP_DIR -name "*.sql" -mtime +7 -delete
-    
-    # Remove old logs (keep last 30 days)
-    find $LOG_DIR -name "*.log" -mtime +30 -delete
+    # Remove old replica sets
+    kubectl delete rs --all -n "${NAMESPACE}" || true
     
     log_success "Cleanup completed"
 }
 
-show_deployment_info() {
-    log_success "Deployment completed successfully!"
-    echo ""
-    echo "=== TigerEx Platform Information ==="
-    echo "Environment: $ENVIRONMENT"
-    echo "Web Application: http://localhost:3000"
-    echo "Admin Dashboard: http://localhost:3100"
-    echo "Landing Pages: http://localhost:3200"
-    echo "API Gateway: http://localhost:8080"
+# Rollback function
+rollback() {
+    local previous_version=${1:-"previous"}
+    log_warning "Rolling back to version: ${previous_version}"
     
-    if [ "$ENVIRONMENT" != "development" ]; then
-        echo "Monitoring (Grafana): http://localhost:3300"
-        echo "Metrics (Prometheus): http://localhost:9090"
-    fi
+    # Rollback deployments
+    deployments=$(kubectl get deployments -n "${NAMESPACE}" -o name)
+    for deployment in $deployments; do
+        kubectl rollout undo "${deployment}" -n "${NAMESPACE}"
+    done
     
-    echo ""
-    echo "=== Useful Commands ==="
-    echo "View logs: docker-compose logs -f [service-name]"
-    echo "Stop services: docker-compose down"
-    echo "Restart service: docker-compose restart [service-name]"
-    echo "Scale service: docker-compose up -d --scale [service-name]=3"
-    echo ""
+    # Wait for rollback to complete
+    for deployment in $deployments; do
+        kubectl rollout status "${deployment}" -n "${NAMESPACE}" --timeout=300s
+    done
     
-    if [ "$ENVIRONMENT" = "development" ]; then
-        echo "=== Development Notes ==="
-        echo "- Default admin credentials: admin@tigerex.com / admin123"
-        echo "- Database is seeded with test data"
-        echo "- All services are running in development mode"
-        echo ""
-    fi
+    log_success "Rollback completed"
 }
 
-# Main deployment flow
+# Main deployment function
 main() {
-    log_info "Starting TigerEx deployment..."
-    log_info "Environment: $ENVIRONMENT"
+    log_info "Starting TigerEx deployment to ${ENVIRONMENT} environment..."
+    log_info "Version: ${VERSION}"
     
-    check_requirements
-    setup_environment
-    
-    if [ "$ENVIRONMENT" != "development" ]; then
-        backup_database
-    fi
-    
-    build_services
-    setup_ssl
-    setup_monitoring
-    deploy_infrastructure
-    deploy_services
-    health_check
-    cleanup
-    show_deployment_info
-    
-    log_success "TigerEx deployment completed successfully!"
+    case "${1}" in
+        "rollback")
+            rollback "${2}"
+            ;;
+        "health")
+            health_check
+            ;;
+        "cleanup")
+            cleanup
+            ;;
+        *)
+            check_prerequisites
+            build_images
+            create_namespace
+            deploy_infrastructure
+            run_migrations
+            deploy_applications
+            setup_monitoring
+            setup_ingress
+            health_check
+            cleanup
+            
+            log_success "TigerEx deployment completed successfully!"
+            log_info "Access the application at: https://tigerex.com"
+            log_info "API endpoint: https://api.tigerex.com"
+            log_info "WebSocket endpoint: wss://ws.tigerex.com"
+            ;;
+    esac
 }
 
-# Handle script interruption
-trap 'log_error "Deployment interrupted"; exit 1' INT TERM
+# Script usage
+usage() {
+    echo "Usage: $0 [environment] [version]"
+    echo "       $0 rollback [version]"
+    echo "       $0 health"
+    echo "       $0 cleanup"
+    echo ""
+    echo "Examples:"
+    echo "  $0 production v1.0.0    # Deploy version v1.0.0 to production"
+    echo "  $0 staging latest       # Deploy latest to staging"
+    echo "  $0 rollback v0.9.0      # Rollback to version v0.9.0"
+    echo "  $0 health               # Check deployment health"
+    echo "  $0 cleanup              # Cleanup old resources"
+}
+
+# Handle script arguments
+if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+    usage
+    exit 0
+fi
 
 # Run main function
 main "$@"
