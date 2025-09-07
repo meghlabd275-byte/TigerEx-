@@ -1,0 +1,113 @@
+{
+  "name": "tigerex",
+  "version": "1.0.0",
+  "description": "Advanced Cryptocurrency Exchange Platform",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "concurrently \"npm run dev:auth\" \"npm run dev:trading\" \"npm run dev:wallet\"",
+    "dev:frontend": "concurrently \"npm run dev:web\" \"npm run dev:admin\"",
+    "dev:auth": "cd backend/auth-service && npm run dev",
+    "dev:trading": "cd backend/trading-engine && npm run dev",
+    "dev:wallet": "cd backend/wallet-service && npm run dev",
+    "dev:web": "cd frontend/web-app && npm run dev",
+    "dev:admin": "cd frontend/admin-dashboard && npm run dev",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "npm run build:auth && npm run build:trading && npm run build:wallet",
+    "build:frontend": "npm run build:web && npm run build:admin",
+    "build:auth": "cd backend/auth-service && npm run build",
+    "build:trading": "cd backend/trading-engine && npm run build",
+    "build:wallet": "cd backend/wallet-service && npm run build",
+    "build:web": "cd frontend/web-app && npm run build",
+    "build:admin": "cd frontend/admin-dashboard && npm run build",
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "npm run test:auth && npm run test:trading && npm run test:wallet",
+    "test:frontend": "npm run test:web && npm run test:admin",
+    "test:auth": "cd backend/auth-service && npm test",
+    "test:trading": "cd backend/trading-engine && npm test",
+    "test:wallet": "cd backend/wallet-service && npm test",
+    "test:web": "cd frontend/web-app && npm test",
+    "test:admin": "cd frontend/admin-dashboard && npm test",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:build": "docker-compose build",
+    "docker:logs": "docker-compose logs -f",
+    "migrate": "npm run migrate:postgres && npm run migrate:mongo",
+    "migrate:postgres": "cd scripts && node migrate-postgres.js",
+    "migrate:mongo": "cd scripts && node migrate-mongo.js",
+    "seed": "npm run seed:postgres && npm run seed:mongo",
+    "seed:postgres": "cd scripts && node seed-postgres.js",
+    "seed:mongo": "cd scripts && node seed-mongo.js",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "install:all": "npm install && npm run install:backend && npm run install:frontend && npm run install:mobile",
+    "install:backend": "cd backend/auth-service && npm install && cd ../trading-engine && npm install && cd ../wallet-service && npm install && cd ../kyc-service && npm install && cd ../notification-service && npm install && cd ../analytics-service && npm install && cd ../admin-service && npm install && cd ../blockchain-service && npm install && cd ../p2p-service && npm install && cd ../copy-trading-service && npm install",
+    "install:frontend": "cd frontend/web-app && npm install && cd ../admin-dashboard && npm install && cd ../landing-pages && npm install",
+    "install:mobile": "cd mobile/android && ./gradlew build && cd ../ios && pod install",
+    "deploy:staging": "npm run build && npm run docker:build && docker-compose -f docker-compose.staging.yml up -d",
+    "deploy:production": "npm run build && npm run docker:build && docker-compose -f docker-compose.production.yml up -d",
+    "backup:db": "node scripts/backup-database.js",
+    "restore:db": "node scripts/restore-database.js",
+    "generate:api-docs": "swagger-jsdoc -d swaggerDef.js -o docs/api.json backend/**/*.js",
+    "start:monitoring": "docker-compose up -d prometheus grafana",
+    "security:audit": "npm audit && npm run security:scan",
+    "security:scan": "node scripts/security-scan.js"
+  },
+  "keywords": [
+    "cryptocurrency",
+    "exchange",
+    "trading",
+    "blockchain",
+    "bitcoin",
+    "ethereum",
+    "defi",
+    "fintech"
+  ],
+  "author": "TigerEx Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "concurrently": "^8.2.0",
+    "eslint": "^8.45.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
+    "prettier": "^3.0.0",
+    "swagger-jsdoc": "^6.2.8",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm test"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/meghla121/TigerEx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/meghla121/TigerEx/issues"
+  },
+  "homepage": "https://github.com/meghla121/TigerEx#readme"
+}
