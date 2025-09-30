@@ -1,0 +1,1 @@
+{'role': 'user', 'content': '<tool_result> <execute-command> ToolResult(success=True, output=\'{\\n  "output": "\\\\u0002\\\\u0002\\\\u0002Updated 5 paths from the index\\\\n   [main 639dc24] Merge: Resolve conflicts - keep Phase 2 implementation\\\\n",\\n  "exit_code": 0,\\n  "cwd": "/workspace"\\n}\') </execute-command> </tool_result>'}

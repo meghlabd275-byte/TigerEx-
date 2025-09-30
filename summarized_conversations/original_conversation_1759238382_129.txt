@@ -1,0 +1,1 @@
+{'role': 'user', 'content': '<tool_result> <full-file-rewrite> ToolResult(success=False, output="File \'backend/trading-bots-service/main.py\' does not exist. Use create_file to create a new file.") </full-file-rewrite> </tool_result>'}

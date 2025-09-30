@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<execute-command>\ngit config --global user.email "tigerex@ninjatech.ai" && git config --global user.name "TigerEx Team"\n</execute-command>\n</function_calls>'}

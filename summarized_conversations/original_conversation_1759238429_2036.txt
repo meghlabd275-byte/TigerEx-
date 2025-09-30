@@ -1,0 +1,1 @@
+{'role': 'user', 'content': "<tool_result> <execute-command> ToolResult(success=False, output='Error executing command: Failed to execute session command: ') </execute-command> </tool_result>"}

@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<execute-command>\ncd /workspace/tigerex && cat PROJECT_SUMMARY.md | head -300\n</execute-command>\n</function_calls>'}

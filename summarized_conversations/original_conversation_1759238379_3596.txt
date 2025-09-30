@@ -1,0 +1,1 @@
+{'role': 'user', 'content': 'Yes complete all remaining phase . Also complete android and iOS app as well as web app for admin panel and users panel. Then ensure all features and functionality is working well . Re check everything working well . Then upload to GitHub repo '}

@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Let me try using the GitHub CLI with the token:\n\n<function_calls>\n<execute-command>\ncd /workspace && git push https://x-access-token:$GITHUB_TOKEN@github.com/meghlabd275-byte/TigerEx-.git main\n</execute-command>\n</function_calls>'}
