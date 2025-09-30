@@ -1,0 +1,300 @@
+# TigerEx - Advanced Hybrid Crypto Exchange Platform
+
+## 🚀 Project Overview
+
+TigerEx is a next-generation hybrid cryptocurrency exchange platform that combines the best features from leading exchanges like Binance, KuCoin, OKX, and Bybit. It's built with modern technologies and enterprise-grade architecture to support high-frequency trading, advanced order types, comprehensive risk management, and seamless CEX/DEX integration with custom blockchain support.
+
+## 🌟 Key Highlights
+
+- **Hybrid Architecture**: Seamless integration of CEX and multi-chain DEX functionality
+- **Custom Blockchain Support**: Full EVM and Web3 blockchain integration capabilities + one-click deployment
+- **Shared Liquidity**: Aggregated liquidity from Binance, Bybit, OKX, and 50+ major DEXs
+- **Token Listing Platform**: Comprehensive token listing system for both CEX and DEX
+- **Multi-Chain DEX Integration**: Support for 50+ DEX protocols across 50+ blockchains
+- **Advanced Trading Features**: All features from major exchanges plus innovative hybrid capabilities
+- **Role-Based Admin System**: 15+ specialized admin roles with comprehensive dashboards
+- **White-Label Solutions**: One-click exchange and DEX deployment with custom branding
+- **Advanced Wallet System**: Hot/cold/custodial/non-custodial + white-label wallet creation
+- **AI-Powered Maintenance**: One-click AI maintenance for exchanges and wallets
+- **Block Explorer Creation**: One-click block explorer deployment for any blockchain
+- **Complete Banking Integration**: 25+ payment methods, 150+ currencies, 180+ countries
+
+## 🏗️ Architecture & Technology Stack
+
+### Backend Services (Microservices Architecture)
+
+#### 1. **Matching Engine** (C++)
+
+- **Performance**: 5M+ trades per second
+- **Features**: Advanced order types, WebSocket support, risk integration
+- **Technology**: C++17, Boost libraries, WebSocket++
+- **Location**: `backend/matching-engine/`
+
+#### 2. **Transaction Engine** (Rust)
+
+- **Performance**: 1M+ TPS for balance management
+- **Features**: Secure ledger, settlement processing, blockchain monitoring
+- **Technology**: Rust, Tokio, Serde, SQLx
+- **Location**: `backend/transaction-engine/`
+
+#### 3. **API Gateway** (Go)
+
+- **Performance**: 100K+ RPS
+- **Features**: JWT auth, rate limiting, WebSocket hub, gRPC support
+- **Technology**: Go, Gin, gRPC, WebSocket
+- **Location**: `backend/api-gateway/`
+
+#### 4. **Risk Management** (Python)
+
+- **Features**: AI-driven fraud detection, real-time anomaly detection
+- **Technology**: Python, TensorFlow, scikit-learn, FastAPI
+- **Location**: `backend/risk-management/`
+
+#### 5. **DEX Integration** (Java)
+
+- **Features**: Multi-chain DEX aggregation, cross-chain swaps, liquidity pools
+- **Technology**: Java Spring Boot, Web3j, Kafka
+- **Location**: `backend/dex-integration/`
+
+#### 6. **Institutional Trading** (C#)
+
+- **Features**: OTC trading, prime brokerage, custody services
+- **Technology**: .NET 8, Entity Framework, SignalR
+- **Location**: `backend/institutional-trading/`
+
+#### 7. **Notification Service** (Node.js)
+
+- **Features**: Real-time notifications, push notifications, email/SMS
+- **Technology**: Node.js, Socket.IO, Bull queues, Firebase
+- **Location**: `backend/notification-service/`
+
+#### 8. **Auth Service** (Rust)
+
+- **Features**: Multi-signature wallets, OAuth2, JWT, biometric auth
+- **Technology**: Rust, Actix-web, JWT, bcrypt
+- **Location**: `backend/auth-service/`
+
+#### 9. **Token Listing Service** (Python)
+
+- **Features**: CEX/DEX token listings, automated compliance checks, ML-based risk assessment
+- **Technology**: Python, FastAPI, TensorFlow, Web3.py, IPFS
+- **Location**: `backend/token-listing-service/`
+
+#### 10. **Liquidity Aggregator** (Rust)
+
+- **Features**: Multi-exchange liquidity aggregation, arbitrage detection, optimal routing
+- **Technology**: Rust, Tokio, WebSocket, Redis, Kafka
+- **Location**: `backend/liquidity-aggregator/`
+
+#### 11. **Web3 Integration** (Go)
+
+- **Features**: Multi-chain Web3 support, smart contract deployment, custom EVM chains
+- **Technology**: Go, Ethereum Go, Gin, WebSocket, GORM
+- **Location**: `backend/web3-integration/`
+
+#### 12. **Role-Based Admin System** (Python)
+
+- **Features**: 15+ admin roles, specialized dashboards, permission management
+- **Technology**: Python, FastAPI, PostgreSQL, Redis
+- **Location**: `backend/role-based-admin/`
+
+#### 13. **Super Admin System** (Python)
+
+- **Features**: Platform management, user oversight, financial controls, system monitoring
+- **Technology**: Python, FastAPI, PostgreSQL, Redis, Prometheus
+- **Location**: `backend/super-admin-system/`
+
+#### 14. **White-Label System** (Multiple)
+
+- **Features**: One-click exchange deployment, custom branding, domain integration
+- **Technology**: Python, Go, React, Docker, Kubernetes
+- **Location**: `backend/white-label-system/`
+
+#### 15. **Advanced Wallet System** (Multiple)
+
+- **Features**: Hot/cold/custodial/non-custodial wallets, multi-sig, hardware integration
+- **Technology**: Python, Go, Rust, Web3, HSM integration
+- **Location**: `backend/advanced-wallet-system/`
+
+#### 16. **AI Maintenance System** (Python)
+
+- **Features**: Predictive maintenance, anomaly detection, automated optimization
+- **Technology**: Python, TensorFlow, scikit-learn, Prometheus, Grafana
+- **Location**: `backend/ai-maintenance-system/`
+
+#### 17. **Popular Coins Service** (Python)
+
+- **Features**: 2000+ trading pairs, real-time price feeds, market data
+- **Technology**: Python, FastAPI, Redis, WebSocket, CoinGecko API
+- **Location**: `backend/popular-coins-service/`
+
+#### 18. **Trading Pair Management** (Python)
+
+- **Features**: Dynamic pair creation, fee configuration, status management
+- **Technology**: Python, FastAPI, PostgreSQL, Redis
+- **Location**: `backend/trading-pair-management/`
+
+#### 19. **Advanced Trading Engine** (C++)
+
+- **Features**: 50+ order types, algorithmic trading, high-frequency trading
+- **Technology**: C++17, Boost, WebSocket++, Redis
+- **Location**: `backend/advanced-trading-engine/`
+
+#### 20. **Derivatives Engine** (Rust)
+
+- **Features**: Futures, options, perpetual swaps, structured products
+- **Technology**: Rust, Tokio, SQLx, WebSocket
+- **Location**: `backend/derivatives-engine/`
+
+#### 21. **ETF Trading** (Python)
+
+- **Features**: Crypto ETFs, leveraged tokens, index funds
+- **Technology**: Python, FastAPI, PostgreSQL, Redis
+- **Location**: `backend/etf-trading/`
+
+#### 22. **Options Trading** (C++)
+
+- **Features**: European/American options, Greeks calculation, volatility trading
+- **Technology**: C++, QuantLib, Boost, WebSocket
+- **Location**: `backend/options-trading/`
+
+#### 23. **Alpha Market Trading** (Node.js)
+
+- **Features**: Pre-listing tokens, IEO platform, early access trading
+- **Technology**: Node.js, Express, MongoDB, WebSocket
+- **Location**: `backend/alpha-market-trading/`
+
+#### 24. **Affiliate System** (Python)
+
+- **Features**: Multi-level referrals, commission tracking, partner management
+- **Technology**: Python, FastAPI, PostgreSQL, Redis
+- **Location**: `backend/affiliate-system/`
+
+#### 25. **Lending & Borrowing** (Java)
+
+- **Features**: Crypto loans, flash loans, margin lending, yield farming
+- **Technology**: Java Spring Boot, PostgreSQL, Redis
+- **Location**: `backend/lending-borrowing/`
+
+### Frontend Applications
+
+#### 1. **Web Application** (Next.js + React)
+
+- **Features**: SSR/ISR, PWA, real-time trading interface
+- **Technology**: Next.js 14, React 18, TypeScript, Tailwind CSS
+- **Location**: `frontend/`
+
+#### 2. **Vue.js Components**
+
+- **Features**: Responsive trading dashboard, modern UI components
+- **Technology**: Vue 3, Composition API, Tailwind CSS
+- **Location**: `frontend/components/vue/`
+
+#### 3. **Mobile Application** (Kotlin + React Native)
+
+- **Features**: Cross-platform, biometric auth, push notifications
+- **Technology**: Kotlin (Android), React Native, Firebase
+- **Location**: `mobile/`
+
+### Database & Storage
+
+#### Multi-Database Architecture
+
+- **PostgreSQL**: Primary ACID-compliant database for user data, orders, trades
+- **CockroachDB**: Distributed SQL for global scalability
+- **Redis**: High-performance caching and session storage
+- **ScyllaDB**: Time-series data for market data and analytics
+- **MongoDB**: Document storage for notifications and logs
+
+### Message Broker & Event Streaming
+
+- **Apache Kafka**: High-throughput event streaming
+- **NATS JetStream**: Real-time message delivery
+- **Redis Pub/Sub**: WebSocket message broadcasting
+
+### Security & Compliance
+
+- **Multi-layer Security**: WAF, DDoS protection, rate limiting
+- **Encryption**: TLS 1.3, AES-256, end-to-end encryption
+- **Authentication**: Multi-factor, biometric, hardware security keys
+- **Compliance**: KYC/AML, regulatory reporting, audit trails
+
+## 🎯 Key Features
+
+### Trading Features
+
+#### CEX Features
+
+- **Spot Trading**: 500+ trading pairs with ultra-low latency
+- **Futures Trading**: USD-M and COIN-M perpetual and quarterly contracts
+- **Options Trading**: European and American style options
+- **Margin Trading**: Cross and isolated margin up to 125x leverage
+- **Copy Trading**: Social trading with top-tier traders
+- **P2P Trading**: Peer-to-peer fiat-crypto trading
+- **OTC Trading**: Over-the-counter for large volume trades
+- **Leveraged Tokens**: 3x, 5x, 10x leveraged tokens
+- **Savings Products**: Flexible and fixed savings with competitive APY
+- **Launchpad**: Token sales and IEO platform
+
+#### DEX Features
+
+- **Multi-Chain Swaps**: Cross-chain token swaps via 15+ DEX protocols
+- **Liquidity Provision**: Add liquidity to pools across multiple chains
+- **Yield Farming**: Automated yield farming strategies
+- **Cross-Chain Bridges**: Seamless asset transfers between chains
+- **DEX Aggregation**: Best price routing across Uniswap, PancakeSwap, SushiSwap, etc.
+- **Arbitrage Trading**: Automated arbitrage opportunities detection
+- **Custom Pool Creation**: Create custom liquidity pools
+
+#### Hybrid Features
+
+- **Unified Liquidity**: Shared order books between CEX and DEX
+- **Cross-Platform Trading**: Execute trades across CEX and DEX simultaneously
+- **Smart Order Routing**: Optimal execution across all available liquidity sources
+- **Liquidity Mining**: Earn rewards for providing liquidity to both CEX and DEX
+
+### Advanced Order Types
+
+- Market, Limit, Stop-Loss, Stop-Limit, Take-Profit
+- Iceberg, OCO (One-Cancels-Other), Trailing Stop
+- Time-in-Force: GTC, IOC, FOK, GTD
+- Advanced execution algorithms
+
+### Blockchain & DeFi Integration
+
+#### Supported Blockchains
+
+- **EVM Chains**: Ethereum, BSC, Polygon, Avalanche, Arbitrum, Optimism, Fantom
+- **Non-EVM**: Solana, Cosmos, Polkadot, Near Protocol
+- **Custom EVM**: Support for any EVM-compatible blockchain
+- **Custom Web3**: Integration with custom blockchain protocols
+
+#### DEX Protocols Supported
+
+- **Ethereum**: Uniswap V2/V3, SushiSwap, Curve, Balancer, 1inch
+- **BSC**: PancakeSwap V2/V3, Biswap, MDEX, Venus
+- **Polygon**: QuickSwap, Dfyn, Aave, Compound
+- **Avalanche**: Trader Joe, Pangolin, Benqi
+- **Arbitrum**: Camelot, GMX, Radiant
+- **Solana**: Raydium, Orca, Jupiter, Serum
+
+#### Cross-Chain Bridges
+
+- **LayerZero**: Universal cross-chain protocol
+- **Axelar**: Secure cross-chain communication
+- **Wormhole**: Multi-chain bridge network
+- **Multichain**: Cross-chain router protocol
+- **Hop Protocol**: Rollup-to-rollup token bridge
+- **Across Protocol**: Optimistic bridge
+
+#### Token Listing System
+
+- **CEX Listing**: Traditional centralized exchange listing process
+- **DEX Listing**: Automated liquidity pool creation
+- **Hybrid Listing**: Simultaneous CEX and DEX listing
+- **Custom Chain Support**: List tokens on custom EVM/Web3 chains
+- **Automated Compliance**: ML-based risk assessment and KYC verification
+- **Market Making**: Integrated market maker programs
+
+### Institutional Features
+
