@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Now let me continue with the next admin panel - **Copy Trading Admin Panel**:\n\n<function_calls>\n<execute-command>\nmkdir -p backend/copy-trading-admin/src\n</execute-command>\n</function_calls>'}

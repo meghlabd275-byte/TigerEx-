@@ -1,0 +1,4 @@
+mobile/TigerExApp/App.tsx
+mobile/TigerExApp/src/store/index.ts
+mobile/TigerExApp/src/store/slices/authSlice.ts
+mobile/TigerExApp/src/theme/index.ts

@@ -1,0 +1,1 @@
+{'role': 'user', 'content': "Now completely implement all of this one by one Critical admin panels , Advanced trading , Difi Enhancements , Desktop Apps , payment gateway. \n\nComplete 100% let's go . Also note me all updated features and functionality you added . "}

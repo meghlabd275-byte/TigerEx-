@@ -1,0 +1,11 @@
+   889 ./tigerex/backend/admin-panel/src/main.py
+   840 ./tigerex/backend/admin-service/main.js
+  1098 ./tigerex/backend/advanced-wallet-system/src/main.py
+   937 ./tigerex/backend/affiliate-system/src/main.py
+   689 ./tigerex/backend/ai-maintenance-system/src/main.py
+  1160 ./tigerex/backend/ai-maintenance/src/main.py
+  1038 ./tigerex/backend/auth-service/src/main.py
+  1073 ./tigerex/backend/block-explorer/src/main.py
+   813 ./tigerex/backend/blockchain-service/main.py
+   602 ./tigerex/backend/compliance-engine/src/main.py
+  9139 total

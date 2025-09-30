@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<create-file file_path="backend/payment-gateway-service/requirements.txt">\nfastapi==0.104.1\nuvicorn==0.24.0\nsqlalchemy==2.0.23\npsycopg2-binary==2.9.9\npydantic==2.5.0\npython-multipart==0.0.6\nstripe==7.0.0\nrequests==2.31.0\ncryptography==41.0.7\n</create-file>\n</function_calls>'}
