@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Thank you for providing access to your GitHub repositories. I can now perform various GitHub operations such as cloning repositories, reading files, creating issues, pushing branches, and creating pull requests.'}

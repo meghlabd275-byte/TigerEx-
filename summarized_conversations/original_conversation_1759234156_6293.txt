@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Let me check the trading engine:\n\n<function_calls>\n<execute-command folder="tigerex/backend/matching-engine">\ncat src/main.cpp | head -150\n</execute-command>\n</function_calls>'}

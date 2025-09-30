@@ -1,0 +1,12 @@
+[main 4ee8bb6] feat: Complete user panel implementation v2.0.0
+ 10 files changed, 5635 insertions(+)
+ create mode 100644 CHANGELOG.md
+ create mode 100644 COMMIT_MESSAGE.md
+ create mode 100644 IMPLEMENTATION_SUMMARY.md
+ create mode 100644 USER_PANEL_GUIDE.md
+ create mode 100644 src/pages/user/copy-trading.tsx
+ create mode 100644 src/pages/user/earn.tsx
+ create mode 100644 src/pages/user/p2p.tsx
+ create mode 100644 src/pages/user/portfolio.tsx
+ create mode 100644 src/pages/user/wallet.tsx
+ create mode 100644 todo.md

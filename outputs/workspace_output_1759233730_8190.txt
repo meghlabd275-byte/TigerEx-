@@ -1,0 +1,7 @@
+[main 115cd5d] feat: Add comprehensive backend analysis and Phase 2 implementation plan
+ 5 files changed, 2470 insertions(+)
+ create mode 100644 BACKEND_ANALYSIS.md
+ create mode 100644 PHASE2_IMPLEMENTATION_PLAN.md
+ create mode 100644 backend/trading-bots-service/Dockerfile
+ create mode 100644 backend/trading-bots-service/main.py
+ create mode 100644 backend/trading-bots-service/requirements.txt

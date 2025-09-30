@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<web-search query="Bybit exchange features 2024 2025 copy trading derivatives unified trading account" num_results="10">\n</web-search>\n</function_calls>'}

@@ -1,0 +1,11 @@
+total 36
+drwxr-xr-x  7 root root   186 Sep 30 11:21 .
+drwxr-xr-x 12 root root  4096 Sep 30 11:24 ..
+-rw-r--r--  1 root root  1524 Sep 30 11:21 Dockerfile
+drwxr-xr-x  3 root root    49 Sep 30 11:21 admin-dashboard
+drwxr-xr-x  5 root root    64 Sep 30 11:21 components
+drwxr-xr-x  2 root root    60 Sep 30 11:21 hooks
+-rw-r--r--  1 root root  4409 Sep 30 11:21 package.json
+drwxr-xr-x  4 root root    49 Sep 30 11:21 src
+-rw-r--r--  1 root root 17457 Sep 30 11:21 tailwind.config.js
+drwxr-xr-x  3 root root    75 Sep 30 11:21 web-app

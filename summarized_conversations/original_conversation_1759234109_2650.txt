@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': '<function_calls>\n<web-search query="KuCoin exchange features 2024 2025 trading bots lending staking futures" num_results="10">\n</web-search>\n</function_calls>'}

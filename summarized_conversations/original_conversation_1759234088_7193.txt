@@ -1,0 +1,1 @@
+{'role': 'user', 'content': 'check this repo . Complete all coding fix all bug and errors . Add all updated an unique features and functionality from Binance okx bybit bitget kucoin mexc coinW exchanges. Build complete fontend services for all backend features and functionality for users panel and admin panel Then git push to this repo '}

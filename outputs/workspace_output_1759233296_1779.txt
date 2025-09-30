@@ -1,0 +1,100 @@
+"""
+TigerEx Authentication Service
+OAuth, 2FA, Captcha, and comprehensive authentication system
+"""
+
+import asyncio
+import json
+import logging
+import os
+import uuid
+import secrets
+import base64
+from datetime import datetime, timedelta
+from typing import Dict, List, Optional, Any
+from enum import Enum
+import hashlib
+import hmac
+import io
+
+import aioredis
+import aiohttp
+from fastapi import FastAPI, HTTPException, Depends, Request, Response, Form, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials, OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel, validator, EmailStr
+from sqlalchemy import create_engine, Column, Integer, String, Boolean, DateTime, Text, JSON, Enum as SQLEnum
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, Session, relationship
+from sqlalchemy.sql import func
+from passlib.context import CryptContext
+from jose import JWTError, jwt
+import pyotp
+import qrcode
+from PIL import Image, ImageDraw, ImageFont
+import random
+import string
+from authlib.integrations.starlette_client import OAuth
+from twilio.rest import Client as TwilioClient
+import sendgrid
+from sendgrid.helpers.mail import Mail
+import httpx
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# FastAPI app
+app = FastAPI(
+    title="TigerEx Authentication Service",
+    description="OAuth, 2FA, Captcha, and comprehensive authentication system",
+    version="1.0.0"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Configuration
+class Config:
+    DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:password@localhost/tigerex")
+    REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "auth-secret-key")
+    JWT_ALGORITHM = "HS256"
+    JWT_EXPIRATION_HOURS = 24
+    
+    # OAuth Configuration
+    GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+    GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+    APPLE_CLIENT_ID = os.getenv("APPLE_CLIENT_ID")
+    APPLE_CLIENT_SECRET = os.getenv("APPLE_CLIENT_SECRET")
+    TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+    
+    # 2FA Configuration
+    TOTP_ISSUER = "TigerEx"
+    SMS_PROVIDER = "twilio"  # twilio or aws_sns
+    
+    # External Services
+    TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
+    TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+    TWILIO_PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER")
+    SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
+    
+    # Security
+    PASSWORD_MIN_LENGTH = 8
+    MAX_LOGIN_ATTEMPTS = 5
+    LOCKOUT_DURATION_MINUTES = 30
+    CAPTCHA_EXPIRY_MINUTES = 10
+
+config = Config()
+
+# Database setup
+engine = create_engine(config.DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+

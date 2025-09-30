@@ -1,0 +1,11 @@
+total 24
+drwxr-xr-x  5 root root  172 Sep 30 11:21 .
+drwxr-xr-x 50 root root 4096 Sep 30 11:21 ..
+-rw-r--r--  1 root root  472 Sep 30 11:21 Dockerfile
+drwxr-xr-x  2 root root   31 Sep 30 11:21 config
+-rw-r--r--  1 root root 1620 Sep 30 11:21 go.mod
+-rw-r--r--  1 root root 1600 Sep 30 11:21 main.go
+drwxr-xr-x  2 root root   29 Sep 30 11:21 models
+-rw-r--r--  1 root root 1154 Sep 30 11:21 package.json
+-rw-r--r--  1 root root  425 Sep 30 11:21 requirements.txt
+drwxr-xr-x  6 root root  128 Sep 30 11:21 src

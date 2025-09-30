@@ -1,0 +1,1 @@
+{'role': 'assistant', 'content': 'Now let me check what research I need to do about the latest features from major exchanges. Let me search for the latest features from Binance, OKX, Bybit, Bitget, KuCoin, MEXC, and CoinW:\n\n<function_calls>\n<web-search query="Binance exchange latest features 2024 2025 trading features" num_results="10">\n</web-search>\n</function_calls>'}
