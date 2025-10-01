@@ -1,0 +1,1599 @@
+{
+  "services": [
+    {
+      "name": "admin-panel",
+      "path": "backend/admin-panel",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "admin-service",
+      "path": "backend/admin-service",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "advanced-trading-engine",
+      "path": "backend/advanced-trading-engine",
+      "has_dockerfile": true,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "advanced-trading-service",
+      "path": "backend/advanced-trading-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "advanced-wallet-system",
+      "path": "backend/advanced-wallet-system",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "affiliate-system",
+      "path": "backend/affiliate-system",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "ai-maintenance",
+      "path": "backend/ai-maintenance",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "ai-maintenance-system",
+      "path": "backend/ai-maintenance-system",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "algo-orders-service",
+      "path": "backend/algo-orders-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "alpha-market-admin",
+      "path": "backend/alpha-market-admin",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "alpha-market-trading",
+      "path": "backend/alpha-market-trading",
+      "has_dockerfile": true,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "analytics-service",
+      "path": "backend/analytics-service",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": true,
+      "language": "Go"
+    },
+    {
+      "name": "api-gateway",
+      "path": "backend/api-gateway",
+      "has_dockerfile": true,
+      "has_requirements": false,
+      "has_main": true,
+      "language": "Go"
+    },
+    {
+      "name": "auth-service",
+      "path": "backend/auth-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": true,
+      "language": "Go"
+    },
+    {
+      "name": "block-explorer",
+      "path": "backend/block-explorer",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "block-trading-service",
+      "path": "backend/block-trading-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "blockchain-service",
+      "path": "backend/blockchain-service",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": true,
+      "language": "Python"
+    },
+    {
+      "name": "compliance-engine",
+      "path": "backend/compliance-engine",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "convert-service",
+      "path": "backend/convert-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "copy-trading",
+      "path": "backend/copy-trading",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "copy-trading-admin",
+      "path": "backend/copy-trading-admin",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "copy-trading-service",
+      "path": "backend/copy-trading-service",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "crypto-card-service",
+      "path": "backend/crypto-card-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "database",
+      "path": "backend/database",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "dca-bot-service",
+      "path": "backend/dca-bot-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "defi-enhancements-service",
+      "path": "backend/defi-enhancements-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "defi-service",
+      "path": "backend/defi-service",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": true,
+      "language": "Rust"
+    },
+    {
+      "name": "derivatives-engine",
+      "path": "backend/derivatives-engine",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "dex-integration",
+      "path": "backend/dex-integration",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "dex-integration-admin",
+      "path": "backend/dex-integration-admin",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "dual-investment-service",
+      "path": "backend/dual-investment-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "earn-service",
+      "path": "backend/earn-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "etf-trading",
+      "path": "backend/etf-trading",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "etf-trading-admin",
+      "path": "backend/etf-trading-admin",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "fiat-gateway-service",
+      "path": "backend/fiat-gateway-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "grid-trading-bot-service",
+      "path": "backend/grid-trading-bot-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "institutional-services",
+      "path": "backend/institutional-services",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "institutional-services-admin",
+      "path": "backend/institutional-services-admin",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "institutional-trading",
+      "path": "backend/institutional-trading",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "insurance-fund-service",
+      "path": "backend/insurance-fund-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "kyc-service",
+      "path": "backend/kyc-service",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": true,
+      "language": "Python"
+    },
+    {
+      "name": "launchpad-service",
+      "path": "backend/launchpad-service",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": true,
+      "language": "Python"
+    },
+    {
+      "name": "launchpool-service",
+      "path": "backend/launchpool-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "lending-borrowing",
+      "path": "backend/lending-borrowing",
+      "has_dockerfile": true,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "lending-borrowing-admin",
+      "path": "backend/lending-borrowing-admin",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "leveraged-tokens-service",
+      "path": "backend/leveraged-tokens-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "liquid-swap-service",
+      "path": "backend/liquid-swap-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "liquidity-aggregator",
+      "path": "backend/liquidity-aggregator",
+      "has_dockerfile": true,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "liquidity-aggregator-admin",
+      "path": "backend/liquidity-aggregator-admin",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "martingale-bot-service",
+      "path": "backend/martingale-bot-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "matching-engine",
+      "path": "backend/matching-engine",
+      "has_dockerfile": true,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "nft-marketplace",
+      "path": "backend/nft-marketplace",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "nft-marketplace-admin",
+      "path": "backend/nft-marketplace-admin",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "notification-service",
+      "path": "backend/notification-service",
+      "has_dockerfile": true,
+      "has_requirements": false,
+      "has_main": true,
+      "language": "Python"
+    },
+    {
+      "name": "options-trading",
+      "path": "backend/options-trading",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "options-trading-admin",
+      "path": "backend/options-trading-admin",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "p2p-admin",
+      "path": "backend/p2p-admin",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "p2p-service",
+      "path": "backend/p2p-service",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": true,
+      "language": "Go"
+    },
+    {
+      "name": "p2p-trading",
+      "path": "backend/p2p-trading",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "payment-gateway",
+      "path": "backend/payment-gateway",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "payment-gateway-admin",
+      "path": "backend/payment-gateway-admin",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "payment-gateway-service",
+      "path": "backend/payment-gateway-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "popular-coins-service",
+      "path": "backend/popular-coins-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "portfolio-margin-service",
+      "path": "backend/portfolio-margin-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "proof-of-reserves-service",
+      "path": "backend/proof-of-reserves-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "referral-program-service",
+      "path": "backend/referral-program-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "risk-management",
+      "path": "backend/risk-management",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "role-based-admin",
+      "path": "backend/role-based-admin",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "social-trading-service",
+      "path": "backend/social-trading-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "spot-trading",
+      "path": "backend/spot-trading",
+      "has_dockerfile": true,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "staking-service",
+      "path": "backend/staking-service",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": true,
+      "language": "Python"
+    },
+    {
+      "name": "sub-accounts-service",
+      "path": "backend/sub-accounts-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "super-admin-system",
+      "path": "backend/super-admin-system",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "token-listing-service",
+      "path": "backend/token-listing-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "trading",
+      "path": "backend/trading",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "trading-bots-service",
+      "path": "backend/trading-bots-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": true,
+      "language": "Python"
+    },
+    {
+      "name": "trading-engine",
+      "path": "backend/trading-engine",
+      "has_dockerfile": true,
+      "has_requirements": false,
+      "has_main": true,
+      "language": "C++"
+    },
+    {
+      "name": "trading-pair-management",
+      "path": "backend/trading-pair-management",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "trading-signals-service",
+      "path": "backend/trading-signals-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "transaction-engine",
+      "path": "backend/transaction-engine",
+      "has_dockerfile": true,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "unified-account-service",
+      "path": "backend/unified-account-service",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": true,
+      "language": "Python"
+    },
+    {
+      "name": "vip-program-service",
+      "path": "backend/vip-program-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "vote-to-list-service",
+      "path": "backend/vote-to-list-service",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "wallet-management",
+      "path": "backend/wallet-management",
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "wallet-service",
+      "path": "backend/wallet-service",
+      "has_dockerfile": true,
+      "has_requirements": false,
+      "has_main": true,
+      "language": "Go"
+    },
+    {
+      "name": "web3-integration",
+      "path": "backend/web3-integration",
+      "has_dockerfile": true,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    },
+    {
+      "name": "white-label-system",
+      "path": "backend/white-label-system",
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "has_main": false,
+      "language": "unknown"
+    }
+  ],
+  "contracts": [
+    {
+      "name": "TigerToken",
+      "path": "blockchain/smart-contracts/contracts/tokens/TigerToken.sol",
+      "category": "tokens"
+    },
+    {
+      "name": "StakingPool",
+      "path": "blockchain/smart-contracts/contracts/staking/StakingPool.sol",
+      "category": "staking"
+    },
+    {
+      "name": "TigerNFT",
+      "path": "blockchain/smart-contracts/contracts/nft/TigerNFT.sol",
+      "category": "nft"
+    }
+  ],
+  "documentation": [
+    {
+      "name": "API_DOCUMENTATION.md",
+      "path": "API_DOCUMENTATION.md",
+      "location": "root",
+      "size": 16006
+    },
+    {
+      "name": "BACKEND_ANALYSIS.md",
+      "path": "BACKEND_ANALYSIS.md",
+      "location": "root",
+      "size": 19068
+    },
+    {
+      "name": "CHANGELOG.md",
+      "path": "CHANGELOG.md",
+      "location": "root",
+      "size": 4520
+    },
+    {
+      "name": "COMPLETE_API_DOCUMENTATION.md",
+      "path": "COMPLETE_API_DOCUMENTATION.md",
+      "location": "root",
+      "size": 2397
+    },
+    {
+      "name": "PHASE2_ENHANCEMENT_PLAN.md",
+      "path": "PHASE2_ENHANCEMENT_PLAN.md",
+      "location": "root",
+      "size": 1800
+    },
+    {
+      "name": "PHASE2_COMPLETE_IMPLEMENTATION_GUIDE.md",
+      "path": "PHASE2_COMPLETE_IMPLEMENTATION_GUIDE.md",
+      "location": "root",
+      "size": 13045
+    },
+    {
+      "name": "DEPLOYMENT_GUIDE.md",
+      "path": "DEPLOYMENT_GUIDE.md",
+      "location": "root",
+      "size": 16120
+    },
+    {
+      "name": "FINAL_100_PERCENT_IMPLEMENTATION_SUMMARY.md",
+      "path": "FINAL_100_PERCENT_IMPLEMENTATION_SUMMARY.md",
+      "location": "root",
+      "size": 11644
+    },
+    {
+      "name": "FINAL_IMPLEMENTATION_STATUS.md",
+      "path": "FINAL_IMPLEMENTATION_STATUS.md",
+      "location": "root",
+      "size": 14639
+    },
+    {
+      "name": "FINAL_COMPREHENSIVE_REPORT.md",
+      "path": "FINAL_COMPREHENSIVE_REPORT.md",
+      "location": "root",
+      "size": 15831
+    },
+    {
+      "name": "FINAL_COMPLETE_SUMMARY.md",
+      "path": "FINAL_COMPLETE_SUMMARY.md",
+      "location": "root",
+      "size": 11177
+    },
+    {
+      "name": "PRODUCTION_DEPLOYMENT_GUIDE.md",
+      "path": "PRODUCTION_DEPLOYMENT_GUIDE.md",
+      "location": "root",
+      "size": 913
+    },
+    {
+      "name": "README.md",
+      "path": "README.md",
+      "location": "root",
+      "size": 13949
+    },
+    {
+      "name": "SETUP.md",
+      "path": "SETUP.md",
+      "location": "root",
+      "size": 9071
+    },
+    {
+      "name": "USER_PANEL_GUIDE.md",
+      "path": "USER_PANEL_GUIDE.md",
+      "location": "root",
+      "size": 16612
+    },
+    {
+      "name": "todo.md",
+      "path": "todo.md",
+      "location": "root",
+      "size": 1828
+    },
+    {
+      "name": "BACKEND_ANALYSIS_REPORT.md",
+      "path": "BACKEND_ANALYSIS_REPORT.md",
+      "location": "root",
+      "size": 3162
+    },
+    {
+      "name": "FRONTEND_ANALYSIS_REPORT.md",
+      "path": "FRONTEND_ANALYSIS_REPORT.md",
+      "location": "root",
+      "size": 2430
+    },
+    {
+      "name": "MISSING_FILES_COMPLETION_REPORT.md",
+      "path": "MISSING_FILES_COMPLETION_REPORT.md",
+      "location": "root",
+      "size": 7898
+    },
+    {
+      "name": "DOCUMENTATION_STATUS_UPDATE.md",
+      "path": "DOCUMENTATION_STATUS_UPDATE.md",
+      "location": "root",
+      "size": 9148
+    },
+    {
+      "name": "COMPLETION_STATUS_FINAL.md",
+      "path": "COMPLETION_STATUS_FINAL.md",
+      "location": "root",
+      "size": 7479
+    },
+    {
+      "name": "FINAL_ANALYSIS_AND_COMPLETION_SUMMARY.md",
+      "path": "FINAL_ANALYSIS_AND_COMPLETION_SUMMARY.md",
+      "location": "root",
+      "size": 14042
+    },
+    {
+      "name": "TASK_COMPLETION_SUMMARY.md",
+      "path": "TASK_COMPLETION_SUMMARY.md",
+      "location": "root",
+      "size": 12736
+    },
+    {
+      "name": "comprehensive_review_todo.md",
+      "path": "comprehensive_review_todo.md",
+      "location": "root",
+      "size": 2741
+    },
+    {
+      "name": "COMPETITOR_FEATURE_ANALYSIS.md",
+      "path": "COMPETITOR_FEATURE_ANALYSIS.md",
+      "location": "root",
+      "size": 5510
+    },
+    {
+      "name": "NEW_FEATURES_IMPLEMENTATION_REPORT.md",
+      "path": "NEW_FEATURES_IMPLEMENTATION_REPORT.md",
+      "location": "root",
+      "size": 12669
+    },
+    {
+      "name": "COMPLETE_FEATURES_OUTLINE.md",
+      "path": "COMPLETE_FEATURES_OUTLINE.md",
+      "location": "root",
+      "size": 16593
+    },
+    {
+      "name": "DOCUMENTATION_CLEANUP_REPORT.md",
+      "path": "DOCUMENTATION_CLEANUP_REPORT.md",
+      "location": "root",
+      "size": 6540
+    },
+    {
+      "name": "README_COMPLETE.md",
+      "path": "docs/archive/README_COMPLETE.md",
+      "location": "archive",
+      "size": 14548
+    },
+    {
+      "name": "COMPLETE_IMPLEMENTATION_ROADMAP.md",
+      "path": "docs/archive/implementation-reports/COMPLETE_IMPLEMENTATION_ROADMAP.md",
+      "location": "archive",
+      "size": 10747
+    },
+    {
+      "name": "COMPLETE_IMPLEMENTATION_SUMMARY.md",
+      "path": "docs/archive/implementation-reports/COMPLETE_IMPLEMENTATION_SUMMARY.md",
+      "location": "archive",
+      "size": 16566
+    },
+    {
+      "name": "IMPLEMENTATION_STATUS_FINAL.md",
+      "path": "docs/archive/implementation-reports/IMPLEMENTATION_STATUS_FINAL.md",
+      "location": "archive",
+      "size": 9768
+    },
+    {
+      "name": "IMPLEMENTATION_SUMMARY.md",
+      "path": "docs/archive/implementation-reports/IMPLEMENTATION_SUMMARY.md",
+      "location": "archive",
+      "size": 19215
+    },
+    {
+      "name": "PHASE2_COMPLETION_REPORT.md",
+      "path": "docs/archive/implementation-reports/PHASE2_COMPLETION_REPORT.md",
+      "location": "archive",
+      "size": 16236
+    },
+    {
+      "name": "PHASE2_IMPLEMENTATION_PLAN.md",
+      "path": "docs/archive/implementation-reports/PHASE2_IMPLEMENTATION_PLAN.md",
+      "location": "archive",
+      "size": 21234
+    },
+    {
+      "name": "COMPREHENSIVE_WORK_SUMMARY.md",
+      "path": "docs/archive/implementation-reports/COMPREHENSIVE_WORK_SUMMARY.md",
+      "location": "archive",
+      "size": 14537
+    },
+    {
+      "name": "PROJECT_STATUS.md",
+      "path": "docs/archive/status-reports/PROJECT_STATUS.md",
+      "location": "archive",
+      "size": 12258
+    },
+    {
+      "name": "PROJECT_SUMMARY.md",
+      "path": "docs/archive/status-reports/PROJECT_SUMMARY.md",
+      "location": "archive",
+      "size": 19843
+    },
+    {
+      "name": "PROJECT_COMPLETE.md",
+      "path": "docs/archive/status-reports/PROJECT_COMPLETE.md",
+      "location": "archive",
+      "size": 12387
+    },
+    {
+      "name": "COMPLETE_FEATURES.md",
+      "path": "docs/archive/status-reports/COMPLETE_FEATURES.md",
+      "location": "archive",
+      "size": 16654
+    },
+    {
+      "name": "FEATURES_IMPLEMENTED.md",
+      "path": "docs/archive/status-reports/FEATURES_IMPLEMENTED.md",
+      "location": "archive",
+      "size": 7763
+    },
+    {
+      "name": "COMPREHENSIVE_FEATURES_SUMMARY.md",
+      "path": "docs/archive/status-reports/COMPREHENSIVE_FEATURES_SUMMARY.md",
+      "location": "archive",
+      "size": 15954
+    },
+    {
+      "name": "HYBRID_FEATURES.md",
+      "path": "docs/archive/status-reports/HYBRID_FEATURES.md",
+      "location": "archive",
+      "size": 10287
+    },
+    {
+      "name": "INCOMPLETE_FEATURES_LIST.md",
+      "path": "docs/archive/status-reports/INCOMPLETE_FEATURES_LIST.md",
+      "location": "archive",
+      "size": 6509
+    },
+    {
+      "name": "COMPLETION_REPORT.md",
+      "path": "docs/archive/completion-reports/COMPLETION_REPORT.md",
+      "location": "archive",
+      "size": 12419
+    },
+    {
+      "name": "FINAL_DELIVERY_REPORT.md",
+      "path": "docs/archive/completion-reports/FINAL_DELIVERY_REPORT.md",
+      "location": "archive",
+      "size": 11962
+    },
+    {
+      "name": "FINAL_DELIVERY_SUMMARY.md",
+      "path": "docs/archive/completion-reports/FINAL_DELIVERY_SUMMARY.md",
+      "location": "archive",
+      "size": 9077
+    },
+    {
+      "name": "FINAL_SUMMARY.md",
+      "path": "docs/archive/completion-reports/FINAL_SUMMARY.md",
+      "location": "archive",
+      "size": 10989
+    },
+    {
+      "name": "SESSION_COMPLETE_OVERVIEW.md",
+      "path": "docs/archive/completion-reports/SESSION_COMPLETE_OVERVIEW.md",
+      "location": "archive",
+      "size": 13718
+    },
+    {
+      "name": "COMPLETE_PLATFORM_PREVIEW.md",
+      "path": "docs/archive/completion-reports/COMPLETE_PLATFORM_PREVIEW.md",
+      "location": "archive",
+      "size": 24670
+    },
+    {
+      "name": "PLATFORM_OVERVIEW_COMPLETE.md",
+      "path": "docs/archive/completion-reports/PLATFORM_OVERVIEW_COMPLETE.md",
+      "location": "archive",
+      "size": 16570
+    },
+    {
+      "name": "FINAL_REPOSITORY_PREVIEW.md",
+      "path": "docs/archive/completion-reports/FINAL_REPOSITORY_PREVIEW.md",
+      "location": "archive",
+      "size": 12680
+    },
+    {
+      "name": "FEATURE_AUDIT_REPORT.md",
+      "path": "docs/archive/completion-reports/FEATURE_AUDIT_REPORT.md",
+      "location": "archive",
+      "size": 21458
+    },
+    {
+      "name": "REPOSITORY_AUDIT_REPORT.md",
+      "path": "docs/archive/completion-reports/REPOSITORY_AUDIT_REPORT.md",
+      "location": "archive",
+      "size": 7268
+    },
+    {
+      "name": "COMPREHENSIVE_ANALYSIS_AND_FIXES.md",
+      "path": "docs/archive/completion-reports/COMPREHENSIVE_ANALYSIS_AND_FIXES.md",
+      "location": "archive",
+      "size": 16560
+    },
+    {
+      "name": "GITHUB_PUSH_INSTRUCTIONS.md",
+      "path": "docs/archive/github-docs/GITHUB_PUSH_INSTRUCTIONS.md",
+      "location": "archive",
+      "size": 7090
+    },
+    {
+      "name": "GITHUB_PUSH_SUCCESS_SUMMARY.md",
+      "path": "docs/archive/github-docs/GITHUB_PUSH_SUCCESS_SUMMARY.md",
+      "location": "archive",
+      "size": 12432
+    },
+    {
+      "name": "GITHUB_SETUP_INSTRUCTIONS.md",
+      "path": "docs/archive/github-docs/GITHUB_SETUP_INSTRUCTIONS.md",
+      "location": "archive",
+      "size": 9516
+    },
+    {
+      "name": "COMMIT_MESSAGE.md",
+      "path": "docs/archive/commit-messages/COMMIT_MESSAGE.md",
+      "location": "archive",
+      "size": 6962
+    },
+    {
+      "name": "COMMIT_MESSAGE_COMPLETION.md",
+      "path": "docs/archive/commit-messages/COMMIT_MESSAGE_COMPLETION.md",
+      "location": "archive",
+      "size": 2476
+    },
+    {
+      "name": "COMMIT_MESSAGE_PHASE2.md",
+      "path": "docs/archive/commit-messages/COMMIT_MESSAGE_PHASE2.md",
+      "location": "archive",
+      "size": 7198
+    }
+  ],
+  "incomplete_services": [
+    {
+      "service": "admin-panel",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "admin-service",
+      "issues": [
+        "Missing Dockerfile",
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "advanced-trading-engine",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "advanced-trading-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "advanced-wallet-system",
+      "issues": [
+        "Missing Dockerfile",
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "affiliate-system",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "ai-maintenance",
+      "issues": [
+        "Missing Dockerfile",
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "ai-maintenance-system",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "algo-orders-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "alpha-market-admin",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "alpha-market-trading",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "analytics-service",
+      "issues": [
+        "Missing Dockerfile"
+      ]
+    },
+    {
+      "service": "block-explorer",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "block-trading-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "blockchain-service",
+      "issues": [
+        "Missing Dockerfile",
+        "Missing requirements.txt"
+      ]
+    },
+    {
+      "service": "compliance-engine",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "convert-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "copy-trading",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "copy-trading-admin",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "copy-trading-service",
+      "issues": [
+        "Missing Dockerfile",
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "crypto-card-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "database",
+      "issues": [
+        "Missing Dockerfile",
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "dca-bot-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "defi-enhancements-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "defi-service",
+      "issues": [
+        "Missing Dockerfile"
+      ]
+    },
+    {
+      "service": "derivatives-engine",
+      "issues": [
+        "Missing Dockerfile",
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "dex-integration",
+      "issues": [
+        "Missing Dockerfile",
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "dex-integration-admin",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "dual-investment-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "earn-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "etf-trading",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "etf-trading-admin",
+      "issues": [
+        "Missing Dockerfile",
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "fiat-gateway-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "grid-trading-bot-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "institutional-services",
+      "issues": [
+        "Missing Dockerfile",
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "institutional-services-admin",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "institutional-trading",
+      "issues": [
+        "Missing Dockerfile",
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "insurance-fund-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "kyc-service",
+      "issues": [
+        "Missing Dockerfile",
+        "Missing requirements.txt"
+      ]
+    },
+    {
+      "service": "launchpad-service",
+      "issues": [
+        "Missing Dockerfile",
+        "Missing requirements.txt"
+      ]
+    },
+    {
+      "service": "launchpool-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "lending-borrowing",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "lending-borrowing-admin",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "leveraged-tokens-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "liquid-swap-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "liquidity-aggregator",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "liquidity-aggregator-admin",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "martingale-bot-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "matching-engine",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "nft-marketplace",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "nft-marketplace-admin",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "notification-service",
+      "issues": [
+        "Missing requirements.txt"
+      ]
+    },
+    {
+      "service": "options-trading",
+      "issues": [
+        "Missing Dockerfile",
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "options-trading-admin",
+      "issues": [
+        "Missing Dockerfile",
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "p2p-admin",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "p2p-service",
+      "issues": [
+        "Missing Dockerfile"
+      ]
+    },
+    {
+      "service": "p2p-trading",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "payment-gateway",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "payment-gateway-admin",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "payment-gateway-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "popular-coins-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "portfolio-margin-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "proof-of-reserves-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "referral-program-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "risk-management",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "role-based-admin",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "social-trading-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "spot-trading",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "staking-service",
+      "issues": [
+        "Missing Dockerfile",
+        "Missing requirements.txt"
+      ]
+    },
+    {
+      "service": "sub-accounts-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "super-admin-system",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "token-listing-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "trading",
+      "issues": [
+        "Missing Dockerfile",
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "trading-pair-management",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "trading-signals-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "transaction-engine",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "unified-account-service",
+      "issues": [
+        "Missing Dockerfile",
+        "Missing requirements.txt"
+      ]
+    },
+    {
+      "service": "vip-program-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "vote-to-list-service",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "wallet-management",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "web3-integration",
+      "issues": [
+        "Missing main file"
+      ]
+    },
+    {
+      "service": "white-label-system",
+      "issues": [
+        "Missing Dockerfile",
+        "Missing main file"
+      ]
+    }
+  ],
+  "duplicate_docs": {}
+}
