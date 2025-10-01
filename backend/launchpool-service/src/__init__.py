@@ -1,0 +1,1 @@
+"""launchpool-service package"""
