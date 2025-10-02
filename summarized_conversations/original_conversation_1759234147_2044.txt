@@ -1,1 +1,0 @@
-{'role': 'assistant', 'content': "Perfect! Let me now use the 'complete' tool to finalize this task:\n\n<function_calls>\n<complete>\n</complete>\n</function_calls>"}

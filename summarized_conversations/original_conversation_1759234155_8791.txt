@@ -1,1 +1,0 @@
-{'role': 'assistant', 'content': 'Let me check a few key backend services to understand their implementation:\n\n<function_calls>\n<execute-command folder="tigerex/backend/auth-service">\ncat src/main.py | head -100\n</execute-command>\n</function_calls>'}

@@ -1,1 +1,0 @@
-{'role': 'assistant', 'content': '<function_calls>\n<execute-command>\nmkdir -p desktop-apps/windows desktop-apps/macos desktop-apps/linux\n</execute-command>\n</function_calls>'}

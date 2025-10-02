@@ -1,1 +1,0 @@
-{'role': 'assistant', 'content': 'Let me check the HYBRID_FEATURES.md and API_DOCUMENTATION.md:\n\n<function_calls>\n<execute-command>\ncd /workspace/tigerex && cat HYBRID_FEATURES.md | head -300\n</execute-command>\n</function_calls>'}

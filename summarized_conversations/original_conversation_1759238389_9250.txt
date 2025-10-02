@@ -1,1 +1,0 @@
-{'role': 'assistant', 'content': 'Now let me create the Staking Service:\n\n<function_calls>\n<execute-command>\nmkdir -p backend/staking-service\n</execute-command>\n</function_calls>'}

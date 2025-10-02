@@ -1,1 +1,0 @@
-{'role': 'user', 'content': '<tool_result> <execute-command> ToolResult(success=True, output=\'{\\n  "output": "   98\\\\n",\\n  "exit_code": 0,\\n  "cwd": "/workspace/tigerex/backend"\\n}\') </execute-command> </tool_result>'}

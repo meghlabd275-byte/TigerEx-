@@ -1,1 +1,0 @@
-{'role': 'assistant', 'content': '<function_calls>\n<execute-command>\ncd /workspace/tigerex/backend && cat super-admin-system/src/main.py | head -100\n</execute-command>\n</function_calls>'}

@@ -1,5 +1,0 @@
-drwxr-xr-x  3 root root   75 Sep 30 11:21 admin-panel
-drwxr-xr-x  2 root root   29 Sep 30 11:21 admin-service
-drwxr-xr-x  3 root root   75 Sep 30 11:21 p2p-admin
-drwxr-xr-x  3 root root   75 Sep 30 11:21 role-based-admin
-drwxr-xr-x  3 root root   75 Sep 30 11:21 super-admin-system

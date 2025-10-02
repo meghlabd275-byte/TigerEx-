@@ -1,1 +1,0 @@
-{'role': 'assistant', 'content': 'Now let me scrape detailed information from these exchanges to understand their features better:\n\n<function_calls>\n<scrape-webpage url="https://coinbureau.com/review/okx/">\n</scrape-webpage>\n</function_calls>'}

@@ -1,1 +1,0 @@
-{'role': 'assistant', 'content': '<function_calls>\n<execute-command folder="tigerex">\ncat FEATURE_AUDIT_REPORT.md | head -200\n</execute-command>\n</function_calls>'}

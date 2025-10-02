@@ -1,1 +1,0 @@
-{'role': 'assistant', 'content': '<function_calls>\n<execute-command folder="tigerex/src/components/trading">\nls -la | head -30\n</execute-command>\n</function_calls>'}

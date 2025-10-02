@@ -1,1 +1,0 @@
-{'role': 'assistant', 'content': '<function_calls>\n<execute-command>\nmkdir -p backend/trading-bots-service\n</execute-command>\n</function_calls>'}

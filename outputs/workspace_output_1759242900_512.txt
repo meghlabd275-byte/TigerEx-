@@ -1,9 +1,0 @@
-total 168
-drwxr-xr-x 2 root root   149 Sep 30 12:43 .
-drwxr-xr-x 5 root root    90 Sep 30 12:43 ..
--rw-r--r-- 1 root root 34484 Sep 30 12:43 copy-trading.tsx
--rw-r--r-- 1 root root 25787 Sep 30 12:43 dashboard.tsx
--rw-r--r-- 1 root root 24818 Sep 30 12:43 earn.tsx
--rw-r--r-- 1 root root 29201 Sep 30 12:43 p2p.tsx
--rw-r--r-- 1 root root 14310 Sep 30 12:43 portfolio.tsx
--rw-r--r-- 1 root root 25139 Sep 30 12:43 wallet.tsx

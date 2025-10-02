@@ -1,1 +1,0 @@
-{'role': 'assistant', 'content': 'Now let me create the Advanced Trading Service with all advanced order types:\n\n<function_calls>\n<execute-command>\nmkdir -p backend/advanced-trading-service/src\n</execute-command>\n</function_calls>'}

@@ -1,1 +1,0 @@
-{'role': 'assistant', 'content': '<function_calls>\n<web-search query="CoinW exchange features 2024 2025 grid trading DCA bots futures" num_results="10">\n</web-search>\n</function_calls>'}

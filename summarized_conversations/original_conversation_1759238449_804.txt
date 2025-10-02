@@ -1,1 +1,0 @@
-{'role': 'assistant', 'content': 'Let me check the API documentation to understand what endpoints are available:\n\n<function_calls>\n<execute-command>\ncd /workspace/tigerex && cat API_DOCUMENTATION.md | head -500\n</execute-command>\n</function_calls>'}

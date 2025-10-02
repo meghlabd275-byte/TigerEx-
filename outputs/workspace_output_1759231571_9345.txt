@@ -1,9 +1,0 @@
-total 40
-drwxr-xr-x 6 root root   128 Sep 30 11:21 .
-drwxr-xr-x 5 root root   172 Sep 30 11:21 ..
--rw-r--r-- 1 root root 36735 Sep 30 11:21 main.py
-drwxr-xr-x 2 root root    81 Sep 30 11:21 middleware
-drwxr-xr-x 2 root root    29 Sep 30 11:21 models
-drwxr-xr-x 2 root root    35 Sep 30 11:21 routes
--rw-r--r-- 1 root root  3718 Sep 30 11:21 server.js
-drwxr-xr-x 2 root root    36 Sep 30 11:21 services
