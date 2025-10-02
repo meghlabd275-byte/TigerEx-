@@ -1,0 +1,15 @@
+{
+  "savings": true,
+  "vipProgram": true,
+  "subAccounts": true,
+  "otcDesk": true,
+  "addressWhitelist": true,
+  "taxReporting": true,
+  "leveragedTokens": true,
+  "dualInvestment": true,
+  "nftMysteryBox": true,
+  "nftAuction": true,
+  "tigerPay": true,
+  "giftCards": true,
+  "affiliateProgram": true
+}

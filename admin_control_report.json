@@ -1,0 +1,809 @@
+{
+  "summary": {
+    "total_services": 36,
+    "services_with_admin": 4,
+    "services_missing_admin": 17,
+    "admin_coverage": "11.1%"
+  },
+  "services": {
+    "address-generation-service": {
+      "service": "address-generation-service",
+      "file": "backend/address-generation-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "admin-service": {
+      "service": "admin-service",
+      "file": "backend/admin-service/main.js",
+      "admin_routes": [
+        [
+          "app",
+          "post",
+          "/api/v1/admin/login"
+        ],
+        [
+          "app",
+          "get",
+          "/api/v1/admin/dashboard/analytics"
+        ],
+        [
+          "app",
+          "get",
+          "/api/v1/admin/users"
+        ],
+        [
+          "app",
+          "get",
+          "/api/v1/admin/kyc/pending"
+        ],
+        [
+          "app",
+          "post",
+          "/api/v1/admin/kyc/:documentId/approve"
+        ],
+        [
+          "app",
+          "get",
+          "/api/v1/admin/p2p/disputes"
+        ],
+        [
+          "app",
+          "post",
+          "/api/v1/admin/blockchain/deploy"
+        ],
+        [
+          "app",
+          "post",
+          "/api/v1/admin/explorer/deploy"
+        ],
+        [
+          "app",
+          "post",
+          "/api/v1/admin/white-label/exchange"
+        ],
+        [
+          "app",
+          "post",
+          "/api/v1/admin/ai-maintenance/enable"
+        ],
+        [
+          "app",
+          "post",
+          "/api/v1/admin/trading-pairs"
+        ],
+        [
+          "app",
+          "post",
+          "/api/v1/admin/coins/list"
+        ]
+      ],
+      "admin_middleware": [],
+      "admin_functions": [
+        [
+          "const",
+          "authenticateAdmin"
+        ],
+        [
+          "const",
+          "adminRole"
+        ]
+      ],
+      "has_admin_control": true
+    },
+    "analytics-dashboard-service": {
+      "service": "analytics-dashboard-service",
+      "file": "backend/analytics-dashboard-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "analytics-service": {
+      "service": "analytics-service",
+      "file": "backend/analytics-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "auto-invest-service": {
+      "service": "auto-invest-service",
+      "file": "backend/auto-invest-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "blockchain-integration-service": {
+      "service": "blockchain-integration-service",
+      "file": "backend/blockchain-integration-service/main.py",
+      "admin_routes": [
+        [
+          "post",
+          "/api/admin/tokens/create"
+        ],
+        [
+          "get",
+          "/api/admin/tokens"
+        ],
+        [
+          "post",
+          "/api/admin/trading-pairs/create"
+        ],
+        [
+          "post",
+          "/api/admin/deposit-addresses/generate"
+        ]
+      ],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": true,
+        "read": true,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": true
+    },
+    "blockchain-service": {
+      "service": "blockchain-service",
+      "file": "backend/blockchain-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "copy-trading-service": {
+      "service": "copy-trading-service",
+      "file": "backend/copy-trading-service/main.js",
+      "admin_routes": [],
+      "admin_middleware": [],
+      "admin_functions": [],
+      "has_admin_control": false
+    },
+    "database": {
+      "service": "database",
+      "file": "backend/database/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "defi-service": {
+      "service": "defi-service",
+      "file": "backend/defi-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "defi-staking-service": {
+      "service": "defi-staking-service",
+      "file": "backend/defi-staking-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "dex-integration": {
+      "service": "dex-integration",
+      "file": "backend/dex-integration/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "enhanced-wallet-service": {
+      "service": "enhanced-wallet-service",
+      "file": "backend/enhanced-wallet-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "eth2-staking-service": {
+      "service": "eth2-staking-service",
+      "file": "backend/eth2-staking-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "futures-earn-service": {
+      "service": "futures-earn-service",
+      "file": "backend/futures-earn-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "futures-trading": {
+      "service": "futures-trading",
+      "file": "backend/futures-trading/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "institutional-trading": {
+      "service": "institutional-trading",
+      "file": "backend/institutional-trading/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "kyc-service": {
+      "service": "kyc-service",
+      "file": "backend/kyc-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "launchpad-service": {
+      "service": "launchpad-service",
+      "file": "backend/launchpad-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "lending-borrowing": {
+      "service": "lending-borrowing",
+      "file": "backend/lending-borrowing/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "margin-trading": {
+      "service": "margin-trading",
+      "file": "backend/margin-trading/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "market-data-service": {
+      "service": "market-data-service",
+      "file": "backend/market-data-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "nft-launchpad-service": {
+      "service": "nft-launchpad-service",
+      "file": "backend/nft-launchpad-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "notification-service-enhanced": {
+      "service": "notification-service-enhanced",
+      "file": "backend/notification-service-enhanced/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "notification-service": {
+      "service": "notification-service",
+      "file": "backend/notification-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": true,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "p2p-service": {
+      "service": "p2p-service",
+      "file": "backend/p2p-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "perpetual-swap-service": {
+      "service": "perpetual-swap-service",
+      "file": "backend/perpetual-swap-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "risk-management-service": {
+      "service": "risk-management-service",
+      "file": "backend/risk-management-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "staking-service": {
+      "service": "staking-service",
+      "file": "backend/staking-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "system-configuration-service": {
+      "service": "system-configuration-service",
+      "file": "backend/system-configuration-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": true,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "trading-bots-service": {
+      "service": "trading-bots-service",
+      "file": "backend/trading-bots-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "trading-engine-enhanced": {
+      "service": "trading-engine-enhanced",
+      "file": "backend/trading-engine-enhanced/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "trading": {
+      "service": "trading",
+      "file": "backend/trading/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "unified-account-service": {
+      "service": "unified-account-service",
+      "file": "backend/unified-account-service/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    },
+    "user-management-admin-service": {
+      "service": "user-management-admin-service",
+      "file": "backend/user-management-admin-service/main.py",
+      "admin_routes": [
+        [
+          "post",
+          "/api/v1/admin/users/search"
+        ],
+        [
+          "get",
+          "/api/v1/admin/users/{user_id}"
+        ],
+        [
+          "put",
+          "/api/v1/admin/users/update"
+        ],
+        [
+          "post",
+          "/api/v1/admin/users/action"
+        ],
+        [
+          "put",
+          "/api/v1/admin/users/limits"
+        ],
+        [
+          "post",
+          "/api/v1/admin/users/note"
+        ],
+        [
+          "get",
+          "/api/v1/admin/users/{user_id}/notes"
+        ],
+        [
+          "get",
+          "/api/v1/admin/users/{user_id}/activity"
+        ],
+        [
+          "get",
+          "/api/v1/admin/users/stats"
+        ]
+      ],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": true,
+        "read": true,
+        "update": true,
+        "delete": false
+      },
+      "has_admin_control": true
+    },
+    "src": {
+      "service": "src",
+      "file": "backend/white-label-system/src/main.py",
+      "admin_routes": [],
+      "admin_decorators": [],
+      "admin_functions": [],
+      "crud": {
+        "create": false,
+        "read": false,
+        "update": false,
+        "delete": false
+      },
+      "has_admin_control": false
+    }
+  },
+  "admin_endpoints": {
+    "blockchain-integration-service": [
+      [
+        "post",
+        "/api/admin/tokens/create"
+      ],
+      [
+        "get",
+        "/api/admin/tokens"
+      ],
+      [
+        "post",
+        "/api/admin/trading-pairs/create"
+      ],
+      [
+        "post",
+        "/api/admin/deposit-addresses/generate"
+      ]
+    ],
+    "user-management-admin-service": [
+      [
+        "post",
+        "/api/v1/admin/users/search"
+      ],
+      [
+        "get",
+        "/api/v1/admin/users/{user_id}"
+      ],
+      [
+        "put",
+        "/api/v1/admin/users/update"
+      ],
+      [
+        "post",
+        "/api/v1/admin/users/action"
+      ],
+      [
+        "put",
+        "/api/v1/admin/users/limits"
+      ],
+      [
+        "post",
+        "/api/v1/admin/users/note"
+      ],
+      [
+        "get",
+        "/api/v1/admin/users/{user_id}/notes"
+      ],
+      [
+        "get",
+        "/api/v1/admin/users/{user_id}/activity"
+      ],
+      [
+        "get",
+        "/api/v1/admin/users/stats"
+      ]
+    ],
+    "src": [
+      [
+        "post",
+        "/api/v1/admin/approve-listing/{application_id}"
+      ],
+      [
+        "post",
+        "/api/v1/admin/reject-listing/{application_id}"
+      ]
+    ],
+    "admin-service": [
+      [
+        "app",
+        "post",
+        "/api/v1/admin/login"
+      ],
+      [
+        "app",
+        "get",
+        "/api/v1/admin/dashboard/analytics"
+      ],
+      [
+        "app",
+        "get",
+        "/api/v1/admin/users"
+      ],
+      [
+        "app",
+        "get",
+        "/api/v1/admin/kyc/pending"
+      ],
+      [
+        "app",
+        "post",
+        "/api/v1/admin/kyc/:documentId/approve"
+      ],
+      [
+        "app",
+        "get",
+        "/api/v1/admin/p2p/disputes"
+      ],
+      [
+        "app",
+        "post",
+        "/api/v1/admin/blockchain/deploy"
+      ],
+      [
+        "app",
+        "post",
+        "/api/v1/admin/explorer/deploy"
+      ],
+      [
+        "app",
+        "post",
+        "/api/v1/admin/white-label/exchange"
+      ],
+      [
+        "app",
+        "post",
+        "/api/v1/admin/ai-maintenance/enable"
+      ],
+      [
+        "app",
+        "post",
+        "/api/v1/admin/trading-pairs"
+      ],
+      [
+        "app",
+        "post",
+        "/api/v1/admin/coins/list"
+      ]
+    ]
+  },
+  "missing_features": {
+    "token-listing-admin": [
+      "Service not found"
+    ],
+    "trading-pair-admin": [
+      "Service not found"
+    ],
+    "liquidity-pool-admin": [
+      "Service not found"
+    ],
+    "deposit-withdrawal-admin-service": [
+      "Service not found"
+    ],
+    "blockchain-integration-admin": [
+      "Service not found"
+    ],
+    "iou-token-admin": [
+      "Service not found"
+    ],
+    "virtual-liquidity-admin": [
+      "Service not found"
+    ],
+    "system-configuration-service": [
+      "Missing admin control endpoints"
+    ],
+    "comprehensive-admin-service": [
+      "Service not found"
+    ],
+    "kyc-aml-admin": [
+      "Service not found"
+    ],
+    "compliance-admin": [
+      "Service not found"
+    ],
+    "fee-management-admin": [
+      "Service not found"
+    ],
+    "announcement-admin": [
+      "Service not found"
+    ],
+    "promotion-admin": [
+      "Service not found"
+    ],
+    "referral-admin": [
+      "Service not found"
+    ],
+    "api-key-admin": [
+      "Service not found"
+    ],
+    "security-admin": [
+      "Service not found"
+    ]
+  }
+}
