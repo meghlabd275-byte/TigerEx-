@@ -280,6 +280,7 @@ impl DerivativesTradingEngine {
     }
 
     async fn initialize_contracts(&self) {
+        // TODO: Consider using proper error handling instead of unwrap()
         let mut contracts = self.contracts.write().unwrap();
         
         // BTC Perpetual Swap
@@ -346,6 +347,7 @@ impl DerivativesTradingEngine {
     }
 
     async fn initialize_risk_limits(&self) {
+        // TODO: Consider using proper error handling instead of unwrap()
         let mut risk_limits = self.risk_limits.write().unwrap();
         
         // BTC Risk Limits
@@ -375,6 +377,7 @@ impl DerivativesTradingEngine {
     }
 
     async fn initialize_insurance_fund(&self) {
+        // TODO: Consider using proper error handling instead of unwrap()
         let mut insurance_fund = self.insurance_fund.write().unwrap();
         
         insurance_fund.insert("BTC".to_string(), InsuranceFund {
@@ -407,10 +410,13 @@ impl DerivativesTradingEngine {
         tokio::spawn(async move {
             let mut interval = interval(Duration::from_secs(60)); // Update every minute
             
+            // TODO: Consider using proper error handling instead of unwrap()
             while *running.lock().unwrap() {
                 interval.tick().await;
                 
+                // TODO: Consider using proper error handling instead of unwrap()
                 let contracts_read = contracts.read().unwrap();
+                // TODO: Consider using proper error handling instead of unwrap()
                 let mut funding_rates_write = funding_rates.write().unwrap();
                 
                 for (symbol, contract) in contracts_read.iter() {
@@ -452,6 +458,7 @@ impl DerivativesTradingEngine {
         tokio::spawn(async move {
             let mut interval = interval(Duration::from_secs(1)); // Update every second
             
+            // TODO: Consider using proper error handling instead of unwrap()
             while *running.lock().unwrap() {
                 interval.tick().await;
                 
@@ -459,6 +466,7 @@ impl DerivativesTradingEngine {
                 let btc_index = Self::calculate_index_price("BTC").await;
                 let eth_index = Self::calculate_index_price("ETH").await;
                 
+                // TODO: Consider using proper error handling instead of unwrap()
                 let mut index_prices_write = index_prices.write().unwrap();
                 index_prices_write.insert("BTCUSDT".to_string(), btc_index);
                 index_prices_write.insert("ETHUSDT".to_string(), eth_index);
@@ -538,6 +546,7 @@ impl DerivativesTradingEngine {
         tokio::spawn(async move {
             let mut interval = interval(Duration::from_secs(1)); // Update every second
             
+            // TODO: Consider using proper error handling instead of unwrap()
             while *running.lock().unwrap() {
                 interval.tick().await;
                 
@@ -556,6 +565,7 @@ impl DerivativesTradingEngine {
         tokio::spawn(async move {
             let mut interval = interval(Duration::from_secs(1)); // Check every second
             
+            // TODO: Consider using proper error handling instead of unwrap()
             while *running.lock().unwrap() {
                 interval.tick().await;
                 
@@ -583,6 +593,7 @@ impl DerivativesTradingEngine {
                 
                 // Add liquidations to queue
                 if !liquidations.is_empty() {
+                    // TODO: Consider using proper error handling instead of unwrap()
                     let mut queue = liquidation_queue.lock().unwrap();
                     queue.extend(liquidations);
                 }
@@ -602,6 +613,7 @@ impl DerivativesTradingEngine {
         tokio::spawn(async move {
             let mut interval = interval(Duration::from_secs(5)); // Check every 5 seconds
             
+            // TODO: Consider using proper error handling instead of unwrap()
             while *running.lock().unwrap() {
                 interval.tick().await;
                 
@@ -631,6 +643,7 @@ impl DerivativesTradingEngine {
         tokio::spawn(async move {
             let mut interval = interval(Duration::from_secs(10)); // Check every 10 seconds
             
+            // TODO: Consider using proper error handling instead of unwrap()
             while *running.lock().unwrap() {
                 interval.tick().await;
                 
@@ -691,6 +704,7 @@ impl DerivativesTradingEngine {
     }
 
     pub async fn get_position(&self, user_id: &str, symbol: &str) -> Option<DerivativePosition> {
+        // TODO: Consider using proper error handling instead of unwrap()
         let positions = self.positions.read().unwrap();
         if let Some(user_positions) = positions.get(user_id) {
             return user_positions.iter()
@@ -701,21 +715,25 @@ impl DerivativesTradingEngine {
     }
 
     pub async fn get_funding_rate(&self, symbol: &str) -> Option<FundingRate> {
+        // TODO: Consider using proper error handling instead of unwrap()
         let funding_rates = self.funding_rates.read().unwrap();
         funding_rates.get(symbol).cloned()
     }
 
     pub async fn get_index_price(&self, symbol: &str) -> Option<IndexPrice> {
+        // TODO: Consider using proper error handling instead of unwrap()
         let index_prices = self.index_prices.read().unwrap();
         index_prices.get(symbol).cloned()
     }
 
     pub async fn get_insurance_fund(&self, asset: &str) -> Option<InsuranceFund> {
+        // TODO: Consider using proper error handling instead of unwrap()
         let insurance_fund = self.insurance_fund.read().unwrap();
         insurance_fund.get(asset).cloned()
     }
 
     pub async fn stop(&self) {
+        // TODO: Consider using proper error handling instead of unwrap()
         let mut running = self.running.lock().unwrap();
         *running = false;
         println!("Derivatives Trading Engine stopped");

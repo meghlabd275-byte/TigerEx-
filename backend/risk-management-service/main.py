@@ -1,3 +1,4 @@
+import os
 """
 TigerEx Risk Management Service
 Real-time risk monitoring, fraud detection, and compliance

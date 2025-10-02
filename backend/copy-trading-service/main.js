@@ -620,7 +620,7 @@ app.get('/api/v1/copy-trading/analytics', authenticateUser, async (req, res) => 
 
 // WebSocket for real-time updates
 wss.on('connection', (ws, req) => {
-    console.log('Copy trading WebSocket connected');
+    // console.log('Copy trading WebSocket connected');
     
     ws.on('message', (message) => {
         try {
@@ -632,7 +632,7 @@ wss.on('connection', (ws, req) => {
     });
 
     ws.on('close', () => {
-        console.log('Copy trading WebSocket disconnected');
+        // console.log('Copy trading WebSocket disconnected');
     });
 });
 
@@ -646,7 +646,7 @@ class TradeSignalProcessor {
         if (this.isProcessing) return;
         
         this.isProcessing = true;
-        console.log('Trade signal processor started');
+        // console.log('Trade signal processor started');
         
         // Process signals every 5 seconds
         setInterval(async () => {
@@ -724,7 +724,7 @@ class TradeSignalProcessor {
             `, [followerSubscription.follower_id, signal.trading_pair_id]);
 
             if (balanceResult.rows.length === 0 || balanceResult.rows[0].balance < tradeSize * signal.price) {
-                console.log(`Insufficient balance for follower ${followerSubscription.follower_id}`);
+                // console.log(`Insufficient balance for follower ${followerSubscription.follower_id}`);
                 return;
             }
 
@@ -754,7 +754,7 @@ class TradeSignalProcessor {
                 is_copy_trade: true
             });
 
-            console.log(`Executed copied trade ${copiedTradeId} for follower ${followerSubscription.follower_id}`);
+            // console.log(`Executed copied trade ${copiedTradeId} for follower ${followerSubscription.follower_id}`);
         } catch (error) {
             console.error('Execute copied trade error:', error);
         }
@@ -817,12 +817,12 @@ async function sendNotification(userId, notification) {
 
 async function notifyAdminMasterApplication(applicationId) {
     // Implementation for notifying admin about new master trader application
-    console.log(`New master trader application: ${applicationId}`);
+    // console.log(`New master trader application: ${applicationId}`);
 }
 
 async function closeOpenPositions(subscriptionId) {
     // Implementation for closing open positions when unsubscribing
-    console.log(`Closing positions for subscription: ${subscriptionId}`);
+    // console.log(`Closing positions for subscription: ${subscriptionId}`);
 }
 
 function handleCopyTradingWebSocketMessage(ws, data) {
@@ -850,7 +850,7 @@ app.use((error, req, res, next) => {
 // Start server
 const PORT = process.env.PORT || 3010;
 server.listen(PORT, () => {
-    console.log(`Copy Trading Service running on port ${PORT}`);
+    // console.log(`Copy Trading Service running on port ${PORT}`);
 });
 
 module.exports = app;

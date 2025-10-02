@@ -691,7 +691,7 @@ app.post('/api/v1/admin/coins/list', authenticateAdmin, requirePermission(PERMIS
 
 // WebSocket for real-time admin updates
 wss.on('connection', (ws, req) => {
-    console.log('Admin WebSocket connected');
+    // console.log('Admin WebSocket connected');
     
     ws.on('message', (message) => {
         try {
@@ -703,7 +703,7 @@ wss.on('connection', (ws, req) => {
     });
 
     ws.on('close', () => {
-        console.log('Admin WebSocket disconnected');
+        // console.log('Admin WebSocket disconnected');
     });
 });
 
@@ -768,7 +768,7 @@ async function updateUserKYCLevel(userId) {
 
 async function sendKYCNotification(userId, status) {
     // Implementation for sending KYC notifications
-    console.log(`Sending KYC notification to user ${userId}: ${status}`);
+    // console.log(`Sending KYC notification to user ${userId}: ${status}`);
 }
 
 function verify2FA(secret, token) {
@@ -778,7 +778,7 @@ function verify2FA(secret, token) {
 
 async function deployBlockchain(config) {
     // Implementation for blockchain deployment
-    console.log('Deploying blockchain:', config.name);
+    // console.log('Deploying blockchain:', config.name);
     
     setTimeout(async () => {
         config.status = 'deployed';
@@ -789,7 +789,7 @@ async function deployBlockchain(config) {
 
 async function deployBlockExplorer(config) {
     // Implementation for block explorer deployment
-    console.log('Deploying block explorer:', config.explorerName);
+    // console.log('Deploying block explorer:', config.explorerName);
     
     setTimeout(async () => {
         config.status = 'deployed';
@@ -800,7 +800,7 @@ async function deployBlockExplorer(config) {
 
 async function deployWhiteLabelExchange(config) {
     // Implementation for white-label exchange deployment
-    console.log('Deploying white-label exchange:', config.name);
+    // console.log('Deploying white-label exchange:', config.name);
     
     setTimeout(async () => {
         config.status = 'deployed';
@@ -811,7 +811,7 @@ async function deployWhiteLabelExchange(config) {
 
 function enableAIMaintenance(config) {
     // Implementation for AI maintenance system
-    console.log('Enabling AI maintenance for:', config.targetSystem);
+    // console.log('Enabling AI maintenance for:', config.targetSystem);
 }
 
 function handleAdminWebSocketMessage(ws, data) {
@@ -835,7 +835,7 @@ app.use((error, req, res, next) => {
 // Start server
 const PORT = process.env.PORT || 3007;
 server.listen(PORT, () => {
-    console.log(`Admin Service running on port ${PORT}`);
+    // console.log(`Admin Service running on port ${PORT}`);
 });
 
 module.exports = app;

@@ -1,3 +1,4 @@
+import os
 """
 TigerEx Enhanced Notification Service
 Multi-channel notifications: Email, SMS, Push, In-App

@@ -515,7 +515,7 @@ async def reward_calculator():
             
             for validator in active_validators:
                 # Mock reward calculation
-                base_reward = Decimal('0.004')  ~ 4% APY
+                base_reward = Decimal('0.004')  # ~ 4% APY
                 reward_amount = base_reward * validator.effective_balance
                 
                 if reward_amount > 0:

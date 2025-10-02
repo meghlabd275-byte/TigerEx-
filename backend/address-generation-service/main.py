@@ -1,3 +1,4 @@
+import os
 """
 TigerEx Address Generation Service
 Generates unique deposit addresses for all supported blockchains

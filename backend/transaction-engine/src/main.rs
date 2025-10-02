@@ -169,6 +169,7 @@ impl TransactionEngine {
 
         // Add to pending transactions
         {
+            // TODO: Consider using proper error handling instead of unwrap()
             let mut pending = self.pending_transactions.lock().unwrap();
             pending.insert(transaction_id, transaction.clone());
         }
@@ -435,6 +436,7 @@ impl TransactionEngine {
     pub async fn get_balance(&self, user_id: u64, asset: &str) -> Result<Balance, Box<dyn std::error::Error>> {
         // Try cache first
         {
+            // TODO: Consider using proper error handling instead of unwrap()
             let balances = self.balances.read().unwrap();
             if let Some(balance) = balances.get(&(user_id, asset.to_string())) {
                 return Ok(balance.clone());
@@ -481,6 +483,7 @@ impl TransactionEngine {
 
         // Cache the balance
         {
+            // TODO: Consider using proper error handling instead of unwrap()
             let mut balances = self.balances.write().unwrap();
             balances.insert((user_id, asset.to_string()), balance.clone());
         }
@@ -592,6 +595,7 @@ impl TransactionEngine {
         
         // Update in-memory cache
         {
+            // TODO: Consider using proper error handling instead of unwrap()
             let mut balances_guard = balances.write().unwrap();
             let key = (update.user_id, update.asset.clone());
             let balance = balances_guard.entry(key).or_insert_with(|| Balance {

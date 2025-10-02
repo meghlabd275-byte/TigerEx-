@@ -1,3 +1,4 @@
+import os
 """
 TigerEx Enhanced Trading Engine
 High-performance order matching and trade execution

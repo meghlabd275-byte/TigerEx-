@@ -26,12 +26,12 @@ export function useWebSocket(url: string): UseWebSocketReturn {
 
     socket.on('connect', () => {
       setIsConnected(true);
-      console.log('WebSocket connected');
+      // console.log('WebSocket connected');
     });
 
     socket.on('disconnect', () => {
       setIsConnected(false);
-      console.log('WebSocket disconnected');
+      // console.log('WebSocket disconnected');
     });
 
     socket.on('error', (error) => {
@@ -41,17 +41,17 @@ export function useWebSocket(url: string): UseWebSocketReturn {
     // Handle market data updates
     socket.on('ticker', (data) => {
       // Handle ticker updates
-      console.log('Ticker update:', data);
+      // console.log('Ticker update:', data);
     });
 
     socket.on('depth', (data) => {
       // Handle order book updates
-      console.log('Order book update:', data);
+      // console.log('Order book update:', data);
     });
 
     socket.on('trade', (data) => {
       // Handle trade updates
-      console.log('Trade update:', data);
+      // console.log('Trade update:', data);
     });
 
     return () => {
@@ -64,7 +64,7 @@ export function useWebSocket(url: string): UseWebSocketReturn {
       if (socketRef.current && isConnected) {
         socketRef.current.emit('subscribe', { channel });
         subscriptionsRef.current.add(channel);
-        console.log(`Subscribed to ${channel}`);
+        // console.log(`Subscribed to ${channel}`);
       }
     },
     [isConnected]
@@ -75,7 +75,7 @@ export function useWebSocket(url: string): UseWebSocketReturn {
       if (socketRef.current && isConnected) {
         socketRef.current.emit('unsubscribe', { channel });
         subscriptionsRef.current.delete(channel);
-        console.log(`Unsubscribed from ${channel}`);
+        // console.log(`Unsubscribed from ${channel}`);
       }
     },
     [isConnected]

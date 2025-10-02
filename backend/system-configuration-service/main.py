@@ -1,3 +1,4 @@
+import os
 """
 TigerEx System Configuration Service
 Manages platform-wide settings, fees, limits, and configurations

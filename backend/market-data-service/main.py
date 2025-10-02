@@ -1,3 +1,4 @@
+import os
 """
 TigerEx Market Data Service
 Real-time market data, price feeds, and candlestick data

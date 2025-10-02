@@ -1,3 +1,4 @@
+import os
 """
 TigerEx Enhanced Wallet Service
 Complete wallet management with deposits, withdrawals, and balance tracking

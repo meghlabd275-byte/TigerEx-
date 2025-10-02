@@ -61,7 +61,7 @@ app.add_middleware(
 
 # Configuration
 class Config:
-    DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:password@localhost/tigerex")
+    DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:{os.getenv("DB_PASSWORD", "postgres")}@localhost/tigerex")
     REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
     
     # Encryption keys

@@ -1,3 +1,4 @@
+import os
 """
 TigerEx User Management Admin Service
 Complete admin interface for managing users, permissions, and accounts

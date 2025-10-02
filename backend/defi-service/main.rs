@@ -218,6 +218,7 @@ async fn create_liquidity_pool(
     
     // Calculate initial price ratio
     let price_ratio = req.initial_liquidity_b.parse::<f64>().unwrap() / 
+                     // TODO: Consider using proper error handling instead of unwrap()
                      req.initial_liquidity_a.parse::<f64>().unwrap();
     
     let pool = LiquidityPool {
@@ -266,6 +267,7 @@ async fn swap_tokens(
     data: web::Data<AppState>,
     req: web::Json<SwapRequest>,
 ) -> Result<HttpResponse> {
+    // TODO: Consider using proper error handling instead of unwrap()
     let amount_in = req.amount_in.parse::<f64>().unwrap();
     let amount_out = amount_in * 0.99; // Mock 1% fee
     
@@ -283,6 +285,7 @@ async fn initiate_bridge_transfer(
     req: web::Json<BridgeRequest>,
 ) -> Result<HttpResponse> {
     let transfer_id = Uuid::new_v4();
+    // TODO: Consider using proper error handling instead of unwrap()
     let amount = req.amount.parse::<f64>().unwrap();
     let bridge_fee = amount * 0.001; // 0.1% fee
     let amount_after_fee = amount - bridge_fee;
@@ -416,7 +419,9 @@ async fn generate_quantum_safe_keys(
 
 // Helper Functions
 async fn calculate_tvl(amount_a: &str, amount_b: &str) -> String {
+    // TODO: Consider using proper error handling instead of unwrap()
     let a_value = amount_a.parse::<f64>().unwrap() * 50000.0; // Mock BTC price
+    // TODO: Consider using proper error handling instead of unwrap()
     let b_value = amount_b.parse::<f64>().unwrap() * 1.0; // Mock USDT price
     (a_value + b_value).to_string()
 }

@@ -1,3 +1,4 @@
+import os
 """
 TigerEx Analytics Dashboard Service
 Comprehensive analytics and metrics for admin dashboard
