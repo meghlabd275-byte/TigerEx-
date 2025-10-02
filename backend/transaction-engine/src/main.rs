@@ -689,6 +689,12 @@ impl TransactionEngine {
 }
 
 #[tokio::main]
+
+// Simple health check function
+fn health_check() -> String {
+    r#"{"status": "healthy", "service": "transaction-engine"}"#.to_string()
+}
+
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     tracing_subscriber::init();
 

@@ -1,6 +1,16 @@
 #include <iostream>
 #include <memory>
 #include <thread>
+
+// Health check endpoint
+string healthCheck() {
+    json response;
+    response["status"] = "healthy";
+    response["service"] = "options-trading";
+    response["timestamp"] = time(0);
+    return response.dump();
+}
+
 #include <vector>
 #include <queue>
 #include <map>

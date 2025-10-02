@@ -11,6 +11,16 @@ Supports spot, futures, margin, options, and advanced order types
 #include <queue>
 #include <memory>
 #include <thread>
+
+// Health check endpoint
+string healthCheck() {
+    json response;
+    response["status"] = "healthy";
+    response["service"] = "options-trading";
+    response["timestamp"] = time(0);
+    return response.dump();
+}
+
 #include <mutex>
 #include <atomic>
 #include <chrono>

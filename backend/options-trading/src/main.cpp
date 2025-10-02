@@ -10,6 +10,16 @@ Supports European/American options, exotic options, volatility trading
 #include <string>
 #include <memory>
 #include <thread>
+
+// Health check endpoint
+string healthCheck() {
+    json response;
+    response["status"] = "healthy";
+    response["service"] = "options-trading";
+    response["timestamp"] = time(0);
+    return response.dump();
+}
+
 #include <mutex>
 #include <atomic>
 #include <chrono>

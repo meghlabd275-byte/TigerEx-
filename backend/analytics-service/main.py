@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-TigerEx kyc-service Service
+TigerEx analytics-service Service
 """
 
 from fastapi import FastAPI
@@ -8,14 +8,14 @@ import uvicorn
 import os
 
 app = FastAPI(
-    title="TigerEx kyc-service",
-    description="Backend service for kyc-service",
+    title="TigerEx analytics-service",
+    description="Backend service for analytics-service",
     version="1.0.0"
 )
 
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy", "service": "kyc-service"}
+    return {"status": "healthy", "service": "analytics-service"}
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8001))

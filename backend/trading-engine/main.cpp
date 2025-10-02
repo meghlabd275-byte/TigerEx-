@@ -28,6 +28,11 @@ private:
     bool running_;
 
 public:
+
+    std::string HealthCheck() {
+        return R"({"status": "healthy", "service": ")trading-engineR"("})";
+    }
+
     TigerExTradingEngine() : running_(false) {}
 
     bool Initialize() {

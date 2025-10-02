@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-TigerEx nft-launchpad-service Service
+TigerEx database Service
 """
 
 from fastapi import FastAPI
@@ -8,14 +8,14 @@ import uvicorn
 import os
 
 app = FastAPI(
-    title="TigerEx nft-launchpad-service",
-    description="Backend service for nft-launchpad-service",
+    title="TigerEx database",
+    description="Backend service for database",
     version="1.0.0"
 )
 
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy", "service": "nft-launchpad-service"}
+    return {"status": "healthy", "service": "database"}
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8003))
