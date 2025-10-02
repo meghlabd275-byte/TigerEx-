@@ -1,0 +1,1559 @@
+{
+  "total_services": 103,
+  "services_with_admin_control": 26,
+  "services_with_token_listing": 4,
+  "services_with_trading_pairs": 15,
+  "services_with_liquidity_pools": 14,
+  "services_with_deposit_control": 17,
+  "services_with_evm": 21,
+  "services_with_non_evm": 22,
+  "services_with_iou": 14,
+  "services_with_virtual_liquidity": 2,
+  "detailed_services": {
+    "admin-panel": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": true,
+        "trading_pair_creation": true,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": true,
+        "evm_blockchain": true,
+        "non_evm_blockchain": true,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "admin-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": true,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": true,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": true,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "advanced-trading-engine": {
+      "files_analyzed": 0,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "advanced-trading-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "advanced-wallet-system": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": true,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": true,
+        "non_evm_blockchain": true,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "affiliate-system": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": true,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "ai-maintenance-system": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "ai-maintenance": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "ai-trading-assistant": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": true,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "algo-orders-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "alpha-market-admin": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": true,
+        "evm_blockchain": false,
+        "non_evm_blockchain": true,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "alpha-market-trading": {
+      "files_analyzed": 12,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": true,
+        "non_evm_blockchain": true,
+        "iou_tokens": true,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "analytics-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": true,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "api-gateway": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": true,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "auth-service": {
+      "files_analyzed": 11,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": true,
+        "evm_blockchain": false,
+        "non_evm_blockchain": true,
+        "iou_tokens": true,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "auto-invest-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "block-explorer": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": true,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": true,
+        "non_evm_blockchain": true,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "block-trading-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "blockchain-integration-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": true,
+        "liquidity_pool": true,
+        "deposit_withdrawal_control": true,
+        "evm_blockchain": true,
+        "non_evm_blockchain": true,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "blockchain-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "compliance-engine": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": true,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "comprehensive-admin-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": true,
+        "trading_pair_creation": true,
+        "liquidity_pool": true,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": true,
+        "non_evm_blockchain": true,
+        "iou_tokens": true,
+        "virtual_liquidity": true,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "convert-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "copy-trading-admin": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": true,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "copy-trading-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": true,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "copy-trading": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": true,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "crypto-card-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "database": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "dca-bot-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "defi-enhancements-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": true,
+        "non_evm_blockchain": true,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "defi-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": true,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": true,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "defi-staking-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": true,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "deposit-withdrawal-admin-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": true,
+        "deposit_withdrawal_control": true,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": true,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "derivatives-engine": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": true,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "dex-integration-admin": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": true,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": true,
+        "non_evm_blockchain": true,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "dex-integration": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "dual-investment-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "earn-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "enhanced-liquidity-aggregator": {
+      "files_analyzed": 4,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": true,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "enhanced-wallet-service": {
+      "files_analyzed": 0,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "etf-trading-admin": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": true,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "etf-trading": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "eth2-staking-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": true,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "fiat-gateway-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "futures-earn-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "futures-trading": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "grid-trading-bot-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "institutional-services-admin": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": true,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "institutional-services": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": true,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "institutional-trading": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "insurance-fund-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "kyc-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "launchpad-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "launchpool-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "lending-borrowing-admin": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": true,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "lending-borrowing": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "leveraged-tokens-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "liquid-swap-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "liquidity-aggregator-admin": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": true,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "liquidity-aggregator": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": true,
+        "non_evm_blockchain": false,
+        "iou_tokens": true,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "margin-trading": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "martingale-bot-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "matching-engine": {
+      "files_analyzed": 0,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "nft-launchpad-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "nft-marketplace-admin": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": true,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "nft-marketplace": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": true,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "notification-service": {
+      "files_analyzed": 3,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": true,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": true,
+        "iou_tokens": true,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "options-trading-admin": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": true,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "options-trading": {
+      "files_analyzed": 0,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "p2p-admin": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": true,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": true,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "p2p-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "p2p-trading": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "payment-gateway-admin": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": true,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "payment-gateway-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "payment-gateway": {
+      "files_analyzed": 10,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": true,
+        "iou_tokens": true,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "perpetual-swap-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "popular-coins-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": true,
+        "liquidity_pool": true,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": true,
+        "non_evm_blockchain": true,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "portfolio-margin-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "proof-of-reserves-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "referral-program-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "risk-management": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": true,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "role-based-admin": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": true,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": true,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "social-trading-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "spot-trading": {
+      "files_analyzed": 14,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": true,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": true,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "spread-arbitrage-bot": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": true,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "staking-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "sub-accounts-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "super-admin-system": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": true,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": true,
+        "non_evm_blockchain": true,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "token-listing-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": true,
+        "trading_pair_creation": true,
+        "liquidity_pool": true,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": true,
+        "non_evm_blockchain": false,
+        "iou_tokens": true,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "trading-bots-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": true,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "trading-engine": {
+      "files_analyzed": 0,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "trading-pair-management": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": true,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "trading-signals-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "trading": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "transaction-engine": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "unified-account-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": false
+      }
+    },
+    "vip-program-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "virtual-liquidity-service": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": true,
+        "liquidity_pool": true,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": true,
+        "virtual_liquidity": true,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "vote-to-list-service": {
+      "files_analyzed": 2,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": false,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "wallet-management": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": true,
+        "non_evm_blockchain": true,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "wallet-service": {
+      "files_analyzed": 10,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": true,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": true,
+        "evm_blockchain": true,
+        "non_evm_blockchain": true,
+        "iou_tokens": true,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": true,
+        "has_user_endpoints": true
+      }
+    },
+    "web3-integration": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": false,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": true,
+        "non_evm_blockchain": true,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    },
+    "white-label-system": {
+      "files_analyzed": 1,
+      "features": {
+        "token_listing": false,
+        "trading_pair_creation": true,
+        "liquidity_pool": false,
+        "deposit_withdrawal_control": false,
+        "evm_blockchain": true,
+        "non_evm_blockchain": false,
+        "iou_tokens": false,
+        "virtual_liquidity": false,
+        "has_admin_endpoints": false,
+        "has_user_endpoints": true
+      }
+    }
+  }
+}
