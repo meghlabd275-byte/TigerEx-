@@ -238,7 +238,7 @@ const UserDashboard: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-              <p className="text-gray-600 mt-2">Welcome back! Here's your portfolio overview</p>
+              <p className="text-gray-600 mt-2">Welcome back! Here&apos;s your portfolio overview</p>
             </div>
             <div className="flex items-center space-x-4">
               <Button variant="outline" size="sm">
@@ -296,7 +296,7 @@ const UserDashboard: React.FC = () => {
             <CardContent className="p-6">
               <div className="flex items-center space-x-2 mb-2">
                 <BarChart3 className="h-5 w-5 text-blue-600" />
-                <h3 className="font-semibold">Today's P&L</h3>
+                <h3 className="font-semibold">Today&apos;s P&L</h3>
               </div>
               <div className="text-2xl font-bold text-green-600">+$1,234.56</div>
               <div className="text-sm text-gray-500">+5.67% from yesterday</div>

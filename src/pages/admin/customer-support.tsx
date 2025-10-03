@@ -468,7 +468,7 @@ const CustomerSupportDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {filteredTickets.map((ticket) => (
-                    <Card key={ticket.id} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => setSelectedTicket(ticket)}>
+                    <div key={ticket.id} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => setSelectedTicket(ticket)}><Card>
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-4">
@@ -529,7 +529,7 @@ const CustomerSupportDashboard: React.FC = () => {
                           </div>
                         </div>
                       </CardContent>
-                    </Card>
+                    </Card></div>
                   ))}
                 </div>
               </CardContent>

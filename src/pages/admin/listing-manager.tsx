@@ -159,6 +159,11 @@ const ListingManagerDashboard: React.FC = () => {
           foundedYear: 2021,
           headquarters: 'United States'
         },
+          technicalInfo: {
+            consensusAlgorithm: "PoS",
+            blockTime: 3,
+            tps: 2000
+          },
         riskScore: 35,
         complianceScore: 75
       },

@@ -580,7 +580,7 @@ const AlphaMarketPage: React.FC = () => {
                   <Button
                     className="mt-4"
                     onClick={() =>
-                      document.querySelector('[value="discover"]')?.click()
+                      (document.querySelector('[value="discover"]') as HTMLElement)?.click()
                     }
                   >
                     Discover Alpha Tokens

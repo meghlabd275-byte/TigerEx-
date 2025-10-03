@@ -644,7 +644,7 @@ const P2PPage: React.FC = () => {
           {orderStep === 1 && (
             <Box>
               <Alert severity="warning" sx={{ mb: 3 }}>
-                Please transfer the payment to the merchant's account details below within the time limit.
+                Please transfer the payment to the merchant&apos;s account details below within the time limit.
               </Alert>
 
               <Paper sx={{ p: 3, bgcolor: 'background.default', mb: 3 }}>

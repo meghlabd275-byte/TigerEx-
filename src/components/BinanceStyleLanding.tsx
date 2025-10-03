@@ -3,14 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  TrendingUpIcon, 
+  ArrowTrendingUpIcon, 
   ShieldCheckIcon, 
   GlobeAltIcon, 
   CurrencyDollarIcon,
   ChartBarIcon,
   CogIcon,
   UserGroupIcon,
-  LightningBoltIcon,
+  BoltIcon,
   StarIcon,
   ArrowRightIcon,
   PlayIcon
@@ -58,7 +58,7 @@ const BinanceStyleLanding: React.FC = () => {
 
   const tradingFeatures = [
     {
-      icon: <TrendingUpIcon className="w-8 h-8" />,
+      icon: <ArrowTrendingUpIcon className="w-8 h-8" />,
       title: "Spot Trading",
       description: "Trade 2000+ crypto pairs with advanced order types",
       link: "/trade/spot"
@@ -358,7 +358,7 @@ const BinanceStyleLanding: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
-                  <LightningBoltIcon className="w-8 h-8 text-yellow-500 flex-shrink-0 mt-1" />
+                  <BoltIcon className="w-8 h-8 text-yellow-500 flex-shrink-0 mt-1" />
                   <div>
                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                       Lightning Fast

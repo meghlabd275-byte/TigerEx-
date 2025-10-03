@@ -1,369 +1,203 @@
 version: '3.8'
 
 services:
-  # Database Services
-  postgres:
-    image: postgres:15-alpine
-    environment:
-      POSTGRES_DB: tigerex
-      POSTGRES_USER: tigerex
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tigerex123}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
-    ports:
-      - "5432:5432"
-    networks:
-      - tigerex-network
-
-  redis:
-    image: redis:7-alpine
-    command: redis-server --requirepass ${REDIS_PASSWORD:-redis123}
-    volumes:
-      - redis_data:/data
-    ports:
-      - "6379:6379"
-    networks:
-      - tigerex-network
-
-  mongodb:
-    image: mongo:6
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: tigerex
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-mongo123}
-    volumes:
-      - mongodb_data:/data/db
-    ports:
-      - "27017:27017"
-    networks:
-      - tigerex-network
-
-  influxdb:
-    image: influxdb:2.7-alpine
-    environment:
-      DOCKER_INFLUXDB_INIT_MODE: setup
-      DOCKER_INFLUXDB_INIT_USERNAME: tigerex
-      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUX_PASSWORD:-influx123}
-      DOCKER_INFLUXDB_INIT_ORG: tigerex
-      DOCKER_INFLUXDB_INIT_BUCKET: trading_data
-    volumes:
-      - influxdb_data:/var/lib/influxdb2
-    ports:
-      - "8086:8086"
-    networks:
-      - tigerex-network
-
-  # Message Queue Services
-  kafka:
-    image: confluentinc/cp-kafka:latest
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    depends_on:
-      - zookeeper
-    ports:
-      - "9092:9092"
-    networks:
-      - tigerex-network
-
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - "2181:2181"
-    networks:
-      - tigerex-network
-
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-    environment:
-      RABBITMQ_DEFAULT_USER: tigerex
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-rabbit123}
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    networks:
-      - tigerex-network
-
-  # Backend Services
-  auth-service:
+  # Frontend - Next.js Application
+  frontend:
     build:
-      context: ./backend/auth-service
+      context: .
       dockerfile: Dockerfile
-    environment:
-      - DATABASE_URL=postgresql://tigerex:${POSTGRES_PASSWORD:-tigerex123}@postgres:5432/tigerex
-      - REDIS_URL=redis://:${REDIS_PASSWORD:-redis123}@redis:6379
-      - JWT_SECRET=${JWT_SECRET:-your-jwt-secret-key}
-    depends_on:
-      - postgres
-      - redis
-    ports:
-      - "3001:3000"
-    networks:
-      - tigerex-network
-
-  trading-engine:
-    build:
-      context: ./backend/trading-engine
-      dockerfile: Dockerfile
-    environment:
-      - DATABASE_URL=postgresql://tigerex:${POSTGRES_PASSWORD:-tigerex123}@postgres:5432/tigerex
-      - REDIS_URL=redis://:${REDIS_PASSWORD:-redis123}@redis:6379
-      - KAFKA_BROKERS=kafka:9092
-    depends_on:
-      - postgres
-      - redis
-      - kafka
-    ports:
-      - "3002:3000"
-    networks:
-      - tigerex-network
-
-  wallet-service:
-    build:
-      context: ./backend/wallet-service
-      dockerfile: Dockerfile
-    environment:
-      - DATABASE_URL=postgresql://tigerex:${POSTGRES_PASSWORD:-tigerex123}@postgres:5432/tigerex
-      - REDIS_URL=redis://:${REDIS_PASSWORD:-redis123}@redis:6379
-    depends_on:
-      - postgres
-      - redis
-    ports:
-      - "3003:3000"
-    networks:
-      - tigerex-network
-
-  kyc-service:
-    build:
-      context: ./backend/kyc-service
-      dockerfile: Dockerfile
-    environment:
-      - MONGO_URL=mongodb://tigerex:${MONGO_PASSWORD:-mongo123}@mongodb:27017/tigerex
-      - REDIS_URL=redis://:${REDIS_PASSWORD:-redis123}@redis:6379
-    depends_on:
-      - mongodb
-      - redis
-    ports:
-      - "3004:3000"
-    networks:
-      - tigerex-network
-
-  notification-service:
-    build:
-      context: ./backend/notification-service
-      dockerfile: Dockerfile
-    environment:
-      - RABBITMQ_URL=amqp://tigerex:${RABBITMQ_PASSWORD:-rabbit123}@rabbitmq:5672
-      - REDIS_URL=redis://:${REDIS_PASSWORD:-redis123}@redis:6379
-    depends_on:
-      - rabbitmq
-      - redis
-    ports:
-      - "3005:3000"
-    networks:
-      - tigerex-network
-
-  analytics-service:
-    build:
-      context: ./backend/analytics-service
-      dockerfile: Dockerfile
-    environment:
-      - INFLUX_URL=http://influxdb:8086
-      - INFLUX_TOKEN=${INFLUX_TOKEN:-your-influx-token}
-      - INFLUX_ORG=tigerex
-      - INFLUX_BUCKET=trading_data
-    depends_on:
-      - influxdb
-    ports:
-      - "3006:3000"
-    networks:
-      - tigerex-network
-
-  admin-service:
-    build:
-      context: ./backend/admin-service
-      dockerfile: Dockerfile
-    environment:
-      - DATABASE_URL=postgresql://tigerex:${POSTGRES_PASSWORD:-tigerex123}@postgres:5432/tigerex
-      - REDIS_URL=redis://:${REDIS_PASSWORD:-redis123}@redis:6379
-    depends_on:
-      - postgres
-      - redis
-    ports:
-      - "3007:3000"
-    networks:
-      - tigerex-network
-
-  blockchain-service:
-    build:
-      context: ./backend/blockchain-service
-      dockerfile: Dockerfile
-    environment:
-      - DATABASE_URL=postgresql://tigerex:${POSTGRES_PASSWORD:-tigerex123}@postgres:5432/tigerex
-      - REDIS_URL=redis://:${REDIS_PASSWORD:-redis123}@redis:6379
-    depends_on:
-      - postgres
-      - redis
-    ports:
-      - "3008:3000"
-    networks:
-      - tigerex-network
-
-  p2p-service:
-    build:
-      context: ./backend/p2p-service
-      dockerfile: Dockerfile
-    environment:
-      - DATABASE_URL=postgresql://tigerex:${POSTGRES_PASSWORD:-tigerex123}@postgres:5432/tigerex
-      - REDIS_URL=redis://:${REDIS_PASSWORD:-redis123}@redis:6379
-    depends_on:
-      - postgres
-      - redis
-    ports:
-      - "3009:3000"
-    networks:
-      - tigerex-network
-
-  copy-trading-service:
-    build:
-      context: ./backend/copy-trading-service
-      dockerfile: Dockerfile
-    environment:
-      - DATABASE_URL=postgresql://tigerex:${POSTGRES_PASSWORD:-tigerex123}@postgres:5432/tigerex
-      - REDIS_URL=redis://:${REDIS_PASSWORD:-redis123}@redis:6379
-      - KAFKA_BROKERS=kafka:9092
-    depends_on:
-      - postgres
-      - redis
-      - kafka
-    ports:
-      - "3010:3000"
-    networks:
-      - tigerex-network
-
-  # Frontend Services
-  web-app:
-    build:
-      context: ./frontend/web-app
-      dockerfile: Dockerfile
-    environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8080
-      - NEXT_PUBLIC_WS_URL=ws://localhost:8080
     ports:
       - "3000:3000"
-    networks:
-      - tigerex-network
-
-  admin-dashboard:
-    build:
-      context: ./frontend/admin-dashboard
-      dockerfile: Dockerfile
     environment:
-      - REACT_APP_API_URL=http://localhost:8080
-      - REACT_APP_WS_URL=ws://localhost:8080
-    ports:
-      - "3100:3000"
-    networks:
-      - tigerex-network
-
-  landing-pages:
-    build:
-      context: ./frontend/landing-pages
-      dockerfile: Dockerfile
-    ports:
-      - "3200:3000"
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://api-gateway:8000
+    depends_on:
+      - api-gateway
     networks:
       - tigerex-network
 
   # API Gateway
-  nginx:
-    image: nginx:alpine
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+  api-gateway:
+    build:
+      context: ./backend/api-gateway
+      dockerfile: Dockerfile
     ports:
-      - "8080:80"
-      - "8443:443"
+      - "8000:8000"
+    environment:
+      - GO_ENV=production
+      - AUTH_SERVICE_URL=http://auth-service:3001
+      - TRADING_SERVICE_URL=http://spot-trading:3002
+      - PAYMENT_SERVICE_URL=http://payment-gateway-service:3003
     depends_on:
       - auth-service
-      - trading-engine
-      - wallet-service
-      - web-app
-      - admin-dashboard
-    networks:
-      - tigerex-network
-
-  # Virtual Liquidity Service
-  virtual-liquidity-service:
-    build: ./backend/virtual-liquidity-service
-    ports:
-      - "8150:8150"
-    environment:
-      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-password}@database:5432/tigerex
-      - REDIS_URL=redis://redis:6379
-    depends_on:
-      - database
+      - spot-trading
+      - mongodb
       - redis
     networks:
       - tigerex-network
-    restart: unless-stopped
 
-  # Comprehensive Admin Service
-  comprehensive-admin-service:
-    build: ./backend/comprehensive-admin-service
+  # Authentication Service
+  auth-service:
+    build:
+      context: ./backend/auth-service
+      dockerfile: Dockerfile
     ports:
-      - "8160:8160"
+      - "3001:3001"
     environment:
-      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-password}@database:5432/tigerex
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongodb:27017/tigerex_auth
+      - JWT_SECRET=${JWT_SECRET}
       - REDIS_URL=redis://redis:6379
-      - VIRTUAL_LIQUIDITY_SERVICE_URL=http://virtual-liquidity-service:8150
-      - TOKEN_LISTING_SERVICE_URL=http://token-listing-service:8000
-      - TRADING_PAIR_SERVICE_URL=http://trading-pair-management:8000
     depends_on:
-      - database
+      - mongodb
       - redis
-      - virtual-liquidity-service
     networks:
       - tigerex-network
-    restart: unless-stopped
 
-  # Monitoring Services
-  prometheus:
-    image: prom/prometheus:latest
-    volumes:
-      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus_data:/prometheus
+  # Spot Trading Service
+  spot-trading:
+    build:
+      context: ./backend/spot-trading
+      dockerfile: Dockerfile
     ports:
-      - "9090:9090"
-    networks:
-      - tigerex-network
-
-  grafana:
-    image: grafana/grafana:latest
+      - "3002:3002"
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin123}
-    volumes:
-      - grafana_data:/var/lib/grafana
-    ports:
-      - "3300:3000"
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongodb:27017/tigerex_trading
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - mongodb
+      - redis
     networks:
       - tigerex-network
 
-volumes:
-  postgres_data:
-  redis_data:
-  mongodb_data:
-  influxdb_data:
-  rabbitmq_data:
-  prometheus_data:
-  grafana_data:
+  # Payment Gateway Service
+  payment-gateway-service:
+    build:
+      context: ./backend/payment-gateway-service
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongodb:27017/tigerex_payments
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - PAYPAL_CLIENT_ID=${PAYPAL_CLIENT_ID}
+      - PAYPAL_CLIENT_SECRET=${PAYPAL_CLIENT_SECRET}
+    depends_on:
+      - mongodb
+    networks:
+      - tigerex-network
+
+  # Unified Admin Panel
+  unified-admin-panel:
+    build:
+      context: ./backend/unified-admin-panel
+      dockerfile: Dockerfile
+    ports:
+      - "3004:3004"
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongodb:27017/tigerex_admin
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      - mongodb
+    networks:
+      - tigerex-network
+
+  # Alpha Market Trading Service
+  alpha-market-trading:
+    build:
+      context: ./backend/alpha-market-trading
+      dockerfile: Dockerfile
+    ports:
+      - "3005:3005"
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongodb:27017/tigerex_alpha
+    depends_on:
+      - mongodb
+    networks:
+      - tigerex-network
+
+  # P2P Service
+  p2p-service:
+    build:
+      context: ./backend/p2p-service
+      dockerfile: Dockerfile
+    ports:
+      - "3006:3006"
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongodb:27017/tigerex_p2p
+    depends_on:
+      - mongodb
+    networks:
+      - tigerex-network
+
+  # Notification Service Enhanced
+  notification-service-enhanced:
+    build:
+      context: ./backend/notification-service-enhanced
+      dockerfile: Dockerfile
+    ports:
+      - "3007:3007"
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongodb:27017/tigerex_notifications
+      - REDIS_URL=redis://redis:6379
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - tigerex-network
+
+  # MongoDB Database
+  mongodb:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
+    networks:
+      - tigerex-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - tigerex-network
+
+  # PostgreSQL (for analytics)
+  postgres:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=tigerex_analytics
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      - tigerex-network
 
 networks:
   tigerex-network:
     driver: bridge
+
+volumes:
+  mongodb_data:
+  redis_data:
+  postgres_data:

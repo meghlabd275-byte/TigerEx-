@@ -55,7 +55,7 @@ export const DropdownMenuTrigger: React.FC<DropdownMenuTriggerProps> = ({
   };
 
   if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children, {
+    return React.cloneElement(children as React.ReactElement<any>, {
       onClick: handleClick,
       'aria-expanded': isOpen,
       'aria-haspopup': true,
@@ -135,14 +135,14 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
   };
 
   if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children, {
+    return React.cloneElement(children as React.ReactElement<any>, {
       onClick: (e: React.MouseEvent) => {
         handleClick();
-        if (children.props.onClick) {
-          children.props.onClick(e);
+        if ((children as any).props.onClick) {
+          (children as any).props.onClick(e);
         }
       },
-      className: `block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 ${children.props.className || ''} ${className}`,
+      className: `block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 ${(children as any).props.className || ''} ${className}`,
     });
   }
 
