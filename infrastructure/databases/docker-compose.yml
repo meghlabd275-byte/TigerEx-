@@ -1,0 +1,306 @@
+version: '3.8'
+
+services:
+  # PostgreSQL - Primary relational database
+  postgres:
+    image: postgres:16-alpine
+    container_name: tigerex-postgres
+    environment:
+      POSTGRES_DB: tigerex
+      POSTGRES_USER: tigerex
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tigerex_secure_password}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts/postgres:/docker-entrypoint-initdb.d
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # TimescaleDB - Time-series data
+  timescaledb:
+    image: timescale/timescaledb:latest-pg16
+    container_name: tigerex-timescaledb
+    environment:
+      POSTGRES_DB: tigerex_timeseries
+      POSTGRES_USER: tigerex
+      POSTGRES_PASSWORD: ${TIMESCALE_PASSWORD:-tigerex_secure_password}
+    ports:
+      - "5433:5432"
+    volumes:
+      - timescale_data:/var/lib/postgresql/data
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # MongoDB - Document store
+  mongodb:
+    image: mongo:7.0
+    container_name: tigerex-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: tigerex
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-tigerex_secure_password}
+      MONGO_INITDB_DATABASE: tigerex
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./init-scripts/mongodb:/docker-entrypoint-initdb.d
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Redis - Caching and session store
+  redis:
+    image: redis:7-alpine
+    container_name: tigerex-redis
+    command: redis-server --requirepass ${REDIS_PASSWORD:-tigerex_secure_password} --maxmemory 2gb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Redis Cluster for high availability
+  redis-cluster:
+    image: redis:7-alpine
+    container_name: tigerex-redis-cluster
+    command: redis-server --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    ports:
+      - "7000-7005:7000-7005"
+    volumes:
+      - redis_cluster_data:/data
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Elasticsearch - Search and analytics
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.3
+    container_name: tigerex-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Cassandra - Distributed NoSQL
+  cassandra:
+    image: cassandra:5.0
+    container_name: tigerex-cassandra
+    environment:
+      CASSANDRA_CLUSTER_NAME: TigerExCluster
+      CASSANDRA_DC: datacenter1
+      CASSANDRA_RACK: rack1
+    ports:
+      - "9042:9042"
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # ScyllaDB - High-performance Cassandra alternative
+  scylladb:
+    image: scylladb/scylla:5.4
+    container_name: tigerex-scylladb
+    command: --smp 2 --memory 2G
+    ports:
+      - "9043:9042"
+    volumes:
+      - scylla_data:/var/lib/scylla
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # ClickHouse - OLAP database
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: tigerex-clickhouse
+    environment:
+      CLICKHOUSE_DB: tigerex
+      CLICKHOUSE_USER: tigerex
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:-tigerex_secure_password}
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # CockroachDB - Distributed SQL
+  cockroachdb:
+    image: cockroachdb/cockroach:latest
+    container_name: tigerex-cockroachdb
+    command: start-single-node --insecure
+    ports:
+      - "26257:26257"
+      - "8080:8080"
+    volumes:
+      - cockroach_data:/cockroach/cockroach-data
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Neo4j - Graph database
+  neo4j:
+    image: neo4j:5.15
+    container_name: tigerex-neo4j
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-tigerex_secure_password}
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4j_data:/data
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # InfluxDB - Time-series database
+  influxdb:
+    image: influxdb:2.7
+    container_name: tigerex-influxdb
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: tigerex
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_PASSWORD:-tigerex_secure_password}
+      DOCKER_INFLUXDB_INIT_ORG: tigerex
+      DOCKER_INFLUXDB_INIT_BUCKET: trading_data
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # QuestDB - High-performance time-series
+  questdb:
+    image: questdb/questdb:7.3.10
+    container_name: tigerex-questdb
+    ports:
+      - "9009:9009"
+      - "8812:8812"
+      - "9003:9003"
+    volumes:
+      - questdb_data:/var/lib/questdb
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Apache Kafka - Event streaming
+  kafka:
+    image: confluentinc/cp-kafka:7.5.3
+    container_name: tigerex-kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Zookeeper for Kafka
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.3
+    container_name: tigerex-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # RabbitMQ - Message broker
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+    container_name: tigerex-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: tigerex
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-tigerex_secure_password}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # NATS - Cloud-native messaging
+  nats:
+    image: nats:2.10-alpine
+    container_name: tigerex-nats
+    command: "-js -m 8222"
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # MinIO - S3-compatible object storage
+  minio:
+    image: minio/minio:latest
+    container_name: tigerex-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: tigerex
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-tigerex_secure_password}
+    ports:
+      - "9090:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  timescale_data:
+  mongodb_data:
+  redis_data:
+  redis_cluster_data:
+  elasticsearch_data:
+  cassandra_data:
+  scylla_data:
+  clickhouse_data:
+  cockroach_data:
+  neo4j_data:
+  influxdb_data:
+  questdb_data:
+  kafka_data:
+  zookeeper_data:
+  rabbitmq_data:
+  minio_data:
+
+networks:
+  tigerex-network:
+    driver: bridge
