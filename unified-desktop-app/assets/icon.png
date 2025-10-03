@@ -1,0 +1,6 @@
+# This is a placeholder for the TigerEx desktop icon
+# Replace with actual PNG icon file (512x512 recommended)
+# Icons should be placed in unified-desktop-app/assets/
+# - icon.png (Linux)
+# - icon.ico (Windows) 
+# - icon.icns (macOS)
