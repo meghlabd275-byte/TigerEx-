@@ -10,7 +10,9 @@ Provides DeFi protocol staking functionality:
 - Risk assessment
 """
 
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
@@ -41,6 +43,9 @@ redis_client = redis.Redis(host='localhost', port=6379, decode_responses=True)
 
 # FastAPI app
 app = FastAPI(title="DeFi Staking Service", version="1.0.0")
+
+# Include admin router
+app.include_router(admin_router)
 
 app.add_middleware(
     CORSMiddleware,

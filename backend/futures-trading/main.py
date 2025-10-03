@@ -4,7 +4,9 @@ Handles perpetual and delivery futures contracts with leverage trading
 Port: 8052
 """
 
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict
@@ -15,6 +17,9 @@ import asyncio
 from decimal import Decimal
 
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="Futures Trading Service",
     description="Advanced futures trading with perpetual and delivery contracts",
     version="1.0.0"

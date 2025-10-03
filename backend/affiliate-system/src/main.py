@@ -16,7 +16,9 @@ import secrets
 import hashlib
 
 import aioredis
-from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks, Query
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, Depends, BackgroundTasks, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, validator, EmailStr
@@ -35,6 +37,9 @@ logger = logging.getLogger(__name__)
 
 # FastAPI app
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="TigerEx Affiliate & Referral System",
     description="Comprehensive affiliate marketing platform with multi-tier commissions and regional partnerships",
     version="1.0.0"

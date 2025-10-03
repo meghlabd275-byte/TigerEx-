@@ -4,10 +4,15 @@ TigerEx lending-borrowing Service
 """
 
 from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+
 import uvicorn
 import os
 
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="TigerEx lending-borrowing",
     description="Backend service for lending-borrowing",
     version="1.0.0"

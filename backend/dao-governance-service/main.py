@@ -1,8 +1,13 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 
 app = FastAPI(title="TigerEx DAO Governance Service")
+
+# Include admin router
+app.include_router(admin_router)
 
 # DAO State
 dao_state = {

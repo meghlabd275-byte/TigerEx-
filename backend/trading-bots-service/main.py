@@ -1,4 +1,6 @@
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Depends, BackgroundTasks
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, WebSocket, WebSocketDisconnect, Depends, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
@@ -20,7 +22,10 @@ import random
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="Trading Bots Service", version="2.0.0")
+app = FastAPI(title="Trading Bots Service", version="3.0.00.0")
+
+# Include admin router
+app.include_router(admin_router)
 
 # CORS middleware
 app.add_middleware(

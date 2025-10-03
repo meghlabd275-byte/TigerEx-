@@ -4,10 +4,15 @@ TigerEx analytics-service Service
 """
 
 from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+
 import uvicorn
 import os
 
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="TigerEx analytics-service",
     description="Backend service for analytics-service",
     version="1.0.0"

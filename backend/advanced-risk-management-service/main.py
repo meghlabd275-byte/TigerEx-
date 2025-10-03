@@ -1,10 +1,15 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException
 from datetime import datetime
 import numpy as np
 from collections import defaultdict
 from typing import Dict, List, Any
 
 app = FastAPI(title="TigerEx Advanced Risk Management Service")
+
+# Include admin router
+app.include_router(admin_router)
 
 # Risk Management State
 risk_state = {

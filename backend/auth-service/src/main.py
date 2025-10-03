@@ -19,7 +19,9 @@ import io
 
 import aioredis
 import aiohttp
-from fastapi import FastAPI, HTTPException, Depends, Request, Response, Form, File, UploadFile
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, Depends, Request, Response, Form, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials, OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.responses import StreamingResponse
@@ -47,6 +49,9 @@ logger = logging.getLogger(__name__)
 
 # FastAPI app
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="TigerEx Authentication Service",
     description="OAuth, 2FA, Captcha, and comprehensive authentication system",
     version="1.0.0"

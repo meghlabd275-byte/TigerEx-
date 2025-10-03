@@ -24,7 +24,9 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 import base64
 
 import aioredis
-from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks, UploadFile, File
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, Depends, BackgroundTasks, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, validator, EmailStr
@@ -40,6 +42,9 @@ logger = logging.getLogger(__name__)
 
 # FastAPI app
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="TigerEx Wallet Management System",
     description="Comprehensive wallet system supporting hot, cold, custodial, and non-custodial wallets",
     version="1.0.0"

@@ -1,10 +1,15 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, Depends, HTTPException
 from sqlalchemy.orm import Session
 from datetime import datetime
 from decimal import Decimal
 import os
 
 app = FastAPI(title="TigerEx Savings Service")
+
+# Include admin router
+app.include_router(admin_router)
 
 # Database models
 from sqlalchemy import Column, Integer, String, Numeric, DateTime, Boolean, Enum

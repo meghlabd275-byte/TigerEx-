@@ -4,7 +4,9 @@ Additional DEX protocols and cross-chain bridge integrations
 Port: 8125
 """
 
-from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, Depends, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
@@ -242,6 +244,9 @@ class DEXSwapRequest(BaseModel):
     metadata: Optional[Dict[str, Any]] = None
 
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="TigerEx DeFi Enhancements Service",
     description="Additional DEX protocols and cross-chain bridges",
     version="1.0.0"

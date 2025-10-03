@@ -4,7 +4,9 @@ TigerEx Address Generation Service
 Generates unique deposit addresses for all supported blockchains
 """
 
-from fastapi import FastAPI, HTTPException, Depends, Header
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, Depends, Header
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict
@@ -32,6 +34,9 @@ structlog.configure(
 logger = structlog.get_logger()
 
 app = FastAPI(title="TigerEx Address Generation Service", version="1.0.0")
+
+# Include admin router
+app.include_router(admin_router)
 
 # CORS middleware
 app.add_middleware(

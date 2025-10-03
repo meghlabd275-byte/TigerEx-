@@ -1,7 +1,12 @@
 from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+
 from datetime import datetime
 
 app = FastAPI(title="TigerEx Pi Network Integration Service")
+
+# Include admin router
+app.include_router(admin_router)
 
 @app.post("/api/v1/pi/deposit-address")
 async def generate_pi_deposit_address(user_id: int):

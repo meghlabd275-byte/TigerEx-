@@ -16,7 +16,9 @@ import secrets
 import hashlib
 
 import aioredis
-from fastapi import FastAPI, HTTPException, Depends, WebSocket, WebSocketDisconnect, BackgroundTasks
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, Depends, WebSocket, WebSocketDisconnect, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, validator, EmailStr
@@ -32,6 +34,9 @@ logger = logging.getLogger(__name__)
 
 # FastAPI app
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="TigerEx P2P Trading System",
     description="Comprehensive peer-to-peer trading platform with escrow, dispute resolution, and multi-country support",
     version="1.0.0"

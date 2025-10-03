@@ -24,7 +24,9 @@ import aioredis
 import asyncpg
 import aiohttp
 import websockets
-from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks, WebSocket
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, Depends, BackgroundTasks, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, EmailStr
@@ -164,6 +166,9 @@ class UpdatePreferencesRequest(BaseModel):
 class NotificationService:
     def __init__(self):
         self.app = FastAPI(title="TigerEx Notification Service", version="1.0.0")
+
+# Include admin router
+app.include_router(admin_router)
         self.setup_middleware()
         self.setup_routes()
         

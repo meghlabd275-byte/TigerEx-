@@ -3,7 +3,9 @@ TigerEx Convert Service
 Instant cryptocurrency conversion with best rates
 """
 
-from fastapi import FastAPI, HTTPException, Depends, status
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, Depends, status
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict
@@ -15,6 +17,9 @@ import os
 import asyncio
 
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="TigerEx Convert Service",
     description="Instant cryptocurrency conversion service",
     version="1.0.0"

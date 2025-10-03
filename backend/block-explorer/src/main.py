@@ -15,7 +15,9 @@ from dataclasses import dataclass, asdict
 from enum import Enum
 import aioredis
 import asyncpg
-from fastapi import FastAPI, HTTPException, BackgroundTasks, Depends, UploadFile, File
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, BackgroundTasks, Depends, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse
 from pydantic import BaseModel, validator
@@ -53,6 +55,9 @@ logger = structlog.get_logger()
 
 # FastAPI app
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="TigerEx Block Explorer Service",
     description="One-click block explorer creation and deployment system",
     version="1.0.0"

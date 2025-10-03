@@ -4,7 +4,9 @@ Manages virtual asset reserves, liquidity pools, and IOU tokens
 Port: 8150
 """
 
-from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks, Query
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, Depends, BackgroundTasks, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, validator
 from typing import List, Optional, Dict, Any
@@ -166,6 +168,9 @@ async def lifespan(app: FastAPI):
 
 # Initialize FastAPI app
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="TigerEx Virtual Liquidity Management Service",
     description="Manages virtual asset reserves, liquidity pools, and IOU tokens",
     version="1.0.0",

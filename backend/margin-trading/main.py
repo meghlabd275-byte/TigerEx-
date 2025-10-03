@@ -4,7 +4,9 @@ Handles leveraged spot trading with isolated and cross margin
 Port: 8053
 """
 
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict
@@ -14,6 +16,9 @@ import uvicorn
 from decimal import Decimal
 
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="Margin Trading Service",
     description="Leveraged spot trading with margin accounts",
     version="1.0.0"

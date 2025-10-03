@@ -23,6 +23,10 @@ const RiskAssessmentService = require('./services/RiskAssessmentService');
 const NotificationService = require('./services/NotificationService');
 
 const app = express();
+// Admin routes
+const adminRoutes = require('./admin/admin_routes');
+app.use('/admin', adminRoutes);
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {

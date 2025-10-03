@@ -3,7 +3,9 @@ TigerEx Trading Pair Management Service
 Comprehensive trading pair management for all trading types
 """
 
-from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, Depends, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, validator
 from typing import List, Dict, Any, Optional
@@ -42,6 +44,9 @@ logger = structlog.get_logger()
 
 # Initialize FastAPI app
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="TigerEx Trading Pair Management Service",
     description="Comprehensive trading pair management for all trading types",
     version="1.0.0"

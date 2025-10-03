@@ -3,7 +3,9 @@ TigerEx crypto-card-service
 Crypto Debit Card Service
 """
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict
@@ -13,6 +15,9 @@ import uvicorn
 import os
 
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="TigerEx crypto-card-service",
     description="Crypto Debit Card Service",
     version="1.0.0"

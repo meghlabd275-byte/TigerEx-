@@ -4,7 +4,9 @@ TigerEx Market Data Service
 Real-time market data, price feeds, and candlestick data
 """
 
-from fastapi import FastAPI, HTTPException, Depends, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, Depends, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, List, Dict
@@ -26,6 +28,9 @@ structlog.configure(
 logger = structlog.get_logger()
 
 app = FastAPI(title="TigerEx Market Data Service", version="1.0.0")
+
+# Include admin router
+app.include_router(admin_router)
 
 # CORS middleware
 app.add_middleware(

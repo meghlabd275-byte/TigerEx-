@@ -4,10 +4,15 @@ TigerEx p2p-service Service
 """
 
 from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+
 import uvicorn
 import os
 
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="TigerEx p2p-service",
     description="Backend service for p2p-service",
     version="1.0.0"

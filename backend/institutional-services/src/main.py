@@ -16,7 +16,9 @@ import uuid
 import hashlib
 import hmac
 import secrets
-from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks, Request
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, Depends, BackgroundTasks, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, validator, EmailStr
@@ -39,6 +41,9 @@ logger = logging.getLogger(__name__)
 
 # FastAPI app
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="TigerEx Institutional Services",
     description="Prime brokerage, OTC trading, and institutional-grade services",
     version="1.0.0"

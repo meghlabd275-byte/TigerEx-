@@ -29,7 +29,9 @@ from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import StandardScaler
 import websockets
 import aiohttp
-from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, Depends, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from pydantic import BaseModel
@@ -623,6 +625,9 @@ class RiskEngine:
 
 # FastAPI application
 app = FastAPI(title="TigerEx Risk Management Service", version="1.0.0")
+
+# Include admin router
+app.include_router(admin_router)
 
 app.add_middleware(
     CORSMiddleware,

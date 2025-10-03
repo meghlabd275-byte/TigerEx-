@@ -3,7 +3,9 @@ TigerEx liquid-swap-service
 Liquid Swap AMM Service
 """
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict
@@ -13,6 +15,9 @@ import uvicorn
 import os
 
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="TigerEx liquid-swap-service",
     description="Liquid Swap AMM Service",
     version="1.0.0"

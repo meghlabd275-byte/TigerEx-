@@ -4,7 +4,9 @@ Comprehensive payment integration with multiple providers
 Port: 8123
 """
 
-from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, Depends, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
@@ -203,6 +205,9 @@ class PaymentMethodCreate(BaseModel):
 
 # FastAPI app
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="TigerEx Payment Gateway Service",
     description="Comprehensive payment integration service",
     version="1.0.0"

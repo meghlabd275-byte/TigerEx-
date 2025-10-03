@@ -25,6 +25,10 @@ const PortfolioService = require('./services/PortfolioService');
 const WebSocketService = require('./services/WebSocketService');
 
 const app = express();
+// Admin routes
+const adminRoutes = require('./admin/admin_routes');
+app.use('/admin', adminRoutes);
+
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {

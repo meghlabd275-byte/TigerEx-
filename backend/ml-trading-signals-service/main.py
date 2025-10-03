@@ -1,9 +1,14 @@
 from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+
 from datetime import datetime, timedelta
 import numpy as np
 from typing import Dict, List, Any
 
 app = FastAPI(title="TigerEx ML Trading Signals Service")
+
+# Include admin router
+app.include_router(admin_router)
 
 class TradingSignalEngine:
     def __init__(self):

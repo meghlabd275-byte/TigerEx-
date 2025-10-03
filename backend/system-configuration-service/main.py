@@ -4,7 +4,9 @@ TigerEx System Configuration Service
 Manages platform-wide settings, fees, limits, and configurations
 """
 
-from fastapi import FastAPI, HTTPException, Depends, Query
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, Depends, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
@@ -25,6 +27,9 @@ structlog.configure(
 logger = structlog.get_logger()
 
 app = FastAPI(title="TigerEx System Configuration Service", version="1.0.0")
+
+# Include admin router
+app.include_router(admin_router)
 
 # CORS middleware
 app.add_middleware(

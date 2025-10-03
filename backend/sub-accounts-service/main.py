@@ -1,7 +1,12 @@
 from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+
 from datetime import datetime
 
 app = FastAPI(title="TigerEx Sub-Accounts Service")
+
+# Include admin router
+app.include_router(admin_router)
 
 @app.post("/api/v1/sub-accounts/create")
 async def create_sub_account(master_user_id: int, email: str, permissions: dict):

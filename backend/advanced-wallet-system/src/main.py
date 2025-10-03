@@ -28,7 +28,9 @@ from solana.keypair import Keypair
 from solana.rpc.api import Client as SolanaClient
 import asyncpg
 import redis.asyncio as redis
-from fastapi import FastAPI, HTTPException, BackgroundTasks, Depends, Security
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, BackgroundTasks, Depends, Security
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, validator
@@ -46,6 +48,9 @@ logger = logging.getLogger(__name__)
 
 # FastAPI app
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="TigerEx Advanced Wallet System",
     description="Comprehensive wallet management system",
     version="1.0.0"

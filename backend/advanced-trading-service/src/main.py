@@ -4,7 +4,9 @@ Implements advanced order types: TWAP, VWAP, and algorithmic trading
 Port: 8124
 """
 
-from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
+from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+, HTTPException, Depends, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
@@ -175,6 +177,9 @@ class ContingentOrderCreate(BaseModel):
     metadata: Optional[Dict[str, Any]] = None
 
 app = FastAPI(
+
+# Include admin router
+app.include_router(admin_router)
     title="TigerEx Advanced Trading Service",
     description="Advanced order types and algorithmic trading",
     version="1.0.0"

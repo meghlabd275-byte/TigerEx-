@@ -1,8 +1,13 @@
 from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+
 from datetime import datetime
 from decimal import Decimal
 
 app = FastAPI(title="TigerEx VIP Program Service")
+
+# Include admin router
+app.include_router(admin_router)
 
 # VIP Levels and Benefits
 VIP_LEVELS = {

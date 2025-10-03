@@ -1,0 +1,2660 @@
+{
+  "summary": {
+    "total_services": 120,
+    "services_with_admin_controls": 23,
+    "services_with_rbac": 17,
+    "services_without_admin": 97,
+    "coverage_percentage": 19.17
+  },
+  "services_without_admin_controls": [
+    "address-generation-service",
+    "advanced-risk-management-service",
+    "advanced-trading-engine",
+    "advanced-trading-service",
+    "advanced-wallet-system",
+    "affiliate-system",
+    "ai-maintenance-system",
+    "ai-maintenance",
+    "ai-trading-assistant",
+    "algo-orders-service",
+    "alpha-market-trading",
+    "analytics-dashboard-service",
+    "analytics-service",
+    "api-gateway",
+    "auth-service",
+    "auto-invest-service",
+    "block-explorer",
+    "block-trading-service",
+    "blockchain-service",
+    "cardano-integration",
+    "compliance-engine",
+    "convert-service",
+    "copy-trading-service",
+    "copy-trading",
+    "crypto-card-service",
+    "dao-governance-service",
+    "database",
+    "dca-bot-service",
+    "defi-enhancements-service",
+    "defi-service",
+    "defi-staking-service",
+    "derivatives-engine",
+    "dex-integration",
+    "dual-investment-service",
+    "earn-service",
+    "enhanced-liquidity-aggregator",
+    "enhanced-wallet-service",
+    "etf-trading",
+    "eth2-staking-service",
+    "fiat-gateway-service",
+    "futures-earn-service",
+    "futures-trading",
+    "grid-trading-bot-service",
+    "institutional-services",
+    "institutional-trading",
+    "insurance-fund-service",
+    "kyc-service",
+    "launchpad-service",
+    "launchpool-service",
+    "lending-borrowing",
+    "leveraged-tokens-service",
+    "liquid-swap-service",
+    "liquidity-aggregator",
+    "margin-trading",
+    "market-data-service",
+    "martingale-bot-service",
+    "matching-engine",
+    "ml-trading-signals-service",
+    "nft-launchpad-service",
+    "nft-marketplace",
+    "notification-service-enhanced",
+    "notification-service",
+    "options-trading",
+    "otc-desk-service",
+    "p2p-service",
+    "p2p-trading",
+    "payment-gateway-service",
+    "perpetual-swap-service",
+    "pi-network-integration",
+    "popular-coins-service",
+    "portfolio-margin-service",
+    "proof-of-reserves-service",
+    "referral-program-service",
+    "risk-management-service",
+    "risk-management",
+    "savings-service",
+    "social-trading-service",
+    "spot-trading",
+    "spread-arbitrage-bot",
+    "staking-service",
+    "sub-accounts-service",
+    "system-configuration-service",
+    "trading-bots-service",
+    "trading-engine-enhanced",
+    "trading-engine",
+    "trading-pair-management",
+    "trading-signals-service",
+    "trading",
+    "transaction-engine",
+    "unified-account-service",
+    "user-authentication-service",
+    "vip-program-service",
+    "virtual-liquidity-service",
+    "vote-to-list-service",
+    "wallet-management",
+    "web3-integration",
+    "white-label-system"
+  ],
+  "detailed_service_analysis": {
+    "address-generation-service": {
+      "name": "address-generation-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "admin-panel": {
+      "name": "admin-panel",
+      "has_admin": true,
+      "has_rbac": true,
+      "admin_features": [
+        "user_management",
+        "kyc",
+        "trading_control",
+        "audit_logs"
+      ],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 12,
+        "rbac": 44,
+        "user_management": 1,
+        "kyc": 20,
+        "withdrawal_approval": 0,
+        "trading_control": 3,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 4,
+        "system_config": 0
+      },
+      "version": "2.0.0"
+    },
+    "admin-service": {
+      "name": "admin-service",
+      "has_admin": true,
+      "has_rbac": true,
+      "admin_features": [
+        "user_management",
+        "kyc",
+        "trading_control",
+        "risk_management",
+        "audit_logs"
+      ],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 12,
+        "rbac": 60,
+        "user_management": 4,
+        "kyc": 54,
+        "withdrawal_approval": 0,
+        "trading_control": 1,
+        "fee_management": 0,
+        "risk_management": 1,
+        "audit_logs": 2,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "advanced-risk-management-service": {
+      "name": "advanced-risk-management-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "risk_management",
+        "audit_logs"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 5,
+        "audit_logs": 2,
+        "system_config": 0
+      }
+    },
+    "advanced-trading-engine": {
+      "name": "advanced-trading-engine",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 0,
+      "patterns_found": {}
+    },
+    "advanced-trading-service": {
+      "name": "advanced-trading-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "advanced-wallet-system": {
+      "name": "advanced-wallet-system",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "affiliate-system": {
+      "name": "affiliate-system",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "kyc"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 1,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "ai-maintenance-system": {
+      "name": "ai-maintenance-system",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "ai-maintenance": {
+      "name": "ai-maintenance",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "ai-trading-assistant": {
+      "name": "ai-trading-assistant",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "algo-orders-service": {
+      "name": "algo-orders-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "alpha-market-admin": {
+      "name": "alpha-market-admin",
+      "has_admin": true,
+      "has_rbac": false,
+      "admin_features": [
+        "kyc"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 19,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 3,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "alpha-market-trading": {
+      "name": "alpha-market-trading",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "kyc"
+      ],
+      "files_scanned": 12,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 21,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      }
+    },
+    "analytics-dashboard-service": {
+      "name": "analytics-dashboard-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "kyc",
+        "withdrawal_approval"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 7,
+        "withdrawal_approval": 2,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "analytics-service": {
+      "name": "analytics-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "api-gateway": {
+      "name": "api-gateway",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 0,
+      "patterns_found": {}
+    },
+    "auth-service": {
+      "name": "auth-service",
+      "has_admin": false,
+      "has_rbac": true,
+      "admin_features": [
+        "user_management",
+        "kyc",
+        "audit_logs"
+      ],
+      "files_scanned": 8,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 20,
+        "user_management": 6,
+        "kyc": 28,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 1,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "auto-invest-service": {
+      "name": "auto-invest-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "block-explorer": {
+      "name": "block-explorer",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "system_config"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 1
+      },
+      "version": "1.0.0"
+    },
+    "block-trading-service": {
+      "name": "block-trading-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "blockchain-integration-service": {
+      "name": "blockchain-integration-service",
+      "has_admin": true,
+      "has_rbac": false,
+      "admin_features": [
+        "trading_control",
+        "audit_logs"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 4,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 1,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 1,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "blockchain-service": {
+      "name": "blockchain-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "cardano-integration": {
+      "name": "cardano-integration",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      }
+    },
+    "compliance-engine": {
+      "name": "compliance-engine",
+      "has_admin": false,
+      "has_rbac": true,
+      "admin_features": [
+        "kyc"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 1,
+        "user_management": 0,
+        "kyc": 51,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "comprehensive-admin-service": {
+      "name": "comprehensive-admin-service",
+      "has_admin": true,
+      "has_rbac": true,
+      "admin_features": [
+        "trading_control",
+        "audit_logs"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 17,
+        "rbac": 1,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 1,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 6,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "convert-service": {
+      "name": "convert-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "copy-trading-admin": {
+      "name": "copy-trading-admin",
+      "has_admin": true,
+      "has_rbac": false,
+      "admin_features": [
+        "kyc",
+        "risk_management"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 14,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 2,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 1,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "copy-trading-service": {
+      "name": "copy-trading-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "kyc",
+        "risk_management",
+        "system_config"
+      ],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 3,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 8,
+        "audit_logs": 0,
+        "system_config": 1
+      },
+      "version": "1.0.0"
+    },
+    "copy-trading": {
+      "name": "copy-trading",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "fee_management"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 2,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "crypto-card-service": {
+      "name": "crypto-card-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "dao-governance-service": {
+      "name": "dao-governance-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      }
+    },
+    "database": {
+      "name": "database",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "dca-bot-service": {
+      "name": "dca-bot-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "defi-enhancements-service": {
+      "name": "defi-enhancements-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "defi-service": {
+      "name": "defi-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "defi-staking-service": {
+      "name": "defi-staking-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "deposit-withdrawal-admin-service": {
+      "name": "deposit-withdrawal-admin-service",
+      "has_admin": true,
+      "has_rbac": true,
+      "admin_features": [
+        "withdrawal_approval",
+        "fee_management",
+        "audit_logs"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 19,
+        "rbac": 1,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 25,
+        "trading_control": 0,
+        "fee_management": 1,
+        "risk_management": 0,
+        "audit_logs": 4,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "derivatives-engine": {
+      "name": "derivatives-engine",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 0,
+      "patterns_found": {}
+    },
+    "dex-integration-admin": {
+      "name": "dex-integration-admin",
+      "has_admin": true,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 14,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "dex-integration": {
+      "name": "dex-integration",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "dual-investment-service": {
+      "name": "dual-investment-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "earn-service": {
+      "name": "earn-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "enhanced-liquidity-aggregator": {
+      "name": "enhanced-liquidity-aggregator",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 0,
+      "patterns_found": {}
+    },
+    "enhanced-wallet-service": {
+      "name": "enhanced-wallet-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "etf-trading-admin": {
+      "name": "etf-trading-admin",
+      "has_admin": true,
+      "has_rbac": false,
+      "admin_features": [
+        "fee_management"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 9,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 11,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "etf-trading": {
+      "name": "etf-trading",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "eth2-staking-service": {
+      "name": "eth2-staking-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "fiat-gateway-service": {
+      "name": "fiat-gateway-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "kyc"
+      ],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 3,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "futures-earn-service": {
+      "name": "futures-earn-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "futures-trading": {
+      "name": "futures-trading",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "grid-trading-bot-service": {
+      "name": "grid-trading-bot-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "risk_management"
+      ],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 2,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "institutional-services-admin": {
+      "name": "institutional-services-admin",
+      "has_admin": true,
+      "has_rbac": false,
+      "admin_features": [
+        "kyc"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 4,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 6,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "institutional-services": {
+      "name": "institutional-services",
+      "has_admin": false,
+      "has_rbac": true,
+      "admin_features": [
+        "kyc",
+        "risk_management"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 7,
+        "user_management": 0,
+        "kyc": 6,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 2,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "institutional-trading": {
+      "name": "institutional-trading",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "insurance-fund-service": {
+      "name": "insurance-fund-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "kyc-aml-service": {
+      "name": "kyc-aml-service",
+      "has_admin": true,
+      "has_rbac": true,
+      "admin_features": [
+        "kyc"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 5,
+        "rbac": 1,
+        "user_management": 0,
+        "kyc": 104,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "kyc-service": {
+      "name": "kyc-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "kyc"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 4,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "launchpad-service": {
+      "name": "launchpad-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "launchpool-service": {
+      "name": "launchpool-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "lending-borrowing-admin": {
+      "name": "lending-borrowing-admin",
+      "has_admin": true,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 4,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "lending-borrowing": {
+      "name": "lending-borrowing",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "leveraged-tokens-service": {
+      "name": "leveraged-tokens-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "risk_management"
+      ],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 3,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "liquid-swap-service": {
+      "name": "liquid-swap-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "liquidity-aggregator-admin": {
+      "name": "liquidity-aggregator-admin",
+      "has_admin": true,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 3,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "liquidity-aggregator": {
+      "name": "liquidity-aggregator",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 0,
+      "patterns_found": {}
+    },
+    "margin-trading": {
+      "name": "margin-trading",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "market-data-service": {
+      "name": "market-data-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "martingale-bot-service": {
+      "name": "martingale-bot-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "risk_management"
+      ],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 2,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "matching-engine": {
+      "name": "matching-engine",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 0,
+      "patterns_found": {}
+    },
+    "ml-trading-signals-service": {
+      "name": "ml-trading-signals-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      }
+    },
+    "nft-launchpad-service": {
+      "name": "nft-launchpad-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "nft-marketplace-admin": {
+      "name": "nft-marketplace-admin",
+      "has_admin": true,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 5,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "nft-marketplace": {
+      "name": "nft-marketplace",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "notification-service-enhanced": {
+      "name": "notification-service-enhanced",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "kyc"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 15,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "notification-service": {
+      "name": "notification-service",
+      "has_admin": false,
+      "has_rbac": true,
+      "admin_features": [
+        "user_management",
+        "kyc"
+      ],
+      "files_scanned": 3,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 1,
+        "user_management": 1,
+        "kyc": 7,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "options-trading-admin": {
+      "name": "options-trading-admin",
+      "has_admin": true,
+      "has_rbac": false,
+      "admin_features": [
+        "risk_management"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 8,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 1,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "options-trading": {
+      "name": "options-trading",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 0,
+      "patterns_found": {}
+    },
+    "otc-desk-service": {
+      "name": "otc-desk-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      }
+    },
+    "p2p-admin": {
+      "name": "p2p-admin",
+      "has_admin": true,
+      "has_rbac": false,
+      "admin_features": [
+        "user_management"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 12,
+        "rbac": 0,
+        "user_management": 1,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "p2p-service": {
+      "name": "p2p-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "p2p-trading": {
+      "name": "p2p-trading",
+      "has_admin": false,
+      "has_rbac": true,
+      "admin_features": [
+        "user_management",
+        "fee_management",
+        "system_config"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 1,
+        "user_management": 3,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 1,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 1
+      },
+      "version": "1.0.0"
+    },
+    "payment-gateway-admin": {
+      "name": "payment-gateway-admin",
+      "has_admin": true,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 5,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "payment-gateway-service": {
+      "name": "payment-gateway-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "fee_management"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 2,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "payment-gateway": {
+      "name": "payment-gateway",
+      "has_admin": true,
+      "has_rbac": false,
+      "admin_features": [
+        "user_management",
+        "kyc",
+        "withdrawal_approval",
+        "risk_management"
+      ],
+      "files_scanned": 10,
+      "patterns_found": {
+        "admin_routes": 3,
+        "rbac": 0,
+        "user_management": 2,
+        "kyc": 40,
+        "withdrawal_approval": 9,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 1,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "perpetual-swap-service": {
+      "name": "perpetual-swap-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "pi-network-integration": {
+      "name": "pi-network-integration",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      }
+    },
+    "popular-coins-service": {
+      "name": "popular-coins-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "portfolio-margin-service": {
+      "name": "portfolio-margin-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "proof-of-reserves-service": {
+      "name": "proof-of-reserves-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "referral-program-service": {
+      "name": "referral-program-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "risk-management-service": {
+      "name": "risk-management-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "kyc",
+        "risk_management"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 13,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 7,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "risk-management": {
+      "name": "risk-management",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "risk_management"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 29,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "role-based-admin": {
+      "name": "role-based-admin",
+      "has_admin": true,
+      "has_rbac": true,
+      "admin_features": [
+        "kyc",
+        "risk_management"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 9,
+        "rbac": 18,
+        "user_management": 0,
+        "kyc": 50,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 1,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "savings-service": {
+      "name": "savings-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      }
+    },
+    "social-trading-service": {
+      "name": "social-trading-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "spot-trading": {
+      "name": "spot-trading",
+      "has_admin": false,
+      "has_rbac": true,
+      "admin_features": [
+        "risk_management"
+      ],
+      "files_scanned": 9,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 4,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 1,
+        "audit_logs": 0,
+        "system_config": 0
+      }
+    },
+    "spread-arbitrage-bot": {
+      "name": "spread-arbitrage-bot",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 0,
+      "patterns_found": {}
+    },
+    "staking-service": {
+      "name": "staking-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "sub-accounts-service": {
+      "name": "sub-accounts-service",
+      "has_admin": false,
+      "has_rbac": true,
+      "admin_features": [],
+      "files_scanned": 3,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 12,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "super-admin-system": {
+      "name": "super-admin-system",
+      "has_admin": true,
+      "has_rbac": true,
+      "admin_features": [
+        "kyc",
+        "trading_control",
+        "fee_management",
+        "risk_management"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 6,
+        "rbac": 15,
+        "user_management": 0,
+        "kyc": 2,
+        "withdrawal_approval": 0,
+        "trading_control": 1,
+        "fee_management": 1,
+        "risk_management": 1,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "system-configuration-service": {
+      "name": "system-configuration-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "fee_management",
+        "system_config"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 11,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 17
+      },
+      "version": "1.0.0"
+    },
+    "token-listing-service": {
+      "name": "token-listing-service",
+      "has_admin": true,
+      "has_rbac": true,
+      "admin_features": [
+        "kyc"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 2,
+        "rbac": 2,
+        "user_management": 0,
+        "kyc": 5,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "trading-bots-service": {
+      "name": "trading-bots-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "2.0.0"
+    },
+    "trading-engine-enhanced": {
+      "name": "trading-engine-enhanced",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "trading-engine": {
+      "name": "trading-engine",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 0,
+      "patterns_found": {}
+    },
+    "trading-pair-management": {
+      "name": "trading-pair-management",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "trading_control"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 6,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "trading-signals-service": {
+      "name": "trading-signals-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "trading": {
+      "name": "trading",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "transaction-engine": {
+      "name": "transaction-engine",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 0,
+      "patterns_found": {}
+    },
+    "unified-account-service": {
+      "name": "unified-account-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "user-authentication-service": {
+      "name": "user-authentication-service",
+      "has_admin": false,
+      "has_rbac": true,
+      "admin_features": [
+        "kyc"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 10,
+        "user_management": 0,
+        "kyc": 4,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "user-management-admin-service": {
+      "name": "user-management-admin-service",
+      "has_admin": true,
+      "has_rbac": true,
+      "admin_features": [
+        "user_management",
+        "kyc",
+        "audit_logs"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 9,
+        "rbac": 1,
+        "user_management": 9,
+        "kyc": 37,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 12,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "vip-program-service": {
+      "name": "vip-program-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "fee_management"
+      ],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 6,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "virtual-liquidity-service": {
+      "name": "virtual-liquidity-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "vote-to-list-service": {
+      "name": "vote-to-list-service",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 2,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "wallet-management": {
+      "name": "wallet-management",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 0,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    },
+    "wallet-service": {
+      "name": "wallet-service",
+      "has_admin": true,
+      "has_rbac": false,
+      "admin_features": [
+        "kyc",
+        "withdrawal_approval",
+        "risk_management",
+        "audit_logs"
+      ],
+      "files_scanned": 9,
+      "patterns_found": {
+        "admin_routes": 2,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 1,
+        "withdrawal_approval": 9,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 1,
+        "audit_logs": 1,
+        "system_config": 0
+      }
+    },
+    "web3-integration": {
+      "name": "web3-integration",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [],
+      "files_scanned": 0,
+      "patterns_found": {}
+    },
+    "white-label-system": {
+      "name": "white-label-system",
+      "has_admin": false,
+      "has_rbac": false,
+      "admin_features": [
+        "kyc"
+      ],
+      "files_scanned": 1,
+      "patterns_found": {
+        "admin_routes": 0,
+        "rbac": 0,
+        "user_management": 0,
+        "kyc": 4,
+        "withdrawal_approval": 0,
+        "trading_control": 0,
+        "fee_management": 0,
+        "risk_management": 0,
+        "audit_logs": 0,
+        "system_config": 0
+      },
+      "version": "1.0.0"
+    }
+  },
+  "version_information": {
+    "address-generation-service": "1.0.0",
+    "admin-panel": "2.0.0",
+    "admin-service": "1.0.0",
+    "advanced-trading-service": "1.0.0",
+    "advanced-wallet-system": "1.0.0",
+    "affiliate-system": "1.0.0",
+    "ai-maintenance-system": "1.0.0",
+    "ai-maintenance": "1.0.0",
+    "ai-trading-assistant": "1.0.0",
+    "algo-orders-service": "1.0.0",
+    "alpha-market-admin": "1.0.0",
+    "analytics-dashboard-service": "1.0.0",
+    "analytics-service": "1.0.0",
+    "auth-service": "1.0.0",
+    "auto-invest-service": "1.0.0",
+    "block-explorer": "1.0.0",
+    "block-trading-service": "1.0.0",
+    "blockchain-integration-service": "1.0.0",
+    "blockchain-service": "1.0.0",
+    "compliance-engine": "1.0.0",
+    "comprehensive-admin-service": "1.0.0",
+    "convert-service": "1.0.0",
+    "copy-trading-admin": "1.0.0",
+    "copy-trading-service": "1.0.0",
+    "copy-trading": "1.0.0",
+    "crypto-card-service": "1.0.0",
+    "database": "1.0.0",
+    "dca-bot-service": "1.0.0",
+    "defi-enhancements-service": "1.0.0",
+    "defi-service": "1.0.0",
+    "defi-staking-service": "1.0.0",
+    "deposit-withdrawal-admin-service": "1.0.0",
+    "dex-integration-admin": "1.0.0",
+    "dex-integration": "1.0.0",
+    "dual-investment-service": "1.0.0",
+    "earn-service": "1.0.0",
+    "enhanced-wallet-service": "1.0.0",
+    "etf-trading-admin": "1.0.0",
+    "etf-trading": "1.0.0",
+    "eth2-staking-service": "1.0.0",
+    "fiat-gateway-service": "1.0.0",
+    "futures-earn-service": "1.0.0",
+    "futures-trading": "1.0.0",
+    "grid-trading-bot-service": "1.0.0",
+    "institutional-services-admin": "1.0.0",
+    "institutional-services": "1.0.0",
+    "institutional-trading": "1.0.0",
+    "insurance-fund-service": "1.0.0",
+    "kyc-aml-service": "1.0.0",
+    "kyc-service": "1.0.0",
+    "launchpad-service": "1.0.0",
+    "launchpool-service": "1.0.0",
+    "lending-borrowing-admin": "1.0.0",
+    "lending-borrowing": "1.0.0",
+    "leveraged-tokens-service": "1.0.0",
+    "liquid-swap-service": "1.0.0",
+    "liquidity-aggregator-admin": "1.0.0",
+    "margin-trading": "1.0.0",
+    "market-data-service": "1.0.0",
+    "martingale-bot-service": "1.0.0",
+    "nft-launchpad-service": "1.0.0",
+    "nft-marketplace-admin": "1.0.0",
+    "nft-marketplace": "1.0.0",
+    "notification-service-enhanced": "1.0.0",
+    "notification-service": "1.0.0",
+    "options-trading-admin": "1.0.0",
+    "p2p-admin": "1.0.0",
+    "p2p-service": "1.0.0",
+    "p2p-trading": "1.0.0",
+    "payment-gateway-admin": "1.0.0",
+    "payment-gateway-service": "1.0.0",
+    "payment-gateway": "1.0.0",
+    "perpetual-swap-service": "1.0.0",
+    "popular-coins-service": "1.0.0",
+    "portfolio-margin-service": "1.0.0",
+    "proof-of-reserves-service": "1.0.0",
+    "referral-program-service": "1.0.0",
+    "risk-management-service": "1.0.0",
+    "risk-management": "1.0.0",
+    "role-based-admin": "1.0.0",
+    "social-trading-service": "1.0.0",
+    "staking-service": "1.0.0",
+    "sub-accounts-service": "1.0.0",
+    "super-admin-system": "1.0.0",
+    "system-configuration-service": "1.0.0",
+    "token-listing-service": "1.0.0",
+    "trading-bots-service": "2.0.0",
+    "trading-engine-enhanced": "1.0.0",
+    "trading-pair-management": "1.0.0",
+    "trading-signals-service": "1.0.0",
+    "trading": "1.0.0",
+    "unified-account-service": "1.0.0",
+    "user-authentication-service": "1.0.0",
+    "user-management-admin-service": "1.0.0",
+    "vip-program-service": "1.0.0",
+    "virtual-liquidity-service": "1.0.0",
+    "vote-to-list-service": "1.0.0",
+    "wallet-management": "1.0.0",
+    "white-label-system": "1.0.0"
+  },
+  "missing_features_comparison": {
+    "binance": [
+      "trading_pair_management",
+      "liquidity_management",
+      "compliance_monitoring",
+      "transaction_monitoring",
+      "api_key_management",
+      "security_settings",
+      "announcement_management",
+      "promotion_management",
+      "vip_tier_management",
+      "staking_pool_management",
+      "launchpad_management",
+      "nft_management",
+      "p2p_dispute_resolution",
+      "customer_support_tools",
+      "analytics_dashboard",
+      "backup_management",
+      "disaster_recovery"
+    ],
+    "bybit": [
+      "withdrawal_control",
+      "trading_management",
+      "fee_configuration",
+      "liquidity_control",
+      "risk_parameters",
+      "compliance_tools",
+      "transaction_review",
+      "system_settings",
+      "api_management",
+      "security_controls",
+      "content_management",
+      "marketing_tools",
+      "vip_management",
+      "derivatives_management",
+      "copy_trading_oversight",
+      "institutional_services",
+      "dispute_management",
+      "support_dashboard",
+      "reporting_tools"
+    ],
+    "okx": [
+      "account_management",
+      "identity_verification",
+      "fund_control",
+      "market_management",
+      "fee_structure",
+      "liquidity_provision",
+      "risk_control",
+      "regulatory_compliance",
+      "monitoring_system",
+      "platform_configuration",
+      "developer_tools",
+      "security_management",
+      "announcement_system",
+      "campaign_management",
+      "tier_management",
+      "earn_product_management",
+      "trading_bot_oversight",
+      "web3_management",
+      "resolution_center",
+      "helpdesk_system",
+      "business_intelligence"
+    ]
+  }
+}

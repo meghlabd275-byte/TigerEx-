@@ -1,7 +1,12 @@
 from fastapi import FastAPI
+from admin.admin_routes import router as admin_router
+
 from datetime import datetime
 
 app = FastAPI(title="TigerEx OTC Desk Service")
+
+# Include admin router
+app.include_router(admin_router)
 
 @app.post("/api/v1/otc/quote-request")
 async def request_quote(user_id: int, asset: str, amount: float, side: str):
