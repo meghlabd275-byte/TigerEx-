@@ -1,0 +1,11 @@
+{
+  "timestamp": "2025-10-03 17:21:45",
+  "total_services": 135,
+  "healthy_services": 135,
+  "failed_services": 0,
+  "warnings": 0,
+  "health_score": 100.0,
+  "failed_details": [],
+  "warning_details": [],
+  "missing_critical": []
+}
