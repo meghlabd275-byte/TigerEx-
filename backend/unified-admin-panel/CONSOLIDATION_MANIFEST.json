@@ -1,0 +1,16 @@
+{
+  "target": "unified-admin-panel",
+  "sources": [
+    "admin-service",
+    "admin-panel",
+    "comprehensive-admin-service",
+    "super-admin-system",
+    "role-based-admin",
+    "universal-admin-controls",
+    "alpha-market-admin",
+    "deposit-withdrawal-admin-service",
+    "user-management-admin-service"
+  ],
+  "merged_count": 9,
+  "category": "admin_services"
+}

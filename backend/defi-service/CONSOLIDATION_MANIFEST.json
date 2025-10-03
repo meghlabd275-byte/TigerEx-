@@ -1,0 +1,10 @@
+{
+  "target": "defi-service",
+  "sources": [
+    "defi-enhancements-service",
+    "defi-staking-service",
+    "liquid-swap-service"
+  ],
+  "merged_count": 3,
+  "category": "defi_services"
+}

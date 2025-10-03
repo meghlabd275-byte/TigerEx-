@@ -1,0 +1,10 @@
+{
+  "target": "wallet-service",
+  "sources": [
+    "wallet-management",
+    "advanced-wallet-system",
+    "enhanced-wallet-service"
+  ],
+  "merged_count": 3,
+  "category": "wallet_services"
+}

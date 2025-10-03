@@ -1,0 +1,11 @@
+{
+  "target": "spot-trading",
+  "sources": [
+    "trading",
+    "trading-engine-enhanced",
+    "advanced-trading-service",
+    "advanced-trading-engine"
+  ],
+  "merged_count": 4,
+  "category": "trading_services"
+}
