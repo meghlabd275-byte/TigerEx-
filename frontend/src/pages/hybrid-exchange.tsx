@@ -6,20 +6,23 @@ import MarketListings from '../components/exchange/MarketListings';
 import WalletOverview from '../components/wallet/WalletOverview';
 import WalletSetup from '../components/wallet/WalletSetup';
 import DEXSwap from '../components/dex/DEXSwap';
+import DEXWalletHome from '../components/dex/DEXWalletHome';
+import Web3Onboarding from '../components/dex/Web3Onboarding';
 import BottomNavigation from '../components/layout/BottomNavigation';
 
 const HybridExchangePage: React.FC = () => {
   const { isConnected, exchangeMode } = useWallet();
   const [activeMainTab, setActiveMainTab] = useState<'exchange' | 'wallet'>('exchange');
   const [activeBottomTab, setActiveBottomTab] = useState('home');
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   // Handle tab changes
   const handleTabChange = (tab: 'exchange' | 'wallet') => {
     setActiveMainTab(tab);
     
-    // If switching to wallet tab and no wallet connected, show wallet setup
+    // If switching to wallet tab and no wallet connected, show onboarding
     if (tab === 'wallet' && !isConnected) {
-      // Will be handled by the conditional rendering below
+      setShowOnboarding(true);
     }
   };
 
@@ -49,12 +52,13 @@ const HybridExchangePage: React.FC = () => {
           <>
             {/* Wallet Tab */}
             {!isConnected ? (
-              <WalletSetup />
+              showOnboarding ? (
+                <Web3Onboarding />
+              ) : (
+                <WalletSetup />
+              )
             ) : (
-              <>
-                <ExchangeModeToggle />
-                <WalletOverview />
-              </>
+              <DEXWalletHome />
             )}
           </>
         )}
