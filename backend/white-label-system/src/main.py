@@ -365,13 +365,13 @@ class WhiteLabelManager:
                 "lint": "next lint"
             },
             "dependencies": {
-                "next": "14.0.0",
+                "next": "13.0.0",
                 "react": "18.0.0",
                 "react-dom": "18.0.0",
                 "@reduxjs/toolkit": "^1.9.0",
                 "react-redux": "^8.0.0",
                 "framer-motion": "^10.0.0",
-                "chart.js": "^4.0.0",
+                "chart.js": "^3.0.0",
                 "react-chartjs-2": "^5.0.0",
                 "lucide-react": "^0.263.0",
                 "tailwindcss": "^3.3.0",

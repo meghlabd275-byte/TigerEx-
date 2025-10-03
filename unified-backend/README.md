@@ -324,5 +324,5 @@ Interactive API documentation available at:
 ---
 
 **Status**: ✅ Production Ready  
-**Version**: 4.0.0  
+**Version**: 3.0.0  
 **Last Updated**: October 3, 2025
