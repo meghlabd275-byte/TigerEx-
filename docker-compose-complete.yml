@@ -1,0 +1,156 @@
+version: '3.8'
+
+services:
+  # Database
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: tigerex
+      POSTGRES_USER: tigerex_user
+      POSTGRES_PASSWORD: tigerex_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - tigerex_network
+
+  # Redis for caching and sessions
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - tigerex_network
+
+  # API Gateway
+  api-gateway:
+    build: ./backend/api-gateway
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://tigerex_user:tigerex_password@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - tigerex_network
+
+  # Admin Control Panel
+  admin-control:
+    build: ./backend/unified-admin-control
+    ports:
+      - "8001:8000"
+    environment:
+      - DATABASE_URL=postgresql://tigerex_user:tigerex_password@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - tigerex_network
+
+  # Authentication Service
+  auth-service:
+    build: ./backend/auth-service
+    ports:
+      - "8002:5000"
+    environment:
+      - DATABASE_URL=postgresql://tigerex_user:tigerex_password@postgres:5432/tigerex
+    depends_on:
+      - postgres
+    networks:
+      - tigerex_network
+
+  # Trading Services
+  spot-trading:
+    build: ./backend/spot-trading
+    ports:
+      - "8010:5000"
+    environment:
+      - DATABASE_URL=postgresql://tigerex_user:tigerex_password@postgres:5432/tigerex
+    depends_on:
+      - postgres
+    networks:
+      - tigerex_network
+
+  futures-trading:
+    build: ./backend/futures-trading
+    ports:
+      - "8011:5000"
+    environment:
+      - DATABASE_URL=postgresql://tigerex_user:tigerex_password@postgres:5432/tigerex
+    depends_on:
+      - postgres
+    networks:
+      - tigerex_network
+
+  # Wallet Services
+  wallet-service:
+    build: ./backend/wallet-service
+    ports:
+      - "8020:5000"
+    environment:
+      - DATABASE_URL=postgresql://tigerex_user:tigerex_password@postgres:5432/tigerex
+    depends_on:
+      - postgres
+    networks:
+      - tigerex_network
+
+  # Common Function Services
+  transfer-service:
+    build: ./backend/transfer-service
+    ports:
+      - "8030:5000"
+    environment:
+      - DATABASE_URL=postgresql://tigerex_user:tigerex_password@postgres:5432/tigerex
+    depends_on:
+      - postgres
+    networks:
+      - tigerex_network
+
+  binance-wallet-service:
+    build: ./backend/binance-wallet-service
+    ports:
+      - "8031:5000"
+    environment:
+      - DATABASE_URL=postgresql://tigerex_user:tigerex_password@postgres:5432/tigerex
+    depends_on:
+      - postgres
+    networks:
+      - tigerex_network
+
+  # Frontend
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://api-gateway:8000
+    depends_on:
+      - api-gateway
+    networks:
+      - tigerex_network
+
+  # Nginx Load Balancer
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - frontend
+      - api-gateway
+      - admin-control
+    networks:
+      - tigerex_network
+
+volumes:
+  postgres_data:
+
+networks:
+  tigerex_network:
+    driver: bridge
