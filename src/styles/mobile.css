@@ -1,0 +1,282 @@
+/* Mobile-First Responsive Design */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Base Mobile Styles */
+.mobile-app {
+  @apply min-h-screen bg-gray-50;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Mobile Navigation */
+.mobile-nav {
+  @apply fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Mobile Header */
+.mobile-header {
+  @apply sticky top-0 bg-white border-b border-gray-200 z-40;
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Mobile Content */
+.mobile-content {
+  @apply pb-20; /* Account for bottom navigation */
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+}
+
+/* Trading Interface Styles */
+.trading-interface {
+  @apply bg-black text-white min-h-screen;
+}
+
+.order-book {
+  @apply text-xs font-mono;
+}
+
+.price-positive {
+  @apply text-green-500;
+}
+
+.price-negative {
+  @apply text-red-500;
+}
+
+/* Wallet Styles */
+.wallet-balance {
+  @apply text-2xl font-bold;
+}
+
+.wallet-balance.hidden {
+  @apply text-gray-400;
+}
+
+.wallet-balance.hidden::after {
+  content: '******';
+}
+
+/* Button Styles */
+.btn-primary {
+  @apply bg-yellow-500 text-white py-3 px-6 rounded-lg font-medium hover:bg-yellow-600 transition-colors;
+}
+
+.btn-secondary {
+  @apply bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-300 transition-colors;
+}
+
+.btn-long {
+  @apply bg-green-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-green-700 transition-colors;
+}
+
+.btn-short {
+  @apply bg-red-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-red-700 transition-colors;
+}
+
+/* Form Styles */
+.form-input {
+  @apply w-full p-4 bg-gray-50 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent;
+}
+
+.form-input-dark {
+  @apply w-full p-3 bg-gray-800 border border-gray-700 rounded text-white focus:outline-none focus:ring-2 focus:ring-yellow-500;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end;
+}
+
+.modal-content {
+  @apply w-full bg-white rounded-t-3xl max-h-[80vh] overflow-y-auto;
+}
+
+.modal-handle {
+  @apply w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4;
+}
+
+/* Card Styles */
+.card {
+  @apply bg-white rounded-lg border border-gray-200 p-4;
+}
+
+.card-hover {
+  @apply hover:border-gray-300 hover:shadow-sm transition-all;
+}
+
+/* List Styles */
+.list-item {
+  @apply flex items-center justify-between p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors;
+}
+
+.list-item:last-child {
+  @apply border-b-0;
+}
+
+/* Status Indicators */
+.status-verified {
+  @apply bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium;
+}
+
+.status-pending {
+  @apply bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs font-medium;
+}
+
+.status-failed {
+  @apply bg-red-100 text-red-800 px-2 py-1 rounded text-xs font-medium;
+}
+
+/* Responsive Breakpoints */
+@media (min-width: 768px) {
+  .mobile-app {
+    @apply max-w-md mx-auto border-l border-r border-gray-200;
+  }
+  
+  .mobile-nav {
+    @apply max-w-md mx-auto;
+  }
+  
+  .mobile-header {
+    @apply max-w-md mx-auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mobile-app {
+    @apply max-w-lg;
+  }
+  
+  .mobile-nav {
+    @apply max-w-lg;
+  }
+  
+  .mobile-header {
+    @apply max-w-lg;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .mobile-app {
+    @apply bg-gray-900;
+  }
+  
+  .card {
+    @apply bg-gray-800 border-gray-700;
+  }
+  
+  .mobile-header {
+    @apply bg-gray-800 border-gray-700;
+  }
+  
+  .mobile-nav {
+    @apply bg-gray-800 border-gray-700;
+  }
+}
+
+/* Animation Classes */
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Touch Optimizations */
+.touch-target {
+  @apply min-h-[44px] min-w-[44px];
+}
+
+/* Safe Area Handling */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-area-left {
+  padding-left: env(safe-area-inset-left);
+}
+
+.safe-area-right {
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Loading States */
+.loading-skeleton {
+  @apply bg-gray-200 animate-pulse rounded;
+}
+
+.loading-spinner {
+  @apply animate-spin rounded-full border-2 border-gray-300 border-t-yellow-500;
+}
+
+/* Error States */
+.error-message {
+  @apply bg-red-50 border border-red-200 text-red-700 p-3 rounded-lg text-sm;
+}
+
+.success-message {
+  @apply bg-green-50 border border-green-200 text-green-700 p-3 rounded-lg text-sm;
+}
+
+.warning-message {
+  @apply bg-yellow-50 border border-yellow-200 text-yellow-700 p-3 rounded-lg text-sm;
+}
+
+/* Accessibility */
+.sr-only {
+  @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+}
+
+/* Focus States */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2;
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .btn-primary {
+    @apply border-2 border-yellow-700;
+  }
+  
+  .btn-secondary {
+    @apply border-2 border-gray-500;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .slide-up,
+  .fade-in,
+  .loading-spinner {
+    animation: none;
+  }
+  
+  .transition-colors,
+  .transition-all {
+    transition: none;
+  }
+}

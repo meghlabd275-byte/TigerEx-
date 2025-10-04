@@ -1,0 +1,39 @@
+import React from 'react';
+import { useState } from 'react';
+import BottomNavigation from './BottomNavigation';
+import TopHeader from './TopHeader';
+
+interface MobileLayoutProps {
+  children: React.ReactNode;
+  title?: string;
+  showBackButton?: boolean;
+  onBack?: () => void;
+}
+
+const MobileLayout: React.FC<MobileLayoutProps> = ({
+  children,
+  title,
+  showBackButton = false,
+  onBack
+}) => {
+  return (
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Top Header */}
+      <TopHeader 
+        title={title}
+        showBackButton={showBackButton}
+        onBack={onBack}
+      />
+      
+      {/* Main Content */}
+      <main className="flex-1 overflow-y-auto pb-20">
+        {children}
+      </main>
+      
+      {/* Bottom Navigation */}
+      <BottomNavigation />
+    </div>
+  );
+};
+
+export default MobileLayout;

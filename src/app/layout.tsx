@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import '../styles/mobile.css';
 import { Providers } from './providers';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -12,7 +13,8 @@ export const metadata: Metadata = {
   keywords:
     'cryptocurrency, exchange, trading, blockchain, defi, bitcoin, ethereum',
   authors: [{ name: 'TigerEx Team' }],
-  viewport: 'width=device-width, initial-scale=1',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
+  themeColor: '#EAB308',
 };
 
 export default function RootLayout({
@@ -22,6 +24,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <meta name="theme-color" content="#EAB308" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="TigerEx" />
+      </head>
       <body className={inter.className}>
         <Providers>{children}</Providers>
       </body>
