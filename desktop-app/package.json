@@ -1,78 +1,51 @@
 {
   "name": "tigerex-desktop",
-  "version": "3.0.0",
-  "description": "TigerEx Desktop App - Professional Crypto Trading Platform",
-  "main": "electron/main.js",
+  "version": "1.0.0",
+  "description": "TigerEx Desktop Application",
+  "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dev": "concurrently &quot;npm run start:react&quot; &quot;wait-on http://localhost:3000 && electron .&quot;",
-    "start:react": "react-scripts start",
-    "build": "react-scripts build",
-    "build:electron": "electron-builder",
-    "build:all": "npm run build && npm run build:electron",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --publish=never"
   },
   "build": {
     "appId": "com.tigerex.desktop",
     "productName": "TigerEx",
     "directories": {
-      "buildResources": "assets",
       "output": "dist"
     },
     "files": [
-      "build/**/*",
-      "electron/**/*",
-      "node_modules/**/*",
-      "package.json"
+      "main.js",
+      "renderer.js",
+      "index.html",
+      "styles.css",
+      "assets/**/*"
     ],
-    "mac": {
-      "category": "public.app-category.finance",
-      "target": ["dmg", "zip"]
-    },
     "win": {
-      "target": ["nsis", "portable"]
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns"
     },
     "linux": {
-      "target": ["AppImage", "deb", "rpm"],
-      "category": "Finance"
+      "target": "AppImage",
+      "icon": "assets/icon.png"
     }
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.20.0",
+    "electron": "^27.0.0",
     "electron-store": "^8.1.0",
-    "axios": "^1.6.2",
-    "socket.io-client": "^4.5.4",
-    "chart.js": "^4.4.0",
-    "react-chartjs-2": "^5.2.0",
-    "lightweight-charts": "^4.1.0",
-    "@mui/material": "^5.14.18",
-    "@mui/icons-material": "^5.14.18",
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
-    "recharts": "^2.10.3",
-    "date-fns": "^2.30.0",
-    "qrcode.react": "^3.1.0"
+    "node-notifier": "^10.0.1",
+    "axios": "^1.6.0"
   },
   "devDependencies": {
-    "electron": "^27.1.2",
-    "electron-builder": "^24.9.1",
-    "concurrently": "^8.2.2",
-    "wait-on": "^7.2.0",
-    "react-scripts": "5.0.1"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "electron-builder": "^24.6.4"
   }
 }
