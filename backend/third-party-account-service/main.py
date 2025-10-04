@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-&quot;&quot;&quot;
+"""
 Third Party Account Service Service
 Category: others
 Description: Third-party account integration
-&quot;&quot;&quot;
+"""
 
 from flask import Flask, request, jsonify, g
 from flask_sqlalchemy import SQLAlchemy

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-&quot;&quot;&quot;
+"""
 Button Game Service Service
 Category: gift_campaign
 Description: Interactive button game rewards
-&quot;&quot;&quot;
+"""
 
 from flask import Flask, request, jsonify, g
 from flask_sqlalchemy import SQLAlchemy

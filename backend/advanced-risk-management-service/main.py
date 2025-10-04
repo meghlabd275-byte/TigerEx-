@@ -167,7 +167,7 @@ def require_role(roles: List[UserRole]):
     return decorator
 
 
-, HTTPException
+from fastapi import HTTPException
 from datetime import datetime
 import numpy as np
 from collections import defaultdict

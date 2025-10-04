@@ -14,10 +14,10 @@ def create_enhanced_security_service():
     service_dir.mkdir(parents=True, exist_ok=True)
     
     main_py = """#!/usr/bin/env python3
-&quot;&quot;&quot;
+"""
 Enhanced Security Service
 Comprehensive security management including 2FA, biometrics, and advanced security features
-&quot;&quot;&quot;
+"""
 
 from flask import Flask, request, jsonify, g
 from flask_sqlalchemy import SQLAlchemy
@@ -405,10 +405,10 @@ def create_account_management_service():
     service_dir.mkdir(parents=True, exist_ok=True)
     
     main_py = """#!/usr/bin/env python3
-&quot;&quot;&quot;
+"""
 Account Management Service
 Comprehensive account management including VIP upgrades, profile management, and account info
-&quot;&quot;&quot;
+"""
 
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy

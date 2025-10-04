@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-&quot;&quot;&quot;
+"""
 Index Linked Service Service
 Category: trade
 Description: Index-linked trading products
-&quot;&quot;&quot;
+"""
 
 from flask import Flask, request, jsonify, g
 from flask_sqlalchemy import SQLAlchemy

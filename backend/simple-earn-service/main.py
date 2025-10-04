@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-&quot;&quot;&quot;
+"""
 Simple Earn Service Service
 Category: earn
 Description: Simple earning products
-&quot;&quot;&quot;
+"""
 
 from flask import Flask, request, jsonify, g
 from flask_sqlalchemy import SQLAlchemy

@@ -17,7 +17,7 @@ import asyncpg
 import redis.asyncio as redis
 from fastapi import FastAPI
 from admin.admin_routes import router as admin_router
-, HTTPException, BackgroundTasks, Depends
+from fastapi import HTTPException, BackgroundTasks, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, validator
 import requests

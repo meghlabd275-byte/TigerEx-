@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-&quot;&quot;&quot;
+"""
 Fan Token Service Service
 Category: others
 Description: Fan token ecosystem
-&quot;&quot;&quot;
+"""
 
 from flask import Flask, request, jsonify, g
 from flask_sqlalchemy import SQLAlchemy

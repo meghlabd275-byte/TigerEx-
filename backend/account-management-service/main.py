@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-&quot;&quot;&quot;
+"""
 Account Management Service
 Comprehensive account management including VIP upgrades, profile management, and account info
-&quot;&quot;&quot;
+"""
 
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy

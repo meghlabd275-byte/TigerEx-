@@ -12,7 +12,7 @@ Provides Ethereum 2.0 staking functionality:
 
 from fastapi import FastAPI
 from admin.admin_routes import router as admin_router
-, HTTPException, Depends
+from fastapi import HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any

@@ -934,10 +934,10 @@ def create_service_verification_script():
     """Create script to verify all services are working"""
     
     verification_script = """#!/usr/bin/env python3
-&quot;&quot;&quot;
+"""
 Service Verification Script
 Tests all services across web, mobile, and desktop platforms
-&quot;&quot;&quot;
+"""
 
 import requests
 import json
@@ -953,7 +953,7 @@ class ServiceVerifier:
         self.results = {}
     
     def load_services(self):
-        &quot;&quot;&quot;Load all services from backend directory&quot;&quot;&quot;
+        """Load all services from backend directory"""
         backend_dir = "tigerex-repo/backend"
         if os.path.exists(backend_dir):
             for item in os.listdir(backend_dir):
@@ -962,7 +962,7 @@ class ServiceVerifier:
         print(f"Found {len(self.services)} services to verify")
     
     def test_service_health(self, service_name):
-        &quot;&quot;&quot;Test individual service health&quot;&quot;&quot;
+        """Test individual service health"""
         try:
             # Try different possible health endpoints
             endpoints = [
@@ -1001,7 +1001,7 @@ class ServiceVerifier:
             }
     
     def test_web_app(self):
-        &quot;&quot;&quot;Test web application&quot;&quot;&quot;
+        """Test web application"""
         try:
             response = requests.get("http://localhost:3000", timeout=10)
             return {
@@ -1017,7 +1017,7 @@ class ServiceVerifier:
             }
     
     def test_mobile_build(self):
-        &quot;&quot;&quot;Test mobile application build&quot;&quot;&quot;
+        """Test mobile application build"""
         try:
             mobile_dir = "tigerex-repo/mobile-app"
             if os.path.exists(mobile_dir):
@@ -1042,7 +1042,7 @@ class ServiceVerifier:
             }
     
     def test_desktop_build(self):
-        &quot;&quot;&quot;Test desktop application build&quot;&quot;&quot;
+        """Test desktop application build"""
         try:
             desktop_dir = "tigerex-repo/desktop-app"
             if os.path.exists(desktop_dir):
@@ -1067,7 +1067,7 @@ class ServiceVerifier:
             }
     
     def run_verification(self):
-        &quot;&quot;&quot;Run complete verification&quot;&quot;&quot;
+        """Run complete verification"""
         print("🔍 Starting TigerEx Service Verification...")
         print("="*60)
         
@@ -1103,7 +1103,7 @@ class ServiceVerifier:
         return self.results
     
     def display_results(self):
-        &quot;&quot;&quot;Display verification results&quot;&quot;&quot;
+        """Display verification results"""
         print("\\n" + "="*60)
         print("📋 VERIFICATION RESULTS")
         print("="*60)

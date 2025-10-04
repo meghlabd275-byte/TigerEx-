@@ -239,7 +239,7 @@ ADMIN_DASHBOARD_HTML = """
 
             <!-- Analytics Tab -->
             <div x-show="activeTab === 'analytics'" class="space-y-6">
-                <h2 class="text-3xl font-bold mb-6">Analytics &amp; Reports</h2>
+                <h2 class="text-3xl font-bold mb-6">Analytics & Reports</h2>
                 <div class="bg-white p-6 rounded-lg shadow">
                     <p class="text-gray-600">Analytics dashboard will be implemented here.</p>
                 </div>

@@ -21,7 +21,7 @@ import aioredis
 import aiohttp
 from fastapi import FastAPI
 from admin.admin_routes import router as admin_router
-, HTTPException, Depends, Request, Response, Form, File, UploadFile
+from fastapi import HTTPException, Depends, Request, Response, Form, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials, OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.responses import StreamingResponse

@@ -6,7 +6,7 @@ Port: 8150
 
 from fastapi import FastAPI
 from admin.admin_routes import router as admin_router
-, HTTPException, Depends, BackgroundTasks, Query
+from fastapi import HTTPException, Depends, BackgroundTasks, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, validator
 from typing import List, Optional, Dict, Any

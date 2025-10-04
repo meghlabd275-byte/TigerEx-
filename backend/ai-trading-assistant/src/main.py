@@ -6,7 +6,7 @@ strategy recommendations, market analysis, and portfolio optimization.
 
 from fastapi import FastAPI
 from admin.admin_routes import router as admin_router
-, HTTPException, Depends, WebSocket, WebSocketDisconnect
+from fastapi import HTTPException, Depends, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any

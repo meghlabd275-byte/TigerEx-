@@ -12,11 +12,11 @@ def create_service_structure(service_name, category, description):
     
     # Create main service file
     main_py = f"""#!/usr/bin/env python3
-&quot;&quot;&quot;
+"""
 {service_name.replace('-', ' ').title()} Service
 Category: {category}
 Description: {description}
-&quot;&quot;&quot;
+"""
 
 from flask import Flask, request, jsonify, g
 from flask_sqlalchemy import SQLAlchemy

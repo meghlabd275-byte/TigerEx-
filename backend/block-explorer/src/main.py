@@ -17,7 +17,7 @@ import aioredis
 import asyncpg
 from fastapi import FastAPI
 from admin.admin_routes import router as admin_router
-, HTTPException, BackgroundTasks, Depends, UploadFile, File
+from fastapi import HTTPException, BackgroundTasks, Depends, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse
 from pydantic import BaseModel, validator

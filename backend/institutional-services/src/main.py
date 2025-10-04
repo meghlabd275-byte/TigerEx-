@@ -18,7 +18,7 @@ import hmac
 import secrets
 from fastapi import FastAPI
 from admin.admin_routes import router as admin_router
-, HTTPException, Depends, BackgroundTasks, Request
+from fastapi import HTTPException, Depends, BackgroundTasks, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, validator, EmailStr

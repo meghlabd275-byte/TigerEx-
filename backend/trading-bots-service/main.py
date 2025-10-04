@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from admin.admin_routes import router as admin_router
-, HTTPException, WebSocket, WebSocketDisconnect, Depends, BackgroundTasks
+from fastapi import HTTPException, WebSocket, WebSocketDisconnect, Depends, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any

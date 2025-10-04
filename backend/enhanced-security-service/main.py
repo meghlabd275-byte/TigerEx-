@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-&quot;&quot;&quot;
+"""
 Enhanced Security Service
 Comprehensive security management including 2FA, biometrics, and advanced security features
-&quot;&quot;&quot;
+"""
 
 from flask import Flask, request, jsonify, g
 from flask_sqlalchemy import SQLAlchemy

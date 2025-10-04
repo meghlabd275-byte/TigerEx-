@@ -6,7 +6,7 @@ Real-time risk monitoring, fraud detection, and compliance
 
 from fastapi import FastAPI
 from admin.admin_routes import router as admin_router
-, HTTPException, Depends, BackgroundTasks
+from fastapi import HTTPException, Depends, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict

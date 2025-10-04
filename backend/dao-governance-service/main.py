@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from admin.admin_routes import router as admin_router
-, HTTPException
+from fastapi import HTTPException
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 

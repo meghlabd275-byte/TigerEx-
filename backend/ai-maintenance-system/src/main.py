@@ -5,7 +5,7 @@ Advanced AI system for predictive maintenance, anomaly detection, and automated 
 
 from fastapi import FastAPI
 from admin.admin_routes import router as admin_router
-, HTTPException, Depends, BackgroundTasks
+from fastapi import HTTPException, Depends, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional

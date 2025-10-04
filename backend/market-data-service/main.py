@@ -6,7 +6,7 @@ Real-time market data, price feeds, and candlestick data
 
 from fastapi import FastAPI
 from admin.admin_routes import router as admin_router
-, HTTPException, Depends, WebSocket, WebSocketDisconnect
+from fastapi import HTTPException, Depends, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, List, Dict
