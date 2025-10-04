@@ -1,0 +1,100 @@
+    return {"status": "success", "participant_id": f"COMP-{datetime.utcnow().timestamp()}"}
+
+# ==================== ADMIN ENDPOINTS FOR ALL SERVICES ====================
+
+@app.get("/api/admin/services/all")
+async def get_all_services_admin(current_admin: User = Depends(get_admin_user)):
+    """Get all services status (admin only)"""
+    from service_registry import registry
+    return {
+        "total_services": registry.get_service_count(),
+        "services": registry.get_all_services()
+    }
+
+@app.get("/api/admin/cross-chain/bridges")
+async def manage_bridges_admin(current_admin: User = Depends(get_admin_user)):
+    """Manage cross-chain bridges (admin only)"""
+    return {"bridges": []}
+
+@app.post("/api/admin/custody/configure")
+async def configure_custody_admin(
+    settings: Dict[str, Any],
+    current_admin: User = Depends(get_admin_user)
+):
+    """Configure custody settings (admin only)"""
+    return {"status": "success"}
+
+@app.get("/api/admin/defi/protocols")
+async def manage_defi_protocols_admin(current_admin: User = Depends(get_admin_user)):
+    """Manage DeFi protocols (admin only)"""
+    return {"protocols": []}
+
+@app.post("/api/admin/elite-traders/verify")
+async def verify_elite_trader_admin(
+    trader_id: int,
+    current_admin: User = Depends(get_admin_user)
+):
+    """Verify elite trader (admin only)"""
+    return {"status": "success"}
+
+@app.get("/api/admin/fan-tokens/manage")
+async def manage_fan_tokens_admin(current_admin: User = Depends(get_admin_user)):
+    """Manage fan tokens (admin only)"""
+    return {"tokens": []}
+
+@app.post("/api/admin/gift-cards/inventory")
+async def manage_gift_card_inventory_admin(
+    brand: str,
+    quantity: int,
+    current_admin: User = Depends(get_admin_user)
+):
+    """Manage gift card inventory (admin only)"""
+    return {"status": "success"}
+
+@app.get("/api/admin/bots/all")
+async def get_all_bots_admin(current_admin: User = Depends(get_admin_user)):
+    """Get all trading bots (admin only)"""
+    return {"bots": []}
+
+@app.get("/api/admin/liquidity/pools")
+async def manage_liquidity_pools_admin(current_admin: User = Depends(get_admin_user)):
+    """Manage liquidity pools (admin only)"""
+    return {"pools": []}
+
+@app.get("/api/admin/merchants")
+async def manage_merchants_admin(current_admin: User = Depends(get_admin_user)):
+    """Manage merchants (admin only)"""
+    return {"merchants": []}
+
+@app.get("/api/admin/nft/projects")
+async def manage_nft_projects_admin(current_admin: User = Depends(get_admin_user)):
+    """Manage NFT projects (admin only)"""
+    return {"projects": []}
+
+@app.post("/api/admin/competitions/create")
+async def create_competition_admin(
+    name: str,
+    prize: float,
+    duration: int,
+    current_admin: User = Depends(get_admin_user)
+):
+    """Create trading competition (admin only)"""
+    return {"status": "success", "competition_id": f"COMP-{datetime.utcnow().timestamp()}"}
+
+@app.get("/api/admin/research/publish")
+async def publish_research_admin(
+    title: str,
+    content: str,
+    current_admin: User = Depends(get_admin_user)
+):
+    """Publish research report (admin only)"""
+    return {"status": "success", "report_id": f"REPORT-{datetime.utcnow().timestamp()}"}
+
+if __name__ == "__main__":
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True,
+        log_level="info"
+    )

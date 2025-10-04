@@ -1,0 +1,11 @@
+Dockerfile
+admin-dashboard
+components
+config
+hooks
+next.config.js
+package.json
+src
+tailwind.config.js
+tsconfig.json
+web-app
