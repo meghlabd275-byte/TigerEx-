@@ -17,6 +17,12 @@ export default function HomePage() {
     
     if (isMobile || isSmallScreen) {
       router.push('/mobile');
+    } else {
+      // Check if user wants to go directly to trading interface
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('trade') === 'true') {
+        router.push('/desktop');
+      }
     }
   }, [router]);
 

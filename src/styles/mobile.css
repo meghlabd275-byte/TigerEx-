@@ -267,6 +267,182 @@
   }
 }
 
+/* Desktop Trading Interface */
+.desktop-trading {
+  @apply min-h-screen bg-gray-900 text-white;
+}
+
+.desktop-trading .trading-chart {
+  @apply bg-gray-900 rounded-lg border border-gray-700;
+}
+
+.desktop-trading .order-book {
+  @apply bg-gray-800 border border-gray-700;
+}
+
+.desktop-trading .trading-panel {
+  @apply bg-gray-800 border border-gray-700;
+}
+
+/* Desktop Grid Styles */
+.desktop-grid {
+  @apply grid grid-cols-12 gap-4 h-screen;
+}
+
+.desktop-sidebar {
+  @apply col-span-2 bg-gray-800 border-r border-gray-700;
+}
+
+.desktop-main {
+  @apply col-span-7 bg-gray-900;
+}
+
+.desktop-right-panel {
+  @apply col-span-3 bg-gray-800 border-l border-gray-700;
+}
+
+/* Trading Interface Specific */
+.trading-header {
+  @apply bg-gray-800 border-b border-gray-700 p-4;
+}
+
+.trading-tabs {
+  @apply flex space-x-8 border-b border-gray-700;
+}
+
+.trading-tab {
+  @apply py-3 px-4 text-sm font-medium border-b-2 transition-colors cursor-pointer;
+}
+
+.trading-tab.active {
+  @apply text-white border-yellow-500;
+}
+
+.trading-tab.inactive {
+  @apply text-gray-400 border-transparent hover:text-white;
+}
+
+/* Options Trading Styles */
+.options-chain {
+  @apply w-full border-collapse;
+}
+
+.options-chain th,
+.options-chain td {
+  @apply px-2 py-1 text-xs border-b border-gray-700;
+}
+
+.options-chain .call-option {
+  @apply text-green-500;
+}
+
+.options-chain .put-option {
+  @apply text-red-500;
+}
+
+.options-chain .strike-price {
+  @apply font-bold text-white text-center;
+}
+
+/* Grid Trading Visualization */
+.grid-visualization {
+  @apply relative h-64 bg-gray-700 rounded overflow-hidden;
+}
+
+.grid-line {
+  @apply absolute left-0 right-0 border-t border-gray-600 flex items-center justify-between px-2;
+}
+
+.grid-price-indicator {
+  @apply w-2 h-2 bg-yellow-500 rounded-full;
+}
+
+/* Bot Trading Cards */
+.bot-card {
+  @apply bg-gray-800 rounded-lg border border-gray-700 p-6 hover:border-gray-600 transition-colors;
+}
+
+.bot-performance-grid {
+  @apply grid grid-cols-2 gap-3;
+}
+
+.bot-stat {
+  @apply bg-gray-700 rounded p-2;
+}
+
+.bot-stat-label {
+  @apply text-xs text-gray-400;
+}
+
+.bot-stat-value {
+  @apply text-sm font-bold;
+}
+
+/* Copy Trading Interface */
+.trader-card {
+  @apply bg-gray-800 rounded-lg border border-gray-700 p-6;
+}
+
+.trader-avatar {
+  @apply w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center text-2xl;
+}
+
+.trader-stats {
+  @apply grid grid-cols-2 gap-4;
+}
+
+.trader-performance-chart {
+  @apply flex items-end space-x-1 h-16;
+}
+
+.performance-bar {
+  @apply flex-1 rounded-t;
+}
+
+/* Responsive Desktop Breakpoints */
+@media (min-width: 1024px) {
+  .desktop-trading {
+    @apply block;
+  }
+  
+  .mobile-app {
+    @apply hidden;
+  }
+}
+
+@media (max-width: 1023px) {
+  .desktop-trading {
+    @apply hidden;
+  }
+  
+  .desktop-grid {
+    @apply grid-cols-1;
+  }
+  
+  .desktop-sidebar,
+  .desktop-main,
+  .desktop-right-panel {
+    @apply col-span-1;
+  }
+}
+
+/* Dark Theme Enhancements */
+.dark-scrollbar::-webkit-scrollbar {
+  @apply w-2;
+}
+
+.dark-scrollbar::-webkit-scrollbar-track {
+  @apply bg-gray-800;
+}
+
+.dark-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-gray-600 rounded;
+}
+
+.dark-scrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500;
+}
+
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .slide-up,
