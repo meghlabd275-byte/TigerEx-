@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx - Loading</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1890ff 0%, #722ed1 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: white;
+            overflow: hidden;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            animation: logoGlow 2s ease-in-out infinite alternate;
+        }
+
+        .tagline {
+            font-size: 16px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            text-align: center;
+        }
+
+        .loading-container {
+            position: relative;
+            width: 200px;
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .loading-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #fff, #f0f0f0);
+            border-radius: 2px;
+            animation: loading 2s ease-in-out infinite;
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .features {
+            position: absolute;
+            bottom: 40px;
+            text-align: center;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .features div {
+            margin: 2px 0;
+        }
+
+        @keyframes logoGlow {
+            0% { text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+            100% { text-shadow: 0 2px 20px rgba(255,255,255,0.3); }
+        }
+
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            50% { transform: translateX(0%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 1s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 2s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 3s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 4s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 5s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: 0.5s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 1.5s; }
+        .particle:nth-child(9) { left: 90%; animation-delay: 2.5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10px) rotate(360deg); opacity: 0; }
+        }
+    </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <div class="logo">TigerEx</div>
+    <div class="tagline">Hybrid Cryptocurrency Exchange</div>
+    
+    <div class="loading-container">
+        <div class="loading-bar"></div>
+    </div>
+    
+    <div class="loading-text">Loading...</div>
+    
+    <div class="features">
+        <div>✨ CEX &amp; DEX Trading</div>
+        <div>🔒 Advanced Security</div>
+        <div>⚡ Lightning Fast</div>
+        <div>🌍 Cross-Platform</div>
+    </div>
+
+    <script>
+        // Simulate loading progress
+        let progress = 0;
+        const loadingText = document.querySelector('.loading-text');
+        const messages = [
+            'Initializing TigerEx...',
+            'Loading trading engine...',
+            'Connecting to markets...',
+            'Setting up security...',
+            'Preparing interface...',
+            'Almost ready...'
+        ];
+
+        let messageIndex = 0;
+        const interval = setInterval(() => {
+            if (messageIndex < messages.length) {
+                loadingText.textContent = messages[messageIndex];
+                messageIndex++;
+            } else {
+                clearInterval(interval);
+                loadingText.textContent = 'Ready!';
+            }
+        }, 300);
+
+        // Add some dynamic effects
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add random particle animations
+            const particles = document.querySelectorAll('.particle');
+            particles.forEach((particle, index) => {
+                const delay = Math.random() * 2;
+                const duration = 4 + Math.random() * 4;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+            });
+        });
+    </script>
+</body>
+</html>
