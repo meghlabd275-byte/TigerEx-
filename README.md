@@ -4,11 +4,6 @@
 
 ![TigerEx Banner](https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1200&h=400&fit=crop)
 
-## 🚀 **Live Demo**
-- **Main Application**: https://3000-cfa300e2-c8a9-490d-af81-6c558cc6349a.proxy.daytona.works
-- **Mobile Interface**: https://3000-cfa300e2-c8a9-490d-af81-6c558cc6349a.proxy.daytona.works/mobile
-- **Desktop Trading**: https://3000-cfa300e2-c8a9-490d-af81-6c558cc6349a.proxy.daytona.works/desktop
-- **Admin Dashboard**: https://3000-cfa300e2-c8a9-490d-af81-6c558cc6349a.proxy.daytona.works/admin
 
 ## 📱 **Mobile Features**
 
