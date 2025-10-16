@@ -68,11 +68,6 @@ npm run build
 npm start
 ```
 
-## 🌟 **Live Demo URLs**
-- **Main**: https://3000-cfa300e2-c8a9-490d-af81-6c558cc6349a.proxy.daytona.works
-- **Mobile**: https://3000-cfa300e2-c8a9-490d-af81-6c558cc6349a.proxy.daytona.works/mobile
-- **Desktop**: https://3000-cfa300e2-c8a9-490d-af81-6c558cc6349a.proxy.daytona.works/desktop
-- **Admin**: https://3000-cfa300e2-c8a9-490d-af81-6c558cc6349a.proxy.daytona.works/admin
 
 ---
 
