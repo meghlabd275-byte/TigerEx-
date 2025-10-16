@@ -1,0 +1,39 @@
+{
+  "name": "TigerExDesktop",
+  "version": "1.0.0",
+  "description": "TigerEx Desktop Application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "dist": "electron-builder --publish=never"
+  },
+  "devDependencies": {
+    "electron": "^25.0.0",
+    "electron-builder": "^23.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.5.0"
+  },
+  "build": {
+    "appId": "com.tigerex.desktop",
+    "productName": "TigerEx Desktop",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "src/**/*",
+      "node_modules/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.finance"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}
