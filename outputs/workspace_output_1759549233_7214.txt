@@ -1,2 +1,0 @@
-origin	https://github.com/meghlabd275-byte/TigerEx-.git (fetch)
-origin	https://github.com/meghlabd275-byte/TigerEx-.git (push)

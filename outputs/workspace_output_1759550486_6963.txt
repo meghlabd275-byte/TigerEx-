@@ -1,2 +1,0 @@
-./backend/tigerex-unified-exchange-service/__pycache__
-./backend/tigerex-unified-exchange-service/__pycache__/unified_exchange_fetchers.cpython-311.pyc
