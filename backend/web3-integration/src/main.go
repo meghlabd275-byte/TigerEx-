@@ -1,4 +1,18 @@
 /*
+ * TigerEx Exchange Platform
+ * Version: 7.0.0 - Consolidated Production Release
+ * 
+ * Complete cryptocurrency exchange platform with:
+ * - CEX/DEX hybrid functionality
+ * - 105+ exchange features
+ * - Multi-platform support (Web, Mobile, Desktop)
+ * - Enterprise-grade security
+ * - White-label deployment ready
+ * 
+ * Production-ready implementation
+ */
+
+/*
 TigerEx Web3 Blockchain Integration Service
 Advanced Go service for multi-chain Web3 integration, smart contract interaction,
 and custom blockchain support for both CEX and DEX operations

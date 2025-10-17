@@ -1,3 +1,17 @@
+/*
+ * TigerEx Exchange Platform
+ * Version: 7.0.0 - Consolidated Production Release
+ * 
+ * Complete cryptocurrency exchange platform with:
+ * - CEX/DEX hybrid functionality
+ * - 105+ exchange features
+ * - Multi-platform support (Web, Mobile, Desktop)
+ * - Enterprise-grade security
+ * - White-label deployment ready
+ * 
+ * Production-ready implementation
+ */
+
 """
 TigerEx Service Registry - Complete Service Catalog
 Registry of all 121+ backend services with their endpoints and capabilities

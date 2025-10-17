@@ -1,3 +1,17 @@
+/*
+ * TigerEx Exchange Platform
+ * Version: 7.0.0 - Consolidated Production Release
+ * 
+ * Complete cryptocurrency exchange platform with:
+ * - CEX/DEX hybrid functionality
+ * - 105+ exchange features
+ * - Multi-platform support (Web, Mobile, Desktop)
+ * - Enterprise-grade security
+ * - White-label deployment ready
+ * 
+ * Production-ready implementation
+ */
+
 """
 TigerEx Advanced Wallet Management System
 Comprehensive wallet creation and management for hot, cold, custodial, and non-custodial wallets

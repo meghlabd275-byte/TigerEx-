@@ -1,3 +1,17 @@
+/*
+ * TigerEx Exchange Platform
+ * Version: 7.0.0 - Consolidated Production Release
+ * 
+ * Complete cryptocurrency exchange platform with:
+ * - CEX/DEX hybrid functionality
+ * - 105+ exchange features
+ * - Multi-platform support (Web, Mobile, Desktop)
+ * - Enterprise-grade security
+ * - White-label deployment ready
+ * 
+ * Production-ready implementation
+ */
+
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
