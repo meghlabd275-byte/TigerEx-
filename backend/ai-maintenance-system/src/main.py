@@ -48,13 +48,13 @@ logger = structlog.get_logger()
 
 # Initialize FastAPI app
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="TigerEx AI Maintenance System",
     description="Advanced AI system for predictive maintenance and system optimization",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 # CORS middleware
 app.add_middleware(

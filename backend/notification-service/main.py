@@ -24,9 +24,8 @@ import aioredis
 import asyncpg
 import aiohttp
 import websockets
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks, WebSocket
 from admin.admin_routes import router as admin_router
-, HTTPException, Depends, BackgroundTasks, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, EmailStr
@@ -169,6 +168,9 @@ class NotificationService:
 
 # Include admin router
 app.include_router(admin_router)
+
+class NotificationService:
+    def __init__(self):
         self.setup_middleware()
         self.setup_routes()
         

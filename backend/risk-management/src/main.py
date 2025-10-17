@@ -29,9 +29,8 @@ from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import StandardScaler
 import websockets
 import aiohttp
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
 from admin.admin_routes import router as admin_router
-, HTTPException, Depends, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from pydantic import BaseModel

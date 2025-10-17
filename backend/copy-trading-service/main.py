@@ -10,13 +10,13 @@ import uvicorn
 import os
 
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="TigerEx copy-trading-service",
     description="Backend service for copy-trading-service",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 @app.get("/health")
 async def health_check():

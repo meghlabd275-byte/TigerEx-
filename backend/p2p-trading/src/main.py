@@ -34,13 +34,13 @@ logger = logging.getLogger(__name__)
 
 # FastAPI app
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="TigerEx P2P Trading System",
     description="Comprehensive peer-to-peer trading platform with escrow, dispute resolution, and multi-country support",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 app.add_middleware(
     CORSMiddleware,

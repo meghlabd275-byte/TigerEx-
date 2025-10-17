@@ -16,13 +16,13 @@ import uvicorn
 from decimal import Decimal
 
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="Margin Trading Service",
     description="Leveraged spot trading with margin accounts",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 app.add_middleware(
     CORSMiddleware,

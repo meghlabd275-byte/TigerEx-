@@ -168,14 +168,13 @@ async def lifespan(app: FastAPI):
 
 # Initialize FastAPI app
 app = FastAPI(
+    title="TigerEx Service",
+    description="TigerEx Backend Service",
+    version="1.0.0"
+)
 
 # Include admin router
 app.include_router(admin_router)
-    title="TigerEx Virtual Liquidity Management Service",
-    description="Manages virtual asset reserves, liquidity pools, and IOU tokens",
-    version="1.0.0",
-    lifespan=lifespan
-)
 
 # CORS middleware
 app.add_middleware(

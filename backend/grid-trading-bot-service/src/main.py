@@ -15,13 +15,13 @@ import uvicorn
 import os
 
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="TigerEx grid-trading-bot-service",
     description="Grid Trading Bot Service",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 app.add_middleware(
     CORSMiddleware,

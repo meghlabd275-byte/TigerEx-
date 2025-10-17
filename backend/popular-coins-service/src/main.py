@@ -34,13 +34,13 @@ logger = logging.getLogger(__name__)
 
 # FastAPI app
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="TigerEx Popular Coins Service",
     description="Comprehensive cryptocurrency and token management",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 app.add_middleware(
     CORSMiddleware,

@@ -218,6 +218,10 @@ JWT_ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 # Initialize FastAPI app
 app = FastAPI(
+    title="TigerEx Admin Panel",
+    description="Comprehensive admin control panel",
+    version="1.0.0"
+)
 
 # RBAC Helper Functions
 def get_current_admin():
@@ -229,11 +233,6 @@ def get_current_admin():
         role=UserRole.ADMIN,
         permissions=ROLE_PERMISSIONS[UserRole.ADMIN]
     )
-
-    title="TigerEx Admin Panel API",
-    description="Comprehensive administration system for TigerEx crypto exchange",
-    version = "3.0.0"
-)
 
 # Middleware
 app.add_middleware(

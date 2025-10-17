@@ -28,9 +28,8 @@ import aiohttp
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, BackgroundTasks
 from admin.admin_routes import router as admin_router
-, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import schedule
@@ -45,13 +44,13 @@ logger = logging.getLogger(__name__)
 
 # FastAPI app
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="TigerEx AI Maintenance System",
     description="Intelligent system monitoring and automated maintenance",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 app.add_middleware(
     CORSMiddleware,

@@ -31,13 +31,13 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="TigerEx AI Trading Assistant",
     description="AI-powered trading assistant with NLP and ML capabilities",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 # CORS middleware
 app.add_middleware(

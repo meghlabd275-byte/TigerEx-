@@ -1,6 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException
 from admin.admin_routes import router as admin_router
-, Depends, HTTPException
 from sqlalchemy.orm import Session
 from datetime import datetime
 from decimal import Decimal

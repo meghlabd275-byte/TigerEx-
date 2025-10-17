@@ -205,13 +205,13 @@ class PaymentMethodCreate(BaseModel):
 
 # FastAPI app
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="TigerEx Payment Gateway Service",
     description="Comprehensive payment integration service",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 app.add_middleware(
     CORSMiddleware,

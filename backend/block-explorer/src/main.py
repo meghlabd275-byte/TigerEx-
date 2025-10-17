@@ -55,13 +55,13 @@ logger = structlog.get_logger()
 
 # FastAPI app
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="TigerEx Block Explorer Service",
     description="One-click block explorer creation and deployment system",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 app.add_middleware(
     CORSMiddleware,

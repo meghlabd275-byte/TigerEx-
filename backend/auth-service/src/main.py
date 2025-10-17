@@ -49,13 +49,13 @@ logger = logging.getLogger(__name__)
 
 # FastAPI app
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="TigerEx Authentication Service",
     description="OAuth, 2FA, Captcha, and comprehensive authentication system",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 app.add_middleware(
     CORSMiddleware,

@@ -15,9 +15,8 @@ from enum import Enum
 import secrets
 
 import aioredis
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Depends, WebSocket, WebSocketDisconnect
 from admin.admin_routes import router as admin_router
-, HTTPException, Depends, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, validator
@@ -34,13 +33,13 @@ logger = logging.getLogger(__name__)
 
 # FastAPI app
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="TigerEx Copy Trading System",
     description="Social trading platform with performance tracking and automated copying",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 app.add_middleware(
     CORSMiddleware,

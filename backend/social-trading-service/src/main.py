@@ -15,13 +15,13 @@ import uvicorn
 import os
 
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="TigerEx social-trading-service",
     description="Social Trading Platform",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 app.add_middleware(
     CORSMiddleware,

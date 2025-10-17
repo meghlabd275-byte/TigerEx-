@@ -69,13 +69,13 @@ redis_client = None
 
 # FastAPI app
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="TigerEx User Authentication Service",
     description="Complete authentication system with 2FA, session management, and security features",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 app.add_middleware(
     CORSMiddleware,

@@ -175,6 +175,10 @@ import uvicorn
 import os
 
 app = FastAPI(
+    title="TigerEx Admin Service",
+    description="Unified admin service",
+    version="1.0.0"
+)
 
 # RBAC Helper Functions
 def get_current_admin():
@@ -186,11 +190,6 @@ def get_current_admin():
         role=UserRole.ADMIN,
         permissions=ROLE_PERMISSIONS[UserRole.ADMIN]
     )
-
-    title="TigerEx admin-service",
-    description="Backend service for admin-service",
-    version="1.0.0"
-)
 
 @app.get("/health")
 async def health_check():

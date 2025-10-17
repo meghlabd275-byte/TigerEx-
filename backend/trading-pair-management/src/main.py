@@ -44,13 +44,13 @@ logger = structlog.get_logger()
 
 # Initialize FastAPI app
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="TigerEx Trading Pair Management Service",
     description="Comprehensive trading pair management for all trading types",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 # CORS middleware
 app.add_middleware(

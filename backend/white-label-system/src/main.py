@@ -24,9 +24,8 @@ import boto3
 from botocore.exceptions import ClientError
 import requests
 import yaml
-from fastapi import FastAPI
-from admin.admin_routes import router as admin_router
-, HTTPException, BackgroundTasks, Depends
+from fastapi import FastAPI, HTTPException, BackgroundTasks
+from admin.admin_routes import router as admin_router, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, validator
 import aiofiles
@@ -39,13 +38,13 @@ logger = logging.getLogger(__name__)
 
 # FastAPI app
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="TigerEx White Label System",
     description="One-click white label exchange and wallet creation",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 app.add_middleware(
     CORSMiddleware,

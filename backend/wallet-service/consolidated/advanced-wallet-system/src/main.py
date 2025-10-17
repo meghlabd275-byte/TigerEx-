@@ -48,13 +48,13 @@ logger = logging.getLogger(__name__)
 
 # FastAPI app
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="TigerEx Advanced Wallet System",
     description="Comprehensive wallet management system",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -66,7 +66,7 @@ app.add_middleware(
 
 # Configuration
 class Config:
-    DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:{os.getenv("DB_PASSWORD", "postgres")}@localhost/tigerex")
+    DATABASE_URL = os.getenv("DATABASE_URL", f"postgresql://postgres:{os.getenv('DB_PASSWORD', 'postgres')}@localhost/tigerex")
     REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
     
     # Encryption keys

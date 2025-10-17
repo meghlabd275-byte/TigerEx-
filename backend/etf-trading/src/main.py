@@ -47,13 +47,13 @@ logger = structlog.get_logger()
 
 # Initialize FastAPI app
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="TigerEx ETF Trading Service",
     description="Advanced Exchange-Traded Fund trading platform",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 # CORS middleware
 app.add_middleware(

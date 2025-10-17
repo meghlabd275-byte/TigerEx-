@@ -178,6 +178,10 @@ import uvicorn
 from admin.admin_routes import router as admin_router
 
 app = FastAPI(
+    title="TigerEx Advanced Trading Engine",
+    description="High-performance trading engine with advanced order types",
+    version="1.0.0"
+)
 
 # RBAC Helper Functions
 def get_current_admin():
@@ -189,11 +193,6 @@ def get_current_admin():
         role=UserRole.ADMIN,
         permissions=ROLE_PERMISSIONS[UserRole.ADMIN]
     )
-
-    title="advanced-trading-engine",
-    version="3.0.0",
-    description="TigerEx advanced-trading-engine with complete admin controls"
-)
 
 # CORS middleware
 app.add_middleware(

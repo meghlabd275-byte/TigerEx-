@@ -16,13 +16,13 @@ import uvicorn
 from decimal import Decimal
 
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="Auto-Invest Service",
     description="Automated recurring cryptocurrency purchases with DCA strategy",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 app.add_middleware(
     CORSMiddleware,

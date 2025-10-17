@@ -177,13 +177,13 @@ class ContingentOrderCreate(BaseModel):
     metadata: Optional[Dict[str, Any]] = None
 
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="TigerEx Advanced Trading Service",
     description="Advanced order types and algorithmic trading",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 app.add_middleware(
     CORSMiddleware,

@@ -17,13 +17,13 @@ import os
 import asyncio
 
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="TigerEx Convert Service",
     description="Instant cryptocurrency conversion service",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 # CORS middleware
 app.add_middleware(

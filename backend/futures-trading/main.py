@@ -17,13 +17,13 @@ import asyncio
 from decimal import Decimal
 
 app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
     title="Futures Trading Service",
     description="Advanced futures trading with perpetual and delivery contracts",
     version="1.0.0"
 )
+
+# Include admin router
+app.include_router(admin_router)
 
 app.add_middleware(
     CORSMiddleware,
