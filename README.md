@@ -1,10 +1,10 @@
-# 🐅 TigerEx v7.0.0 - World's Most Advanced Cryptocurrency Exchange Platform
+# 🐅 TigerEx Hex v8.0.0 - Revolutionary Hybrid Exchange Platform (CEX+DEX)
 
 <div align="center">
 
 ![TigerEx Logo](https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1200&h=400&fit=crop)
 
-**🚀 Production-Ready • 🏢 Enterprise-Grade • 🌍 Global Scale**
+**⚡ Hex Trading • 🌉 Cross-Chain • 🔄 CEX+DEX • 🚀 Production-Ready**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
@@ -17,7 +17,18 @@
 
 ## 🎯 Overview
 
-TigerEx v7.0.0 represents the pinnacle of cryptocurrency exchange technology - a **complete, production-ready platform** that combines the best of centralized (CEX) and decentralized (DEX) trading with **200+ advanced features** that rival and exceed major exchanges like Binance, Coinbase, and Bybit.
+TigerEx Hex v8.0.0 is the world's first truly hybrid exchange platform that seamlessly integrates **Centralized Exchange (CEX) and Decentralized Exchange (DEX)** functionality. With **smart order routing**, **cross-chain compatibility**, and **300+ advanced features**, TigerEx Hex delivers Binance-level performance with DeFi innovation and complete decentralization options.
+
+### 🔥 Revolutionary Hex Technology
+
+TigerEx Hex introduces **Hybrid Exchange (Hex)** technology - the first platform to truly unify CEX and DEX trading:
+
+- **⚡ Smart Order Routing**: Automatically finds the best price across CEX and DEX venues
+- **🌉 Cross-Chain Bridge**: Seamless asset transfers between 5+ blockchain networks
+- **🔄 Unified Liquidity**: Access both centralized order books and decentralized AMM pools
+- **💰 Best Price Guarantee**: Always get the optimal execution price with transparent savings display
+- **🛡️ Security Choice**: Trade on CEX for speed or DEX for full decentralization
+- **📱 Mobile-First**: Native mobile app with full hex trading capabilities
 
 ### 🌟 Key Highlights
 
