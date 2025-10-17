@@ -1,0 +1,1476 @@
+{
+  "timestamp": "2025-10-17T05:30:20.231780",
+  "unimportant_files": [
+    "backend/advanced-trading-engine/README.md",
+    "backend/api-gateway/README.md",
+    "backend/defi-service/CONSOLIDATED_README.md",
+    "backend/derivatives-engine/README.md",
+    "backend/enhanced-liquidity-aggregator/README.md",
+    "backend/hybrid-exchange-ui/README.md",
+    "backend/liquidity-aggregator/README.md",
+    "backend/matching-engine/README.md",
+    "backend/options-trading/README.md",
+    "backend/spot-trading/CONSOLIDATED_README.md",
+    "backend/spot-trading/consolidated/advanced-trading-engine/README.md",
+    "backend/spread-arbitrage-bot/README.md",
+    "backend/tigerex-unified-exchange-service/README.md",
+    "backend/trading-engine/README.md",
+    "backend/transaction-engine/README.md",
+    "backend/unified-admin-panel/CONSOLIDATED_README.md",
+    "backend/unified-services/README.md",
+    "backend/wallet-service/CONSOLIDATED_README.md",
+    "backend/web3-integration/README.md",
+    "backend/white-label-complete-system/README.md",
+    "desktop-apps/README.md",
+    "docs/todo.md",
+    "mobile-app/README.md",
+    "unified-backend/README.md",
+    "archive/docs/FINAL_IMPLEMENTATION_REPORT.md"
+  ],
+  "code_errors": [
+    {
+      "file": "comprehensive_analysis.py",
+      "issues": [
+        "Contains TODO/FIXME comments"
+      ]
+    },
+    {
+      "file": "backend/address-generation-service/main.py",
+      "issues": [
+        "Contains TODO/FIXME comments"
+      ]
+    },
+    {
+      "file": "backend/address-generation-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/admin-panel/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax (<unknown>, line 223)"
+      ]
+    },
+    {
+      "file": "backend/advanced-risk-management-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/advanced-trading-engine/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/advanced-trading-engine/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax (<unknown>, line 183)"
+      ]
+    },
+    {
+      "file": "backend/advanced-trading-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/advanced-trading-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 182)"
+      ]
+    },
+    {
+      "file": "backend/advanced-wallet-system/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/advanced-wallet-system/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 53)"
+      ]
+    },
+    {
+      "file": "backend/affiliate-system/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/affiliate-system/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 42)"
+      ]
+    },
+    {
+      "file": "backend/ai-maintenance-system/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/ai-maintenance-system/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 53)"
+      ]
+    },
+    {
+      "file": "backend/ai-maintenance/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/ai-maintenance/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax (<unknown>, line 33)"
+      ]
+    },
+    {
+      "file": "backend/ai-trading-assistant/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/ai-trading-assistant/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 36)"
+      ]
+    },
+    {
+      "file": "backend/algo-orders-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/algo-orders-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/algo-orders-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/alpha-market-trading/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/analytics-dashboard-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/analytics-service/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 15)"
+      ]
+    },
+    {
+      "file": "backend/analytics-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/api-gateway/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/auth-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/auth-service/consolidated/kyc-service/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 15)"
+      ]
+    },
+    {
+      "file": "backend/auth-service/consolidated/kyc-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/auth-service/consolidated/user-authentication-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/auth-service/consolidated/user-authentication-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 74)"
+      ]
+    },
+    {
+      "file": "backend/auth-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 54)"
+      ]
+    },
+    {
+      "file": "backend/auth-service/src/services/AuthService.js",
+      "issues": [
+        "Contains console.log statements"
+      ]
+    },
+    {
+      "file": "backend/auto-invest-service/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 21)"
+      ]
+    },
+    {
+      "file": "backend/auto-invest-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/block-explorer/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/block-explorer/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 60)"
+      ]
+    },
+    {
+      "file": "backend/block-trading-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/block-trading-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/block-trading-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/blockchain-service/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 15)"
+      ]
+    },
+    {
+      "file": "backend/blockchain-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/cardano-integration/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/compliance-engine/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/compliance-engine/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 41)"
+      ]
+    },
+    {
+      "file": "backend/comprehensive-admin-service/src/main.py",
+      "issues": [
+        "Contains TODO/FIXME comments"
+      ]
+    },
+    {
+      "file": "backend/convert-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/convert-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 22)"
+      ]
+    },
+    {
+      "file": "backend/copy-trading-service/main.js",
+      "issues": [
+        "Contains console.log statements"
+      ]
+    },
+    {
+      "file": "backend/copy-trading-service/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 15)"
+      ]
+    },
+    {
+      "file": "backend/copy-trading-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/copy-trading/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/copy-trading/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/crypto-card-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/crypto-card-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/crypto-card-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/dao-governance-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/database/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 15)"
+      ]
+    },
+    {
+      "file": "backend/database/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/dca-bot-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/dca-bot-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/dca-bot-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/defi-enhancements-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/defi-enhancements-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 249)"
+      ]
+    },
+    {
+      "file": "backend/defi-service/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 15)"
+      ]
+    },
+    {
+      "file": "backend/defi-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/defi-service/consolidated/defi-enhancements-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/defi-service/consolidated/defi-enhancements-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 249)"
+      ]
+    },
+    {
+      "file": "backend/defi-service/consolidated/defi-staking-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/defi-service/consolidated/liquid-swap-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/defi-service/consolidated/liquid-swap-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/defi-service/consolidated/liquid-swap-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/defi-staking-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/deposit-withdrawal-admin-service/src/main.py",
+      "issues": [
+        "Contains TODO/FIXME comments"
+      ]
+    },
+    {
+      "file": "backend/derivatives-engine/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/dex-integration-admin/src/main.py",
+      "issues": [
+        "Contains TODO/FIXME comments"
+      ]
+    },
+    {
+      "file": "backend/dex-integration/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 15)"
+      ]
+    },
+    {
+      "file": "backend/dex-integration/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/dual-investment-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/dual-investment-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/dual-investment-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/earn-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/earn-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/earn-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/enhanced-liquidity-aggregator/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/enhanced-wallet-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/etf-trading/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/etf-trading/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 52)",
+        "Contains TODO/FIXME comments"
+      ]
+    },
+    {
+      "file": "backend/eth2-staking-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/fiat-gateway-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/fiat-gateway-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/fiat-gateway-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/futures-earn-service/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 15)"
+      ]
+    },
+    {
+      "file": "backend/futures-earn-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/futures-trading/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 22)"
+      ]
+    },
+    {
+      "file": "backend/futures-trading/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/grid-trading-bot-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/grid-trading-bot-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/grid-trading-bot-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/institutional-services/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/institutional-services/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 46)"
+      ]
+    },
+    {
+      "file": "backend/institutional-trading/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 15)"
+      ]
+    },
+    {
+      "file": "backend/institutional-trading/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/insurance-fund-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/insurance-fund-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/insurance-fund-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/kyc-service/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 15)"
+      ]
+    },
+    {
+      "file": "backend/kyc-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/launchpad-service/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 15)"
+      ]
+    },
+    {
+      "file": "backend/launchpad-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/launchpool-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/launchpool-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/launchpool-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/lending-borrowing/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 15)"
+      ]
+    },
+    {
+      "file": "backend/lending-borrowing/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/leveraged-tokens-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/leveraged-tokens-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/leveraged-tokens-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/liquid-swap-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/liquid-swap-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/liquid-swap-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/liquidity-aggregator/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/margin-trading/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 21)"
+      ]
+    },
+    {
+      "file": "backend/margin-trading/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/market-data-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/martingale-bot-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/martingale-bot-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/martingale-bot-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/matching-engine/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/ml-trading-signals-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/nft-launchpad-service/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 15)"
+      ]
+    },
+    {
+      "file": "backend/nft-launchpad-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/nft-marketplace/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/nft-marketplace/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 42)"
+      ]
+    },
+    {
+      "file": "backend/notification-service-enhanced/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/notification-service/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax (<unknown>, line 29)"
+      ]
+    },
+    {
+      "file": "backend/notification-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/notification-service/src/server.js",
+      "issues": [
+        "Contains console.log statements"
+      ]
+    },
+    {
+      "file": "backend/options-trading/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/otc-desk-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/p2p-service/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 15)"
+      ]
+    },
+    {
+      "file": "backend/p2p-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/p2p-trading/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/p2p-trading/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 39)"
+      ]
+    },
+    {
+      "file": "backend/payment-gateway-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/payment-gateway-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 210)"
+      ]
+    },
+    {
+      "file": "backend/perpetual-swap-service/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 15)"
+      ]
+    },
+    {
+      "file": "backend/perpetual-swap-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/pi-network-integration/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/popular-coins-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/popular-coins-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 39)"
+      ]
+    },
+    {
+      "file": "backend/portfolio-margin-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/portfolio-margin-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/portfolio-margin-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/proof-of-reserves-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/proof-of-reserves-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/proof-of-reserves-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/referral-program-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/referral-program-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/referral-program-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/risk-management-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/risk-management/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/risk-management/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax (<unknown>, line 34)"
+      ]
+    },
+    {
+      "file": "backend/savings-service/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax (<unknown>, line 3)"
+      ]
+    },
+    {
+      "file": "backend/savings-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/services/admin_advanced_service.py",
+      "issues": [
+        "Syntax Error: non-default argument follows default argument (<unknown>, line 343)"
+      ]
+    },
+    {
+      "file": "backend/social-trading-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/social-trading-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/social-trading-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/spot-trading/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/spot-trading/consolidated/advanced-trading-engine/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/spot-trading/consolidated/advanced-trading-engine/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax (<unknown>, line 183)"
+      ]
+    },
+    {
+      "file": "backend/spot-trading/consolidated/advanced-trading-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/spot-trading/consolidated/advanced-trading-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 182)"
+      ]
+    },
+    {
+      "file": "backend/spot-trading/consolidated/trading-engine-enhanced/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/spot-trading/consolidated/trading/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 15)"
+      ]
+    },
+    {
+      "file": "backend/spot-trading/consolidated/trading/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/spread-arbitrage-bot/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/staking-service/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 15)"
+      ]
+    },
+    {
+      "file": "backend/staking-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/sub-accounts-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/sub-accounts-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/system-configuration-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/trading-bots-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/trading-engine-enhanced/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/trading-engine/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/trading-pair-management/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/trading-pair-management/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 49)"
+      ]
+    },
+    {
+      "file": "backend/trading-signals-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/trading-signals-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/trading-signals-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/trading/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 15)"
+      ]
+    },
+    {
+      "file": "backend/trading/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/transaction-engine/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/unified-account-service/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 15)"
+      ]
+    },
+    {
+      "file": "backend/unified-account-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/unified-admin-panel/server.js",
+      "issues": [
+        "Contains console.log statements"
+      ]
+    },
+    {
+      "file": "backend/unified-admin-panel/consolidated/admin-panel/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax (<unknown>, line 223)"
+      ]
+    },
+    {
+      "file": "backend/unified-admin-panel/consolidated/admin-service/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax (<unknown>, line 180)"
+      ]
+    },
+    {
+      "file": "backend/unified-admin-panel/consolidated/comprehensive-admin-service/src/main.py",
+      "issues": [
+        "Contains TODO/FIXME comments"
+      ]
+    },
+    {
+      "file": "backend/unified-admin-panel/consolidated/deposit-withdrawal-admin-service/src/main.py",
+      "issues": [
+        "Contains TODO/FIXME comments"
+      ]
+    },
+    {
+      "file": "backend/unified-services/complete_admin_operations.py",
+      "issues": [
+        "Contains TODO/FIXME comments"
+      ]
+    },
+    {
+      "file": "backend/unified-services/complete_user_operations.py",
+      "issues": [
+        "Contains TODO/FIXME comments"
+      ]
+    },
+    {
+      "file": "backend/user-authentication-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/vip-program-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/virtual-liquidity-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/virtual-liquidity-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 173)"
+      ]
+    },
+    {
+      "file": "backend/vote-to-list-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/vote-to-list-service/src/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/vote-to-list-service/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 20)"
+      ]
+    },
+    {
+      "file": "backend/wallet-management/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/wallet-management/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 47)"
+      ]
+    },
+    {
+      "file": "backend/wallet-service/consolidated/advanced-wallet-system/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/wallet-service/consolidated/advanced-wallet-system/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 53)"
+      ]
+    },
+    {
+      "file": "backend/wallet-service/consolidated/enhanced-wallet-service/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/wallet-service/consolidated/wallet-management/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/wallet-service/consolidated/wallet-management/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax. Perhaps you forgot a comma? (<unknown>, line 47)"
+      ]
+    },
+    {
+      "file": "backend/web3-integration/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/white-label-system/admin/__init__.py",
+      "issues": [
+        "Very short file"
+      ]
+    },
+    {
+      "file": "backend/white-label-system/src/main.py",
+      "issues": [
+        "Syntax Error: invalid syntax (<unknown>, line 29)"
+      ]
+    },
+    {
+      "file": "desktop-app/electron/main.js",
+      "issues": [
+        "Contains console.log statements"
+      ]
+    },
+    {
+      "file": "desktop/preload.js",
+      "issues": [
+        "Contains console.log statements"
+      ]
+    },
+    {
+      "file": "frontend/src/components/Exchange/CEXTrading.jsx",
+      "issues": [
+        "Contains console.log statements"
+      ]
+    },
+    {
+      "file": "scripts/create_cross_platform_apps.py",
+      "issues": [
+        "Syntax Error: invalid syntax (<unknown>, line 938)"
+      ]
+    },
+    {
+      "file": "scripts/implement_enhanced_security.py",
+      "issues": [
+        "Syntax Error: invalid decimal literal (<unknown>, line 19)"
+      ]
+    },
+    {
+      "file": "scripts/implement_missing_services.py",
+      "issues": [
+        "Syntax Error: invalid syntax (<unknown>, line 16)"
+      ]
+    },
+    {
+      "file": "unified-backend/main.py",
+      "issues": [
+        "Syntax Error: unindent does not match any outer indentation level (<unknown>, line 1641)"
+      ]
+    },
+    {
+      "file": "archive/scripts/check_implementations.py",
+      "issues": [
+        "Contains TODO/FIXME comments"
+      ]
+    },
+    {
+      "file": "archive/scripts/implement_missing_features.py",
+      "issues": [
+        "Contains TODO/FIXME comments"
+      ]
+    }
+  ],
+  "missing_features": [
+    {
+      "name": "AI-Powered Trading Bots",
+      "description": "Machine learning trading bots with strategy optimization",
+      "category": "Trading",
+      "admin_control": true,
+      "implementation": "ai-trading-bot-service"
+    },
+    {
+      "name": "Social Trading Network",
+      "description": "Social features for traders to share strategies and performance",
+      "category": "Social",
+      "admin_control": true,
+      "implementation": "social-trading-service"
+    },
+    {
+      "name": "Advanced Order Types",
+      "description": "Iceberg, TWAP, VWAP, and algorithmic order types",
+      "category": "Trading",
+      "admin_control": true,
+      "implementation": "advanced-order-types-service"
+    },
+    {
+      "name": "Multi-Signature Wallets",
+      "description": "Enterprise-grade multi-sig wallet support",
+      "category": "Security",
+      "admin_control": true,
+      "implementation": "multisig-wallet-service"
+    },
+    {
+      "name": "Liquidation Protection",
+      "description": "Advanced liquidation protection and margin call systems",
+      "category": "Risk Management",
+      "admin_control": true,
+      "implementation": "liquidation-protection-service"
+    },
+    {
+      "name": "Cross-Chain DEX Aggregation",
+      "description": "Aggregate liquidity across multiple DEXs and chains",
+      "category": "DeFi",
+      "admin_control": true,
+      "implementation": "crosschain-dex-aggregator"
+    },
+    {
+      "name": "Institutional Trading Tools",
+      "description": "Tools for institutional traders and funds",
+      "category": "Institutional",
+      "admin_control": true,
+      "implementation": "institutional-tools-service"
+    },
+    {
+      "name": "Advanced Analytics Dashboard",
+      "description": "Real-time analytics with custom metrics and alerts",
+      "category": "Analytics",
+      "admin_control": true,
+      "implementation": "advanced-analytics-service"
+    }
+  ],
+  "summary": {
+    "total_issues": 230,
+    "files_to_delete": 25,
+    "features_to_add": 8
+  }
+}
