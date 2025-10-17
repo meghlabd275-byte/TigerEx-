@@ -216,12 +216,13 @@ JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "your-super-secret-jwt-key")
 JWT_ALGORITHM = "HS256"
 JWT_ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-# Initialize FastAPI app
-app = FastAPI(
-
-# RBAC Helper Functions
-def get_current_admin():
-    """Get current admin user (mock implementation)"""
+    # Initialize FastAPI app
+   app = FastAPI(
+       title="TigerEx Admin Panel API",
+       description="Comprehensive administration system for TigerEx crypto exchange",
+       version="3.0.0"
+   )
+   )
     return AdminUser(
         user_id="admin_001",
         username="admin",

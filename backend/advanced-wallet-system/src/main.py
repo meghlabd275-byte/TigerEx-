@@ -47,20 +47,14 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # FastAPI app
-app = FastAPI(
-
-# Include admin router
-app.include_router(admin_router)
-    title="TigerEx Advanced Wallet System",
-    description="Comprehensive wallet management system",
-    version="1.0.0"
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
+   app = FastAPI(
+       title="TigerEx Advanced Wallet System",
+       description="Comprehensive wallet management system",
+       version="3.0.0"
+   )
+   
+   # Include admin router
+   app.include_router(admin_router, prefix="/admin", tags=["admin"])
     allow_headers=["*"],
 )
 
