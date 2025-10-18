@@ -1,17 +1,17 @@
-# 🐅 TigerEx Hex v8.0.0 - Revolutionary Hybrid Exchange Platform (CEX+DEX)
+# 🐅 TigerEx v4.0.0 - Complete Exchange Platform with Full Admin Controls
 
 <div align="center">
 
 ![TigerEx Logo](https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1200&h=400&fit=crop)
 
-**⚡ Hex Trading • 🌉 Cross-Chain • 🔄 CEX+DEX • 🚀 Production-Ready**
+**⚡ Complete Admin Controls • 🌉 All Trading Types • 🔄 Multi-Platform • 🚀 Production-Ready**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Node.js 20+](https://img.shields.io/badge/node.js-20+-green.svg)](https://nodejs.org/)
 [![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://www.docker.com/)
 
-**🔥 Live Demo:** [https://tigerex-demo.com](https://tigerex-demo.com) | **📚 Docs:** [Documentation](./docs) | **🎮 Admin:** [Admin Panel](./admin)
+**🔥 Live Demo:** [https://tigerex-demo.com](https://tigerex-demo.com) | **📚 Docs:** [Complete Documentation](./COMPLETE_SYSTEM_DOCUMENTATION.md) | **🎮 Admin:** [Admin Controls](http://localhost:8005/docs)
 
 </div>
 

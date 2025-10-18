@@ -1,227 +1,373 @@
 #!/usr/bin/env python3
 """
-Complete TigerEx System Deployment Script
-Deploys all services with admin control and user access
+TigerEx Complete System Deployment Script
+Deploys and starts all services with full admin controls
 """
 
 import os
+import sys
 import subprocess
-import json
-from pathlib import Path
 import time
+import json
+import logging
+from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
-def run_command(command, cwd=None):
-    """Run a command and return the result"""
-    try:
-        result = subprocess.run(
-            command, 
-            shell=True, 
-            cwd=cwd,
-            capture_output=True, 
-            text=True, 
-            check=True
-        )
-        return result.stdout.strip()
-    except subprocess.CalledProcessError as e:
-        print(f"❌ Command failed: {command}")
-        print(f"Error: {e.stderr}")
-        return None
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
-def create_docker_compose():
-    """Create comprehensive docker-compose.yml for all services"""
-    
-    docker_compose_content = """version: '3.8'
+class TigerExDeployer:
+    def __init__(self):
+        self.base_dir = Path(__file__).parent.parent
+        self.services = {
+            'unified_backend': {
+                'path': 'unified-backend',
+                'main_file': 'complete_admin_system.py',
+                'port': 8005,
+                'dependencies': ['requirements.txt']
+            },
+            'data_fetchers': {
+                'path': 'backend/comprehensive-data-fetchers',
+                'main_file': 'complete_exchange_fetchers.py',
+                'port': 8003,
+                'dependencies': ['requirements.txt']
+            },
+            'admin_controls': {
+                'path': 'backend/universal-admin-controls',
+                'main_file': 'complete_admin_service.py',
+                'port': 8004,
+                'dependencies': ['requirements.txt']
+            },
+            'frontend_web': {
+                'path': 'frontend',
+                'main_file': 'package.json',
+                'port': 3000,
+                'type': 'nodejs'
+            },
+            'mobile_app': {
+                'path': 'mobile-app',
+                'main_file': 'package.json',
+                'port': 8081,
+                'type': 'react-native'
+            },
+            'desktop_app': {
+                'path': 'desktop-app',
+                'main_file': 'package.json',
+                'port': None,
+                'type': 'electron'
+            }
+        }
+        self.processes = {}
 
-services:
-  # Database
-  postgres:
-    image: postgres:15
-    environment:
-      POSTGRES_DB: tigerex
-      POSTGRES_USER: tigerex_user
-      POSTGRES_PASSWORD: tigerex_password
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    networks:
-      - tigerex_network
+    def check_prerequisites(self):
+        """Check if all prerequisites are installed"""
+        logger.info("Checking prerequisites...")
+        
+        # Check Python
+        try:
+            result = subprocess.run(['python3', '--version'], capture_output=True, text=True)
+            logger.info(f"Python version: {result.stdout.strip()}")
+        except FileNotFoundError:
+            logger.error("Python3 not found. Please install Python 3.11+")
+            return False
 
-  # Redis for caching and sessions
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    networks:
-      - tigerex_network
+        # Check Node.js
+        try:
+            result = subprocess.run(['node', '--version'], capture_output=True, text=True)
+            logger.info(f"Node.js version: {result.stdout.strip()}")
+        except FileNotFoundError:
+            logger.error("Node.js not found. Please install Node.js 20+")
+            return False
 
-  # API Gateway
-  api-gateway:
-    build: ./backend/api-gateway
-    ports:
-      - "8000:8000"
-    environment:
-      - DATABASE_URL=postgresql://tigerex_user:tigerex_password@postgres:5432/tigerex
-      - REDIS_URL=redis://redis:6379
-    depends_on:
-      - postgres
-      - redis
-    networks:
-      - tigerex_network
+        # Check npm
+        try:
+            result = subprocess.run(['npm', '--version'], capture_output=True, text=True)
+            logger.info(f"npm version: {result.stdout.strip()}")
+        except FileNotFoundError:
+            logger.error("npm not found. Please install npm")
+            return False
 
-  # Admin Control Panel
-  admin-control:
-    build: ./backend/unified-admin-control
-    ports:
-      - "8001:8000"
-    environment:
-      - DATABASE_URL=postgresql://tigerex_user:tigerex_password@postgres:5432/tigerex
-      - REDIS_URL=redis://redis:6379
-    depends_on:
-      - postgres
-      - redis
-    networks:
-      - tigerex_network
+        # Check Docker (optional)
+        try:
+            result = subprocess.run(['docker', '--version'], capture_output=True, text=True)
+            logger.info(f"Docker version: {result.stdout.strip()}")
+        except FileNotFoundError:
+            logger.warning("Docker not found. Docker deployment will not be available")
 
-  # Authentication Service
-  auth-service:
-    build: ./backend/auth-service
-    ports:
-      - "8002:5000"
-    environment:
-      - DATABASE_URL=postgresql://tigerex_user:tigerex_password@postgres:5432/tigerex
-    depends_on:
-      - postgres
-    networks:
-      - tigerex_network
+        return True
 
-  # Trading Services
-  spot-trading:
-    build: ./backend/spot-trading
-    ports:
-      - "8010:5000"
-    environment:
-      - DATABASE_URL=postgresql://tigerex_user:tigerex_password@postgres:5432/tigerex
-    depends_on:
-      - postgres
-    networks:
-      - tigerex_network
+    def install_dependencies(self):
+        """Install dependencies for all services"""
+        logger.info("Installing dependencies...")
+        
+        def install_python_deps(service_name, service_config):
+            service_path = self.base_dir / service_config['path']
+            req_file = service_path / 'requirements.txt'
+            
+            if req_file.exists():
+                logger.info(f"Installing Python dependencies for {service_name}")
+                try:
+                    subprocess.run([
+                        'pip3', 'install', '-r', str(req_file)
+                    ], check=True, cwd=service_path)
+                    logger.info(f"✓ Dependencies installed for {service_name}")
+                except subprocess.CalledProcessError as e:
+                    logger.error(f"✗ Failed to install dependencies for {service_name}: {e}")
+                    return False
+            return True
 
-  futures-trading:
-    build: ./backend/futures-trading
-    ports:
-      - "8011:5000"
-    environment:
-      - DATABASE_URL=postgresql://tigerex_user:tigerex_password@postgres:5432/tigerex
-    depends_on:
-      - postgres
-    networks:
-      - tigerex_network
+        def install_node_deps(service_name, service_config):
+            service_path = self.base_dir / service_config['path']
+            package_file = service_path / 'package.json'
+            
+            if package_file.exists():
+                logger.info(f"Installing Node.js dependencies for {service_name}")
+                try:
+                    subprocess.run(['npm', 'install'], check=True, cwd=service_path)
+                    logger.info(f"✓ Dependencies installed for {service_name}")
+                except subprocess.CalledProcessError as e:
+                    logger.error(f"✗ Failed to install dependencies for {service_name}: {e}")
+                    return False
+            return True
 
-  # Wallet Services
-  wallet-service:
-    build: ./backend/wallet-service
-    ports:
-      - "8020:5000"
-    environment:
-      - DATABASE_URL=postgresql://tigerex_user:tigerex_password@postgres:5432/tigerex
-    depends_on:
-      - postgres
-    networks:
-      - tigerex_network
+        # Install dependencies in parallel
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            futures = []
+            
+            for service_name, service_config in self.services.items():
+                if service_config.get('type') in ['nodejs', 'react-native', 'electron']:
+                    future = executor.submit(install_node_deps, service_name, service_config)
+                else:
+                    future = executor.submit(install_python_deps, service_name, service_config)
+                futures.append((service_name, future))
 
-  # Common Function Services
-  transfer-service:
-    build: ./backend/transfer-service
-    ports:
-      - "8030:5000"
-    environment:
-      - DATABASE_URL=postgresql://tigerex_user:tigerex_password@postgres:5432/tigerex
-    depends_on:
-      - postgres
-    networks:
-      - tigerex_network
+            for service_name, future in futures:
+                try:
+                    success = future.result(timeout=300)  # 5 minute timeout
+                    if not success:
+                        logger.error(f"Failed to install dependencies for {service_name}")
+                        return False
+                except Exception as e:
+                    logger.error(f"Error installing dependencies for {service_name}: {e}")
+                    return False
 
-  binance-wallet-service:
-    build: ./backend/binance-wallet-service
-    ports:
-      - "8031:5000"
-    environment:
-      - DATABASE_URL=postgresql://tigerex_user:tigerex_password@postgres:5432/tigerex
-    depends_on:
-      - postgres
-    networks:
-      - tigerex_network
+        return True
 
-  # Frontend
-  frontend:
-    build: ./frontend
-    ports:
-      - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=http://api-gateway:8000
-    depends_on:
-      - api-gateway
-    networks:
-      - tigerex_network
+    def setup_environment(self):
+        """Setup environment variables and configuration"""
+        logger.info("Setting up environment...")
+        
+        # Create .env files for services
+        env_configs = {
+            'unified-backend/.env': {
+                'DATABASE_URL': 'postgresql://tigerex:tigerex123@localhost:5432/tigerex_db',
+                'REDIS_URL': 'redis://localhost:6379',
+                'JWT_SECRET': 'your-secret-key-change-this-in-production',
+                'JWT_ALGORITHM': 'HS256',
+                'ACCESS_TOKEN_EXPIRE_MINUTES': '30'
+            },
+            'backend/comprehensive-data-fetchers/.env': {
+                'API_PORT': '8003',
+                'JWT_SECRET': 'your-secret-key-change-this-in-production'
+            },
+            'backend/universal-admin-controls/.env': {
+                'API_PORT': '8004',
+                'JWT_SECRET': 'your-secret-key-change-this-in-production',
+                'DATABASE_URL': 'postgresql://tigerex:tigerex123@localhost:5432/tigerex_db',
+                'REDIS_URL': 'redis://localhost:6379'
+            }
+        }
 
-  # Nginx Load Balancer
-  nginx:
-    image: nginx:alpine
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - frontend
-      - api-gateway
-      - admin-control
-    networks:
-      - tigerex_network
+        for env_file, config in env_configs.items():
+            env_path = self.base_dir / env_file
+            env_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            with open(env_path, 'w') as f:
+                for key, value in config.items():
+                    f.write(f"{key}={value}\n")
+            
+            logger.info(f"✓ Created {env_file}")
 
-volumes:
-  postgres_data:
+        return True
 
-networks:
-  tigerex_network:
-    driver: bridge
-"""
-    
-    with open("tigerex-repo/docker-compose-complete.yml", "w") as f:
-        f.write(docker_compose_content)
-    
-    print("✅ Created comprehensive docker-compose.yml")
+    def start_service(self, service_name, service_config):
+        """Start a single service"""
+        service_path = self.base_dir / service_config['path']
+        
+        try:
+            if service_config.get('type') == 'nodejs':
+                # Start Node.js service
+                cmd = ['npm', 'start']
+            elif service_config.get('type') == 'react-native':
+                # Start React Native metro bundler
+                cmd = ['npm', 'start']
+            elif service_config.get('type') == 'electron':
+                # Start Electron app
+                cmd = ['npm', 'run', 'electron']
+            else:
+                # Start Python service
+                cmd = ['python3', service_config['main_file']]
 
-def create_requirements_files():
-    """Create requirements.txt for services that don't have them"""
-    
-    requirements_content = """flask==2.3.3
-flask-sqlalchemy==3.0.5
-flask-jwt-extended==4.5.3
-flask-cors==4.0.0
-psycopg2-binary==2.9.7
-python-dotenv==1.0.0
-requests==2.31.0
-celery==5.3.4
-redis==5.0.1
-gunicorn==21.2.0
-"""
-    
-    # Find all service directories
-    backend_dir = Path("tigerex-repo/backend")
-    for service_dir in backend_dir.iterdir():
-        if service_dir.is_dir():
-            req_file = service_dir / "requirements.txt"
-            if not req_file.exists():
-                with open(req_file, "w") as f:
-                    f.write(requirements_content)
-                print(f"✅ Created requirements.txt for {service_dir.name}")
+            logger.info(f"Starting {service_name} service...")
+            process = subprocess.Popen(
+                cmd,
+                cwd=service_path,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
+            )
+            
+            self.processes[service_name] = process
+            logger.info(f"✓ {service_name} service started (PID: {process.pid})")
+            
+            # Wait a moment to check if process started successfully
+            time.sleep(2)
+            if process.poll() is not None:
+                stdout, stderr = process.communicate()
+                logger.error(f"✗ {service_name} service failed to start")
+                logger.error(f"stdout: {stdout}")
+                logger.error(f"stderr: {stderr}")
+                return False
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"✗ Failed to start {service_name}: {e}")
+            return False
 
-def create_dockerfiles():
-    """Create Dockerfiles for all services"""
-    
-    dockerfile_content = """FROM python:3.11-slim
+    def check_service_health(self, service_name, service_config):
+        """Check if service is healthy"""
+        if service_config['port'] is None:
+            return True  # Skip health check for services without ports
+        
+        import requests
+        
+        try:
+            url = f"http://localhost:{service_config['port']}/api/health"
+            response = requests.get(url, timeout=5)
+            if response.status_code == 200:
+                logger.info(f"✓ {service_name} health check passed")
+                return True
+            else:
+                logger.warning(f"⚠ {service_name} health check returned {response.status_code}")
+                return False
+        except requests.exceptions.RequestException as e:
+            logger.warning(f"⚠ {service_name} health check failed: {e}")
+            return False
+
+    def deploy_all_services(self):
+        """Deploy all services"""
+        logger.info("Starting all services...")
+        
+        # Start backend services first
+        backend_services = ['unified_backend', 'data_fetchers', 'admin_controls']
+        for service_name in backend_services:
+            if service_name in self.services:
+                success = self.start_service(service_name, self.services[service_name])
+                if not success:
+                    logger.error(f"Failed to start {service_name}")
+                    return False
+                time.sleep(3)  # Wait between service starts
+
+        # Wait for backend services to be ready
+        logger.info("Waiting for backend services to be ready...")
+        time.sleep(10)
+
+        # Check backend service health
+        for service_name in backend_services:
+            if service_name in self.services:
+                self.check_service_health(service_name, self.services[service_name])
+
+        # Start frontend services
+        frontend_services = ['frontend_web']
+        for service_name in frontend_services:
+            if service_name in self.services:
+                success = self.start_service(service_name, self.services[service_name])
+                if not success:
+                    logger.warning(f"Failed to start {service_name}")
+                time.sleep(3)
+
+        return True
+
+    def create_docker_compose(self):
+        """Create Docker Compose configuration"""
+        logger.info("Creating Docker Compose configuration...")
+        
+        docker_compose = {
+            'version': '3.8',
+            'services': {
+                'unified-backend': {
+                    'build': './unified-backend',
+                    'ports': ['8005:8005'],
+                    'environment': [
+                        'DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex_db',
+                        'REDIS_URL=redis://redis:6379',
+                        'JWT_SECRET=your-secret-key-change-this-in-production'
+                    ],
+                    'depends_on': ['postgres', 'redis']
+                },
+                'data-fetchers': {
+                    'build': './backend/comprehensive-data-fetchers',
+                    'ports': ['8003:8003'],
+                    'environment': [
+                        'JWT_SECRET=your-secret-key-change-this-in-production'
+                    ]
+                },
+                'admin-controls': {
+                    'build': './backend/universal-admin-controls',
+                    'ports': ['8004:8004'],
+                    'environment': [
+                        'DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex_db',
+                        'REDIS_URL=redis://redis:6379',
+                        'JWT_SECRET=your-secret-key-change-this-in-production'
+                    ],
+                    'depends_on': ['postgres', 'redis']
+                },
+                'frontend': {
+                    'build': './frontend',
+                    'ports': ['3000:3000'],
+                    'environment': [
+                        'REACT_APP_API_URL=http://localhost:8005'
+                    ]
+                },
+                'postgres': {
+                    'image': 'postgres:15',
+                    'environment': [
+                        'POSTGRES_DB=tigerex_db',
+                        'POSTGRES_USER=tigerex',
+                        'POSTGRES_PASSWORD=tigerex123'
+                    ],
+                    'volumes': ['postgres_data:/var/lib/postgresql/data'],
+                    'ports': ['5432:5432']
+                },
+                'redis': {
+                    'image': 'redis:7-alpine',
+                    'ports': ['6379:6379'],
+                    'volumes': ['redis_data:/data']
+                }
+            },
+            'volumes': {
+                'postgres_data': {},
+                'redis_data': {}
+            }
+        }
+
+        with open(self.base_dir / 'docker-compose.yml', 'w') as f:
+            import yaml
+            yaml.dump(docker_compose, f, default_flow_style=False)
+
+        logger.info("✓ Docker Compose configuration created")
+
+    def create_dockerfiles(self):
+        """Create Dockerfiles for services"""
+        logger.info("Creating Dockerfiles...")
+        
+        # Python service Dockerfile template
+        python_dockerfile = """FROM python:3.11-slim
 
 WORKDIR /app
 
@@ -230,271 +376,179 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 5000
+EXPOSE {port}
 
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "main:app"]
+CMD ["python", "{main_file}"]
 """
-    
-    # Find all service directories
-    backend_dir = Path("tigerex-repo/backend")
-    for service_dir in backend_dir.iterdir():
-        if service_dir.is_dir():
-            dockerfile = service_dir / "Dockerfile"
-            if not dockerfile.exists():
-                with open(dockerfile, "w") as f:
+
+        # Node.js service Dockerfile template
+        node_dockerfile = """FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --only=production
+
+COPY . .
+
+EXPOSE {port}
+
+CMD ["npm", "start"]
+"""
+
+        # Create Dockerfiles for Python services
+        python_services = ['unified_backend', 'data_fetchers', 'admin_controls']
+        for service_name in python_services:
+            if service_name in self.services:
+                service_config = self.services[service_name]
+                service_path = self.base_dir / service_config['path']
+                
+                dockerfile_content = python_dockerfile.format(
+                    port=service_config['port'],
+                    main_file=service_config['main_file']
+                )
+                
+                with open(service_path / 'Dockerfile', 'w') as f:
                     f.write(dockerfile_content)
-                print(f"✅ Created Dockerfile for {service_dir.name}")
+                
+                logger.info(f"✓ Created Dockerfile for {service_name}")
 
-def create_deployment_summary():
-    """Create a comprehensive deployment summary"""
-    
-    summary = """# TigerEx Complete System Deployment Summary
+        # Create Dockerfile for frontend
+        frontend_path = self.base_dir / 'frontend'
+        dockerfile_content = node_dockerfile.format(port=3000)
+        
+        with open(frontend_path / 'Dockerfile', 'w') as f:
+            f.write(dockerfile_content)
+        
+        logger.info("✓ Created Dockerfile for frontend")
 
-## 🎉 IMPLEMENTATION COMPLETE
+    def print_service_status(self):
+        """Print status of all services"""
+        logger.info("\n" + "="*60)
+        logger.info("SERVICE STATUS")
+        logger.info("="*60)
+        
+        for service_name, service_config in self.services.items():
+            if service_name in self.processes:
+                process = self.processes[service_name]
+                if process.poll() is None:
+                    status = "✓ RUNNING"
+                    if service_config['port']:
+                        status += f" (http://localhost:{service_config['port']})"
+                else:
+                    status = "✗ STOPPED"
+            else:
+                status = "- NOT STARTED"
+            
+            logger.info(f"{service_name:20} {status}")
 
-### ✅ Services Implemented (87 Total)
+        logger.info("="*60)
+        logger.info("API ENDPOINTS:")
+        logger.info("- Unified Backend:    http://localhost:8005")
+        logger.info("- Data Fetchers:      http://localhost:8003")
+        logger.info("- Admin Controls:     http://localhost:8004")
+        logger.info("- Frontend Web:       http://localhost:3000")
+        logger.info("="*60)
+        logger.info("API DOCUMENTATION:")
+        logger.info("- Unified Backend:    http://localhost:8005/docs")
+        logger.info("- Data Fetchers:      http://localhost:8003/docs")
+        logger.info("- Admin Controls:     http://localhost:8004/docs")
+        logger.info("="*60)
 
-#### Common Function Services (16/16)
-- Transfer Service
-- Binance Wallet Service  
-- Buy Crypto Service
-- Disable Account Service
-- Account Statement Service
-- Demo Trading
-- Launchpool
-- Recurring Buy Service
-- Deposit Fiat Service
-- Deposit Service
-- Referral System
-- Pay Service
-- Orders Management
-- Sell to Fiat Service
-- Withdraw Fiat Service
-- Security Service
+    def stop_all_services(self):
+        """Stop all running services"""
+        logger.info("Stopping all services...")
+        
+        for service_name, process in self.processes.items():
+            try:
+                process.terminate()
+                process.wait(timeout=10)
+                logger.info(f"✓ Stopped {service_name}")
+            except subprocess.TimeoutExpired:
+                process.kill()
+                logger.info(f"✓ Force killed {service_name}")
+            except Exception as e:
+                logger.error(f"✗ Error stopping {service_name}: {e}")
 
-#### Gift & Campaign Services (14/14)
-- Word of Day Service
-- New Listing Promos Service
-- Spot Colosseum Service
-- Button Game Service
-- Carnival Quest Service
-- Refer Win BNB Service
-- BNB ATH Service
-- Monthly Challenge Service
-- Rewards Hub Service
-- Futures Masters Service
-- My Gifts Service
-- Learn Earn Service
-- Red Packet Service
-- Alpha Events Service
+    def run_deployment(self):
+        """Run complete deployment process"""
+        try:
+            logger.info("🚀 Starting TigerEx Complete System Deployment")
+            logger.info("="*60)
+            
+            # Check prerequisites
+            if not self.check_prerequisites():
+                logger.error("Prerequisites check failed")
+                return False
 
-#### Trade Services (12/12)
-- Convert Service
-- Spot Trading
-- Alpha Trading
-- Margin Trading
-- Futures Trading
-- Copy Trading
-- OTC Trading
-- P2P Trading
-- Trading Bots
-- Convert Recurring Service
-- Index Linked Service
-- Options Trading
+            # Install dependencies
+            if not self.install_dependencies():
+                logger.error("Dependency installation failed")
+                return False
 
-#### Earn Services (14/14)
-- Basic Earn Service
-- SOL Staking Service
-- Smart Arbitrage Service
-- Yield Arena Service
-- Super Mine Service
-- Discount Buy Service
-- RWUSD Service
-- BFUSD Service
-- Onchain Yields Service
-- Soft Staking Service
-- Simple Earn Service
-- Pool Service
-- ETH Staking Service
-- Dual Investment Service
+            # Setup environment
+            if not self.setup_environment():
+                logger.error("Environment setup failed")
+                return False
 
-#### Finance Services (5/5)
-- Loans Service
-- Sharia Earn Service
-- VIP Loan Service
-- Fixed Rate Loans Service
-- Binance Wealth Service
+            # Create Docker configurations
+            self.create_dockerfiles()
+            self.create_docker_compose()
 
-#### Information Services (8/8)
-- Chat Service
-- Square Service
-- Binance Academy Service
-- Live Service
-- Research Service
-- Futures Chatroom Service
-- Deposit Withdrawal Status Service
-- Proof of Reserves Service
+            # Deploy services
+            if not self.deploy_all_services():
+                logger.error("Service deployment failed")
+                return False
 
-#### Help & Support Services (5/5)
-- Action Required Service
-- Binance Verify Service
-- Support Service
-- Customer Service Service
-- Self Service Service
+            # Print status
+            self.print_service_status()
 
-#### Others Services (13/13)
-- Third Party Account Service
-- Affiliate Service
-- Megadrop Service
-- Token Unlock Service
-- Gift Card Service
-- Trading Insight Service
-- API Management Service
-- Fan Token Service
-- Binance NFT Service
-- Marketplace Service
-- BABT Service
-- Send Cash Service
-- Charity Service
+            logger.info("\n🎉 TigerEx deployment completed successfully!")
+            logger.info("Press Ctrl+C to stop all services")
 
-### 🔧 Technical Implementation
+            # Keep services running
+            try:
+                while True:
+                    time.sleep(10)
+                    # Check if any service has stopped
+                    for service_name, process in list(self.processes.items()):
+                        if process.poll() is not None:
+                            logger.warning(f"⚠ {service_name} service has stopped")
+            except KeyboardInterrupt:
+                logger.info("\nReceived interrupt signal")
+                self.stop_all_services()
+                logger.info("✓ All services stopped")
 
-#### Backend Architecture
-- **Total Services**: 87 microservices
-- **Database**: PostgreSQL with individual schemas
-- **Authentication**: JWT-based with admin controls
-- **API Gateway**: Centralized routing and load balancing
-- **Admin Panel**: Unified control dashboard
-- **Health Monitoring**: Individual service health checks
+            return True
 
-#### Frontend Implementation
-- **Framework**: React with TypeScript
-- **UI**: Mobile-responsive Binance-like interface
-- **Components**: Service categorization matching screenshots
-- **User Experience**: Complete user profile and shortcuts
-- **Real-time**: Live service status updates
-
-#### Admin Control Features
-- **Complete Dashboard**: System overview and statistics
-- **Service Management**: Enable/disable individual services
-- **User Management**: User accounts and permissions
-- **Analytics**: Service usage and performance metrics
-- **Security**: Admin authentication and role-based access
-- **Monitoring**: Real-time service health and status
-
-### 🚀 Deployment Ready
-
-#### Docker Configuration
-- **Multi-container**: Each service in separate container
-- **Database**: PostgreSQL with persistent storage
-- **Caching**: Redis for session and data caching
-- **Load Balancing**: Nginx reverse proxy
-- **Scalability**: Horizontal scaling support
-
-#### Production Features
-- **Security**: JWT authentication, CORS protection
-- **Performance**: Gunicorn WSGI server, connection pooling
-- **Monitoring**: Health check endpoints
-- **Logging**: Comprehensive error and access logging
-- **Backup**: Database backup and recovery procedures
-
-### 📊 System Statistics
-- **Implementation Progress**: 100% Complete
-- **Service Coverage**: All screenshot services implemented
-- **Admin Control**: Full administrative access
-- **User Access**: Complete user functionality
-- **Mobile UI**: Binance-like responsive interface
-
-### 🎯 Key Features Delivered
-1. **Complete Service Portfolio**: All 87 services from screenshots
-2. **Admin Control Panel**: Full system management
-3. **User Interface**: Mobile-responsive Binance-like UI
-4. **Microservices Architecture**: Scalable and maintainable
-5. **Database Integration**: PostgreSQL with proper schemas
-6. **Authentication System**: JWT with role-based access
-7. **Real-time Features**: Live updates and notifications
-8. **Docker Deployment**: Production-ready containers
-
-## 🏁 READY FOR PRODUCTION DEPLOYMENT
-"""
-    
-    with open("tigerex-repo/COMPLETE_DEPLOYMENT_SUMMARY.md", "w") as f:
-        f.write(summary)
-    
-    print("✅ Created deployment summary")
-
-def git_push_all():
-    """Push all changes to GitHub repository"""
-    
-    print("🚀 Starting Git operations...")
-    
-    # Change to repository directory
-    repo_dir = "tigerex-repo"
-    
-    # Git operations
-    commands = [
-        "git add .",
-        "git commit -m 'Complete TigerEx implementation: All 87 services with admin control and user access'",
-        "git push origin main"
-    ]
-    
-    for command in commands:
-        print(f"Executing: {command}")
-        result = run_command(command, cwd=repo_dir)
-        if result is None:
-            print(f"❌ Failed to execute: {command}")
+        except Exception as e:
+            logger.error(f"Deployment failed: {e}")
+            self.stop_all_services()
             return False
-        print(f"✅ {command} completed")
-    
-    return True
 
 def main():
-    """Main deployment function"""
+    """Main entry point"""
+    deployer = TigerExDeployer()
     
-    print("="*80)
-    print("🐅 TigerEx Complete System Deployment")
-    print("="*80)
-    
-    print("\n📋 Deployment Steps:")
-    print("1. Creating Docker configuration...")
-    create_docker_compose()
-    
-    print("2. Creating requirements files...")
-    create_requirements_files()
-    
-    print("3. Creating Dockerfiles...")
-    create_dockerfiles()
-    
-    print("4. Creating deployment summary...")
-    create_deployment_summary()
-    
-    print("5. Pushing to GitHub...")
-    if git_push_all():
-        print("✅ Successfully pushed to GitHub!")
+    if len(sys.argv) > 1:
+        command = sys.argv[1]
+        
+        if command == 'docker':
+            logger.info("Creating Docker configuration only...")
+            deployer.create_dockerfiles()
+            deployer.create_docker_compose()
+            logger.info("✓ Docker configuration created. Run 'docker-compose up' to start services")
+        elif command == 'stop':
+            logger.info("Stopping all services...")
+            deployer.stop_all_services()
+        else:
+            logger.error(f"Unknown command: {command}")
+            logger.info("Available commands: docker, stop")
+            sys.exit(1)
     else:
-        print("❌ Failed to push to GitHub")
-        return
-    
-    print("\n" + "="*80)
-    print("🎉 DEPLOYMENT COMPLETE!")
-    print("="*80)
-    
-    print("\n📊 Final Statistics:")
-    print("✅ Total Services Implemented: 87/87 (100%)")
-    print("✅ Admin Control Panel: Complete")
-    print("✅ User Interface: Binance-like Mobile UI")
-    print("✅ Backend Services: All microservices ready")
-    print("✅ Database Schema: PostgreSQL configured")
-    print("✅ Docker Deployment: Production-ready")
-    print("✅ GitHub Repository: Updated and pushed")
-    
-    print("\n🚀 Next Steps:")
-    print("1. Run: docker-compose -f docker-compose-complete.yml up -d")
-    print("2. Access Admin Panel: http://localhost:8001")
-    print("3. Access Frontend: http://localhost:3000")
-    print("4. Monitor Services: Check individual health endpoints")
-    
-    print("\n🔗 Repository: https://github.com/meghlabd275-byte/TigerEx-")
+        # Run full deployment
+        success = deployer.run_deployment()
+        sys.exit(0 if success else 1)
 
 if __name__ == "__main__":
     main()
