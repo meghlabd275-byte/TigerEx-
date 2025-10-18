@@ -150,7 +150,7 @@ class User(Base):
     deposit_enabled = Column(Boolean, default=True)
     max_daily_withdrawal = Column(Numeric(20, 8), default=100000)
     permissions = Column(Text)  # JSON string of permissions
-    metadata = Column(Text)  # JSON string of additional data
+    contract_user_metadata = Column(Text)  # JSON string of additional data
 
 class TradingContract(Base):
     __tablename__ = "trading_contracts"
@@ -178,7 +178,7 @@ class TradingContract(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     created_by = Column(String)
-    metadata = Column(Text)  # JSON string
+    user_metadata = Column(Text)  # JSON string
 
 class AuditLog(Base):
     __tablename__ = "audit_logs"
