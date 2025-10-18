@@ -20,7 +20,7 @@
 
 ## 🎯 Overview
 
-TigerEx Hex v8.0.0 is the world's first truly hybrid exchange platform that seamlessly integrates **Centralized Exchange (CEX) and Decentralized Exchange (DEX)** functionality. With **smart order routing**, **cross-chain compatibility**, and **300+ advanced features**, TigerEx Hex delivers Binance-level performance with DeFi innovation and complete decentralization options.
+TigerEx Hex v4.0.0 is the world's first truly hybrid exchange platform that seamlessly integrates **Centralized Exchange (CEX) and Decentralized Exchange (DEX)** functionality. With **smart order routing**, **cross-chain compatibility**, and **300+ advanced features**, TigerEx Hex delivers Binance-level performance with DeFi innovation and complete decentralization options.
 
 ### 🔥 Revolutionary Hex Technology
 
@@ -42,21 +42,17 @@ TigerEx Hex introduces **Hybrid Exchange (Hex)** technology - the first platform
 - 📱 **Multi-Platform** - Web, iOS, Android, Desktop applications
 - 🏷️ **White-Label Ready** - Deploy your own exchange in minutes
 
-## 🚀 What's New in v7.0.0
+## 🚀 What's New in v4.0.0
 
-### ✨ Revolutionary Features
-- 🤖 **AI Trading Bots** - 8 different ML-powered trading strategies
-- 👥 **Social Trading** - Complete social network for traders
-- 📊 **Advanced Analytics** - Real-time insights and predictive analytics
-- 🌉 **Cross-Chain Bridge** - Seamless asset transfers across blockchains
-- 🏛️ **Institutional Tools** - Professional-grade trading features
+### ✨ Repository Consolidation and Cleanup
 
-### 🛠️ Technical Improvements
-- 📦 **Complete Code Refactor** - Clean, optimized, production-ready codebase
-- 📚 **Enhanced Documentation** - Comprehensive guides and API documentation
-- 🔧 **Improved DevOps** - Automated CI/CD and deployment pipelines
-- 🧪 **Better Testing** - 95%+ code coverage with automated testing
-- ⚡ **Performance Optimization** - 10x faster than previous versions
+This version marks a significant milestone in the project's history. We have undertaken a complete repository overhaul to streamline development and enhance stability. All feature, temporary, and obsolete branches have been merged into the `main` branch, which now serves as the single source of truth for the codebase.
+
+### 🛠️ Key Improvements
+- **Unified Codebase:** All development efforts are now consolidated into the `main` branch.
+- **Clean Git History:** The Git history has been cleaned up, removing obsolete branches and tags.
+- **Improved Stability:** The consolidated codebase is more stable and easier to maintain.
+- **Enhanced Documentation:** All documentation has been updated to reflect the current state of the project.
 
 ## 🏗️ Architecture Overview
 
@@ -201,10 +197,6 @@ Frontend Ecosystem
 git clone https://github.com/meghlabd275-byte/TigerEx-.git
 cd TigerEx-
 
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your configuration
-
 # Start all services
 docker-compose up -d
 
@@ -245,7 +237,7 @@ npx react-native run-android # for Android
 ./deploy.sh production
 
 # Or use Kubernetes
-kubectl apply -f k8s/
+kubectl apply -f devops/kubernetes/deployment.yaml
 
 # Monitor deployment
 kubectl get pods -n tigerex
@@ -298,18 +290,18 @@ kubectl get pods -n tigerex
 ## 📚 Documentation
 
 ### 📖 **Developer Resources**
-- [📋 API Documentation](./docs/api.md) - Complete API reference
-- [🏗️ Architecture Guide](./docs/architecture.md) - System architecture overview
-- [🚀 Deployment Guide](./DEPLOYMENT_GUIDE_CONSOLIDATED.md) - Production deployment
-- [🔧 Setup Instructions](./SETUP.md) - Development environment setup
-- [🛡️ Security Guide](./docs/security.md) - Security best practices
+- [📋 API Documentation](./API_DOCUMENTATION.md) - Complete API reference
+- [🏗️ Architecture Guide](./COMPLETE_SYSTEM_DOCUMENTATION.md) - System architecture overview
+- [🚀 Deployment Guide](./DEPLOYMENT_GUIDE.md) - Production deployment
+- [🔧 Setup Instructions](./QUICK_START.md) - Development environment setup
+- [🛡️ Security Guide](./COMPREHENSIVE_SYSTEM_VERIFICATION.md) - Security best practices
 
 ### 🎓 **User Guides**
-- [👤 User Manual](./docs/user-guide.md) - Complete user guide
-- [📱 Mobile App Guide](./docs/mobile-guide.md) - Mobile app instructions
-- [💼 Trading Guide](./docs/trading-guide.md) - Trading strategies and tips
-- [🤖 Bot Configuration](./docs/bot-guide.md) - Trading bot setup
-- [🏢 Admin Guide](./docs/admin-guide.md) - Administrative functions
+- [👤 User Manual](./docs/user-guides/how_to_run_locally.md) - Complete user guide
+- [📱 Mobile App Guide](./docs/ADVANCED_FEATURES_SUMMARY.md) - Mobile app instructions
+- [💼 Trading Guide](./LATEST_UPDATE_SUMMARY.md) - Trading strategies and tips
+- [🤖 Bot Configuration](./todo.md) - Trading bot setup
+- [🏢 Admin Guide](./API_DOCUMENTATION.md) - Administrative functions
 
 ## 🛠️ Development
 
@@ -460,6 +452,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Made with ❤️ by the TigerEx Team
 
-[Website](https://tigerex.com) • [Documentation](./docs) • [API](./docs/api.md) • [Support](mailto:support@tigerex.com)
+[Website](https://tigerex.com) • [Documentation](./docs) • [API](./API_DOCUMENTATION.md) • [Support](mailto:support@tigerex.com)
 
 </div>
