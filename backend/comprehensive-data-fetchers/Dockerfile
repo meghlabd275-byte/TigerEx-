@@ -7,6 +7,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 8004
+EXPOSE 8003
 
-CMD ["python", "complete_admin_service.py"]
+CMD ["python", "complete_exchange_fetchers.py"]

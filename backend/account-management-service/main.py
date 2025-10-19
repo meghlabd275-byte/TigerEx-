@@ -6,21 +6,26 @@ Comprehensive account management including VIP upgrades, profile management, and
 
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, create_access_token
 from flask_cors import CORS
 from datetime import datetime, timedelta
 import logging
 import os
 import uuid
+from authlib.integrations.flask_client import OAuth
+from functools import wraps
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:password@localhost/tigerex')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'your-secret-key')
+app.config['GOOGLE_CLIENT_ID'] = os.getenv('GOOGLE_CLIENT_ID')
+app.config['GOOGLE_CLIENT_SECRET'] = os.getenv('GOOGLE_CLIENT_SECRET')
 
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
 CORS(app)
+oauth = OAuth(app)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -33,13 +38,14 @@ class UserAccount(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(50), nullable=False, unique=True)
     username = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False, unique=True)
     binance_id = db.Column(db.String(20), unique=True)
     
     # Account Status
-    account_type = db.Column(db.String(20), default='Regular')  # Regular, VIP1, VIP2, etc.
-    verification_status = db.Column(db.String(20), default='Unverified')  # Unverified, Verified, Enhanced
-    account_status = db.Column(db.String(20), default='Active')  # Active, Suspended, Closed
+    account_type = db.Column(db.String(20), default='Regular')
+    verification_status = db.Column(db.String(20), default='Unverified')
+    account_status = db.Column(db.String(20), default='Active')
+    is_admin = db.Column(db.Boolean, default=False)
     
     # Profile Information
     first_name = db.Column(db.String(50))
@@ -50,7 +56,7 @@ class UserAccount(db.Model):
     
     # VIP Information
     vip_level = db.Column(db.Integer, default=0)
-    vip_progress = db.Column(db.Float, default=0.0)  # Progress to next VIP level
+    vip_progress = db.Column(db.Float, default=0.0)
     trading_volume_30d = db.Column(db.Float, default=0.0)
     bnb_balance = db.Column(db.Float, default=0.0)
     
@@ -61,47 +67,130 @@ class UserAccount(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-class VIPBenefit(db.Model):
-    __tablename__ = 'vip_benefits'
-    
-    id = db.Column(db.Integer, primary_key=True)
-    vip_level = db.Column(db.Integer, nullable=False)
-    benefit_type = db.Column(db.String(50), nullable=False)
-    benefit_value = db.Column(db.String(100))
-    description = db.Column(db.String(200))
+# Admin check decorator
+def admin_required():
+    def wrapper(fn):
+        @wraps(fn)
+        def decorator(*args, **kwargs):
+            user_id = get_jwt_identity()
+            account = UserAccount.query.filter_by(user_id=user_id).first()
+            if not account or not account.is_admin:
+                return jsonify({'success': False, 'error': 'Admin access required'}), 403
+            return fn(*args, **kwargs)
+        return decorator
+    return wrapper
 
-class AccountVerification(db.Model):
-    __tablename__ = 'account_verifications'
-    
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.String(50), nullable=False)
-    verification_type = db.Column(db.String(50), nullable=False)  # Identity, Address, Enhanced
-    status = db.Column(db.String(20), default='Pending')  # Pending, Approved, Rejected
-    documents = db.Column(db.JSON)
-    submitted_at = db.Column(db.DateTime, default=datetime.utcnow)
-    reviewed_at = db.Column(db.DateTime)
-    reviewer_id = db.Column(db.String(50))
-    notes = db.Column(db.Text)
+# Social Login Routes
+google = oauth.register(
+    name='google',
+    client_id=app.config['GOOGLE_CLIENT_ID'],
+    client_secret=app.config['GOOGLE_CLIENT_SECRET'],
+    access_token_url='https://accounts.google.com/o/oauth2/token',
+    access_token_params=None,
+    authorize_url='https://accounts.google.com/o/oauth2/auth',
+    authorize_params=None,
+    api_base_url='https://www.googleapis.com/oauth2/v1/',
+    userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
+    client_kwargs={'scope': 'openid email profile'},
+)
 
-# Account Routes
-@app.route('/api/account/info', methods=['GET'])
+@app.route('/login/google')
+def login_google():
+    redirect_uri = url_for('authorized_google', _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+@app.route('/login/google/authorized')
+def authorized_google():
+    token = google.authorize_access_token()
+    user_info = google.get('userinfo').json()
+    
+    user = UserAccount.query.filter_by(email=user_info['email']).first()
+    if not user:
+        user = UserAccount(
+            user_id=str(uuid.uuid4()),
+            username=user_info['name'],
+            email=user_info['email'],
+            binance_id=str(uuid.uuid4())[:8].upper()
+        )
+        db.session.add(user)
+        db.session.commit()
+    
+    access_token = create_access_token(identity=user.user_id)
+    return jsonify(access_token=access_token)
+
+@app.route('/api/admin/accounts', methods=['GET'])
 @jwt_required()
-def get_account_info():
+@admin_required()
+def get_all_user_accounts():
     try:
-        user_id = get_jwt_identity()
-        account = UserAccount.query.filter_by(user_id=user_id).first()
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 20, type=int)
+        
+        accounts = UserAccount.query.paginate(page, per_page, False)
+        
+        return jsonify({
+            'success': True,
+            'accounts': [
+                {
+                    'user_id': account.user_id,
+                    'username': account.username,
+                    'email': account.email,
+                    'binance_id': account.binance_id,
+                    'account_type': account.account_type,
+                    'verification_status': account.verification_status,
+                    'account_status': account.account_status,
+                    'is_admin': account.is_admin,
+                    'created_at': account.created_at.isoformat()
+                }
+                for account in accounts.items
+            ],
+            'pagination': {
+                'page': accounts.page,
+                'per_page': accounts.per_page,
+                'total': accounts.total,
+                'total_pages': accounts.pages
+            }
+        })
+    except Exception as e:
+        logger.error(f"Error getting all accounts: {str(e)}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/account/resume', methods=['POST'])
+@jwt_required()
+@admin_required()
+def resume_account():
+    try:
+        data = request.get_json()
+        user_to_resume_id = data.get('user_id')
+        
+        if not user_to_resume_id:
+            return jsonify({'success': False, 'error': 'User ID is required'}), 400
+            
+        account = UserAccount.query.filter_by(user_id=user_to_resume_id).first()
+        if not account:
+            return jsonify({'success': False, 'error': 'Account not found'}), 404
+            
+        if account.account_status != 'Suspended':
+            return jsonify({'success': False, 'error': 'Account is not suspended'}), 400
+            
+        account.account_status = 'Active'
+        account.updated_at = datetime.utcnow()
+        db.session.commit()
+        
+        return jsonify({'success': True, 'message': 'Account resumed successfully'})
+    except Exception as e:
+        logger.error(f"Error resuming account: {str(e)}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/admin/account/email/<email>', methods=['GET'])
+@jwt_required()
+@admin_required()
+def get_user_account_by_email(email):
+    try:
+        account = UserAccount.query.filter_by(email=email).first()
         
         if not account:
-            # Create default account
-            binance_id = str(uuid.uuid4())[:8].upper()
-            account = UserAccount(
-                user_id=user_id,
-                username=f"User-{binance_id[:4].lower()}",
-                email="user@example.com",
-                binance_id=binance_id
-            )
-            db.session.add(account)
-            db.session.commit()
+            return jsonify({'success': False, 'error': 'Account not found'}), 404
         
         return jsonify({
             'success': True,
@@ -112,12 +201,8 @@ def get_account_info():
                 'binance_id': account.binance_id,
                 'account_type': account.account_type,
                 'verification_status': account.verification_status,
-                'vip_level': account.vip_level,
-                'vip_progress': account.vip_progress,
-                'trading_volume_30d': account.trading_volume_30d,
-                'bnb_balance': account.bnb_balance,
-                'twitter_connected': account.twitter_connected,
-                'telegram_connected': account.telegram_connected,
+                'account_status': account.account_status,
+                'is_admin': account.is_admin,
                 'created_at': account.created_at.isoformat()
             }
         })
@@ -125,147 +210,50 @@ def get_account_info():
         logger.error(f"Error getting account info: {str(e)}")
         return jsonify({'success': False, 'error': str(e)}), 500
 
-@app.route('/api/account/vip/benefits', methods=['GET'])
+@app.route('/api/admin/account/<user_id>', methods=['GET'])
 @jwt_required()
-def get_vip_benefits():
+@admin_required()
+def get_user_account_by_id(user_id):
     try:
-        user_id = get_jwt_identity()
         account = UserAccount.query.filter_by(user_id=user_id).first()
-        current_level = account.vip_level if account else 0
         
-        # Get benefits for current and next level
-        current_benefits = VIPBenefit.query.filter_by(vip_level=current_level).all()
-        next_benefits = VIPBenefit.query.filter_by(vip_level=current_level + 1).all()
-        
-        return jsonify({
-            'success': True,
-            'current_level': current_level,
-            'current_benefits': [{
-                'type': benefit.benefit_type,
-                'value': benefit.benefit_value,
-                'description': benefit.description
-            } for benefit in current_benefits],
-            'next_level_benefits': [{
-                'type': benefit.benefit_type,
-                'value': benefit.benefit_value,
-                'description': benefit.description
-            } for benefit in next_benefits],
-            'progress_to_next': account.vip_progress if account else 0.0
-        })
-    except Exception as e:
-        logger.error(f"Error getting VIP benefits: {str(e)}")
-        return jsonify({'success': False, 'error': str(e)}), 500
-
-@app.route('/api/account/verification/status', methods=['GET'])
-@jwt_required()
-def get_verification_status():
-    try:
-        user_id = get_jwt_identity()
-        verifications = AccountVerification.query.filter_by(user_id=user_id).all()
-        
-        verification_status = {
-            'identity': 'Not Started',
-            'address': 'Not Started',
-            'enhanced': 'Not Started'
-        }
-        
-        for verification in verifications:
-            verification_status[verification.verification_type.lower()] = verification.status
-        
-        return jsonify({
-            'success': True,
-            'verifications': verification_status,
-            'overall_status': 'Verified' if all(status == 'Approved' for status in verification_status.values()) else 'Pending'
-        })
-    except Exception as e:
-        logger.error(f"Error getting verification status: {str(e)}")
-        return jsonify({'success': False, 'error': str(e)}), 500
-
-@app.route('/api/account/update-profile', methods=['POST'])
-@jwt_required()
-def update_profile():
-    try:
-        user_id = get_jwt_identity()
-        data = request.get_json()
-        
-        account = UserAccount.query.filter_by(user_id=user_id).first()
         if not account:
             return jsonify({'success': False, 'error': 'Account not found'}), 404
         
-        # Update profile fields
-        if 'first_name' in data:
-            account.first_name = data['first_name']
-        if 'last_name' in data:
-            account.last_name = data['last_name']
-        if 'phone_number' in data:
-            account.phone_number = data['phone_number']
-        if 'nationality' in data:
-            account.nationality = data['nationality']
-        
-        account.updated_at = datetime.utcnow()
-        db.session.commit()
-        
-        return jsonify({'success': True, 'message': 'Profile updated successfully'})
+        return jsonify({
+            'success': True,
+            'account': {
+                'user_id': account.user_id,
+                'username': account.username,
+                'email': account.email,
+                'binance_id': account.binance_id,
+                'account_type': account.account_type,
+                'verification_status': account.verification_status,
+                'account_status': account.account_status,
+                'is_admin': account.is_admin,
+                'created_at': account.created_at.isoformat()
+            }
+        })
     except Exception as e:
-        logger.error(f"Error updating profile: {str(e)}")
+        logger.error(f"Error getting account info: {str(e)}")
         return jsonify({'success': False, 'error': str(e)}), 500
 
-@app.route('/api/account/connect-social', methods=['POST'])
+@app.route('/api/admin/account/<user_id>', methods=['DELETE'])
 @jwt_required()
-def connect_social():
+@admin_required()
+def delete_user_account(user_id):
     try:
-        user_id = get_jwt_identity()
-        data = request.get_json()
-        platform = data.get('platform')
-        
         account = UserAccount.query.filter_by(user_id=user_id).first()
+        
         if not account:
             return jsonify({'success': False, 'error': 'Account not found'}), 404
-        
-        if platform == 'twitter':
-            account.twitter_connected = True
-        elif platform == 'telegram':
-            account.telegram_connected = True
-        
-        db.session.commit()
-        
-        return jsonify({'success': True, 'message': f'{platform.title()} connected successfully'})
-    except Exception as e:
-        logger.error(f"Error connecting social: {str(e)}")
-        return jsonify({'success': False, 'error': str(e)}), 500
-
-@app.route('/health', methods=['GET'])
-def health_check():
-    return jsonify({
-        'status': 'healthy',
-        'service': 'account-management-service',
-        'timestamp': datetime.utcnow().isoformat()
-    })
-
-if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-        
-        # Initialize VIP benefits
-        vip_benefits = [
-            # VIP 0 (Regular)
-            VIPBenefit(vip_level=0, benefit_type='Trading Fee', benefit_value='0.1%', description='Standard trading fee'),
-            VIPBenefit(vip_level=0, benefit_type='Withdrawal Fee', benefit_value='Standard', description='Standard withdrawal fees'),
             
-            # VIP 1
-            VIPBenefit(vip_level=1, benefit_type='Trading Fee', benefit_value='0.09%', description='Reduced trading fee'),
-            VIPBenefit(vip_level=1, benefit_type='Withdrawal Fee', benefit_value='10% Discount', description='10% discount on withdrawal fees'),
-            VIPBenefit(vip_level=1, benefit_type='Customer Support', benefit_value='Priority', description='Priority customer support'),
-        ]
-        
-        for benefit in vip_benefits:
-            existing = VIPBenefit.query.filter_by(
-                vip_level=benefit.vip_level,
-                benefit_type=benefit.benefit_type
-            ).first()
-            if not existing:
-                db.session.add(benefit)
-        
+        db.session.delete(account)
         db.session.commit()
-    
-    app.run(host='0.0.0.0', port=int(os.getenv('PORT', 5000)), debug=True)
+        
+        return jsonify({'success': True, 'message': 'Account deleted successfully'})
+    except Exception as e:
+        logger.error(f"Error deleting account: {str(e)}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+# Main application starts here...
