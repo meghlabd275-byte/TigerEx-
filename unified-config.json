@@ -1,0 +1,49 @@
+{
+  "tigerex_unified_v10": {
+    "version": "10.0.0",
+    "security": {
+      "jwt_secret": "${JWT_SECRET}",
+      "encryption_key": "${ENCRYPTION_KEY}",
+      "api_rate_limit": "1000/hour",
+      "cors_origins": ["${FRONTEND_URL}"],
+      "security_headers": true,
+      "input_validation": true,
+      "sql_injection_protection": true,
+      "xss_protection": true
+    },
+    "exchanges": {
+      "binance": {"enabled": true, "api_key": "${BINANCE_API_KEY}"},
+      "coinbase": {"enabled": true, "api_key": "${COINBASE_API_KEY}"},
+      "kraken": {"enabled": true, "api_key": "${KRAKEN_API_KEY}"},
+      "kucoin": {"enabled": true, "api_key": "${KUCOIN_API_KEY}"},
+      "huobi": {"enabled": true, "api_key": "${HUOBI_API_KEY}"}
+    },
+    "trading_engines": [
+      "spot_trading",
+      "futures_trading", 
+      "options_trading",
+      "margin_trading",
+      "derivatives_trading",
+      "algo_trading",
+      "ai_trading",
+      "copy_trading",
+      "social_trading",
+      "p2p_trading"
+    ],
+    "platforms": {
+      "web": {"enabled": true, "responsive": true, "pwa": true},
+      "mobile": {"enabled": true, "ios": true, "android": true},
+      "desktop": {"enabled": true, "windows": true, "mac": true, "linux": true}
+    },
+    "services": {
+      "authentication": true,
+      "kyc_aml": true,
+      "wallet_management": true,
+      "payment_gateway": true,
+      "notification_service": true,
+      "analytics_service": true,
+      "admin_panel": true,
+      "api_gateway": true
+    }
+  }
+}
