@@ -1,56 +1,252 @@
-
 version: '3.8'
+
 services:
-  unified-backend:
-    build: ./unified-backend
+  # Liquidity Sharing Service
+  liquidity-sharing:
+    build:
+      context: .
+      dockerfile: backend/liquidity-sharing/Dockerfile
     ports:
-      - "8005:8005"
+      - "8001:8001"
     environment:
-      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex_db
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
       - REDIS_URL=redis://redis:6379
-      - JWT_SECRET=your-secret-key-change-this-in-production
+      - BINANCE_API_KEY=${BINANCE_API_KEY}
+      - BINANCE_API_SECRET=${BINANCE_API_SECRET}
+      - OKX_API_KEY=${OKX_API_KEY}
+      - OKX_API_SECRET=${OKX_API_SECRET}
+      - OKX_PASSPHRASE=${OKX_PASSPHRASE}
     depends_on:
       - postgres
       - redis
-  data-fetchers:
-    build: ./backend/comprehensive-data-fetchers
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Own Liquidity System
+  own-liquidity:
+    build:
+      context: .
+      dockerfile: backend/own-liquidity-system/Dockerfile
+    ports:
+      - "8002:8002"
+    environment:
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Cryptocurrency Integration
+  crypto-integration:
+    build:
+      context: .
+      dockerfile: backend/cryptocurrency-integration/Dockerfile
     ports:
       - "8003:8003"
     environment:
-      - JWT_SECRET=your-secret-key-change-this-in-production
-  admin-controls:
-    build: ./backend/universal-admin-controls
-    ports:
-      - "8004:8004"
-    environment:
-      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex_db
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
       - REDIS_URL=redis://redis:6379
-      - JWT_SECRET=your-secret-key-change-this-in-production
+      - COINMARKETCAP_API_KEY=${COINMARKETCAP_API_KEY}
     depends_on:
       - postgres
       - redis
-  frontend:
-    build: ./frontend
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Blockchain Integration
+  blockchain-integration:
+    build:
+      context: .
+      dockerfile: backend/blockchain-integration/Dockerfile
     ports:
-      - "3000:3000"
+      - "8004:8004"
     environment:
-      - REACT_APP_API_URL=http://localhost:8005
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Admin Control System
+  admin-control:
+    build:
+      context: .
+      dockerfile: backend/admin-control-system/Dockerfile
+    ports:
+      - "8005:8005"
+    environment:
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=${SECRET_KEY}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # User Access System
+  user-access:
+    build:
+      context: .
+      dockerfile: backend/user-access-system/Dockerfile
+    ports:
+      - "8006:8006"
+    environment:
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=${SECRET_KEY}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - liquidity-sharing
+      - own-liquidity
+      - crypto-integration
+      - blockchain-integration
+      - admin-control
+      - user-access
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # PostgreSQL Database
   postgres:
-    image: postgres:15
+    image: postgres:15-alpine
     environment:
-      - POSTGRES_DB=tigerex_db
+      - POSTGRES_DB=tigerex
       - POSTGRES_USER=tigerex
       - POSTGRES_PASSWORD=tigerex123
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Redis Cache
   redis:
     image: redis:7-alpine
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Prometheus Monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Grafana Dashboard
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Elasticsearch for Logging
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Kibana for Log Visualization
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.0
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Logstash for Log Processing
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.11.0
+    ports:
+      - "5044:5044"
+    volumes:
+      - ./logging/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    depends_on:
+      - elasticsearch
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
 volumes:
-  postgres_data: {}
-  redis_data: {}
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+  elasticsearch_data:
+
+networks:
+  tigerex-network:
+    driver: bridge
