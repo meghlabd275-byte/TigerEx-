@@ -376,7 +376,7 @@ class BlockchainManager:
             ),
             Blockchain(
                 id=" Aptos",
-                id="aptos",
+                chain_id="aptos",
                 name="Aptos",
                 symbol="APT",
                 blockchain_type=BlockchainType.LAYER_1,

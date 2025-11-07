@@ -366,7 +366,7 @@ class LiquidityProvider:
             raise HTTPException(status_code=400, detail="Invalid tokens for this pool")
         
         if token_in == token_out:
-            raise HTTPException(status_code=400, detail("Cannot swap same token"))
+            raise HTTPException(status_code=400, detail="Cannot swap same token")
         
         # Calculate swap using constant product formula (x * y = k)
         k = pool.base_amount * pool.quote_amount
