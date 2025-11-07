@@ -13,16 +13,26 @@ Complete admin controls for all trading types:
 from typing import Dict, List, Any, Optional, Union
 from datetime import datetime, timedelta
 from enum import Enum
-from fastapi import APIRouter, HTTPException, Depends, Query, Body
-from pydantic import BaseModel, Field
+from fastapi import APIRouter, HTTPException, Depends, Query, Body, BackgroundTasks
+from pydantic import BaseModel, Field, validator
 import json
 import logging
 import asyncio
 from dataclasses import dataclass
+import redis
+import asyncpg
+from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/admin/trading", tags=["comprehensive-trading-admin"])
+
+# ============================================================================
+# DATABASE CONNECTIONS
+# ============================================================================
+
+# Redis client for caching and real-time data
+redis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
 
 # ============================================================================
 # ENUMS AND DATA MODELS
@@ -42,12 +52,26 @@ class TradingStatus(str, Enum):
     PAUSED = "paused"
     SUSPENDED = "suspended"
     EMERGENCY_STOP = "emergency_stop"
+    MAINTENANCE = "maintenance"
 
 class ContractStatus(str, Enum):
     ACTIVE = "active"
     PAUSED = "paused"
     SUSPENDED = "suspended"
     DELETED = "deleted"
+    SETTLING = "settling"
+
+class OrderType(str, Enum):
+    MARKET = "market"
+    LIMIT = "limit"
+    STOP_LOSS = "stop_loss"
+    STOP_LIMIT = "stop_limit"
+    TAKE_PROFIT = "take_profit"
+    TRAILING_STOP = "trailing_stop"
+
+class OrderSide(str, Enum):
+    BUY = "buy"
+    SELL = "sell"
 
 class AdminAction(BaseModel):
     action: str
@@ -57,6 +81,7 @@ class AdminAction(BaseModel):
     user_id: Optional[str] = None
     reason: str
     force: bool = False
+    metadata: Optional[Dict[str, Any]] = {}
 
 class ContractConfig(BaseModel):
     contract_id: str
@@ -220,6 +245,7 @@ def log_admin_action(admin_id: str, action: AdminAction, result: Dict[str, Any])
         "user_id": action.user_id,
         "reason": action.reason,
         "result": result,
+        "metadata": action.metadata,
         "timestamp": datetime.utcnow().isoformat()
     }
     admin_action_log.append(log_entry)
@@ -306,54 +332,6 @@ async def control_trading_system(action: AdminAction, admin_id: str = "system"):
         
     except Exception as e:
         logger.error(f"Failed to control trading: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-@router.get("/config/{trading_type}")
-async def get_trading_config(trading_type: TradingType):
-    """Get configuration for specific trading type"""
-    if trading_type not in TradingType:
-        raise HTTPException(status_code=404, detail="Trading type not found")
-    
-    return {
-        "trading_type": trading_type.value,
-        "config": trading_configs[trading_type].dict(),
-        "status": trading_status[trading_type].value,
-        "paused_symbols": list(paused_symbols[trading_type]),
-        "timestamp": datetime.utcnow().isoformat()
-    }
-
-@router.put("/config/{trading_type}")
-async def update_trading_config(
-    trading_type: TradingType, 
-    config: TradingConfig,
-    admin_id: str = "system"
-):
-    """Update configuration for specific trading type"""
-    if trading_type not in TradingType:
-        raise HTTPException(status_code=404, detail="Trading type not found")
-    
-    try:
-        trading_configs[trading_type] = config
-        
-        action = AdminAction(
-            action="config_update",
-            trading_type=trading_type,
-            reason="Configuration updated"
-        )
-        
-        result = {
-            "success": True,
-            "trading_type": trading_type.value,
-            "config": config.dict()
-        }
-        
-        log_admin_action(admin_id, action, result)
-        await notify_services(action)
-        
-        return result
-        
-    except Exception as e:
-        logger.error(f"Failed to update config: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # ============================================================================
@@ -704,314 +682,6 @@ async def close_all_user_positions(
         raise HTTPException(status_code=500, detail=str(e))
 
 # ============================================================================
-# ORDER MANAGEMENT
-# ============================================================================
-
-@router.get("/orders")
-async def get_all_orders(
-    trading_type: Optional[TradingType] = None,
-    symbol: Optional[str] = None,
-    status: Optional[str] = None,
-    user_id: Optional[str] = None,
-    limit: int = Query(default=100, le=1000),
-    offset: int = Query(default=0, ge=0)
-):
-    """Get all orders with admin access"""
-    # In production, this would query the actual order database
-    return {
-        "orders": [],
-        "total": 0,
-        "limit": limit,
-        "offset": offset,
-        "filters": {
-            "trading_type": trading_type.value if trading_type else None,
-            "symbol": symbol,
-            "status": status,
-            "user_id": user_id
-        },
-        "timestamp": datetime.utcnow().isoformat()
-    }
-
-@router.delete("/orders/{order_id}")
-async def cancel_order(
-    order_id: str,
-    reason: str = "Admin cancellation",
-    admin_id: str = "system"
-):
-    """Cancel any order (admin override)"""
-    try:
-        # In production, this would cancel the actual order
-        
-        action = AdminAction(
-            action="cancel_order",
-            trading_type=TradingType.SPOT,  # Would get from order
-            reason=reason
-        )
-        
-        result = {
-            "success": True,
-            "order_id": order_id,
-            "reason": reason
-        }
-        
-        log_admin_action(admin_id, action, result)
-        await notify_services(action)
-        
-        return result
-        
-    except Exception as e:
-        logger.error(f"Failed to cancel order: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-@router.post("/orders/cancel-all")
-async def cancel_all_orders(
-    trading_type: Optional[TradingType] = None,
-    symbol: Optional[str] = None,
-    user_id: Optional[str] = None,
-    reason: str = "Mass cancellation by admin",
-    admin_id: str = "system"
-):
-    """Cancel all orders (admin emergency function)"""
-    try:
-        # In production, this would cancel actual orders
-        
-        action = AdminAction(
-            action="cancel_all_orders",
-            trading_type=trading_type if trading_type else TradingType.SPOT,
-            symbol=symbol,
-            user_id=user_id,
-            reason=reason
-        )
-        
-        result = {
-            "success": True,
-            "trading_type": trading_type.value if trading_type else "all",
-            "symbol": symbol,
-            "user_id": user_id,
-            "cancelled_orders": 0,
-            "order_ids": []
-        }
-        
-        log_admin_action(admin_id, action, result)
-        await notify_services(action)
-        
-        return result
-        
-    except Exception as e:
-        logger.error(f"Failed to cancel all orders: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-# ============================================================================
-# RISK MANAGEMENT
-# ============================================================================
-
-@router.get("/risk/metrics")
-async def get_risk_metrics(trading_type: Optional[TradingType] = None):
-    """Get risk metrics for trading systems"""
-    # In production, this would calculate actual risk metrics
-    return {
-        "trading_type": trading_type.value if trading_type else "all",
-        "metrics": {
-            "total_exposure": "0.0",
-            "open_interest": "0.0",
-            "insurance_fund_balance": "0.0",
-            "margin_ratio": 0.0,
-            "leverage_ratio": 0.0,
-            "liquidation_risk": "low",
-            "price_volatility": 0.0,
-            "volume_24h": "0.0",
-            "trading_count_24h": 0
-        },
-        "timestamp": datetime.utcnow().isoformat()
-    }
-
-@router.post("/risk/circuit-breaker")
-async def trigger_circuit_breaker(
-    trading_type: TradingType,
-    reason: str = "Circuit breaker triggered by admin",
-    duration_minutes: int = 60,
-    admin_id: str = "system"
-):
-    """Trigger circuit breaker for specific trading type"""
-    try:
-        trading_status[trading_type] = TradingStatus.PAUSED
-        
-        action = AdminAction(
-            action="circuit_breaker",
-            trading_type=trading_type,
-            reason=f"Circuit breaker: {reason}"
-        )
-        
-        result = {
-            "success": True,
-            "trading_type": trading_type.value,
-            "status": TradingStatus.PAUSED.value,
-            "duration_minutes": duration_minutes,
-            "reason": reason
-        }
-        
-        log_admin_action(admin_id, action, result)
-        await notify_services(action)
-        
-        # Schedule automatic resume
-        asyncio.create_task(
-            schedule_circuit_breaker_resume(trading_type, duration_minutes)
-        )
-        
-        return result
-        
-    except Exception as e:
-        logger.error(f"Failed to trigger circuit breaker: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-# ============================================================================
-# AUDIT AND LOGGING
-# ============================================================================
-
-@router.get("/audit/log")
-async def get_audit_log(
-    limit: int = Query(default=100, le=1000),
-    offset: int = Query(default=0, ge=0),
-    trading_type: Optional[TradingType] = None,
-    action_type: Optional[str] = None,
-    admin_id: Optional[str] = None,
-    start_date: Optional[str] = None,
-    end_date: Optional[str] = None
-):
-    """Get admin action audit log"""
-    filtered_log = admin_action_log.copy()
-    
-    # Apply filters
-    if trading_type:
-        filtered_log = [log for log in filtered_log if log.get("trading_type") == trading_type.value]
-    if action_type:
-        filtered_log = [log for log in filtered_log if log.get("action") == action_type]
-    if admin_id:
-        filtered_log = [log for log in filtered_log if log.get("admin_id") == admin_id]
-    
-    # Sort by timestamp (most recent first)
-    filtered_log.sort(key=lambda x: x.get("timestamp", ""), reverse=True)
-    
-    total = len(filtered_log)
-    paginated_log = filtered_log[offset:offset + limit]
-    
-    return {
-        "actions": paginated_log,
-        "total": total,
-        "limit": limit,
-        "offset": offset,
-        "filters": {
-            "trading_type": trading_type.value if trading_type else None,
-            "action_type": action_type,
-            "admin_id": admin_id,
-            "start_date": start_date,
-            "end_date": end_date
-        },
-        "timestamp": datetime.utcnow().isoformat()
-    }
-
-# ============================================================================
-# ANALYTICS AND REPORTING
-# ============================================================================
-
-@router.get("/analytics/overview")
-async def get_analytics_overview(
-    trading_type: Optional[TradingType] = None,
-    period_hours: int = 24
-):
-    """Get comprehensive analytics overview"""
-    end_time = datetime.utcnow()
-    start_time = end_time - timedelta(hours=period_hours)
-    
-    return {
-        "period": {
-            "start": start_time.isoformat(),
-            "end": end_time.isoformat(),
-            "hours": period_hours
-        },
-        "trading_type": trading_type.value if trading_type else "all",
-        "overview": {
-            "total_volume": "0.0",
-            "total_trades": 0,
-            "active_users": 0,
-            "total_orders": 0,
-            "canceled_orders": 0,
-            "filled_orders": 0,
-            "average_order_size": "0.0",
-            "trading_fee_collected": "0.0",
-            "market_data_requests": 0,
-            "api_requests": 0,
-            "error_rate": 0.0
-        },
-        "by_trading_type": {
-            t.value: {
-                "volume": "0.0",
-                "trades": 0,
-                "orders": 0,
-                "status": trading_status[t].value
-            }
-            for t in TradingType
-        },
-        "timestamp": datetime.utcnow().isoformat()
-    }
-
-@router.get("/analytics/performance")
-async def get_performance_metrics(
-    trading_type: Optional[TradingType] = None,
-    period_hours: int = 24
-):
-    """Get performance metrics"""
-    return {
-        "trading_type": trading_type.value if trading_type else "all",
-        "period_hours": period_hours,
-        "performance": {
-            "order_book_depth": 0,
-            "spread_average": "0.0",
-            "latency_p50": 0.0,
-            "latency_p95": 0.0,
-            "latency_p99": 0.0,
-            "throughput_orders_per_second": 0.0,
-            "system_load_average": 0.0,
-            "memory_usage": 0.0,
-            "cpu_usage": 0.0,
-            "database_connections": 0,
-            "cache_hit_ratio": 0.0,
-            "api_response_time": 0.0
-        },
-        "timestamp": datetime.utcnow().isoformat()
-    }
-
-# ============================================================================
-# HEALTH AND STATUS
-# ============================================================================
-
-@router.get("/health")
-async def admin_health():
-    """Admin endpoint health check"""
-    return {
-        "status": "healthy",
-        "service": "comprehensive-trading-admin",
-        "version": "4.0.0",
-        "timestamp": datetime.utcnow().isoformat(),
-        "features": [
-            "spot_trading_control",
-            "future_perpetual_control",
-            "future_cross_control",
-            "margin_trading_control",
-            "grid_trading_control",
-            "copy_trading_control",
-            "option_trading_control",
-            "contract_management",
-            "user_management",
-            "risk_management",
-            "audit_logging",
-            "analytics",
-            "emergency_controls"
-        ],
-        "supported_trading_types": [t.value for t in TradingType]
-    }
-
-# ============================================================================
 # HELPER FUNCTIONS
 # ============================================================================
 
@@ -1020,10 +690,3 @@ async def emergency_cancel_all_orders(trading_type: TradingType, symbol: Optiona
     logger.info(f"Emergency cancelling all orders for {trading_type.value} {symbol or 'all symbols'}")
     # In production, this would cancel actual orders
     pass
-
-async def schedule_circuit_breaker_resume(trading_type: TradingType, duration_minutes: int):
-    """Schedule automatic resume after circuit breaker"""
-    await asyncio.sleep(duration_minutes * 60)
-    if trading_status[trading_type] == TradingStatus.PAUSED:
-        trading_status[trading_type] = TradingStatus.ACTIVE
-        logger.info(f"Automatically resumed trading for {trading_type.value} after circuit breaker")
