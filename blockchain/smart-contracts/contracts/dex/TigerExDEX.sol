@@ -6,14 +6,26 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 /**
  * @title TigerExDEX
- * @dev Advanced DEX contract with AMM functionality, similar to Uniswap V3
+ * @dev Enhanced DEX contract with advanced AMM functionality, security, and governance
+ * Features: Concentrated liquidity, dynamic fees, governance, MEV protection
  */
-contract TigerExDEX is ReentrancyGuard, Ownable {
+contract TigerExDEX is ReentrancyGuard, Ownable, Pausable, ERC20 {
     using SafeERC20 for IERC20;
     using SafeMath for uint256;
+
+    // Events
+    event PoolCreated(uint256 indexed poolId, address indexed tokenA, address indexed tokenB, uint256 feeRate);
+    event LiquidityAdded(uint256 indexed poolId, address indexed provider, uint256 amountA, uint256 amountB, uint256 liquidity);
+    event LiquidityRemoved(uint256 indexed poolId, address indexed provider, uint256 amountA, uint256 amountB, uint256 liquidity);
+    event Swap(uint256 indexed poolId, address indexed sender, address tokenIn, uint256 amountIn, address tokenOut, uint256 amountOut);
+    event FeeCollected(uint256 indexed poolId, address token, uint256 amount);
+    event EmergencyPaused(bool paused);
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
     struct Pool {
         address tokenA;
@@ -24,10 +36,56 @@ contract TigerExDEX is ReentrancyGuard, Ownable {
         uint256 feeRate; // Fee rate in basis points (e.g., 30 = 0.3%)
         uint256 lastUpdate;
         bool active;
+        uint256 sqrtPriceX96; // For concentrated liquidity
+        int24 tick; // Current tick
+        uint256 protocolFee; // Protocol fee in basis points
     }
 
     struct Position {
         uint256 poolId;
+        address owner;
+        int24 tickLower;
+        int24 tickUpper;
+        uint128 liquidity;
+        uint256 tokensOwed0;
+        uint256 tokensOwed1;
+        uint256 feeGrowthInside0LastX128;
+        uint256 feeGrowthInside1LastX128;
+        bool active;
+    }
+
+    struct SwapParams {
+        address tokenIn;
+        address tokenOut;
+        uint256 amountIn;
+        uint256 amountOutMin;
+        address recipient;
+        uint256 deadline;
+        bytes data; // For MEV protection
+    }
+
+    // Constants
+    uint256 public constant MAX_FEE_RATE = 1000; // 10%
+    uint256 public constant MIN_LIQUIDITY = 1000;
+    uint256 public constant MAX_POSITIONS_PER_POOL = 100;
+    uint256 public constant DEADLINE_BUFFER = 300; // 5 minutes
+
+    // State variables
+    mapping(uint256 => Pool) public pools;
+    mapping(address => mapping(address => uint256)) public poolIdMap; // tokenA => tokenB => poolId
+    mapping(uint256 => mapping(address => uint256)) public userLiquidity;
+    mapping(uint256 => Position[]) public positions;
+    mapping(address => uint256[]) public userPositions;
+    
+    uint256 public totalPools;
+    address public admin;
+    address public feeCollector;
+    uint256 public protocolFeeRate = 200; // 2% protocol fee
+    bool public emergencyMode = false;
+    
+    // MEV Protection
+    uint256 public minimumBlockDelay = 1;
+    mapping(address => uint256) public lastUserBlock;
         uint256 liquidity;
         uint256 tokenAAmount;
         uint256 tokenBAmount;

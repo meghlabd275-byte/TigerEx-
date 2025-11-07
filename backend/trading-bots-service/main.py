@@ -1,22 +1,27 @@
-from fastapi import FastAPI
-from admin.admin_routes import router as admin_router
-from fastapi import HTTPException, WebSocket, WebSocketDisconnect, Depends, BackgroundTasks
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Depends, BackgroundTasks, Security
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
-from typing import Optional, List, Dict, Any
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from pydantic import BaseModel, Field, validator
+from typing import Optional, List, Dict, Any, Tuple
 from datetime import datetime, timedelta
 import asyncio
 import json
 from enum import Enum
 import uuid
 import logging
-from sqlalchemy import create_engine, Column, String, Float, Integer, DateTime, Boolean, JSON, Text
+import hashlib
+import hmac
+import secrets
+from sqlalchemy import create_engine, Column, String, Float, Integer, DateTime, Boolean, JSON, Text, Numeric
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
-import redis
+import redis.asyncio as redis
 from collections import defaultdict
 import numpy as np
+import pandas as pd
 import random
+import aiohttp
+import websockets
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

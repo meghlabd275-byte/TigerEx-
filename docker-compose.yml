@@ -1,12 +1,12 @@
 version: '3.8'
 
-# TigerEx Complete Cryptocurrency Exchange Platform
-# Production-ready Docker Compose Configuration
-# Includes all services, monitoring, security, and scaling
+# TigerEx Enhanced Complete Cryptocurrency Exchange Platform
+# Production-ready Docker Compose Configuration with advanced security
+# Includes all services, monitoring, security, scaling, and admin controls
 
 services:
   # ======================================
-  # DATABASE SERVICES
+  # ENHANCED DATABASE SERVICES
   # ======================================
   
   postgresql:
@@ -14,23 +14,33 @@ services:
     container_name: tigerex-postgresql
     restart: unless-stopped
     environment:
-      POSTGRES_DB: tigerex
+      POSTGRES_DB: tigerex_db
       POSTGRES_USER: tigerex
       POSTGRES_PASSWORD: tigerex123
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
     volumes:
       - postgresql_data:/var/lib/postgresql/data
       - ./infrastructure/databases/init:/docker-entrypoint-initdb.d
       - ./infrastructure/databases/config/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./infrastructure/databases/security:/etc/postgresql/security
     ports:
       - "5432:5432"
     networks:
       - tigerex-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U tigerex -d tigerex"]
-      interval: 30s
+      test: ["CMD-SHELL", "pg_isready -U tigerex -d tigerex_db"]
+      interval: 15s
       timeout: 10s
-      retries: 3
+      retries: 5
+      start_period: 30s
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
       start_period: 60s
     deploy:
       resources:

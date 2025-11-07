@@ -1,70 +1,137 @@
-# To learn more about how to use Nix to configure your environment
-# see: https://firebase.google.com/docs/studio/customize-workspace
+# Enhanced TigerEx Development Environment Configuration
+# Complete development setup for cryptocurrency exchange platform
 { pkgs, ... }: {
   # Which nixpkgs channel to use.
   channel = "stable-24.05";
 
   # Use https://search.nixos.org/packages to find packages
   packages = [
+    # Core Development Tools
     pkgs.go
-    pkgs.python311
-    pkgs.python311Packages.pip
-    pkgs.python311Packages.fastapi
-    pkgs.python311Packages.uvicorn
-    pkgs.python311Packages.sqlalchemy
-    pkgs.python311Packages.psycopg2
-    pkgs.python311Packages.redis
-    pkgs.python311Packages.celery
-    pkgs.python311Packages.pydantic
-    pkgs.python311Packages.python-jose
-    pkgs.python311Packages.passlib
-    pkgs.python311Packages.bcrypt
-    pkgs.python311Packages.python-multipart
-    pkgs.python311Packages.websockets
-    pkgs.python311Packages.aiofiles
-    pkgs.python311Packages.pillow
-    pkgs.python311Packages.qrcode
-    pkgs.python311Packages.cryptography
-    pkgs.python311Packages.requests
-    pkgs.python311Packages.beautifulsoup4
-    pkgs.python311Packages.selenium
-    pkgs.python311Packages.pandas
-    pkgs.python311Packages.numpy
-    pkgs.python311Packages.matplotlib
-    pkgs.python311Packages.plotly
-    pkgs.python311Packages.scikit-learn
-    pkgs.python311Packages.tensorflow
-    pkgs.python311Packages.torch
-    pkgs.nodejs_20
+    pkgs.rust
+    pkgs.cargo
+    pkgs.python312
+    pkgs.python312Packages.pip
+    pkgs.python312Packages.virtualenv
+    
+    # Backend Dependencies
+    pkgs.python312Packages.fastapi
+    pkgs.python312Packages.uvicorn
+    pkgs.python312Packages.sqlalchemy
+    pkgs.python312Packages.psycopg2
+    pkgs.python312Packages.redis
+    pkgs.python312Packages.celery
+    pkgs.python312Packages.pydantic
+    pkgs.python312Packages.python-jose
+    pkgs.python312Packages.passlib
+    pkgs.python312Packages.bcrypt
+    pkgs.python312Packages.python-multipart
+    pkgs.python312Packages.websockets
+    pkgs.python312Packages.aiofiles
+    pkgs.python312Packages.aiohttp
+    pkgs.python312Packages.asyncpg
+    
+    # Security & Crypto
+    pkgs.python312Packages.cryptography
+    pkgs.python312Packages.pillow
+    pkgs.python312Packages.qrcode
+    pkgs.python312Packages.python-dotenv
+    
+    # Data Processing & Analytics
+    pkgs.python312Packages.requests
+    pkgs.python312Packages.beautifulsoup4
+    pkgs.python312Packages.selenium
+    pkgs.python312Packages.pandas
+    pkgs.python312Packages.numpy
+    pkgs.python312Packages.matplotlib
+    pkgs.python312Packages.plotly
+    pkgs.python312Packages.scikit-learn
+    pkgs.python312Packages.tensorflow
+    pkgs.python312Packages.torch
+    
+    # Frontend Dependencies
+    pkgs.nodejs_22
     pkgs.nodePackages.nodemon
     pkgs.nodePackages.typescript
     pkgs.nodePackages.yarn
+    pkgs.nodePackages.pnpm
+    pkgs.nodePackages.react-native-cli
+    pkgs.nodePackages.expo-cli
+    
+    # Database & Infrastructure
     pkgs.docker
     pkgs.docker-compose
     pkgs.nginx
     pkgs.redis
-    pkgs.postgresql
+    pkgs.postgresql_16
     pkgs.mongodb
+    pkgs.elasticsearch
+    
+    # Development Tools
     pkgs.git
     pkgs.curl
     pkgs.wget
     pkgs.jq
+    pkgs.helix
+    pkgs.ripgrep
+    pkgs.fd
+    pkgs.bat
+    pkgs.eza
+    pkgs.tree
+    pkgs.htop
+    pkgs.netcat
+    
+    # Security Tools
+    pkgs.openssl
+    pkgs.gnupg
+    pkgs.audit
+    pkgs.nmap
+    
+    # Monitoring & Debugging
+    pkgs.postman
+    pkgs.insomnia
+    pkgs.grpcurl
+    pkgs.k6
+    
+    # Build Tools
+    pkgs.cmake
+    pkgs.gcc
+    pkgs.make
+    pkgs.pkg-config
   ];
 
-  # Sets environment variables in the workspace
+  # Enhanced environment variables in the workspace
   env = {
     NODE_ENV = "development";
     PYTHONPATH = ".";
-    DATABASE_URL = "postgresql://localhost:5432/tigerex";
+    PYTHONPATH = "./unified-backend:./backend:.";
+    DATABASE_URL = "postgresql://tigerex:tigerex123@localhost:5432/tigerex_db";
     REDIS_URL = "redis://localhost:6379";
+    JWT_SECRET = "development-jwt-secret-change-in-production";
+    ENCRYPTION_KEY = "development-encryption-key-change-in-production";
+    WEB3_PROVIDER = "https://mainnet.infura.io/v3/YOUR_INFURA_KEY";
+    DEBUG = "true";
+    LOG_LEVEL = "DEBUG";
+    CORS_ORIGINS = "http://localhost:3000,http://localhost:8081";
+    ENABLE_ADMIN_PANEL = "true";
+    ENABLE_MOBILE_API = "true";
+    ENABLE_DESKTOP_API = "true";
+    EXCHANGE_API_MODE = "sandbox";
+    BLOCKCHAIN_NETWORK = "testnet";
   };
 
   idx = {
-    # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
+    # Enhanced VS Code extensions for complete development experience
     extensions = [
+      # Python Development
       "ms-python.python"
       "ms-python.flake8"
       "ms-python.black-formatter"
+      "ms-python.isort"
+      "ms-python.debugpy"
+      "ms-python.pylint"
+      
+      # Frontend Development
       "bradlc.vscode-tailwindcss"
       "esbenp.prettier-vscode"
       "dbaeumer.vscode-eslint"
@@ -72,9 +139,43 @@
       "formulahendry.auto-rename-tag"
       "christian-kohler.path-intellisense"
       "ms-vscode.vscode-json"
+      
+      # Web3 & Blockchain
+      "juanblanco.solidity"
+      "nomicfoundation.hardhat-solidity"
+      "tintinweb.solidity-visual-auditor"
+      
+      # Docker & DevOps
+      "ms-azuretools.vscode-docker"
       "redhat.vscode-yaml"
       "ms-kubernetes-tools.vscode-kubernetes-tools"
       "ms-vscode-remote.remote-containers"
+      
+      # Database
+      "ms-mssql.mssql"
+      "cweijan.vscode-redis-client"
+      "mtxr.sqltools"
+      
+      # API & Testing
+      "humao.rest-client"
+      "ms-vscode.vscode-postgresql"
+      
+      # Security
+      "ms-vscode.vscode-security-scan"
+      
+      # Productivity
+      "ms-vscode.vscode-todo-highlight"
+      "gruntfuggly.todo-tree"
+      "github.copilot"
+      "github.copilot-chat"
+      
+      # Git & Collaboration
+      "eamodio.gitlens"
+      "github.vscode-pull-request-github"
+      
+      # Documentation
+      "yzhang.markdown-all-in-one"
+      "shd101wyy.markdown-preview-enhanced"
     ];
 
     # Enable previews
