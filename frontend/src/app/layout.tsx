@@ -1,54 +1,41 @@
-import type { Metadata } from 'next';
-import './globals.css';
-import MainLayout from '@/components/layout/MainLayout';
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
+import { Providers } from './providers'
+import { AuthProvider } from '@/contexts/AuthContext'
+import { ThemeProvider } from '@/contexts/ThemeContext'
+import { WebSocketProvider } from '@/contexts/WebSocketContext'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'TigerEx - Hybrid Cryptocurrency Exchange',
-  description: 'Advanced hybrid crypto exchange platform combining CEX and DEX functionality',
-  keywords: ['cryptocurrency', 'exchange', 'trading', 'blockchain', 'defi', 'cex', 'dex'],
+  title: 'TigerEx - Complete Cryptocurrency Exchange',
+  description: 'Advanced cryptocurrency exchange with comprehensive trading features, multi-platform support, and enterprise-grade security',
+  keywords: ['cryptocurrency', 'exchange', 'bitcoin', 'ethereum', 'trading', 'defi', 'nft'],
   authors: [{ name: 'TigerEx Team' }],
   viewport: 'width=device-width, initial-scale=1',
-  themeColor: '#F0B90B',
-  icons: {
-    icon: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
-  },
-  openGraph: {
-    title: 'TigerEx - Hybrid Cryptocurrency Exchange',
-    description: 'Advanced hybrid crypto exchange platform combining CEX and DEX functionality',
-    url: 'https://tigerex.com',
-    siteName: 'TigerEx',
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'TigerEx Platform',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'TigerEx - Hybrid Cryptocurrency Exchange',
-    description: 'Advanced hybrid crypto exchange platform combining CEX and DEX functionality',
-    images: ['/og-image.png'],
-  },
-};
+  themeColor: '#000000',
+  manifest: '/manifest.json',
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="dark">
-      <body>
-        <MainLayout>
-          {children}
-        </MainLayout>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
+        <Providers>
+          <ThemeProvider>
+            <AuthProvider>
+              <WebSocketProvider>
+                {children}
+              </WebSocketProvider>
+            </AuthProvider>
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
-  );
+  )
 }

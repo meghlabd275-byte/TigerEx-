@@ -1,1 +1,83 @@
-{}
+{
+  "name": "tigerex-desktop",
+  "version": "4.0.0",
+  "description": "TigerEx - Complete Cryptocurrency Exchange Desktop Application",
+  "main": "main.js",
+  "homepage": "./",
+  "scripts": {
+    "start": "electron .",
+    "dev": "concurrently &quot;npm run dev:react&quot; &quot;wait-on http://localhost:3001 && electron .&quot;",
+    "dev:react": "react-scripts start",
+    "build": "react-scripts build && electron-builder",
+    "build:win": "react-scripts build && electron-builder --win",
+    "build:mac": "react-scripts build && electron-builder --mac",
+    "build:linux": "react-scripts build && electron-builder --linux",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "prettier --write .",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.9.7",
+    "axios": "^1.6.2",
+    "chart.js": "^4.4.0",
+    "electron-store": "^8.1.0",
+    "electron-updater": "^6.1.7",
+    "lightweight-charts": "^4.1.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.1.3",
+    "react-router-dom": "^6.8.1",
+    "react-scripts": "5.0.1",
+    "socket.io-client": "^4.7.4",
+    "web3": "^4.2.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "concurrently": "^8.2.2",
+    "electron": "^27.1.3",
+    "electron-builder": "^24.8.0",
+    "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.0.0",
+    "prettier": "^3.1.0",
+    "typescript": "5.2.2",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.tigerex.desktop",
+    "productName": "TigerEx Desktop",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "build/**/*",
+      "main.js",
+      "preload.js",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.finance"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

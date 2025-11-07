@@ -1,464 +1,544 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Box,
-  Container,
-  Grid,
-  Paper,
-  Typography,
-  Card,
-  CardContent,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Divider,
-  Button,
-  Chip,
-  Avatar,
-  IconButton,
-  Menu,
-  MenuItem,
-  AppBar,
-  Toolbar,
-  Drawer,
-  CssBaseline,
-  ThemeProvider,
-  createTheme,
-  useTheme,
-} from '@mui/material';
-import {
-  Dashboard as DashboardIcon,
-  TrendingUp as TrendingUpIcon,
-  AccountBalance as AccountBalanceIcon,
-  People as PeopleIcon,
-  Settings as SettingsIcon,
-  ExitToApp as ExitToAppIcon,
-  Menu as MenuIcon,
-  ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon,
-  AccountCircle,
-  Notifications,
-  Language,
-  Security,
-  Analytics,
-  Storage,
-  Cloud,
-  Speed,
-} from '@mui/icons-material';
-import { Line, Bar, Doughnut } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-} from 'chart.js';
+'use client'
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement
-);
+import React, { useState, useEffect } from 'react'
+import { useAuth } from '@/contexts/AuthContext'
 
-const drawerWidth = 240;
+interface SystemStats {
+  totalOrders: number
+  totalVolume: string
+  activeUsers: number
+  tradingStatus: string
+  systemHealth: 'healthy' | 'warning' | 'critical'
+}
 
-const menuItems = [
-  { text: 'Dashboard', icon: <DashboardIcon />, path: '/admin/dashboard' },
-  { text: 'Users', icon: <PeopleIcon />, path: '/admin/users' },
-  { text: 'Trading', icon: <TrendingUpIcon />, path: '/admin/trading' },
-  { text: 'Finance', icon: <AccountBalanceIcon />, path: '/admin/finance' },
-  { text: 'Security', icon: <Security />, path: '/admin/security' },
-  { text: 'Analytics', icon: <Analytics />, path: '/admin/analytics' },
-  { text: 'System', icon: <Storage />, path: '/admin/system' },
-  { text: 'Settings', icon: <SettingsIcon />, path: '/admin/settings' },
-];
+interface User {
+  id: string
+  email: string
+  username: string
+  role: string
+  status: 'active' | 'suspended' | 'banned'
+  kycVerified: boolean
+  twoFactorEnabled: boolean
+  lastLogin: string
+  totalVolume: string
+}
 
-const AdminDashboard: React.FC = () => {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [userProfile, setUserProfile] = useState({
-    name: 'Admin User',
-    email: 'admin@tigerex.com',
-    role: 'Super Admin',
-    avatar: '',
-  });
+interface Order {
+  id: string
+  user: string
+  symbol: string
+  side: 'buy' | 'sell'
+  type: string
+  quantity: string
+  price: string
+  status: string
+  timestamp: string
+}
 
-  const theme = createTheme({
-    palette: {
-      mode: 'dark',
-      primary: {
-        main: '#1976d2',
-      },
-      secondary: {
-        main: '#dc004e',
-      },
-      background: {
-        default: '#121212',
-        paper: '#1e1e1e',
-      },
-    },
-  });
+export const AdminDashboard: React.FC = () => {
+  const { user } = useAuth()
+  const [activeTab, setActiveTab] = useState('overview')
+  const [systemStats, setSystemStats] = useState<SystemStats | null>(null)
+  const [users, setUsers] = useState<User[]>([])
+  const [orders, setOrders] = useState<Order[]>([])
+  const [tradingControls, setTradingControls] = useState({
+    status: 'active',
+    pausedSymbols: [] as string[]
+  })
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+  useEffect(() => {
+    if (user?.role !== 'admin') {
+      // Redirect or show unauthorized message
+      return
+    }
+    
+    loadSystemStats()
+    loadUsers()
+    loadOrders()
+    loadTradingControls()
+  }, [user])
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const loadSystemStats = async () => {
+    try {
+      const response = await fetch('/admin/stats')
+      const data = await response.json()
+      setSystemStats(data)
+    } catch (error) {
+      console.error('Failed to load system stats:', error)
+    }
+  }
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
+  const loadUsers = async () => {
+    try {
+      const response = await fetch('/admin/users')
+      const data = await response.json()
+      setUsers(data.users || [])
+    } catch (error) {
+      console.error('Failed to load users:', error)
+    }
+  }
 
-  const handleLogout = () => {
-    // Implement logout logic
-    console.log('Logging out...');
-    handleMenuClose();
-  };
+  const loadOrders = async () => {
+    try {
+      const response = await fetch('/admin/orders')
+      const data = await response.json()
+      setOrders(data.orders || [])
+    } catch (error) {
+      console.error('Failed to load orders:', error)
+    }
+  }
 
-  const drawer = (
-    <Box sx={{ overflow: 'auto' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
-        <Avatar sx={{ mr: 2, bgcolor: 'primary.main' }}>
-          <Speed />
-        </Avatar>
-        <Typography variant="h6" noWrap>
-          TigerEx Admin
-        </Typography>
-      </Box>
-      <Divider />
-      <List>
-        {menuItems.map((item) => (
-          <ListItem button key={item.text}>
-            <ListItemIcon sx={{ color: 'inherit' }}>
-              {item.icon}
-            </ListItemIcon>
-            <ListItemText primary={item.text} />
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
+  const loadTradingControls = async () => {
+    try {
+      const response = await fetch('/admin/trading/status')
+      const data = await response.json()
+      setTradingControls(data)
+    } catch (error) {
+      console.error('Failed to load trading controls:', error)
+    }
+  }
 
-  // Mock data for charts
-  const tradingVolumeData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    datasets: [
-      {
-        label: 'Trading Volume (USD)',
-        data: [1200000, 1900000, 3000000, 5000000, 2000000, 3000000],
-        borderColor: 'rgb(75, 192, 192)',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-      },
-    ],
-  };
+  const handleTradingControl = async (action: string, symbol?: string) => {
+    try {
+      const response = await fetch('/admin/trading/control', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, symbol, reason: 'Admin action' })
+      })
+      
+      if (response.ok) {
+        loadTradingControls()
+        loadSystemStats()
+      }
+    } catch (error) {
+      console.error('Failed to control trading:', error)
+    }
+  }
 
-  const userGrowthData = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-    datasets: [
-      {
-        label: 'New Users',
-        data: [120, 190, 300, 500, 200, 300],
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
-      },
-    ],
-  };
+  const handleUserAction = async (userId: string, action: string) => {
+    try {
+      const response = await fetch(`/admin/users/${userId}/${action}`, {
+        method: 'POST'
+      })
+      
+      if (response.ok) {
+        loadUsers()
+      }
+    } catch (error) {
+      console.error('Failed to perform user action:', error)
+    }
+  }
 
-  const assetDistributionData = {
-    labels: ['BTC', 'ETH', 'USDT', 'BNB', 'Others'],
-    datasets: [
-      {
-        data: [30, 25, 20, 15, 10],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.8)',
-          'rgba(54, 162, 235, 0.8)',
-          'rgba(255, 205, 86, 0.8)',
-          'rgba(75, 192, 192, 0.8)',
-          'rgba(153, 102, 255, 0.8)',
-        ],
-      },
-    ],
-  };
+  const handleOrderCancel = async (orderId: string) => {
+    try {
+      const response = await fetch(`/admin/orders/${orderId}/cancel`, {
+        method: 'POST'
+      })
+      
+      if (response.ok) {
+        loadOrders()
+      }
+    } catch (error) {
+      console.error('Failed to cancel order:', error)
+    }
+  }
 
-  const statsCards = [
-    { title: 'Total Users', value: '45,234', change: '+12%', icon: <PeopleIcon /> },
-    { title: '24h Volume', value: '$2.3M', change: '+8%', icon: <TrendingUpIcon /> },
-    { title: 'Total Assets', value: '$156M', change: '+15%', icon: <AccountBalanceIcon /> },
-    { title: 'Active Traders', value: '12,456', change: '+5%', icon: <Speed /> },
-  ];
+  if (!user || user.role !== 'admin') {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 max-w-md w-full">
+          <h1 className="text-2xl font-bold text-center mb-4 text-red-600">
+            Access Denied
+          </h1>
+          <p className="text-center text-gray-600 dark:text-gray-300">
+            You don't have permission to access the admin dashboard.
+          </p>
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <ThemeProvider theme={theme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <AppBar
-          position="fixed"
-          sx={{
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
-            ml: { sm: `${drawerWidth}px` },
-          }}
-        >
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: 'none' } }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-              Admin Dashboard
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <IconButton color="inherit">
-                <Notifications />
-              </IconButton>
-              <IconButton color="inherit">
-                <Language />
-              </IconButton>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenuOpen}
-                color="inherit"
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Header */}
+      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+              🐅 TigerEx Admin Dashboard
+            </h1>
+            <div className="flex items-center space-x-4">
+              <span className={`px-3 py-1 rounded text-sm font-medium ${
+                systemStats?.systemHealth === 'healthy' 
+                  ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
+                  : systemStats?.systemHealth === 'warning'
+                  ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100'
+                  : 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100'
+              }`}>
+                System: {systemStats?.systemHealth?.toUpperCase()}
+              </span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Navigation Tabs */}
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <nav className="flex space-x-8">
+            {['overview', 'users', 'orders', 'trading', 'security'].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`py-4 px-1 border-b-2 font-medium text-sm capitalize ${
+                  activeTab === tab
+                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+                }`}
               >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
-              >
-                <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-                <MenuItem onClick={handleMenuClose}>Account</MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-              </Menu>
-            </Box>
-          </Toolbar>
-        </AppBar>
-        <Box
-          component="nav"
-          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-          aria-label="mailbox folders"
-        >
-          <Drawer
-            variant="temporary"
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            ModalProps={{
-              keepMounted: true,
-            }}
-            sx={{
-              display: { xs: 'block', sm: 'none' },
-              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-            }}
-          >
-            {drawer}
-          </Drawer>
-          <Drawer
-            variant="permanent"
-            sx={{
-              display: { xs: 'none', sm: 'block' },
-              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-            }}
-            open
-          >
-            {drawer}
-          </Drawer>
-        </Box>
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
-            p: 3,
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
-          }}
-        >
-          <Toolbar />
-          <Container maxWidth="xl">
-            <Grid container spacing={3}>
-              {/* Stats Cards */}
-              {statsCards.map((stat, index) => (
-                <Grid item xs={12} sm={6} md={3} key={index}>
-                  <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                    <CardContent sx={{ flex: '1 0 auto' }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
-                          {stat.icon}
-                        </Avatar>
-                        <Typography gutterBottom variant="h5" component="div">
-                          {stat.value}
-                        </Typography>
-                      </Box>
-                      <Typography variant="body2" color="text.secondary">
-                        {stat.title}
-                      </Typography>
-                      <Typography variant="body2" color="success.main">
-                        {stat.change}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))}
+                {tab}
+              </button>
+            ))}
+          </nav>
+        </div>
+      </div>
 
-              {/* Trading Volume Chart */}
-              <Grid item xs={12} md={8}>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h6" gutterBottom>
-                      Trading Volume
-                    </Typography>
-                    <Box sx={{ height: 300 }}>
-                      <Line data={tradingVolumeData} />
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Grid>
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {activeTab === 'overview' && (
+          <div className="space-y-6">
+            {/* System Statistics */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Orders</h3>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {systemStats?.totalOrders?.toLocaleString() || '0'}
+                </p>
+              </div>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Volume</h3>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  ${systemStats?.totalVolume || '0'}
+                </p>
+              </div>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Active Users</h3>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {systemStats?.activeUsers?.toLocaleString() || '0'}
+                </p>
+              </div>
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Trading Status</h3>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white capitalize">
+                  {systemStats?.tradingStatus || 'Unknown'}
+                </p>
+              </div>
+            </div>
 
-              {/* Asset Distribution */}
-              <Grid item xs={12} md={4}>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h6" gutterBottom>
-                      Asset Distribution
-                    </Typography>
-                    <Box sx={{ height: 300 }}>
-                      <Doughnut data={assetDistributionData} />
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Grid>
+            {/* Recent Activity */}
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Recent Activity
+              </h3>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-600">
+                  <span className="text-sm text-gray-600 dark:text-gray-300">New user registration</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">2 minutes ago</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-600">
+                  <span className="text-sm text-gray-600 dark:text-gray-300">Large trade executed</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">5 minutes ago</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-600">
+                  <span className="text-sm text-gray-600 dark:text-gray-300">Security alert triggered</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">12 minutes ago</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
-              {/* User Growth */}
-              <Grid item xs={12} md={6}>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h6" gutterBottom>
-                      User Growth
-                    </Typography>
-                    <Box sx={{ height: 300 }}>
-                      <Bar data={userGrowthData} />
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Grid>
+        {activeTab === 'users' && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                User Management
+              </h3>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
+                  <thead className="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        User
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        KYC
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        2FA
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Volume
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-600">
+                    {users.map((user) => (
+                      <tr key={user.id}>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div>
+                            <div className="text-sm font-medium text-gray-900 dark:text-white">
+                              {user.username}
+                            </div>
+                            <div className="text-sm text-gray-500 dark:text-gray-300">
+                              {user.email}
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            user.status === 'active'
+                              ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
+                              : user.status === 'suspended'
+                              ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100'
+                              : 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100'
+                          }`}>
+                            {user.status}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            user.kycVerified
+                              ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
+                              : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                          }`}>
+                            {user.kycVerified ? 'Verified' : 'Pending'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            user.twoFactorEnabled
+                              ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
+                              : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                          }`}>
+                            {user.twoFactorEnabled ? 'Enabled' : 'Disabled'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                          ${user.totalVolume}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <button
+                            onClick={() => handleUserAction(user.id, 'suspend')}
+                            className="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300 mr-3"
+                          >
+                            Suspend
+                          </button>
+                          <button
+                            onClick={() => handleUserAction(user.id, 'ban')}
+                            className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                          >
+                            Ban
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
 
-              {/* Recent Activity */}
-              <Grid item xs={12} md={6}>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h6" gutterBottom>
-                      Recent Activity
-                    </Typography>
-                    <List>
-                      <ListItem>
-                        <ListItemIcon>
-                          <TrendingUpIcon color="success" />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary="New user registration"
-                          secondary="John Doe - 2 minutes ago"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon>
-                          <AccountBalanceIcon color="info" />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary="Large trade executed"
-                          secondary="BTC/USDT - $50,000 - 5 minutes ago"
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon>
-                          <Security color="warning" />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary="Security alert"
-                          secondary="Unusual login attempt - 10 minutes ago"
-                        />
-                      </ListItem>
-                    </List>
-                  </CardContent>
-                </Card>
-              </Grid>
+        {activeTab === 'orders' && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Order Management
+              </h3>
+              <div className="mb-4">
+                <button
+                  onClick={() => handleTradingControl('cancel_all')}
+                  className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+                >
+                  Cancel All Orders
+                </button>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
+                  <thead className="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Order ID
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        User
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Symbol
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Side
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Type
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Quantity
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Price
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-600">
+                    {orders.map((order) => (
+                      <tr key={order.id}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                          {order.id}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                          {order.user}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                          {order.symbol}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            order.side === 'buy'
+                              ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
+                              : 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100'
+                          }`}>
+                            {order.side}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                          {order.type}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                          {order.quantity}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                          {order.price}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            order.status === 'filled'
+                              ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
+                              : order.status === 'open'
+                              ? 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100'
+                              : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                          }`}>
+                            {order.status}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <button
+                            onClick={() => handleOrderCancel(order.id)}
+                            className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                          >
+                            Cancel
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
 
-              {/* System Status */}
-              <Grid item xs={12}>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h6" gutterBottom>
-                      System Status
-                    </Typography>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sm={6} md={3}>
-                        <Chip
-                          label="API Gateway: Online"
-                          color="success"
-                          variant="outlined"
-                          sx={{ width: '100%', mb: 1 }}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6} md={3}>
-                        <Chip
-                          label="Trading Engine: Online"
-                          color="success"
-                          variant="outlined"
-                          sx={{ width: '100%', mb: 1 }}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6} md={3}>
-                        <Chip
-                          label="Database: Online"
-                          color="success"
-                          variant="outlined"
-                          sx={{ width: '100%', mb: 1 }}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6} md={3}>
-                        <Chip
-                          label="Blockchain: Online"
-                          color="success"
-                          variant="outlined"
-                          sx={{ width: '100%', mb: 1 }}
-                        />
-                      </Grid>
-                    </Grid>
-                  </CardContent>
-                </Card>
-              </Grid>
-            </Grid>
-          </Container>
-        </Box>
-      </Box>
-    </ThemeProvider>
-  );
-};
+        {activeTab === 'trading' && (
+          <div className="space-y-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Trading Controls
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Trading Status
+                  </span>
+                  <span className={`px-3 py-1 rounded text-sm font-medium ${
+                    tradingControls.status === 'active'
+                      ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
+                      : 'bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100'
+                  }`}>
+                    {tradingControls.status}
+                  </span>
+                </div>
+                <div className="flex space-x-4">
+                  <button
+                    onClick={() => handleTradingControl('pause')}
+                    className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700"
+                  >
+                    Pause Trading
+                  </button>
+                  <button
+                    onClick={() => handleTradingControl('resume')}
+                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                  >
+                    Resume Trading
+                  </button>
+                  <button
+                    onClick={() => handleTradingControl('emergency_stop')}
+                    className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+                  >
+                    Emergency Stop
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
-export default AdminDashboard;
+        {activeTab === 'security' && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Security Settings
+            </h3>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Enable 2FA Requirement
+                </span>
+                <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                  Configure
+                </button>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  API Rate Limiting
+                </span>
+                <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                  Configure
+                </button>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  IP Whitelist
+                </span>
+                <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                  Configure
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+    </div>
+  )
+}
