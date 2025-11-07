@@ -1,888 +1,417 @@
 version: '3.8'
 
-# TigerEx Enhanced Complete Cryptocurrency Exchange Platform
-# Production-ready Docker Compose Configuration with advanced security
-# Includes all services, monitoring, security, scaling, and admin controls
-
 services:
-  # ======================================
-  # ENHANCED DATABASE SERVICES
-  # ======================================
-  
-  postgresql:
+  # ===========================================
+  # DATABASE SERVICES
+  # ===========================================
+  postgres-primary:
     image: postgres:15-alpine
-    container_name: tigerex-postgresql
-    restart: unless-stopped
+    container_name: tigerex-postgres-primary
     environment:
-      POSTGRES_DB: tigerex_db
-      POSTGRES_USER: tigerex
-      POSTGRES_PASSWORD: tigerex123
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
-      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
     volumes:
-      - postgresql_data:/var/lib/postgresql/data
-      - ./infrastructure/databases/init:/docker-entrypoint-initdb.d
-      - ./infrastructure/databases/config/postgresql.conf:/etc/postgresql/postgresql.conf
-      - ./infrastructure/databases/security:/etc/postgresql/security
+      - postgres_primary_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+      - ./database/config/postgresql.conf:/etc/postgresql/postgresql.conf
     ports:
       - "5432:5432"
     networks:
       - tigerex-network
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U tigerex -d tigerex_db"]
-      interval: 15s
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 30s
       timeout: 10s
-      retries: 5
-      start_period: 30s
-    security_opt:
-      - no-new-privileges:true
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-      start_period: 60s
+      retries: 3
     deploy:
       resources:
         limits:
+          memory: 4G
+          cpus: '2.0'
+        reservations:
           memory: 2G
           cpus: '1.0'
-        reservations:
-          memory: 1G
-          cpus: '0.5'
 
-  redis:
-    image: redis:7-alpine
-    container_name: tigerex-redis
-    restart: unless-stopped
-    command: redis-server --appendonly yes --requirepass tigerex123
+  postgres-read:
+    image: postgres:15-alpine
+    container_name: tigerex-postgres-read
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}_ro
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - redis_data:/data
-      - ./infrastructure/databases/config/redis.conf:/usr/local/etc/redis/redis.conf
+      - postgres_read_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}_ro -d ${POSTGRES_DB}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  postgres-trading:
+    image: postgres:15-alpine
+    container_name: tigerex-postgres-trading
+    environment:
+      POSTGRES_DB: tigerex_trading
+      POSTGRES_USER: ${POSTGRES_USER}_trading
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_trading_data:/var/lib/postgresql/data
+      - ./database/trading/init:/docker-entrypoint-initdb.d
+    ports:
+      - "5434:5432"
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}_trading -d tigerex_trading"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+          cpus: '4.0'
+        reservations:
+          memory: 4G
+          cpus: '2.0'
+
+  # ===========================================
+  # REDIS CLUSTER
+  # ===========================================
+  redis-cache:
+    image: redis:7-alpine
+    container_name: tigerex-redis-cache
+    command: redis-server --appendonly yes --requirepass ${REDIS_CACHE_PASSWORD} --maxmemory 2gb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_cache_data:/data
+      - ./redis/config/redis-cache.conf:/etc/redis/redis.conf
     ports:
       - "6379:6379"
     networks:
       - tigerex-network
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 30s
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-          cpus: '0.5'
-        reservations:
-          memory: 512M
-          cpus: '0.25'
 
-  mongodb:
-    image: mongo:7
-    container_name: tigerex-mongodb
-    restart: unless-stopped
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: tigerex
-      MONGO_INITDB_ROOT_PASSWORD: tigerex123
-      MONGO_INITDB_DATABASE: tigerex
+  redis-session:
+    image: redis:7-alpine
+    container_name: tigerex-redis-session
+    command: redis-server --appendonly yes --requirepass ${REDIS_SESSION_PASSWORD} --maxmemory 1gb --maxmemory-policy allkeys-lru
     volumes:
-      - mongodb_data:/data/db
-      - ./infrastructure/databases/init/mongo:/docker-entrypoint-initdb.d
-      - ./infrastructure/databases/config/mongod.conf:/etc/mongod.conf
+      - redis_session_data:/data
     ports:
-      - "27017:27017"
+      - "6380:6379"
     networks:
       - tigerex-network
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-          cpus: '1.0'
-        reservations:
-          memory: 1G
-          cpus: '0.5'
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
-    container_name: tigerex-elasticsearch
-    restart: unless-stopped
-    environment:
-      - node.name=tigerex-es-node-1
-      - cluster.name=tigerex-cluster
-      - discovery.type=single-node
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-      - xpack.security.enabled=false
-      - xpack.security.enrollment.enabled=false
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
+  redis-market:
+    image: redis:7-alpine
+    container_name: tigerex-redis-market
+    command: redis-server --appendonly yes --requirepass ${REDIS_MARKET_PASSWORD} --maxmemory 4gb --maxmemory-policy allkeys-lru
     volumes:
-      - elasticsearch_data:/usr/share/elasticsearch/data
-      - ./infrastructure/databases/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - redis_market_data:/data
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - "6381:6379"
     networks:
       - tigerex-network
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-          cpus: '1.0'
-        reservations:
-          memory: 1G
-          cpus: '0.5'
 
-  # ======================================
-  # CORE BACKEND SERVICES
-  # ======================================
-  
+  redis-celery:
+    image: redis:7-alpine
+    container_name: tigerex-redis-celery
+    command: redis-server --appendonly yes --requirepass ${CELERY_PASSWORD} --maxmemory 2gb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_celery_data:/data
+    ports:
+      - "6382:6379"
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ===========================================
+  # APPLICATION SERVICES
+  # ===========================================
   api-gateway:
     build:
-      context: ./backend
-      dockerfile: api-gateway/Dockerfile
+      context: ./backend/api-gateway
+      dockerfile: Dockerfile
     container_name: tigerex-api-gateway
-    restart: unless-stopped
     environment:
       - NODE_ENV=production
-      - PORT=8080
-      - REDIS_URL=redis://:tigerex123@redis:6379
-      - DATABASE_URL=postgresql://tigerex:tigerex123@postgresql:5432/tigerex
-    volumes:
-      - ./backend/api-gateway:/app
-      - /app/node_modules
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_CACHE_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
     ports:
       - "8080:8080"
     networks:
       - tigerex-network
     depends_on:
-      - postgresql
-      - redis
+      - postgres-primary
+      - redis-cache
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s
     deploy:
       replicas: 2
-      resources:
-        limits:
-          memory: 512M
-          cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
-
-  authentication-service:
-    build:
-      context: ./backend
-      dockerfile: authentication-service/Dockerfile
-    container_name: tigerex-auth
-    restart: unless-stopped
-    environment:
-      - NODE_ENV=production
-      - PORT=8081
-      - DATABASE_URL=postgresql://tigerex:tigerex123@postgresql:5432/tigerex
-      - REDIS_URL=redis://:tigerex123@redis:6379
-      - JWT_SECRET=your-super-secret-jwt-key
-      - ENCRYPTION_KEY=your-super-secret-encryption-key
-    volumes:
-      - ./backend/authentication-service:/app
-      - /app/node_modules
-    ports:
-      - "8081:8081"
-    networks:
-      - tigerex-network
-    depends_on:
-      - postgresql
-      - redis
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-    deploy:
-      replicas: 2
-      resources:
-        limits:
-          memory: 512M
-          cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
-
-  user-management-service:
-    build:
-      context: ./backend
-      dockerfile: user-management-service/Dockerfile
-    container_name: tigerex-user-management
-    restart: unless-stopped
-    environment:
-      - NODE_ENV=production
-      - PORT=8082
-      - DATABASE_URL=postgresql://tigerex:tigerex123@postgresql:5432/tigerex
-      - REDIS_URL=redis://:tigerex123@redis:6379
-    volumes:
-      - ./backend/user-management-service:/app
-      - /app/node_modules
-    ports:
-      - "8082:8082"
-    networks:
-      - tigerex-network
-    depends_on:
-      - postgresql
-      - redis
-      - authentication-service
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8082/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-    deploy:
-      replicas: 2
-      resources:
-        limits:
-          memory: 512M
-          cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
-
-  trading-engine:
-    build:
-      context: ./backend
-      dockerfile: advanced-trading-engine/Dockerfile
-    container_name: tigerex-trading-engine
-    restart: unless-stopped
-    environment:
-      - NODE_ENV=production
-      - PORT=8083
-      - DATABASE_URL=postgresql://tigerex:tigerex123@postgresql:5432/tigerex
-      - REDIS_URL=redis://:tigerex123@redis:6379
-      - MONGODB_URL=mongodb://tigerex:tigerex123@mongodb:27017/tigerex
-    volumes:
-      - ./backend/advanced-trading-engine:/app
-      - /app/node_modules
-    ports:
-      - "8083:8083"
-    networks:
-      - tigerex-network
-    depends_on:
-      - postgresql
-      - redis
-      - mongodb
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8083/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-    deploy:
-      replicas: 3
       resources:
         limits:
           memory: 1G
-          cpus: '1.0'
-        reservations:
-          memory: 512M
           cpus: '0.5'
 
-  # ======================================
-  # TRADING SERVICES
-  # ======================================
-  
-  exchange-integration-service:
-    build:
-      context: ./backend
-      dockerfile: exchange-integration-service/Dockerfile
-    container_name: tigerex-exchange-integration
-    restart: unless-stopped
-    environment:
-      - NODE_ENV=production
-      - PORT=8084
-      - REDIS_URL=redis://:tigerex123@redis:6379
-      - BINANCE_API_KEY=${BINANCE_API_KEY}
-      - BINANCE_API_SECRET=${BINANCE_API_SECRET}
-      - OKX_API_KEY=${OKX_API_KEY}
-      - OKX_API_SECRET=${OKX_API_SECRET}
-      - OKX_PASSPHRASE=${OKX_PASSPHRASE}
-    volumes:
-      - ./backend/exchange-integration-service:/app
-      - /app/node_modules
-    ports:
-      - "8084:8084"
-    networks:
-      - tigerex-network
-    depends_on:
-      - redis
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8084/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-    deploy:
-      replicas: 2
-      resources:
-        limits:
-          memory: 512M
-          cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
-
-  liquidity-aggregation-service:
-    build:
-      context: ./backend
-      dockerfile: liquidity-aggregation-service/Dockerfile
-    container_name: tigerex-liquidity-aggregation
-    restart: unless-stopped
-    environment:
-      - NODE_ENV=production
-      - PORT=8085
-      - REDIS_URL=redis://:tigerex123@redis:6379
-      - MONGODB_URL=mongodb://tigerex:tigerex123@mongodb:27017/tigerex
-    volumes:
-      - ./backend/liquidity-aggregation-service:/app
-      - /app/node_modules
-    ports:
-      - "8085:8085"
-    networks:
-      - tigerex-network
-    depends_on:
-      - redis
-      - mongodb
-      - exchange-integration-service
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8085/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-    deploy:
-      replicas: 2
-      resources:
-        limits:
-          memory: 512M
-          cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
-
-  order-management-service:
-    build:
-      context: ./backend
-      dockerfile: order-management-service/Dockerfile
-    container_name: tigerex-order-management
-    restart: unless-stopped
-    environment:
-      - NODE_ENV=production
-      - PORT=8086
-      - DATABASE_URL=postgresql://tigerex:tigerex123@postgresql:5432/tigerex
-      - REDIS_URL=redis://:tigerex123@redis:6379
-    volumes:
-      - ./backend/order-management-service:/app
-      - /app/node_modules
-    ports:
-      - "8086:8086"
-    networks:
-      - tigerex-network
-    depends_on:
-      - postgresql
-      - redis
-      - trading-engine
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8086/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-    deploy:
-      replicas: 2
-      resources:
-        limits:
-          memory: 512M
-          cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
-
-  # ======================================
-  # WALLET & PAYMENT SERVICES
-  # ======================================
-  
-  wallet-service:
-    build:
-      context: ./backend
-      dockerfile: advanced-wallet-system/Dockerfile
-    container_name: tigerex-wallet-service
-    restart: unless-stopped
-    environment:
-      - NODE_ENV=production
-      - PORT=8087
-      - DATABASE_URL=postgresql://tigerex:tigerex123@postgresql:5432/tigerex
-      - REDIS_URL=redis://:tigerex123@redis:6379
-      - ETHEREUM_RPC_URL=${ETHEREUM_RPC_URL}
-      - BITCOIN_RPC_URL=${BITCOIN_RPC_URL}
-    volumes:
-      - ./backend/advanced-wallet-system:/app
-      - /app/node_modules
-      - wallet_data:/app/data
-    ports:
-      - "8087:8087"
-    networks:
-      - tigerex-network
-    depends_on:
-      - postgresql
-      - redis
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8087/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-    deploy:
-      replicas: 2
-      resources:
-        limits:
-          memory: 512M
-          cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
-
-  payment-service:
-    build:
-      context: ./backend
-      dockerfile: payment-service/Dockerfile
-    container_name: tigerex-payment-service
-    restart: unless-stopped
-    environment:
-      - NODE_ENV=production
-      - PORT=8088
-      - DATABASE_URL=postgresql://tigerex:tigerex123@postgresql:5432/tigerex
-      - REDIS_URL=redis://:tigerex123@redis:6379
-      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
-      - PAYPAL_CLIENT_ID=${PAYPAL_CLIENT_ID}
-      - PAYPAL_CLIENT_SECRET=${PAYPAL_CLIENT_SECRET}
-    volumes:
-      - ./backend/payment-service:/app
-      - /app/node_modules
-    ports:
-      - "8088:8088"
-    networks:
-      - tigerex-network
-    depends_on:
-      - postgresql
-      - redis
-      - wallet-service
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8088/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-    deploy:
-      replicas: 2
-      resources:
-        limits:
-          memory: 512M
-          cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
-
-  # ======================================
-  # ADMIN & MANAGEMENT SERVICES
-  # ======================================
-  
   admin-panel:
     build:
       context: ./backend/admin-panel
       dockerfile: Dockerfile
     container_name: tigerex-admin-panel
-    restart: unless-stopped
     environment:
       - NODE_ENV=production
-      - PORT=8089
-      - DATABASE_URL=postgresql://tigerex:tigerex123@postgresql:5432/tigerex
-      - REDIS_URL=redis://:tigerex123@redis:6379
-      - JWT_SECRET=tigerex-admin-secret-key-2025
-    volumes:
-      - ./backend/admin-panel:/app
-      - /app/node_modules
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_SESSION_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
     ports:
-      - "8089:8089"
+      - "8001:8001"
     networks:
       - tigerex-network
     depends_on:
-      - postgresql
-      - redis
-      - authentication-service
+      - postgres-primary
+      - redis-session
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8089/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8001/api/v1/system/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s
     deploy:
       resources:
         limits:
-          memory: 512M
-          cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
+          memory: 2G
+          cpus: '1.0'
 
-  risk-management-service:
+  trading-engine:
     build:
-      context: ./backend
-      dockerfile: advanced-risk-management-service/Dockerfile
-    container_name: tigerex-risk-management
-    restart: unless-stopped
+      context: ./backend/trading-engine
+      dockerfile: Dockerfile
+    container_name: tigerex-trading-engine
     environment:
       - NODE_ENV=production
-      - PORT=8090
-      - DATABASE_URL=postgresql://tigerex:tigerex123@postgresql:5432/tigerex
-      - REDIS_URL=redis://:tigerex123@redis:6379
-    volumes:
-      - ./backend/advanced-risk-management-service:/app
-      - /app/node_modules
+      - DATABASE_URL=${DATABASE_TRADING_URL}
+      - REDIS_URL=${REDIS_MARKET_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
     ports:
-      - "8090:8090"
+      - "8002:8002"
     networks:
       - tigerex-network
     depends_on:
-      - postgresql
-      - redis
-      - trading-engine
+      - postgres-trading
+      - redis-market
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8090/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: '2.0'
+
+  wallet-service:
+    build:
+      context: ./backend/wallet-service
+      dockerfile: Dockerfile
+    container_name: tigerex-wallet-service
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_CACHE_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+    ports:
+      - "8003:8003"
+    networks:
+      - tigerex-network
+    depends_on:
+      - postgres-primary
+      - redis-cache
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s
     deploy:
-      replicas: 2
       resources:
         limits:
-          memory: 512M
-          cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
+          memory: 2G
+          cpus: '1.0'
 
-  # ======================================
-  # COMPLIANCE & SECURITY SERVICES
-  # ======================================
-  
-  kyc-service:
+  kyc-aml-service:
     build:
-      context: ./backend
-      dockerfile: kyc-service/Dockerfile
-    container_name: tigerex-kyc-service
-    restart: unless-stopped
+      context: ./backend/kyc-aml-service
+      dockerfile: Dockerfile
+    container_name: tigerex-kyc-aml-service
     environment:
       - NODE_ENV=production
-      - PORT=8091
-      - DATABASE_URL=postgresql://tigerex:tigerex123@postgresql:5432/tigerex
-      - REDIS_URL=redis://:tigerex123@redis:6379
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_CACHE_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - S3_BUCKET_NAME=${S3_BUCKET_NAME}
-    volumes:
-      - ./backend/kyc-service:/app
-      - /app/node_modules
-      - kyc_data:/app/uploads
     ports:
-      - "8091:8091"
+      - "8004:8004"
     networks:
       - tigerex-network
     depends_on:
-      - postgresql
-      - redis
+      - postgres-primary
+      - redis-cache
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8091/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8004/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s
-    deploy:
-      replicas: 2
-      resources:
-        limits:
-          memory: 512M
-          cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
 
-  aml-service:
+  # ===========================================
+  # EXCHANGE INTEGRATION SERVICES
+  # ===========================================
+  binance-service:
     build:
-      context: ./backend
-      dockerfile: aml-service/Dockerfile
-    container_name: tigerex-aml-service
-    restart: unless-stopped
+      context: ./backend/binance-service
+      dockerfile: Dockerfile
+    container_name: tigerex-binance-service
     environment:
       - NODE_ENV=production
-      - PORT=8092
-      - DATABASE_URL=postgresql://tigerex:tigerex123@postgresql:5432/tigerex
-      - REDIS_URL=redis://:tigerex123@redis:6379
-      - CHAINALYSIS_API_KEY=${CHAINALYSIS_API_KEY}
-    volumes:
-      - ./backend/aml-service:/app
-      - /app/node_modules
-    ports:
-      - "8092:8092"
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_MARKET_URL}
+      - BINANCE_API_KEY=${BINANCE_API_KEY}
+      - BINANCE_API_SECRET=${BINANCE_API_SECRET}
     networks:
       - tigerex-network
     depends_on:
-      - postgresql
-      - redis
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8092/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
+      - postgres-primary
+      - redis-market
+    restart: unless-stopped
     deploy:
-      replicas: 1
       resources:
         limits:
-          memory: 1G
-          cpus: '1.0'
-        reservations:
           memory: 512M
           cpus: '0.5'
 
-  # ======================================
-  # NOTIFICATION SERVICES
-  # ======================================
-  
-  notification-service:
+  okx-service:
     build:
-      context: ./backend
-      dockerfile: notification-service/Dockerfile
-    container_name: tigerex-notification-service
-    restart: unless-stopped
+      context: ./backend/okx-service
+      dockerfile: Dockerfile
+    container_name: tigerex-okx-service
     environment:
       - NODE_ENV=production
-      - PORT=8093
-      - DATABASE_URL=postgresql://tigerex:tigerex123@postgresql:5432/tigerex
-      - REDIS_URL=redis://:tigerex123@redis:6379
-      - SMTP_HOST=${SMTP_HOST}
-      - SMTP_PORT=${SMTP_PORT}
-      - SMTP_USER=${SMTP_USER}
-      - SMTP_PASSWORD=${SMTP_PASSWORD}
-      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
-      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
-    volumes:
-      - ./backend/notification-service:/app
-      - /app/node_modules
-    ports:
-      - "8093:8093"
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_MARKET_URL}
+      - OKX_API_KEY=${OKX_API_KEY}
+      - OKX_API_SECRET=${OKX_API_SECRET}
+      - OKX_PASSPHRASE=${OKX_PASSPHRASE}
     networks:
       - tigerex-network
     depends_on:
-      - postgresql
-      - redis
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8093/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-    deploy:
-      replicas: 2
-      resources:
-        limits:
-          memory: 512M
-          cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
-
-  websocket-service:
-    build:
-      context: ./backend
-      dockerfile: websocket-service/Dockerfile
-    container_name: tigerex-websocket-service
+      - postgres-primary
+      - redis-market
     restart: unless-stopped
-    environment:
-      - NODE_ENV=production
-      - PORT=8094
-      - REDIS_URL=redis://:tigerex123@redis:6379
-    volumes:
-      - ./backend/websocket-service:/app
-      - /app/node_modules
-    ports:
-      - "8094:8094"
-    networks:
-      - tigerex-network
-    depends_on:
-      - redis
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8094/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
     deploy:
-      replicas: 3
       resources:
         limits:
           memory: 512M
           cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
 
-  # ======================================
-  # ANALYTICS SERVICES
-  # ======================================
-  
-  analytics-service:
-    build:
-      context: ./backend
-      dockerfile: analytics-service/Dockerfile
-    container_name: tigerex-analytics-service
-    restart: unless-stopped
-    environment:
-      - NODE_ENV=production
-      - PORT=8095
-      - DATABASE_URL=postgresql://tigerex:tigerex123@postgresql:5432/tigerex
-      - REDIS_URL=redis://:tigerex123@redis:6379
-      - MONGODB_URL=mongodb://tigerex:tigerex123@mongodb:27017/tigerex
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-    volumes:
-      - ./backend/analytics-service:/app
-      - /app/node_modules
-    ports:
-      - "8095:8095"
-    networks:
-      - tigerex-network
-    depends_on:
-      - postgresql
-      - redis
-      - mongodb
-      - elasticsearch
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8095/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-    deploy:
-      replicas: 2
-      resources:
-        limits:
-          memory: 1G
-          cpus: '1.0'
-        reservations:
-          memory: 512M
-          cpus: '0.5'
-
-  # ======================================
+  # ===========================================
   # FRONTEND APPLICATIONS
-  # ======================================
-  
+  # ===========================================
   web-app:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      target: production
     container_name: tigerex-web-app
-    restart: unless-stopped
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=http://api-gateway:8080
-      - NEXT_PUBLIC_WS_URL=ws://websocket-service:8094
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-      - /app/.next
+      - NEXT_PUBLIC_WS_URL=ws://api-gateway:8080
     ports:
       - "3000:3000"
     networks:
       - tigerex-network
     depends_on:
       - api-gateway
-      - websocket-service
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s
     deploy:
-      replicas: 2
       resources:
         limits:
-          memory: 1G
-          cpus: '0.5'
-        reservations:
-          memory: 512M
-          cpus: '0.25'
+          memory: 2G
+          cpus: '1.0'
 
-  admin-web-app:
+  admin-dashboard:
     build:
       context: ./frontend/admin-dashboard
       dockerfile: Dockerfile
-    container_name: tigerex-admin-web-app
-    restart: unless-stopped
+      target: production
+    container_name: tigerex-admin-dashboard
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_API_URL=http://admin-panel:8089
-    volumes:
-      - ./frontend/admin-dashboard:/app
-      - /app/node_modules
-      - /app/.next
+      - NEXT_PUBLIC_API_URL=http://admin-panel:8001
     ports:
-      - "3001:3001"
+      - "3001:3000"
     networks:
       - tigerex-network
     depends_on:
       - admin-panel
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3001"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-          cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
 
-  # ======================================
-  # MONITORING & LOGGING
-  # ======================================
-  
+  # ===========================================
+  # MONITORING AND LOGGING
+  # ===========================================
   prometheus:
     image: prom/prometheus:latest
     container_name: tigerex-prometheus
-    restart: unless-stopped
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -897,29 +426,20 @@ services:
       - "9090:9090"
     networks:
       - tigerex-network
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-          cpus: '0.5'
-        reservations:
-          memory: 512M
-          cpus: '0.25'
 
   grafana:
     image: grafana/grafana:latest
     container_name: tigerex-grafana
-    restart: unless-stopped
     environment:
       - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=tigerex123
-      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - GF_USERS_ALLOW_SIGN_UP=false
     volumes:
       - grafana_data:/var/lib/grafana
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
@@ -930,188 +450,224 @@ services:
       - tigerex-network
     depends_on:
       - prometheus
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1"]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-          cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
 
-  jaeger:
-    image: jaegertracing/all-in-one:latest
-    container_name: tigerex-jaeger
-    restart: unless-stopped
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: tigerex-elasticsearch
     environment:
-      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
     ports:
-      - "16686:16686"
-      - "14268:14268"
-      - "9411:9411"
+      - "9200:9200"
+      - "9300:9300"
     networks:
       - tigerex-network
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:14268/"]
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s
     deploy:
       resources:
         limits:
-          memory: 512M
-          cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
+          memory: 4G
+          cpus: '2.0'
 
-  # ======================================
-  # MESSAGE QUEUES
-  # ======================================
-  
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.0
+    container_name: tigerex-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - tigerex-network
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5601/api/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ===========================================
+  # BACKGROUND TASKS
+  # ===========================================
+  celery-worker:
+    build:
+      context: ./backend/celery-worker
+      dockerfile: Dockerfile
+    environment:
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - tigerex-network
+    depends_on:
+      - redis-celery
+      - postgres-primary
+    restart: unless-stopped
+    deploy:
+      replicas: 4
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+
+  celery-beat:
+    build:
+      context: ./backend/celery-beat
+      dockerfile: Dockerfile
+    environment:
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - tigerex-network
+    depends_on:
+      - redis-celery
+      - postgres-primary
+    restart: unless-stopped
+
+  # ===========================================
+  # MESSAGE QUEUE
+  # ===========================================
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: tigerex-rabbitmq
-    restart: unless-stopped
     environment:
-      - RABBITMQ_DEFAULT_USER=tigerex
-      - RABBITMQ_DEFAULT_PASS=tigerex123
-      - RABBITMQ_DEFAULT_VHOST=tigerex
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
-      - ./infrastructure/databases/config/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
     ports:
       - "5672:5672"
       - "15672:15672"
     networks:
       - tigerex-network
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "ping"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-          cpus: '0.5'
-        reservations:
-          memory: 512M
-          cpus: '0.25'
 
-  # ======================================
+  # ===========================================
   # LOAD BALANCER
-  # ======================================
-  
+  # ===========================================
   nginx:
     image: nginx:alpine
     container_name: tigerex-nginx
-    restart: unless-stopped
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./ssl:/etc/nginx/ssl
-      - nginx_logs:/var/log/nginx
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/logs:/var/log/nginx
     ports:
       - "80:80"
       - "443:443"
-      - "8000:8000"
-      - "8001:8001"
     networks:
       - tigerex-network
     depends_on:
       - web-app
-      - admin-web-app
+      - admin-dashboard
       - api-gateway
-      - admin-panel
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s
+
+  # ===========================================
+  # SECURITY SERVICES
+  # ===========================================
+  fail2ban:
+    image: lscr.io/linuxserver/fail2ban:latest
+    container_name: tigerex-fail2ban
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=UTC
+    volumes:
+      - ./security/fail2ban:/config
+      - /var/log:/var/log:ro
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    privileged: true
+
+  # ===========================================
+  # BACKUP SERVICES
+  # ===========================================
+  backup-service:
+    build:
+      context: ./scripts/backup
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - S3_BUCKET_NAME=${BACKUP_S3_BUCKET}
+    volumes:
+      - ./backups:/backups
+    networks:
+      - tigerex-network
+    depends_on:
+      - postgres-primary
+    restart: unless-stopped
     deploy:
-      replicas: 2
       resources:
         limits:
           memory: 512M
-          cpus: '0.5'
-        reservations:
-          memory: 256M
           cpus: '0.25'
 
-# ======================================
+# ===========================================
 # VOLUMES
-# ======================================
-
+# ===========================================
 volumes:
-  postgresql_data:
+  postgres_primary_data:
     driver: local
-    labels:
-      - "tigerex.database=postgresql"
-  
-  redis_data:
+  postgres_read_data:
     driver: local
-    labels:
-      - "tigerex.database=redis"
-  
-  mongodb_data:
+  postgres_trading_data:
     driver: local
-    labels:
-      - "tigerex.database=mongodb"
-  
-  elasticsearch_data:
+  redis_cache_data:
     driver: local
-    labels:
-      - "tigerex.database=elasticsearch"
-  
+  redis_session_data:
+    driver: local
+  redis_market_data:
+    driver: local
+  redis_celery_data:
+    driver: local
   prometheus_data:
     driver: local
-    labels:
-      - "tigerex.monitoring=prometheus"
-  
   grafana_data:
     driver: local
-    labels:
-      - "tigerex.monitoring=grafana"
-  
+  elasticsearch_data:
+    driver: local
   rabbitmq_data:
     driver: local
-    labels:
-      - "tigerex.queue=rabbitmq"
-  
-  nginx_logs:
-    driver: local
-    labels:
-      - "tigerex.logs=nginx"
-  
-  wallet_data:
-    driver: local
-    labels:
-      - "tigerex.data=wallet"
-  
-  kyc_data:
-    driver: local
-    labels:
-      - "tigerex.data=kyc"
 
-# ======================================
+# ===========================================
 # NETWORKS
-# ======================================
-
+# ===========================================
 networks:
   tigerex-network:
     driver: bridge
     ipam:
-      driver: default
       config:
         - subnet: 172.20.0.0/16
-    labels:
-      - "tigerex.network=main"
+    driver_opts:
+      com.docker.network.bridge.name: tigerex-br0
