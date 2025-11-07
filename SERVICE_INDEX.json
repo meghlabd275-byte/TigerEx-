@@ -1,0 +1,3538 @@
+{
+  "total_services": 255,
+  "services_with_main": 237,
+  "services_with_docker": 207,
+  "services": [
+    {
+      "name": "account-management-service",
+      "path": "backend/account-management-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "account-statement-service",
+      "path": "backend/account-statement-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "action-required-service",
+      "path": "backend/action-required-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "address-generation-service",
+      "path": "backend/address-generation-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "admin-control-system",
+      "path": "backend/admin-control-system",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "admin-panel",
+      "path": "backend/admin-panel",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "complete_admin_system.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "admin-service",
+      "path": "backend/admin-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.js",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "advanced-derivatives-trading",
+      "path": "backend/advanced-derivatives-trading",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "advanced-nft-marketplace",
+      "path": "backend/advanced-nft-marketplace",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "advanced-order-types",
+      "path": "backend/advanced-order-types",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "advanced-risk-management-service",
+      "path": "backend/advanced-risk-management-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "advanced-trading-engine",
+      "path": "backend/advanced-trading-engine",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "CMakeLists.txt",
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "advanced-trading-service",
+      "path": "backend/advanced-trading-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "advanced-wallet-system",
+      "path": "backend/advanced-wallet-system",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "affiliate-system",
+      "path": "backend/affiliate-system",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "ai-maintenance-system",
+      "path": "backend/ai-maintenance-system",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "ai-maintenance",
+      "path": "backend/ai-maintenance",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "ai-trading-assistant-enhanced",
+      "path": "backend/ai-trading-assistant-enhanced",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "ai-trading-assistant",
+      "path": "backend/ai-trading-assistant",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "ai-trading-bot-service",
+      "path": "backend/ai-trading-bot-service",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "algo-orders-service",
+      "path": "backend/algo-orders-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "alpha-events-service",
+      "path": "backend/alpha-events-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "alpha-market-admin",
+      "path": "backend/alpha-market-admin",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "alpha-market-trading",
+      "path": "backend/alpha-market-trading",
+      "has_main": false,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "package.json",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "analytics-dashboard-service",
+      "path": "backend/analytics-dashboard-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "analytics-service",
+      "path": "backend/analytics-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.go",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "api-gateway",
+      "path": "backend/api-gateway",
+      "has_main": false,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "go.mod",
+        "main.go",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "api-management-service",
+      "path": "backend/api-management-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "auth-service",
+      "path": "backend/auth-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "config",
+        "consolidated",
+        "models",
+        "src"
+      ],
+      "files": [
+        "CONSOLIDATED_README.md",
+        "CONSOLIDATION_MANIFEST.json",
+        "Dockerfile",
+        "go.mod",
+        "main.go",
+        "package.json",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "auto-invest-service",
+      "path": "backend/auto-invest-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "babt-service",
+      "path": "backend/babt-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "bfusd-service",
+      "path": "backend/bfusd-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "binance-academy-service",
+      "path": "backend/binance-academy-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "binance-advanced-service",
+      "path": "backend/binance-advanced-service",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "binance-nft-service",
+      "path": "backend/binance-nft-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "binance-verify-service",
+      "path": "backend/binance-verify-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "binance-wallet-service",
+      "path": "backend/binance-wallet-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "binance-wealth-service",
+      "path": "backend/binance-wealth-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "block-explorer",
+      "path": "backend/block-explorer",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "block-trading-service",
+      "path": "backend/block-trading-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "blockchain-integration-complete",
+      "path": "backend/blockchain-integration-complete",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "blockchain-integration-service",
+      "path": "backend/blockchain-integration-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "blockchain-integration",
+      "path": "backend/blockchain-integration",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py",
+        "top_100_blockchains.py"
+      ]
+    },
+    {
+      "name": "blockchain-service",
+      "path": "backend/blockchain-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "bnb-ath-service",
+      "path": "backend/bnb-ath-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "bot-trading",
+      "path": "backend/bot-trading",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "button-game-service",
+      "path": "backend/button-game-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "buy-crypto-service",
+      "path": "backend/buy-crypto-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "bybit-advanced-service",
+      "path": "backend/bybit-advanced-service",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "carbon-neutral-trading",
+      "path": "backend/carbon-neutral-trading",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "cardano-integration",
+      "path": "backend/cardano-integration",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "complete_cardano_integration.py",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "carnival-quest-service",
+      "path": "backend/carnival-quest-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "charity-service",
+      "path": "backend/charity-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "chat-service",
+      "path": "backend/chat-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "coinbase-advanced-service",
+      "path": "backend/coinbase-advanced-service",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "complete-exchange-system",
+      "path": "backend/complete-exchange-system",
+      "has_main": false,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "enhanced_unified_exchange_api.py",
+        "requirements.txt",
+        "unified_exchange_api.py"
+      ]
+    },
+    {
+      "name": "compliance-engine",
+      "path": "backend/compliance-engine",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "comprehensive-admin-service",
+      "path": "backend/comprehensive-admin-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "comprehensive-data-fetchers",
+      "path": "backend/comprehensive-data-fetchers",
+      "has_main": false,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "complete_exchange_fetchers.py",
+        "complete_fetchers.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "convert-recurring-service",
+      "path": "backend/convert-recurring-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "convert-service",
+      "path": "backend/convert-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "copy-trading-admin",
+      "path": "backend/copy-trading-admin",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "copy-trading-service",
+      "path": "backend/copy-trading-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.js",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "copy-trading",
+      "path": "backend/copy-trading",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "cross-chain-bridge-service",
+      "path": "backend/cross-chain-bridge-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "complete_cross_chain_bridge.py",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "cross-chain-dex-aggregator-enhanced",
+      "path": "backend/cross-chain-dex-aggregator-enhanced",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "crosschain-dex-aggregator",
+      "path": "backend/crosschain-dex-aggregator",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "crypto-card-service",
+      "path": "backend/crypto-card-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "crypto-integration",
+      "path": "backend/crypto-integration",
+      "has_main": false,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "top_200_cryptocurrencies.py"
+      ]
+    },
+    {
+      "name": "cryptocurrency-integration",
+      "path": "backend/cryptocurrency-integration",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "customer-service-service",
+      "path": "backend/customer-service-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "dao-governance-service",
+      "path": "backend/dao-governance-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "complete_dao_governance.py",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "database",
+      "path": "backend/database",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "migrations"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "dca-bot-service",
+      "path": "backend/dca-bot-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "decentralized-governance-token",
+      "path": "backend/decentralized-governance-token",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "defi-enhancements-service",
+      "path": "backend/defi-enhancements-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "defi-service",
+      "path": "backend/defi-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "consolidated"
+      ],
+      "files": [
+        "CONSOLIDATION_MANIFEST.json",
+        "Dockerfile",
+        "main.py",
+        "main.rs",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "defi-staking-service",
+      "path": "backend/defi-staking-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "deposit-fiat-service",
+      "path": "backend/deposit-fiat-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "deposit-withdrawal-admin-service",
+      "path": "backend/deposit-withdrawal-admin-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "deposit-withdrawal-status-service",
+      "path": "backend/deposit-withdrawal-status-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "derivatives-engine",
+      "path": "backend/derivatives-engine",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Cargo.toml",
+        "Dockerfile",
+        "requirements.txt",
+        "server.js"
+      ]
+    },
+    {
+      "name": "dex-integration-admin",
+      "path": "backend/dex-integration-admin",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "dex-integration-service",
+      "path": "backend/dex-integration-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "dex-integration",
+      "path": "backend/dex-integration",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "disable-account-service",
+      "path": "backend/disable-account-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "discount-buy-service",
+      "path": "backend/discount-buy-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "dual-investment-service",
+      "path": "backend/dual-investment-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "earn-service",
+      "path": "backend/earn-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "enhanced-liquidity-aggregator",
+      "path": "backend/enhanced-liquidity-aggregator",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Cargo.toml",
+        "Dockerfile",
+        "main.py",
+        "requirements.txt",
+        "server.js"
+      ]
+    },
+    {
+      "name": "enhanced-security-service",
+      "path": "backend/enhanced-security-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "enhanced-wallet-service",
+      "path": "backend/enhanced-wallet-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "etf-trading-admin",
+      "path": "backend/etf-trading-admin",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "etf-trading",
+      "path": "backend/etf-trading",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "eth-staking-service",
+      "path": "backend/eth-staking-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "eth2-staking-service",
+      "path": "backend/eth2-staking-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "exchange-admin-control",
+      "path": "backend/exchange-admin-control",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "fan-token-service",
+      "path": "backend/fan-token-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "fiat-gateway-service",
+      "path": "backend/fiat-gateway-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "fixed-rate-loans-service",
+      "path": "backend/fixed-rate-loans-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "futures-chatroom-service",
+      "path": "backend/futures-chatroom-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "futures-earn-service",
+      "path": "backend/futures-earn-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "futures-masters-service",
+      "path": "backend/futures-masters-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "futures-trading",
+      "path": "backend/futures-trading",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "gift-card-service",
+      "path": "backend/gift-card-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "go-microservices",
+      "path": "backend/go-microservices",
+      "has_main": false,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "go.mod",
+        "main.go"
+      ]
+    },
+    {
+      "name": "grid-trading",
+      "path": "backend/grid-trading",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "grid-trading-bot-service",
+      "path": "backend/grid-trading-bot-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "hex-trading-engine",
+      "path": "backend/hex-trading-engine",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "high-speed-trading-engine",
+      "path": "backend/high-speed-trading-engine",
+      "has_main": false,
+      "has_dockerfile": true,
+      "has_requirements": false,
+      "subdirs": [
+        "include",
+        "src"
+      ],
+      "files": [
+        "CMakeLists.txt",
+        "Dockerfile"
+      ]
+    },
+    {
+      "name": "huobi-advanced-service",
+      "path": "backend/huobi-advanced-service",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "hybrid-exchange-ui",
+      "path": "backend/hybrid-exchange-ui",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "hybrid_dashboard.py",
+        "hybrid_exchange_interface.py",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "index-linked-service",
+      "path": "backend/index-linked-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "institutional-prime-brokerage",
+      "path": "backend/institutional-prime-brokerage",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "institutional-services-admin",
+      "path": "backend/institutional-services-admin",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "institutional-services",
+      "path": "backend/institutional-services",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "institutional-trading",
+      "path": "backend/institutional-trading",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "Controllers",
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "insurance-fund-service",
+      "path": "backend/insurance-fund-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "kraken-advanced-service",
+      "path": "backend/kraken-advanced-service",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "kyc-aml-service",
+      "path": "backend/kyc-aml-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "kyc-service",
+      "path": "backend/kyc-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "launchpad-service",
+      "path": "backend/launchpad-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "launchpool-service",
+      "path": "backend/launchpool-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "learn-earn-service",
+      "path": "backend/learn-earn-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "lending-borrowing-admin",
+      "path": "backend/lending-borrowing-admin",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "lending-borrowing",
+      "path": "backend/lending-borrowing",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "pom.xml",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "leveraged-tokens-service",
+      "path": "backend/leveraged-tokens-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "liquid-swap-service",
+      "path": "backend/liquid-swap-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "liquidation-protection-service",
+      "path": "backend/liquidation-protection-service",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "liquidity-aggregator-admin",
+      "path": "backend/liquidity-aggregator-admin",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "liquidity-aggregator",
+      "path": "backend/liquidity-aggregator",
+      "has_main": false,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Cargo.toml",
+        "Dockerfile",
+        "requirements.txt",
+        "server.js"
+      ]
+    },
+    {
+      "name": "liquidity-enhancement",
+      "path": "backend/liquidity-enhancement",
+      "has_main": false,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "complete_exchange_liquidity.py"
+      ]
+    },
+    {
+      "name": "liquidity-provider-program",
+      "path": "backend/liquidity-provider-program",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "live-service",
+      "path": "backend/live-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "loans-service",
+      "path": "backend/loans-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "margin-trading",
+      "path": "backend/margin-trading",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "market-data-service",
+      "path": "backend/market-data-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "market-making-bot-system",
+      "path": "backend/market-making-bot-system",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "README.md",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "martingale-bot-service",
+      "path": "backend/martingale-bot-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "matching-engine",
+      "path": "backend/matching-engine",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "CMakeLists.txt",
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "megadrop-service",
+      "path": "backend/megadrop-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "ml-trading-signals-service",
+      "path": "backend/ml-trading-signals-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "complete_ml_signals.py",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "mobile-app-enhanced-ux",
+      "path": "backend/mobile-app-enhanced-ux",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "monthly-challenge-service",
+      "path": "backend/monthly-challenge-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "multisig-wallet-service",
+      "path": "backend/multisig-wallet-service",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "my-gifts-service",
+      "path": "backend/my-gifts-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "new-listing-promos-service",
+      "path": "backend/new-listing-promos-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "nft-launchpad-service",
+      "path": "backend/nft-launchpad-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "nft-marketplace-admin",
+      "path": "backend/nft-marketplace-admin",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "nft-marketplace",
+      "path": "backend/nft-marketplace",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "notification-service-enhanced",
+      "path": "backend/notification-service-enhanced",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "notification-service",
+      "path": "backend/notification-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "package.json",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "okx-advanced-service",
+      "path": "backend/okx-advanced-service",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "onchain-yields-service",
+      "path": "backend/onchain-yields-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "options-trading-admin",
+      "path": "backend/options-trading-admin",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "options-trading",
+      "path": "backend/options-trading",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "otc-desk-service",
+      "path": "backend/otc-desk-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "own-liquidity-system",
+      "path": "backend/own-liquidity-system",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "complete_liquidity_provider.py",
+        "main.py"
+      ]
+    },
+    {
+      "name": "p2p-admin",
+      "path": "backend/p2p-admin",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "p2p-service",
+      "path": "backend/p2p-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.go",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "p2p-trading",
+      "path": "backend/p2p-trading",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "payment-gateway-admin",
+      "path": "backend/payment-gateway-admin",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "payment-gateway-service",
+      "path": "backend/payment-gateway-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "payment-gateway",
+      "path": "backend/payment-gateway",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "package.json",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "pegged-order-service",
+      "path": "backend/pegged-order-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "perpetual-swap-service",
+      "path": "backend/perpetual-swap-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "pi-network-integration",
+      "path": "backend/pi-network-integration",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "complete_pi_integration.py",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "popular-coins-service",
+      "path": "backend/popular-coins-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "portfolio-margin-service",
+      "path": "backend/portfolio-margin-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "proof-of-reserves-service",
+      "path": "backend/proof-of-reserves-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "quantum-resistant-security",
+      "path": "backend/quantum-resistant-security",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "recurring-buy-service",
+      "path": "backend/recurring-buy-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "red-packet-service",
+      "path": "backend/red-packet-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "refer-win-bnb-service",
+      "path": "backend/refer-win-bnb-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "referral-program-service",
+      "path": "backend/referral-program-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "research-service",
+      "path": "backend/research-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "rewards-hub-service",
+      "path": "backend/rewards-hub-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "rfq-service",
+      "path": "backend/rfq-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "risk-management-service",
+      "path": "backend/risk-management-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "risk-management",
+      "path": "backend/risk-management",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "role-based-admin",
+      "path": "backend/role-based-admin",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "rpi-order-service",
+      "path": "backend/rpi-order-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "rust-performance-engine",
+      "path": "backend/rust-performance-engine",
+      "has_main": false,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Cargo.toml"
+      ]
+    },
+    {
+      "name": "rwusd-service",
+      "path": "backend/rwusd-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "savings-service",
+      "path": "backend/savings-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "security-service",
+      "path": "backend/security-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "comprehensive_security.py",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "self-service-service",
+      "path": "backend/self-service-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "sell-to-fiat-service",
+      "path": "backend/sell-to-fiat-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "send-cash-service",
+      "path": "backend/send-cash-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "services",
+      "path": "backend/services",
+      "has_main": false,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "admin_advanced_service.py",
+        "advanced_transfer_service.py",
+        "deposit_withdraw_service.py",
+        "portfolio_service.py",
+        "trading_history_service.py"
+      ]
+    },
+    {
+      "name": "sharia-earn-service",
+      "path": "backend/sharia-earn-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "simple-earn-service",
+      "path": "backend/simple-earn-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "smart-arbitrage-service",
+      "path": "backend/smart-arbitrage-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "social-trading-platform",
+      "path": "backend/social-trading-platform",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "social-trading-service",
+      "path": "backend/social-trading-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "soft-staking-service",
+      "path": "backend/soft-staking-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "sol-staking-service",
+      "path": "backend/sol-staking-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "spot-colosseum-service",
+      "path": "backend/spot-colosseum-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "spot-trading",
+      "path": "backend/spot-trading",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "consolidated",
+        "src"
+      ],
+      "files": [
+        "CONSOLIDATION_MANIFEST.json",
+        "Cargo.toml",
+        "Dockerfile",
+        "package.json",
+        "requirements.txt",
+        "server.js"
+      ]
+    },
+    {
+      "name": "spread-arbitrage-bot",
+      "path": "backend/spread-arbitrage-bot",
+      "has_main": false,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Cargo.toml",
+        "Dockerfile",
+        "requirements.txt",
+        "server.js"
+      ]
+    },
+    {
+      "name": "square-service",
+      "path": "backend/square-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "staking-service",
+      "path": "backend/staking-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "sub-accounts-service",
+      "path": "backend/sub-accounts-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "super-admin-system",
+      "path": "backend/super-admin-system",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "super-mine-service",
+      "path": "backend/super-mine-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "support-service",
+      "path": "backend/support-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "system-configuration-service",
+      "path": "backend/system-configuration-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "third-party-account-service",
+      "path": "backend/third-party-account-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "tigerex-unified-exchange-service",
+      "path": "backend/tigerex-unified-exchange-service",
+      "has_main": false,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "requirements.txt",
+        "unified_admin_operations.py",
+        "unified_exchange_fetchers.py",
+        "unified_user_operations.py"
+      ]
+    },
+    {
+      "name": "token-listing-service",
+      "path": "backend/token-listing-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "token-unlock-service",
+      "path": "backend/token-unlock-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "trading-bots-service",
+      "path": "backend/trading-bots-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "trading-engine-enhanced",
+      "path": "backend/trading-engine-enhanced",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "trading-engine",
+      "path": "backend/trading-engine",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "CMakeLists.txt",
+        "Dockerfile",
+        "main.cpp",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "trading-pair-management",
+      "path": "backend/trading-pair-management",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "trading-signals-service",
+      "path": "backend/trading-signals-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "trading",
+      "path": "backend/trading",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "futures-trading"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "transaction-engine",
+      "path": "backend/transaction-engine",
+      "has_main": false,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Cargo.toml",
+        "Dockerfile",
+        "requirements.txt",
+        "server.js"
+      ]
+    },
+    {
+      "name": "transfer-service",
+      "path": "backend/transfer-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "ultimate-exchange-fetchers",
+      "path": "backend/ultimate-exchange-fetchers",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "ultimate-unified-exchange",
+      "path": "backend/ultimate-unified-exchange",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "unified-account-service",
+      "path": "backend/unified-account-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "unified-admin-control",
+      "path": "backend/unified-admin-control",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "unified-admin-panel",
+      "path": "backend/unified-admin-panel",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "consolidated",
+        "middleware",
+        "models",
+        "routes",
+        "services"
+      ],
+      "files": [
+        "CONSOLIDATION_MANIFEST.json",
+        "Dockerfile",
+        "package.json",
+        "requirements.txt",
+        "server.js"
+      ]
+    },
+    {
+      "name": "unified-services",
+      "path": "backend/unified-services",
+      "has_main": false,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "complete_admin_operations.py",
+        "complete_fetcher_service.py",
+        "complete_user_operations.py",
+        "enhanced_admin_panel.py",
+        "requirements.txt",
+        "unified_fetcher_service.py"
+      ]
+    },
+    {
+      "name": "universal-admin-controls",
+      "path": "backend/universal-admin-controls",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "complete_admin_service.py",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "user-access-service",
+      "path": "backend/user-access-service",
+      "has_main": false,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "complete_user_system.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "user-access-system",
+      "path": "backend/user-access-system",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "user-authentication-service",
+      "path": "backend/user-authentication-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "user-management-admin-service",
+      "path": "backend/user-management-admin-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "vip-loan-service",
+      "path": "backend/vip-loan-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "vip-program-service",
+      "path": "backend/vip-program-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "virtual-liquidity-service",
+      "path": "backend/virtual-liquidity-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "vote-to-list-service",
+      "path": "backend/vote-to-list-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "wallet-management",
+      "path": "backend/wallet-management",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "wallet-service",
+      "path": "backend/wallet-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "consolidated",
+        "src"
+      ],
+      "files": [
+        "CONSOLIDATION_MANIFEST.json",
+        "Dockerfile",
+        "main.go",
+        "package.json",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "web3-integration",
+      "path": "backend/web3-integration",
+      "has_main": false,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "go.mod",
+        "main.go",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "white-label-complete-system",
+      "path": "backend/white-label-complete-system",
+      "has_main": false,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "admin_control_panel.py",
+        "requirements.txt",
+        "user_rights_manager.py",
+        "white_label_master.py"
+      ]
+    },
+    {
+      "name": "white-label-system",
+      "path": "backend/white-label-system",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [
+        "admin",
+        "src"
+      ],
+      "files": [
+        "Dockerfile",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "withdraw-fiat-service",
+      "path": "backend/withdraw-fiat-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "word-of-day-service",
+      "path": "backend/word-of-day-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "yield-arena-service",
+      "path": "backend/yield-arena-service",
+      "has_main": true,
+      "has_dockerfile": true,
+      "has_requirements": true,
+      "subdirs": [],
+      "files": [
+        "Dockerfile",
+        "main.py",
+        "requirements.txt"
+      ]
+    },
+    {
+      "name": "advanced-liquidity-system",
+      "path": "backend/advanced-liquidity-system",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "bitfinex-advanced-service",
+      "path": "backend/bitfinex-advanced-service",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "coingecko-blockchain-integration",
+      "path": "backend/coingecko-blockchain-integration",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "coinmarketcap-integration-complete",
+      "path": "backend/coinmarketcap-integration-complete",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "comprehensive-admin-control-system",
+      "path": "backend/comprehensive-admin-control-system",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "cryptocurrency-integration-service",
+      "path": "backend/cryptocurrency-integration-service",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "gemini-advanced-service",
+      "path": "backend/gemini-advanced-service",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "kucoin-advanced-service",
+      "path": "backend/kucoin-advanced-service",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "multi-exchange-liquidity-service",
+      "path": "backend/multi-exchange-liquidity-service",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "orbit-exchange-service",
+      "path": "backend/orbit-exchange-service",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "own-liquidity-system-complete",
+      "path": "backend/own-liquidity-system-complete",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "unified-admin-control-system",
+      "path": "backend/unified-admin-control-system",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    },
+    {
+      "name": "user-access-system-complete",
+      "path": "backend/user-access-system-complete",
+      "has_main": true,
+      "has_dockerfile": false,
+      "has_requirements": false,
+      "subdirs": [],
+      "files": [
+        "main.py"
+      ]
+    }
+  ]
+}

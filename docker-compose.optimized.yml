@@ -1,0 +1,1868 @@
+networks:
+  tigerex-network:
+    driver: bridge
+services:
+  account_management_service:
+    build: ./backend/account-management-service
+    container_name: tigerex-account-management-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  account_statement_service:
+    build: ./backend/account-statement-service
+    container_name: tigerex-account-statement-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  action_required_service:
+    build: ./backend/action-required-service
+    container_name: tigerex-action-required-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  address_generation_service:
+    build: ./backend/address-generation-service
+    container_name: tigerex-address-generation-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  admin_panel:
+    build: ./backend/admin-panel
+    container_name: tigerex-admin-panel
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  admin_service:
+    build: ./backend/admin-service
+    container_name: tigerex-admin-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  advanced_order_types:
+    build: ./backend/advanced-order-types
+    container_name: tigerex-advanced-order-types
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  advanced_risk_management_service:
+    build: ./backend/advanced-risk-management-service
+    container_name: tigerex-advanced-risk-management-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  advanced_trading_engine:
+    build: ./backend/advanced-trading-engine
+    container_name: tigerex-advanced-trading-engine
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  advanced_trading_service:
+    build: ./backend/advanced-trading-service
+    container_name: tigerex-advanced-trading-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  advanced_wallet_system:
+    build: ./backend/advanced-wallet-system
+    container_name: tigerex-advanced-wallet-system
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  affiliate_system:
+    build: ./backend/affiliate-system
+    container_name: tigerex-affiliate-system
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  ai_maintenance:
+    build: ./backend/ai-maintenance
+    container_name: tigerex-ai-maintenance
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  ai_maintenance_system:
+    build: ./backend/ai-maintenance-system
+    container_name: tigerex-ai-maintenance-system
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  ai_trading_assistant:
+    build: ./backend/ai-trading-assistant
+    container_name: tigerex-ai-trading-assistant
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  algo_orders_service:
+    build: ./backend/algo-orders-service
+    container_name: tigerex-algo-orders-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  alpha_events_service:
+    build: ./backend/alpha-events-service
+    container_name: tigerex-alpha-events-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  alpha_market_admin:
+    build: ./backend/alpha-market-admin
+    container_name: tigerex-alpha-market-admin
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  alpha_market_trading:
+    build: ./backend/alpha-market-trading
+    container_name: tigerex-alpha-market-trading
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  analytics_dashboard_service:
+    build: ./backend/analytics-dashboard-service
+    container_name: tigerex-analytics-dashboard-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  analytics_service:
+    build: ./backend/analytics-service
+    container_name: tigerex-analytics-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  api_gateway:
+    build: ./backend/api-gateway
+    container_name: tigerex-api-gateway
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  api_management_service:
+    build: ./backend/api-management-service
+    container_name: tigerex-api-management-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  auth_service:
+    build: ./backend/auth-service
+    container_name: tigerex-auth-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  auto_invest_service:
+    build: ./backend/auto-invest-service
+    container_name: tigerex-auto-invest-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  babt_service:
+    build: ./backend/babt-service
+    container_name: tigerex-babt-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  bfusd_service:
+    build: ./backend/bfusd-service
+    container_name: tigerex-bfusd-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  binance_academy_service:
+    build: ./backend/binance-academy-service
+    container_name: tigerex-binance-academy-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  binance_nft_service:
+    build: ./backend/binance-nft-service
+    container_name: tigerex-binance-nft-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  binance_verify_service:
+    build: ./backend/binance-verify-service
+    container_name: tigerex-binance-verify-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  binance_wallet_service:
+    build: ./backend/binance-wallet-service
+    container_name: tigerex-binance-wallet-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  binance_wealth_service:
+    build: ./backend/binance-wealth-service
+    container_name: tigerex-binance-wealth-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  block_explorer:
+    build: ./backend/block-explorer
+    container_name: tigerex-block-explorer
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  block_trading_service:
+    build: ./backend/block-trading-service
+    container_name: tigerex-block-trading-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  blockchain_integration_complete:
+    build: ./backend/blockchain-integration-complete
+    container_name: tigerex-blockchain-integration-complete
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  blockchain_integration_service:
+    build: ./backend/blockchain-integration-service
+    container_name: tigerex-blockchain-integration-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  blockchain_service:
+    build: ./backend/blockchain-service
+    container_name: tigerex-blockchain-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  bnb_ath_service:
+    build: ./backend/bnb-ath-service
+    container_name: tigerex-bnb-ath-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  button_game_service:
+    build: ./backend/button-game-service
+    container_name: tigerex-button-game-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  buy_crypto_service:
+    build: ./backend/buy-crypto-service
+    container_name: tigerex-buy-crypto-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  cardano_integration:
+    build: ./backend/cardano-integration
+    container_name: tigerex-cardano-integration
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  carnival_quest_service:
+    build: ./backend/carnival-quest-service
+    container_name: tigerex-carnival-quest-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  charity_service:
+    build: ./backend/charity-service
+    container_name: tigerex-charity-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  chat_service:
+    build: ./backend/chat-service
+    container_name: tigerex-chat-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  complete_exchange_system:
+    build: ./backend/complete-exchange-system
+    container_name: tigerex-complete-exchange-system
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  compliance_engine:
+    build: ./backend/compliance-engine
+    container_name: tigerex-compliance-engine
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  comprehensive_admin_service:
+    build: ./backend/comprehensive-admin-service
+    container_name: tigerex-comprehensive-admin-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  comprehensive_data_fetchers:
+    build: ./backend/comprehensive-data-fetchers
+    container_name: tigerex-comprehensive-data-fetchers
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  convert_recurring_service:
+    build: ./backend/convert-recurring-service
+    container_name: tigerex-convert-recurring-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  convert_service:
+    build: ./backend/convert-service
+    container_name: tigerex-convert-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  copy_trading:
+    build: ./backend/copy-trading
+    container_name: tigerex-copy-trading
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  copy_trading_admin:
+    build: ./backend/copy-trading-admin
+    container_name: tigerex-copy-trading-admin
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  copy_trading_service:
+    build: ./backend/copy-trading-service
+    container_name: tigerex-copy-trading-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  cross_chain_bridge_service:
+    build: ./backend/cross-chain-bridge-service
+    container_name: tigerex-cross-chain-bridge-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  crypto_card_service:
+    build: ./backend/crypto-card-service
+    container_name: tigerex-crypto-card-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  customer_service_service:
+    build: ./backend/customer-service-service
+    container_name: tigerex-customer-service-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  dao_governance_service:
+    build: ./backend/dao-governance-service
+    container_name: tigerex-dao-governance-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  database:
+    build: ./backend/database
+    container_name: tigerex-database
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  dca_bot_service:
+    build: ./backend/dca-bot-service
+    container_name: tigerex-dca-bot-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  defi_enhancements_service:
+    build: ./backend/defi-enhancements-service
+    container_name: tigerex-defi-enhancements-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  defi_service:
+    build: ./backend/defi-service
+    container_name: tigerex-defi-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  defi_staking_service:
+    build: ./backend/defi-staking-service
+    container_name: tigerex-defi-staking-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  deposit_fiat_service:
+    build: ./backend/deposit-fiat-service
+    container_name: tigerex-deposit-fiat-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  deposit_withdrawal_admin_service:
+    build: ./backend/deposit-withdrawal-admin-service
+    container_name: tigerex-deposit-withdrawal-admin-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  deposit_withdrawal_status_service:
+    build: ./backend/deposit-withdrawal-status-service
+    container_name: tigerex-deposit-withdrawal-status-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  derivatives_engine:
+    build: ./backend/derivatives-engine
+    container_name: tigerex-derivatives-engine
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  dex_integration:
+    build: ./backend/dex-integration
+    container_name: tigerex-dex-integration
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  dex_integration_admin:
+    build: ./backend/dex-integration-admin
+    container_name: tigerex-dex-integration-admin
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  dex_integration_service:
+    build: ./backend/dex-integration-service
+    container_name: tigerex-dex-integration-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  disable_account_service:
+    build: ./backend/disable-account-service
+    container_name: tigerex-disable-account-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  discount_buy_service:
+    build: ./backend/discount-buy-service
+    container_name: tigerex-discount-buy-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  dual_investment_service:
+    build: ./backend/dual-investment-service
+    container_name: tigerex-dual-investment-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  earn_service:
+    build: ./backend/earn-service
+    container_name: tigerex-earn-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  enhanced_liquidity_aggregator:
+    build: ./backend/enhanced-liquidity-aggregator
+    container_name: tigerex-enhanced-liquidity-aggregator
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  enhanced_security_service:
+    build: ./backend/enhanced-security-service
+    container_name: tigerex-enhanced-security-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  enhanced_wallet_service:
+    build: ./backend/enhanced-wallet-service
+    container_name: tigerex-enhanced-wallet-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  etf_trading:
+    build: ./backend/etf-trading
+    container_name: tigerex-etf-trading
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  etf_trading_admin:
+    build: ./backend/etf-trading-admin
+    container_name: tigerex-etf-trading-admin
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  eth2_staking_service:
+    build: ./backend/eth2-staking-service
+    container_name: tigerex-eth2-staking-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  eth_staking_service:
+    build: ./backend/eth-staking-service
+    container_name: tigerex-eth-staking-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  fan_token_service:
+    build: ./backend/fan-token-service
+    container_name: tigerex-fan-token-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  fiat_gateway_service:
+    build: ./backend/fiat-gateway-service
+    container_name: tigerex-fiat-gateway-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  fixed_rate_loans_service:
+    build: ./backend/fixed-rate-loans-service
+    container_name: tigerex-fixed-rate-loans-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  futures_chatroom_service:
+    build: ./backend/futures-chatroom-service
+    container_name: tigerex-futures-chatroom-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  futures_earn_service:
+    build: ./backend/futures-earn-service
+    container_name: tigerex-futures-earn-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  futures_masters_service:
+    build: ./backend/futures-masters-service
+    container_name: tigerex-futures-masters-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  futures_trading:
+    build: ./backend/futures-trading
+    container_name: tigerex-futures-trading
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  gift_card_service:
+    build: ./backend/gift-card-service
+    container_name: tigerex-gift-card-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  grid_trading_bot_service:
+    build: ./backend/grid-trading-bot-service
+    container_name: tigerex-grid-trading-bot-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  hex_trading_engine:
+    build: ./backend/hex-trading-engine
+    container_name: tigerex-hex-trading-engine
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  high_speed_trading_engine:
+    build: ./backend/high-speed-trading-engine
+    container_name: tigerex-high-speed-trading-engine
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  hybrid_exchange_ui:
+    build: ./backend/hybrid-exchange-ui
+    container_name: tigerex-hybrid-exchange-ui
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  index_linked_service:
+    build: ./backend/index-linked-service
+    container_name: tigerex-index-linked-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  institutional_services:
+    build: ./backend/institutional-services
+    container_name: tigerex-institutional-services
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  institutional_services_admin:
+    build: ./backend/institutional-services-admin
+    container_name: tigerex-institutional-services-admin
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  institutional_trading:
+    build: ./backend/institutional-trading
+    container_name: tigerex-institutional-trading
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  insurance_fund_service:
+    build: ./backend/insurance-fund-service
+    container_name: tigerex-insurance-fund-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  kyc_aml_service:
+    build: ./backend/kyc-aml-service
+    container_name: tigerex-kyc-aml-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  kyc_service:
+    build: ./backend/kyc-service
+    container_name: tigerex-kyc-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  launchpad_service:
+    build: ./backend/launchpad-service
+    container_name: tigerex-launchpad-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  launchpool_service:
+    build: ./backend/launchpool-service
+    container_name: tigerex-launchpool-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  learn_earn_service:
+    build: ./backend/learn-earn-service
+    container_name: tigerex-learn-earn-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  lending_borrowing:
+    build: ./backend/lending-borrowing
+    container_name: tigerex-lending-borrowing
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  lending_borrowing_admin:
+    build: ./backend/lending-borrowing-admin
+    container_name: tigerex-lending-borrowing-admin
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  leveraged_tokens_service:
+    build: ./backend/leveraged-tokens-service
+    container_name: tigerex-leveraged-tokens-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  liquid_swap_service:
+    build: ./backend/liquid-swap-service
+    container_name: tigerex-liquid-swap-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  liquidity_aggregator:
+    build: ./backend/liquidity-aggregator
+    container_name: tigerex-liquidity-aggregator
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  liquidity_aggregator_admin:
+    build: ./backend/liquidity-aggregator-admin
+    container_name: tigerex-liquidity-aggregator-admin
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  liquidity_provider_program:
+    build: ./backend/liquidity-provider-program
+    container_name: tigerex-liquidity-provider-program
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  live_service:
+    build: ./backend/live-service
+    container_name: tigerex-live-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  loans_service:
+    build: ./backend/loans-service
+    container_name: tigerex-loans-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  margin_trading:
+    build: ./backend/margin-trading
+    container_name: tigerex-margin-trading
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  market_data_service:
+    build: ./backend/market-data-service
+    container_name: tigerex-market-data-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  market_making_bot_system:
+    build: ./backend/market-making-bot-system
+    container_name: tigerex-market-making-bot-system
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  martingale_bot_service:
+    build: ./backend/martingale-bot-service
+    container_name: tigerex-martingale-bot-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  matching_engine:
+    build: ./backend/matching-engine
+    container_name: tigerex-matching-engine
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  megadrop_service:
+    build: ./backend/megadrop-service
+    container_name: tigerex-megadrop-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  ml_trading_signals_service:
+    build: ./backend/ml-trading-signals-service
+    container_name: tigerex-ml-trading-signals-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  monthly_challenge_service:
+    build: ./backend/monthly-challenge-service
+    container_name: tigerex-monthly-challenge-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  my_gifts_service:
+    build: ./backend/my-gifts-service
+    container_name: tigerex-my-gifts-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  new_listing_promos_service:
+    build: ./backend/new-listing-promos-service
+    container_name: tigerex-new-listing-promos-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  nft_launchpad_service:
+    build: ./backend/nft-launchpad-service
+    container_name: tigerex-nft-launchpad-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  nft_marketplace:
+    build: ./backend/nft-marketplace
+    container_name: tigerex-nft-marketplace
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  nft_marketplace_admin:
+    build: ./backend/nft-marketplace-admin
+    container_name: tigerex-nft-marketplace-admin
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  notification_service:
+    build: ./backend/notification-service
+    container_name: tigerex-notification-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  notification_service_enhanced:
+    build: ./backend/notification-service-enhanced
+    container_name: tigerex-notification-service-enhanced
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  onchain_yields_service:
+    build: ./backend/onchain-yields-service
+    container_name: tigerex-onchain-yields-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  options_trading:
+    build: ./backend/options-trading
+    container_name: tigerex-options-trading
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  options_trading_admin:
+    build: ./backend/options-trading-admin
+    container_name: tigerex-options-trading-admin
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  otc_desk_service:
+    build: ./backend/otc-desk-service
+    container_name: tigerex-otc-desk-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  p2p_admin:
+    build: ./backend/p2p-admin
+    container_name: tigerex-p2p-admin
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  p2p_service:
+    build: ./backend/p2p-service
+    container_name: tigerex-p2p-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  p2p_trading:
+    build: ./backend/p2p-trading
+    container_name: tigerex-p2p-trading
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  payment_gateway:
+    build: ./backend/payment-gateway
+    container_name: tigerex-payment-gateway
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  payment_gateway_admin:
+    build: ./backend/payment-gateway-admin
+    container_name: tigerex-payment-gateway-admin
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  payment_gateway_service:
+    build: ./backend/payment-gateway-service
+    container_name: tigerex-payment-gateway-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  pegged_order_service:
+    build: ./backend/pegged-order-service
+    container_name: tigerex-pegged-order-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  perpetual_swap_service:
+    build: ./backend/perpetual-swap-service
+    container_name: tigerex-perpetual-swap-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  pi_network_integration:
+    build: ./backend/pi-network-integration
+    container_name: tigerex-pi-network-integration
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  popular_coins_service:
+    build: ./backend/popular-coins-service
+    container_name: tigerex-popular-coins-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  portfolio_margin_service:
+    build: ./backend/portfolio-margin-service
+    container_name: tigerex-portfolio-margin-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  proof_of_reserves_service:
+    build: ./backend/proof-of-reserves-service
+    container_name: tigerex-proof-of-reserves-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  recurring_buy_service:
+    build: ./backend/recurring-buy-service
+    container_name: tigerex-recurring-buy-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  red_packet_service:
+    build: ./backend/red-packet-service
+    container_name: tigerex-red-packet-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  refer_win_bnb_service:
+    build: ./backend/refer-win-bnb-service
+    container_name: tigerex-refer-win-bnb-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  referral_program_service:
+    build: ./backend/referral-program-service
+    container_name: tigerex-referral-program-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  research_service:
+    build: ./backend/research-service
+    container_name: tigerex-research-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  rewards_hub_service:
+    build: ./backend/rewards-hub-service
+    container_name: tigerex-rewards-hub-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  rfq_service:
+    build: ./backend/rfq-service
+    container_name: tigerex-rfq-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  risk_management:
+    build: ./backend/risk-management
+    container_name: tigerex-risk-management
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  risk_management_service:
+    build: ./backend/risk-management-service
+    container_name: tigerex-risk-management-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  role_based_admin:
+    build: ./backend/role-based-admin
+    container_name: tigerex-role-based-admin
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  rpi_order_service:
+    build: ./backend/rpi-order-service
+    container_name: tigerex-rpi-order-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  rwusd_service:
+    build: ./backend/rwusd-service
+    container_name: tigerex-rwusd-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  savings_service:
+    build: ./backend/savings-service
+    container_name: tigerex-savings-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  security_service:
+    build: ./backend/security-service
+    container_name: tigerex-security-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  self_service_service:
+    build: ./backend/self-service-service
+    container_name: tigerex-self-service-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  sell_to_fiat_service:
+    build: ./backend/sell-to-fiat-service
+    container_name: tigerex-sell-to-fiat-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  send_cash_service:
+    build: ./backend/send-cash-service
+    container_name: tigerex-send-cash-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  sharia_earn_service:
+    build: ./backend/sharia-earn-service
+    container_name: tigerex-sharia-earn-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  simple_earn_service:
+    build: ./backend/simple-earn-service
+    container_name: tigerex-simple-earn-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  smart_arbitrage_service:
+    build: ./backend/smart-arbitrage-service
+    container_name: tigerex-smart-arbitrage-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  social_trading_service:
+    build: ./backend/social-trading-service
+    container_name: tigerex-social-trading-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  soft_staking_service:
+    build: ./backend/soft-staking-service
+    container_name: tigerex-soft-staking-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  sol_staking_service:
+    build: ./backend/sol-staking-service
+    container_name: tigerex-sol-staking-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  spot_colosseum_service:
+    build: ./backend/spot-colosseum-service
+    container_name: tigerex-spot-colosseum-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  spot_trading:
+    build: ./backend/spot-trading
+    container_name: tigerex-spot-trading
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  spread_arbitrage_bot:
+    build: ./backend/spread-arbitrage-bot
+    container_name: tigerex-spread-arbitrage-bot
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  square_service:
+    build: ./backend/square-service
+    container_name: tigerex-square-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  staking_service:
+    build: ./backend/staking-service
+    container_name: tigerex-staking-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  sub_accounts_service:
+    build: ./backend/sub-accounts-service
+    container_name: tigerex-sub-accounts-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  super_admin_system:
+    build: ./backend/super-admin-system
+    container_name: tigerex-super-admin-system
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  super_mine_service:
+    build: ./backend/super-mine-service
+    container_name: tigerex-super-mine-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  support_service:
+    build: ./backend/support-service
+    container_name: tigerex-support-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  system_configuration_service:
+    build: ./backend/system-configuration-service
+    container_name: tigerex-system-configuration-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  third_party_account_service:
+    build: ./backend/third-party-account-service
+    container_name: tigerex-third-party-account-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  tigerex_unified_exchange_service:
+    build: ./backend/tigerex-unified-exchange-service
+    container_name: tigerex-tigerex-unified-exchange-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  token_listing_service:
+    build: ./backend/token-listing-service
+    container_name: tigerex-token-listing-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  token_unlock_service:
+    build: ./backend/token-unlock-service
+    container_name: tigerex-token-unlock-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  trading:
+    build: ./backend/trading
+    container_name: tigerex-trading
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  trading_bots_service:
+    build: ./backend/trading-bots-service
+    container_name: tigerex-trading-bots-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  trading_engine:
+    build: ./backend/trading-engine
+    container_name: tigerex-trading-engine
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  trading_engine_enhanced:
+    build: ./backend/trading-engine-enhanced
+    container_name: tigerex-trading-engine-enhanced
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  trading_pair_management:
+    build: ./backend/trading-pair-management
+    container_name: tigerex-trading-pair-management
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  trading_signals_service:
+    build: ./backend/trading-signals-service
+    container_name: tigerex-trading-signals-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  transaction_engine:
+    build: ./backend/transaction-engine
+    container_name: tigerex-transaction-engine
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  transfer_service:
+    build: ./backend/transfer-service
+    container_name: tigerex-transfer-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  unified_account_service:
+    build: ./backend/unified-account-service
+    container_name: tigerex-unified-account-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  unified_admin_control:
+    build: ./backend/unified-admin-control
+    container_name: tigerex-unified-admin-control
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  unified_admin_panel:
+    build: ./backend/unified-admin-panel
+    container_name: tigerex-unified-admin-panel
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  unified_services:
+    build: ./backend/unified-services
+    container_name: tigerex-unified-services
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  universal_admin_controls:
+    build: ./backend/universal-admin-controls
+    container_name: tigerex-universal-admin-controls
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  user_access_service:
+    build: ./backend/user-access-service
+    container_name: tigerex-user-access-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  user_authentication_service:
+    build: ./backend/user-authentication-service
+    container_name: tigerex-user-authentication-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  user_management_admin_service:
+    build: ./backend/user-management-admin-service
+    container_name: tigerex-user-management-admin-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  vip_loan_service:
+    build: ./backend/vip-loan-service
+    container_name: tigerex-vip-loan-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  vip_program_service:
+    build: ./backend/vip-program-service
+    container_name: tigerex-vip-program-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  virtual_liquidity_service:
+    build: ./backend/virtual-liquidity-service
+    container_name: tigerex-virtual-liquidity-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  vote_to_list_service:
+    build: ./backend/vote-to-list-service
+    container_name: tigerex-vote-to-list-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  wallet_management:
+    build: ./backend/wallet-management
+    container_name: tigerex-wallet-management
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  wallet_service:
+    build: ./backend/wallet-service
+    container_name: tigerex-wallet-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  web3_integration:
+    build: ./backend/web3-integration
+    container_name: tigerex-web3-integration
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  white_label_complete_system:
+    build: ./backend/white-label-complete-system
+    container_name: tigerex-white-label-complete-system
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  white_label_system:
+    build: ./backend/white-label-system
+    container_name: tigerex-white-label-system
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  withdraw_fiat_service:
+    build: ./backend/withdraw-fiat-service
+    container_name: tigerex-withdraw-fiat-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  word_of_day_service:
+    build: ./backend/word-of-day-service
+    container_name: tigerex-word-of-day-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+  yield_arena_service:
+    build: ./backend/yield-arena-service
+    container_name: tigerex-yield-arena-service
+    environment:
+    - NODE_ENV=production
+    - API_PORT=8000
+    networks:
+    - tigerex-network
+    restart: unless-stopped
+version: '3.8'
