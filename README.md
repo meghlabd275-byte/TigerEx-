@@ -1,4 +1,4 @@
-# 🚀 TigerEx Complete Enterprise Trading Platform v7.0.0
+# 🚀 TigerEx Complete Enterprise Trading Platform v8.0.0
 
 🚀 **A comprehensive, enterprise-grade cryptocurrency exchange platform with complete admin controls, full cross-platform support, and advanced trading systems including spot, futures, margin, options, grid, and copy trading with blockchain integration.**
 

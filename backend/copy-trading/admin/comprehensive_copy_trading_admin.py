@@ -510,7 +510,7 @@ async def pause_copy_trader(follower_id: str, admin_id: str = "current_admin"):
             raise HTTPException(status_code=404, detail="Copy trader not found")
         
         if copy_trader["status"] == CopyStatus.PAUSED:
-            raise HTTPException(status_code=400, detail("Copy trading already paused"))
+            raise HTTPException(status_code=400, detail="Copy trading already paused")
         
         # Stop copy activities
         await stop_copy_activities(follower_id)
@@ -764,9 +764,9 @@ async def update_trader_risk_settings(
         raise HTTPException(status_code=500, detail=str(e))
 
 # ============================================================================
- BATCH OPERATIONS
-# ============================================================================
-
+   # ============================================================================
+   # BATCH OPERATIONS
+   # ============================================================================
 @router.post("/batch/pause-all-copying")
 async def pause_all_copy_trading(admin_id: str = "current_admin"):
     """Pause all copy trading activities - Emergency stop functionality"""

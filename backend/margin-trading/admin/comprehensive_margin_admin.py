@@ -652,9 +652,9 @@ async def create_risk_rule(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# ============================================================================
- BATCH OPERATIONS
-# ============================================================================
+   # ============================================================================
+   # BATCH OPERATIONS
+   # ============================================================================
 
 @router.post("/batch/pause-all-margin")
 async def pause_all_margin_pairs(admin_id: str = "current_admin"):

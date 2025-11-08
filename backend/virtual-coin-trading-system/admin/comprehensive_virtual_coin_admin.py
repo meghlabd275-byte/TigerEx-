@@ -272,7 +272,7 @@ async def suspend_virtual_coin(
             raise HTTPException(status_code=404, detail="Virtual coin not found")
         
         if coin["status"] != CoinStatus.ACTIVE:
-            raise HTTPException(status_code=400, detail("Only active coins can be suspended"))
+            raise HTTPException(status_code=400, detail="Only active coins can be suspended")
         
         # Cancel all active orders
         await cancel_all_coin_orders(coin_id)
@@ -318,7 +318,7 @@ async def resume_virtual_coin(coin_id: str, admin_id: str = "current_admin"):
             raise HTTPException(status_code=404, detail="Virtual coin not found")
         
         if coin["status"] != CoinStatus.SUSPENDED:
-            raise HTTPException(status_code=400, detail("Only suspended coins can be resumed"))
+            raise HTTPException(status_code=400, detail="Only suspended coins can be resumed")
         
         # Check if conditions are met for resumption
         resume_check = await check_coin_resume_conditions(coin_id)
@@ -368,7 +368,7 @@ async def delist_virtual_coin(
             raise HTTPException(status_code=404, detail="Virtual coin not found")
         
         if coin["status"] in [CoinStatus.DELISTED]:
-            raise HTTPException(status_code=400, detail("Coin already delisted"))
+            raise HTTPException(status_code=400, detail="Coin already delisted")
         
         # Check for active holders
         holders = await get_coin_holders(coin_id)
@@ -410,7 +410,7 @@ async def delist_virtual_coin(
         }
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail(str(e)))
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.delete("/coins/{coin_id}")
 async def delete_virtual_coin(
@@ -551,7 +551,7 @@ async def pause_trading_pair(pair_id: str, admin_id: str = "current_admin"):
             raise HTTPException(status_code=404, detail="Trading pair not found")
         
         if pair["status"] != CoinStatus.ACTIVE:
-            raise HTTPException(status_code=400, detail("Pair is not active"))
+            raise HTTPException(status_code=400, detail="Pair is not active")
         
         # Cancel all active orders
         await cancel_pair_orders(pair_id)

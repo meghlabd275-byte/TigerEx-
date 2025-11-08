@@ -516,9 +516,9 @@ async def configure_risk_management(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# ============================================================================
- BATCH OPERATIONS
-# ============================================================================
+   # ============================================================================
+   # BATCH OPERATIONS
+   # ============================================================================
 
 @router.post("/batch/pause-all-perpetual")
 async def pause_all_perpetual_contracts(admin_id: str = "current_admin"):

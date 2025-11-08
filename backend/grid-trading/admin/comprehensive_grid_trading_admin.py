@@ -626,9 +626,9 @@ async def update_bot_risk_parameters(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# ============================================================================
- BATCH OPERATIONS
-# ============================================================================
+   # ============================================================================
+   # BATCH OPERATIONS
+   # ============================================================================
 
 @router.post("/batch/pause-all")
 async def pause_all_grid_bots(admin_id: str = "current_admin"):

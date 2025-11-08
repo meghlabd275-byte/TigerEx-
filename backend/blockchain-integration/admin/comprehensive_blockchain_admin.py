@@ -484,9 +484,9 @@ async def list_token_on_exchange(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# ============================================================================
- BATCH OPERATIONS
-# ============================================================================
+   # ============================================================================
+   # BATCH OPERATIONS
+   # ============================================================================
 
 @router.post("/batch/sync-networks")
 async def batch_sync_all_networks(admin_id: str = "current_admin"):

@@ -313,7 +313,7 @@ async def resume_iou_contract(iou_id: str, admin_id: str = "current_admin"):
             raise HTTPException(status_code=404, detail="IOU contract not found")
         
         if contract["status"] != IOUStatus.PENDING:
-            raise HTTPException(status_code=400, detail("Contract is not paused"))
+            raise HTTPException(status_code=400, detail="Contract is not paused")
         
         # Check if conditions are met for resumption
         resume_check = await check_resume_conditions(iou_id)
@@ -359,7 +359,7 @@ async def cancel_iou_contract(
             raise HTTPException(status_code=404, detail="IOU contract not found")
         
         if contract["status"] in [IOUStatus.SETTLED, IOUStatus.CANCELLED, IOUStatus.EXPIRED]:
-            raise HTTPException(status_code=400, detail("Contract cannot be cancelled"))
+            raise HTTPException(status_code=400, detail="Contract cannot be cancelled")
         
         # Check for settlements
         settlements = await get_contract_settlements(iou_id)
@@ -523,7 +523,7 @@ async def process_iou_settlement(
             raise HTTPException(status_code=404, detail="IOU contract not found")
         
         if contract["status"] != IOUStatus.ACTIVE:
-            raise HTTPException(status_code=400, detail("IOU contract is not active"))
+            raise HTTPException(status_code=400, detail="IOU contract is not active")
         
         # Process settlement
         settlement_result = await process_settlement_transaction(settlement.dict())
@@ -594,7 +594,7 @@ async def force_iou_settlement(
             raise HTTPException(status_code=404, detail="IOU contract not found")
         
         if contract["status"] != IOUStatus.ACTIVE:
-            raise HTTPException(status_code=400, detail("IOU contract is not active"))
+            raise HTTPException(status_code=400, detail="IOU contract is not active"))
         
         # Calculate settlement amount including penalties
         settlement_calculation = await calculate_force_settlement_amount(iou_id)

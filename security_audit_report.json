@@ -1,0 +1,110 @@
+{
+  "errors": [
+    {
+      "filename": "./backend/blockchain-integration/admin/comprehensive_blockchain_admin.py",
+      "reason": "syntax error while parsing AST from file"
+    },
+    {
+      "filename": "./backend/copy-trading/admin/comprehensive_copy_trading_admin.py",
+      "reason": "syntax error while parsing AST from file"
+    },
+    {
+      "filename": "./backend/futures-trading/admin/comprehensive_futures_admin.py",
+      "reason": "syntax error while parsing AST from file"
+    },
+    {
+      "filename": "./backend/grid-trading/admin/comprehensive_grid_trading_admin.py",
+      "reason": "syntax error while parsing AST from file"
+    },
+    {
+      "filename": "./backend/iou-system/admin/comprehensive_iou_admin.py",
+      "reason": "syntax error while parsing AST from file"
+    },
+    {
+      "filename": "./backend/margin-trading/admin/comprehensive_margin_admin.py",
+      "reason": "syntax error while parsing AST from file"
+    },
+    {
+      "filename": "./backend/virtual-coin-trading-system/admin/comprehensive_virtual_coin_admin.py",
+      "reason": "syntax error while parsing AST from file"
+    }
+  ],
+  "generated_at": "2025-11-08T04:13:20Z",
+  "metrics": {
+    "./backend/blockchain-integration/admin/comprehensive_blockchain_admin.py": {
+      "loc": 511,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "./backend/copy-trading/admin/comprehensive_copy_trading_admin.py": {
+      "loc": 738,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "./backend/futures-trading/admin/comprehensive_futures_admin.py": {
+      "loc": 532,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "./backend/grid-trading/admin/comprehensive_grid_trading_admin.py": {
+      "loc": 617,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "./backend/iou-system/admin/comprehensive_iou_admin.py": {
+      "loc": 717,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "./backend/margin-trading/admin/comprehensive_margin_admin.py": {
+      "loc": 613,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "./backend/options-trading/admin/comprehensive_options_admin.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 578,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "./backend/spot-trading/admin/comprehensive_admin_controls.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 420,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "./backend/virtual-coin-trading-system/admin/comprehensive_virtual_coin_admin.py": {
+      "loc": 809,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "_totals": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 5535,
+      "nosec": 0,
+      "skipped_tests": 0
+    }
+  },
+  "results": []
+}
