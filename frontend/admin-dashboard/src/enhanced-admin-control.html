@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx - Enhanced Admin Control Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a1a2e;
+            --secondary-color: #16213e;
+            --accent-color: #e94560;
+            --success-color: #0f4c75;
+            --warning-color: #f47068;
+            --info-color: #3282b8;
+            --text-light: #ffffff;
+            --text-muted: #a8a8b3;
+            --bg-dark: #0f0f1e;
+            --bg-card: #1e1e2e;
+            --border-color: #2d2d44;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--primary-color) 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 280px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            background: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .sidebar-logo i {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section-title {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-item {
+            margin: 0.25rem 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: var(--primary-color);
+            color: var(--text-light);
+            border-left-color: var(--accent-color);
+        }
+
+        .nav-link.active {
+            background: var(--primary-color);
+            color: var(--accent-color);
+            border-left-color: var(--accent-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .content-header {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .page-subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.1);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .stat-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .stat-change.positive {
+            background: rgba(15, 76, 117, 0.2);
+            color: #4fc3f7;
+        }
+
+        .stat-change.negative {
+            background: rgba(244, 112, 104, 0.2);
+            color: var(--warning-color);
+        }
+
+        /* Trading Control Panel */
+        .control-panel {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .panel-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .control-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .control-tab {
+            padding: 0.75rem 1rem;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .control-tab:hover {
+            color: var(--text-light);
+        }
+
+        .control-tab.active {
+            color: var(--accent-color);
+            border-bottom-color: var(--accent-color);
+        }
+
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .control-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--primary-color);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .control-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .control-name {
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .control-status {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Action Buttons */
+        .btn-admin {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary-admin {
+            background: var(--accent-color);
+            color: var(--text-light);
+        }
+
+        .btn-primary-admin:hover {
+            background: #d73d5a;
+            transform: translateY(-2px);
+        }
+
+        .btn-success-admin {
+            background: var(--success-color);
+            color: var(--text-light);
+        }
+
+        .btn-success-admin:hover {
+            background: #0a3a5a;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning-admin {
+            background: var(--warning-color);
+            color: var(--text-light);
+        }
+
+        .btn-danger-admin {
+            background: #d32f2f;
+            color: var(--text-light);
+        }
+
+        /* Data Tables */
+        .data-table {
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .table-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .admin-table th {
+            background: var(--primary-color);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .admin-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-light);
+        }
+
+        .admin-table tbody tr:hover {
+            background: var(--primary-color);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(79, 195, 247, 0.2);
+            color: #4fc3f7;
+        }
+
+        .status-paused {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .status-suspended {
+            background: rgba(244, 112, 104, 0.2);
+            color: var(--warning-color);
+        }
+
+        .status-inactive {
+            background: rgba(168, 168, 179, 0.2);
+            color: var(--text-muted);
+        }
+
+        /* Mobile Responsive */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: var(--accent-color);
+            border: none;
+            color: var(--text-light);
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 4rem 1rem 1rem;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .control-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-muted);
+            border-top: 2px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--primary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="sidebar-logo">
+                <i class="fas fa-tiger"></i>
+                <span>TigerEx Admin</span>
+            </a>
+        </div>
+        <nav class="sidebar-nav">
+            <!-- Dashboard Section -->
+            <div class="nav-section">
+                <div class="nav-section-title">Dashboard</div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link active" onclick="showSection('dashboard')">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Overview</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Trading Controls -->
+            <div class="nav-section">
+                <div class="nav-section-title">Trading Controls</div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('spot-trading')">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Spot Trading</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('futures-trading')">
+                        <i class="fas fa-chart-area"></i>
+                        <span>Futures Trading</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('margin-trading')">
+                        <i class="fas fa-coins"></i>
+                        <span>Margin Trading</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('options-trading')">
+                        <i class="fas fa-project-diagram"></i>
+                        <span>Options Trading</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('grid-trading')">
+                        <i class="fas fa-th"></i>
+                        <span>Grid Trading</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('copy-trading')">
+                        <i class="fas fa-users"></i>
+                        <span>Copy Trading</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Market Making -->
+            <div class="nav-section">
+                <div class="nav-section-title">Market Making</div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('market-making')">
+                        <i class="fas fa-robot"></i>
+                        <span>Market Making Bots</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('liquidity')">
+                        <i class="fas fa-water"></i>
+                        <span>Liquidity Management</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Token Management -->
+            <div class="nav-section">
+                <div class="nav-section-title">Token Management</div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('token-creation')">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Token Creation</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('virtual-coins')">
+                        <i class="fas fa-gem"></i>
+                        <span>Virtual Coins</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('iou-system')">
+                        <i class="fas fa-file-invoice"></i>
+                        <span>IOU System</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Blockchain -->
+            <div class="nav-section">
+                <div class="nav-section-title">Blockchain</div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('evm-blockchains')">
+                        <i class="fas fa-cube"></i>
+                        <span>EVM Blockchains</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('non-evm-blockchains')">
+                        <i class="fas fa-link"></i>
+                        <span>Non-EVM Blockchains</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('cross-chain')">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Cross-Chain Bridge</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- User Management -->
+            <div class="nav-section">
+                <div class="nav-section-title">User Management</div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('user-access')">
+                        <i class="fas fa-user-shield"></i>
+                        <span>User Access Control</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('permissions')">
+                        <i class="fas fa-key"></i>
+                        <span>Permissions</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('platform-access')">
+                        <i class="fas fa-devices"></i>
+                        <span>Platform Access</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- System -->
+            <div class="nav-section">
+                <div class="nav-section-title">System</div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('settings')">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('logs')">
+                        <i class="fas fa-list-alt"></i>
+                        <span>System Logs</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('security')">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Security</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Section -->
+        <section id="dashboard-section">
+            <div class="content-header">
+                <h1 class="page-title">Admin Dashboard</h1>
+                <p class="page-subtitle">Complete control over all trading systems and platform features</p>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: var(--accent-color);">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>12.5%</span>
+                        </div>
+                    </div>
+                    <div class="stat-value">$2.5B</div>
+                    <div class="stat-label">Total Trading Volume</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: var(--success-color);">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>8.3%</span>
+                        </div>
+                    </div>
+                    <div class="stat-value">150K+</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: var(--info-color);">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>15.7%</span>
+                        </div>
+                    </div>
+                    <div class="stat-value">850</div>
+                    <div class="stat-label">Trading Pairs</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: var(--warning-color);">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="stat-change negative">
+                            <i class="fas fa-arrow-down"></i>
+                            <span>2.1%</span>
+                        </div>
+                    </div>
+                    <div class="stat-value">1,250</div>
+                    <div class="stat-label">Active Bots</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="control-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Quick Actions</h2>
+                    <button class="btn-admin btn-primary-admin" onclick="showCreateModal()">
+                        <i class="fas fa-plus"></i>
+                        Quick Create
+                    </button>
+                </div>
+                
+                <div class="control-tabs">
+                    <button class="control-tab active" onclick="showControlTab('trading')">Trading</button>
+                    <button class="control-tab" onclick="showControlTab('tokens')">Tokens</button>
+                    <button class="control-tab" onclick="showControlTab('blockchain')">Blockchain</button>
+                    <button class="control-tab" onclick="showControlTab('users')">Users</button>
+                </div>
+
+                <div id="trading-controls" class="control-grid">
+                    <div class="control-item">
+                        <div class="control-info">
+                            <span class="control-name">Spot Trading</span>
+                            <span class="control-status">245 active pairs</span>
+                        </div>
+                        <div>
+                            <button class="btn-admin btn-success-admin" onclick="pauseAllSpotTrading()">Pause</button>
+                            <button class="btn-admin btn-warning-admin" onclick="showSpotTradingModal()">Manage</button>
+                        </div>
+                    </div>
+
+                    <div class="control-item">
+                        <div class="control-info">
+                            <span class="control-name">Futures Trading</span>
+                            <span class="control-status">125 contracts</span>
+                        </div>
+                        <div>
+                            <button class="btn-admin btn-success-admin" onclick="pauseAllFuturesTrading()">Pause</button>
+                            <button class="btn-admin btn-warning-admin" onclick="showFuturesTradingModal()">Manage</button>
+                        </div>
+                    </div>
+
+                    <div class="control-item">
+                        <div class="control-info">
+                            <span class="control-name">Margin Trading</span>
+                            <span class="control-status">85 pairs</span>
+                        </div>
+                        <div>
+                            <button class="btn-admin btn-success-admin" onclick="pauseAllMarginTrading()">Pause</button>
+                            <button class="btn-admin btn-warning-admin" onclick="showMarginTradingModal()">Manage</button>
+                        </div>
+                    </div>
+
+                    <div class="control-item">
+                        <div class="control-info">
+                            <span class="control-name">Options Trading</span>
+                            <span class="control-status">45 contracts</span>
+                        </div>
+                        <div>
+                            <button class="btn-admin btn-success-admin" onclick="pauseAllOptionsTrading()">Pause</button>
+                            <button class="btn-admin btn-warning-admin" onclick="showOptionsTradingModal()">Manage</button>
+                        </div>
+                    </div>
+
+                    <div class="control-item">
+                        <div class="control-info">
+                            <span class="control-name">Grid Trading</span>
+                            <span class="control-status">525 bots</span>
+                        </div>
+                        <div>
+                            <button class="btn-admin btn-success-admin" onclick="pauseAllGridTrading()">Pause</button>
+                            <button class="btn-admin btn-warning-admin" onclick="showGridTradingModal()">Manage</button>
+                        </div>
+                    </div>
+
+                    <div class="control-item">
+                        <div class="control-info">
+                            <span class="control-name">Copy Trading</span>
+                            <span class="control-status">35 masters</span>
+                        </div>
+                        <div>
+                            <button class="btn-admin btn-success-admin" onclick="pauseAllCopyTrading()">Pause</button>
+                            <button class="btn-admin btn-warning-admin" onclick="showCopyTradingModal()">Manage</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tokens-controls" class="control-grid" style="display: none;">
+                    <div class="control-item">
+                        <div class="control-info">
+                            <span class="control-name">Token Creation</span>
+                            <span class="control-status">Active</span>
+                        </div>
+                        <div>
+                            <button class="btn-admin btn-primary-admin" onclick="showTokenCreationModal()">Create Token</button>
+                        </div>
+                    </div>
+
+                    <div class="control-item">
+                        <div class="control-info">
+                            <span class="control-name">Virtual Coins</span>
+                            <span class="control-status">200 tokens</span>
+                        </div>
+                        <div>
+                            <button class="btn-admin btn-warning-admin" onclick="showVirtualCoinsModal()">Manage</button>
+                        </div>
+                    </div>
+
+                    <div class="control-item">
+                        <div class="control-info">
+                            <span class="control-name">IOU System</span>
+                            <span class="control-status">10K active IOUs</span>
+                        </div>
+                        <div>
+                            <button class="btn-admin btn-warning-admin" onclick="showIOUSystemModal()">Manage</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="blockchain-controls" class="control-grid" style="display: none;">
+                    <div class="control-item">
+                        <div class="control-info">
+                            <span class="control-name">EVM Blockchains</span>
+                            <span class="control-status">18 chains</span>
+                        </div>
+                        <div>
+                            <button class="btn-admin btn-primary-admin" onclick="showEVMBlockchainModal()">Add Chain</button>
+                        </div>
+                    </div>
+
+                    <div class="control-item">
+                        <div class="control-info">
+                            <span class="control-name">Non-EVM Blockchains</span>
+                            <span class="control-status">7 chains</span>
+                        </div>
+                        <div>
+                            <button class="btn-admin btn-primary-admin" onclick="showNonEVMBlockchainModal()">Add Chain</button>
+                        </div>
+                    </div>
+
+                    <div class="control-item">
+                        <div class="control-info">
+                            <span class="control-name">Cross-Chain Bridge</span>
+                            <span class="control-status">45 bridges</span>
+                        </div>
+                        <div>
+                            <button class="btn-admin btn-warning-admin" onclick="showCrossChainModal()">Manage</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="users-controls" class="control-grid" style="display: none;">
+                    <div class="control-item">
+                        <div class="control-info">
+                            <span class="control-name">User Access Control</span>
+                            <span class="control-status">All platforms</span>
+                        </div>
+                        <div>
+                            <button class="btn-admin btn-warning-admin" onclick="showUserAccessModal()">Manage Access</button>
+                        </div>
+                    </div>
+
+                    <div class="control-item">
+                        <div class="control-info">
+                            <span class="control-name">Permissions</span>
+                            <span class="control-status">8 roles</span>
+                        </div>
+                        <div>
+                            <button class="btn-admin btn-warning-admin" onclick="showPermissionsModal()">Manage Roles</button>
+                        </div>
+                    </div>
+
+                    <div class="control-item">
+                        <div class="control-info">
+                            <span class="control-name">Platform Access</span>
+                            <span class="control-status">Web, Mobile, Desktop</span>
+                        </div>
+                        <div>
+                            <button class="btn-admin btn-warning-admin" onclick="showPlatformAccessModal()">Control Access</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity Table -->
+            <div class="data-table">
+                <div class="table-header">
+                    <h3 class="table-title">Recent System Activity</h3>
+                    <button class="btn-admin btn-primary-admin" onclick="refreshActivity()">
+                        <i class="fas fa-sync-alt"></i>
+                        Refresh
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Action</th>
+                                <th>User</th>
+                                <th>Component</th>
+                                <th>Status</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activity-table">
+                            <tr>
+                                <td>2024-01-08 14:35:22</td>
+                                <td>Contract Created</td>
+                                <td>admin</td>
+                                <td>Spot Trading</td>
+                                <td><span class="status-badge status-active">Success</span></td>
+                                <td>BTC/USDT perpetual contract</td>
+                            </tr>
+                            <tr>
+                                <td>2024-01-08 14:30:15</td>
+                                <td>Token Deployed</td>
+                                <td>admin</td>
+                                <td>EVM Blockchain</td>
+                                <td><span class="status-badge status-active">Success</span></td>
+                                <td>ERC20 token on Ethereum</td>
+                            </tr>
+                            <tr>
+                                <td>2024-01-08 14:25:08</td>
+                                <td>Bot Paused</td>
+                                <td>admin</td>
+                                <td>Market Making</td>
+                                <td><span class="status-badge status-paused">Paused</span></td>
+                                <td>Grid bot for ETH/USDT</td>
+                            </tr>
+                            <tr>
+                                <td>2024-01-08 14:20:45</td>
+                                <td>User Access Updated</td>
+                                <td>admin</td>
+                                <td>User Management</td>
+                                <td><span class="status-badge status-active">Success</span></td>
+                                <td>Granted trading permissions</td>
+                            </tr>
+                            <tr>
+                                <td>2024-01-08 14:15:30</td>
+                                <td>Pair Created</td>
+                                <td>admin</td>
+                                <td>Token Creation</td>
+                                <td><span class="status-badge status-active">Success</span></td>
+                                <td>New trading pair NEW/USDT</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Other sections will be dynamically loaded here -->
+    </main>
+
+    <!-- Create Modal -->
+    <div id="create-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Quick Create</h2>
+                <button class="modal-close" onclick="closeModal('create-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="create-form">
+                <div class="form-group">
+                    <label class="form-label">Select Type</label>
+                    <select class="form-select" id="create-type" onchange="updateCreateForm()">
+                        <option value="">Choose a type...</option>
+                        <option value="trading-pair">Trading Pair</option>
+                        <option value="token">Token</option>
+                        <option value="bot">Trading Bot</option>
+                        <option value="contract">Smart Contract</option>
+                        <option value="blockchain">Blockchain</option>
+                        <option value="user">User Access</option>
+                    </select>
+                </div>
+                <div id="create-form-fields"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-admin btn-secondary-admin" onclick="closeModal('create-modal')">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn-admin btn-primary-admin">
+                        <i class="fas fa-plus"></i>
+                        Create
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentSection = 'dashboard';
+        let currentTab = 'trading';
+
+        // Sidebar toggle for mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Section navigation
+        function showSection(section) {
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Load section content
+            loadSectionContent(section);
+            currentSection = section;
+
+            // Close mobile sidebar
+            if (window.innerWidth <= 768) {
+                toggleSidebar();
+            }
+        }
+
+        // Control tabs
+        function showControlTab(tab) {
+            // Update active tab
+            document.querySelectorAll('.control-tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Show corresponding controls
+            document.querySelectorAll('.control-grid').forEach(grid => {
+                grid.style.display = 'none';
+            });
+            document.getElementById(`${tab}-controls`).style.display = 'grid';
+            currentTab = tab;
+        }
+
+        // Modal functions
+        function showCreateModal() {
+            document.getElementById('create-modal').style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Create form update
+        function updateCreateForm() {
+            const type = document.getElementById('create-type').value;
+            const fieldsContainer = document.getElementById('create-form-fields');
+            
+            let fieldsHTML = '';
+            
+            switch(type) {
+                case 'trading-pair':
+                    fieldsHTML = `
+                        <div class="form-group">
+                            <label class="form-label">Base Token</label>
+                            <input type="text" class="form-input" placeholder="e.g., BTC" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Quote Token</label>
+                            <input type="text" class="form-input" placeholder="e.g., USDT" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Trading Type</label>
+                            <select class="form-select" required>
+                                <option value="spot">Spot</option>
+                                <option value="futures">Futures</option>
+                                <option value="margin">Margin</option>
+                                <option value="options">Options</option>
+                            </select>
+                        </div>
+                    `;
+                    break;
+                case 'token':
+                    fieldsHTML = `
+                        <div class="form-group">
+                            <label class="form-label">Token Name</label>
+                            <input type="text" class="form-input" placeholder="e.g., Tiger Token" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Token Symbol</label>
+                            <input type="text" class="form-input" placeholder="e.g., TIGER" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Total Supply</label>
+                            <input type="number" class="form-input" placeholder="e.g., 1000000" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Token Type</label>
+                            <select class="form-select" required>
+                                <option value="erc20">ERC20</option>
+                                <option value="bep20">BEP20</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                        </div>
+                    `;
+                    break;
+                case 'bot':
+                    fieldsHTML = `
+                        <div class="form-group">
+                            <label class="form-label">Bot Type</label>
+                            <select class="form-select" required>
+                                <option value="grid">Grid Trading</option>
+                                <option value="market-making">Market Making</option>
+                                <option value="copy">Copy Trading</option>
+                                <option value="arbitrage">Arbitrage</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Trading Pair</label>
+                            <input type="text" class="form-input" placeholder="e.g., BTC/USDT" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Initial Investment</label>
+                            <input type="number" class="form-input" placeholder="e.g., 1000" required>
+                        </div>
+                    `;
+                    break;
+                // Add more cases for other types
+            }
+            
+            fieldsContainer.innerHTML = fieldsHTML;
+        }
+
+        // Trading control functions
+        function pauseAllSpotTrading() {
+            if (confirm('Are you sure you want to pause all spot trading? This will affect all users.')) {
+                showNotification('All spot trading paused successfully', 'success');
+                updateActivity('Trading Paused', 'admin', 'Spot Trading', 'paused', 'All spot trading pairs paused');
+            }
+        }
+
+        function pauseAllFuturesTrading() {
+            if (confirm('Are you sure you want to pause all futures trading? This will affect all users.')) {
+                showNotification('All futures trading paused successfully', 'success');
+                updateActivity('Trading Paused', 'admin', 'Futures Trading', 'paused', 'All futures contracts paused');
+            }
+        }
+
+        function pauseAllMarginTrading() {
+            if (confirm('Are you sure you want to pause all margin trading? This will affect all users.')) {
+                showNotification('All margin trading paused successfully', 'success');
+                updateActivity('Trading Paused', 'admin', 'Margin Trading', 'paused', 'All margin trading paused');
+            }
+        }
+
+        function pauseAllOptionsTrading() {
+            if (confirm('Are you sure you want to pause all options trading? This will affect all users.')) {
+                showNotification('All options trading paused successfully', 'success');
+                updateActivity('Trading Paused', 'admin', 'Options Trading', 'paused', 'All options contracts paused');
+            }
+        }
+
+        function pauseAllGridTrading() {
+            if (confirm('Are you sure you want to pause all grid trading? This will affect all bots.')) {
+                showNotification('All grid trading paused successfully', 'success');
+                updateActivity('Trading Paused', 'admin', 'Grid Trading', 'paused', 'All grid trading bots paused');
+            }
+        }
+
+        function pauseAllCopyTrading() {
+            if (confirm('Are you sure you want to pause all copy trading? This will affect all copy relationships.')) {
+                showNotification('All copy trading paused successfully', 'success');
+                updateActivity('Trading Paused', 'admin', 'Copy Trading', 'paused', 'All copy trading paused');
+            }
+        }
+
+        // Modal show functions for detailed management
+        function showSpotTradingModal() {
+            showNotification('Opening spot trading management...', 'info');
+            // Load spot trading management section
+        }
+
+        function showFuturesTradingModal() {
+            showNotification('Opening futures trading management...', 'info');
+        }
+
+        function showMarginTradingModal() {
+            showNotification('Opening margin trading management...', 'info');
+        }
+
+        function showOptionsTradingModal() {
+            showNotification('Opening options trading management...', 'info');
+        }
+
+        function showGridTradingModal() {
+            showNotification('Opening grid trading management...', 'info');
+        }
+
+        function showCopyTradingModal() {
+            showNotification('Opening copy trading management...', 'info');
+        }
+
+        function showTokenCreationModal() {
+            showNotification('Opening token creation interface...', 'info');
+        }
+
+        function showVirtualCoinsModal() {
+            showNotification('Opening virtual coin management...', 'info');
+        }
+
+        function showIOUSystemModal() {
+            showNotification('Opening IOU system management...', 'info');
+        }
+
+        function showEVMBlockchainModal() {
+            showNotification('Opening EVM blockchain deployment...', 'info');
+        }
+
+        function showNonEVMBlockchainModal() {
+            showNotification('Opening non-EVM blockchain deployment...', 'info');
+        }
+
+        function showCrossChainModal() {
+            showNotification('Opening cross-chain bridge management...', 'info');
+        }
+
+        function showUserAccessModal() {
+            showNotification('Opening user access control...', 'info');
+        }
+
+        function showPermissionsModal() {
+            showNotification('Opening permissions management...', 'info');
+        }
+
+        function showPlatformAccessModal() {
+            showNotification('Opening platform access control...', 'info');
+        }
+
+        // Activity management
+        function refreshActivity() {
+            const table = document.getElementById('activity-table');
+            table.innerHTML = '<tr><td colspan="6" style="text-align: center;"><div class="loading-spinner"></div> Loading...</td></tr>';
+            
+            // Simulate API call
+            setTimeout(() => {
+                updateActivity('Data Refreshed', 'admin', 'System', 'success', 'Activity table refreshed');
+                location.reload(); // In real app, this would be an API call
+            }, 1000);
+        }
+
+        function updateActivity(action, user, component, status, details) {
+            const table = document.getElementById('activity-table');
+            const now = new Date().toLocaleString();
+            
+            const statusClass = status === 'success' ? 'status-active' : 
+                              status === 'paused' ? 'status-paused' : 
+                              status === 'error' ? 'status-suspended' : 'status-inactive';
+            
+            const newRow = `
+                <tr>
+                    <td>${now}</td>
+                    <td>${action}</td>
+                    <td>${user}</td>
+                    <td>${component}</td>
+                    <td><span class="status-badge ${statusClass}">${status.charAt(0).toUpperCase() + status.slice(1)}</span></td>
+                    <td>${details}</td>
+                </tr>
+            `;
+            
+            table.insertAdjacentHTML('afterbegin', newRow);
+            
+            // Keep only last 10 activities
+            while (table.children.length > 10) {
+                table.removeChild(table.lastChild);
+            }
+        }
+
+        // Load section content
+        function loadSectionContent(section) {
+            // In a real implementation, this would load different content based on section
+            console.log(`Loading ${section} section...`);
+        }
+
+        // Form submission
+        document.getElementById('create-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const type = document.getElementById('create-type').value;
+            if (!type) {
+                showNotification('Please select a type to create', 'error');
+                return;
+            }
+            
+            // Simulate creation
+            showNotification(`${type.replace('-', ' ').charAt(0).toUpperCase() + type.slice(1).replace('-', ' ')} created successfully!`, 'success');
+            updateActivity('Resource Created', 'admin', type, 'success', `New ${type} created via admin panel`);
+            closeModal('create-modal');
+            
+            // Reset form
+            document.getElementById('create-form').reset();
+            document.getElementById('create-form-fields').innerHTML = '';
+        });
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+                <button class="notification-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            // Add styles
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'var(--success-color)' : type === 'error' ? 'var(--warning-color)' : 'var(--info-color)'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 3000;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 1rem;
+                min-width: 300px;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        // Add notification styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            .notification-content {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+            }
+            
+            .notification-close {
+                background: transparent;
+                border: none;
+                color: white;
+                font-size: 1.2rem;
+                cursor: pointer;
+                padding: 0;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('TigerEx Enhanced Admin Control Panel loaded');
+            updateActivity('System Started', 'admin', 'Dashboard', 'success', 'Admin panel initialized');
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                document.getElementById('sidebar').classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
