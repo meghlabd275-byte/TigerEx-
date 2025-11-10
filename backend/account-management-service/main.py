@@ -4,7 +4,7 @@ Account Management Service
 Comprehensive account management including VIP upgrades, profile management, and account info
 """
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, create_access_token
 from flask_cors import CORS
@@ -256,4 +256,232 @@ def delete_user_account(user_id):
         logger.error(f"Error deleting account: {str(e)}")
         return jsonify({'success': False, 'error': str(e)}), 500
 
-# Main application starts here...
+@app.route('/api/account/profile', methods=['GET'])
+   @jwt_required()
+   def get_account_profile():
+       try:
+           user_id = get_jwt_identity()
+           account = UserAccount.query.filter_by(user_id=user_id).first()
+           
+           if not account:
+               return jsonify({'success': False, 'error': 'Account not found'}), 404
+           
+           return jsonify({
+               'success': True,
+               'profile': {
+                   'user_id': account.user_id,
+                   'username': account.username,
+                   'email': account.email,
+                   'binance_id': account.binance_id,
+                   'account_type': account.account_type,
+                   'verification_status': account.verification_status,
+                   'account_status': account.account_status,
+                   'is_admin': account.is_admin,
+                   'first_name': account.first_name,
+                   'last_name': account.last_name,
+                   'date_of_birth': account.date_of_birth.isoformat() if account.date_of_birth else None,
+                   'nationality': account.nationality,
+                   'phone_number': account.phone_number,
+                   'vip_level': account.vip_level,
+                   'vip_progress': account.vip_progress,
+                   'trading_volume_30d': account.trading_volume_30d,
+                   'bnb_balance': account.bnb_balance,
+                   'twitter_connected': account.twitter_connected,
+                   'telegram_connected': account.telegram_connected,
+                   'created_at': account.created_at.isoformat()
+               }
+           })
+       except Exception as e:
+           logger.error(f"Error getting account profile: {str(e)}")
+           return jsonify({'success': False, 'error': str(e)}), 500
+
+   @app.route('/api/account/profile', methods=['PUT'])
+   @jwt_required()
+   def update_account_profile():
+       try:
+           user_id = get_jwt_identity()
+           account = UserAccount.query.filter_by(user_id=user_id).first()
+           
+           if not account:
+               return jsonify({'success': False, 'error': 'Account not found'}), 404
+           
+           data = request.get_json()
+           
+           # Update profile fields
+           if 'first_name' in data:
+               account.first_name = data['first_name']
+           if 'last_name' in data:
+               account.last_name = data['last_name']
+           if 'date_of_birth' in data:
+               account.date_of_birth = datetime.strptime(data['date_of_birth'], '%Y-%m-%d').date()
+           if 'nationality' in data:
+               account.nationality = data['nationality']
+           if 'phone_number' in data:
+               account.phone_number = data['phone_number']
+           
+           account.updated_at = datetime.utcnow()
+           db.session.commit()
+           
+           return jsonify({'success': True, 'message': 'Profile updated successfully'})
+       except Exception as e:
+           logger.error(f"Error updating account profile: {str(e)}")
+           return jsonify({'success': False, 'error': str(e)}), 500
+
+   @app.route('/api/account/vip/upgrade', methods=['POST'])
+   @jwt_required()
+   def upgrade_vip():
+       try:
+           user_id = get_jwt_identity()
+           account = UserAccount.query.filter_by(user_id=user_id).first()
+           
+           if not account:
+               return jsonify({'success': False, 'error': 'Account not found'}), 404
+           
+           data = request.get_json()
+           target_vip_level = data.get('vip_level', account.vip_level + 1)
+           
+           # Check VIP upgrade requirements
+           vip_requirements = {
+               1: {'trading_volume': 1000, 'bnb_balance': 0.1},
+               2: {'trading_volume': 5000, 'bnb_balance': 0.5},
+               3: {'trading_volume': 10000, 'bnb_balance': 1.0},
+               4: {'trading_volume': 50000, 'bnb_balance': 5.0},
+               5: {'trading_volume': 100000, 'bnb_balance': 10.0}
+           }
+           
+           if target_vip_level not in vip_requirements:
+               return jsonify({'success': False, 'error': 'Invalid VIP level'}), 400
+           
+           requirements = vip_requirements[target_vip_level]
+           
+           if (account.trading_volume_30d < requirements['trading_volume'] or 
+               account.bnb_balance < requirements['bnb_balance']):
+               return jsonify({
+                   'success': False, 
+                   'error': 'Requirements not met',
+                   'requirements': requirements,
+                   'current': {
+                       'trading_volume': account.trading_volume_30d,
+                       'bnb_balance': account.bnb_balance
+                   }
+               }), 400
+           
+           account.vip_level = target_vip_level
+           account.account_type = f'VIP {target_vip_level}'
+           account.updated_at = datetime.utcnow()
+           db.session.commit()
+           
+           return jsonify({
+               'success': True, 
+               'message': f'Successfully upgraded to VIP {target_vip_level}',
+               'vip_level': account.vip_level,
+               'account_type': account.account_type
+           })
+       except Exception as e:
+           logger.error(f"Error upgrading VIP: {str(e)}")
+           return jsonify({'success': False, 'error': str(e)}), 500
+
+   @app.route('/api/admin/account/<user_id>/suspend', methods=['POST'])
+   @jwt_required()
+   @admin_required()
+   def suspend_account(user_id):
+       try:
+           data = request.get_json()
+           reason = data.get('reason', 'Administrative action')
+           
+           account = UserAccount.query.filter_by(user_id=user_id).first()
+           if not account:
+               return jsonify({'success': False, 'error': 'Account not found'}), 404
+           
+           account.account_status = 'Suspended'
+           account.updated_at = datetime.utcnow()
+           db.session.commit()
+           
+           return jsonify({'success': True, 'message': f'Account suspended. Reason: {reason}'})
+       except Exception as e:
+           logger.error(f"Error suspending account: {str(e)}")
+           return jsonify({'success': False, 'error': str(e)}), 500
+
+   @app.route('/api/account/verify', methods=['POST'])
+   @jwt_required()
+   def verify_account():
+       try:
+           user_id = get_jwt_identity()
+           account = UserAccount.query.filter_by(user_id=user_id).first()
+           
+           if not account:
+               return jsonify({'success': False, 'error': 'Account not found'}), 404
+           
+           data = request.get_json()
+           
+           # Implement verification logic
+           verification_data = {
+               'id_document': data.get('id_document'),
+               'proof_of_address': data.get('proof_of_address'),
+               'selfie': data.get('selfie')
+           }
+           
+           # Simulate verification process
+           account.verification_status = 'Pending'
+           account.updated_at = datetime.utcnow()
+           db.session.commit()
+           
+           return jsonify({'success': True, 'message': 'Verification submitted for review'})
+       except Exception as e:
+           logger.error(f"Error verifying account: {str(e)}")
+           return jsonify({'success': False, 'error': str(e)}), 500
+
+   @app.route('/api/admin/accounts/search', methods=['POST'])
+   @jwt_required()
+   @admin_required()
+   def search_accounts():
+       try:
+           data = request.get_json()
+           search_term = data.get('search_term', '')
+           search_type = data.get('search_type', 'all')
+           
+           query = UserAccount.query
+           
+           if search_type == 'username':
+               query = query.filter(UserAccount.username.ilike(f'%{search_term}%'))
+           elif search_type == 'email':
+               query = query.filter(UserAccount.email.ilike(f'%{search_term}%'))
+           elif search_type == 'binance_id':
+               query = query.filter(UserAccount.binance_id.ilike(f'%{search_term}%'))
+           else:  # all
+               query = query.filter(
+                   db.or_(
+                       UserAccount.username.ilike(f'%{search_term}%'),
+                       UserAccount.email.ilike(f'%{search_term}%'),
+                       UserAccount.binance_id.ilike(f'%{search_term}%')
+                   )
+               )
+           
+           accounts = query.all()
+           
+           return jsonify({
+               'success': True,
+               'accounts': [
+                   {
+                       'user_id': account.user_id,
+                       'username': account.username,
+                       'email': account.email,
+                       'binance_id': account.binance_id,
+                       'account_type': account.account_type,
+                       'verification_status': account.verification_status,
+                       'account_status': account.account_status,
+                       'is_admin': account.is_admin,
+                       'created_at': account.created_at.isoformat()
+                   }
+                   for account in accounts
+               ]
+           })
+       except Exception as e:
+           logger.error(f"Error searching accounts: {str(e)}")
+           return jsonify({'success': False, 'error': str(e)}), 500
+
+   if __name__ == '__main__':
+       with app.app_context():
+           db.create_all()
+           logger.info("Account Management Service started successfully")
+       app.run(host='0.0.0.0', port=5001, debug=True)
