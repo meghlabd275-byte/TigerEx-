@@ -594,7 +594,7 @@ async def force_iou_settlement(
             raise HTTPException(status_code=404, detail="IOU contract not found")
         
         if contract["status"] != IOUStatus.ACTIVE:
-            raise HTTPException(status_code=400, detail="IOU contract is not active"))
+            raise HTTPException(status_code=400, detail="IOU contract is not active")
         
         # Calculate settlement amount including penalties
         settlement_calculation = await calculate_force_settlement_amount(iou_id)

@@ -584,7 +584,7 @@ async def resume_trading_pair(pair_id: str, admin_id: str = "current_admin"):
             raise HTTPException(status_code=404, detail="Trading pair not found")
         
         if pair["status"] != CoinStatus.SUSPENDED:
-            raise HTTPException(status_code=400, detail("Pair is not paused"))
+            raise HTTPException(status_code=400, detail="Pair is not paused"
         
         # Update status
         await update_pair_status(pair_id, CoinStatus.ACTIVE)
