@@ -1,308 +1,304 @@
 version: '3.8'
 
 services:
-  # Advanced Portfolio Analytics Service
-  advanced-portfolio-analytics:
-    build:
-      context: ./backend/advanced-portfolio-analytics
-      dockerfile: Dockerfile
-    container_name: tigerex-portfolio-analytics
-    ports:
-      - "8009:8009"
-    environment:
-      - DATABASE_URL=postgresql://postgres:password@postgres:5432/tigerex_portfolio
-      - REDIS_URL=redis://redis:6379/1
-      - ENVIRONMENT=production
-    depends_on:
-      - postgres
-      - redis
-    networks:
-      - tigerex-network
-    restart: unless-stopped
-    volumes:
-      - ./logs:/app/logs
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8009/api/v1/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # Multi-Tenant Architecture Service
-  multi-tenant-architecture:
-    build:
-      context: ./backend/multi-tenant-architecture
-      dockerfile: Dockerfile
-    container_name: tigerex-multi-tenant
-    ports:
-      - "8010:8010"
-    environment:
-      - DATABASE_URL=postgresql://postgres:password@postgres:5432/tigerex_tenants
-      - REDIS_URL=redis://redis:6379/2
-      - JWT_SECRET=${JWT_SECRET:-your-secret-key-here}
-      - ENVIRONMENT=production
-    depends_on:
-      - postgres
-      - redis
-    networks:
-      - tigerex-network
-    restart: unless-stopped
-    volumes:
-      - ./logs:/app/logs
-      - ./uploads:/app/uploads
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8010/api/v1/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # Institutional Features Service
-  institutional-features:
-    build:
-      context: ./backend/institutional-features
-      dockerfile: Dockerfile
-    container_name: tigerex-institutional
-    ports:
-      - "8011:8011"
-    environment:
-      - DATABASE_URL=postgresql://postgres:password@postgres:5432/tigerex_institutional
-      - REDIS_URL=redis://redis:6379/3
-      - ENVIRONMENT=production
-      - ALGO_ENGINE_URL=http://algo-engine:8020
-    depends_on:
-      - postgres
-      - redis
-    networks:
-      - tigerex-network
-    restart: unless-stopped
-    volumes:
-      - ./logs:/app/logs
-      - ./reports:/app/reports
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8011/api/v1/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # Advanced Compliance Tools Service
-  advanced-compliance-tools:
-    build:
-      context: ./backend/advanced-compliance-tools
-      dockerfile: Dockerfile
-    container_name: tigerex-compliance
-    ports:
-      - "8012:8012"
-    environment:
-      - DATABASE_URL=postgresql://postgres:password@postgres:5432/tigerex_compliance
-      - REDIS_URL=redis://redis:6379/4
-      - ENVIRONMENT=production
-      - WATCHLIST_API_URL=http://watchlist-service:8021
-      - SANCTIONS_API_KEY=${SANCTIONS_API_KEY}
-    depends_on:
-      - postgres
-      - redis
-    networks:
-      - tigerex-network
-    restart: unless-stopped
-    volumes:
-      - ./logs:/app/logs
-      - ./compliance-reports:/app/reports
-      - ./kyc-documents:/app/kyc
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8012/api/v1/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # Cross-Chain DeFi Integration Service
-  cross-chain-defi-integration:
-    build:
-      context: ./backend/cross-chain-defi-integration
-      dockerfile: Dockerfile
-    container_name: tigerex-defi
-    ports:
-      - "8013:8013"
-    environment:
-      - DATABASE_URL=postgresql://postgres:password@postgres:5432/tigerex_defi
-      - REDIS_URL=redis://redis:6379/5
-      - ENVIRONMENT=production
-      - WEB3_PROVIDER_URL=${WEB3_PROVIDER_URL:-https://mainnet.infura.io/v3/YOUR_PROJECT_ID}
-      - ETHERSCAN_API_KEY=${ETHERSCAN_API_KEY}
-    depends_on:
-      - postgres
-      - redis
-    networks:
-      - tigerex-network
-    restart: unless-stopped
-    volumes:
-      - ./logs:/app/logs
-      - ./blockchain-data:/app/data
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8013/api/v1/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # Enhanced Mobile Features Service
-  enhanced-mobile-features:
-    build:
-      context: ./backend/enhanced-mobile-features
-      dockerfile: Dockerfile
-    container_name: tigerex-mobile
-    ports:
-      - "8014:8014"
-    environment:
-      - DATABASE_URL=postgresql://postgres:password@postgres:5432/tigerex_mobile
-      - REDIS_URL=redis://redis:6379/6
-      - ENVIRONMENT=production
-      - APNS_KEY_ID=${APNS_KEY_ID}
-      - APNS_TEAM_ID=${APNS_TEAM_ID}
-      - FCM_SERVER_KEY=${FCM_SERVER_KEY}
-    depends_on:
-      - postgres
-      - redis
-    networks:
-      - tigerex-network
-    restart: unless-stopped
-    volumes:
-      - ./logs:/app/logs
-      - ./push-notifications:/app/notifications
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8014/api/v1/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # AI Trading Insights Service (Enhanced)
-  ai-trading-insights:
-    build:
-      context: ./backend/ai-trading-insights
-      dockerfile: Dockerfile
-    container_name: tigerex-ai-insights
-    ports:
-      - "8008:8008"
-    environment:
-      - DATABASE_URL=postgresql://postgres:password@postgres:5432/tigerex_ai
-      - REDIS_URL=redis://redis:6379/7
-      - ENVIRONMENT=production
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - MODEL_NAME=${MODEL_NAME:-gpt-4}
-    depends_on:
-      - postgres
-      - redis
-    networks:
-      - tigerex-network
-    restart: unless-stopped
-    volumes:
-      - ./logs:/app/logs
-      - ./ai-models:/app/models
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8008/api/v1/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # Derivatives Trading Service (Enhanced)
-  derivatives-trading:
-    build:
-      context: ./backend/derivatives-trading
-      dockerfile: Dockerfile
-    container_name: tigerex-derivatives
-    ports:
-      - "8007:8007"
-    environment:
-      - DATABASE_URL=postgresql://postgres:password@postgres:5432/tigerex_derivatives
-      - REDIS_URL=redis://redis:6379/8
-      - ENVIRONMENT=production
-      - CQG_API_KEY=${CQG_API_KEY}
-      - CQG_SECRET=${CQG_SECRET}
-    depends_on:
-      - postgres
-      - redis
-    networks:
-      - tigerex-network
-    restart: unless-stopped
-    volumes:
-      - ./logs:/app/logs
-      - ./trading-data:/app/data
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8007/api/v1/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # PostgreSQL Database (Multiple Databases)
+  # Database Services
   postgres:
-    image: postgres:15-alpine
-    container_name: tigerex-postgres
-    ports:
-      - "5432:5432"
+    image: postgres:15
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=tigerex_main
+      POSTGRES_DB: tigerex
+      POSTGRES_USER: tigerex
+      POSTGRES_PASSWORD: tigerex123
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./database/init-scripts:/docker-entrypoint-initdb.d
-    networks:
-      - tigerex-network
-    restart: unless-stopped
+    ports:
+      - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U tigerex"]
       interval: 30s
       timeout: 10s
       retries: 3
 
-  # Redis Cluster (Multiple Instances)
   redis:
     image: redis:7-alpine
-    container_name: tigerex-redis
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
-      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
-    command: redis-server /usr/local/etc/redis/redis.conf
-    networks:
-      - tigerex-network
-    restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 30s
       timeout: 10s
       retries: 3
 
-  # Nginx Load Balancer
-  nginx:
-    image: nginx:alpine
-    container_name: tigerex-nginx
+  # Core Backend Services
+  admin-service:
+    build: ./backend/admin-service
     ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/ssl:/etc/nginx/ssl
-      - ./logs/nginx:/var/log/nginx
+      - "5002:5002"
+    environment:
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
     depends_on:
-      - advanced-portfolio-analytics
-      - multi-tenant-architecture
-      - institutional-features
-      - advanced-compliance-tools
-      - cross-chain-defi-integration
-      - enhanced-mobile-features
-      - ai-trading-insights
-      - derivatives-trading
-    networks:
-      - tigerex-network
-    restart: unless-stopped
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
-  # Prometheus Monitoring
+  trading-engine:
+    build: ./backend/advanced-trading-engine
+    ports:
+      - "5003:5003"
+    environment:
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  account-management:
+    build: ./backend/account-management-service
+    ports:
+      - "5001:5001"
+    environment:
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # v11.0.0 Advanced Services
+  ai-trading-insights:
+    build: ./backend/ai-trading-insights-service
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
+      - ML_MODEL_PATH=/app/models
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  advanced-portfolio-analytics:
+    build: ./backend/advanced-portfolio-analytics
+    ports:
+      - "8001:8001"
+    environment:
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  multi-tenant-architecture:
+    build: ./backend/multi-tenant-architecture
+    ports:
+      - "8002:8002"
+    environment:
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  institutional-features:
+    build: ./backend/institutional-features
+    ports:
+      - "8003:8003"
+    environment:
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  advanced-compliance-tools:
+    build: ./backend/advanced-compliance-tools
+    ports:
+      - "8004:8004"
+    environment:
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8004/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  cross-chain-defi-integration:
+    build: ./backend/cross-chain-defi-integration
+    ports:
+      - "8005:8005"
+    environment:
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
+      - ETHEREUM_RPC_URL=${ETHEREUM_RPC_URL}
+      - BSC_RPC_URL=${BSC_RPC_URL}
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8005/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  enhanced-mobile-features:
+    build: ./backend/enhanced-mobile-features
+    ports:
+      - "8006:8006"
+    environment:
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
+      - FCM_SERVER_KEY=${FCM_SERVER_KEY}
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8006/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  derivatives-trading:
+    build: ./backend/derivatives-trading-service
+    ports:
+      - "8007:8007"
+    environment:
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8007/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  advanced-algorithmic-trading:
+    build: ./backend/advanced-algorithmic-trading
+    ports:
+      - "8015:8015"
+    environment:
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
+      - BINANCE_API_KEY=${BINANCE_API_KEY}
+      - BINANCE_SECRET_KEY=${BINANCE_SECRET_KEY}
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8015/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  enterprise-features:
+    build: ./backend/enterprise-features
+    ports:
+      - "8016:8016"
+    environment:
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8016/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  global-expansion:
+    build: ./backend/global-expansion
+    ports:
+      - "8017:8017"
+    environment:
+      - DATABASE_URL=postgresql://tigerex:tigerex123@postgres:5432/tigerex
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8017/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend Services
+  web-frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5002
+      - REACT_APP_WS_URL=ws://localhost:8001
+    depends_on:
+      - admin-service
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  admin-dashboard:
+    build: ./frontend/admin-dashboard
+    ports:
+      - "3001:3001"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5002
+    depends_on:
+      - admin-service
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Monitoring Services
   prometheus:
     image: prom/prometheus:latest
-    container_name: tigerex-prometheus
     ports:
       - "9090:9090"
     volumes:
-      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -311,18 +307,19 @@ services:
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
-    networks:
-      - tigerex-network
-    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
-  # Grafana Dashboard
   grafana:
     image: grafana/grafana:latest
-    container_name: tigerex-grafana
     ports:
-      - "3000:3000"
+      - "3002:3000"
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
       - GF_USERS_ALLOW_SIGN_UP=false
     volumes:
       - grafana_data:/var/lib/grafana
@@ -330,26 +327,37 @@ services:
       - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
     depends_on:
       - prometheus
-    networks:
-      - tigerex-network
-    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
-# Volumes
+  # Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - web-frontend
+      - admin-dashboard
+      - admin-service
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
 volumes:
   postgres_data:
-    driver: local
   redis_data:
-    driver: local
   prometheus_data:
-    driver: local
   grafana_data:
-    driver: local
 
-# Networks
 networks:
-  tigerex-network:
+  default:
     driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16
-</create-file>

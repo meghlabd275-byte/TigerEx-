@@ -2,7 +2,7 @@
 
 ![TigerEx Logo](https://via.placeholder.com/150x50/0000FF/FFFFFF?text=TigerEx)
 
-**TigerEx v10.0.0** - Enterprise-grade cryptocurrency trading platform with comprehensive features for web, mobile, and desktop applications.
+**TigerEx v11.0.0** - Complete enterprise-grade cryptocurrency trading platform with advanced AI-powered features, multi-tenant architecture, and global expansion capabilities for web, mobile, and desktop applications.
 
 ## 🚀 Features
 
