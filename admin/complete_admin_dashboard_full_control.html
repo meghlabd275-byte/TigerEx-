@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx - Admin Dashboard - Full Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #0B0E11;
+            color: #EAECEF;
+            overflow-x: hidden;
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: #1E2329;
+            border-right: 1px solid #2B3139;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid #2B3139;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #FCD535;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .admin-menu {
+            padding: 16px 0;
+        }
+
+        .menu-section {
+            margin-bottom: 24px;
+        }
+
+        .menu-title {
+            padding: 0 24px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: #848E9C;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            color: #EAECEF;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .menu-item:hover {
+            background: #2B3139;
+            color: #FCD535;
+        }
+
+        .menu-item.active {
+            background: rgba(252, 213, 53, 0.1);
+            color: #FCD535;
+        }
+
+        .menu-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #FCD535;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            background: #0B0E11;
+        }
+
+        .top-bar {
+            background: #1E2329;
+            border-bottom: 1px solid #2B3139;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #EAECEF;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            padding: 8px 12px 8px 40px;
+            background: #0B0E11;
+            border: 1px solid #2B3139;
+            border-radius: 6px;
+            color: #EAECEF;
+            width: 300px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #848E9C;
+        }
+
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background: #F6465D;
+            border-radius: 50%;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .user-profile:hover {
+            background: #2B3139;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #FCD535;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: 600;
+        }
+
+        .content-area {
+            padding: 32px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: #1E2329;
+            border: 1px solid #2B3139;
+            border-radius: 12px;
+            padding: 24px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .stat-icon.blue { background: rgba(59, 130, 246, 0.1); color: #3B82F6; }
+        .stat-icon.green { background: rgba(16, 185, 129, 0.1); color: #10B981; }
+        .stat-icon.red { background: rgba(239, 68, 68, 0.1); color: #EF4444; }
+        .stat-icon.yellow { background: rgba(252, 213, 53, 0.1); color: #FCD535; }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #EAECEF;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #848E9C;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .stat-change {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .stat-change.positive { color: #10B981; }
+        .stat-change.negative { color: #EF4444; }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .chart-card {
+            background: #1E2329;
+            border: 1px solid #2B3139;
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #EAECEF;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            background: transparent;
+            border: 1px solid #2B3139;
+            border-radius: 6px;
+            color: #848E9C;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            border-color: #FCD535;
+            color: #FCD535;
+        }
+
+        .action-btn.active {
+            background: #FCD535;
+            border-color: #FCD535;
+            color: #000;
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        .table-card {
+            background: #1E2329;
+            border: 1px solid #2B3139;
+            border-radius: 12px;
+            padding: 24px;
+            overflow: hidden;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #2B3139;
+            color: #848E9C;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #2B3139;
+            color: #EAECEF;
+            font-size: 14px;
+        }
+
+        .data-table tr:hover {
+            background: #2B3139;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-badge.active {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10B981;
+        }
+
+        .status-badge.pending {
+            background: rgba(252, 213, 53, 0.1);
+            color: #FCD535;
+        }
+
+        .status-badge.suspended {
+            background: rgba(239, 68, 68, 0.1);
+            color: #EF4444;
+        }
+
+        .control-panel {
+            background: #1E2329;
+            border: 1px solid #2B3139;
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .control-section {
+            margin-bottom: 24px;
+        }
+
+        .control-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #EAECEF;
+            margin-bottom: 16px;
+        }
+
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .toggle-label {
+            color: #EAECEF;
+            font-size: 14px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background: #2B3139;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #FCD535;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(24px);
+        }
+
+        .slider-group {
+            margin-bottom: 16px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #EAECEF;
+        }
+
+        .range-slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #2B3139;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #FCD535;
+            cursor: pointer;
+        }
+
+        .range-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #FCD535;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #FCD535;
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: #E5C230;
+        }
+
+        .btn-secondary {
+            background: #2B3139;
+            color: #EAECEF;
+        }
+
+        .btn-secondary:hover {
+            background: #3B4149;
+        }
+
+        .btn-danger {
+            background: #EF4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #DC2626;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1E2329;
+            border: 1px solid #2B3139;
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #EAECEF;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #848E9C;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            margin-bottom: 24px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .content-area {
+                padding: 16px;
+            }
+            
+            .search-input {
+                width: 200px;
+            }
+        }
+    </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-tiger"></i>
+                    <span>TigerEx Admin</span>
+                </div>
+            </div>
+            
+            <nav class="admin-menu">
+                <div class="menu-section">
+                    <div class="menu-title">Dashboard</div>
+                    <div class="menu-item active" data-page="overview">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Overview</span>
+                    </div>
+                    <div class="menu-item" data-page="analytics">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Analytics</span>
+                    </div>
+                    <div class="menu-item" data-page="reports">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Reports</span>
+                    </div>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Trading Control</div>
+                    <div class="menu-item" data-page="trading-settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Trading Settings</span>
+                    </div>
+                    <div class="menu-item" data-page="markets">
+                        <i class="fas fa-coins"></i>
+                        <span>Markets</span>
+                    </div>
+                    <div class="menu-item" data-page="orders">
+                        <i class="fas fa-list"></i>
+                        <span>Orders</span>
+                    </div>
+                    <div class="menu-item" data-page="fees">
+                        <i class="fas fa-dollar-sign"></i>
+                        <span>Fee Management</span>
+                    </div>
+                    <div class="menu-item" data-page="liquidity">
+                        <i class="fas fa-water"></i>
+                        <span>Liquidity</span>
+                    </div>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">User Management</div>
+                    <div class="menu-item" data-page="users">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </div>
+                    <div class="menu-item" data-page="kyc">
+                        <i class="fas fa-user-check"></i>
+                        <span>KYC Verification</span>
+                    </div>
+                    <div class="menu-item" data-page="permissions">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Permissions</span>
+                    </div>
+                    <div class="menu-item" data-page="suspensions">
+                        <i class="fas fa-ban"></i>
+                        <span>Suspensions</span>
+                    </div>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Financial</div>
+                    <div class="menu-item" data-page="balances">
+                        <i class="fas fa-wallet"></i>
+                        <span>Balance Management</span>
+                    </div>
+                    <div class="menu-item" data-page="withdrawals">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Withdrawals</span>
+                    </div>
+                    <div class="menu-item" data-page="deposits">
+                        <i class="fas fa-piggy-bank"></i>
+                        <span>Deposits</span>
+                    </div>
+                    <div class="menu-item" data-page="revenue">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Revenue</span>
+                    </div>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Security</div>
+                    <div class="menu-item" data-page="security">
+                        <i class="fas fa-lock"></i>
+                        <span>Security Center</span>
+                    </div>
+                    <div class="menu-item" data-page="audit">
+                        <i class="fas fa-history"></i>
+                        <span>Audit Log</span>
+                    </div>
+                    <div class="menu-item" data-page="compliance">
+                        <i class="fas fa-gavel"></i>
+                        <span>Compliance</span>
+                    </div>
+                    <div class="menu-item" data-page="risk">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Risk Management</span>
+                    </div>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">System</div>
+                    <div class="menu-item" data-page="settings">
+                        <i class="fas fa-cogs"></i>
+                        <span>System Settings</span>
+                    </div>
+                    <div class="menu-item" data-page="api">
+                        <i class="fas fa-code"></i>
+                        <span>API Management</span>
+                    </div>
+                    <div class="menu-item" data-page="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span>Notifications</span>
+                    </div>
+                    <div class="menu-item" data-page="backup">
+                        <i class="fas fa-database"></i>
+                        <span>Backup & Restore</span>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="page-title" id="pageTitle">Dashboard Overview</div>
+                <div class="top-bar-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" placeholder="Search...">
+                    </div>
+                    <div class="notification-bell">
+                        <i class="fas fa-bell" style="color: #848E9C; font-size: 20px; cursor: pointer;"></i>
+                        <div class="notification-dot"></div>
+                    </div>
+                    <div class="user-profile">
+                        <div class="user-avatar">SA</div>
+                        <div>
+                            <div style="color: #EAECEF; font-size: 14px;">Super Admin</div>
+                            <div style="color: #848E9C; font-size: 12px;">admin@tigerex.com</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area" id="contentArea">
+                <!-- Overview Page Content -->
+                <div id="overviewPage">
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon blue">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">124,563</div>
+                            <div class="stat-label">Total Users</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>12.5% from last month</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon green">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">$2.8B</div>
+                            <div class="stat-label">24h Trading Volume</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>8.3% from yesterday</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon yellow">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">$1.2M</div>
+                            <div class="stat-label">Daily Revenue</div>
+                            <div class="stat-change negative">
+                                <i class="fas fa-arrow-down"></i>
+                                <span>3.2% from yesterday</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon red">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">23</div>
+                            <div class="stat-label">Security Alerts</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-down"></i>
+                                <span>15% decrease</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Grid -->
+                    <div class="main-grid">
+                        <!-- Trading Volume Chart -->
+                        <div class="chart-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Trading Volume (7 Days)</h3>
+                                <div class="card-actions">
+                                    <button class="action-btn active">7D</button>
+                                    <button class="action-btn">1M</button>
+                                    <button class="action-btn">3M</button>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="volumeChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Revenue Chart -->
+                        <div class="chart-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Revenue Distribution</h3>
+                                <div class="card-actions">
+                                    <button class="action-btn active">Trading Fees</button>
+                                    <button class="action-btn">Listing Fees</button>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activities -->
+                    <div class="table-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Recent Activities</h3>
+                            <div class="card-actions">
+                                <button class="btn btn-primary" onclick="refreshActivities()">
+                                    <i class="fas fa-sync-alt"></i> Refresh
+                                </button>
+                            </div>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>User</th>
+                                    <th>Action</th>
+                                    <th>Details</th>
+                                    <th>Status</th>
+                                    <th>Admin</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activitiesTable">
+                                <tr>
+                                    <td>10:23:45</td>
+                                    <td>user_12345</td>
+                                    <td>Large Withdrawal</td>
+                                    <td>500,000 USDT</td>
+                                    <td><span class="status-badge pending">Pending</span></td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>10:15:32</td>
+                                    <td>user_67890</td>
+                                    <td>KYC Verification</td>
+                                    <td>Document Upload</td>
+                                    <td><span class="status-badge active">Approved</span></td>
+                                    <td>admin_john</td>
+                                </tr>
+                                <tr>
+                                    <td>09:58:21</td>
+                                    <td>user_54321</td>
+                                    <td>Account Suspension</td>
+                                    <td>Suspicious Activity</td>
+                                    <td><span class="status-badge suspended">Suspended</span></td>
+                                    <td>admin_mary</td>
+                                </tr>
+                                <tr>
+                                    <td>09:45:12</td>
+                                    <td>user_98765</td>
+                                    <trading-activity>Futures Trading</trading-activity>
+                                    <td>125x BTC Position</td>
+                                    <td><span class="status-badge active">Active</span></td>
+                                    <td>-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for User Actions -->
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">User Details</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveModal()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Admin Dashboard JavaScript Implementation
+        class TigerExAdminDashboard {
+            constructor() {
+                this.currentPage = 'overview';
+                this.charts = {};
+                this.data = {
+                    users: [],
+                    transactions: [],
+                    activities: []
+                };
+                
+                this.init();
+            }
+
+            init() {
+                this.initializeEventListeners();
+                this.initializeCharts();
+                this.loadInitialData();
+                this.startRealTimeUpdates();
+            }
+
+            initializeEventListeners() {
+                // Menu navigation
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    item.addEventListener('click', (e) => this.handleMenuClick(e));
+                });
+
+                // Search functionality
+                document.querySelector('.search-input').addEventListener('input', (e) => {
+                    this.handleSearch(e.target.value);
+                });
+
+                // Time frame buttons
+                document.querySelectorAll('.action-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => this.handleTimeFrameClick(e));
+                });
+
+                // Notification bell
+                document.querySelector('.notification-bell').addEventListener('click', () => {
+                    this.showNotifications();
+                });
+
+                // User profile
+                document.querySelector('.user-profile').addEventListener('click', () => {
+                    this.showUserProfile();
+                });
+            }
+
+            handleMenuClick(e) {
+                const menuItem = e.currentTarget;
+                const page = menuItem.dataset.page;
+                
+                // Update active state
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                menuItem.classList.add('active');
+                
+                // Navigate to page
+                this.navigateToPage(page);
+            }
+
+            navigateToPage(page) {
+                this.currentPage = page;
+                
+                // Update page title
+                const titles = {
+                    overview: 'Dashboard Overview',
+                    analytics: 'Analytics Dashboard',
+                    reports: 'Reports Center',
+                    'trading-settings': 'Trading Settings',
+                    markets: 'Markets Management',
+                    orders: 'Orders Management',
+                    fees: 'Fee Management',
+                    liquidity: 'Liquidity Management',
+                    users: 'User Management',
+                    kyc: 'KYC Verification',
+                    permissions: 'Permissions Management',
+                    suspensions: 'Account Suspensions',
+                    balances: 'Balance Management',
+                    withdrawals: 'Withdrawal Management',
+                    deposits: 'Deposit Management',
+                    revenue: 'Revenue Analytics',
+                    security: 'Security Center',
+                    audit: 'Audit Log',
+                    compliance: 'Compliance Center',
+                    risk: 'Risk Management',
+                    settings: 'System Settings',
+                    api: 'API Management',
+                    notifications: 'Notification Settings',
+                    backup: 'Backup & Restore'
+                };
+                
+                document.getElementById('pageTitle').textContent = titles[page] || page;
+                
+                // Load page content
+                this.loadPageContent(page);
+            }
+
+            loadPageContent(page) {
+                const contentArea = document.getElementById('contentArea');
+                
+                // Show loading state
+                contentArea.innerHTML = '<div class="text-center py-8"><i class="fas fa-spinner fa-spin text-4xl text-yellow-400"></i></div>';
+                
+                // Simulate loading delay
+                setTimeout(() => {
+                    switch(page) {
+                        case 'users':
+                            contentArea.innerHTML = this.generateUsersPage();
+                            this.initializeUsersPage();
+                            break;
+                        case 'trading-settings':
+                            contentArea.innerHTML = this.generateTradingSettingsPage();
+                            this.initializeTradingSettings();
+                            break;
+                        case 'security':
+                            contentArea.innerHTML = this.generateSecurityPage();
+                            this.initializeSecuritySettings();
+                            break;
+                        case 'fees':
+                            contentArea.innerHTML = this.generateFeesPage();
+                            this.initializeFeesManagement();
+                            break;
+                        case 'kyc':
+                            contentArea.innerHTML = this.generateKYCPage();
+                            this.initializeKYCManagement();
+                            break;
+                        default:
+                            // Keep overview page for simplicity
+                            if (page !== 'overview') {
+                                contentArea.innerHTML = this.generateDefaultPage(page);
+                            }
+                    }
+                }, 500);
+            }
+
+            generateUsersPage() {
+                return `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon blue">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">124,563</div>
+                            <div class="stat-label">Total Users</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon green">
+                                    <i class="fas fa-user-check"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">118,234</div>
+                            <div class="stat-label">Verified Users</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon yellow">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">6,329</div>
+                            <div class="stat-label">Pending KYC</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon red">
+                                    <i class="fas fa-ban"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">127</div>
+                            <div class="stat-label">Suspended Users</div>
+                        </div>
+                    </div>
+
+                    <div class="table-card">
+                        <div class="card-header">
+                            <h3 class="card-title">User Management</h3>
+                            <div class="card-actions">
+                                <button class="btn btn-primary" onclick="addUser()">
+                                    <i class="fas fa-plus"></i> Add User
+                                </button>
+                                <button class="btn btn-secondary" onclick="exportUsers()">
+                                    <i class="fas fa-download"></i> Export
+                                </button>
+                            </div>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>Email</th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>KYC</th>
+                                    <th>Balance</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTable">
+                                <!-- Users will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+
+            generateTradingSettingsPage() {
+                return `
+                    <div class="control-panel">
+                        <div class="control-section">
+                            <h3 class="control-title">Trading Modes Control</h3>
+                            
+                            <div class="toggle-group">
+                                <span class="toggle-label">Spot Trading</span>
+                                <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                    <div class="toggle-slider"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="toggle-group">
+                                <span class="toggle-label">Futures Trading</span>
+                                <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                    <div class="toggle-slider"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="toggle-group">
+                                <span class="toggle-label">Margin Trading</span>
+                                <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                    <div class="toggle-slider"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="toggle-group">
+                                <span class="toggle-label">Options Trading</span>
+                                <div class="toggle-switch" onclick="toggleSwitch(this)">
+                                    <div class="toggle-slider"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="toggle-group">
+                                <span class="toggle-label">Alpha Trading</span>
+                                <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                    <div class="toggle-slider"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control-section">
+                            <h3 class="control-title">Leverage Settings</h3>
+                            
+                            <div class="slider-group">
+                                <div class="slider-label">
+                                    <span>Maximum Leverage</span>
+                                    <span id="maxLeverageValue">125x</span>
+                                </div>
+                                <input type="range" class="range-slider" min="1" max="200" value="125" 
+                                       oninput="updateSliderValue('maxLeverageValue', this.value + 'x')">
+                            </div>
+                            
+                            <div class="slider-group">
+                                <div class="slider-label">
+                                    <span>Default Leverage</span>
+                                    <span id="defaultLeverageValue">10x</span>
+                                </div>
+                                <input type="range" class="range-slider" min="1" max="50" value="10" 
+                                       oninput="updateSliderValue('defaultLeverageValue', this.value + 'x')">
+                            </div>
+                        </div>
+
+                        <div class="control-section">
+                            <h3 class="control-title">Order Settings</h3>
+                            
+                            <div class="slider-group">
+                                <div class="slider-label">
+                                    <span>Minimum Order Size (USDT)</span>
+                                    <span id="minOrderValue">10</span>
+                                </div>
+                                <input type="range" class="range-slider" min="1" max="1000" value="10" 
+                                       oninput="updateSliderValue('minOrderValue', this.value)">
+                            </div>
+                            
+                            <div class="slider-group">
+                                <div class="slider-label">
+                                    <span>Maximum Order Size (USDT)</span>
+                                    <span id="maxOrderValue">1000000</span>
+                                </div>
+                                <input type="range" class="range-slider" min="1000" max="10000000" value="1000000" step="1000"
+                                       oninput="updateSliderValue('maxOrderValue', this.value)">
+                            </div>
+                        </div>
+
+                        <div class="control-section">
+                            <button class="btn btn-primary" onclick="saveTradingSettings()">
+                                <i class="fas fa-save"></i> Save Settings
+                            </button>
+                            <button class="btn btn-secondary" onclick="resetTradingSettings()">
+                                <i class="fas fa-undo"></i> Reset to Default
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            generateSecurityPage() {
+                return `
+                    <div class="control-panel">
+                        <div class="control-section">
+                            <h3 class="control-title">Security Features</h3>
+                            
+                            <div class="toggle-group">
+                                <span class="toggle-label">Two-Factor Authentication</span>
+                                <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                    <div class="toggle-slider"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="toggle-group">
+                                <span class="toggle-label">Email Verification</span>
+                                <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                    <div class="toggle-slider"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="toggle-group">
+                                <span class="toggle-label">IP Whitelist</span>
+                                <div class="toggle-switch" onclick="toggleSwitch(this)">
+                                    <div class="toggle-slider"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="toggle-group">
+                                <span class="toggle-label">Withdrawal Whitelist</span>
+                                <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                    <div class="toggle-slider"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="toggle-group">
+                                <span class="toggle-label">Session Timeout (30 min)</span>
+                                <div class="toggle-switch active" onclick="toggleSwitch(this)">
+                                    <div class="toggle-slider"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control-section">
+                            <h3 class="control-title">Risk Thresholds</h3>
+                            
+                            <div class="slider-group">
+                                <div class="slider-label">
+                                    <span>Daily Withdrawal Limit (USDT)</span>
+                                    <span id="withdrawalLimitValue">10000</span>
+                                </div>
+                                <input type="range" class="range-slider" min="100" max="100000" value="10000" step="100"
+                                       oninput="updateSliderValue('withdrawalLimitValue', this.value)">
+                            </div>
+                            
+                            <div class="slider-group">
+                                <div class="slider-label">
+                                    <span>Failed Login Attempts</span>
+                                    <span id="failedAttemptsValue">5</span>
+                                </div>
+                                <input type="range" class="range-slider" min="3" max="10" value="5" 
+                                       oninput="updateSliderValue('failedAttemptsValue', this.value)">
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            generateFeesPage() {
+                return `
+                    <div class="control-panel">
+                        <div class="control-section">
+                            <h3 class="control-title">Trading Fee Structure</h3>
+                            
+                            <div class="slider-group">
+                                <div class="slider-label">
+                                    <span>Maker Fee (%)</span>
+                                    <span id="makerFeeValue">0.1</span>
+                                </div>
+                                <input type="range" class="range-slider" min="0" max="1" value="0.1" step="0.01"
+                                       oninput="updateSliderValue('makerFeeValue', this.value)">
+                            </div>
+                            
+                            <div class="slider-group">
+                                <div class="slider-label">
+                                    <span>Taker Fee (%)</span>
+                                    <span id="takerFeeValue">0.1</span>
+                                </div>
+                                <input type="range" class="range-slider" min="0" max="1" value="0.1" step="0.01"
+                                       oninput="updateSliderValue('takerFeeValue', this.value)">
+                            </div>
+                            
+                            <div class="slider-group">
+                                <div class="slider-label">
+                                    <span>Futures Fee (%)</span>
+                                    <span id="futuresFeeValue">0.02</span>
+                                </div>
+                                <input type="range" class="range-slider" min="0" max="0.5" value="0.02" step="0.001"
+                                       oninput="updateSliderValue('futuresFeeValue', this.value)">
+                            </div>
+                        </div>
+
+                        <div class="control-section">
+                            <h3 class="control-title">VIP Fee Tiers</h3>
+                            <div class="table-card">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Tier</th>
+                                            <th>30D Volume (USDT)</th>
+                                            <th>Maker Fee</th>
+                                            <th>Taker Fee</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>VIP 1</td>
+                                            <td>≥ 1,000,000</td>
+                                            <td>0.09%</td>
+                                            <td>0.09%</td>
+                                            <td><button class="btn btn-secondary" onclick="editTier('VIP 1')">Edit</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>VIP 2</td>
+                                            <td>≥ 5,000,000</td>
+                                            <td>0.08%</td>
+                                            <td>0.08%</td>
+                                            <td><button class="btn btn-secondary" onclick="editTier('VIP 2')">Edit</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>VIP 3</td>
+                                            <td>≥ 20,000,000</td>
+                                            <td>0.07%</td>
+                                            <td>0.07%</td>
+                                            <td><button class="btn btn-secondary" onclick="editTier('VIP 3')">Edit</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            generateKYCPage() {
+                return `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon green">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">118,234</div>
+                            <div class="stat-label">Verified Users</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon yellow">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">6,329</div>
+                            <div class="stat-label">Pending Verification</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon red">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">234</div>
+                            <div class="stat-label">Rejected Applications</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <div class="stat-icon blue">
+                                    <i class="fas fa-hourglass-half"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">1,766</div>
+                            <div class="stat-label">In Review</div>
+                        </div>
+                    </div>
+
+                    <div class="table-card">
+                        <div class="card-header">
+                            <h3 class="card-title">KYC Applications</h3>
+                            <div class="card-actions">
+                                <select class="search-input" style="width: auto;" onchange="filterKYC(this.value)">
+                                    <option value="all">All Status</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="rejected">Rejected</option>
+                                    <option value="review">In Review</option>
+                                </select>
+                            </div>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Application ID</th>
+                                    <th>User</th>
+                                    <th>Type</th>
+                                    <th>Submitted</th>
+                                    <th>Status</th>
+                                    <th>Reviewer</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="kycTable">
+                                <!-- KYC applications will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+
+            generateDefaultPage(page) {
+                return `
+                    <div class="text-center py-16">
+                        <i class="fas fa-cogs text-6xl text-gray-500 mb-4"></i>
+                        <h2 class="text-2xl font-bold text-gray-400 mb-2">${page.charAt(0).toUpperCase() + page.slice(1)}</h2>
+                        <p class="text-gray-500">This section is under development</p>
+                        <button class="btn btn-primary mt-4" onclick="navigateToPage('overview')">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </button>
+                    </div>
+                `;
+            }
+
+            initializeCharts() {
+                // Volume Chart
+                const volumeCtx = document.getElementById('volumeChart').getContext('2d');
+                this.charts.volume = new Chart(volumeCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'Trading Volume (Billion USD)',
+                            data: [2.1, 2.3, 2.8, 2.5, 2.9, 3.1, 2.8],
+                            borderColor: '#FCD535',
+                            backgroundColor: 'rgba(252, 213, 53, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    color: '#2B3139'
+                                },
+                                ticks: {
+                                    color: '#848E9C'
+                                }
+                            },
+                            y: {
+                                grid: {
+                                    color: '#2B3139'
+                                },
+                                ticks: {
+                                    color: '#848E9C'
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Revenue Chart
+                const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+                this.charts.revenue = new Chart(revenueCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Spot Trading', 'Futures Trading', 'Margin Trading', 'Listing Fees'],
+                        datasets: [{
+                            data: [45, 30, 20, 5],
+                            backgroundColor: [
+                                '#FCD535',
+                                '#3B82F6',
+                                '#10B981',
+                                '#EF4444'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#EAECEF'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            loadInitialData() {
+                // Load sample data
+                this.loadUsersData();
+                this.loadKYCData();
+                this.loadActivitiesData();
+            }
+
+            loadUsersData() {
+                const sampleUsers = [
+                    { id: 'USR001', email: 'john@example.com', name: 'John Doe', status: 'active', kyc: 'verified', balance: '125,432 USDT' },
+                    { id: 'USR002', email: 'jane@example.com', name: 'Jane Smith', status: 'active', kyc: 'pending', balance: '67,890 USDT' },
+                    { id: 'USR003', email: 'mike@example.com', name: 'Mike Johnson', status: 'suspended', kyc: 'verified', balance: '234,567 USDT' },
+                    { id: 'USR004', email: 'sarah@example.com', name: 'Sarah Wilson', status: 'active', kyc: 'rejected', balance: '45,123 USDT' },
+                    { id: 'USR005', email: 'tom@example.com', name: 'Tom Brown', status: 'active', kyc: 'verified', balance: '890,123 USDT' }
+                ];
+
+                const usersTable = document.getElementById('usersTable');
+                if (usersTable) {
+                    usersTable.innerHTML = sampleUsers.map(user => `
+                        <tr>
+                            <td>${user.id}</td>
+                            <td>${user.email}</td>
+                            <td>${user.name}</td>
+                            <td><span class="status-badge ${user.status}">${user.status}</span></td>
+                            <td><span class="status-badge ${user.kyc === 'verified' ? 'active' : user.kyc === 'pending' ? 'pending' : 'suspended'}">${user.kyc}</span></td>
+                            <td>${user.balance}</td>
+                            <td>
+                                <button class="btn btn-secondary" onclick="viewUser('${user.id}')">View</button>
+                                <button class="btn btn-primary" onclick="editUser('${user.id}')">Edit</button>
+                                ${user.status === 'active' ? 
+                                    `<button class="btn btn-danger" onclick="suspendUser('${user.id}')">Suspend</button>` :
+                                    `<button class="btn btn-primary" onclick="activateUser('${user.id}')">Activate</button>`
+                                }
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            }
+
+            loadKYCData() {
+                const sampleKYC = [
+                    { id: 'KYC001', user: 'john@example.com', type: 'Individual', submitted: '2024-01-15 10:30', status: 'pending', reviewer: '-' },
+                    { id: 'KYC002', user: 'jane@example.com', type: 'Individual', submitted: '2024-01-14 15:45', status: 'approved', reviewer: 'admin_john' },
+                    { id: 'KYC003', user: 'corp@company.com', type: 'Corporate', submitted: '2024-01-14 09:20', status: 'review', reviewer: 'admin_mary' },
+                    { id: 'KYC004', user: 'mike@example.com', type: 'Individual', submitted: '2024-01-13 14:15', status: 'rejected', reviewer: 'admin_john' },
+                    { id: 'KYC005', user: 'sarah@example.com', type: 'Individual', submitted: '2024-01-13 11:00', status: 'approved', reviewer: 'admin_mary' }
+                ];
+
+                const kycTable = document.getElementById('kycTable');
+                if (kycTable) {
+                    kycTable.innerHTML = sampleKYC.map(kyc => `
+                        <tr>
+                            <td>${kyc.id}</td>
+                            <td>${kyc.user}</td>
+                            <td>${kyc.type}</td>
+                            <td>${kyc.submitted}</td>
+                            <td><span class="status-badge ${kyc.status === 'approved' ? 'active' : kyc.status === 'pending' ? 'pending' : 'suspended'}">${kyc.status}</span></td>
+                            <td>${kyc.reviewer}</td>
+                            <td>
+                                <button class="btn btn-secondary" onclick="reviewKYC('${kyc.id}')">Review</button>
+                                ${kyc.status === 'pending' ? 
+                                    `<button class="btn btn-primary" onclick="approveKYC('${kyc.id}')">Approve</button>` : ''
+                                }
+                                ${kyc.status !== 'rejected' ? 
+                                    `<button class="btn btn-danger" onclick="rejectKYC('${kyc.id}')">Reject</button>` : ''
+                                }
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            }
+
+            loadActivitiesData() {
+                // Activities are already in the HTML, but this could be dynamic
+            }
+
+            startRealTimeUpdates() {
+                // Simulate real-time updates
+                setInterval(() => {
+                    this.updateStats();
+                }, 30000); // Update every 30 seconds
+            }
+
+            updateStats() {
+                // Update random stat values
+                const statValues = document.querySelectorAll('.stat-value');
+                statValues.forEach(stat => {
+                    const currentValue = stat.textContent;
+                    if (currentValue.includes('$') || currentValue.includes('B') || currentValue.includes('M')) {
+                        // Simulate small changes
+                        const numValue = parseFloat(currentValue.replace(/[^0-9.]/g, ''));
+                        const change = (Math.random() - 0.5) * numValue * 0.01;
+                        const newValue = numValue + change;
+                        
+                        if (currentValue.includes('B')) {
+                            stat.textContent = `$${newValue.toFixed(1)}B`;
+                        } else if (currentValue.includes('M')) {
+                            stat.textContent = `$${newValue.toFixed(1)}M`;
+                        }
+                    }
+                });
+            }
+
+            handleSearch(query) {
+                console.log('Searching for:', query);
+                // Implement search functionality
+            }
+
+            handleTimeFrameClick(e) {
+                const button = e.target;
+                const buttons = button.parentElement.querySelectorAll('.action-btn');
+                buttons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Update chart based on time frame
+                this.updateChartData(button.textContent);
+            }
+
+            updateChartData(timeFrame) {
+                // Update chart data based on selected time frame
+                console.log('Updating chart for time frame:', timeFrame);
+            }
+
+            showNotifications() {
+                alert('Notifications panel would open here');
+            }
+
+            showUserProfile() {
+                alert('User profile panel would open here');
+            }
+        }
+
+        // Initialize dashboard
+        let dashboard;
+        document.addEventListener('DOMContentLoaded', () => {
+            dashboard = new TigerExAdminDashboard();
+        });
+
+        // Global functions for button actions
+        function toggleSwitch(element) {
+            element.classList.toggle('active');
+        }
+
+        function updateSliderValue(elementId, value) {
+            document.getElementById(elementId).textContent = value;
+        }
+
+        function closeModal() {
+            document.getElementById('userModal').classList.remove('active');
+        }
+
+        function saveModal() {
+            // Save modal data
+            closeModal();
+        }
+
+        function refreshActivities() {
+            // Refresh activities data
+            location.reload();
+        }
+
+        function addUser() {
+            alert('Add user functionality would open here');
+        }
+
+        function exportUsers() {
+            alert('Export users functionality would trigger here');
+        }
+
+        function viewUser(userId) {
+            alert(`View user ${userId} details`);
+        }
+
+        function editUser(userId) {
+            alert(`Edit user ${userId}`);
+        }
+
+        function suspendUser(userId) {
+            if (confirm(`Are you sure you want to suspend user ${userId}?`)) {
+                alert(`User ${userId} suspended`);
+            }
+        }
+
+        function activateUser(userId) {
+            if (confirm(`Are you sure you want to activate user ${userId}?`)) {
+                alert(`User ${userId} activated`);
+            }
+        }
+
+        function saveTradingSettings() {
+            alert('Trading settings saved successfully!');
+        }
+
+        function resetTradingSettings() {
+            if (confirm('Are you sure you want to reset all trading settings to default?')) {
+                alert('Trading settings reset to default');
+            }
+        }
+
+        function editTier(tier) {
+            alert(`Edit ${tier} tier settings`);
+        }
+
+        function filterKYC(status) {
+            console.log('Filtering KYC by status:', status);
+            // Implement KYC filtering
+        }
+
+        function reviewKYC(kycId) {
+            alert(`Review KYC application ${kycId}`);
+        }
+
+        function approveKYC(kycId) {
+            if (confirm(`Are you sure you want to approve KYC ${kycId}?`)) {
+                alert(`KYC ${kycId} approved`);
+            }
+        }
+
+        function rejectKYC(kycId) {
+            if (confirm(`Are you sure you want to reject KYC ${kycId}?`)) {
+                alert(`KYC ${kycId} rejected`);
+            }
+        }
+
+        function navigateToPage(page) {
+            if (dashboard) {
+                dashboard.navigateToPage(page);
+            }
+        }
+    </script>
+</body>
+</html>
