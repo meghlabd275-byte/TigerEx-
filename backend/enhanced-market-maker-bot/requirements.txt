@@ -1,0 +1,179 @@
+"""
+TigerEx Enhanced Market Maker Bot Requirements
+Combining dependencies for high-frequency trading, ML/AI, and multi-exchange support
+"""
+
+# Core Web Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+websockets==12.0
+
+# Data Processing & Analysis
+numpy==1.24.3
+pandas==2.0.3
+scipy==1.11.4
+scikit-learn==1.3.2
+
+# Machine Learning & AI
+tensorflow==2.15.0
+torch==2.1.1
+torchvision==0.16.1
+transformers==4.36.0
+xgboost==2.0.2
+lightgbm==4.1.0
+
+# High-Performance Computing
+numba==0.58.1
+cython==3.0.2
+joblib==1.3.2
+
+# Database & Caching
+redis==5.0.1
+aioredis==2.0.1
+sqlalchemy==2.0.23
+psycopg2-binary==2.9.9
+alembic==1.13.1
+
+# Message Queue & Streaming
+kafka-python==2.0.2
+aiokafka==0.8.11
+celery[redis]==5.3.4
+
+# Exchange APIs & Trading
+ccxt==4.1.64
+python-binance==1.0.17
+bybit==5.7.0
+okx==3.2.0
+kucoin==3.0.1
+gate-api==4.29.0
+crypto-compare==0.7.5
+
+# WebSocket & Real-time
+websockets==12.0
+aiohttp==3.9.1
+httpx==0.25.2
+requests==2.31.0
+
+# Authentication & Security
+pyjwt==2.8.0
+cryptography==41.0.7
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+
+# Data Validation & Serialization
+pydantic==2.5.0
+pydantic-settings==2.1.0
+marshmallow==3.20.1
+
+# Monitoring & Logging
+prometheus-client==0.19.0
+grafana-api==1.0.3
+structlog==23.2.0
+sentry-sdk[fastapi]==1.38.0
+
+# Configuration Management
+python-dotenv==1.0.0
+pyyaml==6.0.1
+toml==0.10.2
+
+# Testing & Quality
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+black==23.11.0
+flake8==6.1.0
+mypy==1.7.1
+
+# Async & Concurrency
+asyncio-mqtt==0.16.1
+concurrent-futures==3.1.1
+threading-utils==1.0.2
+
+# Mathematical & Statistical
+statsmodels==0.14.0
+arch==6.2.0
+ta-lib==0.4.28
+talib-binary==0.4.24
+
+# Time Series Analysis
+prophet==1.1.4
+arrow==1.3.0
+pendulum==3.0.0
+
+# Risk Management & Portfolio
+pyfolio==0.9.0
+empyrical==0.5.5
+quantlib==1.33
+
+# Visualization & Reporting
+matplotlib==3.8.2
+plotly==5.17.0
+seaborn==0.13.0
+bokeh==3.3.0
+dash==2.14.2
+
+# Cloud & Deployment
+docker==6.1.3
+kubernetes==28.1.0
+boto3==1.34.0
+google-cloud-storage==2.10.0
+azure-storage-blob==12.19.0
+
+# API Documentation
+swagger-ui-bundle==0.0.9
+redoc-cli==0.13.0
+
+# Development Tools
+jupyter==1.0.0
+ipython==8.17.2
+notebook==7.0.6
+
+# Performance Optimization
+orjson==3.9.10
+ujson==5.8.0
+msgpack==1.0.7
+
+# Decimal & Precision
+decimal==1.70
+mpmath==1.3.0
+
+# Utilities
+click==8.1.7
+tqdm==4.66.1
+rich==13.7.0
+typer==0.9.0
+
+# Financial Calculations
+yfinance==0.2.28
+pandas-datareader==0.10.0
+ffn==0.3.7
+
+# Risk Metrics
+py VaR==0.2.1
+riskparity==1.0.0
+
+# Backtesting
+backtrader==1.9.78.123
+zipline-reloaded==2.4.0
+vectorbt==0.25.2
+
+# Optimization
+hyperopt==0.2.7
+optuna==3.4.0
+shap==0.44.0
+
+# Network & Infrastructure
+aiofiles==23.2.1
+watchdog==3.0.0
+psutil==5.9.6
+
+# Data Storage
+h5py==3.10.0
+parquet==1.3.1
+pyarrow==14.0.1
+
+# Miscellaneous
+python-dateutil==2.8.2
+pytz==2023.3
+schedule==1.2.0
+currencyconverter==0.17.4
