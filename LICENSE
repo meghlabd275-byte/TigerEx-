@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2024 TigerEx Team
+Copyright (c) 2024 TigerEx Trading Platform
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,69 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+## 📋 Additional Information
+
+### 🏢 Project Information
+- **Project Name**: TigerEx Trading Platform
+- **Version**: v12.0.0
+- **License Type**: MIT License
+- **Copyright Holder**: TigerEx Development Team
+- **License Date**: November 14, 2024
+
+### 🎯 What This License Allows
+
+✅ **Commercial Use**: You can use this software for commercial purposes
+✅ **Modification**: You can modify the software to suit your needs
+✅ **Distribution**: You can distribute copies of the software
+✅ **Private Use**: You can use the software privately
+✅ **Sublicensing**: You can license your derivative works under different terms
+
+### ⚠️ Requirements
+
+📋 **License and Copyright Notice**: Must include original license and copyright
+📋 **State Changes**: Must indicate if you modified the software
+
+### 🚫 Limitations
+
+❌ **Liability**: Authors are not liable for any damages
+❌ **Warranty**: Software is provided without warranty
+
+### 📧 Contact
+
+For questions about licensing or commercial use:
+- **Email**: legal@tigerex.com
+- **Website**: https://tigerex.com
+- **GitHub**: https://github.com/meghlabd275-byte/TigerEx-
+
+---
+
+## 🏆 Attribution
+
+If you use TigerEx in your project, we appreciate attribution but it's not required:
+
+```
+Powered by TigerEx Trading Platform
+https://github.com/meghlabd275-byte/TigerEx-
+```
+
+---
+
+## 📚 Third-Party Licenses
+
+This project includes third-party components with their own licenses:
+
+- **Next.js**: MIT License
+- **React**: MIT License  
+- **Tailwind CSS**: MIT License
+- **FastAPI**: MIT License
+- **PostgreSQL**: PostgreSQL License
+- **Redis**: BSD License
+
+Please refer to individual component documentation for their specific license terms.
+
+---
+
+**🎯 Thank you for using TigerEx Trading Platform!**
