@@ -1,0 +1,108 @@
+# Core dependencies
+asyncio
+aiohttp
+aiofiles
+websockets
+fastapi
+uvicorn
+pydantic
+sqlalchemy
+asyncpg
+psycopg2-binary
+redis
+
+# Data processing
+pandas
+numpy
+scipy
+scikit-learn
+xgboost
+lightgbm
+
+# Machine Learning
+torch
+torchvision
+tensorflow
+transformers
+gym
+stable-baselines3
+
+# Blockchain and Web3
+web3
+eth-account
+websockets
+
+# Financial data
+yfinance
+ccxt
+vectorbt
+ta
+
+# DeFi
+web3
+eth-brownie
+
+# Visualization
+matplotlib
+seaborn
+plotly
+graphviz
+
+# Testing and development
+pytest
+pytest-asyncio
+black
+flake8
+mypy
+
+# Utilities
+python-dotenv
+click
+rich
+tqdm
+python-dateutil
+pytz
+
+# Security
+cryptography
+pycryptodome
+bcrypt
+jwt
+
+# Monitoring
+prometheus-client
+statsd
+
+# HTTP and networking
+requests
+httpx
+urllib3
+
+# Database
+alembic
+pymongo
+
+# Cloud and deployment
+docker
+kubernetes
+boto3
+google-cloud-storage
+
+# Mobile app dependencies (for reference)
+react-native
+@react-navigation/native
+@react-navigation/bottom-tabs
+@react-navigation/stack
+react-native-vector-icons
+react-native-push-notification
+@react-native-async-storage/async-storage
+react-redux
+@reduxjs/toolkit
+
+# Documentation
+sphinx
+mkdocs
+
+# Performance
+numba
+cython

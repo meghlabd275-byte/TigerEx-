@@ -1,0 +1,53 @@
+{
+  "database_url": "postgresql://user:password@localhost/marketmaker_db",
+  "exchanges": {
+    "binance": {
+      "api_key": "your_binance_api_key",
+      "secret": "your_binance_secret",
+      "sandbox": false
+    },
+    "coinbasepro": {
+      "api_key": "your_coinbase_api_key",
+      "secret": "your_coinbase_secret",
+      "passphrase": "your_coinbase_passphrase",
+      "sandbox": false
+    },
+    "kraken": {
+      "api_key": "your_kraken_api_key",
+      "secret": "your_kraken_secret",
+      "sandbox": false
+    }
+  },
+  "max_position_size": 1000000.0,
+  "risk_tolerance": 0.02,
+  "max_drawdown": 0.15,
+  "ml_model_update_frequency": 3600,
+  "prediction_confidence_threshold": 0.7,
+  "defi_enabled": true,
+  "max_defi_allocation": 0.3,
+  "nft_enabled": true,
+  "max_nft_allocation": 0.1,
+  "options_enabled": true,
+  "max_options_allocation": 0.2,
+  "admin_port": 8000,
+  "enable_api": true,
+  "backtest_enabled": true,
+  "auto_optimization": true,
+  "defi_config": {
+    "address": "0xYourAddress",
+    "private_key": "your_private_key",
+    "infura_key": "your_infura_key"
+  },
+  "nft_config": {
+    "opensea_api_key": "your_opensea_api_key",
+    "wallet_address": "0xYourAddress",
+    "private_key": "your_private_key",
+    "max_investment": 10.0,
+    "risk_tolerance": 0.7
+  },
+  "options_config": {
+    "risk_free_rate": 0.02,
+    "max_positions": 100,
+    "max_risk": 10000.0
+  }
+}

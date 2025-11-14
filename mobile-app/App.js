@@ -1,10 +1,11 @@
 /**
- * TigerEx Market Maker Bot - Mobile Monitoring App
- * React Native application for real-time bot monitoring and control
+ * TigerEx Market Maker Bot Mobile App - Complete Version
+ * Advanced monitoring and control application with all features
  */
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
+  SafeAreaView,
   StyleSheet,
   View,
   Text,
@@ -13,344 +14,252 @@ import {
   Alert,
   RefreshControl,
   Dimensions,
-  ActivityIndicator,
+  StatusBar,
   Platform,
-  Linking,
-  Share,
+  Animated,
 } from 'react-native';
-import {
-  NavigationContainer,
-  useNavigation,
-  DrawerActions,
-} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import PushNotification from 'react-native-push-notification';
-import WebSocket from 'react-native-websockets';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  LineChart,
-  BarChart,
-  PieChart,
-  AreaChart,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts';
-
-// Import Redux store and actions
-import { store } from './src/redux/store';
-import {
-  setBots,
-  updateBotStatus,
-  setPerformanceData,
-  setAlerts,
-  setUserPermissions,
-} from './src/redux/actions';
-
-// Import services
-import { ApiService } from './src/services/ApiService';
-import { WebSocketService } from './src/services/WebSocketService';
-import { NotificationService } from './src/services/NotificationService';
-import { AuthService } from './src/services/AuthService';
+import { Chart, LineChart } from 'react-native-chart-kit';
 
 // Import components
-import { BotCard } from './src/components/BotCard';
-import { PerformanceChart } from './src/components/PerformanceChart';
-import { AlertItem } from './src/components/AlertItem';
-import { PermissionToggle } from './src/components/PermissionToggle';
-import { LoadingSpinner } from './src/components/LoadingSpinner';
+import Dashboard from './src/components/Dashboard';
+import BotManagement from './src/components/BotManagement';
+import Portfolio from './src/components/Portfolio';
+import Analytics from './src/components/Analytics';
+import Settings from './src/components/Settings';
+import LoginScreen from './src/components/LoginScreen';
+import BotDetail from './src/components/BotDetail';
+import TradingView from './src/components/TradingView';
+import Notifications from './src/components/Notifications';
+import DeFiDashboard from './src/components/DeFiDashboard';
+import NFTMarketplace from './src/components/NFTMarketplace';
+import OptionsTrading from './src/components/OptionsTrading';
+import ComplianceCenter from './src/components/ComplianceCenter';
 
-// Import screens
-import DashboardScreen from './src/screens/DashboardScreen';
-import BotDetailScreen from './src/screens/BotDetailScreen';
-import AnalyticsScreen from './src/screens/AnalyticsScreen';
-import SettingsScreen from './src/screens/SettingsScreen';
-import LoginScreen from './src/screens/LoginScreen';
-import ProfileScreen from './src/screens/ProfileScreen';
+// Import services
+import ApiService from './src/services/ApiService';
+import NotificationService from './src/services/NotificationService';
+import WebSocketService from './src/services/WebSocketService';
+import BiometricService from './src/services/BiometricService';
+import LocationService from './src/services/LocationService';
 
-const { width, height } = Dimensions.get('window');
+// Import store
+import { store } from './src/store';
+import { setBots, updateBotStatus, addNotification } from './src/store/actions';
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-const Drawer = createDrawerNavigator();
+const { width, height } = Dimensions.get('window');
 
-// Main App Component
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [connectionStatus, setConnectionStatus] = useState('disconnected');
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [biometricEnabled, setBiometricEnabled] = useState(false);
+  const [securityLevel, setSecurityLevel] = useState('standard');
   const dispatch = useDispatch();
-  
-  // Services
-  const apiService = useRef(new ApiService());
-  const wsService = useRef(new WebSocketService());
-  const notificationService = useRef(new NotificationService());
-  const authService = useRef(new AuthService());
+  const fadeAnim = new Animated.Value(0);
 
-  // Initialize app
+  // Initialize services
   useEffect(() => {
     initializeApp();
-    
-    // Configure push notifications
-    PushNotification.configure({
-      onNotification: handleNotification,
-      requestPermissions: Platform.OS === 'ios',
-      permissions: {
-        alert: true,
-        badge: true,
-        sound: true,
-      },
-    });
-
-    return () => {
-      cleanup();
-    };
   }, []);
 
   const initializeApp = async () => {
     try {
+      // Animate logo
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 2000,
+        useNativeDriver: true,
+      }).start();
+
+      // Check biometric availability
+      const biometricAvailable = await BiometricService.isAvailable();
+      setBiometricEnabled(biometricAvailable);
+
       // Check authentication
       const token = await AsyncStorage.getItem('auth_token');
       if (token) {
-        await authService.current.validateToken(token);
-        setIsAuthenticated(true);
-        await loadUserData();
+        ApiService.setAuthToken(token);
+        
+        // Check security level
+        const userSecurityLevel = await AsyncStorage.getItem('security_level');
+        setSecurityLevel(userSecurityLevel || 'standard');
+        
+        // Biometric authentication for high security
+        if (userSecurityLevel === 'high' && biometricAvailable) {
+          const authenticated = await BiometricService.authenticate();
+          if (authenticated) {
+            setIsAuthenticated(true);
+          }
+        } else {
+          setIsAuthenticated(true);
+        }
       }
 
-      // Initialize notifications
-      await notificationService.current.initialize();
-      
+      // Initialize push notifications
+      initializePushNotifications();
+
       // Initialize WebSocket connection
-      if (isAuthenticated) {
-        connectWebSocket();
+      WebSocketService.initialize();
+
+      // Initialize location services for compliance
+      await LocationService.initialize();
+
+      // Load initial data
+      if (token) {
+        await loadInitialData();
       }
 
-      setIsLoading(false);
+      setLoading(false);
     } catch (error) {
-      console.error('App initialization error:', error);
-      setIsLoading(false);
+      console.error('Error initializing app:', error);
+      setLoading(false);
     }
   };
 
-  const loadUserData = async () => {
-    try {
-      // Load user permissions
-      const permissions = await apiService.current.getUserPermissions();
-      dispatch(setUserPermissions(permissions));
+  const initializePushNotifications = () => {
+    PushNotification.configure({
+      onNotification: function (notification) {
+        console.log('Notification:', notification);
+        
+        if (notification.userInteraction) {
+          handleNotificationPress(notification);
+        } else {
+          // Handle background notification
+          NotificationService.handleBackgroundNotification(notification);
+        }
+      },
+      requestPermissions: Platform.OS === 'ios',
+    });
 
-      // Load initial bot data
-      const bots = await apiService.current.getBots();
+    // Create notification channels (Android)
+    if (Platform.OS === 'android') {
+      const channels = [
+        {
+          channelId: 'bot-alerts',
+          channelName: 'Bot Alerts',
+          channelDescription: 'Critical alerts for market maker bot activities',
+          playSound: true,
+          soundName: 'default',
+          importance: 5,
+          vibrate: true,
+        },
+        {
+          channelId: 'portfolio-updates',
+          channelName: 'Portfolio Updates',
+          channelDescription: 'Portfolio performance updates',
+          playSound: false,
+          importance: 3,
+          vibrate: false,
+        },
+        {
+          channelId: 'compliance-alerts',
+          channelName: 'Compliance Alerts',
+          channelDescription: 'Regulatory compliance notifications',
+          playSound: true,
+          soundName: 'alert',
+          importance: 4,
+          vibrate: true,
+        },
+        {
+          channelId: 'defi-opportunities',
+          channelName: 'DeFi Opportunities',
+          channelDescription: 'New DeFi yield opportunities',
+          playSound: false,
+          importance: 2,
+          vibrate: false,
+        },
+        {
+          channelId: 'nft-alerts',
+          channelName: 'NFT Alerts',
+          channelDescription: 'NFT marketplace opportunities',
+          playSound: false,
+          importance: 2,
+          vibrate: false,
+        },
+      ];
+
+      channels.forEach(channel => {
+        PushNotification.createChannel(channel, (created) => 
+          console.log(`Channel ${channel.channelId} created:`, created)
+        );
+      });
+    }
+  };
+
+  const loadInitialData = async () => {
+    try {
+      // Load bots data
+      const bots = await ApiService.getBots();
       dispatch(setBots(bots));
 
-      // Load performance data
-      const performanceData = await apiService.current.getPerformanceData();
-      dispatch(setPerformanceData(performanceData));
-
-      // Load alerts
-      const alerts = await apiService.current.getAlerts();
-      dispatch(setAlerts(alerts));
+      // Load portfolio data including DeFi positions
+      const portfolio = await ApiService.getPortfolio();
+      
+      // Load NFT portfolio
+      const nftPortfolio = await ApiService.getNFTPortfolio();
+      
+      // Load options positions
+      const optionsPositions = await ApiService.getOptionsPositions();
+      
+      // Load compliance status
+      const complianceStatus = await ApiService.getComplianceStatus();
+      
+      // Load notifications
+      const notifications = await ApiService.getNotifications();
+      notifications.forEach(notification => {
+        dispatch(addNotification(notification));
+      });
     } catch (error) {
-      console.error('Error loading user data:', error);
+      console.error('Error loading initial data:', error);
     }
   };
 
-  const connectWebSocket = () => {
-    wsService.current.connect({
-      onOpen: () => {
-        setConnectionStatus('connected');
-        console.log('WebSocket connected');
-      },
-      onMessage: handleWebSocketMessage,
-      onClose: () => {
-        setConnectionStatus('disconnected');
-        console.log('WebSocket disconnected');
-        // Attempt reconnection
-        setTimeout(connectWebSocket, 5000);
-      },
-      onError: (error) => {
-        setConnectionStatus('error');
-        console.error('WebSocket error:', error);
-      },
-    });
+  const handleNotificationPress = (notification) => {
+    // Navigate to relevant screen based on notification type
+    switch (notification.data?.type) {
+      case 'bot_alert':
+        // Navigate to bot detail
+        break;
+      case 'portfolio_update':
+        // Navigate to portfolio
+        break;
+      case 'compliance_alert':
+        // Navigate to compliance center
+        break;
+      case 'defi_opportunity':
+        // Navigate to DeFi dashboard
+        break;
+      case 'nft_alert':
+        // Navigate to NFT marketplace
+        break;
+      case 'options_alert':
+        // Navigate to options trading
+        break;
+      default:
+        // Navigate to dashboard
+        break;
+    }
   };
 
-  const handleWebSocketMessage = useCallback((message) => {
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
     try {
-      const data = JSON.parse(message);
-      
-      switch (data.type) {
-        case 'bot_status_update':
-          dispatch(updateBotStatus(data.payload));
-          break;
-        case 'performance_update':
-          dispatch(setPerformanceData(data.payload));
-          break;
-        case 'new_alert':
-          dispatch(setAlerts([data.payload, ...useSelector(state => state.alerts)]));
-          // Show push notification
-          notificationService.current.showAlert(data.payload);
-          break;
-        case 'permission_update':
-          dispatch(setUserPermissions(data.payload));
-          break;
-        default:
-          console.log('Unknown message type:', data.type);
-      }
+      await loadInitialData();
+      await WebSocketService.refreshData();
     } catch (error) {
-      console.error('Error parsing WebSocket message:', error);
+      console.error('Error refreshing data:', error);
     }
+    setRefreshing(false);
   }, []);
-
-  const handleNotification = useCallback((notification) => {
-    if (notification.userInteraction) {
-      // User tapped notification
-      const { botId, type } = notification.data;
-      
-      if (type === 'bot_alert') {
-        navigation.navigate('BotDetail', { botId });
-      } else if (type === 'system_alert') {
-        navigation.navigate('Dashboard');
-      }
-    }
-  }, []);
-
-  const cleanup = () => {
-    wsService.current.disconnect();
-    notificationService.current.cleanup();
-  };
-
-  if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#007AFF" />
-        <Text style={styles.loadingText}>Loading TigerEx...</Text>
-      </View>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Login" component={LoginScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
-  }
-
-  return (
-    <NavigationContainer>
-      <Drawer.Navigator
-        drawerContent={({ navigation }) => (
-          <DrawerContent navigation={navigation} />
-        )}
-      >
-        <Drawer.Screen name="Main" component={MainTabNavigator} />
-      </Drawer.Navigator>
-    </NavigationContainer>
-  );
-};
-
-// Main Tab Navigator
-const MainTabNavigator = () => {
-  const { alerts } = useSelector(state => state);
-  const alertCount = alerts.filter(alert => !alert.acknowledged).length;
-
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-
-          switch (route.name) {
-            case 'Dashboard':
-              iconName = 'dashboard';
-              break;
-            case 'Bots':
-              iconName = 'smart-toy';
-              break;
-            case 'Analytics':
-              iconName = 'analytics';
-              break;
-            case 'Alerts':
-              iconName = 'notifications';
-              break;
-            case 'Settings':
-              iconName = 'settings';
-              break;
-            default:
-              iconName = 'help';
-          }
-
-          return (
-            <Icon
-              name={iconName}
-              size={size}
-              color={color}
-            />
-          );
-        },
-        tabBarActiveTintColor: '#007AFF',
-        tabBarInactiveTintColor: 'gray',
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor: '#f8f9fa',
-          borderTopWidth: 1,
-          borderTopColor: '#e9ecef',
-        },
-      })}
-    >
-      <Tab.Screen
-        name="Dashboard"
-        component={DashboardScreen}
-        options={{
-          tabBarLabel: 'Dashboard',
-        }}
-      />
-      <Tab.Screen
-        name="Bots"
-        component={BotsTabScreen}
-        options={{
-          tabBarLabel: 'Bots',
-          tabBarBadge: alertCount > 0 ? alertCount : undefined,
-        }}
-      />
-      <Tab.Screen
-        name="Analytics"
-        component={AnalyticsScreen}
-        options={{
-          tabBarLabel: 'Analytics',
-        }}
-      />
-      <Tab.Screen
-        name="Alerts"
-        component={AlertsTabScreen}
-        options={{
-          tabBarLabel: 'Alerts',
-          tabBarBadge: alertCount > 0 ? alertCount : undefined,
-        }}
-      />
-      <Tab.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{
-          tabBarLabel: 'Settings',
-        }}
-      />
-    </Tab.Navigator>
-  );
-};
-
-// Custom Drawer Content
-const DrawerContent = ({ navigation }) => {
-  const { user, permissions } = useSelector(state => state);
-  const dispatch = useDispatch();
 
   const handleLogout = async () => {
     Alert.alert(
@@ -362,7 +271,10 @@ const DrawerContent = ({ navigation }) => {
           text: 'Logout',
           style: 'destructive',
           onPress: async () => {
-            await AsyncStorage.removeItem('auth_token');
+            await AsyncStorage.multiRemove(['auth_token', 'security_level']);
+            ApiService.clearAuthToken();
+            WebSocketService.disconnect();
+            LocationService.stopTracking();
             setIsAuthenticated(false);
           },
         },
@@ -370,211 +282,24 @@ const DrawerContent = ({ navigation }) => {
     );
   };
 
-  const menuItems = [
-    {
-      title: 'Dashboard',
-      icon: 'dashboard',
-      onPress: () => navigation.navigate('Main'),
-    },
-    {
-      title: 'Profile',
-      icon: 'person',
-      onPress: () => navigation.navigate('Profile'),
-    },
-    {
-      title: 'Portfolio',
-      icon: 'account-balance-wallet',
-      onPress: () => navigation.navigate('Portfolio'),
-      disabled: !permissions.portfolio_access,
-    },
-    {
-      title: 'Reports',
-      icon: 'assessment',
-      onPress: () => navigation.navigate('Reports'),
-      disabled: !permissions.reports_access,
-    },
-    {
-      title: 'API Keys',
-      icon: 'vpn-key',
-      onPress: () => navigation.navigate('APIKeys'),
-      disabled: !permissions.api_management,
-    },
-    {
-      title: 'Settings',
-      icon: 'settings',
-      onPress: () => navigation.navigate('Settings'),
-    },
-    {
-      title: 'Help & Support',
-      icon: 'help',
-      onPress: () => Linking.openURL('https://support.tigerex.com'),
-    },
-    {
-      title: 'Logout',
-      icon: 'logout',
-      onPress: handleLogout,
-    },
-  ];
-
-  return (
-    <View style={styles.drawerContainer}>
-      <View style={styles.drawerHeader}>
-        <View style={styles.profileContainer}>
-          <Icon name="account-circle" size={60} color="#007AFF" />
-          <View style={styles.profileInfo}>
-            <Text style={styles.profileName}>{user.name || 'User'}</Text>
-            <Text style={styles.profileEmail}>{user.email || 'user@tigerex.com'}</Text>
-            <View style={styles.permissionBadge}>
-              <Text style={styles.permissionText}>
-                {user.role || 'Trader'}
-              </Text>
-            </View>
-          </View>
-        </View>
-      </View>
-
-      <ScrollView style={styles.drawerMenu}>
-        {menuItems.map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[
-              styles.menuItem,
-              item.disabled && styles.menuItemDisabled,
-            ]}
-            onPress={item.onPress}
-            disabled={item.disabled}
-          >
-            <Icon
-              name={item.icon}
-              size={24}
-              color={item.disabled ? '#ccc' : '#333'}
-              style={styles.menuIcon}
-            />
-            <Text
-              style={[
-                styles.menuText,
-                item.disabled && styles.menuTextDisabled,
-              ]}
-            >
-              {item.title}
-            </Text>
-            {item.disabled && (
-              <Icon name="lock" size={16} color="#ccc" />
-            )}
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-
-      <View style={styles.drawerFooter}>
-        <Text style={styles.versionText}>Version 2.0.0</Text>
-        <Text style={styles.copyrightText}>© 2024 TigerEx</Text>
-      </View>
-    </View>
-  );
-};
-
-// Bots Tab Screen
-const BotsTabScreen = ({ navigation }) => {
-  const { bots, isLoading } = useSelector(state => state);
-  const [refreshing, setRefreshing] = useState(false);
-  const dispatch = useDispatch();
-
-  const onRefresh = useCallback(async () => {
-    setRefreshing(true);
-    try {
-      const updatedBots = await apiService.current.getBots();
-      dispatch(setBots(updatedBots));
-    } catch (error) {
-      console.error('Error refreshing bots:', error);
-    } finally {
-      setRefreshing(false);
-    }
-  }, []);
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Market Maker Bots</Text>
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => navigation.navigate('CreateBot')}
-        >
-          <Icon name="add" size={24} color="white" />
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView
-        style={styles.content}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        {isLoading ? (
-          <LoadingSpinner />
-        ) : bots.length === 0 ? (
-          <View style={styles.emptyState}>
-            <Icon name="smart-toy" size={64} color="#ccc" />
-            <Text style={styles.emptyStateText}>No bots configured</Text>
-            <TouchableOpacity
-              style={styles.createButton}
-              onPress={() => navigation.navigate('CreateBot')}
-            >
-              <Text style={styles.createButtonText}>Create Your First Bot</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          bots.map((bot) => (
-            <BotCard
-              key={bot.id}
-              bot={bot}
-              onPress={() => navigation.navigate('BotDetail', { botId: bot.id })}
-              onToggle={async (enabled) => {
-                try {
-                  await apiService.current.toggleBot(bot.id, enabled);
-                  // Update local state
-                } catch (error) {
-                  Alert.alert('Error', 'Failed to toggle bot status');
-                }
-              }}
-            />
-          ))
-        )}
-      </ScrollView>
-    </View>
-  );
-};
-
-// Alerts Tab Screen
-const AlertsTabScreen = ({ navigation }) => {
-  const { alerts, isLoading } = useSelector(state => state);
-  const dispatch = useDispatch();
-
-  const acknowledgeAlert = async (alertId) => {
-    try {
-      await apiService.current.acknowledgeAlert(alertId);
-      dispatch(setAlerts(alerts.map(alert =>
-        alert.id === alertId ? { ...alert, acknowledged: true } : alert
-      )));
-    } catch (error) {
-      Alert.alert('Error', 'Failed to acknowledge alert');
-    }
-  };
-
-  const clearAllAlerts = async () => {
+  const handleSecurityUpgrade = async () => {
     Alert.alert(
-      'Clear All Alerts',
-      'Are you sure you want to clear all alerts?',
+      'Security Upgrade',
+      'Enable biometric authentication for enhanced security?',
       [
         { text: 'Cancel', style: 'cancel' },
         {
-          text: 'Clear',
-          style: 'destructive',
+          text: 'Enable',
           onPress: async () => {
-            try {
-              await apiService.current.clearAllAlerts();
-              dispatch(setAlerts([]));
-            } catch (error) {
-              Alert.alert('Error', 'Failed to clear alerts');
+            if (biometricEnabled) {
+              const authenticated = await BiometricService.authenticate();
+              if (authenticated) {
+                await AsyncStorage.setItem('security_level', 'high');
+                setSecurityLevel('high');
+                Alert.alert('Success', 'Biometric authentication enabled');
+              }
+            } else {
+              Alert.alert('Error', 'Biometric authentication not available on this device');
             }
           },
         },
@@ -582,211 +307,256 @@ const AlertsTabScreen = ({ navigation }) => {
     );
   };
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Alerts</Text>
-        {alerts.length > 0 && (
-          <TouchableOpacity style={styles.clearButton} onPress={clearAllAlerts}>
-            <Text style={styles.clearButtonText}>Clear All</Text>
-          </TouchableOpacity>
-        )}
-      </View>
+  if (loading) {
+    return <LoadingScreen fadeAnim={fadeAnim} />;
+  }
 
-      <ScrollView style={styles.content}>
-        {isLoading ? (
-          <LoadingSpinner />
-        ) : alerts.length === 0 ? (
-          <View style={styles.emptyState}>
-            <Icon name="notifications-none" size={64} color="#ccc" />
-            <Text style={styles.emptyStateText}>No alerts</Text>
-            <Text style={styles.emptyStateSubtext}>
-              You'll see alerts here when your bots need attention
-            </Text>
-          </View>
-        ) : (
-          alerts.map((alert) => (
-            <AlertItem
-              key={alert.id}
-              alert={alert}
-              onAcknowledge={() => acknowledgeAlert(alert.id)}
-              onPress={() => {
-                if (alert.botId) {
-                  navigation.navigate('BotDetail', { botId: alert.botId });
-                }
-              }}
-            />
-          ))
-        )}
-      </ScrollView>
-    </View>
+  if (!isAuthenticated) {
+    return <LoginScreen onLoginSuccess={() => setIsAuthenticated(true)} />;
+  }
+
+  const MainTabs = () => (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          switch (route.name) {
+            case 'Dashboard':
+              iconName = 'dashboard';
+              break;
+            case 'Bots':
+              iconName = 'smart-toy';
+              break;
+            case 'DeFi':
+              iconName = 'currency-bitcoin';
+              break;
+            case 'NFT':
+              iconName = 'collections';
+              break;
+            case 'Options':
+              iconName = 'show-chart';
+              break;
+            case 'Portfolio':
+              iconName = 'account-balance-wallet';
+              break;
+            case 'Analytics':
+              iconName = 'analytics';
+              break;
+            case 'Compliance':
+              iconName = 'security';
+              break;
+            case 'Settings':
+              iconName = 'settings';
+              break;
+            default:
+              iconName = 'help';
+          }
+          return <Icon name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: '#0066cc',
+        tabBarInactiveTintColor: 'gray',
+        tabBarStyle: [
+          styles.tabBar,
+          { height: Platform.OS === 'ios' ? 90 : 70 }
+        ],
+        headerStyle: styles.header,
+        headerTintColor: '#fff',
+        headerTitleStyle: styles.headerTitle,
+        tabBarLabelStyle: styles.tabBarLabel,
+      })}
+    >
+      <Tab.Screen 
+        name="Dashboard" 
+        component={Dashboard}
+        options={{ title: 'Dashboard' }}
+      />
+      <Tab.Screen 
+        name="Bots" 
+        component={BotManagement}
+        options={{ title: 'Market Makers' }}
+      />
+      <Tab.Screen 
+        name="DeFi" 
+        component={DeFiDashboard}
+        options={{ title: 'DeFi' }}
+      />
+      <Tab.Screen 
+        name="NFT" 
+        component={NFTMarketplace}
+        options={{ title: 'NFTs' }}
+      />
+      <Tab.Screen 
+        name="Options" 
+        component={OptionsTrading}
+        options={{ title: 'Options' }}
+      />
+      <Tab.Screen 
+        name="Portfolio" 
+        component={Portfolio}
+        options={{ title: 'Portfolio' }}
+      />
+      <Tab.Screen 
+        name="Analytics" 
+        component={Analytics}
+        options={{ title: 'Analytics' }}
+      />
+      <Tab.Screen 
+        name="Compliance" 
+        component={ComplianceCenter}
+        options={{ title: 'Compliance' }}
+      />
+      <Tab.Screen 
+        name="Settings" 
+        component={Settings}
+        options={{ 
+          title: 'Settings',
+          headerRight: () => (
+            <View style={styles.headerButtons}>
+              <TouchableOpacity onPress={handleSecurityUpgrade} style={styles.headerButton}>
+                <Icon name="enhanced-security" size={24} color="#fff" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleLogout} style={styles.headerButton}>
+                <Icon name="logout" size={24} color="#fff" />
+              </TouchableOpacity>
+            </View>
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#0066cc" />
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen 
+            name="Main" 
+            component={MainTabs}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen 
+            name="BotDetail" 
+            component={BotDetail}
+            options={({ route }) => ({ title: route.params.botName })}
+          />
+          <Stack.Screen 
+            name="TradingView" 
+            component={TradingView}
+            options={({ route }) => ({ title: route.params.symbol })}
+          />
+          <Stack.Screen 
+            name="Notifications" 
+            component={Notifications}
+            options={{ title: 'Notifications' }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaView>
   );
 };
 
-// Styles
+const LoadingScreen = ({ fadeAnim }) => (
+  <View style={styles.loadingContainer}>
+    <Animated.View style={[styles.logoContainer, { opacity: fadeAnim }]}>
+      <Icon name="smart-toy" size={80} color="#fff" />
+      <Text style={styles.loadingText}>TigerEx</Text>
+      <Text style={styles.loadingSubtext}>Market Maker Bot</Text>
+      <Text style={styles.loadingVersion}>Enterprise Edition</Text>
+    </Animated.View>
+    <View style={styles.loadingFeatures}>
+      <View style={styles.featureItem}>
+        <Icon name="check-circle" size={16} color="#4CAF50" />
+        <Text style={styles.featureText}>Advanced AI Trading</Text>
+      </View>
+      <View style={styles.featureItem}>
+        <Icon name="check-circle" size={16} color="#4CAF50" />
+        <Text style={styles.featureText}>DeFi Integration</Text>
+      </View>
+      <View style={styles.featureItem}>
+        <Icon name="check-circle" size={16} color="#4CAF50" />
+        <Text style={styles.featureText}>NFT Marketplace</Text>
+      </View>
+      <View style={styles.featureItem}>
+        <Icon name="check-circle" size={16} color="#4CAF50" />
+        <Text style={styles.featureText}>Options Trading</Text>
+      </View>
+      <View style={styles.featureItem}>
+        <Icon name="check-circle" size={16} color="#4CAF50" />
+        <Text style={styles.featureText}>Compliance Tools</Text>
+      </View>
+    </View>
+  </View>
+);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: '#f5f5f5',
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f8f9fa',
+    backgroundColor: '#0066cc',
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 50,
   },
   loadingText: {
-    marginTop: 10,
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginTop: 20,
+  },
+  loadingSubtext: {
     fontSize: 16,
-    color: '#666',
+    color: '#fff',
+    marginTop: 5,
+    opacity: 0.8,
+  },
+  loadingVersion: {
+    fontSize: 12,
+    color: '#fff',
+    marginTop: 5,
+    opacity: 0.6,
+  },
+  loadingFeatures: {
+    paddingHorizontal: 40,
+  },
+  featureItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 5,
+  },
+  featureText: {
+    color: '#fff',
+    marginLeft: 10,
+    fontSize: 14,
+  },
+  tabBar: {
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#e0e0e0',
+    paddingBottom: Platform.OS === 'ios' ? 20 : 10,
+  },
+  tabBarLabel: {
+    fontSize: 10,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e9ecef',
+    backgroundColor: '#0066cc',
+    elevation: 0,
+    shadowOpacity: 0,
   },
   headerTitle: {
-    fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
   },
-  addButton: {
-    backgroundColor: '#007AFF',
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  clearButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    backgroundColor: '#dc3545',
-    borderRadius: 4,
-  },
-  clearButtonText: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  content: {
-    flex: 1,
-    padding: 16,
-  },
-  emptyState: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 60,
-  },
-  emptyStateText: {
-    marginTop: 16,
-    fontSize: 18,
-    color: '#666',
-    textAlign: 'center',
-  },
-  emptyStateSubtext: {
-    marginTop: 8,
-    fontSize: 14,
-    color: '#999',
-    textAlign: 'center',
-  },
-  createButton: {
-    marginTop: 24,
-    backgroundColor: '#007AFF',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 8,
-  },
-  createButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  drawerContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  drawerHeader: {
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e9ecef',
-  },
-  profileContainer: {
+  headerButtons: {
     flexDirection: 'row',
-    alignItems: 'center',
   },
-  profileInfo: {
-    marginLeft: 16,
-    flex: 1,
-  },
-  profileName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  profileEmail: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 4,
-  },
-  permissionBadge: {
-    marginTop: 8,
-    backgroundColor: '#007AFF',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-    alignSelf: 'flex-start',
-  },
-  permissionText: {
-    fontSize: 12,
-    color: 'white',
-    fontWeight: '600',
-  },
-  drawerMenu: {
-    flex: 1,
-  },
-  menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  menuItemDisabled: {
-    opacity: 0.5,
-  },
-  menuIcon: {
-    marginRight: 16,
-  },
-  menuText: {
-    fontSize: 16,
-    color: '#333',
-    flex: 1,
-  },
-  menuTextDisabled: {
-    color: '#ccc',
-  },
-  drawerFooter: {
-    padding: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#e9ecef',
-    alignItems: 'center',
-  },
-  versionText: {
-    fontSize: 12,
-    color: '#666',
-  },
-  copyrightText: {
-    fontSize: 10,
-    color: '#999',
-    marginTop: 4,
+  headerButton: {
+    marginRight: 15,
   },
 });
 
