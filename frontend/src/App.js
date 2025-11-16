@@ -169,8 +169,11 @@ const createAppTheme = (mode) => createTheme({
   ...themeConfig,
 });
 
+import { RBACProvider, useRBAC } from './contexts/RBACProvider';
+import DashboardRouter from './components/dashboards/DashboardRouter';
+
 // Main App Component
-const App = () => {
+const AppContent = () => {
   const dispatch = useDispatch();
   const { isAuthenticated, user, token } = useSelector((state) => state.auth);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -180,6 +183,14 @@ const App = () => {
   const { notification } = useNotification();
   
   const theme = createAppTheme(darkMode ? 'dark' : 'light');
+
+  const { setUserRole } = useRBAC();
+
+  useEffect(() => {
+    if (user && user.role) {
+      setUserRole(user.role);
+    }
+  }, [user, setUserRole]);
   
   // WebSocket connection for real-time data
   const { isConnected, lastMessage } = useWebSocket({
@@ -355,106 +366,113 @@ const App = () => {
   );
 
   return (
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Router>
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              
-              {/* Protected Routes */}
-              <Route
-                path="/*"
-                element={
-                  <ProtectedRoute>
-                    <MainLayout>
-                      <Routes>
-                        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                        <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/trading" element={<TradingInterface />} />
-                        <Route path="/portfolio" element={<Portfolio />} />
-                        <Route path="/markets" element={<Markets />} />
-                        <Route path="/bots" element={<TradingBots />} />
-                        <Route path="/kyc" element={<KYCVerification />} />
-                        
-                        {/* Admin Routes */}
-                        <Route
-                          path="/admin/*"
-                          element={
-                            <ProtectedRoute requiredRole="admin">
-                              <Routes>
-                                <Route path="/dashboard" element={<AdminDashboard />} />
-                                <Route path="/users" element={<UserManagement />} />
-                                <Route path="/trading" element={<TradingControls />} />
-                                <Route path="/monitoring" element={<SystemMonitoring />} />
-                              </Routes>
-                            </ProtectedRoute>
-                          }
-                        />
-                      </Routes>
-                    </MainLayout>
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </Router>
-          
-          {/* Global Snackbar */}
-          <Snackbar
-            open={snackbar.open}
-            autoHideDuration={6000}
-            onClose={handleCloseSnackbar}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-          >
-            <Alert
-              onClose={handleCloseSnackbar}
-              severity={snackbar.severity}
-              sx={{ width: '100%' }}
-            >
-              {snackbar.message}
-            </Alert>
-          </Snackbar>
-          
-          {/* Connection Status Indicator */}
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          {/* Protected Routes */}
+          <Route
+            path="/*"
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <Routes>
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                    <Route path="/dashboard" element={<DashboardRouter />} />
+                    <Route path="/trading" element={<TradingInterface />} />
+                    <Route path="/portfolio" element={<Portfolio />} />
+                    <Route path="/markets" element={<Markets />} />
+                    <Route path="/bots" element={<TradingBots />} />
+                    <Route path="/futures-trading" element={<FuturesTrading />} />
+                    <Route path="/kyc" element={<KYCVerification />} />
+
+                    {/* Admin Routes */}
+                    <Route
+                      path="/admin/*"
+                      element={
+                        <ProtectedRoute requiredRole="admin">
+                          <Routes>
+                            <Route path="/dashboard" element={<AdminDashboard />} />
+                            <Route path="/users" element={<UserManagement />} />
+                            <Route path="/trading" element={<TradingControls />} />
+                            <Route path="/monitoring" element={<SystemMonitoring />} />
+                          </Routes>
+                        </ProtectedRoute>
+                      }
+                    />
+                  </Routes>
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Router>
+
+      {/* Global Snackbar */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
+
+      {/* Connection Status Indicator */}
+      <Box
+        sx={{
+          position: 'fixed',
+          top: 80,
+          right: 20,
+          zIndex: 1000,
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+            backgroundColor: theme.palette.background.paper,
+            padding: 1,
+            borderRadius: 1,
+            boxShadow: theme.shadows[2],
+          }}
+        >
           <Box
             sx={{
-              position: 'fixed',
-              top: 80,
-              right: 20,
-              zIndex: 1000,
+              width: 10,
+              height: 10,
+              borderRadius: '50%',
+              backgroundColor: isConnected ? theme.palette.success.main : theme.palette.error.main,
             }}
-          >
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                backgroundColor: theme.palette.background.paper,
-                padding: 1,
-                borderRadius: 1,
-                boxShadow: theme.shadows[2],
-              }}
-            >
-              <Box
-                sx={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: '50%',
-                  backgroundColor: isConnected ? theme.palette.success.main : theme.palette.error.main,
-                }}
-              />
-              <Typography variant="caption">
-                {isConnected ? 'Connected' : 'Disconnected'}
-              </Typography>
-            </Box>
-          </Box>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </Provider>
+          />
+          <Typography variant="caption">
+            {isConnected ? 'Connected' : 'Disconnected'}
+          </Typography>
+        </Box>
+      </Box>
+    </ThemeProvider>
   );
 };
+
+const App = () => (
+  <Provider store={store}>
+    <QueryClientProvider client={queryClient}>
+      <RBACProvider>
+        <AppContent />
+      </RBACProvider>
+    </QueryClientProvider>
+  </Provider>
+);
 
 export default App;
