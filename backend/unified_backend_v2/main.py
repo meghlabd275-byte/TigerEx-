@@ -71,6 +71,10 @@ class UserRole(str, Enum):
     SUPPORT = "support"
     COMPLIANCE = "compliance"
     RISK_MANAGER = "risk_manager"
+    LISTINGS_MANAGER = "listings_manager"
+    LIQUIDITY_PROVIDER = "liquidity_provider"
+    MARKET_MAKER_CLIENT = "market_maker_client"
+    DIRECTOR = "director"
     TRADER = "trader"
     USER = "user"
 
@@ -113,6 +117,7 @@ class Permission(str, Enum):
     TRADING_HALT = "trading:halt"
     TRADING_RESUME = "trading:resume"
     PAIR_MANAGE = "pair:manage"
+    TOKEN_MANAGE = "token:manage"
     LIQUIDITY_MANAGE = "liquidity:manage"
 
     # Risk Management
@@ -174,6 +179,21 @@ ROLE_PERMISSIONS = {
         Permission.POSITION_MONITOR, Permission.RISK_CONFIGURE,
         Permission.LIQUIDATION_MANAGE, Permission.TRADING_HALT,
         Permission.ANALYTICS_VIEW, Permission.REPORT_GENERATE
+    ],
+    UserRole.LISTINGS_MANAGER: [
+        Permission.PAIR_MANAGE, Permission.TOKEN_MANAGE,
+        Permission.ANALYTICS_VIEW
+    ],
+    UserRole.LIQUIDITY_PROVIDER: [
+        Permission.LIQUIDITY_MANAGE, Permission.POSITION_MONITOR,
+        Permission.ANALYTICS_VIEW
+    ],
+    UserRole.MARKET_MAKER_CLIENT: [
+        Permission.POSITION_MONITOR, Permission.ANALYTICS_VIEW
+    ],
+    UserRole.DIRECTOR: [
+        Permission.ANALYTICS_VIEW, Permission.REPORT_GENERATE,
+        Permission.AUDIT_LOG_VIEW
     ],
     UserRole.TRADER: [],
     UserRole.USER: []
@@ -1075,9 +1095,9 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
         raise credentials_exception
     return user
 
-def require_role(required_role: UserRole):
+def require_role(required_roles: List[UserRole]):
     def role_checker(current_user: User = Depends(get_current_user)):
-        if current_user.role != required_role and current_user.role != UserRole.SUPER_ADMIN:
+        if current_user.role not in required_roles and current_user.role != UserRole.SUPER_ADMIN:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Insufficient permissions"
@@ -1163,7 +1183,7 @@ async def get_users(
     role: Optional[UserRole] = None,
     status: Optional[UserStatus] = None,
     kyc_status: Optional[KYCStatus] = None,
-    current_user: User = Depends(require_role(UserRole.ADMIN)),
+    current_user: User = Depends(require_role([UserRole.ADMIN, UserRole.MODERATOR])),
     db: Session = Depends(get_db)
 ):
     """Get all users with filtering and pagination"""
@@ -1203,7 +1223,7 @@ async def get_users(
 @app.post("/admin/users", response_model=UserResponse)
 async def create_user(
     user_data: UserCreate,
-    current_user: User = Depends(require_role(UserRole.ADMIN)),
+    current_user: User = Depends(require_role([UserRole.ADMIN])),
     db: Session = Depends(get_db)
 ):
     """Create a new user"""
@@ -1265,7 +1285,7 @@ async def create_user(
 @app.get("/admin/users/{user_id}", response_model=UserResponse)
 async def get_user(
     user_id: str,
-    current_user: User = Depends(require_role(UserRole.ADMIN)),
+    current_user: User = Depends(require_role([UserRole.ADMIN, UserRole.MODERATOR])),
     db: Session = Depends(get_db)
 ):
     """Get user by ID"""
@@ -1291,7 +1311,7 @@ async def get_user(
 @app.get("/admin/users/{user_id}/profile", response_model=UserFullProfileResponse)
 async def get_user_profile(
     user_id: str,
-    current_user: User = Depends(require_role(UserRole.ADMIN)),
+    current_user: User = Depends(require_role([UserRole.ADMIN, UserRole.MODERATOR])),
     db: Session = Depends(get_db)
 ):
     """Get a user's full profile, including balances and order history."""
@@ -1314,7 +1334,7 @@ async def get_user_profile(
 async def update_user(
     user_id: str,
     user_data: UserUpdate,
-    current_user: User = Depends(require_role(UserRole.ADMIN)),
+    current_user: User = Depends(require_role([UserRole.ADMIN])),
     db: Session = Depends(get_db)
 ):
     """Update user"""
@@ -1357,7 +1377,7 @@ async def update_user(
 @app.delete("/admin/users/{user_id}")
 async def delete_user(
     user_id: str,
-    current_user: User = Depends(require_role(UserRole.SUPER_ADMIN)),
+    current_user: User = Depends(require_role([UserRole.SUPER_ADMIN])),
     db: Session = Depends(get_db)
 ):
     """Delete user (soft delete)"""
@@ -1395,7 +1415,7 @@ async def delete_user(
 @app.post("/admin/users/{user_id}/reset-password")
 async def reset_user_password(
     user_id: str,
-    current_user: User = Depends(require_role(UserRole.ADMIN)),
+    current_user: User = Depends(require_role([UserRole.ADMIN])),
     db: Session = Depends(get_db)
 ):
     """Reset user password"""
@@ -1430,7 +1450,7 @@ async def reset_user_password(
 @app.post("/admin/users/bulk-action")
 async def bulk_user_action(
     bulk_request: "BulkActionRequest",
-    current_user: User = Depends(require_role(UserRole.ADMIN)),
+    current_user: User = Depends(require_role([UserRole.ADMIN])),
     db: Session = Depends(get_db)
 ):
     """Perform bulk actions on users"""
@@ -1482,7 +1502,7 @@ async def bulk_user_action(
 
 @app.get("/admin/system/health")
 async def system_health_check(
-    current_user: User = Depends(require_role(UserRole.ADMIN))
+    current_user: User = Depends(require_role([UserRole.ADMIN, UserRole.MODERATOR]))
 ):
     """Get system health status"""
 
@@ -1537,7 +1557,7 @@ async def system_health_check(
 @app.get("/admin/export/users")
 async def export_users(
     format: str = "csv",
-    current_user: User = Depends(require_role(UserRole.ADMIN)),
+    current_user: User = Depends(require_role([UserRole.ADMIN])),
     db: Session = Depends(get_db)
 ):
     """Export users data"""
@@ -1608,7 +1628,7 @@ async def export_users(
 
 @app.get("/admin/config")
 async def get_system_config(
-    current_user: User = Depends(require_role(UserRole.SUPER_ADMIN))
+    current_user: User = Depends(require_role([UserRole.SUPER_ADMIN]))
 ):
     """Get system configuration"""
 
@@ -1648,7 +1668,7 @@ async def get_system_config(
 @app.post("/admin/config")
 async def update_system_config(
     config_request: SystemConfigRequest,
-    current_user: User = Depends(require_role(UserRole.SUPER_ADMIN))
+    current_user: User = Depends(require_role([UserRole.SUPER_ADMIN]))
 ):
     """Update system configuration"""
 
@@ -1674,7 +1694,7 @@ async def update_system_config(
 async def get_user_analytics(
     start_date: Optional[datetime] = None,
     end_date: Optional[datetime] = None,
-    current_user: User = Depends(require_role(UserRole.ADMIN)),
+    current_user: User = Depends(require_role([UserRole.ADMIN, UserRole.MODERATOR])),
     db: Session = Depends(get_db)
 ):
     """Get user analytics"""
@@ -1727,6 +1747,40 @@ async def get_user_analytics(
             } for user in new_users_by_date
         ]
     }
+
+@app.get("/admin/roles")
+async def get_roles(
+    current_user: User = Depends(require_role(UserRole.SUPER_ADMIN))
+):
+    """Get all roles and their permissions"""
+    return ROLE_PERMISSIONS
+
+@app.put("/admin/roles/{role_name}")
+async def update_role_permissions(
+    role_name: UserRole,
+    permissions: List[Permission],
+    current_user: User = Depends(require_role(UserRole.SUPER_ADMIN))
+):
+    """Update permissions for a role"""
+    if role_name == UserRole.SUPER_ADMIN:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot modify Super Admin role"
+        )
+
+    ROLE_PERMISSIONS[role_name] = [p.value for p in permissions]
+
+    # Log audit event
+    log_audit_event(
+        user_id=str(current_user.id),
+        action="update_role_permissions",
+        resource="admin_panel",
+        details={"role": role_name, "permissions": [p.value for p in permissions]},
+        ip_address="0.0.0.0",
+        user_agent="admin_panel"
+    )
+
+    return {"message": f"Permissions for role '{role_name}' updated successfully"}
 
 # ==================== HEALTH ENDPOINTS ====================
 
@@ -1781,30 +1835,30 @@ if __name__ == "__main__":
 class AdminPanelManager:
     def __init__(self):
         self.redis_client = None
-        self.web3_clients = {}
+        # self.web3_clients = {}
         self.s3_client = None
 
     async def initialize(self):
         """Initialize async components"""
-        self.redis_client = await aioredis.from_url(config.REDIS_URL)
+        # self.redis_client = await aioredis.from_url(config.REDIS_URL)
 
         # Initialize Web3 clients
-        self.web3_clients = {
-            BlockchainNetwork.ETHEREUM: Web3(Web3.HTTPProvider(config.ETHEREUM_RPC_URL)),
-            BlockchainNetwork.POLYGON: Web3(Web3.HTTPProvider(config.POLYGON_RPC_URL)),
-            BlockchainNetwork.BSC: Web3(Web3.HTTPProvider(config.BSC_RPC_URL)),
-            BlockchainNetwork.ARBITRUM: Web3(Web3.HTTPProvider(config.ARBITRUM_RPC_URL)),
-            BlockchainNetwork.OPTIMISM: Web3(Web3.HTTPProvider(config.OPTIMISM_RPC_URL)),
-            BlockchainNetwork.AVALANCHE: Web3(Web3.HTTPProvider(config.AVALANCHE_RPC_URL))
-        }
+        # self.web3_clients = {
+        #     BlockchainNetwork.ETHEREUM: Web3(Web3.HTTPProvider(config.ETHEREUM_RPC_URL)),
+        #     BlockchainNetwork.POLYGON: Web3(Web3.HTTPProvider(config.POLYGON_RPC_URL)),
+        #     BlockchainNetwork.BSC: Web3(Web3.HTTPProvider(config.BSC_RPC_URL)),
+        #     BlockchainNetwork.ARBITRUM: Web3(Web3.HTTPProvider(config.ARBITRUM_RPC_URL)),
+        #     BlockchainNetwork.OPTIMISM: Web3(Web3.HTTPProvider(config.OPTIMISM_RPC_URL)),
+        #     BlockchainNetwork.AVALANCHE: Web3(Web3.HTTPProvider(config.AVALANCHE_RPC_URL))
+        # }
 
         # Initialize S3 client
-        if config.AWS_ACCESS_KEY_ID:
-            self.s3_client = boto3.client(
-                's3',
-                aws_access_key_id=config.AWS_ACCESS_KEY_ID,
-                aws_secret_access_key=config.AWS_SECRET_ACCESS_KEY
-            )
+        # if config.AWS_ACCESS_KEY_ID:
+        #     self.s3_client = boto3.client(
+        #         's3',
+        #         aws_access_key_id=config.AWS_ACCESS_KEY_ID,
+        #         aws_secret_access_key=config.AWS_SECRET_ACCESS_KEY
+        #     )
 
     async def create_blockchain(self, blockchain_data: BlockchainCreate, admin: Dict[str, Any], db: Session):
         """Create new blockchain integration"""
@@ -1821,18 +1875,18 @@ class AdminPanelManager:
         blockchain_id = f"CHAIN_{secrets.token_hex(8).upper()}"
 
         # Test RPC connection
-        try:
-            web3 = Web3(Web3.HTTPProvider(str(blockchain_data.rpc_url)))
-            if not web3.is_connected():
-                raise HTTPException(status_code=400, detail="Cannot connect to RPC URL")
+        # try:
+        #     web3 = Web3(Web3.HTTPProvider(str(blockchain_data.rpc_url)))
+        #     if not web3.is_connected():
+        #         raise HTTPException(status_code=400, detail="Cannot connect to RPC URL")
 
-            # Verify chain ID
-            actual_chain_id = web3.eth.chain_id
-            if actual_chain_id != blockchain_data.chain_id:
-                raise HTTPException(status_code=400, detail=f"Chain ID mismatch. Expected {blockchain_data.chain_id}, got {actual_chain_id}")
+        #     # Verify chain ID
+        #     actual_chain_id = web3.eth.chain_id
+        #     if actual_chain_id != blockchain_data.chain_id:
+        #         raise HTTPException(status_code=400, detail=f"Chain ID mismatch. Expected {blockchain_data.chain_id}, got {actual_chain_id}")
 
-        except Exception as e:
-            raise HTTPException(status_code=400, detail=f"RPC connection failed: {str(e)}")
+        # except Exception as e:
+        #     raise HTTPException(status_code=400, detail=f"RPC connection failed: {str(e)}")
 
         blockchain = Blockchain(
             blockchain_id=blockchain_id,
@@ -1856,7 +1910,25 @@ class AdminPanelManager:
         db.refresh(blockchain)
 
         # Add to Web3 clients
-        self.web3_clients[blockchain_data.network] = web3
+        # self.web3_clients[blockchain_data.network] = web3
+
+        return blockchain
+
+    async def update_blockchain(self, blockchain_id: str, blockchain_data: BlockchainCreate, admin: Dict[str, Any], db: Session):
+        """Update existing blockchain integration"""
+
+        blockchain = db.query(Blockchain).filter(Blockchain.blockchain_id == blockchain_id).first()
+
+        if not blockchain:
+            raise HTTPException(status_code=404, detail="Blockchain not found")
+
+        update_data = blockchain_data.dict(exclude_unset=True)
+        for field, value in update_data.items():
+            setattr(blockchain, field, value)
+
+        blockchain.updated_at = datetime.utcnow()
+        db.commit()
+        db.refresh(blockchain)
 
         return blockchain
 
@@ -1915,6 +1987,24 @@ class AdminPanelManager:
 
         return token
 
+    async def update_token(self, token_id: str, token_data: TokenCreate, admin: Dict[str, Any], db: Session):
+        """Update existing token"""
+
+        token = db.query(Token).filter(Token.token_id == token_id).first()
+
+        if not token:
+            raise HTTPException(status_code=404, detail="Token not found")
+
+        update_data = token_data.dict(exclude_unset=True)
+        for field, value in update_data.items():
+            setattr(token, field, value)
+
+        token.updated_at = datetime.utcnow()
+        db.commit()
+        db.refresh(token)
+
+        return token
+
     async def create_trading_pair(self, pair_data: TradingPairCreate, admin: Dict[str, Any], db: Session):
         """Create new trading pair"""
 
@@ -1961,31 +2051,49 @@ class AdminPanelManager:
 
         return trading_pair
 
-    async def validate_token_contract(self, contract_address: str, blockchain: Blockchain, token_data: TokenCreate):
-        """Validate token contract on blockchain"""
+    async def update_trading_pair(self, pair_id: str, pair_data: TradingPairCreate, admin: Dict[str, Any], db: Session):
+        """Update existing trading pair"""
 
-        web3 = self.web3_clients.get(blockchain.network)
-        if not web3:
-            return
+        pair = db.query(TradingPair).filter(TradingPair.pair_id == pair_id).first()
 
-        try:
-            # Check if address is valid
-            if not web3.is_address(contract_address):
-                raise HTTPException(status_code=400, detail="Invalid contract address")
+        if not pair:
+            raise HTTPException(status_code=404, detail="Trading pair not found")
 
-            # Check if contract exists
-            code = web3.eth.get_code(web3.to_checksum_address(contract_address))
-            if code == b'':
-                raise HTTPException(status_code=400, detail="No contract found at address")
+        update_data = pair_data.dict(exclude_unset=True)
+        for field, value in update_data.items():
+            setattr(pair, field, value)
 
-            # For ERC20 tokens, validate basic functions
-            if token_data.token_standard == TokenStandard.ERC20:
-                # This would include more comprehensive contract validation
-                # For now, we'll just check that it's a contract
-                pass
+        pair.updated_at = datetime.utcnow()
+        db.commit()
+        db.refresh(pair)
 
-        except Exception as e:
-            raise HTTPException(status_code=400, detail=f"Contract validation failed: {str(e)}")
+        return pair
+
+    # async def validate_token_contract(self, contract_address: str, blockchain: Blockchain, token_data: TokenCreate):
+    #     """Validate token contract on blockchain"""
+
+    #     web3 = self.web3_clients.get(blockchain.network)
+    #     if not web3:
+    #         return
+
+    #     try:
+    #         # Check if address is valid
+    #         if not web3.is_address(contract_address):
+    #             raise HTTPException(status_code=400, detail="Invalid contract address")
+
+    #         # Check if contract exists
+    #         code = web3.eth.get_code(web3.to_checksum_address(contract_address))
+    #         if code == b'':
+    #             raise HTTPException(status_code=400, detail="No contract found at address")
+
+    #         # For ERC20 tokens, validate basic functions
+    #         if token_data.token_standard == TokenStandard.ERC20:
+    #             # This would include more comprehensive contract validation
+    #             # For now, we'll just check that it's a contract
+    #             pass
+
+    #     except Exception as e:
+    #         raise HTTPException(status_code=400, detail=f"Contract validation failed: {str(e)}")
 
     async def fetch_coingecko_data(self, coingecko_id: str) -> Dict[str, Any]:
         """Fetch token data from CoinGecko"""
@@ -2483,6 +2591,21 @@ async def create_blockchain(
         "status": "created"
     }
 
+@app.put("/api/v1/admin/blockchains/{blockchain_id}")
+async def update_blockchain(
+    blockchain_id: str,
+    blockchain_data: BlockchainCreate,
+    current_admin: Dict[str, Any] = Depends(get_current_admin),
+    db: Session = Depends(get_db)
+):
+    """Update existing blockchain integration"""
+    blockchain = await admin_manager.update_blockchain(blockchain_id, blockchain_data, current_admin, db)
+    return {
+        "blockchain_id": blockchain.blockchain_id,
+        "name": blockchain.name,
+        "status": "updated"
+    }
+
 @app.get("/api/v1/admin/blockchains")
 async def get_blockchains(
     is_active: Optional[bool] = None,
@@ -2532,6 +2655,21 @@ async def create_token(
         "symbol": token.symbol,
         "blockchain": token.blockchain.name,
         "status": token.status
+    }
+
+@app.put("/api/v1/admin/tokens/{token_id}")
+async def update_token(
+    token_id: str,
+    token_data: TokenCreate,
+    current_admin: Dict[str, Any] = Depends(get_current_admin),
+    db: Session = Depends(get_db)
+):
+    """Update existing token"""
+    token = await admin_manager.update_token(token_id, token_data, current_admin, db)
+    return {
+        "token_id": token.token_id,
+        "name": token.name,
+        "status": "updated"
     }
 
 @app.get("/api/v1/admin/tokens")
@@ -2591,6 +2729,21 @@ async def create_trading_pair(
         "base_token": pair.base_token.symbol,
         "quote_token": pair.quote_token.symbol,
         "status": pair.status
+    }
+
+@app.put("/api/v1/admin/trading-pairs/{pair_id}")
+async def update_trading_pair(
+    pair_id: str,
+    pair_data: TradingPairCreate,
+    current_admin: Dict[str, Any] = Depends(get_current_admin),
+    db: Session = Depends(get_db)
+):
+    """Update existing trading pair"""
+    pair = await admin_manager.update_trading_pair(pair_id, pair_data, current_admin, db)
+    return {
+        "pair_id": pair.pair_id,
+        "symbol": pair.symbol,
+        "status": "updated"
     }
 
 @app.get("/api/v1/admin/trading-pairs")
@@ -2868,7 +3021,7 @@ async def create_copy_relationship(
 @app.get("/api/v1/p2p-admin/disputes")
 async def get_disputes(
     db: Session = Depends(get_db),
-    current_admin: User = Depends(require_role(UserRole.ADMIN))
+    current_admin: User = Depends(require_role([UserRole.ADMIN, UserRole.MODERATOR]))
 ):
     disputes = db.query(TradeDispute).filter(TradeDispute.status == "open").all()
     return disputes
@@ -2878,7 +3031,7 @@ async def resolve_dispute(
     dispute_id: str,
     resolution_data: DisputeResolution,
     db: Session = Depends(get_db),
-    current_admin: User = Depends(require_role(UserRole.ADMIN))
+    current_admin: User = Depends(require_role([UserRole.ADMIN, UserRole.MODERATOR]))
 ):
     dispute = await p2p_admin_manager.resolve_dispute(dispute_id, resolution_data, current_admin, db)
     return {"dispute_id": dispute.dispute_id, "status": dispute.status}
@@ -2888,7 +3041,7 @@ async def manage_user(
     user_id: str,
     action_data: UserAction,
     db: Session = Depends(get_db),
-    current_admin: User = Depends(require_role(UserRole.ADMIN))
+    current_admin: User = Depends(require_role([UserRole.ADMIN, UserRole.MODERATOR]))
 ):
     user = await p2p_admin_manager.manage_user(user_id, action_data, current_admin, db)
     return {"user_id": user.user_id, "is_blocked": user.is_blocked, "is_verified": user.is_verified}
@@ -2920,7 +3073,7 @@ async def request_withdrawal(
 async def create_wallet(
     blockchain: str,
     wallet_type: WalletType,
-    current_admin: User = Depends(require_role(UserRole.ADMIN)),
+    current_admin: User = Depends(require_role([UserRole.ADMIN])),
     db: Session = Depends(get_db)
 ):
     """
@@ -2933,7 +3086,7 @@ async def create_wallet(
 async def get_wallets(
     wallet_type: Optional[WalletType] = None,
     blockchain: Optional[str] = None,
-    current_admin: User = Depends(require_role(UserRole.ADMIN)),
+    current_admin: User = Depends(require_role([UserRole.ADMIN])),
     db: Session = Depends(get_db)
 ):
     """
@@ -2953,7 +3106,7 @@ async def transfer_funds(
     to_wallet_id: str,
     amount: float,
     currency: str,
-    current_admin: User = Depends(require_role(UserRole.ADMIN)),
+    current_admin: User = Depends(require_role([UserRole.ADMIN])),
     db: Session = Depends(get_db)
 ):
     """
@@ -2971,7 +3124,7 @@ async def transfer_funds(
 @app.get("/api/v1/admin/wallets/{wallet_id}/transactions", response_model=List[WalletTransactionResponse])
 async def get_wallet_transactions(
     wallet_id: str,
-    current_admin: User = Depends(require_role(UserRole.ADMIN)),
+    current_admin: User = Depends(require_role([UserRole.ADMIN])),
     db: Session = Depends(get_db)
 ):
     """

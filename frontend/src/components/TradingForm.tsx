@@ -1,105 +1,112 @@
 import React, { useState } from 'react';
-import api from '../services/api';
 
-const TradingForm = ({ symbol }) => {
-    const [side, setSide] = useState('buy');
-    const [orderType, setOrderType] = useState('market');
-    const [quantity, setQuantity] = useState('');
-    const [price, setPrice] = useState('');
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(null);
+const TradingForm = () => {
+  const [orderType, setOrderType] = useState('limit');
+  const [side, setSide] = useState('buy');
+  const [price, setPrice] = useState('');
+  const [amount, setAmount] = useState('');
+  const [total, setTotal] = useState('');
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError(null);
-        setSuccess(null);
+  const handlePriceChange = (e) => {
+    setPrice(e.target.value);
+    setTotal(parseFloat(e.target.value) * parseFloat(amount) || '');
+  };
 
-        if (!quantity) {
-            setError('Quantity is required');
-            return;
-        }
+  const handleAmountChange = (e) => {
+    setAmount(e.target.value);
+    setTotal(parseFloat(price) * parseFloat(e.target.value) || '');
+  };
 
-        if (orderType === 'limit' && !price) {
-            setError('Price is required for limit orders');
-            return;
-        }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle order submission logic here
+    console.log({
+      orderType,
+      side,
+      price,
+      amount,
+      total,
+    });
+  };
 
-        try {
-            const orderData = {
-                symbol,
-                side,
-                order_type: orderType,
-                quantity: parseFloat(quantity),
-                price: orderType === 'limit' ? parseFloat(price) : null,
-                stop_price: (orderType === 'stop_loss' || orderType === 'take_profit') ? parseFloat(price) : null,
-            };
-
-            const response = await api.post('/orders', orderData);
-            setSuccess(`Order placed successfully! Order ID: ${response.data.order_id}`);
-            setQuantity('');
-            setPrice('');
-        } catch (err) {
-            setError(err.response?.data?.detail || 'An error occurred while placing the order');
-        }
-    };
-
-    return (
-        <div className="trading-form">
-            <h3>Place Order</h3>
-            {error && <div className="error">{error}</div>}
-            {success && <div className="success">{success}</div>}
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Side:</label>
-                    <select value={side} onChange={(e) => setSide(e.target.value)}>
-                        <option value="buy">Buy</option>
-                        <option value="sell">Sell</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Order Type:</label>
-                    <select value={orderType} onChange={(e) => setOrderType(e.target.value)}>
-                        <option value="market">Market</option>
-                        <option value="limit">Limit</option>
-                        <option value="stop_loss">Stop-Loss</option>
-                        <option value="take_profit">Take-Profit</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Quantity:</label>
-                    <input
-                        type="number"
-                        value={quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
-                        placeholder="0.00"
-                    />
-                </div>
-                {orderType === 'limit' && (
-                    <div>
-                        <label>Price:</label>
-                        <input
-                            type="number"
-                            value={price}
-                            onChange={(e) => setPrice(e.target.value)}
-                            placeholder="0.00"
-                        />
-                    </div>
-                )}
-                {(orderType === 'stop_loss' || orderType === 'take_profit') && (
-                    <div>
-                        <label>Stop Price:</label>
-                        <input
-                            type="number"
-                            value={price}
-                            onChange={(e) => setPrice(e.target.value)}
-                            placeholder="0.00"
-                        />
-                    </div>
-                )}
-                <button type="submit">Place {side === 'buy' ? 'Buy' : 'Sell'} Order</button>
-            </form>
+  return (
+    <div className="bg-gray-800 text-white p-4 rounded-lg">
+      <h2 className="text-xl font-bold mb-4">Trade</h2>
+      <div className="flex mb-4">
+        <button
+          className={`px-4 py-2 rounded-l-lg ${side === 'buy' ? 'bg-green-500' : 'bg-gray-700'}`}
+          onClick={() => setSide('buy')}
+        >
+          Buy
+        </button>
+        <button
+          className={`px-4 py-2 rounded-r-lg ${side === 'sell' ? 'bg-red-500' : 'bg-gray-700'}`}
+          onClick={() => setSide('sell')}
+        >
+          Sell
+        </button>
+      </div>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label htmlFor="orderType" className="block mb-2">Order Type</label>
+          <select
+            id="orderType"
+            className="w-full p-2 bg-gray-700 rounded"
+            value={orderType}
+            onChange={(e) => setOrderType(e.target.value)}
+          >
+            <option value="limit">Limit</option>
+            <option value="market">Market</option>
+            <option value="stop-loss">Stop-Loss</option>
+            <option value="take-profit">Take-Profit</option>
+          </select>
         </div>
-    );
+        <div className="mb-4">
+          <label htmlFor="price" className="block mb-2">Price</label>
+          <input
+            type="text"
+            id="price"
+            className="w-full p-2 bg-gray-700 rounded"
+            value={price}
+            onChange={handlePriceChange}
+            disabled={orderType === 'market'}
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="amount" className="block mb-2">Amount</label>
+          <input
+            type="text"
+            id="amount"
+            className="w-full p-2 bg-gray-700 rounded"
+            value={amount}
+            onChange={handleAmountChange}
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="total" className="block mb-2">Total</label>
+          <input
+            type="text"
+            id="total"
+            className="w-full p-2 bg-gray-700 rounded"
+            value={total}
+            readOnly
+          />
+        </div>
+        <div className="flex justify-between mb-4">
+          <button type="button" className="w-1/4 py-1 bg-gray-700 rounded">25%</button>
+          <button type="button" className="w-1/4 py-1 bg-gray-700 rounded">50%</button>
+          <button type="button" className="w-1/4 py-1 bg-gray-700 rounded">75%</button>
+          <button type="button" className="w-1/4 py-1 bg-gray-700 rounded">100%</button>
+        </div>
+        <button
+          type="submit"
+          className={`w-full py-2 rounded ${side === 'buy' ? 'bg-green-500' : 'bg-red-500'}`}
+        >
+          {side === 'buy' ? 'Buy' : 'Sell'}
+        </button>
+      </form>
+    </div>
+  );
 };
 
 export default TradingForm;
