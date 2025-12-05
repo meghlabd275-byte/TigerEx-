@@ -1,0 +1,515 @@
+version: '3.8'
+
+services:
+  # ============= CORE DATABASES =============
+  postgres:
+    image: postgres:15-alpine
+    container_name: tigerex-postgres
+    environment:
+      POSTGRES_DB: tigerex
+      POSTGRES_USER: tigerex_admin
+      POSTGRES_PASSWORD: TigerEx2024SecureDB!
+      POSTGRES_MULTIPLE_DATABASES: tigerex_trading,tigerex_users,tigerex_analytics
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tigerex_admin -d tigerex"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  redis:
+    image: redis:7-alpine
+    container_name: tigerex-redis
+    command: redis-server --appendonly yes --requirepass TigerEx2024Redis!
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  mongodb:
+    image: mongo:7
+    container_name: tigerex-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: tigerex_admin
+      MONGO_INITDB_ROOT_PASSWORD: TigerEx2024Mongo!
+      MONGO_INITDB_DATABASE: tigerex
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ============= TIGEREX UNIFIED SERVICES =============
+
+  # Tiger User Service - User Management & Authentication
+  tiger-user-service:
+    build:
+      context: ./backend/tiger-user-service
+      dockerfile: Dockerfile
+    container_name: tigerex-user-service
+    environment:
+      - DATABASE_URL=postgresql://tigerex_admin:TigerEx2024SecureDB!@postgres:5432/tigerex
+      - JWT_SECRET_KEY=TigerEx2024JWTSecretKey!
+      - REDIS_URL=redis://:TigerEx2024Redis!@redis:6379/0
+    ports:
+      - "5001:5001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Tiger Pay Service - Payment Gateway
+  tiger-pay-service:
+    build:
+      context: ./backend/tiger-pay-service
+      dockerfile: Dockerfile
+    container_name: tigerex-pay-service
+    environment:
+      - DATABASE_URL=postgresql://tigerex_admin:TigerEx2024SecureDB!@postgres:5432/tigerex
+      - JWT_SECRET_KEY=TigerEx2024JWTSecretKey!
+      - REDIS_URL=redis://:TigerEx2024Redis!@redis:6379/0
+    ports:
+      - "5002:5002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5002/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Tiger Card Service - Debit Card Management
+  tiger-card-service:
+    build:
+      context: ./backend/tiger-card-service
+      dockerfile: Dockerfile
+    container_name: tigerex-card-service
+    environment:
+      - DATABASE_URL=postgresql://tigerex_admin:TigerEx2024SecureDB!@postgres:5432/tigerex
+      - JWT_SECRET_KEY=TigerEx2024JWTSecretKey!
+      - REDIS_URL=redis://:TigerEx2024Redis!@redis:6379/0
+    ports:
+      - "5003:5003"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5003/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Tiger Academy Service - Educational Platform
+  tiger-academy-service:
+    build:
+      context: ./backend/tiger-academy-service
+      dockerfile: Dockerfile
+    container_name: tigerex-academy-service
+    environment:
+      - DATABASE_URL=postgresql://tigerex_admin:TigerEx2024SecureDB!@postgres:5432/tigerex
+      - JWT_SECRET_KEY=TigerEx2024JWTSecretKey!
+      - REDIS_URL=redis://:TigerEx2024Redis!@redis:6379/0
+    ports:
+      - "5004:5004"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5004/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Tiger Staking Service - Staking Platform
+  tiger-staking-service:
+    build:
+      context: ./backend/tiger-staking-service
+      dockerfile: Dockerfile
+    container_name: tigerex-staking-service
+    environment:
+      - DATABASE_URL=postgresql://tigerex_admin:TigerEx2024SecureDB!@postgres:5432/tigerex
+      - JWT_SECRET_KEY=TigerEx2024JWTSecretKey!
+      - REDIS_URL=redis://:TigerEx2024Redis!@redis:6379/0
+    ports:
+      - "5005:5005"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5005/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Tiger Trading Service - Unified Trading Platform
+  tiger-trading-service:
+    build:
+      context: ./backend/tiger-trading-service
+      dockerfile: Dockerfile
+    container_name: tigerex-trading-service
+    environment:
+      - DATABASE_URL=postgresql://tigerex_admin:TigerEx2024SecureDB!@postgres:5432/tigerex
+      - JWT_SECRET_KEY=TigerEx2024JWTSecretKey!
+      - REDIS_URL=redis://:TigerEx2024Redis!@redis:6379/0
+    ports:
+      - "5006:5006"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5006/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Tiger Wallet Service - Multi-Chain Wallet
+  tiger-wallet-service:
+    build:
+      context: ./backend/tiger-wallet-service
+      dockerfile: Dockerfile
+    container_name: tigerex-wallet-service
+    environment:
+      - DATABASE_URL=postgresql://tigerex_admin:TigerEx2024SecureDB!@postgres:5432/tigerex
+      - JWT_SECRET_KEY=TigerEx2024JWTSecretKey!
+      - REDIS_URL=redis://:TigerEx2024Redis!@redis:6379/0
+    ports:
+      - "5007:5007"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5007/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Tiger Admin Service - Admin Control System
+  tiger-admin-service:
+    build:
+      context: ./backend/tiger-admin-service
+      dockerfile: Dockerfile
+    container_name: tigerex-admin-service
+    environment:
+      - DATABASE_URL=postgresql://tigerex_admin:TigerEx2024SecureDB!@postgres:5432/tigerex
+      - JWT_SECRET_KEY=TigerEx2024JWTSecretKey!
+      - REDIS_URL=redis://:TigerEx2024Redis!@redis:6379/0
+    ports:
+      - "5008:5008"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5008/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Tiger NFT Service - NFT Marketplace & Launchpad
+  tiger-nft-service:
+    build:
+      context: ./backend/tiger-nft-service
+      dockerfile: Dockerfile
+    container_name: tigerex-nft-service
+    environment:
+      - DATABASE_URL=postgresql://tigerex_admin:TigerEx2024SecureDB!@postgres:5432/tigerex
+      - JWT_SECRET_KEY=TigerEx2024JWTSecretKey!
+      - REDIS_URL=redis://:TigerEx2024Redis!@redis:6379/0
+    ports:
+      - "5009:5009"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5009/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Tiger Trading Bots Service - Automated Trading
+  tiger-trading-bots-service:
+    build:
+      context: ./backend/tiger-trading-bots-service
+      dockerfile: Dockerfile
+    container_name: tigerex-trading-bots-service
+    environment:
+      - DATABASE_URL=postgresql://tigerex_admin:TigerEx2024SecureDB!@postgres:5432/tigerex
+      - JWT_SECRET_KEY=TigerEx2024JWTSecretKey!
+      - REDIS_URL=redis://:TigerEx2024Redis!@redis:6379/0
+    ports:
+      - "5010:5010"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5010/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ============= INFRASTRUCTURE SERVICES =============
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: tigerex-nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - tiger-user-service
+      - tiger-pay-service
+      - tiger-card-service
+      - tiger-academy-service
+      - tiger-staking-service
+      - tiger-trading-service
+      - tiger-wallet-service
+      - tiger-admin-service
+      - tiger-nft-service
+      - tiger-trading-bots-service
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # API Gateway
+  api-gateway:
+    image: nginx:alpine
+    container_name: tigerex-api-gateway
+    volumes:
+      - ./api-gateway.conf:/etc/nginx/nginx.conf
+    ports:
+      - "8080:80"
+    depends_on:
+      - tiger-user-service
+      - tiger-pay-service
+      - tiger-card-service
+      - tiger-academy-service
+      - tiger-staking-service
+      - tiger-trading-service
+      - tiger-wallet-service
+      - tiger-admin-service
+      - tiger-nft-service
+      - tiger-trading-bots-service
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # ============= MONITORING =============
+
+  # Prometheus Monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: tigerex-prometheus
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Grafana Dashboard
+  grafana:
+    image: grafana/grafana:latest
+    container_name: tigerex-grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=TigerEx2024Grafana!
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana:/etc/grafana/provisioning
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # ============= LOGGING =============
+
+  # ELK Stack
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+    container_name: tigerex-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.8.0
+    container_name: tigerex-logstash
+    volumes:
+      - ./logging/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    ports:
+      - "5044:5044"
+    depends_on:
+      - elasticsearch
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.8.0
+    container_name: tigerex-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # ============= FRONTEND APPLICATIONS =============
+
+  # Web Application
+  web-app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: tigerex-web-app
+    environment:
+      - REACT_APP_API_URL=http://localhost:8080
+      - REACT_APP_WS_URL=ws://localhost:8080
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api-gateway
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+  # Mobile API Gateway
+  mobile-api:
+    image: nginx:alpine
+    container_name: tigerex-mobile-api
+    volumes:
+      - ./mobile-api.conf:/etc/nginx/nginx.conf
+    ports:
+      - "8081:80"
+    depends_on:
+      - tiger-user-service
+      - tiger-pay-service
+      - tiger-card-service
+      - tiger-academy-service
+      - tiger-staking-service
+      - tiger-trading-service
+      - tiger-wallet-service
+      - tiger-admin-service
+      - tiger-nft-service
+      - tiger-trading-bots-service
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+
+# ============= VOLUMES =============
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  mongodb_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+
+# ============= NETWORKS =============
+networks:
+  tigerex-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
