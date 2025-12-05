@@ -28,6 +28,13 @@ class GeminiFeature(str, Enum):
     RECURRING_BUYS = "recurring_buys"
     INTEREST_EARNING = "interest_earning"
     STAKING = "staking"
+    ACTIVETRADER_PRO = "activetrader_pro"
+    GEMINI_PAY = "gemini_pay"
+    GEMINI_CARD = "gemini_card"
+    GEMINI_EARN_ENHANCED = "gemini_earn_enhanced"
+    CUSTODY_ADVANCED = "custody_advanced"
+    CLEARING_SETTLEMENT = "clearing_settlement"
+    DERIVATIVES_EXCHANGE = "derivatives_exchange"
 
 class GeminiConfig:
     API_KEY = os.getenv("GEMINI_API_KEY")
@@ -436,6 +443,307 @@ async def get_candles(symbol: str, time_frame: str = "1day"):
                 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# ==================== UNIQUE GEMINI FEATURES ====================
+
+@app.get("/activetrader/pro")
+async def get_activetrader_pro():
+    """Get Gemini ActiveTrader Pro advanced trading interface"""
+    return {
+        "features": [
+            {
+                "feature": "Advanced Order Types",
+                "types": ["Iceberg", "Hidden", "Fill-or-Kill", "Immediate-or-Cancel"],
+                "description": "Sophisticated order execution strategies"
+            },
+            {
+                "feature": "Real-time Market Data",
+                "data_feeds": ["Level 2 quotes", "Time & Sales", "Market depth"],
+                "latency": "< 10ms"
+            },
+            {
+                "feature": "Dynamic Fee Structure",
+                "tiers": [
+                    {"volume": ">$10M/month", "maker_fee": "0.0%", "taker_fee": "0.1%"},
+                    {"volume": ">$1M/month", "maker_fee": "0.05%", "taker_fee": "0.15%"}
+                ]
+            }
+        ],
+        "trading_tools": [
+            "Advanced charting with 100+ indicators",
+            "Risk management dashboard",
+            "Portfolio analytics",
+            "Algorithmic trading interface"
+        ],
+        "api_access": {
+            "rest_api": "Full trading capabilities",
+            "websocket_api": "Real-time streaming",
+            "fix_protocol": "Institutional connectivity"
+        }
+    }
+
+@app.get("/gemini/pay")
+async def get_gemini_pay():
+    """Get Gemini Pay payment solution"""
+    return {
+        "payment_solution": {
+            "name": "Gemini Pay",
+            "type": "P2P and merchant payment solution",
+            "technology": "Gemini Dollar (GUSD) stablecoin"
+        },
+        "features": [
+            {
+                "feature": "Instant Settlement",
+                "description": "Near-instant peer-to-peer transfers",
+                "settlement_time": "< 2 seconds"
+            },
+            {
+                "feature": "Zero Fees",
+                "description": "No transaction fees for Gemini Pay users",
+                "network_fees": "Waived for GUSD transactions"
+            },
+            {
+                "feature": "Merchant Integration",
+                "description": "Easy API integration for merchants",
+                "integration": "Plugin for major e-commerce platforms"
+            }
+        ],
+        "supported_assets": ["GUSD", "BTC", "ETH", "LTC", "BCH", "ZEC", "XRP", "DOGE"],
+        "limits": {
+            "daily_send": "$10,000",
+            "daily_receive": "$50,000",
+            "monthly_limit": "$100,000"
+        }
+    }
+
+@app.get("/gemini/card")
+async def get_gemini_card():
+    """Get Gemini credit card features"""
+    return {
+        "card_product": {
+            "name": "Gemini Credit Card",
+            "issuer": "WebBank",
+            "network": "Mastercard",
+            "rewards": "Bitcoin rewards"
+        },
+        "rewards_structure": [
+            {
+                "category": "Dining",
+                "reward_rate": "3% back in BTC",
+                "examples": ["Restaurants", "Bars", "Food delivery"]
+            },
+            {
+                "category": "Groceries",
+                "reward_rate": "2% back in BTC",
+                "examples": ["Supermarkets", "Food stores"]
+            },
+            {
+                "category": "All other purchases",
+                "reward_rate": "1% back in BTC",
+                "examples": ["Retail", "Online shopping", "Services"]
+            }
+        ],
+        "card_features": [
+            "No annual fee",
+            "No foreign transaction fees",
+            "Contactless payments",
+            "Mobile wallet support",
+            "Real-time rewards tracking"
+        ],
+        "approval_requirements": {
+            "minimum_credit_score": "660",
+            "kyc_required": True,
+            "us_residents": True
+        }
+    }
+
+@app.get("/gemini/earn/enhanced")
+async def get_gemini_earn_enhanced():
+    """Get Gemini Earn enhanced interest program"""
+    return {
+        "earn_program": {
+            "name": "Gemini Earn Enhanced",
+            "description": "Enhanced yield program with higher APYs",
+            "risk_level": "Institutional-grade lending"
+        },
+        "interest_rates": [
+            {
+                "asset": "GUSD",
+                "apy": "7.25%",
+                "compounding": "Daily",
+                "minimum": "$100"
+            },
+            {
+                "asset": "USDC",
+                "apy": "6.95%",
+                "compounding": "Daily",
+                "minimum": "$100"
+            },
+            {
+                "asset": "BTC",
+                "apy": "4.50%",
+                "compounding": "Daily",
+                "minimum": "0.001 BTC"
+            },
+            {
+                "asset": "ETH",
+                "apy": "4.25%",
+                "compounding": "Daily",
+                "minimum": "0.01 ETH"
+            }
+        ],
+        "enhanced_features": [
+            "Tiered interest rates based on balance",
+            "Insurance coverage up to $200M",
+            "Instant withdrawals up to $100K",
+            "Auto-compounding option",
+            "Tax optimization tools"
+        ],
+        "lending_partners": [
+            "Genesis Global Trading",
+            "BlockFi",
+            "Institutional borrowers"
+        ]
+    }
+
+@app.get("/custody/advanced")
+async def get_custody_advanced():
+    """Get Gemini advanced custody services"""
+    return {
+        "custody_solution": {
+            "name": "Gemini Custody Advanced",
+            "type": "Institutional-grade crypto custody",
+            "regulation": "NYDFS regulated trust company"
+        },
+        "security_features": [
+            {
+                "feature": "Multi-signature Security",
+                "description": "Multiple keys required for transactions",
+                "key_distribution": "Geographically distributed"
+            },
+            {
+                "feature": "Cold Storage",
+                "description": "Majority of assets in air-gapped cold storage",
+                "online_ratio": "Less than 2% online"
+            },
+            {
+                "feature": "Insurance Coverage",
+                "description": "Comprehensive insurance protection",
+                "coverage_amount": "$200M+"
+            }
+        ],
+        "supported_assets": [
+            "All major cryptocurrencies",
+            "Stablecoins",
+            "DeFi tokens",
+            "Custom token support"
+        ],
+        "governance_features": [
+            "Multi-user controls",
+            "Role-based permissions",
+            "Transaction policies",
+            "Audit trails",
+            "Compliance reporting"
+        ],
+        "integration_options": [
+            "API access",
+            "Webhooks",
+            "Reporting tools",
+            "Third-party integration"
+        ]
+    }
+
+@app.get("/clearing/settlement")
+async def get_clearing_settlement():
+    """Get Gemini clearing and settlement services"""
+    return {
+        "clearing_services": {
+            "name": "Gemini Clearing",
+            "type": "Principal clearing and settlement",
+            "regulation": "SEC-registered broker-dealer"
+        },
+        "services": [
+            {
+                "service": "Trade Clearing",
+                "description": "Principal clearing of crypto trades",
+                "benefits": ["Reduced counterparty risk", "Faster settlement", "Improved efficiency"]
+            },
+            {
+                "service": "Settlement Services",
+                "description": "End-to-end settlement solution",
+                "settlement_time": "T+0 for many assets",
+                "automation": "Highly automated process"
+            }
+        ],
+        "institutional_benefits": [
+            "Capital efficiency",
+            "Risk management",
+            "Regulatory compliance",
+            "Operational efficiency",
+            "Reporting transparency"
+        ],
+        "supported_markets": [
+            "Spot markets",
+            "Futures markets",
+            "Options markets",
+            "Institutional markets"
+        ],
+        "compliance_standards": [
+            "SEC compliance",
+            "FINRA oversight",
+            "AML/KYC procedures",
+            "Regular audits"
+        ]
+    }
+
+@app.get("/derivatives/exchange")
+async def get_derivatives_exchange():
+    """Get Gemini derivatives exchange platform"""
+    return {
+        "derivatives_platform": {
+            "name": "Gemini Derivatives Exchange",
+            "regulation": "CFTC-regulated",
+            "launch_status": "Coming soon"
+        },
+        "planned_products": [
+            {
+                "product": "Bitcoin Futures",
+                "contract_size": "1 BTC",
+                "settlement": "Cash-settled",
+                "margin": "Portfolio margining"
+            },
+            {
+                "product": "Ethereum Futures",
+                "contract_size": "10 ETH",
+                "settlement": "Cash-settled",
+                "margin": "Portfolio margining"
+            },
+            {
+                "product": "Options on Crypto",
+                "underlying": ["BTC", "ETH"],
+                "style": "European style",
+                "settlement": "Cash-settled"
+            }
+        ],
+        "advanced_features": [
+            "Portfolio margining",
+            "Cross-margining",
+            "Algorithmic trading",
+            "Risk management tools",
+            "Institutional connectivity"
+        ],
+        "market_making": {
+            "in_house_making": "Proprietary market making",
+            "external_makers": "Qualified market maker program",
+            "liquidity_incentives": "Tiered fee rebates"
+        },
+        "compliance_focus": [
+            "Regulated marketplace",
+            "Market surveillance",
+            "Position limits",
+            "Reporting requirements"
+        ]
+    }
 
 if __name__ == "__main__":
     import uvicorn

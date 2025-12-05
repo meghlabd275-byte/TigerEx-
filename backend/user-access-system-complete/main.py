@@ -59,6 +59,12 @@ class UserRole(str, Enum):
     VIP_USER = "vip_user"
     INSTITUTIONAL = "institutional"
     ADMIN = "admin"
+    SUPER_ADMIN = "super_admin"
+    EXCHANGE_ADMIN = "exchange_admin"
+    COMPLIANCE_OFFICER = "compliance_officer"
+    SUPPORT_AGENT = "support_agent"
+    MARKET_MAKER = "market_maker"
+    API_USER = "api_user"
 
 class KYCStatus(str, Enum):
     NOT_STARTED = "not_started"
