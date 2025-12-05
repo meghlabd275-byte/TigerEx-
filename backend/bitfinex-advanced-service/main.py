@@ -1,13 +1,14 @@
 """
-Bitfinex Advanced Service - Complete Bitfinex Integration
+Bitfinex Advanced Service - Complete Bitfinex Integration for TigerEx
 All unique Bitfinex features including advanced trading, derivatives, funding, etc.
+TigerEx Branded Implementation
 """
 
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, Query
 from fastapi.security import HTTPBearer
-from pydantic import BaseModel
-from typing import Optional, List, Dict, Any
-from datetime import datetime
+from pydantic import BaseModel, Field
+from typing import Optional, List, Dict, Any, Union
+from datetime import datetime, timedelta
 from enum import Enum
 import aiohttp
 import hashlib
@@ -15,367 +16,410 @@ import hmac
 import base64
 import json
 import logging
+import os
+import time
+import urllib.parse
+from dataclasses import dataclass
 
-app = FastAPI(title="Bitfinex Advanced Service v1.0.0", version="1.0.0")
+app = FastAPI(
+    title="TigerEx Bitfinex Advanced Service v1.0.0", 
+    version="1.0.0",
+    description="Complete Bitfinex integration for TigerEx trading platform"
+)
 security = HTTPBearer()
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class BitfinexFeature(str, Enum):
     SPOT_TRADING = "spot_trading"
     MARGIN_TRADING = "margin_trading"
-    DERIVATIVES = "derivatives"
+    DERIVATIVES_TRADING = "derivatives_trading"
     FUNDING = "funding"
     STAKING = "staking"
     LENDING = "lending"
     OTC_DESK = "otc_desk"
-    ORDER_TYPES = "advanced_order_types"
+    ADVANCED_ORDER_TYPES = "advanced_order_types"
+    DERIVATIVES_FUTURES = "derivatives_futures"
+    DERIVATICES_OPTIONS = "derivatives_options"
+    PORTFOLIO_MANAGEMENT = "portfolio_management"
+    MOBILE_TRADING = "mobile_trading"
+    API_TRADING = "api_trading"
 
+class OrderType(str, Enum):
+    MARKET = "MARKET"
+    LIMIT = "LIMIT"
+    STOP = "STOP"
+    STOP_LIMIT = "STOP_LIMIT"
+    TRAILING_STOP = "TRAILING_STOP"
+    FILL_OR_KILL = "FOK"
+    IMMEDIATE_OR_CANCEL = "IOC"
+    HIDDEN = "HIDDEN"
+
+class Side(str, Enum):
+    BUY = "buy"
+    SELL = "sell"
+
+@dataclass
 class BitfinexConfig:
-    API_KEY = os.getenv("BITFINEX_API_KEY")
-    API_SECRET = os.getenv("BITFINEX_SECRET")
-    BASE_URL = "https://api-pub.bitfinex.com/v2"
-    AUTH_URL = "https://api.bitfinex.com/v2"
-
+    API_KEY: str = os.getenv("BITFINEX_API_KEY")
+    API_SECRET: str = os.getenv("BITFINEX_SECRET")
+    BASE_URL: str = "https://api-pub.bitfinex.com/v2"
+    AUTH_URL: str = "https://api.bitfinex.com/v2"
+    
     @staticmethod
-    def get_signature(path: str, body: str, nonce: int) -> str:
+    def get_signature(path: str, body: str, nonce: str) -> str:
         """Generate Bitfinex API signature"""
         message = f"/api/v2{path}{nonce}{body}"
         signature = hmac.new(
-            BitfinexConfig.API_SECRET.encode(),
-            message.encode(),
+            BitfinexConfig.API_SECRET.encode('utf-8'),
+            message.encode('utf-8'),
             hashlib.sha384
         ).hexdigest()
         return signature
-
+    
     @staticmethod
-    def get_auth_headers(path: str, body: str = "") -> Dict:
-        """Get authentication headers"""
-        nonce = int(time.time() * 1000)
+    def get_auth_headers(path: str, body: str = "") -> Dict[str, str]:
+        """Get authenticated headers for Bitfinex API"""
+        nonce = str(int(time.time() * 1000))
         signature = BitfinexConfig.get_signature(path, body, nonce)
         
         return {
-            "bfx-apikey": BitfinexConfig.API_KEY,
-            "bfx-signature": signature,
-            "bfx-nonce": str(nonce),
-            "Content-Type": "application/json"
+            'bfx-nonce': nonce,
+            'bfx-apikey': BitfinexConfig.API_KEY,
+            'bfx-signature': signature,
+            'Content-Type': 'application/json'
         }
 
-class TradingPair(BaseModel):
-    symbol: str
-    base_currency: str
-    quote_currency: str
-    price_precision: int
-    initial_margin: str
-    minimum_order_size: str
+class BitfinexOrder(BaseModel):
+    symbol: str = Field(..., description="Trading symbol")
+    side: Side = Field(..., description="Order side")
+    order_type: OrderType = Field(..., description="Order type")
+    amount: str = Field(..., description="Order amount")
+    price: Optional[str] = Field(None, description="Order price")
+    use_lev: Optional[int] = Field(None, description="Leverage")
+    stop_price: Optional[str] = Field(None, description="Stop price")
+    trailing_stop: Optional[float] = Field(None, description="Trailing stop")
+    hidden: Optional[bool] = Field(False, description="Hidden order")
+    oco_order: Optional[Dict[str, Any]] = Field(None, description="OCO order")
+    aff_code: Optional[str] = Field(None, description="Affiliate code")
 
-class OrderRequest(BaseModel):
-    symbol: str
-    amount: float
-    price: Optional[float] = None
-    side: str  # buy/sell
-    type: str  # exchange/market/limit
-    flags: Optional[List[int]] = None
-
-class FundingRequest(BaseModel):
-    currency: str
-    amount: float
-    rate: float
-    period: int
-    direction: str  # lend/borrow
-
-@app.get("/")
-async def root():
-    return {
-        "service": "Bitfinex Advanced Service",
-        "features": [feature.value for feature in BitfinexFeature],
-        "status": "operational"
-    }
-
-@app.get("/trading/pairs")
-async def get_trading_pairs():
-    """Get all available trading pairs"""
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(f"{BitfinexConfig.BASE_URL}/conf/pub:list:pair:exchange") as response:
-                data = await response.json()
-                
-                pairs = []
-                symbols = data[0]  # Bitfinex returns array in first element
-                
-                # Get detailed info for each pair
-                for symbol in symbols[:100]:  # Limit to first 100 for performance
-                    try:
-                        async with session.get(f"{BitfinexConfig.BASE_URL}/conf/pub:info:pair:{symbol}") as response:
-                            pair_info = await response.json()
-                            if pair_info[0]:  # If data exists
-                                info = pair_info[0][0]
-                                pairs.append(TradingPair(
-                                    symbol=symbol,
-                                    base_currency=info[0],
-                                    quote_currency=info[1],
-                                    price_precision=info[2],
-                                    initial_margin=info[3],
-                                    minimum_order_size=info[4]
-                                ))
-                    except:
-                        continue
-                
-                return {"pairs": pairs}
-                
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/trading/ticker/{symbol}")
-async def get_ticker(symbol: str):
-    """Get ticker information for a symbol"""
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(f"{BitfinexConfig.BASE_URL}/ticker/t{symbol}") as response:
-                data = await response.json()
-                
-                if data:
-                    return {
-                        "symbol": symbol,
-                        "bid": data[0],
-                        "bid_size": data[1],
-                        "ask": data[2],
-                        "ask_size": data[3],
-                        "daily_change": data[4],
-                        "daily_change_perc": data[5],
-                        "last_price": data[6],
-                        "volume": data[7],
-                        "high": data[8],
-                        "low": data[9]
-                    }
-                else:
-                    return {"symbol": symbol, "status": "no_data"}
-                
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/trading/orderbook/{symbol}")
-async def get_orderbook(symbol: str, precision: str = "P0", len: int = 25):
-    """Get order book for a symbol"""
-    try:
-        params = {"len": str(len)}
-        async with aiohttp.ClientSession() as session:
-            async with session.get(f"{BitfinexConfig.BASE_URL}/book/{symbol}/{precision}", params=params) as response:
-                data = await response.json()
-                
-                # Bitfinex returns [PRICE, COUNT, AMOUNT] format
-                bids = []
-                asks = []
-                
-                for item in data:
-                    price, count, amount = item
-                    if amount > 0:  # Bids
-                        bids.append([price, abs(amount)])
-                    else:  # Asks
-                        asks.append([price, abs(amount)])
-                
-                return {
-                    "symbol": symbol,
-                    "bids": bids,
-                    "asks": asks,
-                    "timestamp": datetime.utcnow()
-                }
-                
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.post("/trading/order")
-async def place_order(order: OrderRequest):
-    """Place trading order"""
-    try:
-        path = "/auth/w/order/submit"
-        url = BitfinexConfig.AUTH_URL + path
+class TigerExBitfinexService:
+    def __init__(self):
+        self.config = BitfinexConfig()
+        self.session = None
+    
+    async def __aenter__(self):
+        self.session = aiohttp.ClientSession()
+        return self
+    
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        if self.session:
+            await self.session.close()
+    
+    async def get_account_info(self) -> Dict[str, Any]:
+        """Get account information"""
+        url = f"{self.config.AUTH_URL}/auth/r/wallets"
         
-        payload = {
-            "type": order.type,
-            "symbol": f"t{order.symbol}",
-            "amount": str(order.amount),
-            "side": order.side[0].upper()  # Buy -> B, Sell -> S
+        headers = BitfinexConfig.get_auth_headers("/auth/r/wallets")
+        
+        async with self.session.post(url, headers=headers) as response:
+            if response.status != 200:
+                raise HTTPException(status_code=response.status, detail=await response.text())
+            return await response.json()
+    
+    async def place_order(self, order: BitfinexOrder) -> Dict[str, Any]:
+        """Place an order on Bitfinex"""
+        url = f"{self.config.AUTH_URL}/auth/w/order/submit"
+        
+        order_data = {
+            "symbol": order.symbol,
+            "side": order.side.value,
+            "type": order.order_type.value,
+            "amount": order.amount
         }
         
         if order.price:
-            payload["price"] = str(order.price)
+            order_data["price"] = order.price
+        if order.use_lev:
+            order_data["lev"] = order.use_lev
+        if order.stop_price:
+            order_data["price_trailing"] = order.stop_price
+        if order.trailing_stop:
+            order_data["trailing_amount"] = order.trailing_stop
+        if order.hidden:
+            order_data["hidden"] = 1
+        if order.oco_order:
+            order_data.update(order.oco_order)
         
-        if order.flags:
-            payload["flags"] = order.flags
+        body = json.dumps(order_data)
+        headers = BitfinexConfig.get_auth_headers("/auth/w/order/submit", body)
         
-        body = json.dumps(payload)
-        headers = BitfinexConfig.get_auth_headers(path, body)
+        async with self.session.post(url, headers=headers, data=body) as response:
+            if response.status != 200:
+                raise HTTPException(status_code=response.status, detail=await response.text())
+            return await response.json()
+    
+    async def get_trading_pairs(self) -> List[Dict[str, Any]]:
+        """Get all trading symbols"""
+        url = f"{self.config.BASE_URL}/conf/pub:list:pair:exchange"
         
-        async with aiohttp.ClientSession() as session:
-            async with session.post(url, data=body, headers=headers) as response:
-                return await response.json()
-                
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/derivatives/symbols")
-async def get_derivatives_symbols():
-    """Get derivatives trading symbols"""
-    try:
-        async with aiohttp.ClientSession() as session:
-            # Get futures symbols
-            async with session.get(f"{BitfinexConfig.BASE_URL}/conf/pub:list:pair:futures") as response:
-                futures_data = await response.json()
-                
-            # Get perpetual swap symbols
-            async with session.get(f"{BitfinexConfig.BASE_URL}/conf/pub:list:pair:perp") as response:
-                perp_data = await response.json()
-                
-            return {
-                "futures": futures_data[0] if futures_data else [],
-                "perpetual_swaps": perp_data[0] if perp_data else []
-            }
-                
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/funding/currencies")
-async def get_funding_currencies():
-    """Get available funding currencies"""
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(f"{BitfinexConfig.BASE_URL}/conf/pub:list:currency") as response:
-                data = await response.json()
-                return {"currencies": data[0] if data else []}
-                
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/funding/ticker/{currency}")
-async def get_funding_ticker(currency: str):
-    """Get funding ticker for a currency"""
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(f"{BitfinexConfig.BASE_URL}/f/stats/{currency}") as response:
-                return await response.json()
-                
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.post("/funding/offer")
-async def create_funding_offer(funding: FundingRequest):
-    """Create funding offer"""
-    try:
-        path = "/auth/w/funding/offer/submit"
-        url = BitfinexConfig.AUTH_URL + path
+        async with self.session.get(url) as response:
+            if response.status != 200:
+                raise HTTPException(status_code=response.status, detail=await response.text())
+            return await response.json()
+    
+    async def get_ticker(self, symbol: str) -> Dict[str, Any]:
+        """Get ticker information for a symbol"""
+        url = f"{self.config.BASE_URL}/ticker/t{symbol}"
         
-        payload = {
-            "type": "f",
-            "symbol": f"f{funding.currency}",
-            "amount": str(funding.amount),
-            "rate": str(funding.rate),
-            "period": funding.period
+        async with self.session.get(url) as response:
+            if response.status != 200:
+                raise HTTPException(status_code=response.status, detail=await response.text())
+            return await response.json()
+    
+    async def get_orderbook(self, symbol: str, limit: int = 100) -> Dict[str, Any]:
+        """Get order book depth for a symbol"""
+        url = f"{self.config.BASE_URL}/book/t{symbol}/P{limit}"
+        
+        async with self.session.get(url) as response:
+            if response.status != 200:
+                raise HTTPException(status_code=response.status, detail=await response.text())
+            return await response.json()
+    
+    async def get_recent_trades(self, symbol: str, limit: int = 100) -> List[Dict[str, Any]]:
+        """Get recent trades list for a symbol"""
+        url = f"{self.config.BASE_URL}/trades/t{symbol}/hist"
+        
+        params = {"limit": limit}
+        
+        async with self.session.get(url, params=params) as response:
+            if response.status != 200:
+                raise HTTPException(status_code=response.status, detail=await response.text())
+            return await response.json()
+    
+    async def get_klines(
+        self, 
+        symbol: str, 
+        timeframe: str = "1m", 
+        start: Optional[str] = None,
+        end: Optional[str] = None,
+        limit: int = 100
+    ) -> List[List[str]]:
+        """Get historical candlestick data"""
+        url = f"{self.config.BASE_URL}/candles/trade:{timeframe}:t{symbol}/hist"
+        
+        params = {
+            "limit": limit
         }
         
-        body = json.dumps(payload)
-        headers = BitfinexConfig.get_auth_headers(path, body)
+        if start:
+            params["start"] = start
+        if end:
+            params["end"] = end
         
-        async with aiohttp.ClientSession() as session:
-            async with session.post(url, data=body, headers=headers) as response:
-                return await response.json()
-                
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/margin/info/{symbol}")
-async def get_margin_info(symbol: str):
-    """Get margin trading information"""
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(f"{BitfinexConfig.BASE_URL}/conf/pub:info:pair:{symbol}") as response:
-                data = await response.json()
-                
-                if data and data[0]:
-                    info = data[0][0]
-                    return {
-                        "symbol": symbol,
-                        "initial_margin": info[3],
-                        "max_leverage": 1 / float(info[3]) if info[3] != "0" else 1,
-                        "minimum_order_size": info[4],
-                        "trading_fees": info[5]
-                    }
-                
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/lending/products")
-async def get_lending_products():
-    """Get lending products"""
-    try:
-        path = "/auth/r/stats/funding/earn"
-        url = BitfinexConfig.AUTH_URL + path
-        headers = BitfinexConfig.get_auth_headers(path)
+        async with self.session.get(url, params=params) as response:
+            if response.status != 200:
+                raise HTTPException(status_code=response.status, detail=await response.text())
+            return await response.json()
+    
+    async def get_derivatives_contracts(self) -> List[Dict[str, Any]]:
+        """Get derivatives contracts information"""
+        url = f"{self.config.BASE_URL}/conf/pub:list:contract:derivatives"
         
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url, headers=headers) as response:
-                return await response.json()
-                
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/account/wallet")
-async def get_wallet_balance():
-    """Get wallet balance"""
-    try:
-        path = "/auth/r/wallets"
-        url = BitfinexConfig.AUTH_URL + path
-        headers = BitfinexConfig.get_auth_headers(path)
+        async with self.session.get(url) as response:
+            if response.status != 200:
+                raise HTTPException(status_code=response.status, detail=await response.text())
+            return await response.json()
+    
+    async def get_funding_products(self) -> Dict[str, Any]:
+        """Get Bitfinex funding products"""
+        url = f"{self.config.AUTH_URL}/auth/r/info/funding"
         
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url, headers=headers) as response:
-                return await response.json()
-                
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        headers = BitfinexConfig.get_auth_headers("/auth/r/info/funding")
+        
+        async with self.session.post(url, headers=headers) as response:
+            if response.status != 200:
+                raise HTTPException(status_code=response.status, detail=await response.text())
+            return await response.json()
+    
+    async def get_staking_products(self) -> Dict[str, Any]:
+        """Get Bitfinex staking products"""
+        url = f"{self.config.AUTH_URL}/auth/r/staking/products"
+        
+        headers = BitfinexConfig.get_auth_headers("/auth/r/staking/products")
+        
+        async with self.session.post(url, headers=headers) as response:
+            if response.status != 200:
+                raise HTTPException(status_code=response.status, detail=await response.text())
+            return await response.json()
+    
+    async def get_lending_products(self) -> Dict[str, Any]:
+        """Get Bitfinex lending products"""
+        url = f"{self.config.AUTH_URL}/auth/r/funding/offer/hist"
+        
+        headers = BitfinexConfig.get_auth_headers("/auth/r/funding/offer/hist")
+        
+        async with self.session.post(url, headers=headers) as response:
+            if response.status != 200:
+                raise HTTPException(status_code=response.status, detail=await response.text())
+            return await response.json()
+    
+    async def get_portfolio_info(self) -> Dict[str, Any]:
+        """Get portfolio information"""
+        url = f"{self.config.AUTH_URL}/auth/r/portfolio"
+        
+        headers = BitfinexConfig.get_auth_headers("/auth/r/portfolio")
+        
+        async with self.session.post(url, headers=headers) as response:
+            if response.status != 200:
+                raise HTTPException(status_code=response.status, detail=await response.text())
+            return await response.json()
+    
+    async def get_derivatives_futures_positions(self) -> Dict[str, Any]:
+        """Get derivatives futures positions"""
+        url = f"{self.config.AUTH_URL}/auth/r/positions"
+        
+        headers = BitfinexConfig.get_auth_headers("/auth/r/positions")
+        
+        async with self.session.post(url, headers=headers) as response:
+            if response.status != 200:
+                raise HTTPException(status_code=response.status, detail=await response.text())
+            return await response.json()
+    
+    async def get_derivatives_options_info(self) -> Dict[str, Any]:
+        """Get derivatives options information"""
+        url = f"{self.config.BASE_URL}/conf/pub:list:contract:options"
+        
+        async with self.session.get(url) as response:
+            if response.status != 200:
+                raise HTTPException(status_code=response.status, detail=await response.text())
+            return await response.json()
 
-@app.get("/market/candles/{symbol}")
-async def get_candles(symbol: str, timeframe: str = "1h", limit: int = 100):
-    """Get candlestick data"""
-    try:
-        params = {"limit": str(limit)}
-        async with aiohttp.ClientSession() as session:
-            async with session.get(f"{BitfinexConfig.BASE_URL}/candles/trade:{timeframe}:t{symbol}", params=params) as response:
-                data = await response.json()
-                
-                # Bitfinex returns [MTS, OPEN, CLOSE, HIGH, LOW, VOLUME]
-                candles = []
-                for candle in data:
-                    candles.append({
-                        "timestamp": candle[0],
-                        "open": candle[1],
-                        "close": candle[2],
-                        "high": candle[3],
-                        "low": candle[4],
-                        "volume": candle[5]
-                    })
-                
-                return {
-                    "symbol": symbol,
-                    "timeframe": timeframe,
-                    "candles": candles
-                }
-                
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+# API Endpoints
+@app.get("/tigerex/bitfinex/account")
+async def get_account_info(credentials: str = Depends(security)):
+    """Get account information - TigerEx Bitfinex Integration"""
+    async with TigerExBitfinexService() as service:
+        return await service.get_account_info()
 
-@app.get("/order/types")
-async def get_order_types():
-    """Get available order types and flags"""
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(f"{BitfinexConfig.BASE_URL}/conf/pub:map:order:flags") as response:
-                data = await response.json()
-                return {"order_flags": data[0] if data else []}
-                
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+@app.post("/tigerex/bitfinex/order")
+async def place_order(order: BitfinexOrder, credentials: str = Depends(security)):
+    """Place order - TigerEx Bitfinex Integration"""
+    async with TigerExBitfinexService() as service:
+        return await service.place_order(order)
+
+@app.get("/tigerex/bitfinex/symbols")
+async def get_trading_pairs(credentials: str = Depends(security)):
+    """Get trading pairs - TigerEx Bitfinex Integration"""
+    async with TigerExBitfinexService() as service:
+        return await service.get_trading_pairs()
+
+@app.get("/tigerex/bitfinex/ticker")
+async def get_ticker(
+    symbol: str = Query(..., description="Symbol"),
+    credentials: str = Depends(security)
+):
+    """Get ticker - TigerEx Bitfinex Integration"""
+    async with TigerExBitfinexService() as service:
+        return await service.get_ticker(symbol)
+
+@app.get("/tigerex/bitfinex/orderbook")
+async def get_orderbook(
+    symbol: str = Query(..., description="Symbol"),
+    limit: int = Query(100, description="Limit"),
+    credentials: str = Depends(security)
+):
+    """Get orderbook - TigerEx Bitfinex Integration"""
+    async with TigerExBitfinexService() as service:
+        return await service.get_orderbook(symbol, limit)
+
+@app.get("/tigerex/bitfinex/trades")
+async def get_recent_trades(
+    symbol: str = Query(..., description="Symbol"),
+    limit: int = Query(100, description="Limit"),
+    credentials: str = Depends(security)
+):
+    """Get recent trades - TigerEx Bitfinex Integration"""
+    async with TigerExBitfinexService() as service:
+        return await service.get_recent_trades(symbol, limit)
+
+@app.get("/tigerex/bitfinex/klines")
+async def get_klines(
+    symbol: str = Query(..., description="Symbol"),
+    timeframe: str = Query("1m", description="Timeframe"),
+    start: Optional[str] = Query(None, description="Start"),
+    end: Optional[str] = Query(None, description="End"),
+    limit: int = Query(100, description="Limit"),
+    credentials: str = Depends(security)
+):
+    """Get klines - TigerEx Bitfinex Integration"""
+    async with TigerExBitfinexService() as service:
+        return await service.get_klines(symbol, timeframe, start, end, limit)
+
+@app.get("/tigerex/bitfinex/derivatives/contracts")
+async def get_derivatives_contracts(credentials: str = Depends(security)):
+    """Get derivatives contracts - TigerEx Bitfinex Integration"""
+    async with TigerExBitfinexService() as service:
+        return await service.get_derivatives_contracts()
+
+@app.get("/tigerex/bitfinex/funding")
+async def get_funding_products(credentials: str = Depends(security)):
+    """Get funding products - TigerEx Bitfinex Integration"""
+    async with TigerExBitfinexService() as service:
+        return await service.get_funding_products()
+
+@app.get("/tigerex/bitfinex/staking")
+async def get_staking_products(credentials: str = Depends(security)):
+    """Get staking products - TigerEx Bitfinex Integration"""
+    async with TigerExBitfinexService() as service:
+        return await service.get_staking_products()
+
+@app.get("/tigerex/bitfinex/lending")
+async def get_lending_products(credentials: str = Depends(security)):
+    """Get lending products - TigerEx Bitfinex Integration"""
+    async with TigerExBitfinexService() as service:
+        return await service.get_lending_products()
+
+@app.get("/tigerex/bitfinex/portfolio")
+async def get_portfolio_info(credentials: str = Depends(security)):
+    """Get portfolio info - TigerEx Bitfinex Integration"""
+    async with TigerExBitfinexService() as service:
+        return await service.get_portfolio_info()
+
+@app.get("/tigerex/bitfinex/derivatives/positions")
+async def get_derivatives_futures_positions(credentials: str = Depends(security)):
+    """Get derivatives positions - TigerEx Bitfinex Integration"""
+    async with TigerExBitfinexService() as service:
+        return await service.get_derivatives_futures_positions()
+
+@app.get("/tigerex/bitfinex/derivatives/options")
+async def get_derivatives_options_info(credentials: str = Depends(security)):
+    """Get derivatives options - TigerEx Bitfinex Integration"""
+    async with TigerExBitfinexService() as service:
+        return await service.get_derivatives_options_info()
+
+@app.get("/tigerex/bitfinex/features")
+async def get_available_features():
+    """Get available TigerEx Bitfinex features"""
+    return {
+        "service": "TigerEx Bitfinex Advanced Service",
+        "version": "1.0.0",
+        "features": [feature.value for feature in BitfinexFeature],
+        "supported_order_types": [ot.value for ot in OrderType],
+        "tigerex_integrated": True
+    }
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint"""
+    return {
+        "status": "healthy",
+        "service": "TigerEx Bitfinex Advanced Service",
+        "timestamp": datetime.now().isoformat()
+    }
 
 if __name__ == "__main__":
     import uvicorn
-    import time
-    import os
-    uvicorn.run(app, host="0.0.0.0", port=8002)
+    uvicorn.run(app, host="0.0.0.0", port=8014)

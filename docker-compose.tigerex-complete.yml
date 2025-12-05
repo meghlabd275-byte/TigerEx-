@@ -245,6 +245,97 @@ services:
       timeout: 10s
       retries: 3
 
+  # TigerEx MEXC Advanced Service
+  tigerex-mexc:
+    build: ./backend/mexc-advanced-service
+    container_name: tigerex-mexc
+    ports:
+      - "8010:8010"
+    environment:
+      - MEXC_API_KEY=${MEXC_API_KEY}
+      - MEXC_SECRET=${MEXC_SECRET}
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8010/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # TigerEx Bitget Advanced Service
+  tigerex-bitget:
+    build: ./backend/bitget-advanced-service
+    container_name: tigerex-bitget
+    ports:
+      - "8011:8011"
+    environment:
+      - BITGET_API_KEY=${BITGET_API_KEY}
+      - BITGET_SECRET=${BITGET_SECRET}
+      - BITGET_PASSPHRASE=${BITGET_PASSPHRASE}
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8011/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # TigerEx CoinW Advanced Service
+  tigerex-coinw:
+    build: ./backend/coinw-advanced-service
+    container_name: tigerex-coinw
+    ports:
+      - "8012:8012"
+    environment:
+      - COINW_API_KEY=${COINW_API_KEY}
+      - COINW_SECRET=${COINW_SECRET}
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8012/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # TigerEx WhiteBit Advanced Service
+  tigerex-whitebit:
+    build: ./backend/whitebit-advanced-service
+    container_name: tigerex-whitebit
+    ports:
+      - "8013:8013"
+    environment:
+      - WHITEBIT_API_KEY=${WHITEBIT_API_KEY}
+      - WHITEBIT_SECRET=${WHITEBIT_SECRET}
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8013/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # TigerEx Bitfinex Advanced Service
+  tigerex-bitfinex:
+    build: ./backend/bitfinex-advanced-service
+    container_name: tigerex-bitfinex
+    ports:
+      - "8014:8014"
+    environment:
+      - BITFINEX_API_KEY=${BITFINEX_API_KEY}
+      - BITFINEX_SECRET=${BITFINEX_SECRET}
+    networks:
+      - tigerex-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8014/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
   # ============= CORE TIGEREX APPLICATION =============
   app:
     build: .
@@ -262,6 +353,11 @@ services:
       - OKX_API_URL=http://tigerex-okx:8003
       - HTX_API_URL=http://tigerex-htx:8004
       - KUCOIN_API_URL=http://tigerex-kucoin:8005
+      - MEXC_API_URL=http://tigerex-mexc:8010
+      - BITGET_API_URL=http://tigerex-bitget:8011
+      - COINW_API_URL=http://tigerex-coinw:8012
+      - WHITEBIT_API_URL=http://tigerex-whitebit:8013
+      - BITFINEX_API_URL=http://tigerex-bitfinex:8014
     depends_on:
       postgres:
         condition: service_healthy
@@ -276,6 +372,18 @@ services:
       tigerex-bybit:
         condition: service_healthy
       tigerex-okx:
+        condition: service_healthy
+      tigerex-htx:
+        condition: service_healthy
+      tigerex-mexc:
+        condition: service_healthy
+      tigerex-bitget:
+        condition: service_healthy
+      tigerex-coinw:
+        condition: service_healthy
+      tigerex-whitebit:
+        condition: service_healthy
+      tigerex-bitfinex:
         condition: service_healthy
     networks:
       - tigerex-network
