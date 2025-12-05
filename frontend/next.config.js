@@ -30,4 +30,24 @@ const nextConfig = {
   },
 };
 
+const path = require('path');
+
+nextConfig.experimental = {
+  ...nextConfig.experimental,
+  turbopack: {
+    ...nextConfig.experimental?.turbopack,
+    rules: {
+      ...nextConfig.experimental?.turbopack?.rules,
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
+    resolveAlias: {
+      ...nextConfig.experimental?.turbopack?.resolveAlias,
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
+};
+
 module.exports = nextConfig;

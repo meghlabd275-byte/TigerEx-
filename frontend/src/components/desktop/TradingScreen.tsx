@@ -61,6 +61,38 @@ export default function TradingScreen() {
   const [amount, setAmount] = useState('');
   const [total, setTotal] = useState('');
   const [activeTab, setActiveTab] = useState('Chart');
+  const [orderBook, setOrderBook] = useState(mockOrderBook);
+  const [trades, setTrades] = useState(mockTrades);
+
+  useEffect(() => {
+    const fetchOrderBook = async () => {
+      try {
+        const response = await api.get('/api/v1/orderbook/BTCUSDT');
+        setOrderBook(response.data);
+      } catch (error) {
+        console.error('Error fetching order book:', error);
+      }
+    };
+
+    const fetchTrades = async () => {
+      try {
+        const response = await api.get('/api/v1/trades/BTCUSDT');
+        setTrades(response.data);
+      } catch (error) {
+        console.error('Error fetching trades:', error);
+      }
+    };
+
+    fetchOrderBook();
+    fetchTrades();
+
+    const interval = setInterval(() => {
+      fetchOrderBook();
+      fetchTrades();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="flex-1 bg-bg-primary text-text-primary overflow-hidden">
@@ -196,7 +228,7 @@ export default function TradingScreen() {
                 <span className="text-right">Time</span>
               </div>
               <div className="space-y-1 max-h-40 overflow-y-auto">
-                {mockTrades.map((trade, index) => (
+                {trades.map((trade, index) => (
                   <div key={index} className="grid grid-cols-3 gap-4 text-xs py-1">
                     <span className={trade.side === 'buy' ? 'text-success' : 'text-danger'}>
                       {trade.price}
@@ -222,7 +254,7 @@ export default function TradingScreen() {
 
             {/* Asks */}
             <div className="space-y-1 mb-4">
-              {mockOrderBook.asks.reverse().map((ask, index) => (
+              {orderBook.asks.map((ask, index) => (
                 <div key={index} className="grid grid-cols-3 gap-4 text-xs py-1 hover:bg-bg-tertiary cursor-pointer">
                   <span className="text-danger">{ask.price}</span>
                   <span className="text-right text-text-primary">{ask.amount}</span>
@@ -239,7 +271,7 @@ export default function TradingScreen() {
 
             {/* Bids */}
             <div className="space-y-1">
-              {mockOrderBook.bids.map((bid, index) => (
+              {orderBook.bids.map((bid, index) => (
                 <div key={index} className="grid grid-cols-3 gap-4 text-xs py-1 hover:bg-bg-tertiary cursor-pointer">
                   <span className="text-success">{bid.price}</span>
                   <span className="text-right text-text-primary">{bid.amount}</span>
