@@ -204,6 +204,14 @@ class TigerExAPI {
     return await this.request(`/market/${exchange}/pairs`);
   }
 
+  async getRobinhoodQuote(symbol) {
+    return await this.request(`/robinhood/quote/${symbol}`);
+  }
+
+  async getGateioOrderbook(currencyPair) {
+    return await this.request(`/gateio/orderbook?currency_pair=${currencyPair}`);
+  }
+
   // Trading
   async placeOrder(orderData) {
     return await this.request('/trading/order', {
@@ -244,13 +252,32 @@ class TigerExAPI {
   // User Management
   async getUsers(params = {}) {
     const queryString = new URLSearchParams(params).toString();
-    return await this.request(`/users?${queryString}`, {}, true);
+    return await this.request(`/admin/users?${queryString}`, {}, true);
   }
 
   async suspendUser(userId, reason, duration) {
     return await this.request(`/users/${userId}/suspend`, {
       method: 'POST',
       body: JSON.stringify({ action: 'suspend_user', reason, duration_hours: duration })
+    }, true);
+  }
+
+  async banUser(userId, reason) {
+    return await this.request(`/users/${userId}/control?action=ban`, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'ban_user', reason })
+    }, true);
+  }
+
+  async controlUser(userId, action) {
+    return await this.request(`/users/${userId}/control?action=${action}`, {
+      method: 'POST'
+    }, true);
+  }
+
+  async controlService(exchangeId, action) {
+    return await this.request(`/services/${exchangeId}/control?action=${action}`, {
+      method: 'POST'
     }, true);
   }
 
@@ -465,6 +492,7 @@ const ProtectedRoute = ({ children, adminOnly = false, superAdminOnly = false })
 const AdminDashboard = () => {
   const [currentTab, setCurrentTab] = useState(0);
   const [systemStatus, setSystemStatus] = useState({});
+    const [exchanges, setExchanges] = useState({});
   const [users, setUsers] = useState([]);
   const [auditLogs, setAuditLogs] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -480,6 +508,13 @@ const AdminDashboard = () => {
     () => api.getSystemStatus(),
     { refetchInterval: 30000 }
   );
+
+    // Exchanges Config Query
+    const { data: exchangesData, refetch: refetchExchanges } = useQuery(
+      'exchangeConfigs',
+      () => api.request('/admin/exchanges', {}, true),
+      { refetchInterval: 60000 }
+    );
 
   // Users Query
   const { data: usersData, isLoading: usersLoading, refetch: refetchUsers } = useQuery(
@@ -499,7 +534,8 @@ const AdminDashboard = () => {
     if (systemData) setSystemStatus(systemData);
     if (usersData) setUsers(usersData.users || []);
     if (logsData) setAuditLogs(logsData.logs || []);
-  }, [systemData, usersData, logsData]);
+      if (exchangesData) setExchanges(exchangesData.exchanges || {});
+    }, [systemData, usersData, logsData, exchangesData]);
 
   // WebSocket for real-time updates
   useEffect(() => {
@@ -580,6 +616,66 @@ const AdminDashboard = () => {
   // System Overview Tab
   const SystemOverviewTab = () => (
     <Grid container spacing={3}>
+      {/* Service Control Panel */}
+      <Grid item xs={12}>
+        <Card>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              Service Control Panel
+            </Typography>
+            <Grid container spacing={2}>
+              {Object.keys(exchanges).length > 0 ? (
+                Object.entries(exchanges).map(([id, config]) => (
+                  <Grid item xs={12} sm={6} md={4} lg={3} key={id}>
+                    <Paper variant="outlined" sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Box>
+                        <Typography variant="subtitle2" fontWeight="bold" sx={{ textTransform: 'capitalize' }}>{id}</Typography>
+                        <Chip
+                          label={config.maintenance_mode ? "Maintenance" : "Active"}
+                          size="small"
+                          color={config.maintenance_mode ? "warning" : "success"}
+                          variant="outlined"
+                          sx={{ height: 20, fontSize: '0.625rem' }}
+                        />
+                      </Box>
+                      <Box sx={{ display: 'flex', gap: 0.5 }}>
+                        <Tooltip title="Pause">
+                          <IconButton size="small" color="warning" onClick={() => api.controlService(id, 'pause').then(() => refetchExchanges())}>
+                            <PowerOff fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Resume">
+                          <IconButton size="small" color="success" onClick={() => api.controlService(id, 'resume').then(() => refetchExchanges())}>
+                            <PlayArrow fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                    </Paper>
+                  </Grid>
+                ))
+              ) : (
+                ['Binance', 'Bybit', 'OKX', 'Bitget', 'Bitfinex', 'MEXC', 'Kraken', 'Robinhood', 'Gate.io', 'Coinbase', 'HTX'].map((exchange) => (
+                  <Grid item xs={12} sm={6} md={4} lg={3} key={exchange}>
+                    <Paper variant="outlined" sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Box>
+                        <Typography variant="subtitle2" fontWeight="bold">{exchange}</Typography>
+                        <Chip
+                          label="Loading..."
+                          size="small"
+                          color="default"
+                          variant="outlined"
+                          sx={{ height: 20, fontSize: '0.625rem' }}
+                        />
+                      </Box>
+                    </Paper>
+                  </Grid>
+                ))
+              )}
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
+
       {/* Status Cards */}
       <Grid item xs={12} md={4}>
         <Card sx={{ bgcolor: systemStatus.trading_status === 'active' ? 'success.light' : 'error.light' }}>
