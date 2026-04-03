@@ -16,7 +16,7 @@ import os
 import time
 import hashlib
 import secrets
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 import jwt
 
 app = FastAPI(
@@ -52,6 +52,13 @@ class Exchange(str, Enum):
     KRAKEN = "kraken"
     COINBASE = "coinbase"
     GEMINI = "gemini"
+    BITGET = "bitget"
+    MEXC = "mexc"
+    BITFINEX = "bitfinex"
+    COINW = "coinw"
+    WHITEBIT = "whitebit"
+    GATEIO = "gateio"
+    ROBINHOOD = "robinhood"
 
 class Permission(str, Enum):
     # User Management
@@ -143,17 +150,51 @@ class TigerExAdminConfig:
 class TigerExAdminService:
     def __init__(self):
         self.config = TigerExAdminConfig()
+        self.db_file = "/tmp/tigerex_admin_db.json"
         self.users_db = {}
         self.api_keys_db = {}
         self.exchange_configs = {}
         self.audit_logs = []
         self.session_tokens = {}
         
-        # Initialize default super admin
-        self._initialize_default_admin()
+        # Load from file if exists
+        self._load_db()
         
-        # Initialize exchange configurations
-        self._initialize_exchange_configs()
+        # Initialize default super admin if none
+        if not self.users_db:
+            self._initialize_default_admin()
+
+        # Initialize exchange configurations if none
+        if not self.exchange_configs:
+            self._initialize_exchange_configs()
+            self._save_db()
+
+    def _save_db(self):
+        """Save database to JSON file for persistence"""
+        try:
+            data = {
+                "users": {uid: u.model_dump(mode='json') for uid, u in self.users_db.items()},
+                "api_keys": {kid: k.model_dump(mode='json') for kid, k in self.api_keys_db.items()},
+                "exchange_configs": {eid: c.model_dump(mode='json') for eid, c in self.exchange_configs.items()},
+                "audit_logs": [asdict(l) for l in self.audit_logs]
+            }
+            with open(self.db_file, 'w') as f:
+                json.dump(data, f, indent=4, default=str)
+        except Exception as e:
+            logger.error(f"Failed to save DB: {e}")
+
+    def _load_db(self):
+        """Load database from JSON file"""
+        if os.path.exists(self.db_file):
+            try:
+                with open(self.db_file, 'r') as f:
+                    data = json.load(f)
+                    self.users_db = {uid: User(**u) for uid, u in data.get("users", {}).items()}
+                    self.api_keys_db = {kid: APIKey(**k) for kid, k in data.get("api_keys", {}).items()}
+                    self.exchange_configs = {eid: ExchangeConfig(**c) for eid, c in data.get("exchange_configs", {}).items()}
+                    # Audit logs would need more complex parsing back to dataclass
+            except Exception as e:
+                logger.error(f"Failed to load DB: {e}")
     
     def _initialize_default_admin(self):
         """Initialize default super admin user"""
@@ -228,6 +269,38 @@ class TigerExAdminService:
                 rate_limits={"requests_per_minute": 100, "orders_per_second": 10},
                 trading_fees={"spot": 0.002, "futures": 0.0004},
                 withdrawal_fees={"BTC": 0.0005, "ETH": 0.005, "USDT": 1.0}
+            ),
+            Exchange.BITGET: ExchangeConfig(
+                exchange=Exchange.BITGET,
+                api_base_url="https://api.bitget.com",
+                supported_features=["spot_trading", "futures_trading", "copy_trading", "staking"],
+                rate_limits={"requests_per_minute": 600, "orders_per_second": 10},
+                trading_fees={"spot": 0.001, "futures": 0.0004},
+                withdrawal_fees={"BTC": 0.0005, "USDT": 1.0}
+            ),
+            Exchange.MEXC: ExchangeConfig(
+                exchange=Exchange.MEXC,
+                api_base_url="https://api.mexc.com",
+                supported_features=["spot_trading", "futures_trading", "etf_trading", "staking"],
+                rate_limits={"requests_per_minute": 1000, "orders_per_second": 20},
+                trading_fees={"spot": 0.0, "futures": 0.0002},
+                withdrawal_fees={"BTC": 0.0003, "USDT": 1.0}
+            ),
+            Exchange.GATEIO: ExchangeConfig(
+                exchange=Exchange.GATEIO,
+                api_base_url="https://api.gateio.ws/api/v4",
+                supported_features=["spot_trading", "futures_trading", "margin_trading", "staking"],
+                rate_limits={"requests_per_minute": 900, "orders_per_second": 15},
+                trading_fees={"spot": 0.002, "futures": 0.0005},
+                withdrawal_fees={"BTC": 0.001, "USDT": 2.0}
+            ),
+            Exchange.ROBINHOOD: ExchangeConfig(
+                exchange=Exchange.ROBINHOOD,
+                api_base_url="https://api.robinhood.com",
+                supported_features=["crypto_trading", "stock_trading", "options_trading"],
+                rate_limits={"requests_per_minute": 300, "orders_per_second": 5},
+                trading_fees={"spot": 0.0, "crypto": 0.0},
+                withdrawal_fees={"BTC": 0.0, "USDT": 0.0}
             )
         }
         
@@ -304,6 +377,7 @@ class TigerExAdminService:
             user_agent=user_agent
         )
         self.audit_logs.append(action)
+        self._save_db()
     
     def create_jwt_token(self, user: User) -> str:
         """Create JWT token for user"""
@@ -344,6 +418,18 @@ class UpdateExchangeConfigRequest(BaseModel):
     maintenance_mode: Optional[bool] = None
     rate_limits: Optional[Dict[str, Any]] = None
     custom_params: Optional[Dict[str, Any]] = None
+
+class ServiceControlAction(str, Enum):
+    PAUSE = "pause"
+    RESUME = "resume"
+    HALT = "halt"
+    STOP = "stop"
+
+class UserControlAction(str, Enum):
+    ACTIVATE = "activate"
+    DEACTIVATE = "deactivate"
+    SUSPEND = "suspend"
+    BAN = "ban"
 
 # API Endpoints
 @app.post("/tigerex/admin/login")
@@ -446,6 +532,7 @@ async def create_user(
     )
     
     admin_service.users_db[new_user_id] = new_user
+    admin_service._save_db()
     
     admin_service.log_admin_action(
         user.user_id, "CREATE_USER", f"USER:{new_user_id}",
@@ -499,9 +586,10 @@ async def update_exchange_config(
     if request.custom_params is not None:
         config.custom_params = request.custom_params
     
+    admin_service._save_db()
     admin_service.log_admin_action(
         user.user_id, "UPDATE_EXCHANGE", f"EXCHANGE:{exchange_id}",
-        request.dict(exclude_none=True), "127.0.0.1", "TigerEx Admin System"
+        request.model_dump(exclude_none=True), "127.0.0.1", "TigerEx Admin System"
     )
     
     return {"message": "Exchange configuration updated successfully"}
@@ -554,6 +642,7 @@ async def create_api_key(
     )
     
     admin_service.api_keys_db[key_id] = new_key
+    admin_service._save_db()
     
     admin_service.log_admin_action(
         user.user_id, "CREATE_API_KEY", f"EXCHANGE:{request.exchange.value}",
@@ -630,6 +719,84 @@ async def get_admin_features():
             "Security Controls"
         ]
     }
+
+@app.post("/admin/services/{exchange_id}/control")
+async def control_service(
+    exchange_id: str,
+    action: ServiceControlAction,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Control exchange service (pause, resume, halt, stop)"""
+    user = admin_service.authenticate_user(credentials)
+    admin_service.check_permission(user, Permission.MANAGE_EXCHANGES)
+
+    if exchange_id not in admin_service.exchange_configs:
+        raise HTTPException(status_code=404, detail="Exchange not found")
+
+    config = admin_service.exchange_configs[exchange_id]
+
+    if action in [ServiceControlAction.PAUSE, ServiceControlAction.HALT, ServiceControlAction.STOP]:
+        config.maintenance_mode = True
+    elif action == ServiceControlAction.RESUME:
+        config.maintenance_mode = False
+
+    admin_service._save_db()
+    admin_service.log_admin_action(
+        user.user_id, f"SERVICE_{action.value.upper()}", f"EXCHANGE:{exchange_id}",
+        {"action": action.value}, "127.0.0.1", "TigerEx Admin System"
+    )
+
+    return {"message": f"Service {exchange_id} {action.value}d successfully"}
+
+@app.delete("/admin/users/{user_id}")
+async def delete_user(
+    user_id: str,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Delete user"""
+    user = admin_service.authenticate_user(credentials)
+    admin_service.check_permission(user, Permission.DELETE_USERS)
+
+    if user_id not in admin_service.users_db:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    del admin_service.users_db[user_id]
+    admin_service._save_db()
+
+    admin_service.log_admin_action(
+        user.user_id, "DELETE_USER", f"USER:{user_id}",
+        {"user_id": user_id}, "127.0.0.1", "TigerEx Admin System"
+    )
+
+    return {"message": f"User {user_id} deleted successfully"}
+
+@app.post("/admin/users/{user_id}/control")
+async def control_user(
+    user_id: str,
+    action: UserControlAction,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Control user access (activate, deactivate, suspend, ban)"""
+    user = admin_service.authenticate_user(credentials)
+    admin_service.check_permission(user, Permission.MANAGE_USERS)
+
+    if user_id not in admin_service.users_db:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    target_user = admin_service.users_db[user_id]
+
+    if action == UserControlAction.ACTIVATE:
+        target_user.is_active = True
+    elif action in [UserControlAction.DEACTIVATE, UserControlAction.SUSPEND, UserControlAction.BAN]:
+        target_user.is_active = False
+
+    admin_service._save_db()
+    admin_service.log_admin_action(
+        user.user_id, f"USER_{action.value.upper()}", f"USER:{user_id}",
+        {"action": action.value}, "127.0.0.1", "TigerEx Admin System"
+    )
+
+    return {"message": f"User {user_id} {action.value}d successfully"}
 
 @app.get("/health")
 async def health_check():
