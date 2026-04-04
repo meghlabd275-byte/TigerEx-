@@ -495,3 +495,133 @@ router.get('/me', authMiddleware, async (req, res) => {
 });
 
 module.exports = router;
+
+// Social Login (Google, Facebook, Twitter, Telegram)
+router.post('/social-login', async (req, res) => {
+  try {
+    const { provider, socialId, email, firstName, lastName, photoUrl } = req.body;
+
+    if (!provider || !socialId || !email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Provider, socialId and email are required',
+      });
+    }
+
+    // Check if user with this social provider and ID already exists
+    let user = await User.findOne({ socialProvider: provider, socialId: socialId });
+
+    if (!user) {
+      // Check if user with this email already exists
+      user = await User.findOne({ email: email.toLowerCase() });
+
+      if (user) {
+        // Link social account to existing email account
+        user.socialProvider = provider;
+        user.socialId = socialId;
+        if (!user.isEmailVerified) user.isEmailVerified = true;
+      } else {
+        // Create new user for social login
+        const username = email.split('@')[0] + '_' + Math.random().toString(36).substr(2, 5);
+        user = new User({
+          email: email.toLowerCase(),
+          username: username,
+          password: crypto.randomBytes(16).toString('hex'), // Random password for social users
+          firstName: firstName,
+          lastName: lastName,
+          isEmailVerified: true,
+          accountStatus: 'active',
+          socialProvider: provider,
+          socialId: socialId,
+          metadata: {
+            registrationSource: 'social_' + provider,
+            userAgent: req.get('User-Agent'),
+            registrationIP: req.ip,
+          }
+        });
+      }
+      await user.save();
+    }
+
+    if (user.accountStatus !== 'active') {
+      return res.status(403).json({
+        success: false,
+        message: 'Account is not active. Please contact support.',
+      });
+    }
+
+    // Update last login
+    user.lastLogin = new Date();
+    user.ipAddresses.push({
+      ip: req.ip,
+      userAgent: req.get('User-Agent'),
+      location: req.get('CF-IPCountry') || 'Unknown',
+    });
+    if (user.ipAddresses.length > 10) user.ipAddresses = user.ipAddresses.slice(-10);
+    await user.save();
+
+    // Generate tokens
+    const accessToken = TokenService.generateAccessToken(user);
+    const refreshToken = TokenService.generateRefreshToken(user);
+    await TokenService.storeRefreshToken(user.userId, refreshToken);
+
+    res.json({
+      success: true,
+      message: 'Social login successful',
+      data: {
+        user: user.toSafeObject(),
+        accessToken,
+        refreshToken,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Social login failed',
+      error: error.message,
+    });
+  }
+});
+
+// Social Login (Google, Facebook, Twitter, Telegram)
+router.post('/social-login', async (req, res) => {
+  try {
+    const { provider, socialId, email, firstName, lastName, photoUrl } = req.body;
+    if (!provider || !socialId || !email) {
+      return res.status(400).json({ success: false, message: 'Provider, socialId and email are required' });
+    }
+    let user = await User.findOne({ socialProvider: provider, socialId: socialId });
+    if (!user) {
+      user = await User.findOne({ email: email.toLowerCase() });
+      if (user) {
+        user.socialProvider = provider;
+        user.socialId = socialId;
+        if (!user.isEmailVerified) user.isEmailVerified = true;
+      } else {
+        const username = email.split('@')[0] + '_' + Math.random().toString(36).substr(2, 5);
+        user = new User({
+          email: email.toLowerCase(),
+          username: username,
+          password: crypto.randomBytes(16).toString('hex'),
+          firstName: firstName,
+          lastName: lastName,
+          isEmailVerified: true,
+          accountStatus: 'active',
+          socialProvider: provider,
+          socialId: socialId,
+          metadata: { registrationSource: 'social_' + provider, userAgent: req.get('User-Agent'), registrationIP: req.ip }
+        });
+      }
+      await user.save();
+    }
+    if (user.accountStatus !== 'active') { return res.status(403).json({ success: false, message: 'Account is not active' }); }
+    user.lastLogin = new Date();
+    user.ipAddresses.push({ ip: req.ip, userAgent: req.get('User-Agent'), location: req.get('CF-IPCountry') || 'Unknown' });
+    if (user.ipAddresses.length > 10) user.ipAddresses = user.ipAddresses.slice(-10);
+    await user.save();
+    const accessToken = TokenService.generateAccessToken(user);
+    const refreshToken = TokenService.generateRefreshToken(user);
+    await TokenService.storeRefreshToken(user.userId, refreshToken);
+    res.json({ success: true, message: 'Social login successful', data: { user: user.toSafeObject(), accessToken, refreshToken } });
+  } catch (error) { res.status(500).json({ success: false, message: 'Social login failed', error: error.message }); }
+});

@@ -1,77 +1,23 @@
-"""
-Bybit Advanced Service - All Unique Bybit Features
-Includes Dual Asset, Copy Trading, Launchpad, Institutional Services
-"""
-
-from fastapi import FastAPI, HTTPException, Depends
-from fastapi.security import HTTPBearer
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import Optional, List, Dict, Any
-from datetime import datetime
-from enum import Enum
-import logging
+from typing import List, Dict, Any, Optional
+import time
+import uuid
 
-app = FastAPI(title="Bybit Advanced Service v10.0.0", version="10.0.0")
-security = HTTPBearer()
-
-class BybitFeature(str, Enum):
-    DUAL_ASSET = "dual_asset"
-    COPY_TRADING = "copy_trading"
-    LAUNCHPAD = "launchpad"
-    INSTITUTIONAL = "institutional"
-    TRADING_BOTS = "trading_bots"
+app = FastAPI(title="TigerEx bybit Advanced Service")
 
 @app.get("/")
-async def root():
-    return {
-        "service": "Bybit Advanced Service",
-        "features": [feature.value for feature in BybitFeature],
-        "status": "operational"
-    }
+async def index():
+    return {"status": "online", "exchange": "bybit", "version": "1.0.0"}
 
-@app.get("/dual-asset/products")
-async def get_dual_asset_products():
-    """Get dual asset products"""
-    return {
-        "products": [
-            {
-                "name": "BTC-USDT Dual Asset",
-                "apy": 25.5,
-                "investment_period": 7,
-                "min_investment": 100
-            }
-        ]
-    }
+@app.get("/health")
+async def health():
+    return {"status": "healthy", "timestamp": time.time()}
 
-@app.get("/copy-trading/traders")
-async def get_copy_trading_traders():
-    """Get top copy traders"""
-    return {
-        "traders": [
-            {
-                "trader_id": "top_trader_001",
-                "nickname": "ProTrader",
-                "win_rate": 85.5,
-                "followers": 1200,
-                "total_pnl": "50000 USDT"
-            }
-        ]
-    }
+@app.get("/market/ticker/{symbol}")
+async def get_ticker(symbol: str):
+    return {"symbol": symbol, "price": 100.0, "change_24h": 0.5}
 
-@app.get("/launchpad/projects")
-async def get_launchpad_projects():
-    """Get launchpad projects"""
-    return {
-        "projects": [
-            {
-                "name": "New Token Launch",
-                "symbol": "NEW",
-                "price": 0.001,
-                "total_supply": "1000000000"
-            }
-        ]
-    }
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8005)
+@app.post("/trade")
+async def place_trade(data: Dict[str, Any]):
+    return {"order_id": str(uuid.uuid4()), "status": "executed", "exchange": "bybit"}

@@ -1,74 +1,23 @@
-"""
-Huobi (HTX) Advanced Service - All Unique Huobi Features
-Includes Huobi Prime, Huobi Earn, HECO Chain, Institutional Services
-"""
-
-from fastapi import FastAPI, HTTPException, Depends
-from fastapi.security import HTTPBearer
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import Optional, List, Dict, Any
-from datetime import datetime
-from enum import Enum
-import logging
+from typing import List, Dict, Any, Optional
+import time
+import uuid
 
-app = FastAPI(title="Huobi Advanced Service v10.0.0", version="10.0.0")
-security = HTTPBearer()
-
-class HuobiFeature(str, Enum):
-    HUOBI_PRIME = "huobi_prime"
-    HUOBI_EARN = "huobi_earn"
-    HECO_CHAIN = "heco_chain"
-    INSTITUTIONAL = "institutional"
-    WEALTH_MANAGEMENT = "wealth_management"
-    CRYPTO_LOANS = "crypto_loans"
-    GRID_TRADING = "grid_trading"
+app = FastAPI(title="TigerEx huobi Advanced Service")
 
 @app.get("/")
-async def root():
-    return {
-        "service": "Huobi Advanced Service (HTX)",
-        "features": [feature.value for feature in HuobiFeature],
-        "status": "operational"
-    }
+async def index():
+    return {"status": "online", "exchange": "huobi", "version": "1.0.0"}
 
-@app.get("/prime/projects")
-async def get_prime_projects():
-    """Get Huobi Prime projects"""
-    return {
-        "projects": [
-            {
-                "name": "HTX Prime Launch",
-                "token": "NEW",
-                "price": 0.01,
-                "total_allocation": "1000000 USD"
-            }
-        ]
-    }
+@app.get("/health")
+async def health():
+    return {"status": "healthy", "timestamp": time.time()}
 
-@app.get("/earn/products")
-async def get_earn_products():
-    """Get Huobi Earn products"""
-    return {
-        "products": [
-            {
-                "product_name": "HT Flexible Savings",
-                "apy": 8.5,
-                "min_investment": 100,
-                "currency": "USDT"
-            }
-        ]
-    }
+@app.get("/market/ticker/{symbol}")
+async def get_ticker(symbol: str):
+    return {"symbol": symbol, "price": 100.0, "change_24h": 0.5}
 
-@app.get("/heco/defi")
-async def get_heco_defi():
-    """Get HECO Chain DeFi info"""
-    return {
-        "chain_name": "Huobi ECO Chain",
-        "tvl": "2.5B USD",
-        "block_height": 150000000,
-        "validators": 21
-    }
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8003)
+@app.post("/trade")
+async def place_trade(data: Dict[str, Any]):
+    return {"order_id": str(uuid.uuid4()), "status": "executed", "exchange": "huobi"}

@@ -241,6 +241,24 @@ const userSchema = new mongoose.Schema(
     },
 
     // Metadata
+    socialProvider: {
+      type: String,
+      enum: ["google", "facebook", "twitter", "telegram", "none"],
+      default: "none"
+    },
+    socialId: {
+      type: String,
+      sparse: true
+    },
+    socialProvider: {
+      type: String,
+      enum: ["google", "facebook", "twitter", "telegram", "none"],
+      default: "none"
+    },
+    socialId: {
+      type: String,
+      sparse: true
+    },
     metadata: {
       registrationSource: String,
       userAgent: String,
