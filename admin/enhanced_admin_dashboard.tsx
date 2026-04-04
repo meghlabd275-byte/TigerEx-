@@ -6,17 +6,9 @@ interface User {
   name: string;
   email: string;
   role: string;
-  status: 'active' | 'suspended' | 'pending' | 'banned';
+  status: 'active' | 'suspended' | 'pending';
   lastLogin: string;
   balance: number;
-}
-
-interface ExchangeService {
-  id: string;
-  name: string;
-  status: 'active' | 'paused' | 'halted' | 'stopped';
-  load: number;
-  uptime: string;
 }
 
 interface Transaction {
@@ -41,7 +33,6 @@ const EnhancedAdminDashboard: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [metrics, setMetrics] = useState<SystemMetrics[]>([]);
-  const [services, setServices] = useState<ExchangeService[]>([]);
   const [selectedPeriod, setSelectedPeriod] = useState('24h');
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
@@ -55,19 +46,9 @@ const EnhancedAdminDashboard: React.FC = () => {
         name: `User ${i + 1}`,
         email: `user${i + 1}@example.com`,
         role: ['admin', 'trader', 'user'][Math.floor(Math.random() * 3)],
-        status: ['active', 'suspended', 'pending', 'banned'][Math.floor(Math.random() * 4)] as User['status'],
+        status: ['active', 'suspended', 'pending'][Math.floor(Math.random() * 3)] as User['status'],
         lastLogin: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString(),
         balance: Math.random() * 100000
-      }));
-
-      // Generate services
-      const exchangeNames = ['Binance', 'Bybit', 'OKX', 'Bitget', 'Bitfinex', 'MEXC', 'Kraken', 'Robinhood', 'Gate.io', 'Coinbase', 'HTX'];
-      const mockServices: ExchangeService[] = exchangeNames.map(name => ({
-        id: name.toLowerCase().replace('.', ''),
-        name: name,
-        status: ['active', 'paused', 'halted', 'stopped'][Math.floor(Math.random() * 4)] as ExchangeService['status'],
-        load: Math.random() * 100,
-        uptime: '99.9%'
       }));
 
       // Generate transactions
@@ -93,7 +74,6 @@ const EnhancedAdminDashboard: React.FC = () => {
       setUsers(mockUsers);
       setTransactions(mockTransactions);
       setMetrics(mockMetrics);
-      setServices(mockServices);
       setLoading(false);
     };
 
@@ -202,33 +182,6 @@ const EnhancedAdminDashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Service Management */}
-        <div className="bg-gray-800 rounded-lg p-6 mb-8">
-          <h3 className="text-xl font-semibold mb-6">Service Control Panel</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {services.map(service => (
-              <div key={service.id} className="bg-gray-700 p-4 rounded-lg flex justify-between items-center">
-                <div>
-                  <div className="font-bold">{service.name}</div>
-                  <div className="text-xs text-gray-400">Load: {service.load.toFixed(1)}% | Uptime: {service.uptime}</div>
-                  <span className={`text-[10px] uppercase px-1.5 py-0.5 rounded ${
-                    service.status === 'active' ? 'bg-green-900 text-green-200' :
-                    service.status === 'paused' ? 'bg-yellow-900 text-yellow-200' :
-                    'bg-red-900 text-red-200'
-                  }`}>
-                    {service.status}
-                  </span>
-                </div>
-                <div className="flex gap-1">
-                  <button className="bg-yellow-600 hover:bg-yellow-700 p-1 rounded text-xs" title="Pause">⏸</button>
-                  <button className="bg-green-600 hover:bg-green-700 p-1 rounded text-xs" title="Resume">▶</button>
-                  <button className="bg-red-600 hover:bg-red-700 p-1 rounded text-xs" title="Stop">⏹</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* User Management Table */}
         <div className="bg-gray-800 rounded-lg p-6 mb-8">
           <div className="flex justify-between items-center mb-6">
@@ -299,14 +252,11 @@ const EnhancedAdminDashboard: React.FC = () => {
                     </td>
                     <td className="py-3">
                       <div className="flex gap-2">
-                        <button className="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded text-xs">
+                        <button className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm">
                           Edit
                         </button>
-                        <button className="bg-yellow-600 hover:bg-yellow-700 px-2 py-1 rounded text-xs">
+                        <button className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm">
                           Suspend
-                        </button>
-                        <button className="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-xs">
-                          Ban
                         </button>
                       </div>
                     </td>

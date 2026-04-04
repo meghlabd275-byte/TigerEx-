@@ -129,8 +129,6 @@ interface Order {
   created_at: string
 }
 
-type ServiceState = 'active' | 'paused' | 'halted' | 'stopped'
-
 const EnhancedAdminPage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [activeTab, setActiveTab] = useState('dashboard')
@@ -143,14 +141,6 @@ const EnhancedAdminPage: React.FC = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [showNotifications, setShowNotifications] = useState(false)
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
-  const [globalTradingState, setGlobalTradingState] = useState<ServiceState>('active')
-  const [serviceStates, setServiceStates] = useState<Record<string, ServiceState>>({
-    spot: 'active',
-    futures: 'active',
-    margin: 'active',
-    deposits: 'active',
-    withdrawals: 'active'
-  })
 
   // Sample data
   const [users, setUsers] = useState<User[]>([
@@ -301,23 +291,6 @@ const EnhancedAdminPage: React.FC = () => {
         // Handle delete
         break
     }
-  }
-
-  const updateServiceStatus = (service: string, status: ServiceState) => {
-    setServiceStates((prev) => ({ ...prev, [service]: status }))
-  }
-
-  const updateUserStatus = (status: User['status']) => {
-    if (!selectedUser) return
-    setUsers((prev) =>
-      prev.map((user) => (user.id === selectedUser.id ? { ...user, status } : user))
-    )
-  }
-
-  const toggleUserServiceAccess = (enabled: boolean) => {
-    if (!selectedUser) return
-    const nextStatus: User['status'] = enabled ? 'active' : 'locked'
-    updateUserStatus(nextStatus)
   }
 
   const renderDashboard = () => (
@@ -758,90 +731,28 @@ const EnhancedAdminPage: React.FC = () => {
         return (
           <div className="bg-gray-800 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-white mb-4">Trading Control Panel</h3>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <div className="p-4 rounded-lg bg-gray-900 border border-gray-700">
-                <p className="text-gray-400 text-sm mb-2">Global trading state</p>
-                <p className="text-white font-semibold capitalize mb-3">{globalTradingState}</p>
-                <div className="flex flex-wrap gap-2">
-                  {(['active', 'paused', 'halted', 'stopped'] as ServiceState[]).map((state) => (
-                    <button
-                      key={state}
-                      onClick={() => setGlobalTradingState(state)}
-                      className={`px-3 py-1 rounded text-sm ${globalTradingState === state ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}
-                    >
-                      {state}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="p-4 rounded-lg bg-gray-900 border border-gray-700">
-                <p className="text-gray-400 text-sm mb-2">Per-service controls</p>
-                <div className="space-y-3">
-                  {Object.entries(serviceStates).map(([service, state]) => (
-                    <div key={service} className="flex items-center justify-between">
-                      <span className="text-gray-200 capitalize">{service}</span>
-                      <div className="flex gap-2">
-                        <button onClick={() => updateServiceStatus(service, 'paused')} className="px-2 py-1 text-xs bg-yellow-700 text-yellow-100 rounded">Pause</button>
-                        <button onClick={() => updateServiceStatus(service, 'active')} className="px-2 py-1 text-xs bg-green-700 text-green-100 rounded">Resume</button>
-                        <button onClick={() => updateServiceStatus(service, 'halted')} className="px-2 py-1 text-xs bg-red-700 text-red-100 rounded">Halt</button>
-                      </div>
-                      <span className="text-xs text-gray-400 capitalize">{state}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+            <p className="text-gray-400">Trading control features coming soon...</p>
           </div>
         )
       case 'finance':
         return (
           <div className="bg-gray-800 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-white mb-4">Financial Management</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
-                <p className="text-gray-400 text-sm">Platform Balance</p>
-                <p className="text-white text-2xl font-bold">$42.8M</p>
-              </div>
-              <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
-                <p className="text-gray-400 text-sm">Pending Withdrawals</p>
-                <p className="text-white text-2xl font-bold">128</p>
-              </div>
-              <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
-                <p className="text-gray-400 text-sm">Revenue (24h)</p>
-                <p className="text-white text-2xl font-bold">$186K</p>
-              </div>
-            </div>
+            <p className="text-gray-400">Financial management features coming soon...</p>
           </div>
         )
       case 'security':
         return (
           <div className="bg-gray-800 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-white mb-4">Security Settings</h3>
-            <div className="space-y-3">
-              <button onClick={() => updateUserStatus('suspended')} className="px-3 py-2 bg-red-700 text-red-100 rounded">Suspend Selected User</button>
-              <button onClick={() => updateUserStatus('active')} className="ml-2 px-3 py-2 bg-green-700 text-green-100 rounded">Reactivate Selected User</button>
-              <button onClick={() => toggleUserServiceAccess(false)} className="ml-2 px-3 py-2 bg-orange-700 text-orange-100 rounded">Disable Service Access</button>
-              <button onClick={() => toggleUserServiceAccess(true)} className="ml-2 px-3 py-2 bg-blue-700 text-blue-100 rounded">Enable Service Access</button>
-              <p className="text-gray-400 text-sm">Tip: select a user from the user table first, then apply a security action.</p>
-            </div>
+            <p className="text-gray-400">Security management features coming soon...</p>
           </div>
         )
       case 'system':
         return (
           <div className="bg-gray-800 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-white mb-4">System Configuration</h3>
-            <div className="space-y-3 text-sm">
-              <div className="flex items-center justify-between bg-gray-900 border border-gray-700 rounded p-3">
-                <span className="text-gray-300">Maintenance Mode</span>
-                <span className={`font-semibold ${globalTradingState === 'stopped' ? 'text-red-400' : 'text-green-400'}`}>
-                  {globalTradingState === 'stopped' ? 'Enabled' : 'Disabled'}
-                </span>
-              </div>
-              <div className="flex items-center justify-between bg-gray-900 border border-gray-700 rounded p-3">
-                <span className="text-gray-300">Services Managed</span>
-                <span className="text-white font-semibold">{Object.keys(serviceStates).length}</span>
-              </div>
-            </div>
+            <p className="text-gray-400">System configuration features coming soon...</p>
           </div>
         )
       default:
