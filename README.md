@@ -1,36 +1,31 @@
-# TigerEx - Unified Cryptocurrency Exchange Platform
+# TigerEx - Enterprise Cryptocurrency Exchange Platform
 
-## 🚀 Project Overview
+![TigerEx](https://img.shields.io/badge/TigerEx-v2.0-green)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Build](https://img.shields.io/badge/build-passing-brightgreen)
 
-Welcome to TigerEx, a complete cryptocurrency exchange platform built with a unified backend and a modern frontend. This project consolidates all backend services into a single, high-performance FastAPI application, `unified_backend_v2`, and provides a seamless user experience with a Next.js frontend.
+## 🏗️ Architecture
 
-This `README.md` provides a comprehensive guide to understanding, deploying, and developing the TigerEx platform. It serves as the central source of truth for all documentation, replacing outdated files like `API_DOCUMENTATION.md` and `DEPLOYMENT_GUIDE.md`.
+### Technology Stack
 
-## 📚 Table of Contents
+| Layer | Technologies |
+|-------|-------------|
+| **Frontend** | Next.js 14, React 18, TypeScript, Tailwind CSS, React Native |
+| **Backend** | Python, FastAPI, Node.js, Express, Go, Rust |
+| **Database** | PostgreSQL, MongoDB, Redis, TimescaleDB |
+| **Blockchain** | Solidity, Hardhat, Ethers.js, Web3.js |
+| **Mobile** | Swift (iOS), Kotlin (Android), React Native |
+| **Infrastructure** | Docker, Kubernetes, AWS/GCP, Nginx |
 
-- [Features](#-features)
-- [Architecture](#-architecture)
-- [API Documentation](#-api-documentation)
-- [Deployment](#-deployment)
-- [Local Development](#-local-development)
-- [Testing](#-testing)
-- [Contributing](#-contributing)
+### Core Components
 
-## ✨ Features
-
-- **Unified Backend:** All backend logic is consolidated into a single `unified_backend_v2` service, simplifying development and deployment.
-- **Advanced Trading:** Support for stop-loss and take-profit orders.
-- **Multi-Chain Wallet:** Deposit and withdraw assets from multiple blockchain networks.
-- **Real-Time Market Data:** WebSocket integration for live order book and trade updates.
-- **Secure Authentication:** JWT-based authentication with 2FA support.
-- **Admin Dashboard:** A comprehensive dashboard for managing users, monitoring platform activity, and more.
-
-## 🏛️ Architecture
-
-The TigerEx platform consists of two main components:
-
-1.  **`unified_backend_v2`:** A FastAPI application that handles all backend logic, including user authentication, trading, wallet management, and market data.
-2.  **`frontend`:** A Next.js application that provides the user interface for the exchange.
+1. **Core Trading Engine (Rust)** - High-performance order matching in `backend/core-engine/`
+2. **Social Auth Service (Node.js)** - Complete social authentication in `backend/social-auth-service/`
+3. **FIX Protocol Engine (Rust)** - Institutional trading support in `backend/fix-protocol-engine/`
+4. **Unified Backend (Python)** - FastAPI services in `backend/unified_backend_v2/`
+5. **Frontend (Next.js)** - Web application in `frontend/`
+6. **Mobile Apps** - Native apps in `mobile/`
+7. **Smart Contracts** - Solidity contracts in `blockchain/smart-contracts/`
 
 ## 🚀 Deployment
 
