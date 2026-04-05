@@ -1,0 +1,38 @@
+[package]
+name = "tigerex-trading-core"
+version = "1.0.0"
+edition = "2021"
+authors = ["TigerEx Team"]
+description = "High-performance trading engine and matching system"
+
+[dependencies]
+tokio = { version = "1.35", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+uuid = { version = "1.6", features = ["v4", "serde"] }
+dashmap = "5.5"
+crossbeam-queue = "0.3"
+parking_lot = "0.12"
+async-trait = "0.1"
+thiserror = "1.0"
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+chrono = { version = "0.4", features = ["serde"] }
+rust_decimal = "1.33"
+rust_decimal_macros = "1.33"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[profile.dev]
+opt-level = 0
+debug = true
+
+[[bin]]
+name = "tigerex-core"
+path = "src/main.rs"
