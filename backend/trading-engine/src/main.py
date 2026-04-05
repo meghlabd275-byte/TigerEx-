@@ -295,10 +295,41 @@ class TradingEngine:
     async def perform_risk_checks(self, order: Order):
         """Perform risk management checks"""
         # Check user's balance
+        user_balance = await self.get_user_balance(order.user_id)
+        required_amount = order.quantity * (order.price or await self.get_market_price(order.symbol))
+        
+        if order.side == OrderSide.BUY:
+            if user_balance.get(order.quote_currency, 0) < required_amount:
+                raise HTTPException(status_code=400, detail="Insufficient balance")
+        else:
+            if user_balance.get(order.base_currency, 0) < order.quantity:
+                raise HTTPException(status_code=400, detail="Insufficient balance")
+        
         # Check position limits
+        current_positions = await self.get_user_positions(order.user_id)
+        position_value = sum(p.quantity * p.entry_price for p in current_positions)
+        max_position_value = await self.get_user_max_position(order.user_id)
+        
+        if position_value + required_amount > max_position_value:
+            raise HTTPException(status_code=400, detail="Position limit exceeded")
+        
         # Check daily trading limits
+        daily_volume = await self.get_user_daily_volume(order.user_id)
+        max_daily_volume = await self.get_user_max_daily_volume(order.user_id)
+        
+        if daily_volume + required_amount > max_daily_volume:
+            raise HTTPException(status_code=400, detail="Daily trading limit exceeded")
+        
         # Check price deviation limits
-        pass
+        if order.price:
+            market_price = await self.get_market_price(order.symbol)
+            price_deviation = abs(order.price - market_price) / market_price
+            max_deviation = 0.1  # 10% max deviation
+            
+            if price_deviation > max_deviation:
+                raise HTTPException(status_code=400, detail="Price deviation too high")
+        
+        return True
     
     async def execute_market_order(self, order: Order):
         """Execute a market order"""

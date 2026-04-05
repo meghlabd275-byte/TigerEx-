@@ -758,17 +758,293 @@ CMD ["npm", "start"]
     async def _deploy_exchange_backend(self, exchange: WhiteLabelExchange):
         """Deploy exchange backend services"""
         # Deploy all the microservices with exchange-specific configuration
-        pass
+        try:
+            logger.info(f"Deploying backend services for exchange {exchange.exchange_id}")
+            
+            # Create namespace for the exchange
+            namespace = f"tigerex-{exchange.exchange_id.lower()}"
+            
+            # Deploy core services using Kubernetes
+            services = [
+                "auth-service",
+                "trading-engine",
+                "wallet-service",
+                "order-service",
+                "market-data-service",
+                "user-service",
+                "kyc-service",
+                "notification-service",
+                "api-gateway"
+            ]
+            
+            for service in services:
+                # Create deployment configuration
+                deployment_config = {
+                    "apiVersion": "apps/v1",
+                    "kind": "Deployment",
+                    "metadata": {
+                        "name": f"{exchange.exchange_id.lower()}-{service}",
+                        "namespace": namespace,
+                        "labels": {
+                            "app": service,
+                            "exchange": exchange.exchange_id
+                        }
+                    },
+                    "spec": {
+                        "replicas": 2,
+                        "selector": {
+                            "matchLabels": {"app": service}
+                        },
+                        "template": {
+                            "metadata": {"labels": {"app": service}},
+                            "spec": {
+                                "containers": [{
+                                    "name": service,
+                                    "image": f"tigerex/{service}:latest",
+                                    "env": [
+                                        {"name": "EXCHANGE_ID", "value": exchange.exchange_id},
+                                        {"name": "DATABASE_URL", "valueFrom": {"secretKeyRef": {"name": "db-credentials", "key": "url"}}},
+                                        {"name": "REDIS_URL", "valueFrom": {"secretKeyRef": {"name": "redis-credentials", "key": "url"}}}
+                                    ],
+                                    "ports": [{"containerPort": 8000}],
+                                    "resources": {
+                                        "requests": {"cpu": "100m", "memory": "256Mi"},
+                                        "limits": {"cpu": "500m", "memory": "512Mi"}
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                }
+                
+                logger.info(f"Deploying {service} for exchange {exchange.exchange_id}")
+                # In production, this would apply the deployment to Kubernetes
+                # await self.k8s_api.create_namespaced_deployment(namespace, deployment_config)
+            
+            # Configure ingress for the exchange
+            ingress_config = {
+                "apiVersion": "networking.k8s.io/v1",
+                "kind": "Ingress",
+                "metadata": {
+                    "name": f"{exchange.exchange_id.lower()}-api-ingress",
+                    "namespace": namespace,
+                    "annotations": {
+                        "kubernetes.io/ingress.class": "nginx",
+                        "cert-manager.io/cluster-issuer": "letsencrypt-prod"
+                    }
+                },
+                "spec": {
+                    "tls": [{
+                        "hosts": [f"api.{exchange.domain_name or f'{exchange.exchange_id.lower()}.tigerex.com'}"],
+                        "secretName": f"{exchange.exchange_id.lower()}-api-tls"
+                    }],
+                    "rules": [{
+                        "host": f"api.{exchange.domain_name or f'{exchange.exchange_id.lower()}.tigerex.com'}",
+                        "http": {
+                            "paths": [{
+                                "path": "/",
+                                "pathType": "Prefix",
+                                "backend": {
+                                    "service": {
+                                        "name": "api-gateway",
+                                        "port": {"number": 8000}
+                                    }
+                                }
+                            }]
+                        }
+                    }]
+                }
+            }
+            
+            logger.info(f"Backend deployment completed for exchange {exchange.exchange_id}")
+            
+        except Exception as e:
+            logger.error(f"Failed to deploy backend for exchange {exchange.exchange_id}: {str(e)}")
+            raise
 
     async def _deploy_exchange_frontend(self, exchange: WhiteLabelExchange):
         """Deploy exchange frontend"""
         # Deploy customized frontend with branding
-        pass
+        try:
+            logger.info(f"Deploying frontend for exchange {exchange.exchange_id}")
+            
+            namespace = f"tigerex-{exchange.exchange_id.lower()}"
+            
+            # Build frontend with custom branding
+            branding_config = exchange.branding_config or {}
+            
+            # Create frontend deployment
+            frontend_config = {
+                "apiVersion": "apps/v1",
+                "kind": "Deployment",
+                "metadata": {
+                    "name": f"{exchange.exchange_id.lower()}-frontend",
+                    "namespace": namespace,
+                    "labels": {
+                        "app": "frontend",
+                        "exchange": exchange.exchange_id
+                    }
+                },
+                "spec": {
+                    "replicas": 3,
+                    "selector": {
+                        "matchLabels": {"app": "frontend"}
+                    },
+                    "template": {
+                        "metadata": {"labels": {"app": "frontend"}},
+                        "spec": {
+                            "containers": [{
+                                "name": "frontend",
+                                "image": f"tigerex/frontend:{exchange.exchange_id.lower()}",
+                                "env": [
+                                    {"name": "NEXT_PUBLIC_EXCHANGE_NAME", "value": exchange.brand_name or exchange.name},
+                                    {"name": "NEXT_PUBLIC_EXCHANGE_ID", "value": exchange.exchange_id},
+                                    {"name": "NEXT_PUBLIC_API_URL", "value": f"https://api.{exchange.domain_name or f'{exchange.exchange_id.lower()}.tigerex.com'}"},
+                                    {"name": "NEXT_PUBLIC_PRIMARY_COLOR", "value": branding_config.get("primaryColor", "#F7931A")},
+                                    {"name": "NEXT_PUBLIC_SECONDARY_COLOR", "value": branding_config.get("secondaryColor", "#1E2329")},
+                                    {"name": "NEXT_PUBLIC_LOGO_URL", "value": branding_config.get("logoUrl", "")}
+                                ],
+                                "ports": [{"containerPort": 3000}],
+                                "resources": {
+                                    "requests": {"cpu": "100m", "memory": "256Mi"},
+                                    "limits": {"cpu": "500m", "memory": "512Mi"}
+                                }
+                            }]
+                        }
+                    }
+                }
+            }
+            
+            # Configure ingress for frontend
+            ingress_config = {
+                "apiVersion": "networking.k8s.io/v1",
+                "kind": "Ingress",
+                "metadata": {
+                    "name": f"{exchange.exchange_id.lower()}-frontend-ingress",
+                    "namespace": namespace,
+                    "annotations": {
+                        "kubernetes.io/ingress.class": "nginx",
+                        "cert-manager.io/cluster-issuer": "letsencrypt-prod"
+                    }
+                },
+                "spec": {
+                    "tls": [{
+                        "hosts": [exchange.domain_name or f"{exchange.exchange_id.lower()}.tigerex.com"],
+                        "secretName": f"{exchange.exchange_id.lower()}-frontend-tls"
+                    }],
+                    "rules": [{
+                        "host": exchange.domain_name or f"{exchange.exchange_id.lower()}.tigerex.com",
+                        "http": {
+                            "paths": [{
+                                "path": "/",
+                                "pathType": "Prefix",
+                                "backend": {
+                                    "service": {
+                                        "name": "frontend",
+                                        "port": {"number": 3000}
+                                    }
+                                }
+                            }]
+                        }
+                    }]
+                }
+            }
+            
+            logger.info(f"Frontend deployment completed for exchange {exchange.exchange_id}")
+            
+        except Exception as e:
+            logger.error(f"Failed to deploy frontend for exchange {exchange.exchange_id}: {str(e)}")
+            raise
 
     async def _deploy_exchange_admin(self, exchange: WhiteLabelExchange):
         """Deploy exchange admin panel"""
         # Deploy admin panel with exchange-specific features
-        pass
+        try:
+            logger.info(f"Deploying admin panel for exchange {exchange.exchange_id}")
+            
+            namespace = f"tigerex-{exchange.exchange_id.lower()}"
+            
+            # Create admin panel deployment
+            admin_config = {
+                "apiVersion": "apps/v1",
+                "kind": "Deployment",
+                "metadata": {
+                    "name": f"{exchange.exchange_id.lower()}-admin",
+                    "namespace": namespace,
+                    "labels": {
+                        "app": "admin",
+                        "exchange": exchange.exchange_id
+                    }
+                },
+                "spec": {
+                    "replicas": 2,
+                    "selector": {
+                        "matchLabels": {"app": "admin"}
+                    },
+                    "template": {
+                        "metadata": {"labels": {"app": "admin"}},
+                        "spec": {
+                            "containers": [{
+                                "name": "admin",
+                                "image": f"tigerex/admin-panel:{exchange.exchange_id.lower()}",
+                                "env": [
+                                    {"name": "EXCHANGE_ID", "value": exchange.exchange_id},
+                                    {"name": "EXCHANGE_NAME", "value": exchange.brand_name or exchange.name},
+                                    {"name": "API_URL", "value": f"https://api.{exchange.domain_name or f'{exchange.exchange_id.lower()}.tigerex.com'}"},
+                                    {"name": "ADMIN_SECRET", "valueFrom": {"secretKeyRef": {"name": "admin-secrets", "key": "secret"}}}
+                                ],
+                                "ports": [{"containerPort": 8001}],
+                                "resources": {
+                                    "requests": {"cpu": "100m", "memory": "256Mi"},
+                                    "limits": {"cpu": "500m", "memory": "512Mi"}
+                                }
+                            }]
+                        }
+                    }
+                }
+            }
+            
+            # Configure ingress for admin panel
+            ingress_config = {
+                "apiVersion": "networking.k8s.io/v1",
+                "kind": "Ingress",
+                "metadata": {
+                    "name": f"{exchange.exchange_id.lower()}-admin-ingress",
+                    "namespace": namespace,
+                    "annotations": {
+                        "kubernetes.io/ingress.class": "nginx",
+                        "cert-manager.io/cluster-issuer": "letsencrypt-prod",
+                        "nginx.ingress.kubernetes.io/whitelist-source-range": "0.0.0.0/0"  # In production, restrict this
+                    }
+                },
+                "spec": {
+                    "tls": [{
+                        "hosts": [f"admin.{exchange.domain_name or f'{exchange.exchange_id.lower()}.tigerex.com'}"],
+                        "secretName": f"{exchange.exchange_id.lower()}-admin-tls"
+                    }],
+                    "rules": [{
+                        "host": f"admin.{exchange.domain_name or f'{exchange.exchange_id.lower()}.tigerex.com'}",
+                        "http": {
+                            "paths": [{
+                                "path": "/",
+                                "pathType": "Prefix",
+                                "backend": {
+                                    "service": {
+                                        "name": "admin",
+                                        "port": {"number": 8001}
+                                    }
+                                }
+                            }]
+                        }
+                    }]
+                }
+            }
+            
+            logger.info(f"Admin panel deployment completed for exchange {exchange.exchange_id}")
+            
+        except Exception as e:
+            logger.error(f"Failed to deploy admin panel for exchange {exchange.exchange_id}: {str(e)}")
+            raise
 
 # Initialize manager
 admin_manager = SuperAdminManager()

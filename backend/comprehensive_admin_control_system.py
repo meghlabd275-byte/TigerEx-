@@ -465,8 +465,36 @@ class ComprehensiveAdminControlSystem:
             if user.username == username and user.is_active:
                 # Check IP restrictions
                 if user.ip_restrictions:
-                    # Simplified IP check - in production would use proper IP validation
-                    pass
+                    # IP validation - check if the requesting IP is in the allowed list
+                    import ipaddress
+                    ip_allowed = False
+                    for allowed_ip in user.ip_restrictions:
+                        try:
+                            # Support both single IPs and CIDR ranges
+                            if '/' in allowed_ip:
+                                # CIDR range
+                                network = ipaddress.ip_network(allowed_ip, strict=False)
+                                if ipaddress.ip_address(ip_address) in network:
+                                    ip_allowed = True
+                                    break
+                            else:
+                                # Single IP
+                                if ip_address == allowed_ip:
+                                    ip_allowed = True
+                                    break
+                        except ValueError:
+                            continue
+                    
+                    if not ip_allowed:
+                        logger.warning(f"IP {ip_address} not in allowed list for user {username}")
+                        return {
+                            "success": False,
+                            "error": "IP address not allowed",
+                            "user_id": None,
+                            "role": None,
+                            "permissions": [],
+                            "department": None
+                        }
 
                 # Update last login
                 user.last_login = datetime.now()

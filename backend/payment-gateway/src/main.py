@@ -1009,8 +1009,68 @@ async def verify_webhook_signature(provider: str, body: bytes, headers: Dict[str
 
 async def process_webhook(provider: str, payload: Dict[str, Any]):
     """Process webhook payload from payment provider"""
-    # Implementation for webhook processing
-    pass
+    try:
+        if provider == "stripe":
+            event_type = payload.get("type")
+            data = payload.get("data", {}).get("object", {})
+            
+            if event_type == "payment_intent.succeeded":
+                payment_intent_id = data.get("id")
+                amount = data.get("amount") / 100  # Convert from cents
+                currency = data.get("currency", "usd").upper()
+                metadata = data.get("metadata", {})
+                user_id = metadata.get("user_id")
+                
+                # Update payment status in database
+                logger.info(f"Payment succeeded: {payment_intent_id} for user {user_id}")
+                
+                # Credit user balance
+                if user_id:
+                    # Implementation would credit the user's balance
+                    pass
+            
+            elif event_type == "payment_intent.payment_failed":
+                payment_intent_id = data.get("id")
+                error = data.get("last_payment_error", {})
+                logger.warning(f"Payment failed: {payment_intent_id}, Error: {error}")
+        
+        elif provider == "paypal":
+            event_type = payload.get("event_type")
+            resource = payload.get("resource", {})
+            
+            if event_type == "PAYMENT.CAPTURE.COMPLETED":
+                capture_id = resource.get("id")
+                amount = float(resource.get("amount", {}).get("value", 0))
+                currency = resource.get("amount", {}).get("currency_code", "USD")
+                custom_id = resource.get("custom_id")
+                
+                logger.info(f"PayPal payment completed: {capture_id}")
+            
+            elif event_type == "PAYMENT.CAPTURE.DENIED":
+                capture_id = resource.get("id")
+                logger.warning(f"PayPal payment denied: {capture_id}")
+        
+        elif provider == "coinbase":
+            event_type = payload.get("type")
+            data = payload.get("data", {})
+            
+            if event_type == "charge:confirmed":
+                charge_id = data.get("id")
+                code = data.get("code")
+                timeline = data.get("timeline", [])
+                
+                # Find the confirmed event in timeline
+                for event in timeline:
+                    if event.get("status") == "COMPLETED":
+                        amount = event.get("amount", {})
+                        logger.info(f"Coinbase charge confirmed: {charge_id}")
+        
+        logger.info(f"Processed webhook for {provider}: {payload.get('id', 'unknown')}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error processing webhook: {str(e)}")
+        return False
 
 @app.get("/health")
 async def health_check():

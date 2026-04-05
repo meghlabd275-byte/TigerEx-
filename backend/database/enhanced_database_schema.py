@@ -896,13 +896,41 @@ def create_database_schema(database_url: str):
 # Migration utility functions
 def run_migrations(engine):
     """Run pending database migrations"""
-    # Implementation for running migrations
-    pass
+    import alembic.config
+    from alembic import command
+    
+    try:
+        # Get Alembic config
+        alembic_cfg = alembic.config.Config()
+        alembic_cfg.set_main_option("sqlalchemy.url", str(engine.url))
+        
+        # Run migrations
+        command.upgrade(alembic_cfg, "head")
+        logger.info("Database migrations completed successfully")
+        return True
+    except Exception as e:
+        logger.error(f"Migration failed: {str(e)}")
+        return False
 
 def create_migration(name: str, description: str):
     """Create a new migration file"""
-    # Implementation for creating migrations
-    pass
+    import alembic.config
+    from alembic import command
+    
+    try:
+        alembic_cfg = alembic.config.Config()
+        
+        # Create a new migration
+        command.revision(
+            alembic_cfg,
+            message=f"{name}: {description}",
+            autogenerate=True
+        )
+        logger.info(f"Created migration: {name}")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to create migration: {str(e)}")
+        return False
 
 # Database utility functions
 def get_database_stats(engine):

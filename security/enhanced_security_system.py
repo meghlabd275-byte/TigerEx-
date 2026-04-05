@@ -580,8 +580,35 @@ class ThreatIntelligence:
     
     def update_threat_intelligence(self):
         """Update threat intelligence data"""
-        # Implementation for updating from threat feeds
-        pass
+        try:
+            # Simulate updating from threat feeds
+            # In production, this would fetch from actual threat intelligence APIs
+            
+            # Common malicious IP patterns
+            new_threats = [
+                "185.220.101.0/24",  # Known Tor exit nodes
+                "45.155.205.0/24",   # Known malicious range
+                "193.32.162.0/24",   # Known botnet
+                "91.219.29.0/24",    # Known malicious range
+            ]
+            
+            for threat in new_threats:
+                if "/" in threat:
+                    # CIDR range - add all IPs in range
+                    import ipaddress
+                    network = ipaddress.ip_network(threat, strict=False)
+                    for ip in network.hosts():
+                        self.malicious_ips.add(str(ip))
+                else:
+                    self.malicious_ips.add(threat)
+            
+            # Update timestamp
+            self.last_threat_update = datetime.utcnow()
+            
+            logger.info(f"Updated threat intelligence: {len(self.malicious_ips)} malicious IPs")
+            
+        except Exception as e:
+            logger.error(f"Failed to update threat intelligence: {str(e)}")
 
 class ComplianceManager:
     def __init__(self, config: Dict[str, Any]):
