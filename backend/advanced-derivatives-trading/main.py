@@ -874,8 +874,10 @@ async def get_option_flow_analysis(
     )
     
     if underlying:
-        # Filter by underlying (would need to join with OptionContract)
-        pass
+        # Filter by underlying by joining with OptionContract
+        from sqlalchemy.orm import joinedload
+        query = query.join(OptionContract, OptionContract.id == DerivativeTrade.product_id)
+        query = query.filter(OptionContract.underlying == underlying)
     
     trades = query.all()
     

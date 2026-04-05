@@ -613,9 +613,37 @@ class AdminPanelManager:
             
             # For ERC20 tokens, validate basic functions
             if token_data.token_standard == TokenStandard.ERC20:
-                # This would include more comprehensive contract validation
-                # For now, we'll just check that it's a contract
-                pass
+                # Comprehensive ERC20 contract validation
+                erc20_abi = [
+                    {"constant": True, "inputs": [], "name": "name", "outputs": [{"name": "", "type": "string"}], "type": "function"},
+                    {"constant": True, "inputs": [], "name": "symbol", "outputs": [{"name": "", "type": "string"}], "type": "function"},
+                    {"constant": True, "inputs": [], "name": "decimals", "outputs": [{"name": "", "type": "uint8"}], "type": "function"},
+                    {"constant": True, "inputs": [], "name": "totalSupply", "outputs": [{"name": "", "type": "uint256"}], "type": "function"}
+                ]
+                
+                contract = web3.eth.contract(
+                    address=web3.to_checksum_address(contract_address),
+                    abi=erc20_abi
+                )
+                
+                # Validate required ERC20 functions exist
+                try:
+                    name = contract.functions.name().call()
+                    symbol = contract.functions.symbol().call()
+                    decimals = contract.functions.decimals().call()
+                    total_supply = contract.functions.totalSupply().call()
+                    
+                    # Store validated token info
+                    token_data.name = name
+                    token_data.symbol = symbol
+                    token_data.decimals = decimals
+                    token_data.total_supply = str(total_supply)
+                    
+                except Exception as e:
+                    raise HTTPException(
+                        status_code=400, 
+                        detail=f"Contract is not a valid ERC20 token: {str(e)}"
+                    )
                 
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"Contract validation failed: {str(e)}")

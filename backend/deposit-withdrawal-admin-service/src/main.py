@@ -232,9 +232,45 @@ async def monitor_network_health():
                 """)
                 
                 for asset in assets:
-                    # Check for suspicious activity
-                    # TODO: Implement actual network health checks
-                    pass
+                    # Check for suspicious activity based on failed transactions
+                    failed_tx_count = await conn.fetchval("""
+                        SELECT COUNT(*) FROM transaction_monitoring
+                        WHERE asset_symbol = $1
+                        AND status = 'failed'
+                        AND created_at > NOW() - INTERVAL '1 hour'
+                    """, asset['asset_symbol'])
+                    
+                    # If more than 10 failed transactions in last hour, auto-pause
+                    if failed_tx_count and failed_tx_count > 10:
+                        await conn.execute("""
+                            UPDATE asset_deposit_withdrawal_status
+                            SET deposit_paused = true,
+                                withdrawal_paused = true,
+                                network_status = 'congested',
+                                auto_paused_at = NOW(),
+                                auto_pause_reason = 'High failure rate detected'
+                            WHERE asset_symbol = $1
+                        """, asset['asset_symbol'])
+                        
+                        # Log the auto-pause action
+                        await conn.execute("""
+                            INSERT INTO system_alerts (
+                                alert_type, asset_symbol, message, severity, created_at
+                            ) VALUES ('auto_pause', $1, 'Auto-paused due to high failure rate', 'warning', NOW())
+                        """, asset['asset_symbol'])
+                        
+                        logger.warning(f"Auto-paused {asset['asset_symbol']} due to {failed_tx_count} failed transactions")
+                    
+                    # Check blockchain sync status
+                    sync_status = await redis_client.get(f"blockchain_sync:{asset['blockchain']}")
+                    if sync_status == 'stalled':
+                        await conn.execute("""
+                            UPDATE asset_deposit_withdrawal_status
+                            SET network_status = 'congested',
+                                sync_stalled = true
+                            WHERE asset_symbol = $1
+                        """, asset['asset_symbol'])
+                        logger.warning(f"Blockchain {asset['blockchain']} sync stalled for {asset['asset_symbol']}")
                     
         except Exception as e:
             logger.error(f"Error in monitor_network_health: {str(e)}")
@@ -301,9 +337,99 @@ async def update_statistics():
             await asyncio.sleep(3600)  # Update every hour
             
             async with db_pool.acquire() as conn:
-                # Update hourly statistics
-                # TODO: Implement statistics calculation
-                pass
+                # Calculate and store hourly deposit statistics
+                await conn.execute("""
+                    INSERT INTO deposit_statistics_hourly (
+                        hour_timestamp, asset_symbol, total_deposits, 
+                        total_amount, total_fees, unique_users, avg_amount
+                    )
+                    SELECT 
+                        DATE_TRUNC('hour', NOW() - INTERVAL '1 hour') as hour_timestamp,
+                        asset_symbol,
+                        COUNT(*) as total_deposits,
+                        SUM(amount) as total_amount,
+                        SUM(fee) as total_fees,
+                        COUNT(DISTINCT user_id) as unique_users,
+                        AVG(amount) as avg_amount
+                    FROM deposits
+                    WHERE created_at >= NOW() - INTERVAL '1 hour'
+                    AND status = 'completed'
+                    GROUP BY asset_symbol, DATE_TRUNC('hour', created_at)
+                    ON CONFLICT (hour_timestamp, asset_symbol) 
+                    DO UPDATE SET 
+                        total_deposits = EXCLUDED.total_deposits,
+                        total_amount = EXCLUDED.total_amount,
+                        total_fees = EXCLUDED.total_fees,
+                        unique_users = EXCLUDED.unique_users,
+                        avg_amount = EXCLUDED.avg_amount
+                """)
+                
+                # Calculate and store hourly withdrawal statistics
+                await conn.execute("""
+                    INSERT INTO withdrawal_statistics_hourly (
+                        hour_timestamp, asset_symbol, total_withdrawals,
+                        total_amount, total_fees, unique_users, avg_amount
+                    )
+                    SELECT 
+                        DATE_TRUNC('hour', NOW() - INTERVAL '1 hour') as hour_timestamp,
+                        asset_symbol,
+                        COUNT(*) as total_withdrawals,
+                        SUM(amount) as total_amount,
+                        SUM(fee) as total_fees,
+                        COUNT(DISTINCT user_id) as unique_users,
+                        AVG(amount) as avg_amount
+                    FROM withdrawals
+                    WHERE created_at >= NOW() - INTERVAL '1 hour'
+                    AND status = 'completed'
+                    GROUP BY asset_symbol, DATE_TRUNC('hour', created_at)
+                    ON CONFLICT (hour_timestamp, asset_symbol)
+                    DO UPDATE SET
+                        total_withdrawals = EXCLUDED.total_withdrawals,
+                        total_amount = EXCLUDED.total_amount,
+                        total_fees = EXCLUDED.total_fees,
+                        unique_users = EXCLUDED.unique_users,
+                        avg_amount = EXCLUDED.avg_amount
+                """)
+                
+                # Update daily aggregates
+                await conn.execute("""
+                    INSERT INTO deposit_statistics_daily (
+                        date_timestamp, asset_symbol, total_deposits,
+                        total_amount, total_fees, unique_users
+                    )
+                    SELECT 
+                        DATE(NOW() - INTERVAL '1 day') as date_timestamp,
+                        asset_symbol,
+                        SUM(total_deposits) as total_deposits,
+                        SUM(total_amount) as total_amount,
+                        SUM(total_fees) as total_fees,
+                        SUM(unique_users) as unique_users
+                    FROM deposit_statistics_hourly
+                    WHERE hour_timestamp >= DATE_TRUNC('day', NOW() - INTERVAL '1 day')
+                    AND hour_timestamp < DATE_TRUNC('day', NOW())
+                    GROUP BY asset_symbol
+                    ON CONFLICT (date_timestamp, asset_symbol)
+                    DO UPDATE SET
+                        total_deposits = EXCLUDED.total_deposits,
+                        total_amount = EXCLUDED.total_amount,
+                        total_fees = EXCLUDED.total_fees,
+                        unique_users = EXCLUDED.unique_users
+                """)
+                
+                # Update Redis cache with latest stats
+                total_deposits_24h = await conn.fetchval("""
+                    SELECT COALESCE(SUM(total_amount), 0) FROM deposit_statistics_hourly
+                    WHERE hour_timestamp >= NOW() - INTERVAL '24 hours'
+                """)
+                total_withdrawals_24h = await conn.fetchval("""
+                    SELECT COALESCE(SUM(total_amount), 0) FROM withdrawal_statistics_hourly
+                    WHERE hour_timestamp >= NOW() - INTERVAL '24 hours'
+                """)
+                
+                await redis_client.set('stats:deposits_24h', str(total_deposits_24h), ex=7200)
+                await redis_client.set('stats:withdrawals_24h', str(total_withdrawals_24h), ex=7200)
+                
+                logger.info(f"Updated deposit/withdrawal statistics - 24h deposits: {total_deposits_24h}, withdrawals: {total_withdrawals_24h}")
                 
         except Exception as e:
             logger.error(f"Error in update_statistics: {str(e)}")

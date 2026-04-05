@@ -377,11 +377,82 @@ class SecurityAuditManager:
     
     async def _setup_rate_limiting(self):
         """Setup rate limiting configuration"""
-        pass
+        # Configure rate limits for different endpoint types
+        rate_limit_configs = {
+            "api_general": {"requests": 100, "window": 60},  # 100 req/min
+            "api_trading": {"requests": 50, "window": 10},   # 50 req/10sec
+            "api_public": {"requests": 200, "window": 60},   # 200 req/min
+            "auth_login": {"requests": 5, "window": 300},    # 5 req/5min
+            "auth_register": {"requests": 3, "window": 3600}, # 3 req/hour
+            "withdrawal": {"requests": 10, "window": 3600},  # 10 req/hour
+        }
+        
+        for endpoint_type, config in rate_limit_configs.items():
+            await self.redis.hset(
+                f"rate_limit_config:{endpoint_type}",
+                mapping={"requests": config["requests"], "window": config["window"]}
+            )
+        
+        # Setup IP-based rate limiting
+        await self.redis.set("rate_limit:ip_global", "1000:60")  # 1000 req/min per IP
+        
+        # Setup user-based rate limiting tiers
+        await self.redis.set("rate_limit:user_standard", "500:60")  # 500 req/min
+        await self.redis.set("rate_limit:user_vip", "1000:60")      # 1000 req/min
+        await self.redis.set("rate_limit:user_institutional", "5000:60")  # 5000 req/min
+        
+        logger.info("Rate limiting configuration initialized")
     
     async def _start_vulnerability_scanner(self):
         """Start automated vulnerability scanning"""
-        pass
+        # Initialize vulnerability scanner with periodic scanning
+        self.vulnerability_scan_interval = 3600  # 1 hour
+        
+        while True:
+            try:
+                # Scan critical endpoints
+                critical_endpoints = [
+                    "/api/auth/login",
+                    "/api/auth/register", 
+                    "/api/user/wallet",
+                    "/api/trade/order",
+                    "/api/withdraw",
+                    "/api/admin"
+                ]
+                
+                for endpoint in critical_endpoints:
+                    # Check for common vulnerabilities
+                    vuln_checks = {
+                        "sql_injection": await self._check_sql_injection(endpoint),
+                        "xss": await self._check_xss_vulnerability(endpoint),
+                        "csrf": await self._check_csrf_protection(endpoint),
+                        "auth_bypass": await self._check_auth_bypass(endpoint),
+                        "rate_limit": await self._check_rate_limiting(endpoint),
+                    }
+                    
+                    for vuln_type, result in vuln_checks.items():
+                        if result.get("vulnerable", False):
+                            await self.redis.hset(
+                                f"vulnerability:{endpoint}:{vuln_type}",
+                                mapping={
+                                    "endpoint": endpoint,
+                                    "type": vuln_type,
+                                    "severity": result.get("severity", "medium"),
+                                    "details": json.dumps(result.get("details", {})),
+                                    "discovered_at": datetime.utcnow().isoformat()
+                                }
+                            )
+                            logger.warning(f"Vulnerability found: {vuln_type} at {endpoint}")
+                
+                # Store last scan time
+                await self.redis.set("vuln_scan:last_run", datetime.utcnow().isoformat())
+                
+                # Sleep until next scan
+                await asyncio.sleep(self.vulnerability_scan_interval)
+                
+            except Exception as e:
+                logger.error(f"Error in vulnerability scanner: {str(e)}")
+                await asyncio.sleep(60)  # Wait before retrying
     
     async def scan_codebase(self, codebase_path: str) -> List[Vulnerability]:
         """Scan codebase for security vulnerabilities"""

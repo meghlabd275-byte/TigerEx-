@@ -758,17 +758,126 @@ CMD ["npm", "start"]
     async def _deploy_exchange_backend(self, exchange: WhiteLabelExchange):
         """Deploy exchange backend services"""
         # Deploy all the microservices with exchange-specific configuration
-        pass
+        try:
+            # Create exchange-specific environment configuration
+            env_config = {
+                "EXCHANGE_ID": exchange.exchange_id,
+                "EXCHANGE_NAME": exchange.name,
+                "DATABASE_URL": f"postgresql://{exchange.db_user}:{exchange.db_password}@{exchange.db_host}/{exchange.db_name}",
+                "REDIS_URL": f"redis://{exchange.redis_host}:{exchange.redis_port}/{exchange.redis_db}",
+                "KAFKA_BROKERS": exchange.kafka_brokers,
+                "LOG_LEVEL": exchange.log_level,
+            }
+            
+            # Deploy core services
+            core_services = [
+                "auth-service", "trading-engine", "order-service", "wallet-service",
+                "market-data-service", "user-service", "kyc-service", "notification-service"
+            ]
+            
+            for service in core_services:
+                # Create Kubernetes deployment for each service
+                deployment_name = f"{exchange.exchange_id}-{service}"
+                
+                # Apply deployment configuration
+                await self.kubernetes_client.create_deployment(
+                    name=deployment_name,
+                    image=f"tigerex/{service}:latest",
+                    env_vars=env_config,
+                    replicas=2 if service in ["trading-engine", "order-service"] else 1,
+                    namespace=exchange.namespace
+                )
+                
+                logger.info(f"Deployed {service} for exchange {exchange.name}")
+            
+            # Configure service mesh and ingress
+            await self.kubernetes_client.configure_ingress(
+                namespace=exchange.namespace,
+                domain=exchange.domain,
+                tls_enabled=True
+            )
+            
+            exchange.backend_deployed = True
+            logger.info(f"Backend deployment completed for exchange {exchange.name}")
+            
+        except Exception as e:
+            logger.error(f"Backend deployment failed: {str(e)}")
+            raise
     
     async def _deploy_exchange_frontend(self, exchange: WhiteLabelExchange):
         """Deploy exchange frontend"""
-        # Deploy customized frontend with branding
-        pass
+        try:
+            # Generate customized frontend build
+            frontend_config = {
+                "EXCHANGE_NAME": exchange.name,
+                "EXCHANGE_LOGO": exchange.logo_url,
+                "PRIMARY_COLOR": exchange.primary_color,
+                "SECONDARY_COLOR": exchange.secondary_color,
+                "SUPPORTED_LANGUAGES": exchange.supported_languages,
+                "DEFAULT_LANGUAGE": exchange.default_language,
+                "THEME": exchange.theme,
+                "DOMAIN": exchange.domain,
+                "FEATURES": exchange.enabled_features,
+            }
+            
+            # Create frontend deployment
+            await self.kubernetes_client.create_deployment(
+                name=f"{exchange.exchange_id}-frontend",
+                image="tigerex/frontend:latest",
+                env_vars=frontend_config,
+                replicas=2,
+                namespace=exchange.namespace,
+                config_map_data=frontend_config
+            )
+            
+            # Configure CDN for static assets
+            await self.cdn_client.configure_cdn(
+                domain=exchange.domain,
+                origins=[f"{exchange.exchange_id}-frontend.{exchange.namespace}.svc.cluster.local"]
+            )
+            
+            exchange.frontend_deployed = True
+            logger.info(f"Frontend deployment completed for exchange {exchange.name}")
+            
+        except Exception as e:
+            logger.error(f"Frontend deployment failed: {str(e)}")
+            raise
     
     async def _deploy_exchange_admin(self, exchange: WhiteLabelExchange):
         """Deploy exchange admin panel"""
-        # Deploy admin panel with exchange-specific features
-        pass
+        try:
+            # Create admin panel configuration
+            admin_config = {
+                "EXCHANGE_ID": exchange.exchange_id,
+                "EXCHANGE_NAME": exchange.name,
+                "ADMIN_USERS": json.dumps(exchange.admin_users),
+                "PERMISSIONS": json.dumps(exchange.admin_permissions),
+                "FEATURES": json.dumps(exchange.admin_features),
+            }
+            
+            # Deploy admin panel service
+            await self.kubernetes_client.create_deployment(
+                name=f"{exchange.exchange_id}-admin",
+                image="tigerex/admin-panel:latest",
+                env_vars=admin_config,
+                replicas=1,
+                namespace=exchange.namespace
+            )
+            
+            # Create admin ingress route
+            await self.kubernetes_client.configure_ingress(
+                namespace=exchange.namespace,
+                domain=f"admin.{exchange.domain}",
+                service_name=f"{exchange.exchange_id}-admin",
+                tls_enabled=True
+            )
+            
+            exchange.admin_deployed = True
+            logger.info(f"Admin panel deployment completed for exchange {exchange.name}")
+            
+        except Exception as e:
+            logger.error(f"Admin deployment failed: {str(e)}")
+            raise
 
 # Initialize manager
 admin_manager = SuperAdminManager()

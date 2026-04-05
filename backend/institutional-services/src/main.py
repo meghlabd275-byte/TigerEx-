@@ -833,8 +833,15 @@ class ComplianceEngine:
         
         # Check for large trade reporting requirements
         if order_value > config.LARGE_TRADE_THRESHOLD:
-            # Would trigger regulatory reporting
-            pass
+            # Trigger regulatory reporting
+            await self._submit_large_trade_report(
+                client_id=client.client_id,
+                order_id=otc_order.order_id,
+                order_value=order_value,
+                asset=otc_order.asset,
+                counterparty=otc_order.counterparty
+            )
+            logger.info(f"Large trade report submitted for order {otc_order.order_id}")
         
         # Check for suspicious activity
         if order_value > config.SUSPICIOUS_ACTIVITY_THRESHOLD:
