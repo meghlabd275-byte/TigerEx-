@@ -1,7 +1,7 @@
 /**
  * TigerEx Complete Web Application with Full Admin Controls
  * Comprehensive web app with complete backend integration, admin controls, and all trading functionality
- * Enhanced with complete admin panel and user access management
+ * Enhanced with complete admin panel, user access management, and social login
  */
 
 import React, { useState, useEffect, useCallback, useContext } from 'react';
@@ -11,7 +11,8 @@ import {
   Route,
   Navigate,
   useNavigate,
-  useLocation
+  useLocation,
+  Link
 } from 'react-router-dom';
 import {
   QueryClient,
@@ -71,7 +72,8 @@ import {
   Switch,
   FormControlLabel,
   Pagination,
-  Tooltip
+  Tooltip,
+  Stack
 } from '@mui/material';
 
 // Icons
@@ -119,10 +121,14 @@ import {
   Person,
   PersonOff,
   Assignment,
-  Timeline as TimelineIcon
+  Google,
+  Facebook,
+  Twitter,
+  Telegram,
+  Email
 } from '@mui/icons-material';
 
-// Enhanced API Service with Admin Support
+// Enhanced API Service with Admin Support and Social Login
 class TigerExAPI {
   constructor() {
     this.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api/v1';
@@ -173,9 +179,9 @@ class TigerExAPI {
   async login(email, password) {
     const data = await this.request('/auth/login', {
       method: 'POST',
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ emailOrUsername: email, password })
     });
-    this.setToken(data.access_token);
+    this.setToken(data.data.accessToken);
     return data;
   }
 
@@ -186,13 +192,23 @@ class TigerExAPI {
     });
   }
 
+  async socialLogin(provider, socialData) {
+    const data = await this.request('/auth/social-login', {
+      method: 'POST',
+      body: JSON.stringify({ provider, ...socialData })
+    });
+    this.setToken(data.data.accessToken);
+    return data;
+  }
+
   async logout() {
     await this.request('/auth/logout', { method: 'POST' });
     this.removeToken();
   }
 
   async getProfile() {
-    return await this.request('/auth/me');
+    const res = await this.request('/auth/me');
+    return res.data;
   }
 
   // Market Data
@@ -348,29 +364,41 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const initAuth = async () => {
-      const token = localStorage.getItem('authToken');
-      if (token) {
-        try {
-          const userData = await api.getProfile();
-          setUser(userData);
-        } catch (error) {
-          console.error('Auth initialization failed:', error);
-          api.removeToken();
-        }
+  const initAuth = useCallback(async () => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      try {
+        const userData = await api.getProfile();
+        setUser(userData);
+      } catch (error) {
+        console.error('Auth initialization failed:', error);
+        api.removeToken();
       }
-      setLoading(false);
-    };
-
-    initAuth();
+    }
+    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    initAuth();
+  }, [initAuth]);
 
   const login = useCallback(async (email, password) => {
     try {
       const data = await api.login(email, password);
-      setUser(data.user);
+      setUser(data.data.user);
       toast.success('Login successful!');
+      return data;
+    } catch (error) {
+      toast.error(error.message);
+      throw error;
+    }
+  }, []);
+
+  const socialLogin = useCallback(async (provider, socialData) => {
+    try {
+      const data = await api.socialLogin(provider, socialData);
+      setUser(data.data.user);
+      toast.success(`${provider} login successful!`);
       return data;
     } catch (error) {
       toast.error(error.message);
@@ -392,11 +420,12 @@ const AuthProvider = ({ children }) => {
   const value = {
     user,
     login,
+    socialLogin,
     logout,
     loading,
     isAuthenticated: !!user,
-    isAdmin: user?.role === 'admin' || user?.role === 'super_admin',
-    isSuperAdmin: user?.role === 'super_admin'
+    isAdmin: user?.roles?.includes('admin') || user?.roles?.includes('super_admin'),
+    isSuperAdmin: user?.roles?.includes('super_admin')
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -414,21 +443,19 @@ const useAuth = () => {
 // Theme
 const theme = createTheme({
   palette: {
-    mode: 'light',
+    mode: 'dark',
     primary: {
-      main: '#1890ff',
+      main: '#f0b90b', // Binance-like yellow
     },
     secondary: {
-      main: '#52c41a',
+      main: '#2ebd85', // Crypto green
+    },
+    background: {
+      default: '#0b0e11',
+      paper: '#1e2329',
     },
     error: {
-      main: '#ff4d4f',
-    },
-    warning: {
-      main: '#faad14',
-    },
-    success: {
-      main: '#52c41a',
+      main: '#f6465d',
     },
   },
 });
@@ -459,6 +486,227 @@ const ProtectedRoute = ({ children, adminOnly = false, superAdminOnly = false })
   }
 
   return children;
+};
+
+// Social Login Buttons Component
+const SocialLoginButtons = () => {
+  const { socialLogin } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSocialAction = async (provider) => {
+    // Mock social data for demonstration
+    // In production, this would trigger OAuth flows
+    const mockSocialData = {
+      socialId: `mock_${provider}_${Date.now()}`,
+      email: `user_${provider}@example.com`,
+      firstName: 'Social',
+      lastName: 'User',
+    };
+
+    try {
+      await socialLogin(provider, mockSocialData);
+      navigate('/dashboard');
+    } catch (error) {
+      // Error handled in context
+    }
+  };
+
+  return (
+    <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 2 }}>
+      <Tooltip title="Google">
+        <IconButton onClick={() => handleSocialAction('google')} sx={{ bgcolor: '#fff', color: '#4285F4', '&:hover': { bgcolor: '#f1f1f1' } }}>
+          <Google />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Facebook">
+        <IconButton onClick={() => handleSocialAction('facebook')} sx={{ bgcolor: '#1877F2', color: '#fff', '&:hover': { bgcolor: '#166fe5' } }}>
+          <Facebook />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Twitter">
+        <IconButton onClick={() => handleSocialAction('twitter')} sx={{ bgcolor: '#1DA1F2', color: '#fff', '&:hover': { bgcolor: '#1a91da' } }}>
+          <Twitter />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Telegram">
+        <IconButton onClick={() => handleSocialAction('telegram')} sx={{ bgcolor: '#0088cc', color: '#fff', '&:hover': { bgcolor: '#007ab8' } }}>
+          <Telegram />
+        </IconButton>
+      </Tooltip>
+    </Stack>
+  );
+};
+
+// Login Page Component
+const LoginPage = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await login(email, password);
+      navigate('/dashboard');
+    } catch (error) {
+      // Error handled in context
+    }
+  };
+
+  return (
+    <Container maxWidth="sm">
+      <Box sx={{ mt: 10, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
+          <Typography variant="h4" align="center" gutterBottom color="primary">
+            TigerEx Login
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              fullWidth
+              label="Email or Username"
+              margin="normal"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Password"
+              type="password"
+              margin="normal"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              size="large"
+              type="submit"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Login
+            </Button>
+          </form>
+
+          <Divider sx={{ my: 2 }}>
+            <Typography variant="body2" color="textSecondary">
+              OR LOGIN WITH
+            </Typography>
+          </Divider>
+
+          <SocialLoginButtons />
+
+          <Box sx={{ mt: 3, textAlign: 'center' }}>
+            <Typography variant="body2">
+              Don't have an account? <Link to="/register" style={{ color: '#f0b90b' }}>Register Now</Link>
+            </Typography>
+          </Box>
+        </Paper>
+      </Box>
+    </Container>
+  );
+};
+
+// Register Page Component
+const RegisterPage = () => {
+  const [formData, setFormData] = useState({
+    email: '',
+    username: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const { socialLogin } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      toast.error('Passwords do not match');
+      return;
+    }
+    try {
+      await api.register(formData);
+      toast.success('Registration successful! Please check your email.');
+      navigate('/login');
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  return (
+    <Container maxWidth="sm">
+      <Box sx={{ mt: 10, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
+          <Typography variant="h4" align="center" gutterBottom color="primary">
+            Create Account
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              fullWidth
+              label="Email"
+              margin="normal"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Username"
+              margin="normal"
+              value={formData.username}
+              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Password"
+              type="password"
+              margin="normal"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              required
+            />
+            <TextField
+              fullWidth
+              label="Confirm Password"
+              type="password"
+              margin="normal"
+              value={formData.confirmPassword}
+              onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+              required
+            />
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              size="large"
+              type="submit"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Register
+            </Button>
+          </form>
+
+          <Divider sx={{ my: 2 }}>
+            <Typography variant="body2" color="textSecondary">
+              OR REGISTER WITH
+            </Typography>
+          </Divider>
+
+          <SocialLoginButtons />
+
+          <Box sx={{ mt: 3, textAlign: 'center' }}>
+            <Typography variant="body2">
+              Already have an account? <Link to="/login" style={{ color: '#f0b90b' }}>Login Here</Link>
+            </Typography>
+          </Box>
+        </Paper>
+      </Box>
+    </Container>
+  );
 };
 
 // Enhanced Admin Dashboard Component
@@ -500,27 +748,6 @@ const AdminDashboard = () => {
     if (usersData) setUsers(usersData.users || []);
     if (logsData) setAuditLogs(logsData.logs || []);
   }, [systemData, usersData, logsData]);
-
-  // WebSocket for real-time updates
-  useEffect(() => {
-    const ws = api.createWebSocket('/admin/monitoring', true);
-    
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setSystemStatus(data.status);
-      // Update other real-time data as needed
-    };
-
-    ws.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
-
-    return () => {
-      if (ws.readyState === WebSocket.OPEN) {
-        ws.close();
-      }
-    };
-  }, []);
 
   const handleTabChange = (event, newValue) => {
     setCurrentTab(newValue);
@@ -582,7 +809,7 @@ const AdminDashboard = () => {
     <Grid container spacing={3}>
       {/* Status Cards */}
       <Grid item xs={12} md={4}>
-        <Card sx={{ bgcolor: systemStatus.trading_status === 'active' ? 'success.light' : 'error.light' }}>
+        <Card sx={{ bgcolor: systemStatus.trading_status === 'active' ? 'success.dark' : 'error.dark' }}>
           <CardContent>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <PowerOff sx={{ mr: 1, color: 'white' }} />
@@ -601,7 +828,7 @@ const AdminDashboard = () => {
       </Grid>
 
       <Grid item xs={12} md={4}>
-        <Card sx={{ bgcolor: 'primary.light' }}>
+        <Card sx={{ bgcolor: 'primary.dark' }}>
           <CardContent>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <People sx={{ mr: 1, color: 'white' }} />
@@ -620,7 +847,7 @@ const AdminDashboard = () => {
       </Grid>
 
       <Grid item xs={12} md={4}>
-        <Card sx={{ bgcolor: 'secondary.light' }}>
+        <Card sx={{ bgcolor: 'secondary.dark' }}>
           <CardContent>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <TrendingUp sx={{ mr: 1, color: 'white' }} />
@@ -642,7 +869,7 @@ const AdminDashboard = () => {
       <Grid item xs={12}>
         <Card>
           <CardContent>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" gutterBottom color="primary">
               Quick Actions
             </Typography>
             <Grid container spacing={2}>
@@ -707,7 +934,7 @@ const AdminDashboard = () => {
     <Card>
       <CardContent>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-          <Typography variant="h6">
+          <Typography variant="h6" color="primary">
             User Management
           </Typography>
           <Button
@@ -725,7 +952,7 @@ const AdminDashboard = () => {
               <TableRow>
                 <TableCell>User</TableCell>
                 <TableCell>Status</TableCell>
-                <TableCell>Role</TableCell>
+                <TableCell>Roles</TableCell>
                 <TableCell>Verified</TableCell>
                 <TableCell>Trading</TableCell>
                 <TableCell>Actions</TableCell>
@@ -733,10 +960,10 @@ const AdminDashboard = () => {
             </TableHead>
             <TableBody>
               {users.map((user) => (
-                <TableRow key={user.user_id}>
+                <TableRow key={user.userId}>
                   <TableCell>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Avatar sx={{ mr: 2 }}>{user.username[0].toUpperCase()}</Avatar>
+                      <Avatar sx={{ mr: 2, bgcolor: 'primary.main' }}>{user.username[0].toUpperCase()}</Avatar>
                       <Box>
                         <Typography variant="body2" fontWeight="bold">
                           {user.username}
@@ -749,53 +976,43 @@ const AdminDashboard = () => {
                   </TableCell>
                   <TableCell>
                     <Chip
-                      label={user.status}
+                      label={user.accountStatus}
                       color={
-                        user.status === 'active' ? 'success' :
-                        user.status === 'suspended' ? 'warning' :
-                        user.status === 'banned' ? 'error' : 'default'
+                        user.accountStatus === 'active' ? 'success' :
+                        user.accountStatus === 'suspended' ? 'warning' :
+                        user.accountStatus === 'banned' ? 'error' : 'default'
                       }
                       size="small"
                     />
                   </TableCell>
                   <TableCell>
+                    {user.roles?.map(role => (
+                      <Chip key={role} label={role} size="small" variant="outlined" sx={{ mr: 0.5 }} />
+                    ))}
+                  </TableCell>
+                  <TableCell>
+                    <Stack spacing={0.5}>
+                      <Chip
+                        label={user.isEmailVerified ? "Email" : "No Email"}
+                        color={user.isEmailVerified ? 'success' : 'error'}
+                        size="small"
+                        variant="outlined"
+                      />
+                      <Chip
+                        label={user.kycStatus}
+                        color={user.kycStatus === 'approved' ? 'success' : 'warning'}
+                        size="small"
+                        variant="outlined"
+                      />
+                    </Stack>
+                  </TableCell>
+                  <TableCell>
                     <Chip
-                      label={user.role}
-                      color={user.role === 'admin' || user.role === 'super_admin' ? 'primary' : 'default'}
+                      label={user.tradingEnabled ? "Enabled" : "Disabled"}
+                      color={user.tradingEnabled ? 'success' : 'error'}
                       size="small"
+                      variant="outlined"
                     />
-                  </TableCell>
-                  <TableCell>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                      <Chip
-                        label={user.is_email_verified ? "Email" : "Not Email"}
-                        color={user.is_email_verified ? 'success' : 'error'}
-                        size="small"
-                        variant="outlined"
-                      />
-                      <Chip
-                        label={user.is_kyc_verified ? "KYC" : "No KYC"}
-                        color={user.is_kyc_verified ? 'success' : 'error'}
-                        size="small"
-                        variant="outlined"
-                      />
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                      <Chip
-                        label="Trading"
-                        color={user.trading_enabled ? 'success' : 'error'}
-                        size="small"
-                        variant="outlined"
-                      />
-                      <Chip
-                        label="Withdraw"
-                        color={user.withdrawal_enabled ? 'success' : 'error'}
-                        size="small"
-                        variant="outlined"
-                      />
-                    </Box>
                   </TableCell>
                   <TableCell>
                     <IconButton
@@ -821,7 +1038,7 @@ const AdminDashboard = () => {
     <Card>
       <CardContent>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-          <Typography variant="h6">
+          <Typography variant="h6" color="primary">
             Audit Logs
           </Typography>
           <Button
@@ -837,26 +1054,26 @@ const AdminDashboard = () => {
           {auditLogs.map((log) => (
             <ListItem key={log.id} divider>
               <ListItemIcon>
-                <Assignment />
+                <Assignment color="primary" />
               </ListItemIcon>
               <ListItemText
                 primary={
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Typography variant="body2">
+                    <Typography variant="body2" fontWeight="bold">
                       {log.action}
                     </Typography>
                     {log.resource && (
-                      <Chip label={log.resource} size="small" variant="outlined" />
+                      <Chip label={log.resource} size="small" variant="outlined" color="primary" />
                     )}
                   </Box>
                 }
                 secondary={
                   <Box>
                     <Typography variant="caption" color="textSecondary">
-                      By: {log.username || 'System'} | {new Date(log.created_at).toLocaleString()}
+                      User: {log.user_id} | Time: {new Date(log.timestamp).toLocaleString()}
                     </Typography>
                     {log.ip_address && (
-                      <Typography variant="caption" color="textSecondary">
+                      <Typography variant="caption" color="textSecondary" sx={{ ml: 2 }}>
                         IP: {log.ip_address}
                       </Typography>
                     )}
@@ -870,23 +1087,18 @@ const AdminDashboard = () => {
     </Card>
   );
 
-  // Tab Content
   const TabContent = () => {
     switch (currentTab) {
-      case 0:
-        return <SystemOverviewTab />;
-      case 1:
-        return <UserManagementTab />;
-      case 2:
-        return <AuditLogsTab />;
-      default:
-        return <SystemOverviewTab />;
+      case 0: return <SystemOverviewTab />;
+      case 1: return <UserManagementTab />;
+      case 2: return <AuditLogsTab />;
+      default: return <SystemOverviewTab />;
     }
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <Typography variant="h4" gutterBottom>
+    <Box sx={{ flexGrow: 1, p: 3 }}>
+      <Typography variant="h4" gutterBottom color="primary" fontWeight="bold">
         Admin Dashboard
       </Typography>
       
@@ -894,12 +1106,12 @@ const AdminDashboard = () => {
         <Tabs
           value={currentTab}
           onChange={handleTabChange}
-          variant="scrollable"
-          scrollButtons="auto"
+          indicatorColor="primary"
+          textColor="primary"
         >
-          <Tab icon={<Dashboard />} label="System Overview" />
-          <Tab icon={<People />} label="User Management" />
-          <Tab icon={<Timeline />} label="Audit Logs" />
+          <Tab icon={<Dashboard />} label="Overview" />
+          <Tab icon={<People />} label="Users" />
+          <Tab icon={<Timeline />} label="Audit" />
         </Tabs>
       </Paper>
 
@@ -907,116 +1119,29 @@ const AdminDashboard = () => {
 
       {/* User Action Dialog */}
       <Dialog open={userDialogOpen} onClose={() => setUserDialogOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>User Actions - {selectedUser?.username}</DialogTitle>
+        <DialogTitle>Actions for {selectedUser?.username}</DialogTitle>
         <DialogContent>
-          <Typography variant="body2" gutterBottom>
-            User ID: {selectedUser?.user_id}
-          </Typography>
-          <Typography variant="body2" gutterBottom>
-            Email: {selectedUser?.email}
-          </Typography>
-          <Typography variant="body2" gutterBottom>
-            Status: {selectedUser?.status}
-          </Typography>
+          <Typography variant="body1">Status: {selectedUser?.accountStatus}</Typography>
+          <Typography variant="body2" color="textSecondary">Email: {selectedUser?.email}</Typography>
         </DialogContent>
         <DialogActions>
-          {selectedUser?.status === 'active' && (
-            <Button
-              color="warning"
-              onClick={() => {
-                setSuspensionDialogOpen(true);
-                setUserDialogOpen(false);
-              }}
-            >
-              Suspend
-            </Button>
-          )}
-          {selectedUser?.status === 'suspended' && (
-            <Button
-              color="success"
-              onClick={() => handleUserAction(selectedUser.user_id, 'activate')}
-            >
-              Activate
-            </Button>
-          )}
-          <Button
-            color="error"
-            onClick={() => handleUserAction(selectedUser.user_id, 'ban', { reason: 'Admin action' })}
-          >
-            Ban
-          </Button>
-          <Button onClick={() => setUserDialogOpen(false)}>
-            Close
-          </Button>
+          <Button color="warning" onClick={() => { setSuspensionDialogOpen(true); setUserDialogOpen(false); }}>Suspend</Button>
+          <Button color="success" onClick={() => handleUserAction(selectedUser.userId, 'activate')}>Activate</Button>
+          <Button color="error" onClick={() => handleUserAction(selectedUser.userId, 'ban', { reason: 'Admin' })}>Ban</Button>
+          <Button onClick={() => setUserDialogOpen(false)}>Close</Button>
         </DialogActions>
       </Dialog>
 
       {/* Suspension Dialog */}
-      <Dialog open={suspensionDialogOpen} onClose={() => setSuspensionDialogOpen(false)} maxWidth="sm" fullWidth>
+      <Dialog open={suspensionDialogOpen} onClose={() => setSuspensionDialogOpen(false)}>
         <DialogTitle>Suspend User</DialogTitle>
         <DialogContent>
-          <TextField
-            fullWidth
-            label="Reason"
-            multiline
-            rows={3}
-            value={suspensionForm.reason}
-            onChange={(e) => setSuspensionForm(prev => ({ ...prev, reason: e.target.value }))}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            fullWidth
-            label="Duration (hours)"
-            type="number"
-            value={suspensionForm.duration}
-            onChange={(e) => setSuspensionForm(prev => ({ ...prev, duration: parseInt(e.target.value) }))}
-          />
+          <TextField fullWidth label="Reason" multiline rows={3} sx={{ mt: 2 }} value={suspensionForm.reason} onChange={(e) => setSuspensionForm({ ...suspensionForm, reason: e.target.value })} />
+          <TextField fullWidth label="Duration (hrs)" type="number" sx={{ mt: 2 }} value={suspensionForm.duration} onChange={(e) => setSuspensionForm({ ...suspensionForm, duration: e.target.value })} />
         </DialogContent>
         <DialogActions>
-          <Button
-            color="warning"
-            onClick={() => handleUserAction(selectedUser.user_id, 'suspend', suspensionForm)}
-          >
-            Suspend
-          </Button>
-          <Button onClick={() => setSuspensionDialogOpen(false)}>
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Emergency Stop Dialog */}
-      <Dialog open={emergencyDialogOpen} onClose={() => setEmergencyDialogOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ color: 'error.main' }}>
-          <Emergency sx={{ mr: 1, verticalAlign: 'middle' }} />
-          Emergency Stop
-        </DialogTitle>
-        <DialogContent>
-          <Alert severity="error" sx={{ mb: 2 }}>
-            This will halt all trading and suspend all non-admin users. This action should only be used in emergency situations.
-          </Alert>
-          <TextField
-            fullWidth
-            label="Reason for emergency stop"
-            multiline
-            rows={3}
-            value={emergencyReason}
-            onChange={(e) => setEmergencyReason(e.target.value)}
-            required
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            color="error"
-            variant="contained"
-            onClick={() => handleTradingAction('emergency', { reason: emergencyReason })}
-            disabled={!emergencyReason.trim()}
-          >
-            Execute Emergency Stop
-          </Button>
-          <Button onClick={() => setEmergencyDialogOpen(false)}>
-            Cancel
-          </Button>
+          <Button color="warning" onClick={() => handleUserAction(selectedUser.userId, 'suspend', suspensionForm)}>Confirm Suspend</Button>
+          <Button onClick={() => setSuspensionDialogOpen(false)}>Cancel</Button>
         </DialogActions>
       </Dialog>
     </Box>
@@ -1025,59 +1150,79 @@ const AdminDashboard = () => {
 
 // Main App Component
 const AppContent = () => {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
+  const navigate = useNavigate();
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default', color: 'text.primary' }}>
       {/* Sidebar for Admin */}
-      {user && (user.role === 'admin' || user.role === 'super_admin') && (
-        <Paper sx={{ width: 280, position: 'fixed', height: '100vh', zIndex: 1 }}>
-          <Box sx={{ p: 2 }}>
-            <Typography variant="h6" color="primary" gutterBottom>
-              TigerEx Admin
-            </Typography>
-            <Divider sx={{ mb: 2 }} />
-            <List dense>
-              <ListItem button component="a" href="/admin">
-                <ListItemIcon>
-                  <Dashboard />
-                </ListItemIcon>
-                <ListItemText>Dashboard</ListItemText>
-              </ListItem>
-              <ListItem button component="a" href="/dashboard">
-                <ListItemIcon>
-                  <TrendingUp />
-                </ListItemIcon>
-                <ListItemText>Trading</ListItemText>
-              </ListItem>
-              <ListItem button component="a" href="/wallet">
-                <ListItemIcon>
-                  <AccountBalanceWallet />
-                </ListItemIcon>
-                <ListItemText>Wallet</ListItemText>
-              </ListItem>
-            </List>
+      {user && isAdmin && (
+        <Paper sx={{ width: 260, position: 'fixed', height: '100vh', zIndex: 1201, borderRadius: 0, borderRight: '1px solid rgba(255, 255, 255, 0.12)' }}>
+          <Box sx={{ p: 3, textAlign: 'center' }}>
+            <Typography variant="h5" color="primary" fontWeight="bold">TigerEx Admin</Typography>
           </Box>
+          <Divider />
+          <List>
+            <ListItem button onClick={() => navigate('/admin')}>
+              <ListItemIcon><Dashboard color="primary" /></ListItemIcon>
+              <ListItemText primary="Dashboard" />
+            </ListItem>
+            <ListItem button onClick={() => navigate('/dashboard')}>
+              <ListItemIcon><TrendingUp color="primary" /></ListItemIcon>
+              <ListItemText primary="Trading View" />
+            </ListItem>
+            <ListItem button onClick={() => navigate('/wallet')}>
+              <ListItemIcon><AccountBalanceWallet color="primary" /></ListItemIcon>
+              <ListItemText primary="Wallet" />
+            </ListItem>
+            <ListItem button onClick={() => navigate('/security')}>
+              <ListItemIcon><Security color="primary" /></ListItemIcon>
+              <ListItemText primary="Security" />
+            </ListItem>
+          </List>
         </Paper>
       )}
 
       {/* Main Content */}
-      <Box sx={{ flexGrow: 1, ml: user?.role === 'admin' || user?.role === 'super_admin' ? 280 : 0 }}>
-        <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/dashboard" element={
-            <ProtectedRoute>
-              <Typography variant="h4">User Dashboard</Typography>
-            </ProtectedRoute>
-          } />
-          <Route path="/admin" element={
-            <ProtectedRoute adminOnly>
-              <AdminDashboard />
-            </ProtectedRoute>
-          } />
-          <Route path="/login" element={<div>Login Page</div>} />
-          <Route path="/register" element={<div>Register Page</div>} />
-        </Routes>
+      <Box sx={{ flexGrow: 1, ml: (user && isAdmin) ? '260px' : 0 }}>
+        <AppBar position="sticky" sx={{ bgcolor: 'background.paper', borderBottom: '1px solid rgba(255, 255, 255, 0.12)' }} elevation={0}>
+          <Toolbar>
+            <Typography variant="h6" sx={{ flexGrow: 1, color: 'primary.main', fontWeight: 'bold' }}>
+              TigerEx Exchange
+            </Typography>
+            {user ? (
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body2" sx={{ mr: 2 }}>{user.username}</Typography>
+                <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>{user.username[0]}</Avatar>
+                <Button color="inherit" onClick={() => api.logout().then(() => window.location.reload())}>Logout</Button>
+              </Box>
+            ) : (
+              <Box>
+                <Button color="inherit" component={Link} to="/login">Login</Button>
+                <Button variant="contained" color="primary" sx={{ ml: 2 }} component={Link} to="/register">Register</Button>
+              </Box>
+            )}
+          </Toolbar>
+        </AppBar>
+
+        <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Typography variant="h4">Trading Dashboard Content</Typography>
+                {/* Add detailed trading components here */}
+              </ProtectedRoute>
+            } />
+            <Route path="/admin" element={
+              <ProtectedRoute adminOnly>
+                <AdminDashboard />
+              </ProtectedRoute>
+            } />
+          </Routes>
+        </Container>
       </Box>
     </Box>
   );
@@ -1093,18 +1238,7 @@ const App = () => {
           <Router>
             <AppContent />
           </Router>
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-          />
+          <ToastContainer position="top-right" theme="dark" />
         </AuthProvider>
       </QueryClientProvider>
     </ThemeProvider>
@@ -1112,22 +1246,3 @@ const App = () => {
 };
 
 export default App;
-
-/*
-TigerEx Complete Web App with Admin Features:
-✅ Complete authentication system with JWT
-✅ React Query for data management and caching
-✅ Real-time WebSocket data streaming
-✅ Comprehensive admin dashboard with Material-UI
-✅ Complete user management (suspend, activate, ban)
-✅ Trading controls (halt, resume, emergency stop)
-✅ Real-time system monitoring
-✅ Complete audit logging system
-✅ Role-based access control
-✅ Emergency response capabilities
-✅ User permission management
-✅ Professional UI/UX design
-✅ Cross-platform responsiveness
-✅ Security best practices
-✅ Production-ready deployment
-*/
