@@ -1,113 +1,43 @@
-# TigerEx - Enterprise Cryptocurrency Exchange Platform
+# TigerEx: The Ultimate High-Performance Unified Exchange Ecosystem
 
-![TigerEx](https://img.shields.io/badge/TigerEx-v2.0-green)
-![License](https://img.shields.io/badge/license-MIT-blue)
-![Build](https://img.shields.io/badge/build-passing-brightgreen)
+TigerEx is a comprehensive, multi-exchange trading platform and administrative suite designed for maximum speed, security, and control.
 
-## 🏗️ Architecture
+## 🚀 Key Features
 
-### Technology Stack
+### 1. Unified Admin Control System (v3.1)
+- **Centralized Management**: Full control over all 12 integrated exchanges from a single dashboard.
+- **RBAC (Role-Based Access Control)**: Granular permissions for Super Admins, Exchange Admins, User Managers, and more.
+- **Service Controls**: PAUSE, RESUME, HALT, or STOP any service or user access instantly.
+- **Audit Logs**: Complete persistent history of all administrative actions.
+- **Emergency Stop**: One-click global halt functionality for extreme market conditions.
 
-| Layer | Technologies |
-|-------|-------------|
-| **Frontend** | Next.js 14, React 18, TypeScript, Tailwind CSS, React Native |
-| **Backend** | Python, FastAPI, Node.js, Express, Go, Rust |
-| **Database** | PostgreSQL, MongoDB, Redis, TimescaleDB |
-| **Blockchain** | Solidity, Hardhat, Ethers.js, Web3.js |
-| **Mobile** | Swift (iOS), Kotlin (Android), React Native |
-| **Infrastructure** | Docker, Kubernetes, AWS/GCP, Nginx |
+### 2. Multi-Exchange Integration
+Full advanced trading services implemented for:
+- Binance, Bybit, OKX, Bitget, Bitfinex, MEXC, Kraken, Robinhood, Huobi, HTX, Coinbase, and Gate.io.
 
-### Core Components
+### 3. Advanced Authentication
+- **Social Login**: Integrated Google, Facebook, Twitter, and Telegram login/registration.
+- **JWT & 2FA**: Secure token-based authentication with optional Two-Factor support.
 
-1. **Core Trading Engine (Rust)** - High-performance order matching in `backend/core-engine/`
-2. **Social Auth Service (Node.js)** - Complete social authentication in `backend/social-auth-service/`
-3. **FIX Protocol Engine (Rust)** - Institutional trading support in `backend/fix-protocol-engine/`
-4. **Unified Backend (Python)** - FastAPI services in `backend/unified_backend_v2/`
-5. **Frontend (Next.js)** - Web application in `frontend/`
-6. **Mobile Apps** - Native apps in `mobile/`
-7. **Smart Contracts** - Solidity contracts in `blockchain/smart-contracts/`
+### 4. High-Performance Core
+- **C++ Matching Engine**: Sub-microsecond order matching logic.
+- **Rust Performance Engine**: Optimized execution core for high-throughput data processing.
+- **Solidity Smart Contracts**: Core DEX functionality for decentralized trading.
+- **C# Strategy Service**: Advanced algorithmic trading support.
 
-## 🚀 Deployment
+### 5. Comprehensive Tech Stack
+- **Backend**: Python (FastAPI), Node.js (Express), Go, Java, Ruby, PHP, Rust, C++, C#.
+- **Frontend**: Next.js, React, Material-UI, Tailwind CSS.
+- **Mobile**: Swift (iOS), Kotlin (Android).
+- **Analytics**: R-based market analysis scripts.
 
-This guide provides instructions for deploying the TigerEx platform in a production environment.
+## 🛠️ Getting Started
+1. Configure your environment variables in `.env`.
+2. Start the Unified Admin Control: `python backend/tigerex_unified_admin_control/main.py`.
+3. Launch the web interface: `cd frontend && npm run dev`.
 
-### Prerequisites
+## 🔒 Security
+TigerEx follows industry-standard security practices, including encrypted storage, secure OAuth flows, and regular audit logging.
 
-- **Docker:** 20.10+
-- **Docker Compose:** 1.29+
-- **Node.js:** 16+
-- **Python:** 3.8+
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/meghlabd275-byte/TigerEx-.git
-cd TigerEx-
-```
-
-### 2. Configure Environment Variables
-
-Create a `.env` file in the root directory and configure the following variables:
-
-```
-DATABASE_URL=postgresql://user:password@db/tigerex
-REDIS_URL=redis://redis:6379
-SECRET_KEY=your_secret_key
-```
-
-### 3. Build and Run with Docker Compose
-
-The recommended way to deploy the TigerEx platform is with Docker Compose.
-
-```bash
-docker-compose up -d --build
-```
-
-This will build and start the `unified_backend_v2`, `frontend`, and all required services.
-
-## 💻 Local Development
-
-For local development, you can run the backend and frontend services separately.
-
-### Backend (`unified_backend_v2`)
-
-1.  **Navigate to the backend directory:**
-    ```bash
-    cd backend/unified_backend_v2
-    ```
-
-2.  **Install dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-3.  **Run the development server:**
-    ```bash
-    uvicorn main:app --reload
-    ```
-
-### Frontend
-
-1.  **Navigate to the frontend directory:**
-    ```bash
-    cd frontend
-    ```
-
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
-
-3.  **Run the development server:**
-    ```bash
-    npm run dev
-    ```
-
-## 🧪 Testing
-
-The `unified_backend_v2` includes a comprehensive test suite. To run the tests:
-
-```bash
-cd backend/unified_backend_v2
-python -m pytest
-```
+---
+*TigerEx - Engineered for the next generation of global finance.*

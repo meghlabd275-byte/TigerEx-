@@ -343,7 +343,7 @@ async def update_user(uid: str, req: UpdateUserRequest, user: User = Depends(get
     check_perm(user, Permission.MANAGE_USERS)
     if uid not in db.data["users"]:
         raise HTTPException(404, "User not found")
-
+    
     target = db.data["users"][uid]
     update_data = req.model_dump(exclude_unset=True)
     for k, v in update_data.items():
@@ -355,7 +355,7 @@ async def update_user(uid: str, req: UpdateUserRequest, user: User = Depends(get
             target[k] = v.value
         else:
             target[k] = v
-
+    
     db.save()
     log_audit(user.user_id, "UPDATE_USER", f"user:{uid}", update_data, request)
     return target
@@ -408,7 +408,7 @@ async def update_exchange(exchange_id: str, req: UpdateExchangeRequest, user: Us
     check_perm(user, Permission.CONFIGURE_EXCHANGES)
     if exchange_id not in db.data["exchanges"]:
         raise HTTPException(status_code=404, detail="Exchange not found")
-
+    
     cfg = db.data["exchanges"][exchange_id]
     update_data = req.model_dump(exclude_unset=True)
     cfg.update(update_data)

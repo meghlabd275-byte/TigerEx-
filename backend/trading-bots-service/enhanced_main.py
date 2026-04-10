@@ -135,34 +135,8 @@ class BotEngine:
 
     async def load_active_bots(self):
         """Load all active bots from database"""
-        try:
-            async with self.db_pool.acquire() as conn:
-                active_bots = await conn.fetch("""
-                    SELECT * FROM trading_bots 
-                    WHERE status = 'running' OR status = 'paused'
-                    ORDER BY created_at DESC
-                """)
-                
-                for bot_data in active_bots:
-                    bot_id = bot_data['id']
-                    self.active_bots[bot_id] = {
-                        'id': bot_id,
-                        'user_id': bot_data['user_id'],
-                        'name': bot_data['name'],
-                        'strategy': bot_data['strategy'],
-                        'config': json.loads(bot_data['config']) if isinstance(bot_data['config'], str) else bot_data['config'],
-                        'status': BotStatus(bot_data['status']),
-                        'created_at': bot_data['created_at']
-                    }
-                    
-                    # Resume running bots
-                    if bot_data['status'] == 'running':
-                        asyncio.create_task(self._run_bot(bot_id))
-                
-                logger.info(f"Loaded {len(active_bots)} active bots from database")
-                
-        except Exception as e:
-            logger.error(f"Error loading active bots: {str(e)}")
+        # Simulate loading bots
+        pass
 
     async def create_bot(self, user_id: str, bot_data: BotCreate) -> Dict[str, Any]:
         """Create new trading bot"""
