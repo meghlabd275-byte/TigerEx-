@@ -46,8 +46,17 @@
             <button onclick="showTab('listing')" class="nav-tab" id="tab-listing">
                 <i class="fas fa-list mr-2"></i>Listing
             </button>
+            <button onclick="showTab('launchpad')" class="nav-tab" id="tab-launchpad">
+                <i class="fas fa-rocket mr-2"></i>Launchpad
+            </button>
             <button onclick="showTab('liquidity')" class="nav-tab" id="tab-liquidity">
                 <i class="fas fa-water mr-2"></i>Liquidity
+            </button>
+            <button onclick="showTab('whitelabel')" class="nav-tab" id="tab-whitelabel">
+                <i class="fas fa-tag mr-2"></i>White Label
+            </button>
+            <button onclick="showTab('staking')" class="nav-tab" id="tab-staking">
+                <i class="fas fa-percentage mr-2"></i>Staking
             </button>
             <button onclick="showTab('mm')" class="nav-tab" id="tab-mm">
                 <i class="fas fa-users mr-2"></i>Market Maker
@@ -318,6 +327,154 @@
             </div>
         </div>
 
+        <!-- Listing Manager Fees -->
+        <div id="listing-section" class="hidden">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-list mr-2"></i>Listing Manager Fees</h2>
+                <p class="text-xs text-gray-400 mb-3">Token listing and new pair fees</p>
+                
+                <!-- Fee Address -->
+                <div class="bg-gray-800 p-3 rounded mb-4">
+                    <div class="text-xs text-gray-400 mb-1">Listing Fee Address</div>
+                    <div class="font-mono text-xs">0xL1st1ngF33Collect...</div>
+                    <button class="mt-2 text-xs bg-blue-600 px-2 py-1 rounded"><i class="fas fa-copy"></i> Copy</button>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Spot Listings</div>
+                        <div class="text-green-500">$100,000</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Futures Listings</div>
+                        <div class="text-green-500">$30,000</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>ETF Listings</div>
+                        <div class="text-green-500">$20,000</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="flex justify-between items-center">
+                    <div class="font-bold">Total Listing Fees</div>
+                    <div class="text-2xl font-bold text-green-500">$150,000</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Launchpad Fees -->
+        <div id="launchpad-section" class="hidden">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-rocket mr-2"></i>Launchpad Fees</h2>
+                <p class="text-xs text-gray-400 mb-3">Token launchpad and IDO fees</p>
+                
+                <!-- Fee Address -->
+                <div class="bg-gray-800 p-3 rounded mb-4">
+                    <div class="text-xs text-gray-400 mb-1">Launchpad Fee Address</div>
+                    <div class="font-mono text-xs">0xL4unchp4dF33sC0llect...</div>
+                    <button class="mt-2 text-xs bg-blue-600 px-2 py-1 rounded"><i class="fas fa-copy"></i> Copy</button>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>IDO Sales</div>
+                        <div class="text-green-500">$85,000</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Launchpad Allocation</div>
+                        <div class="text-green-500">$35,000</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Token Sales Fee</div>
+                        <div class="text-green-500">$15,000</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="flex justify-between items-center">
+                    <div class="font-bold">Total Launchpad Fees</div>
+                    <div class="text-2xl font-bold text-green-500">$135,000</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- White Label Fees -->
+        <div id="whitelabel-section" class="hidden">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-tag mr-2"></i>White Label Fees</h2>
+                <p class="text-xs text-gray-400 mb-3">White label client fees</p>
+                
+                <!-- Fee Address -->
+                <div class="bg-gray-800 p-3 rounded mb-4">
+                    <div class="text-xs text-gray-400 mb-1">White Label Fee Address</div>
+                    <div class="font-mono text-xs">0xWh1t3L4b3lF33s...</div>
+                    <button class="mt-2 text-xs bg-blue-600 px-2 py-1 rounded"><i class="fas fa-copy"></i> Copy</button>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Enterprise Clients</div>
+                        <div class="text-green-500">$250,000</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Business Clients</div>
+                        <div class="text-green-500">$85,000</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>API Access</div>
+                        <div class="text-green-500">$25,000</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="flex justify-between items-center">
+                    <div class="font-bold">Total White Label Fees</div>
+                    <div class="text-2xl font-bold text-green-500">$360,000</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Staking/Fees -->
+        <div id="staking-section" class="hidden">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-percentage mr-2"></i>Staking Rewards</h2>
+                <p class="text-xs text-gray-400 mb-3">Staking and yield fees</p>
+                
+                <!-- Fee Address -->
+                <div class="bg-gray-800 p-3 rounded mb-4">
+                    <div class="text-xs text-gray-400 mb-1">Staking Fee Address</div>
+                    <div class="font-mono text-xs">0xSt4k1ngR3w4rds...</div>
+                    <button class="mt-2 text-xs bg-blue-600 px-2 py-1 rounded"><i class="fas fa-copy"></i> Copy</button>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Staking Rewards</div>
+                        <div class="text-green-500">$125,000</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Yield Farming</div>
+                        <div class="text-green-500">$45,000</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>DeFi Rewards</div>
+                        <div class="text-green-500">$22,000</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="flex justify-between items-center">
+                    <div class="font-bold">Total Staking</div>
+                    <div class="text-2xl font-bold text-green-500">$192,000</div>
+                </div>
+            </div>
+        </div>
+
         <!-- Market Maker Fees -->
         <div id="mm-section" class="hidden">
             <div class="section">
@@ -367,7 +524,7 @@
 
     <script>
         function showTab(tab) {
-            ['overview', 'trading', 'conversion', 'withdraw', 'listing', 'liquidity', 'mm'].forEach(t => {
+            ['overview', 'trading', 'conversion', 'withdraw', 'listing', 'launchpad', 'liquidity', 'whitelabel', 'staking', 'mm'].forEach(t => {
                 document.getElementById(t + '-section').classList.add('hidden');
                 document.getElementById('tab-' + t).classList.remove('active');
             });
