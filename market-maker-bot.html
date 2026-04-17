@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx - Market Maker Bot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0d10; color: #fff; }
+        .section { background: #1a1f26; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+        .nav-tab { padding: 10px 16px; border-radius: 8px; transition: 0.2s; }
+        .nav-tab.active { background: #4b5cd7; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-gray-900 p-4 sticky top-0 z-50 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <i class="fas fa-robot text-purple-500 text-xl"></i>
+            <div>
+                <h1 class="font-bold text-lg">Market Maker Bot</h1>
+                <p class="text-xs text-gray-400">TigerEx MM Program</p>
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <button class="p-2 bg-gray-800 rounded-full"><i class="fas fa-bell"></i></button>
+            <div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">A</div>
+        </div>
+    </header>
+
+    <div class="p-4 pb-20">
+        <!-- Role Switch -->
+        <div class="flex gap-2 mb-4">
+            <button onclick="setRole('client')" class="nav-tab active flex-1" id="role-client">
+                <i class="fas fa-user mr-2"></i>Client Dashboard
+            </button>
+            <button onclick="setRole('admin')" class="nav-tab flex-1" id="role-admin">
+                <i class="fas fa-cog mr-2"></i>Admin Panel
+            </button>
+        </div>
+
+        <!-- Client Dashboard -->
+        <div id="client-dashboard">
+            <!-- Stats -->
+            <div class="grid grid-cols-3 gap-3 mb-4">
+                <div class="section text-center">
+                    <div class="text-xs text-gray-400">Active Bots</div>
+                    <div class="font-bold text-xl">5</div>
+                </div>
+                <div class="section text-center">
+                    <div class="text-xs text-gray-400">Total Volume</div>
+                    <div class="font-bold text-xl">$2.5M</div>
+                </div>
+                <div class="section text-center">
+                    <div class="text-xs text-gray-400">P&L</div>
+                    <div class="font-bold text-xl text-green-500">+$45,230</div>
+                </div>
+            </div>
+
+            <!-- Create Bot -->
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-plus-circle mr-2"></i>Create Market Maker Bot</h2>
+                
+                <div class="space-y-3">
+                    <div>
+                        <label class="text-sm text-gray-400">Trading Pair</label>
+                        <select class="w-full bg-gray-800 p-3 rounded mt-1">
+                            <option>BTC/USDT</option>
+                            <option>ETH/USDT</option>
+                            <option>BNB/USDT</option>
+                            <option>SOL/USDT</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400">Strategy</label>
+                        <select class="w-full bg-gray-800 p-3 rounded mt-1">
+                            <option>Aggressive (0.1% spread)</option>
+                            <option>Balanced (0.2% spread)</option>
+                            <option>Conservative (0.5% spread)</option>
+                            <option>Custom</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-sm text-gray-400">Min Spread %</label>
+                            <input type="text" value="0.1" class="w-full bg-gray-800 p-2 rounded mt-1">
+                        </div>
+                        <div>
+                            <label class="text-sm text-gray-400">Max Spread %</label>
+                            <input type="text" value="0.5" class="w-full bg-gray-800 p-2 rounded mt-1">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400">Order Size (USDT)</label>
+                        <input type="text" value="1000" class="w-full bg-gray-800 p-3 rounded mt-1">
+                    </div>
+                    <div>
+                        <label class="text-sm text-gray-400">Max Orders</label>
+                        <input type="text" value="10" class="w-full bg-gray-800 p-3 rounded mt-1">
+                    </div>
+                    <button class="w-full bg-purple-600 py-3 rounded font-bold">
+                        <i class="fas fa-rocket mr-2"></i>Start Bot
+                    </button>
+                </div>
+            </div>
+
+            <!-- Active Bots -->
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3">Active Bots</h2>
+                <div class="space-y-2">
+                    <div class="bg-gray-800 p-3 rounded">
+                        <div class="flex justify-between items-center mb-2">
+                            <div>
+                                <span class="font-bold">BTC/USDT</span>
+                                <span class="ml-2 text-xs bg-green-600 px-2 py-0.5 rounded">Running</span>
+                            </div>
+                            <button class="text-red-500 text-xs"><i class="fas fa-stop"></i> Stop</button>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-xs text-gray-400">
+                            <div>Orders: 8</div>
+                            <div>Vol: $45K</div>
+                            <div class="text-green-500">P&L: +$234</div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 p-3 rounded">
+                        <div class="flex justify-between items-center mb-2">
+                            <div>
+                                <span class="font-bold">ETH/USDT</span>
+                                <span class="ml-2 text-xs bg-green-600 px-2 py-0.5 rounded">Running</span>
+                            </div>
+                            <button class="text-red-500 text-xs"><i class="fas fa-stop"></i> Stop</button>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-xs text-gray-400">
+                            <div>Orders: 5</div>
+                            <div>Vol: $23K</div>
+                            <div class="text-green-500">P&L: +$156</div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 p-3 rounded">
+                        <div class="flex justify-between items-center mb-2">
+                            <div>
+                                <span class="font-bold">BNB/USDT</span>
+                                <span class="ml-2 text-xs bg-yellow-600 px-2 py-0.5 rounded">Paused</span>
+                            </div>
+                            <button class="text-green-500 text-xs"><i class="fas fa-play"></i> Start</button>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 text-xs text-gray-400">
+                            <div>Orders: 3</div>
+                            <div>Vol: $12K</div>
+                            <div class="text-yellow-500">P&L: +$45</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance -->
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3">Performance</h2>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-gray-800 p-3 rounded">
+                        <div class="text-xs text-gray-400">Today</div>
+                        <div class="text-xl font-bold text-green-500">+$1,234</div>
+                    </div>
+                    <div class="bg-gray-800 p-3 rounded">
+                        <div class="text-xs text-gray-400">This Week</div>
+                        <div class="text-xl font-bold text-green-500">+$8,450</div>
+                    </div>
+                    <div class="bg-gray-800 p-3 rounded">
+                        <div class="text-xs text-gray-400">This Month</div>
+                        <div class="text-xl font-bold text-green-500">+$45,230</div>
+                    </div>
+                    <div class="bg-gray-800 p-3 rounded">
+                        <div class="text-xs text-gray-400">Total</div>
+                        <div class="text-xl font-bold text-green-500">$125,450</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="admin-dashboard" class="hidden">
+            <!-- Stats -->
+            <div class="grid grid-cols-4 gap-3 mb-4">
+                <div class="section text-center">
+                    <div class="text-xs text-gray-400">Total Bots</div>
+                    <div class="font-bold text-xl">156</div>
+                </div>
+                <div class="section text-center">
+                    <div class="text-xs text-gray-400">Active</div>
+                    <div class="font-bold text-xl text-green-500">89</div>
+                </div>
+                <div class="section text-center">
+                    <div class="text-xs text-gray-400">Total Volume</div>
+                    <div class="font-bold text-xl">$45M</div>
+                </div>
+                <div class="section text-center">
+                    <div class="text-xs text-gray-400">MM Fees</div>
+                    <div class="font-bold text-xl text-green-500">$82,000</div>
+                </div>
+            </div>
+
+            <!-- Fee Collection -->
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-wallet mr-2 text-yellow-500"></i>Market Maker Fee Collection</h2>
+                
+                <div class="bg-gray-800 p-3 rounded mb-3">
+                    <div class="text-xs text-gray-400 mb-1">MM Fee Collection Address</div>
+                    <div class="font-mono text-sm">0xM4rk3tM4k3rF33sC0llect...</div>
+                    <button class="mt-2 text-xs bg-blue-600 px-2 py-1 rounded"><i class="fas fa-copy"></i> Copy</button>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Program Fees</div>
+                        <div class="text-green-500">$50,000</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>API Access Fees</div>
+                        <div class="text-green-500">$22,000</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Rebates</div>
+                        <div class="text-yellow-500">-$10,000</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- All Bots -->
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3">All Market Maker Bots</h2>
+                <div class="space-y-2">
+                    <div class="bg-gray-800 p-3 rounded">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <div class="font-bold">Client: 0x7a2...3f</div>
+                                <div class="text-xs text-gray-400">BTC/USDT • Aggressive</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-green-500">+$2,340</div>
+                                <span class="text-xs bg-green-600 px-2 py-0.5 rounded">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 p-3 rounded">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <div class="font-bold">Client: 0x9c3...1b</div>
+                                <div class="text-xs text-gray-400">ETH/USDT • Balanced</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-green-500">+$1,890</div>
+                                <span class="text-xs bg-green-600 px-2 py-0.5 rounded">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-800 p-3 rounded">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <div class="font-bold">Client: 0x3d5...8c</div>
+                                <div class="text-xs text-gray-400">SOL/USDT • Conservative</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-red-500">-$450</div>
+                                <span class="text-xs bg-red-600 px-2 py-0.5 rounded">Stopped</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings -->
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3">Global Settings</h2>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span>Min. Deposit Required</span>
+                        <span class="font-bold">$10,000</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Min. Trading Volume</span>
+                        <span class="font-bold">$100,000/month</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>Max. Spread (Client)</span>
+                        <span class="font-bold">1%</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>API Fee/Month</span>
+                        <span class="font-bold">$500</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 flex justify-around p-3 z-50">
+        <button class="text-center">
+            <i class="fas fa-robot block"></i>
+            <span class="text-xs">Bots</span>
+        </button>
+        <button class="text-center">
+            <i class="fas fa-chart-line block"></i>
+            <span class="text-xs">Analytics</span>
+        </button>
+        <button class="text-center">
+            <i class="fas fa-cog block"></i>
+            <span class="text-xs">Settings</span>
+        </button>
+        <button class="text-center">
+            <i class="fas fa-user block"></i>
+            <span class="text-xs">Profile</span>
+        </button>
+    </nav>
+
+    <script>
+        function setRole(role) {
+            if (role === 'client') {
+                document.getElementById('client-dashboard').classList.remove('hidden');
+                document.getElementById('admin-dashboard').classList.add('hidden');
+                document.getElementById('role-client').classList.add('active');
+                document.getElementById('role-admin').classList.remove('active');
+            } else {
+                document.getElementById('client-dashboard').classList.add('hidden');
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                document.getElementById('role-client').classList.remove('active');
+                document.getElementById('role-admin').classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
