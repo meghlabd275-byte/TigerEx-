@@ -306,21 +306,31 @@
                     <div class="bg-gray-800 p-3 rounded">
                         <div class="text-xs text-gray-400">From</div>
                         <select class="w-full bg-transparent mt-1">
-                            <option>Spot Wallet</option>
-                            <option>Futures Wallet</option>
-                            <option>TradFi Wallet</option>
-                            <option>OTC Finance</option>
-                            <option>Derivatives</option>
+                            <option>Spot Wallet 💰</option>
+                            <option>Futures Wallet 📊</option>
+                            <option>Option Wallet 📈</option>
+                            <option>TradFi Wallet 🏦</option>
+                            <option>Derivatives ⚡</option>
+                            <option>OTC Finance 💵</option>
+                            <option>Margin Wallet 📉</option>
+                            <option>Grid Bot 🤖</option>
+                            <option>DCA Bot ⏰</option>
+                            <option>Copy Trading 👥</option>
                         </select>
                     </div>
                     <div class="bg-gray-800 p-3 rounded">
                         <div class="text-xs text-gray-400">To</div>
                         <select class="w-full bg-transparent mt-1">
-                            <option>Spot Wallet</option>
-                            <option>Futures Wallet</option>
-                            <option>TradFi Wallet</option>
-                            <option>OTC Finance</option>
-                            <option>Derivatives</option>
+                            <option>Spot Wallet 💰</option>
+                            <option>Futures Wallet 📊</option>
+                            <option>Option Wallet 📈</option>
+                            <option>TradFi Wallet 🏦</option>
+                            <option>Derivatives ⚡</option>
+                            <option>OTC Finance 💵</option>
+                            <option>Margin Wallet 📉</option>
+                            <option>Grid Bot 🤖</option>
+                            <option>DCA Bot ⏰</option>
+                            <option>Copy Trading 👥</option>
                         </select>
                     </div>
                 </div>
@@ -329,11 +339,16 @@
                 <div class="mb-4">
                     <label class="text-sm text-gray-400">Asset</label>
                     <select class="w-full bg-gray-800 p-3 rounded mt-1">
-                        <option>USDT</option>
-                        <option>BTC</option>
-                        <option>ETH</option>
-                        <option>BNB</option>
-                        <option>USDC</option>
+                        <option>USDT - Tether</option>
+                        <option>BTC - Bitcoin</option>
+                        <option>ETH - Ethereum</option>
+                        <option>BNB - Binance Coin</option>
+                        <option>USDC - USD Coin</option>
+                        <option>TRX - Tron</option>
+                        <option>XRP - Ripple</option>
+                        <option>SOL - Solana</option>
+                        <option>ADA - Cardano</option>
+                        <option>DOGE - Dogecoin</option>
                     </select>
                 </div>
 
@@ -343,7 +358,89 @@
                     <input type="text" placeholder="0.00" class="w-full bg-gray-800 p-3 rounded mt-1">
                 </div>
 
+                <!-- Available Balance -->
+                <div class="text-sm text-gray-400 mb-4">
+                    Available: <span class="text-white">1,250.00 USDT</span>
+                </div>
+
                 <button class="w-full action-btn py-3 rounded font-bold">Transfer</button>
+            </div>
+        </div>
+
+        <!-- Convert Section -->
+        <div id="convert-section" class="hidden">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-sync mr-2"></i>Convert</h2>
+                
+                <!-- From Wallet -->
+                <div class="mb-3">
+                    <label class="text-sm text-gray-400">From Wallet</label>
+                    <select class="w-full bg-gray-800 p-3 rounded mt-1">
+                        <option>Spot Wallet 💰</option>
+                        <option>Futures Wallet 📊</option>
+                        <option>Option Wallet 📈</option>
+                        <option>TradFi Wallet 🏦</option>
+                        <option>Derivatives ⚡</option>
+                        <option>OTC Finance 💵</option>
+                        <option>Margin Wallet 📉</option>
+                    </select>
+                </div>
+
+                <div class="bg-gray-800 p-4 rounded mb-4">
+                    <div class="grid grid-cols-3 gap-2 items-center">
+                        <div class="text-center">
+                            <div class="text-xs text-gray-400 mb-1">From</div>
+                            <select class="bg-gray-700 p-2 rounded">
+                                <option>BTC</option>
+                                <option>ETH</option>
+                                <option>USDT</option>
+                            </select>
+                        </div>
+                        <div class="text-center">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-xs text-gray-400 mb-1">To</div>
+                            <select class="bg-gray-700 p-2 rounded">
+                                <option>USDT</option>
+                                <option>BTC</option>
+                                <option>ETH</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- To Wallet -->
+                <div class="mb-3">
+                    <label class="text-sm text-gray-400">To Wallet</label>
+                    <select class="w-full bg-gray-800 p-3 rounded mt-1">
+                        <option>Spot Wallet 💰</option>
+                        <option>Futures Wallet 📊</option>
+                        <option>Option Wallet 📈</option>
+                        <option>TradFi Wallet 🏦</option>
+                        <option>Derivatives ⚡</option>
+                        <option>OTC Finance 💵</option>
+                        <option>Margin Wallet 📉</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="text-sm text-gray-400">Amount</label>
+                    <input type="text" placeholder="0.00" class="w-full bg-gray-800 p-3 rounded mt-1">
+                </div>
+
+                <div class="text-sm text-gray-400 mb-4">
+                    <div class="flex justify-between">
+                        <span>Rate:</span>
+                        <span>1 BTC = 45,230.45 USDT</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Receive:</span>
+                        <span class="text-green-500">0.00 USDT</span>
+                    </div>
+                </div>
+
+                <button class="w-full action-btn py-3 rounded font-bold">Convert</button>
             </div>
         </div>
 
