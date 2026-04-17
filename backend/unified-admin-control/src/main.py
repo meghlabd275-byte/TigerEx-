@@ -15,11 +15,12 @@ from dataclasses import dataclass
 
 import asyncpg
 import redis.asyncio as aioredis
-from fastapi import FastAPI, HTTPException, Depends, Request, BackgroundTasks
+from fastapi import FastAPI, HTTPException, Depends, Request, BackgroundTasks, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, validator, EmailStr
 import jwt
+import uuid
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -139,6 +140,64 @@ class SystemConfigRequest(BaseModel):
     reason: str
 
 
+class SocialAuthRequest(BaseModel):
+    provider: str
+    provider_user_id: str
+    auth_token: Optional[str] = None
+    email: Optional[EmailStr] = None
+    full_name: Optional[str] = None
+
+
+class TradingPairCreateRequest(BaseModel):
+    symbol: str
+    base_asset: str
+    quote_asset: str
+    market_type: str = "spot"  # spot, futures, options, etf, derivatives
+    maker_fee: float = 0.001
+    taker_fee: float = 0.001
+    max_leverage: int = 1
+
+
+class TradingPairImportRequest(BaseModel):
+    source_exchange: str
+    symbol: str
+    market_type: str = "spot"
+
+
+class LiquidityPoolRequest(BaseModel):
+    pool_name: str
+    symbol: str
+    liquidity_amount: float
+    source_exchange: Optional[str] = None
+
+
+class ExchangeStatusRequest(BaseModel):
+    exchange_id: str
+    status: str
+    reason: Optional[str] = None
+
+
+class RoleFeeProfileRequest(BaseModel):
+    role_name: str
+    maker_fee: float
+    taker_fee: float
+    withdrawal_fee_rate: float
+    reason: str
+
+
+class UserServiceAccessRequest(BaseModel):
+    user_id: str
+    service_name: str
+    enabled: bool
+    reason: str
+
+
+class TradFiOperationRequest(BaseModel):
+    operation: str
+    payload: Dict[str, Any] = {}
+    reason: str = "admin operation"
+
+
 # Admin Control Manager
 class UnifiedAdminControl:
     """Complete admin control over all exchange services"""
@@ -148,6 +207,13 @@ class UnifiedAdminControl:
         self.db_pool = None
         self.services: Dict[str, ServiceInfo] = {}
         self.alerts: List[SystemAlert] = []
+        self.trading_pairs: Dict[str, dict] = {}
+        self.liquidity_pools: Dict[str, dict] = {}
+        self.exchange_statuses: Dict[str, dict] = {}
+        self.role_fee_profiles: Dict[str, dict] = {}
+        self.user_service_access: Dict[str, dict] = {}
+        self.state_file = os.getenv("ADMIN_CONTROL_STATE_FILE", "/tmp/tigerex_admin_control_state.json")
+        self._state_lock = asyncio.Lock()
         self._initialized = False
     
     async def initialize(self):
@@ -170,6 +236,7 @@ class UnifiedAdminControl:
         
         # Initialize services
         await self._initialize_services()
+        await self._load_state()
         self._initialized = True
     
     async def _initialize_services(self):
@@ -195,6 +262,51 @@ class UnifiedAdminControl:
                 error_rate=0.0,
                 last_check=datetime.utcnow()
             )
+
+        # Seed default market metadata used by admin controls
+        self.trading_pairs.update({
+            "BTC-USDT": {"symbol": "BTC-USDT", "market_type": "spot", "status": "active", "maker_fee": 0.001, "taker_fee": 0.001, "source": "tigerex"},
+            "ETH-USDT": {"symbol": "ETH-USDT", "market_type": "spot", "status": "active", "maker_fee": 0.001, "taker_fee": 0.001, "source": "tigerex"},
+        })
+
+        self.role_fee_profiles.update({
+            "standard": {"role_name": "standard", "maker_fee": 0.001, "taker_fee": 0.0012, "withdrawal_fee_rate": 0.001},
+            "vip": {"role_name": "vip", "maker_fee": 0.0006, "taker_fee": 0.0008, "withdrawal_fee_rate": 0.0007},
+            "institutional": {"role_name": "institutional", "maker_fee": 0.0002, "taker_fee": 0.0004, "withdrawal_fee_rate": 0.0005},
+        })
+
+    async def _load_state(self):
+        """Load persisted admin-control state for pair/pool/fees/access metadata."""
+        if not os.path.exists(self.state_file):
+            return
+        try:
+            with open(self.state_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            self.trading_pairs.update(data.get("trading_pairs", {}))
+            self.liquidity_pools.update(data.get("liquidity_pools", {}))
+            self.exchange_statuses.update(data.get("exchange_statuses", {}))
+            self.role_fee_profiles.update(data.get("role_fee_profiles", {}))
+            self.user_service_access.update(data.get("user_service_access", {}))
+            logger.info("Admin control state restored from %s", self.state_file)
+        except Exception as exc:
+            logger.warning("Failed to restore admin-control state: %s", exc)
+
+    async def _persist_state(self):
+        """Persist current admin-control state so data survives process restarts."""
+        async with self._state_lock:
+            data = {
+                "trading_pairs": self.trading_pairs,
+                "liquidity_pools": self.liquidity_pools,
+                "exchange_statuses": self.exchange_statuses,
+                "role_fee_profiles": self.role_fee_profiles,
+                "user_service_access": self.user_service_access,
+                "saved_at": datetime.utcnow().isoformat(),
+            }
+            state_dir = os.path.dirname(self.state_file)
+            if state_dir:
+                os.makedirs(state_dir, exist_ok=True)
+            with open(self.state_file, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2, sort_keys=True)
     
     async def get_service_status(self, service_name: str) -> Optional[ServiceInfo]:
         """Get status of a specific service"""
@@ -511,6 +623,113 @@ class UnifiedAdminControl:
         
         return True
     
+    async def create_or_update_trading_pair(self, payload: TradingPairCreateRequest, reason: str) -> dict:
+        """Create or update a trading pair with full admin control metadata"""
+        record = {
+            "symbol": payload.symbol,
+            "base_asset": payload.base_asset,
+            "quote_asset": payload.quote_asset,
+            "market_type": payload.market_type,
+            "maker_fee": payload.maker_fee,
+            "taker_fee": payload.taker_fee,
+            "max_leverage": payload.max_leverage,
+            "status": "active",
+            "source": "tigerex",
+            "updated_at": datetime.utcnow().isoformat()
+        }
+        self.trading_pairs[payload.symbol] = record
+        await self._persist_state()
+
+        await self._log_admin_action("create_or_update_trading_pair", payload.symbol, reason, details=record)
+        return record
+
+    async def set_trading_pair_status(self, symbol: str, status: str, reason: str) -> bool:
+        pair = self.trading_pairs.get(symbol)
+        if not pair:
+            return False
+        pair["status"] = status
+        pair["status_reason"] = reason
+        pair["updated_at"] = datetime.utcnow().isoformat()
+        await self._persist_state()
+        await self._log_admin_action("set_trading_pair_status", symbol, reason, details={"status": status})
+        return True
+
+    async def import_trading_pair(self, payload: TradingPairImportRequest, reason: str) -> dict:
+        imported = {
+            "symbol": payload.symbol,
+            "market_type": payload.market_type,
+            "status": "active",
+            "source": payload.source_exchange.lower(),
+            "maker_fee": 0.001,
+            "taker_fee": 0.001,
+            "updated_at": datetime.utcnow().isoformat()
+        }
+        self.trading_pairs[payload.symbol] = imported
+        await self._persist_state()
+        await self._log_admin_action("import_trading_pair", payload.symbol, reason, details=imported)
+        return imported
+
+    async def create_liquidity_pool(self, payload: LiquidityPoolRequest, reason: str) -> dict:
+        pool_id = str(uuid.uuid4())
+        pool = {
+            "pool_id": pool_id,
+            "pool_name": payload.pool_name,
+            "symbol": payload.symbol,
+            "liquidity_amount": payload.liquidity_amount,
+            "source_exchange": payload.source_exchange or "tigerex",
+            "status": "active",
+            "updated_at": datetime.utcnow().isoformat()
+        }
+        self.liquidity_pools[pool_id] = pool
+        await self._persist_state()
+        await self._log_admin_action("create_liquidity_pool", pool_id, reason, details=pool)
+        return pool
+
+    async def import_liquidity_pool(self, payload: LiquidityPoolRequest, reason: str) -> dict:
+        imported = await self.create_liquidity_pool(payload, reason)
+        imported["imported"] = True
+        imported["imported_at"] = datetime.utcnow().isoformat()
+        return imported
+
+    async def set_exchange_status(self, payload: ExchangeStatusRequest) -> dict:
+        exchange = {
+            "exchange_id": payload.exchange_id,
+            "status": payload.status,
+            "reason": payload.reason,
+            "updated_at": datetime.utcnow().isoformat()
+        }
+        self.exchange_statuses[payload.exchange_id] = exchange
+        await self._persist_state()
+        await self._log_admin_action("set_exchange_status", payload.exchange_id, payload.reason, details=exchange)
+        return exchange
+
+    async def set_role_fee_profile(self, payload: RoleFeeProfileRequest) -> dict:
+        profile = {
+            "role_name": payload.role_name,
+            "maker_fee": payload.maker_fee,
+            "taker_fee": payload.taker_fee,
+            "withdrawal_fee_rate": payload.withdrawal_fee_rate,
+            "updated_at": datetime.utcnow().isoformat(),
+        }
+        self.role_fee_profiles[payload.role_name] = profile
+        await self._persist_state()
+        await self._log_admin_action("set_role_fee_profile", payload.role_name, payload.reason, details=profile)
+        return profile
+
+    async def set_user_service_access(self, payload: UserServiceAccessRequest) -> dict:
+        access_key = f"{payload.user_id}:{payload.service_name}"
+        record = {
+            "user_id": payload.user_id,
+            "service_name": payload.service_name,
+            "enabled": payload.enabled,
+            "reason": payload.reason,
+            "updated_at": datetime.utcnow().isoformat(),
+        }
+        self.user_service_access[access_key] = record
+        await self._persist_state()
+        await self._log_admin_action("set_user_service_access", access_key, payload.reason, details=record)
+        return record
+
     # Withdrawal Management
     async def approve_withdrawal(self, withdrawal_id: str, reason: str = None) -> bool:
         """Approve a withdrawal request"""
@@ -713,6 +932,25 @@ async def get_current_admin(
         raise HTTPException(status_code=401, detail="Invalid token")
 
 
+def ensure_admin_permission(admin: dict, permission: str):
+    permissions = set(admin.get("permissions", []))
+    if permission not in permissions and "all" not in permissions and admin.get("role") != "super_admin":
+        raise HTTPException(status_code=403, detail=f"Missing permission: {permission}")
+
+
+
+
+def create_access_token(subject: str, role: str = "user", extra: Optional[dict] = None) -> str:
+    payload = {
+        "sub": subject,
+        "role": role,
+        "iat": datetime.utcnow(),
+        "exp": datetime.utcnow() + timedelta(hours=24),
+    }
+    if extra:
+        payload.update(extra)
+    return jwt.encode(payload, config.JWT_SECRET_KEY, algorithm=config.JWT_ALGORITHM)
+
 # API Endpoints
 
 @app.get("/api/v1/admin/dashboard")
@@ -735,6 +973,40 @@ async def get_admin_dashboard(admin: dict = Depends(get_current_admin)):
             "memory": svc.memory_usage
         } for name, svc in services.items()},
         "active_alerts": len([a for a in admin_control.alerts if not a.resolved])
+    }
+
+
+@app.post("/api/v1/auth/social/login")
+async def social_login(request: SocialAuthRequest):
+    """Social login/register bootstrap endpoint for web, mobile, and desktop clients."""
+    provider = request.provider.lower()
+    supported = {"google", "facebook", "twitter", "telegram", "apple", "github"}
+    if provider not in supported:
+        raise HTTPException(status_code=400, detail=f"Unsupported provider: {request.provider}")
+    if not request.provider_user_id.strip():
+        raise HTTPException(status_code=400, detail="provider_user_id is required")
+    if os.getenv("SOCIAL_AUTH_REQUIRE_TOKEN", "false").lower() == "true" and not request.auth_token:
+        raise HTTPException(status_code=400, detail="auth_token is required for this deployment")
+
+    identity = f"{provider}:{request.provider_user_id}"
+    token = create_access_token(
+        subject=identity,
+        role="user",
+        extra={
+            "provider": provider,
+            "email": request.email,
+            "name": request.full_name,
+        },
+    )
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "user": {
+            "id": identity,
+            "provider": provider,
+            "email": request.email,
+            "full_name": request.full_name,
+        },
     }
 
 
@@ -865,6 +1137,217 @@ async def delist_trading_pair(
     """Delist a trading pair"""
     await admin_control.delist_trading_pair(request.symbol, request.reason)
     return {"success": True, "message": f"Trading pair {request.symbol} delisted"}
+
+
+
+@app.post("/api/v1/admin/tradfi/pairs")
+async def create_or_update_pair(
+    request: TradingPairCreateRequest,
+    reason: str = "admin update",
+    admin: dict = Depends(get_current_admin)
+):
+    ensure_admin_permission(admin, "trading.pairs.manage")
+    pair = await admin_control.create_or_update_trading_pair(request, reason)
+    return {"success": True, "pair": pair}
+
+
+@app.post("/api/v1/admin/tradfi/pairs/import")
+async def import_pair(
+    request: TradingPairImportRequest,
+    reason: str = "import from reputed exchange",
+    admin: dict = Depends(get_current_admin)
+):
+    ensure_admin_permission(admin, "trading.pairs.import")
+    pair = await admin_control.import_trading_pair(request, reason)
+    return {"success": True, "pair": pair}
+
+
+@app.post("/api/v1/admin/tradfi/pairs/{symbol}/status")
+async def set_pair_status(
+    symbol: str,
+    status: str,
+    reason: str,
+    admin: dict = Depends(get_current_admin)
+):
+    ensure_admin_permission(admin, "trading.pairs.status")
+    ok = await admin_control.set_trading_pair_status(symbol, status, reason)
+    if not ok:
+        raise HTTPException(status_code=404, detail="Trading pair not found")
+    return {"success": True, "symbol": symbol, "status": status}
+
+
+@app.get("/api/v1/admin/tradfi/pairs")
+async def list_pairs(
+    market_type: Optional[str] = Query(default=None),
+    status: Optional[str] = Query(default=None),
+    admin: dict = Depends(get_current_admin)
+):
+    pairs = list(admin_control.trading_pairs.values())
+    if market_type:
+        pairs = [p for p in pairs if p.get("market_type") == market_type]
+    if status:
+        pairs = [p for p in pairs if p.get("status") == status]
+    return {"pairs": pairs}
+
+
+@app.post("/api/v1/admin/tradfi/liquidity-pools")
+async def create_pool(
+    request: LiquidityPoolRequest,
+    reason: str = "admin liquidity action",
+    admin: dict = Depends(get_current_admin)
+):
+    ensure_admin_permission(admin, "liquidity.pools.manage")
+    pool = await admin_control.create_liquidity_pool(request, reason)
+    return {"success": True, "pool": pool}
+
+
+@app.post("/api/v1/admin/tradfi/liquidity-pools/import")
+async def import_pool(
+    request: LiquidityPoolRequest,
+    reason: str = "liquidity imported from reputed exchange",
+    admin: dict = Depends(get_current_admin)
+):
+    ensure_admin_permission(admin, "liquidity.pools.import")
+    pool = await admin_control.import_liquidity_pool(request, reason)
+    return {"success": True, "pool": pool}
+
+
+@app.get("/api/v1/admin/tradfi/liquidity-pools")
+async def list_pools(admin: dict = Depends(get_current_admin)):
+    return {"pools": list(admin_control.liquidity_pools.values())}
+
+
+@app.post("/api/v1/admin/exchange/status")
+async def update_exchange_status(
+    request: ExchangeStatusRequest,
+    admin: dict = Depends(get_current_admin)
+):
+    ensure_admin_permission(admin, "exchange.status.manage")
+    exchange = await admin_control.set_exchange_status(request)
+    return {"success": True, "exchange": exchange}
+
+
+@app.get("/api/v1/admin/exchange/status/{exchange_id}")
+async def get_exchange_status(exchange_id: str, admin: dict = Depends(get_current_admin)):
+    status = admin_control.exchange_statuses.get(exchange_id)
+    if not status:
+        raise HTTPException(status_code=404, detail="Exchange status not found")
+    return status
+
+
+@app.post("/api/v1/admin/fees/roles")
+async def set_role_fee_profile(
+    request: RoleFeeProfileRequest,
+    admin: dict = Depends(get_current_admin)
+):
+    ensure_admin_permission(admin, "fees.roles.manage")
+    profile = await admin_control.set_role_fee_profile(request)
+    return {"success": True, "profile": profile}
+
+
+@app.get("/api/v1/admin/fees/roles")
+async def get_role_fee_profiles(admin: dict = Depends(get_current_admin)):
+    return {"profiles": list(admin_control.role_fee_profiles.values())}
+
+
+@app.post("/api/v1/admin/users/service-access")
+async def set_user_service_access(
+    request: UserServiceAccessRequest,
+    admin: dict = Depends(get_current_admin)
+):
+    ensure_admin_permission(admin, "users.access.manage")
+    access = await admin_control.set_user_service_access(request)
+    return {"success": True, "access": access}
+
+
+@app.post("/api/v1/admin/users/{user_id}/access/halt-all")
+async def halt_all_user_services(
+    user_id: str,
+    reason: str,
+    admin: dict = Depends(get_current_admin)
+):
+    ensure_admin_permission(admin, "users.access.manage")
+    services = ["spot", "futures", "options", "derivatives", "etf", "withdrawal", "deposit", "p2p"]
+    results = []
+    for service_name in services:
+        payload = UserServiceAccessRequest(
+            user_id=user_id,
+            service_name=service_name,
+            enabled=False,
+            reason=reason,
+        )
+        results.append(await admin_control.set_user_service_access(payload))
+    return {"success": True, "updated": results}
+
+
+@app.post("/api/v1/admin/users/{user_id}/access/resume-all")
+async def resume_all_user_services(
+    user_id: str,
+    reason: str,
+    admin: dict = Depends(get_current_admin)
+):
+    ensure_admin_permission(admin, "users.access.manage")
+    services = ["spot", "futures", "options", "derivatives", "etf", "withdrawal", "deposit", "p2p"]
+    results = []
+    for service_name in services:
+        payload = UserServiceAccessRequest(
+            user_id=user_id,
+            service_name=service_name,
+            enabled=True,
+            reason=reason,
+        )
+        results.append(await admin_control.set_user_service_access(payload))
+    return {"success": True, "updated": results}
+
+
+@app.get("/api/v1/admin/users/service-access/{user_id}")
+async def get_user_service_access(user_id: str, admin: dict = Depends(get_current_admin)):
+    access = [v for v in admin_control.user_service_access.values() if v["user_id"] == user_id]
+    return {"user_id": user_id, "access": access}
+
+
+@app.post("/api/v1/admin/tradfi/operate")
+async def tradfi_operate(
+    request: TradFiOperationRequest,
+    admin: dict = Depends(get_current_admin)
+):
+    """Single-entry endpoint used by admin dashboards to execute TradFi operations."""
+    operation = request.operation.lower()
+    payload = request.payload or {}
+    reason = request.reason
+
+    if operation == "create_pair":
+        ensure_admin_permission(admin, "trading.pairs.manage")
+        pair = await admin_control.create_or_update_trading_pair(TradingPairCreateRequest(**payload), reason)
+        return {"success": True, "result": pair}
+    if operation == "import_pair":
+        ensure_admin_permission(admin, "trading.pairs.import")
+        pair = await admin_control.import_trading_pair(TradingPairImportRequest(**payload), reason)
+        return {"success": True, "result": pair}
+    if operation == "set_pair_status":
+        ensure_admin_permission(admin, "trading.pairs.status")
+        symbol = payload.get("symbol")
+        status = payload.get("status")
+        if not symbol or not status:
+            raise HTTPException(status_code=400, detail="symbol and status are required")
+        ok = await admin_control.set_trading_pair_status(symbol, status, reason)
+        if not ok:
+            raise HTTPException(status_code=404, detail="Trading pair not found")
+        return {"success": True, "result": {"symbol": symbol, "status": status}}
+    if operation == "create_pool":
+        ensure_admin_permission(admin, "liquidity.pools.manage")
+        pool = await admin_control.create_liquidity_pool(LiquidityPoolRequest(**payload), reason)
+        return {"success": True, "result": pool}
+    if operation == "import_pool":
+        ensure_admin_permission(admin, "liquidity.pools.import")
+        pool = await admin_control.import_liquidity_pool(LiquidityPoolRequest(**payload), reason)
+        return {"success": True, "result": pool}
+    if operation == "set_exchange_status":
+        ensure_admin_permission(admin, "exchange.status.manage")
+        exchange = await admin_control.set_exchange_status(ExchangeStatusRequest(**payload))
+        return {"success": True, "result": exchange}
+
+    raise HTTPException(status_code=400, detail=f"Unsupported operation: {request.operation}")
 
 
 @app.post("/api/v1/admin/trading/fees")
