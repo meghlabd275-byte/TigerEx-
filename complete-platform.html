@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx - Complete Trading Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0d10; color: #fff; }
+        .section { background: #1a1f26; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+        .nav-tab { padding: 10px 16px; border-radius: 8px; transition: 0.2s; }
+        .nav-tab.active { background: #4b5cd7; }
+        .service-card { background: #252a33; padding: 12px; border-radius: 8px; transition: 0.2s; }
+        .service-card:hover { background: #2f363d; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-gray-900 p-4 sticky top-0 z-50">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-shield-alt text-2xl text-green-500"></i>
+                <div>
+                    <h1 class="font-bold text-xl">TigerEx</h1>
+                    <p class="text-xs text-gray-400">345 Services • Complete Exchange Platform</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <button class="p-2 bg-gray-800 rounded"><i class="fas fa-bell"></i></button>
+                <button class="p-2 bg-gray-800 rounded"><i class="fas fa-cog"></i></button>
+                <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">A</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="p-4">
+        <!-- Stats -->
+        <div class="grid grid-cols-4 gap-3 mb-4">
+            <div class="section text-center">
+                <div class="text-xs text-gray-400">Services</div>
+                <div class="font-bold text-2xl">345</div>
+            </div>
+            <div class="section text-center">
+                <div class="text-xs text-gray-400">Active</div>
+                <div class="font-bold text-2xl text-green-500">342</div>
+            </div>
+            <div class="section text-center">
+                <div class="text-xs text-gray-400">Users</div>
+                <div class="font-bold text-2xl">1.2M</div>
+            </div>
+            <div class="section text-center">
+                <div class="text-xs text-gray-400">Volume</div>
+                <div class="font-bold text-2xl">$4.5B</div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="flex gap-2 overflow-x-auto mb-4">
+            <button onclick="showTab('trading')" class="nav-tab active" id="tab-trading">
+                <i class="fas fa-chart-line mr-2"></i>Trading
+            </button>
+            <button onclick="showTab('wallets')" class="nav-tab" id="tab-wallets">
+                <i class="fas fa-wallet mr-2"></i>Wallets
+            </button>
+            <button onclick="showTab('services')" class="nav-tab" id="tab-services">
+                <i class="fas fa-server mr-2"></i>Services
+            </button>
+            <button onclick="showTab('admin')" class="nav-tab" id="tab-admin">
+                <i class="fas fa-cogs mr-2"></i>Admin
+            </button>
+            <button onclick="showTab('ai')" class="nav-tab" id="tab-ai">
+                <i class="fas fa-robot mr-2"></i>AI Services
+            </button>
+        </div>
+
+        <!-- Trading Section -->
+        <div id="trading-section">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-exchange-alt mr-2"></i>Trading Services (45 Backend Services)</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    <div class="service-card"><i class="fas fa-bolt text-green-500 mr-2"></i>Spot Trading</div>
+                    <div class="service-card"><i class="fas fa-futbol text-green-500 mr-2"></i>Futures Trading</div>
+                    <div class="service-card"><i class="fas fa-chess text-green-500 mr-2"></i>Options Trading</div>
+                    <div class="service-card"><i class="fas fa-layer-group text-green-500 mr-2"></i>Derivatives</div>
+                    <div class="service-card"><i class="fas fa-hand-holding-usd text-green-500 mr-2"></i>Margin Trading</div>
+                    <div class="service-card"><i class="fas fa-building text-green-500 mr-2"></i>TradFi (CFD/Forex)</div>
+                    <div class="service-card"><i class="fas fa-robot text-purple-500 mr-2"></i>Algo Trading</div>
+                    <div class="service-card"><i class="fas fa-grid text-purple-500 mr-2"></i>Grid Trading Bot</div>
+                    <div class="service-card"><i class="fas fa-clock text-purple-500 mr-2"></i>DCA Bot</div>
+                    <div class="service-card"><i class="fas fa-brain text-purple-500 mr-2"></i>AI Trading Bot</div>
+                    <div class="service-card"><i class="fas fa-users text-purple-500 mr-2"></i>Copy Trading</div>
+                    <div class="service-card"><i class="fas fa-signal text-purple-500 mr-2"></i>Trading Signals</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wallets Section -->
+        <div id="wallets-section" class="hidden">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-wallet mr-2"></i>Wallet Services (38 Backend Services)</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    <div class="service-card"><i class="fas fa-fire text-red-500 mr-2"></i>Hot Wallet</div>
+                    <div class="service-card"><i class="fas fa-snowflake text-blue-500 mr-2"></i>Cold Wallet</div>
+                    <div class="service-card"><i class="fas fa-check-double text-yellow-500 mr-2"></i>Multisig Wallet</div>
+                    <div class="service-card"><i class="fas fa-credit-card text-green-500 mr-2"></i>TigerPay</div>
+                    <div class="service-card"><i class="fas fa-credit-card text-yellow-500 mr-2"></i>Tiger Card</div>
+                    <div class="service-card"><i class="fas fa-exchange-alt text-blue-500 mr-2"></i>Internal Transfer</div>
+                    <div class="service-card"><i class="fas fa-sync text-blue-500 mr-2"></i>Convert</div>
+                    <div class="service-card"><i class="fas fa-handshake text-green-500 mr-2"></i>P2P Trading</div>
+                    <div class="service-card"><i class="fas fa-gift text-red-500 mr-2"></i>Red Packet</div>
+                    <div class="service-card"><i class="fas fa-paper-plane text-green-500 mr-2"></i>Token MultiSend</div>
+                    <div class="service-card"><i class="fas fa-exchange-alt text-purple-500 mr-2"></i>DEX Trading</div>
+                    <div class="service-card"><i class="fas fa-water text-purple-500 mr-2"></i>Liquidity Pool</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Section -->
+        <div id="services-section" class="hidden">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-server mr-2"></i>Core Services (262 Backend Services)</h2>
+                
+                <!-- User Management -->
+                <h3 class="font-bold text-md mb-2 text-green-500">User Management (12)</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
+                    <div class="service-card text-xs">Authentication</div>
+                    <div class="service-card text-xs">KYC Service</div>
+                    <div class="service-card text-xs">User Management</div>
+                    <div class="service-card text-xs">Account Management</div>
+                    <div class="service-card text-xs">User Access System</div>
+                    <div class="service-card text-xs">VIP Program</div>
+                    <div class="service-card text-xs">Affiliate System</div>
+                    <div class="service-card text-xs">Referral System</div>
+                </div>
+
+                <!-- Admin -->
+                <h3 class="font-bold text-md mb-2 text-yellow-500">Admin & Control (18)</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
+                    <div class="service-card text-xs">Admin Service</div>
+                    <div class="service-card text-xs">Admin Panel</div>
+                    <div class="service-card text-xs">Unified Admin</div>
+                    <div class="service-card text-xs">White Label System</div>
+                    <div class="service-card text-xs">User Rights Manager</div>
+                    <div class="service-card text-xs">Compliance Tools</div>
+                    <div class="service-card text-xs">Risk Management</div>
+                    <div class="service-card text-xs">Audit Service</div>
+                </div>
+
+                <!-- Financial -->
+                <h3 class="font-bold text-md mb-2 text-blue-500">Financial Services (28)</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
+                    <div class="service-card text-xs">Staking Service</div>
+                    <div class="service-card text-xs">Lending Service</div>
+                    <div class="service-card text-xs">VIP Loan</div>
+                    <div class="service-card text-xs">Payment Gateway</div>
+                    <div class="service-card text-xs">Fiat Withdraw</div>
+                    <div class="service-card text-xs">OTC Desk</div>
+                    <div class="service-card text-xs">Gift Card</div>
+                    <div class="service-card text-xs">Cardano Integration</div>
+                </div>
+
+                <!-- Trading -->
+                <h3 class="font-bold text-md mb-2 text-purple-500">Trading Engine (22)</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
+                    <div class="service-card text-xs">Trading Engine</div>
+                    <div class="service-card text-xs">Advanced Engine</div>
+                    <div class="service-card text-xs">Order Matching</div>
+                    <div class="service-card text-xs">Order Types</div>
+                    <div class="service-card text-xs">Trading Pairs</div>
+                    <div class="service-card text-xs">Token Listing</div>
+                    <div class="service-card text-xs">Vote to List</div>
+                    <div class="service-card text-xs">Token Unlock</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Section -->
+        <div id="admin-section" class="hidden">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-cogs mr-2"></i>Admin Control (18 Backend Services)</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    <div class="service-card"><i class="fas fa-shield-alt mr-2"></i>Admin Control Panel</div>
+                    <div class="service-card"><i class="fas fa-users-cog mr-2"></i>User Rights Manager</div>
+                    <div class="service-card"><i class="fas fa-gem mr-2"></i>White Label Master</div>
+                    <div class="service-card"><i class="fas fa-chart-bar mr-2"></i>Analytics Dashboard</div>
+                    <div class="service-card"><i class="fas fa-clipboard-check mr-2"></i>Compliance Dashboard</div>
+                    <div class="service-card"><i class="fas fa-shield-virus mr-2"></i>Security Center</div>
+                </div>
+            </div>
+
+            <!-- Fee Collection -->
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-coins mr-2"></i>Fee Collection (9 Unique Addresses)</h2>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between p-2 bg-gray-800 rounded">
+                        <span>Trading Fees (CEX/DEX)</span>
+                        <span class="text-green-500">$475,230</span>
+                    </div>
+                    <div class="flex justify-between p-2 bg-gray-800 rounded">
+                        <span>Conversion Fees (0.1%)</span>
+                        <span class="text-green-500">$23,450</span>
+                    </div>
+                    <div class="flex justify-between p-2 bg-gray-800 rounded">
+                        <span>Withdrawal Fees</span>
+                        <span class="text-green-500">$89,230</span>
+                    </div>
+                    <div class="flex justify-between p-2 bg-gray-800 rounded">
+                        <span>Listing Manager Fees</span>
+                        <span class="text-green-500">$150,000</span>
+                    </div>
+                    <div class="flex justify-between p-2 bg-gray-800 rounded">
+                        <span>Launchpad Fees</span>
+                        <span class="text-green-500">$135,000</span>
+                    </div>
+                    <div class="flex justify-between p-2 bg-gray-800 rounded">
+                        <span>Liquidity Deposits</span>
+                        <span class="text-green-500">$450,768</span>
+                    </div>
+                    <div class="flex justify-between p-2 bg-gray-800 rounded">
+                        <span>White Label Fees</span>
+                        <span class="text-green-500">$360,000</span>
+                    </div>
+                    <div class="flex justify-between p-2 bg-gray-800 rounded">
+                        <span>Staking Rewards</span>
+                        <span class="text-green-500">$192,000</span>
+                    </div>
+                    <div class="flex justify-between p-2 bg-gray-800 rounded">
+                        <span>Market Maker Fees</span>
+                        <span class="text-green-500">$82,000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Section -->
+        <div id="ai-section" class="hidden">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-robot mr-2"></i>AI & Trading Services (15 Backend Services)</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    <div class="service-card"><i class="fas fa-brain mr-2"></i>AI Trading Bot</div>
+                    <div class="service-card"><i class="fas fa-comment-dots mr-2"></i>AI Trading Assistant</div>
+                    <div class="service-card"><i class="fas fa-lightbulb mr-2"></i>AI Insights</div>
+                    <div class="service-card"><i class="fas fa-tools mr-2"></i>AI Maintenance</div>
+                    <div class="service-card"><i class="fas fa-chart-line mr-2">Portfolio Analytics</div>
+                    <div class="service-card"><i class="fas fa-brain mr-2">Market Prediction</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tab) {
+            ['trading', 'wallets', 'services', 'admin', 'ai'].forEach(t => {
+                document.getElementById(t + '-section').classList.add('hidden');
+                document.getElementById('tab-' + t).classList.remove('active');
+            });
+            document.getElementById(tab + '-section').classList.remove('hidden');
+            document.getElementById('tab-' + tab).classList.add('active');
+        }
+    </script>
+</body>
+</html>
