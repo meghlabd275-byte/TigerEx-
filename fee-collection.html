@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx - Fee Collection System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0d10; color: #fff; }
+        .section { background: #1a1f26; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+        .nav-tab { padding: 10px 16px; border-radius: 8px; transition: 0.2s; }
+        .nav-tab.active { background: #4b5cd7; }
+        .fee-card { background: #252a33; padding: 12px; border-radius: 8px; text-align: center; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-gray-900 p-4 sticky top-0 z-50 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <i class="fas fa-coins text-yellow-500 text-xl"></i>
+            <h1 class="font-bold text-lg">TigerEx Fee Collection</h1>
+        </div>
+        <div class="flex gap-2">
+            <button class="p-2 bg-gray-800 rounded-full"><i class="fas fa-cog"></i></button>
+            <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">A</div>
+        </div>
+    </header>
+
+    <div class="p-4 pb-20">
+        <!-- Navigation -->
+        <div class="flex gap-2 overflow-x-auto mb-4">
+            <button onclick="showTab('overview')" class="nav-tab active" id="tab-overview">
+                <i class="fas fa-chart-pie mr-2"></i>Overview
+            </button>
+            <button onclick="showTab('trading')" class="nav-tab" id="tab-trading">
+                <i class="fas fa-exchange-alt mr-2"></i>Trading Fees
+            </button>
+            <button onclick="showTab('conversion')" class="nav-tab" id="tab-conversion">
+                <i class="fas fa-sync mr-2"></i>Conversion
+            </button>
+            <button onclick="showTab('withdraw')" class="nav-tab" id="tab-withdraw">
+                <i class="fas fa-arrow-up mr-2"></i>Withdrawal
+            </button>
+            <button onclick="showTab('listing')" class="nav-tab" id="tab-listing">
+                <i class="fas fa-list mr-2"></i>Listing
+            </button>
+            <button onclick="showTab('liquidity')" class="nav-tab" id="tab-liquidity">
+                <i class="fas fa-water mr-2"></i>Liquidity
+            </button>
+            <button onclick="showTab('mm')" class="nav-tab" id="tab-mm">
+                <i class="fas fa-users mr-2"></i>Market Maker
+            </button>
+        </div>
+
+        <!-- Overview -->
+        <div id="overview-section">
+            <div class="grid grid-cols-2 gap-3 mb-4">
+                <div class="fee-card">
+                    <div class="text-xs text-gray-400">Total Collected</div>
+                    <div class="font-bold text-xl text-green-500">$1,245,678</div>
+                </div>
+                <div class="fee-card">
+                    <div class="text-xs text-gray-400">Today's Fees</div>
+                    <div class="font-bold text-xl">$45,234</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3">Fee Distribution</h2>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div><i class="fas fa-exchange-alt mr-2"></i>Trading Fees</div>
+                        <div class="text-green-500">$450,230</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div><i class="fas fa-sync mr-2"></i>Conversion Fees</div>
+                        <div class="text-green-500">$23,450</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div><i class="fas fa-arrow-up mr-2"></i>Withdrawal Fees</div>
+                        <div class="text-green-500">$89,230</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div><i class="fas fa-list mr-2"></i>Listing Fees</div>
+                        <div class="text-green-500">$150,000</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div><i class="fas fa-water mr-2"></i>Liquidity Deposits</div>
+                        <div class="text-green-500">$450,768</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div><i class="fas fa-users mr-2"></i>Market Maker</div>
+                        <div class="text-green-500">$82,000</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trading Fees (CEX & DEX) -->
+        <div id="trading-section" class="hidden">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-exchange-alt mr-2"></i>Trading Fees</h2>
+                <p class="text-xs text-gray-400 mb-3">Collected from CEX and DEX trading</p>
+                
+                <!-- Fee Wallet Address -->
+                <div class="bg-gray-800 p-3 rounded mb-4">
+                    <div class="text-xs text-gray-400 mb-1">Fee Collection Address</div>
+                    <div class="font-mono text-xs">0xFee1C0llectTrading4dd234...</div>
+                    <button class="mt-2 text-xs bg-blue-600 px-2 py-1 rounded"><i class="fas fa-copy"></i> Copy</button>
+                </div>
+
+                <!-- CEX Fees -->
+                <h3 class="font-bold mb-2">CEX Trading Fees</h3>
+                <div class="space-y-2 mb-4">
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Spot Trading</div>
+                        <div class="text-green-500">$234,500</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Futures Trading</div>
+                        <div class="text-green-500">$145,230</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Margin Trading</div>
+                        <div class="text-green-500">$45,000</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Options</div>
+                        <div class="text-green-500">$25,500</div>
+                    </div>
+                </div>
+
+                <!-- DEX Fees -->
+                <h3 class="font-bold mb-2">DEX Trading Fees</h3>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Swap Fees</div>
+                        <div class="text-green-500">$12,450</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Liquidity Pool</div>
+                        <div class="text-green-500">$8,230</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>NFT Trading</div>
+                        <div class="text-green-500">$4,320</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <div class="font-bold">Total Trading Fees</div>
+                        <div class="text-xs text-gray-400">CEX + DEX</div>
+                    </div>
+                    <div class="text-2xl font-bold text-green-500">$475,230</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conversion Fees -->
+        <div id="conversion-section" class="hidden">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-sync mr-2"></i>Conversion Fees</h2>
+                <p class="text-xs text-gray-400 mb-3">0.1% fee on all conversions</p>
+                
+                <!-- Fee Address -->
+                <div class="bg-gray-800 p-3 rounded mb-4">
+                    <div class="text-xs text-gray-400 mb-1">Conversion Fee Address</div>
+                    <div class="font-mono text-xs">0xC0nv3rtF23sCollect...</div>
+                    <button class="mt-2 text-xs bg-blue-600 px-2 py-1 rounded"><i class="fas fa-copy"></i> Copy</button>
+                </div>
+
+                <!-- Conversion Pairs -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>BTC → USDT</div>
+                        <div class="text-green-500">$8,450</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>ETH → USDT</div>
+                        <div class="text-green-500">$6,230</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>BNB → USDT</div>
+                        <div class="text-green-500">$3,450</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Others</div>
+                        <div class="text-green-500">$5,320</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="flex justify-between items-center">
+                    <div class="font-bold">Total Conversion Fees</div>
+                    <div class="text-2xl font-bold text-green-500">$23,450</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Withdrawal Fees -->
+        <div id="withdraw-section" class="hidden">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-arrow-up mr-2"></i>Withdrawal Fees</h2>
+                <p class="text-xs text-gray-400 mb-3">Network fees from all withdrawals</p>
+                
+                <!-- Fee Address -->
+                <div class="bg-gray-800 p-3 rounded mb-4">
+                    <div class="text-xs text-gray-400 mb-1">Withdrawal Fee Address</div>
+                    <div class="font-mono text-xs">0xW1thdr4w4lF233s...</div>
+                    <button class="mt-2 text-xs bg-blue-600 px-2 py-1 rounded"><i class="fas fa-copy"></i> Copy</button>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>BTC Withdrawals</div>
+                        <div class="text-green-500">$45,230</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>ETH Withdrawals</div>
+                        <div class="text-green-500">$23,000</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>USDT Withdrawals</div>
+                        <div class="text-green-500">$15,000</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Others</div>
+                        <div class="text-green-500">$6,000</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="flex justify-between items-center">
+                    <div class="font-bold">Total Withdrawal Fees</div>
+                    <div class="text-2xl font-bold text-green-500">$89,230</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Listing Fees -->
+        <div id="listing-section" class="hidden">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-list mr-2"></i>Listing Fees</h2>
+                <p class="text-xs text-gray-400 mb-3">Token listing and new pair fees</p>
+                
+                <!-- Fee Address -->
+                <div class="bg-gray-800 p-3 rounded mb-4">
+                    <div class="text-xs text-gray-400 mb-1">Listing Fee Address</div>
+                    <div class="font-mono text-xs">0xL1st1ngF33Collect...</div>
+                    <button class="mt-2 text-xs bg-blue-600 px-2 py-1 rounded"><i class="fas fa-copy"></i> Copy</button>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Spot Listings</div>
+                        <div class="text-green-500">$100,000</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Futures Listings</div>
+                        <div class="text-green-500">$30,000</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>ETF Listings</div>
+                        <div class="text-green-500">$20,000</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="flex justify-between items-center">
+                    <div class="font-bold">Total Listing Fees</div>
+                    <div class="text-2xl font-bold text-green-500">$150,000</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Liquidity Deposits -->
+        <div id="liquidity-section" class="hidden">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-water mr-2"></i>Liquidity Deposits</h2>
+                <p class="text-xs text-gray-400 mb-3">Liquidity provider deposits</p>
+                
+                <!-- Fee Address -->
+                <div class="bg-gray-800 p-3 rounded mb-4">
+                    <div class="text-xs text-gray-400 mb-1">Liquidity Address</div>
+                    <div class="font-mono text-xs">0xL1qu1d1tyD3p0s1t...</div>
+                    <button class="mt-2 text-xs bg-blue-600 px-2 py-1 rounded"><i class="fas fa-copy"></i> Copy</button>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Liquidity Pool #1</div>
+                        <div class="text-green-500">$250,000</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Liquidity Pool #2</div>
+                        <div class="text-green-500">$150,768</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>Staking Rewards</div>
+                        <div class="text-green-500">$50,000</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="flex justify-between items-center">
+                    <div class="font-bold">Total Liquidity</div>
+                    <div class="text-2xl font-bold text-green-500">$450,768</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Market Maker Fees -->
+        <div id="mm-section" class="hidden">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-users mr-2"></i>Market Maker Fees</h2>
+                <p class="text-xs text-gray-400 mb-3">Market maker program fees</p>
+                
+                <!-- Fee Address -->
+                <div class="bg-gray-800 p-3 rounded mb-4">
+                    <div class="text-xs text-gray-400 mb-1">Market Maker Fee Address</div>
+                    <div class="font-mono text-xs">0xM4rk3tM4k3rF33...</div>
+                    <button class="mt-2 text-xs bg-blue-600 px-2 py-1 rounded"><i class="fas fa-copy"></i> Copy</button>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>MM Program Fees</div>
+                        <div class="text-green-500">$50,000</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>MM Rebates</div>
+                        <div class="text-green-500">$22,000</div>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-800 rounded">
+                        <div>API Fees</div>
+                        <div class="text-green-500">$10,000</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="flex justify-between items-center">
+                    <div class="font-bold">Total Market Maker</div>
+                    <div class="text-2xl font-bold text-green-500">$82,000</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 flex justify-around p-2 z-50 text-xs">
+        <button onclick="showTab('overview')" class="text-center p-1"><i class="fas fa-chart-pie block"></i>Overview</button>
+        <button onclick="showTab('trading')" class="text-center p-1"><i class="fas fa-exchange-alt block"></i>Trading</button>
+        <button onclick="showTab('conversion')" class="text-center p-1"><i class="fas fa-sync block"></i>Convert</button>
+        <button onclick="showTab('withdraw')" class="text-center p-1"><i class="fas fa-arrow-up block"></i>Withdraw</button>
+        <button onclick="showTab('liquidity')" class="text-center p-1"><i class="fas fa-water block"></i>Liquid</button>
+    </nav>
+
+    <script>
+        function showTab(tab) {
+            ['overview', 'trading', 'conversion', 'withdraw', 'listing', 'liquidity', 'mm'].forEach(t => {
+                document.getElementById(t + '-section').classList.add('hidden');
+                document.getElementById('tab-' + t).classList.remove('active');
+            });
+            document.getElementById(tab + '-section').classList.remove('hidden');
+            document.getElementById('tab-' + tab).classList.add('active');
+        }
+    </script>
+</body>
+</html>
