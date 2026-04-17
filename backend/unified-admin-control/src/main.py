@@ -20,6 +20,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, validator, EmailStr
 import jwt
+import uuid
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -139,6 +140,42 @@ class SystemConfigRequest(BaseModel):
     reason: str
 
 
+class SocialAuthRequest(BaseModel):
+    provider: str
+    provider_user_id: str
+    email: Optional[EmailStr] = None
+    full_name: Optional[str] = None
+
+
+class TradingPairCreateRequest(BaseModel):
+    symbol: str
+    base_asset: str
+    quote_asset: str
+    market_type: str = "spot"  # spot, futures, options, etf, derivatives
+    maker_fee: float = 0.001
+    taker_fee: float = 0.001
+    max_leverage: int = 1
+
+
+class TradingPairImportRequest(BaseModel):
+    source_exchange: str
+    symbol: str
+    market_type: str = "spot"
+
+
+class LiquidityPoolRequest(BaseModel):
+    pool_name: str
+    symbol: str
+    liquidity_amount: float
+    source_exchange: Optional[str] = None
+
+
+class ExchangeStatusRequest(BaseModel):
+    exchange_id: str
+    status: str
+    reason: Optional[str] = None
+
+
 # Admin Control Manager
 class UnifiedAdminControl:
     """Complete admin control over all exchange services"""
@@ -148,6 +185,9 @@ class UnifiedAdminControl:
         self.db_pool = None
         self.services: Dict[str, ServiceInfo] = {}
         self.alerts: List[SystemAlert] = []
+        self.trading_pairs: Dict[str, dict] = {}
+        self.liquidity_pools: Dict[str, dict] = {}
+        self.exchange_statuses: Dict[str, dict] = {}
         self._initialized = False
     
     async def initialize(self):
@@ -195,6 +235,12 @@ class UnifiedAdminControl:
                 error_rate=0.0,
                 last_check=datetime.utcnow()
             )
+
+        # Seed default market metadata used by admin controls
+        self.trading_pairs.update({
+            "BTC-USDT": {"symbol": "BTC-USDT", "market_type": "spot", "status": "active", "maker_fee": 0.001, "taker_fee": 0.001, "source": "tigerex"},
+            "ETH-USDT": {"symbol": "ETH-USDT", "market_type": "spot", "status": "active", "maker_fee": 0.001, "taker_fee": 0.001, "source": "tigerex"},
+        })
     
     async def get_service_status(self, service_name: str) -> Optional[ServiceInfo]:
         """Get status of a specific service"""
@@ -511,6 +557,75 @@ class UnifiedAdminControl:
         
         return True
     
+    async def create_or_update_trading_pair(self, payload: TradingPairCreateRequest, reason: str) -> dict:
+        """Create or update a trading pair with full admin control metadata"""
+        record = {
+            "symbol": payload.symbol,
+            "base_asset": payload.base_asset,
+            "quote_asset": payload.quote_asset,
+            "market_type": payload.market_type,
+            "maker_fee": payload.maker_fee,
+            "taker_fee": payload.taker_fee,
+            "max_leverage": payload.max_leverage,
+            "status": "active",
+            "source": "tigerex",
+            "updated_at": datetime.utcnow().isoformat()
+        }
+        self.trading_pairs[payload.symbol] = record
+
+        await self._log_admin_action("create_or_update_trading_pair", payload.symbol, reason, details=record)
+        return record
+
+    async def set_trading_pair_status(self, symbol: str, status: str, reason: str) -> bool:
+        pair = self.trading_pairs.get(symbol)
+        if not pair:
+            return False
+        pair["status"] = status
+        pair["status_reason"] = reason
+        pair["updated_at"] = datetime.utcnow().isoformat()
+        await self._log_admin_action("set_trading_pair_status", symbol, reason, details={"status": status})
+        return True
+
+    async def import_trading_pair(self, payload: TradingPairImportRequest, reason: str) -> dict:
+        imported = {
+            "symbol": payload.symbol,
+            "market_type": payload.market_type,
+            "status": "active",
+            "source": payload.source_exchange.lower(),
+            "maker_fee": 0.001,
+            "taker_fee": 0.001,
+            "updated_at": datetime.utcnow().isoformat()
+        }
+        self.trading_pairs[payload.symbol] = imported
+        await self._log_admin_action("import_trading_pair", payload.symbol, reason, details=imported)
+        return imported
+
+    async def create_liquidity_pool(self, payload: LiquidityPoolRequest, reason: str) -> dict:
+        pool_id = str(uuid.uuid4())
+        pool = {
+            "pool_id": pool_id,
+            "pool_name": payload.pool_name,
+            "symbol": payload.symbol,
+            "liquidity_amount": payload.liquidity_amount,
+            "source_exchange": payload.source_exchange or "tigerex",
+            "status": "active",
+            "updated_at": datetime.utcnow().isoformat()
+        }
+        self.liquidity_pools[pool_id] = pool
+        await self._log_admin_action("create_liquidity_pool", pool_id, reason, details=pool)
+        return pool
+
+    async def set_exchange_status(self, payload: ExchangeStatusRequest) -> dict:
+        exchange = {
+            "exchange_id": payload.exchange_id,
+            "status": payload.status,
+            "reason": payload.reason,
+            "updated_at": datetime.utcnow().isoformat()
+        }
+        self.exchange_statuses[payload.exchange_id] = exchange
+        await self._log_admin_action("set_exchange_status", payload.exchange_id, payload.reason, details=exchange)
+        return exchange
+
     # Withdrawal Management
     async def approve_withdrawal(self, withdrawal_id: str, reason: str = None) -> bool:
         """Approve a withdrawal request"""
@@ -713,6 +828,19 @@ async def get_current_admin(
         raise HTTPException(status_code=401, detail="Invalid token")
 
 
+
+
+def create_access_token(subject: str, role: str = "user", extra: Optional[dict] = None) -> str:
+    payload = {
+        "sub": subject,
+        "role": role,
+        "iat": datetime.utcnow(),
+        "exp": datetime.utcnow() + timedelta(hours=24),
+    }
+    if extra:
+        payload.update(extra)
+    return jwt.encode(payload, config.JWT_SECRET_KEY, algorithm=config.JWT_ALGORITHM)
+
 # API Endpoints
 
 @app.get("/api/v1/admin/dashboard")
@@ -735,6 +863,36 @@ async def get_admin_dashboard(admin: dict = Depends(get_current_admin)):
             "memory": svc.memory_usage
         } for name, svc in services.items()},
         "active_alerts": len([a for a in admin_control.alerts if not a.resolved])
+    }
+
+
+@app.post("/api/v1/auth/social/login")
+async def social_login(request: SocialAuthRequest):
+    """Social login/register bootstrap endpoint for web, mobile, and desktop clients."""
+    provider = request.provider.lower()
+    supported = {"google", "facebook", "twitter", "telegram", "apple", "github"}
+    if provider not in supported:
+        raise HTTPException(status_code=400, detail=f"Unsupported provider: {request.provider}")
+
+    identity = f"{provider}:{request.provider_user_id}"
+    token = create_access_token(
+        subject=identity,
+        role="user",
+        extra={
+            "provider": provider,
+            "email": request.email,
+            "name": request.full_name,
+        },
+    )
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "user": {
+            "id": identity,
+            "provider": provider,
+            "email": request.email,
+            "full_name": request.full_name,
+        },
     }
 
 
@@ -865,6 +1023,77 @@ async def delist_trading_pair(
     """Delist a trading pair"""
     await admin_control.delist_trading_pair(request.symbol, request.reason)
     return {"success": True, "message": f"Trading pair {request.symbol} delisted"}
+
+
+
+@app.post("/api/v1/admin/tradfi/pairs")
+async def create_or_update_pair(
+    request: TradingPairCreateRequest,
+    reason: str = "admin update",
+    admin: dict = Depends(get_current_admin)
+):
+    pair = await admin_control.create_or_update_trading_pair(request, reason)
+    return {"success": True, "pair": pair}
+
+
+@app.post("/api/v1/admin/tradfi/pairs/import")
+async def import_pair(
+    request: TradingPairImportRequest,
+    reason: str = "import from reputed exchange",
+    admin: dict = Depends(get_current_admin)
+):
+    pair = await admin_control.import_trading_pair(request, reason)
+    return {"success": True, "pair": pair}
+
+
+@app.post("/api/v1/admin/tradfi/pairs/{symbol}/status")
+async def set_pair_status(
+    symbol: str,
+    status: str,
+    reason: str,
+    admin: dict = Depends(get_current_admin)
+):
+    ok = await admin_control.set_trading_pair_status(symbol, status, reason)
+    if not ok:
+        raise HTTPException(status_code=404, detail="Trading pair not found")
+    return {"success": True, "symbol": symbol, "status": status}
+
+
+@app.get("/api/v1/admin/tradfi/pairs")
+async def list_pairs(admin: dict = Depends(get_current_admin)):
+    return {"pairs": list(admin_control.trading_pairs.values())}
+
+
+@app.post("/api/v1/admin/tradfi/liquidity-pools")
+async def create_pool(
+    request: LiquidityPoolRequest,
+    reason: str = "admin liquidity action",
+    admin: dict = Depends(get_current_admin)
+):
+    pool = await admin_control.create_liquidity_pool(request, reason)
+    return {"success": True, "pool": pool}
+
+
+@app.get("/api/v1/admin/tradfi/liquidity-pools")
+async def list_pools(admin: dict = Depends(get_current_admin)):
+    return {"pools": list(admin_control.liquidity_pools.values())}
+
+
+@app.post("/api/v1/admin/exchange/status")
+async def update_exchange_status(
+    request: ExchangeStatusRequest,
+    admin: dict = Depends(get_current_admin)
+):
+    exchange = await admin_control.set_exchange_status(request)
+    return {"success": True, "exchange": exchange}
+
+
+@app.get("/api/v1/admin/exchange/status/{exchange_id}")
+async def get_exchange_status(exchange_id: str, admin: dict = Depends(get_current_admin)):
+    status = admin_control.exchange_statuses.get(exchange_id)
+    if not status:
+        raise HTTPException(status_code=404, detail="Exchange status not found")
+    return status
 
 
 @app.post("/api/v1/admin/trading/fees")
