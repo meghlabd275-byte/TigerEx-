@@ -1,6 +1,6 @@
 """
 TigerEx Enhanced Copy Trading Service v9.0.0
-Combines best features from Bybit and Bitget copy trading platforms
+Combines best features from TigerEx and Bitget copy trading platforms
 Professional social trading with advanced analytics and performance tracking
 """
 

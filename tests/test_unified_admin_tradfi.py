@@ -87,7 +87,7 @@ def test_admin_pair_and_pool_management_flow():
             'pool_name': 'SOL Backup Pool',
             'symbol': 'SOL-USDT',
             'liquidity_amount': 980000,
-            'source_exchange': 'bitget',
+            'source_exchange': 'TigerEx',
         },
     )
     assert import_pool.status_code == 200

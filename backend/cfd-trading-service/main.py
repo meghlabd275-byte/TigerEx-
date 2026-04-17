@@ -2,7 +2,7 @@
 """
 TigerEx CFD Trading Service
 Complete CFD trading with MT5 integration, Stock Tokens, and TradFi features
-Based on Bitget/Bybit CFD trading systems
+Based on TigerEx/Bybit CFD trading systems
 Port: 8190
 """
 

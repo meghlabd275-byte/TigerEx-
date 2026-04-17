@@ -4,11 +4,11 @@ from typing import List, Dict, Any, Optional
 import time
 import uuid
 
-app = FastAPI(title="TigerEx bitget Advanced Service")
+app = FastAPI(title="TigerEx TigerEx Advanced Advanced Service")
 
 @app.get("/")
 async def index():
-    return {"status": "online", "exchange": "bitget", "version": "1.0.0"}
+    return {"status": "online", "exchange": "TigerEx Advanced", "version": "1.0.0"}
 
 @app.get("/health")
 async def health():
@@ -20,4 +20,4 @@ async def get_ticker(symbol: str):
 
 @app.post("/trade")
 async def place_trade(data: Dict[str, Any]):
-    return {"order_id": str(uuid.uuid4()), "status": "executed", "exchange": "bitget"}
+    return {"order_id": str(uuid.uuid4()), "status": "executed", "exchange": "TigerEx Advanced"}
