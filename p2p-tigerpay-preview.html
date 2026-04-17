@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx - P2P, TigerPay & Transfer Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0d10; color: #fff; }
+        .section { background: #1a1f26; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+        .nav-tab { padding: 10px 16px; border-radius: 8px; transition: 0.2s; }
+        .nav-tab.active { background: #4b5cd7; }
+        .action-btn { background: linear-gradient(135deg, #00dcb1, #00b890); }
+        .asset-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-bottom: 1px solid #2f363d; }
+        .transfer-method { padding: 12px; border-radius: 8px; text-align: center; background: #252a33; transition: 0.2s; }
+        .transfer-method:hover, .transfer-method.active { background: #4b5cd7; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-gray-900 p-4 sticky top-0 z-50 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <i class="fas fa-wallet text-xl text-green-500"></i>
+            <div>
+                <h1 class="font-bold text-lg">TigerEx Finance</h1>
+                <p class="text-xs text-gray-400">P2P • TigerPay • Transfers</p>
+            </div>
+        </div>
+        <div class="flex gap-3">
+            <button class="p-2 bg-gray-800 rounded-full"><i class="fas fa-bell"></i></button>
+            <button class="p-2 bg-gray-800 rounded-full"><i class="fas fa-user"></i></button>
+        </div>
+    </header>
+
+    <div class="p-4">
+        <!-- Main Navigation -->
+        <div class="flex gap-2 overflow-x-auto mb-4">
+            <button onclick="showTab('p2p')" class="nav-tab active whitespace-nowrap" id="tab-p2p">
+                <i class="fas fa-handshake mr-2"></i>P2P Trading
+            </button>
+            <button onclick="showTab('tigerpay')" class="nav-tab whitespace-nowrap" id="tab-tigerpay">
+                <i class="fas fa-credit-card mr-2"></i>TigerPay
+            </button>
+            <button onclick="showTab('transfer')" class="nav-tab whitespace-nowrap" id="tab-transfer">
+                <i class="fas fa-exchange-alt mr-2"></i>Transfer
+            </button>
+            <button onclick="showTab('convert')" class="nav-tab whitespace-nowrap" id="tab-convert">
+                <i class="fas fa-sync mr-2"></i>Convert
+            </button>
+            <button onclick="showTab('redpacket')" class="nav-tab whitespace-nowrap" id="tab-redpacket">
+                <i class="fas fa-gift mr-2"></i>Red Packet
+            </button>
+        </div>
+
+        <!-- P2P Trading Section -->
+        <div id="p2p-section">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-store mr-2"></i>P2P Buy & Sell</h2>
+                
+                <!-- Filter -->
+                <div class="flex gap-2 mb-4">
+                    <select class="bg-gray-800 p-2 rounded text-sm">
+                        <option>Fiat Currency</option>
+                        <option>USD</option>
+                        <option>EUR</option>
+                        <option>GBP</option>
+                        <option>INR</option>
+                    </select>
+                    <select class="bg-gray-800 p-2 rounded text-sm">
+                        <option>Payment</option>
+                        <option>Bank Transfer</option>
+                        <option>PayPal</option>
+                        <option>Google Pay</option>
+                        <option>Apple Pay</option>
+                    </select>
+                </div>
+
+                <!-- Buy Orders -->
+                <h3 class="font-bold mb-2">Buy USDT</h3>
+                <div class="space-y-2 mb-4">
+                    <div class="asset-row">
+                        <div>
+                            <div class="font-bold">Trader Alex</div>
+                            <div class="text-xs text-gray-400">● 98% • 500+ orders</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold">$1.02</div>
+                            <div class="text-xs text-gray-400">Min: $50</div>
+                            <button class="mt-1 action-btn px-4 py-1 rounded text-sm font-bold">Buy</button>
+                        </div>
+                    </div>
+                    <div class="asset-row">
+                        <div>
+                            <div class="font-bold">CryptoPro</div>
+                            <div class="text-xs text-gray-400">● 95% • 1.2k orders</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold">$1.03</div>
+                            <div class="text-xs text-gray-400">Min: $100</div>
+                            <button class="mt-1 action-btn px-4 py-1 rounded text-sm font-bold">Buy</button>
+                        </div>
+                    </div>
+                    <div class="asset-row">
+                        <div>
+                            <div class="font-bold">FastTrade</div>
+                            <div class="text-xs text-gray-400">● 99% • 5k orders</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold">$1.05</div>
+                            <div class="text-xs text-gray-400">Min: $20</div>
+                            <button class="mt-1 action-btn px-4 py-1 rounded text-sm font-bold">Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sell Orders -->
+                <h3 class="font-bold mb-2">Sell USDT</h3>
+                <div class="space-y-2">
+                    <div class="asset-row">
+                        <div>
+                            <div class="font-bold">Seller Maria</div>
+                            <div class="text-xs text-gray-400">● 97% • 800 orders</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold">$0.98</div>
+                            <div class="text-xs text-gray-400">Min: $50</div>
+                            <button class="mt-1 bg-red-600 px-4 py-1 rounded text-sm font-bold">Sell</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Ad -->
+            <div class="section">
+                <h3 class="font-bold"><i class="fas fa-plus-circle mr-2"></i>Create P2P Ad</h3>
+                <div class="grid grid-cols-2 gap-3 mt-3">
+                    <button class="action-btn py-3 rounded font-bold">I Want to Buy</button>
+                    <button class="bg-red-600 py-3 rounded font-bold">I Want to Sell</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TigerPay Section -->
+        <div id="tigerpay-section" class="hidden">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-credit-card mr-2"></i>TigerPay Wallet</h2>
+                
+                <!-- Balance Card -->
+                <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-4 mb-4">
+                    <div class="text-sm opacity-80">Total Balance</div>
+                    <div class="text-2xl font-bold">$12,450.00</div>
+                    <div class="flex gap-2 mt-3">
+                        <button class="bg-white/20 px-4 py-1 rounded text-sm"><i class="fas fa-plus mr-1"></i>Add</button>
+                        <button class="bg-white/20 px-4 py-1 rounded text-sm"><i class="fas fa-minus mr-1"></i>Withdraw</button>
+                    </div>
+                </div>
+
+                <!-- Tiger Card -->
+                <div class="mb-4">
+                    <h3 class="font-bold mb-2"><i class="fas fa-credit-card mr-2"></i>Tiger Card</h3>
+                    <div class="bg-gradient-to-r from-yellow-500 to-orange-600 rounded-xl p-4 relative overflow-hidden">
+                        <div class="relative z-10">
+                            <div class="flex justify-between items-start">
+                                <div class="text-sm">Tiger Card</div>
+                                <i class="fab fa-cc-visa text-2xl"></i>
+                            </div>
+                            <div class="text-xl font-mono mt-4">•••• •••• •••• 4532</div>
+                            <div class="flex justify-between mt-4">
+                                <div class="text-sm">JOHN DOE</div>
+                                <div class="text-xs">12/28</div>
+                            </div>
+                        </div>
+                        <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full"></div>
+                    </div>
+                    <div class="flex gap-2 mt-2">
+                        <button class="flex-1 bg-gray-800 py-2 rounded text-sm"><i class="fas fa-snowflake mr-2"></i>Freeze</button>
+                        <button class="flex-1 bg-gray-800 py-2 rounded text-sm"><i class="fas fa-history mr-2"></i>History</button>
+                    </div>
+                </div>
+
+                <!-- Payment Methods -->
+                <div class="mb-4">
+                    <h3 class="font-bold mb-2">Payment Methods</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between p-3 bg-gray-800 rounded">
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-university text-xl"></i>
+                                <div>
+                                    <div class="font-bold">Bank of America</div>
+                                    <div class="text-xs text-gray-400">•••• 2839</div>
+                                </div>
+                            </div>
+                            <span class="text-green-500 text-xs">Default</span>
+                        </div>
+                        <button class="w-full bg-gray-800 p-3 rounded text-center text-gray-400">
+                            <i class="fas fa-plus mr-2"></i>Add Payment Method
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Transactions -->
+                <div>
+                    <h3 class="font-bold mb-2">Recent Transactions</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between p-2 border-b border-gray-700">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-arrow-up text-green-500"></i>
+                                <div>
+                                    <div class="text-sm">Sent to John</div>
+                                    <div class="text-xs text-gray-400">Today, 2:30 PM</div>
+                                </div>
+                            </div>
+                            <div class="text-red-500">-$500.00</div>
+                        </div>
+                        <div class="flex items-center justify-between p-2 border-b border-gray-700">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-arrow-down text-green-500"></i>
+                                <div>
+                                    <div class="text-sm">Received from Mike</div>
+                                    <div class="text-xs text-gray-400">Today, 11:15 AM</div>
+                                </div>
+                            </div>
+                            <div class="text-green-500">+$1,250.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transfer Section -->
+        <div id="transfer-section" class="hidden">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-exchange-alt mr-2"></i>Internal Transfer</h2>
+                
+                <!-- Transfer Method -->
+                <div class="grid grid-cols-4 gap-2 mb-4">
+                    <div class="transfer-method active" onclick="selectTransfer(this)">
+                        <i class="fas fa-user text-xl mb-1"></i>
+                        <div class="text-xs">UID</div>
+                    </div>
+                    <div class="transfer-method" onclick="selectTransfer(this)">
+                        <i class="fas fa-at text-xl mb-1"></i>
+                        <div class="text-xs">Email</div>
+                    </div>
+                    <div class="transfer-method" onclick="selectTransfer(this)">
+                        <i class="fas fa-phone text-xl mb-1"></i>
+                        <div class="text-xs">Phone</div>
+                    </div>
+                    <div class="transfer-method" onclick="selectTransfer(this)">
+                        <i class="fab fa-telegram text-xl mb-1"></i>
+                        <div class="text-xs">Telegram</div>
+                    </div>
+                </div>
+
+                <!-- Recipient -->
+                <div class="mb-4">
+                    <label class="text-sm text-gray-400">Recipient</label>
+                    <input type="text" placeholder="Enter UID/Email/Phone" class="w-full bg-gray-800 p-3 rounded mt-1">
+                </div>
+
+                <!-- Amount -->
+                <div class="mb-4">
+                    <label class="text-sm text-gray-400">Amount</label>
+                    <input type="text" placeholder="0.00" class="w-full bg-gray-800 p-3 rounded mt-1">
+                </div>
+
+                <!-- Quick Select -->
+                <div class="flex gap-2 mb-4">
+                    <button class="flex-1 bg-gray-800 py-2 rounded text-sm">25%</button>
+                    <button class="flex-1 bg-gray-800 py-2 rounded text-sm">50%</button>
+                    <button class="flex-1 bg-gray-800 py-2 rounded text-sm">75%</button>
+                    <button class="flex-1 bg-gray-800 py-2 rounded text-sm">100%</button>
+                </div>
+
+                <button class="w-full action-btn py-3 rounded font-bold mb-4">Transfer Now</button>
+
+                <!-- Recent Transfers -->
+                <div>
+                    <h3 class="font-bold mb-2">Recent Transfers</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between p-2 bg-gray-800 rounded">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">M</div>
+                                <div>
+                                    <div class="text-sm">Mike Johnson</div>
+                                    <div class="text-xs text-gray-400">UID: 8823491</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm text-green-500">+$250.00</div>
+                                <div class="text-xs text-gray-400">Jan 15</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wallet Transfer -->
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-wallet mr-2"></i>Wallet Transfer</h2>
+                
+                <!-- From/To -->
+                <div class="grid grid-cols-2 gap-2 mb-4">
+                    <div class="bg-gray-800 p-3 rounded">
+                        <div class="text-xs text-gray-400">From</div>
+                        <select class="w-full bg-transparent mt-1">
+                            <option>Spot Wallet</option>
+                            <option>Futures Wallet</option>
+                            <option>TradFi Wallet</option>
+                            <option>OTC Finance</option>
+                            <option>Derivatives</option>
+                        </select>
+                    </div>
+                    <div class="bg-gray-800 p-3 rounded">
+                        <div class="text-xs text-gray-400">To</div>
+                        <select class="w-full bg-transparent mt-1">
+                            <option>Spot Wallet</option>
+                            <option>Futures Wallet</option>
+                            <option>TradFi Wallet</option>
+                            <option>OTC Finance</option>
+                            <option>Derivatives</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Asset -->
+                <div class="mb-4">
+                    <label class="text-sm text-gray-400">Asset</label>
+                    <select class="w-full bg-gray-800 p-3 rounded mt-1">
+                        <option>USDT</option>
+                        <option>BTC</option>
+                        <option>ETH</option>
+                        <option>BNB</option>
+                        <option>USDC</option>
+                    </select>
+                </div>
+
+                <!-- Amount -->
+                <div class="mb-4">
+                    <label class="text-sm text-gray-400">Amount</label>
+                    <input type="text" placeholder="0.00" class="w-full bg-gray-800 p-3 rounded mt-1">
+                </div>
+
+                <button class="w-full action-btn py-3 rounded font-bold">Transfer</button>
+            </div>
+        </div>
+
+        <!-- Convert Section -->
+        <div id="convert-section" class="hidden">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-sync mr-2"></i>Convert</h2>
+                
+                <div class="bg-gray-800 p-4 rounded mb-4">
+                    <div class="grid grid-cols-3 gap-2 items-center">
+                        <div class="text-center">
+                            <div class="text-xs text-gray-400 mb-1">From</div>
+                            <select class="bg-gray-700 p-2 rounded">
+                                <option>BTC</option>
+                                <option>ETH</option>
+                                <option>USDT</option>
+                            </select>
+                        </div>
+                        <div class="text-center">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-xs text-gray-400 mb-1">To</div>
+                            <select class="bg-gray-700 p-2 rounded">
+                                <option>USDT</option>
+                                <option>BTC</option>
+                                <option>ETH</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="text-sm text-gray-400">Amount</label>
+                    <input type="text" placeholder="0.00" class="w-full bg-gray-800 p-3 rounded mt-1">
+                </div>
+
+                <div class="text-sm text-gray-400 mb-4">
+                    <div class="flex justify-between">
+                        <span>Rate:</span>
+                        <span>1 BTC = 45,230.45 USDT</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Receive:</span>
+                        <span class="text-green-500">0.00 USDT</span>
+                    </div>
+                </div>
+
+                <button class="w-full action-btn py-3 rounded font-bold">Convert</button>
+            </div>
+        </div>
+
+        <!-- Red Packet Section -->
+        <div id="redpacket-section" class="hidden">
+            <div class="section">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-gift mr-2"></i>Red Packet</h2>
+                
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="bg-red-600 p-4 rounded text-center">
+                        <i class="fas fa-birthday-cake text-2xl mb-2"></i>
+                        <div class="font-bold">Lucky Draw</div>
+                        <div class="text-xs text-gray-300">Random amount</div>
+                    </div>
+                    <div class="bg-yellow-600 p-4 rounded text-center">
+                        <i class="fas fa-users text-2xl mb-2"></i>
+                        <div class="font-bold">Equal Split</div>
+                        <div class="text-xs text-gray-300">Same for all</div>
+                    </div>
+                </div>
+
+                <!-- Create Red Packet -->
+                <div class="mb-4">
+                    <label class="text-sm text-gray-400">Total Amount</label>
+                    <input type="text" placeholder="0.00" class="w-full bg-gray-800 p-3 rounded mt-1">
+                </div>
+
+                <div class="mb-4">
+                    <label class="text-sm text-gray-400">Number of Packets</label>
+                    <input type="number" placeholder="10" class="w-full bg-gray-800 p-3 rounded mt-1">
+                </div>
+
+                <div class="mb-4">
+                    <label class="text-sm text-gray-400">Message</label>
+                    <input type="text" placeholder="Best wishes!" class="w-full bg-gray-800 p-3 rounded mt-1">
+                </div>
+
+                <button class="w-full action-btn py-3 rounded font-bold mb-4">Create Red Packet</button>
+
+                <!-- Recent -->
+                <div>
+                    <h3 class="font-bold mb-2">Recent Red Packets</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between p-2 bg-gray-800 rounded">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-gift text-red-500"></i>
+                                <div>
+                                    <div class="text-sm">Lucky Draw</div>
+                                    <div class="text-xs text-gray-400">5/50 taken</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm">$250.00</div>
+                                <div class="text-xs text-gray-400">2 hours ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 flex justify-around p-3 z-50">
+        <button onclick="showTab('p2p')" class="text-center">
+            <i class="fas fa-handshake block"></i>
+            <span class="text-xs">P2P</span>
+        </button>
+        <button onclick="showTab('tigerpay')" class="text-center">
+            <i class="fas fa-credit-card block"></i>
+            <span class="text-xs">Pay</span>
+        </button>
+        <button onclick="showTab('transfer')" class="text-center">
+            <i class="fas fa-exchange-alt block"></i>
+            <span class="text-xs">Transfer</span>
+        </button>
+        <button onclick="showTab('convert')" class="text-center">
+            <i class="fas fa-sync block"></i>
+            <span class="text-xs">Convert</span>
+        </button>
+        <button onclick="showTab('redpacket')" class="text-center">
+            <i class="fas fa-gift block"></i>
+            <span class="text-xs">Gift</span>
+        </button>
+    </nav>
+
+    <script>
+        function showTab(tab) {
+            // Hide all sections
+            document.getElementById('p2p-section').classList.add('hidden');
+            document.getElementById('tigerpay-section').classList.add('hidden');
+            document.getElementById('transfer-section').classList.add('hidden');
+            document.getElementById('convert-section').classList.add('hidden');
+            document.getElementById('redpacket-section').classList.add('hidden');
+            
+            // Reset nav tabs
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            
+            // Show selected
+            document.getElementById(tab + '-section').classList.remove('hidden');
+            document.getElementById('tab-' + tab).classList.add('active');
+        }
+
+        function selectTransfer(el) {
+            document.querySelectorAll('.transfer-method').forEach(m => m.classList.remove('active'));
+            el.classList.add('active');
+        }
+    </script>
+</body>
+</html>
