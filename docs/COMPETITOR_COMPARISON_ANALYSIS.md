@@ -310,6 +310,9 @@ This update adds practical parity features for operations teams that requested B
 - Admin-managed trading pair lifecycle (`create/update/import/status management`).
 - Liquidity pool creation + import metadata tracking from reputed exchanges.
 - Exchange-level status management (`exchange_id`, status, reason) to support white-label operations.
+- Role-based fee profile controls (maker/taker/withdrawal fee policies by user role).
+- User-service access controls (pause/disable selected services at user-level).
+- Persistent admin metadata snapshots (state file restore/save for operational continuity).
 
 ### Newly Exposed Admin APIs
 
@@ -319,9 +322,17 @@ This update adds practical parity features for operations teams that requested B
 - `POST /api/v1/admin/tradfi/pairs/{symbol}/status`
 - `GET /api/v1/admin/tradfi/pairs`
 - `POST /api/v1/admin/tradfi/liquidity-pools`
+- `POST /api/v1/admin/tradfi/liquidity-pools/import`
 - `GET /api/v1/admin/tradfi/liquidity-pools`
 - `POST /api/v1/admin/exchange/status`
 - `GET /api/v1/admin/exchange/status/{exchange_id}`
+- `POST /api/v1/admin/fees/roles`
+- `GET /api/v1/admin/fees/roles`
+- `POST /api/v1/admin/users/service-access`
+- `GET /api/v1/admin/users/service-access/{user_id}`
+- `POST /api/v1/admin/users/{user_id}/access/halt-all`
+- `POST /api/v1/admin/users/{user_id}/access/resume-all`
+- `POST /api/v1/admin/tradfi/operate`
 
 ### Competitive Positioning Snapshot
 
@@ -332,6 +343,10 @@ This update adds practical parity features for operations teams that requested B
 | Pair import from reputed exchanges | ✅ Metadata-level import workflow | ✅ Available |
 | Liquidity pool management/import | ✅ Pool records + source exchange tracking | ✅ Available |
 | Exchange ID & status controls (white-label ops) | ✅ Included | ✅ Available |
+| Role-based trading/withdrawal fee controls | ✅ Included | ✅ Available |
+| Per-user service pause/resume access control | ✅ Included | ✅ Available |
+| Unified admin operation endpoint for UI automation | ✅ Included | ⚠️ Varies |
+| Metadata persistence for operational recovery | ✅ Included | ⚠️ Varies |
 
 > Note: upstream exchange integrations (live API synchronization and legal/compliance workflows) should be connected per deployment policy.
 

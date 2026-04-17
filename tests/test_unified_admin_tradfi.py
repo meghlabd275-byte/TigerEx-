@@ -14,7 +14,11 @@ client = TestClient(mod.app)
 
 
 def admin_headers():
-    token = mod.create_access_token('admin-user', role='admin')
+    token = mod.create_access_token(
+        'admin-user',
+        role='admin',
+        extra={'permissions': ['all']},
+    )
     return {'Authorization': f'Bearer {token}'}
 
 
@@ -76,6 +80,19 @@ def test_admin_pair_and_pool_management_flow():
     assert create_pool.status_code == 200
     assert create_pool.json()['pool']['symbol'] == 'SOL-USDT'
 
+    import_pool = client.post(
+        '/api/v1/admin/tradfi/liquidity-pools/import?reason=external+sync',
+        headers=headers,
+        json={
+            'pool_name': 'SOL Backup Pool',
+            'symbol': 'SOL-USDT',
+            'liquidity_amount': 980000,
+            'source_exchange': 'bitget',
+        },
+    )
+    assert import_pool.status_code == 200
+    assert import_pool.json()['pool']['imported'] is True
+
 
 def test_exchange_status_controls():
     headers = admin_headers()
@@ -89,3 +106,70 @@ def test_exchange_status_controls():
     get_res = client.get('/api/v1/admin/exchange/status/tigerex-us', headers=headers)
     assert get_res.status_code == 200
     assert get_res.json()['status'] == 'maintenance'
+
+
+def test_role_fees_and_user_service_access():
+    headers = admin_headers()
+    fee_res = client.post(
+        '/api/v1/admin/fees/roles',
+        headers=headers,
+        json={
+            'role_name': 'market_maker',
+            'maker_fee': 0.0001,
+            'taker_fee': 0.0003,
+            'withdrawal_fee_rate': 0.0004,
+            'reason': 'volume incentive'
+        },
+    )
+    assert fee_res.status_code == 200
+    assert fee_res.json()['profile']['role_name'] == 'market_maker'
+
+    access_res = client.post(
+        '/api/v1/admin/users/service-access',
+        headers=headers,
+        json={
+            'user_id': 'u-1001',
+            'service_name': 'futures',
+            'enabled': False,
+            'reason': 'risk review',
+        },
+    )
+    assert access_res.status_code == 200
+    assert access_res.json()['access']['enabled'] is False
+
+
+def test_tradfi_operate_endpoint_and_user_halt_resume():
+    headers = admin_headers()
+    operate_res = client.post(
+        '/api/v1/admin/tradfi/operate',
+        headers=headers,
+        json={
+            'operation': 'create_pair',
+            'reason': 'ops console create',
+            'payload': {
+                'symbol': 'XRP-USDT',
+                'base_asset': 'XRP',
+                'quote_asset': 'USDT',
+                'market_type': 'spot',
+                'maker_fee': 0.0009,
+                'taker_fee': 0.0011,
+                'max_leverage': 2,
+            },
+        },
+    )
+    assert operate_res.status_code == 200
+    assert operate_res.json()['result']['symbol'] == 'XRP-USDT'
+
+    halt_res = client.post(
+        '/api/v1/admin/users/u-2002/access/halt-all?reason=compliance+review',
+        headers=headers,
+    )
+    assert halt_res.status_code == 200
+    assert all(not entry['enabled'] for entry in halt_res.json()['updated'])
+
+    resume_res = client.post(
+        '/api/v1/admin/users/u-2002/access/resume-all?reason=review+completed',
+        headers=headers,
+    )
+    assert resume_res.status_code == 200
+    assert all(entry['enabled'] for entry in resume_res.json()['updated'])
