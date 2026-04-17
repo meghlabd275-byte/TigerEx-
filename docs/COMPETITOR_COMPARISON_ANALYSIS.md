@@ -302,3 +302,38 @@ The main competitive advantages are the complete source code access, no revenue 
 
 *Document Version: 2.0.0*
 *Last Updated: April 2024*
+## 11. 2026 Incremental Parity Update (Bybit/Bitget-style TradFi Admin Controls)
+
+This update adds practical parity features for operations teams that requested Bybit/Bitget-style controls:
+
+- Social auth bootstrap endpoint (`google`, `facebook`, `twitter`, `telegram`, `apple`, `github`).
+- Admin-managed trading pair lifecycle (`create/update/import/status management`).
+- Liquidity pool creation + import metadata tracking from reputed exchanges.
+- Exchange-level status management (`exchange_id`, status, reason) to support white-label operations.
+
+### Newly Exposed Admin APIs
+
+- `POST /api/v1/auth/social/login`
+- `POST /api/v1/admin/tradfi/pairs`
+- `POST /api/v1/admin/tradfi/pairs/import`
+- `POST /api/v1/admin/tradfi/pairs/{symbol}/status`
+- `GET /api/v1/admin/tradfi/pairs`
+- `POST /api/v1/admin/tradfi/liquidity-pools`
+- `GET /api/v1/admin/tradfi/liquidity-pools`
+- `POST /api/v1/admin/exchange/status`
+- `GET /api/v1/admin/exchange/status/{exchange_id}`
+
+### Competitive Positioning Snapshot
+
+| Capability | TigerEx (now) | Typical on Bybit/Bitget/Others |
+|---|---|---|
+| Social login adapters | ✅ Bootstrap API included | ✅ Available |
+| Trading pair lifecycle admin actions | ✅ Create/update/halt/stop/delist via status controls | ✅ Available |
+| Pair import from reputed exchanges | ✅ Metadata-level import workflow | ✅ Available |
+| Liquidity pool management/import | ✅ Pool records + source exchange tracking | ✅ Available |
+| Exchange ID & status controls (white-label ops) | ✅ Included | ✅ Available |
+
+> Note: upstream exchange integrations (live API synchronization and legal/compliance workflows) should be connected per deployment policy.
+
+*Document Version: 2.1.0*
+*Last Updated: April 17, 2026*
