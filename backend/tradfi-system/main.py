@@ -40,6 +40,28 @@ class OrderType(str, Enum):
     STOP = "stop"
     STOP_LIMIT = "stop_limit"
     TRAILING_STOP = "trailing_stop"
+    OCO = "oco"  # One-Cancels-Other
+    OTO = "oto"  # One-Triggers-Other
+    STOP_LOSS = "stop_loss"
+    TAKE_PROFIT = "take_profit"
+
+class OrderTimeInForce(str, Enum):
+    GTC = "good_till_cancel"  # Good Till Cancel
+    IOC = "immediate_or_cancel"  # Immediate or Cancel
+    FOK = "fill_or_kill"  # Fill or Kill
+    GTD = "good_till_date"  # Good Till Date
+    GTT = "good_till_time"  # Good Till Time
+
+class PositionStatus(str, Enum):
+    OPEN = "open"
+    CLOSED = "closed"
+    LIQUIDATED = "liquidated"
+    HEDGED = "hedged"
+
+class MarginMode(str, Enum):
+    CROSS = "cross"
+    ISOLATED = "isolated"
+    HEDGE = "hedge"
 
 class OrderStatus(str, Enum):
     PENDING = "pending"
@@ -89,6 +111,19 @@ class TradingInstrument:
     spread_target: Decimal = Decimal("0.0001")
     exchange_id: str = "TIGEREX"
     is_tradable: bool = True
+    
+    # Extended trader features
+    contract_size: Decimal = Decimal("1")
+    settlement_currency: str = "USDT"
+    settlement_type: str = "cash"  # cash, physical
+    price_precision: int = 8
+    quantity_precision: int = 8
+    min_notional: Decimal = Decimal("10")
+    max_notional: Decimal = Decimal("10000000")
+    price_change_limit: Decimal = Decimal("0.1")  # 10% max change
+    trading_fee_maker: Decimal = Decimal("0.001")
+    trading_fee_taker: Decimal = Decimal("0.002")
+    
     created_at: datetime = field(default_factory=datetime.utcnow)
     updated_at: datetime = field(default_factory=datetime.utcnow)
 
@@ -583,6 +618,35 @@ class TradingEngine:
         )
 
 trading_engine = TradingEngine()
+
+# Add these in-memory methods for fallback
+class InMemoryStore:
+    """In-memory storage for orders and positions"""
+    orders_store: Dict[str, List[Order]] = {}
+    positions_store: Dict[str, List[Position]] = {}
+    
+    @classmethod
+    async def get_user_orders(cls, user_id: str) -> List[Order]:
+        return cls.orders_store.get(user_id, [])
+    
+    @classmethod
+    async def get_user_positions(cls, user_id: str) -> List[Position]:
+        return cls.positions_store.get(user_id, [])
+    
+    @classmethod
+    async def add_order(cls, user_id: str, order: Order):
+        if user_id not in cls.orders_store:
+            cls.orders_store[user_id] = []
+        cls.orders_store[user_id].append(order)
+    
+    @classmethod
+    async def add_position(cls, user_id: str, position: Position):
+        if user_id not in cls.positions_store:
+            cls.positions_store[user_id] = []
+        cls.positions_store[user_id].append(position)
+
+# Update TradingEngine to use in-memory fallback
+OriginalTradingEngine = TradingEngine
 
 # Instrument Management
 class InstrumentManager:
@@ -1093,6 +1157,223 @@ async def add_liquidity(
 @app.get("/health")
 async def health_check():
     return {"status": "healthy", "service": "tradfi-system", "timestamp": datetime.utcnow().isoformat()}
+
+# ============ TRADER FEATURES ============
+
+@app.get("/trading/instruments")
+async def get_trading_instruments(
+    instrument_type: Optional[str] = None,
+    status: Optional[str] = "active"
+):
+    """Get all trading instruments with filters"""
+    inst_type = InstrumentType(instrument_type) if instrument_type else None
+    instruments = await instrument_manager.get_instruments(inst_type)
+    return {
+        "success": True,
+        "data": [
+            {
+                "symbol": i.symbol,
+                "name": i.name,
+                "type": i.instrument_type.value,
+                "status": i.status.value,
+                "leverage_max": float(i.leverage_max),
+                "margin_requirement": float(i.margin_requirement),
+                "trading_fee_maker": float(i.trading_fee_maker),
+                "trading_fee_taker": float(i.trading_fee_taker),
+                "is_tradable": i.is_tradable
+            } for i in instruments if i.status.value == status or status == "all"
+        ]
+    }
+
+@app.get("/trading/instruments/{symbol}")
+async def get_instrument_detail(symbol: str):
+    """Get specific instrument details"""
+    instruments = await instrument_manager.get_instruments()
+    for i in instruments:
+        if i.symbol == symbol:
+            return {
+                "success": True,
+                "data": {
+                    "symbol": i.symbol,
+                    "name": i.name,
+                    "type": i.instrument_type.value,
+                    "base_currency": i.base_currency,
+                    "quote_currency": i.quote_currency,
+                    "leverage_min": float(i.leverage_min),
+                    "leverage_max": float(i.leverage_max),
+                    "min_quantity": float(i.min_quantity),
+                    "max_quantity": float(i.max_quantity),
+                    "min_notional": float(i.min_notional),
+                    "max_notional": float(i.max_notional),
+                    "trading_fee_maker": float(i.trading_fee_maker),
+                    "trading_fee_taker": float(i.trading_fee_taker),
+                    "spread_target": float(i.spread_target),
+                    "tick_size": float(i.tick_size),
+                    "status": i.status.value
+                }
+            }
+    return {"success": False, "error": "Instrument not found"}
+
+@app.get("/trading/fees")
+async def get_trading_fees(
+    instrument_type: Optional[str] = None
+):
+    """Get trading fees"""
+    fees = await fee_manager.get_fee_structures()
+    return {"success": True, "data": fees}
+
+# ============ NEW ORDER ENDPOINTS ============
+
+@app.post("/trading/order")
+async def create_trade_order(
+    order_data: CreateOrderRequest,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Create new order"""
+    user_id = "user_123"
+    order = await trading_engine.create_order(user_id, order_data)
+    return {"success": True, "data": {"order_id": order.order_id, "status": order.status.value}}
+
+@app.post("/trading/order/cancel")
+async def cancel_trade_order(
+    order_id: str,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Cancel order"""
+    user_id = "user_123"
+    await trading_engine.cancel_order(user_id, order_id)
+    return {"success": True}
+
+@app.get("/trading/orders")
+async def get_orders(
+    status: Optional[str] = None,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Get user's orders"""
+    user_id = "user_123"
+    orders = await trading_engine.get_user_orders(user_id)
+    return {
+        "success": True,
+        "data": [
+            {
+                "order_id": o.order_id,
+                "symbol": o.symbol,
+                "side": o.side.value,
+                "type": o.order_type.value,
+                "quantity": float(o.quantity),
+                "price": float(o.price) if o.price else None,
+                "status": o.status.value,
+                "filled_quantity": float(o.filled_quantity),
+                "created_at": o.created_at.isoformat() if o.created_at else None
+            } for o in orders if status is None or o.status.value == status
+        ]
+    }
+
+# ============ NEW POSITION ENDPOINTS ============
+
+@app.get("/trading/positions")
+async def get_trading_positions(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Get user's positions"""
+    user_id = "user_123"
+    positions = await trading_engine.get_positions(user_id)
+    return {
+        "success": True,
+        "data": [
+            {
+                "position_id": p.position_id,
+                "symbol": p.symbol,
+                "side": p.side.value,
+                "quantity": float(p.quantity),
+                "entry_price": float(p.entry_price),
+                "leverage": float(p.leverage),
+                "unrealized_pnl": float(p.unrealized_pnl),
+                "margin": float(p.margin),
+                "liquidation_price": float(p.liquidation_price) if p.liquidation_price else None,
+                "status": p.status.value
+            } for p in positions
+        ]
+    }
+
+@app.post("/trading/position/close")
+async def close_trading_position(
+    position_id: str,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Close position"""
+    user_id = "user_123"
+    await trading_engine.close_position(user_id, position_id)
+    return {"success": True}
+
+@app.get("/trading/positions/{position_id}")
+async def get_position_detail(
+    position_id: str,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Get position details"""
+    user_id = "user_123"
+    positions = await trading_engine.get_positions(user_id)
+    for p in positions:
+        if p.position_id == position_id:
+            return {
+                "success": True,
+                "data": {
+                    "position_id": p.position_id,
+                    "symbol": p.symbol,
+                    "side": p.side.value,
+                    "quantity": float(p.quantity),
+                    "entry_price": float(p.entry_price),
+                    "current_price": float(p.current_price),
+                    "leverage": float(p.leverage),
+                    "unrealized_pnl": float(p.unrealized_pnl),
+                    "realized_pnl": float(p.realized_pnl),
+                    "margin": float(p.margin),
+                    "margin_ratio": float(p.margin_ratio),
+                    "liquidation_price": float(p.liquidation_price),
+                    "status": p.status.value
+                }
+            }
+    return {"success": False, "error": "Position not found"}
+
+# ============ ACCOUNT ENDPOINTS ============
+
+@app.get("/account/balance")
+async def get_account_balance(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Get account balance"""
+    user_id = "user_123"
+    return {
+        "success": True,
+        "data": {
+            "total_equity": 0.0,
+            "available_balance": 0.0,
+            "total_margin": 0.0,
+            "unrealized_pnl": 0.0,
+            "wallets": []
+        }
+    }
+
+@app.get("/account/leverage")
+async def get_leverage_info(
+    symbol: str,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Get leverage info for symbol"""
+    instruments = await instrument_manager.get_instruments()
+    for i in instruments:
+        if i.symbol == symbol:
+            return {
+                "success": True,
+                "data": {
+                    "symbol": symbol,
+                    "leverage_min": float(i.leverage_min),
+                    "leverage_max": float(i.leverage_max),
+                    "margin_requirement": float(i.margin_requirement)
+                }
+            }
+    return {"success": False, "error": "Instrument not found"}
 
 if __name__ == "__main__":
     import uvicorn
