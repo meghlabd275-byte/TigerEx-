@@ -51,7 +51,7 @@ ccxt==4.1.90
 python-binance==1.0.19
 krakenex==2.1.0
 pybit==5.7.0
-okx==1.0.0
+okx==2.1.2
 coinbaseadvancedclient==1.0.0
 kucoin-python==2.2.1
 gemini==3.0.0
