@@ -29,8 +29,9 @@ authlib==1.3.0
 # ============= HTTP CLIENTS & API =============
 httpx==0.25.2
 aiohttp==3.9.1
-requests==2.31.0
-websockets==12.0
+requests>=2.31.0
+# urllib3 - Let pip resolve conflicts automatically
+websockets>=12.0
 
 # ============= ASYNC & CONCURRENCY =============
 asyncio==3.4.3
@@ -40,31 +41,31 @@ confluent-kafka==2.3.0
 pika==1.3.2
 
 # ============= DATA PROCESSING & ANALYTICS =============
-pandas==2.2.3
+pandas>=2.2.3
 # numpy==2.2.6  # Let pip resolve version based on dependencies
-scipy==1.17.1
-scikit-learn==1.6.1
-ta==0.10.2
+scipy>=1.17.1
+scikit-learn>=1.6.1
+ta>=0.10.2
 
 # ============= CRYPTOCURRENCY & TRADING =============
-ccxt==4.1.90
+ccxt>=4.1.90
 python-binance==1.0.19
 krakenex==2.1.0
 pybit==5.7.0
-okx==2.1.2
+# okx - unavailable for Python 3.13
 # kucoin-python, gemini, coinbaseadvancedclient removed - no Python 3.13 wheels
 
 # ============= FINANCIAL & MARKET DATA =============
-yfinance==0.2.28
-pandas-market-calendars==4.4.1
-pyportfolioopt==1.5.5
+yfinance>=0.2.28
+pandas-market-calendars>=4.4.1
+pyportfolioopt>=1.5.5
 
 # ============= MONITORING & LOGGING =============
 prometheus-client==0.19.0
 statsd==4.0.1
 structlog==23.2.0
 loguru==0.7.2
-sentry-sdk==1.38.0
+sentry-sdk>=1.38.0
 
 # ============= TASK QUEUE & JOB SCHEDULING =============
 apscheduler==3.10.4
@@ -81,13 +82,13 @@ aiosmtplib==3.0.1
 sendgrid==6.10.0
 twilio==8.10.0
 fcm-django==1.0.9
-pusher==3.3.2
+pusher>=3.3.2
 
 # ============= FILE PROCESSING & STORAGE =============
 pillow==11.3.0
 python-magic==0.4.27
 boto3==1.34.0
-minio==7.2.0
+minio>=7.2.0
 aiofiles==23.2.1
 
 # ============= RATE LIMITING & CACHING =============
@@ -97,13 +98,13 @@ hiredis==2.2.3
 diskcache==5.6.3
 
 # ============= TESTING & QUALITY =============
-pytest==7.4.3
+pytest>=7.4.3
 pytest-asyncio==0.21.1
 pytest-cov==4.1.0
-black==23.11.0
-isort==5.12.0
-flake8==6.1.0
-mypy==1.7.1
+black>=23.11.0
+isort>=5.12.0
+flake8>=6.1.0
+mypy>=1.7.1
 
 # ============= DEVELOPMENT TOOLS =============
 jupyter==1.0.0
@@ -129,19 +130,19 @@ pytz==2023.3
 
 # ============= CONFIGURATION MANAGEMENT =============
 dynaconf==3.2.4
-hydra-core==1.3.2
+hydra-core>=1.3.2
 configparser==6.0.0
 pyyaml==6.0.1
 
 # ============= GEOGRAPHIC & LOCATION =============
 geopy==2.4.1
-geoip2==4.8.0
+geoip2>=4.8.0
 country-converter==1.2.0
 
 # ============= BLOCKCHAIN & WEB3 =============
 web3==6.11.3
 py-solc-x==1.1.1
-slither-analyzer==0.9.6
+slither-analyzer>=0.9.6
 eth-account>=0.9.0
 
 # ============= SECURITY & ENCRYPTION =============
@@ -164,8 +165,8 @@ factory-boy==3.3.0
 # socketio, eventlet, gevent removed - unavailable for Python 3.13
 
 # ============= IMAGE PROCESSING =============
-opencv-python-headless==4.8.1.78
-imageio==2.33.1
+opencv-python-headless>=4.8.1.78
+imageio>=2.33.1
 # skimage removed - unavailable for Python 3.13
 
 # ============= NATURAL LANGUAGE PROCESSING =============
@@ -175,8 +176,8 @@ openai==1.3.8
 
 # ============= SCRAPING & AUTOMATION =============
 beautifulsoup4==4.12.2
-selenium==4.16.0
-scrapy==2.11.0
+selenium>=4.16.0
+scrapy>=2.11.0
 playwright==1.40.0
 
 # ============= HEALTH CHECKS & MONITORING =============
@@ -188,7 +189,7 @@ py-cpuinfo==9.0.0
 # ============= ENVIRONMENT VARIABLES & SECRETS =============
 python-decouple==3.8
 keyring==24.3.0
-vault==1.1.1
+# vault - conflicts with Babel
 
 # ============= BACKUP & RECOVERY =============
 # pgbackup, mongo-backup, s3-backup removed - unavailable for Python 3.13
@@ -196,11 +197,11 @@ vault==1.1.1
 # ============= API TESTING =============
 httpx==0.25.2
 requests-mock==1.11.0
-responses==0.24.1
+responses>=0.24.1
 vcrpy==6.0.1
 
 # ============= DATA MIGRATION =============
-pandas-gbq==0.19.2
+pandas-gbq>=0.19.2
 sqlalchemy2-stubs==0.0.2a38
 pymysql==1.1.0
 
@@ -213,8 +214,8 @@ django==4.2.7
 # (mlflow, bentoML, kserve removed - Python 3.13 compatibility)
 
 # ============= CONTAINER ORCHESTRATION =============
-docker==6.1.3
-kubernetes==28.1.0
+docker>=6.1.3
+kubernetes>=28.1.0
 openshift==0.13.1
 
 # ============= CLI TOOLS =============
@@ -230,16 +231,16 @@ motor==3.3.2
 
 # ============= GRAPH DATABASES =============
 neo4j==5.15.0
-py2neo==2021.2.4
+py2neo>=2021.2.4
 gremlinpython==3.7.1
 
 # ============= SEARCH ENGINES =============
 elasticsearch==8.11.0
-opensearch-py==2.4.0
+opensearch-py>=2.4.0
 whoosh==2.7.4
 
 # ============= TIME SERIES DATABASES =============
-influxdb-client==1.39.0
+influxdb-client>=1.39.0
 # timescaledb-psycopg2 removed - unavailable for Python 3.13
 clickhouse-driver==0.2.6
 
@@ -249,9 +250,9 @@ faust==1.10.4; python_version < "3.11"
 ray>=2.45.0
 
 # ============= DISTRIBUTED COMPUTING =============
-dask==2023.11.0
+dask>=2023.11.0
 joblib==1.3.2
-distributed==2023.11.0
+distributed>=2023.11.0
 
 # ============= MESSAGING PROTOCOLS =============
 mqtt==0.0.1
@@ -259,9 +260,9 @@ amqp==5.2.0
 stomp.py==8.1.0
 
 # ============= DOCUMENTATION =============
-mkdocs==1.5.3
+mkdocs>=1.5.3
 mkdocs-material==9.4.8
-sphinx==7.2.6
+sphinx>=7.2.6
 
 # ============= API GATEWAY =============
 # kong - using latest available version (API gateway, not Python package)
@@ -285,8 +286,8 @@ opencensus==0.11.3
 # traefik==2.10.0  # Traefik - not a Python package
 
 # ============= CERTIFICATE MANAGEMENT =============
-certbot==2.7.4
-acme==2.7.4
+certbot>=2.7.4
+acme>=2.7.4
 cryptography==44.0.0
 
 # ============= COMPLIANCE & REGULATION =============
@@ -306,20 +307,20 @@ adyen==15.0.1
 # (pyfolio, empyrical, ffn removed - Python 3.13 compatibility issues)
 
 # ============= PORTFOLIO OPTIMIZATION =============
-pyportfolioopt==1.5.5
-cvxpy==1.3.2
+pyportfolioopt>=1.5.5
+cvxpy>=1.3.2
 # riskparity==1.0.0  # Not available on PyPI
 
 # ============= TECHNICAL ANALYSIS =============
 TA-Lib==0.4.28
-ta==0.10.2
-pandas-ta==0.4.71b0
+ta>=0.10.2
+pandas-ta>=0.4.71b0
 
 # ============= MARKET DATA FEEDS =============
-yfinance==0.2.28
+yfinance>=0.2.28
 alpha_vantage==2.3.1
 iexfinance==0.4.3
-polygon-api-client==1.16.3
+# polygon-api-client - conflicts with websockets
 
 # ============= SOCIAL TRADING =============
 # twitter-api-v2==1.1.0  # Not available, use python-twitter
@@ -337,8 +338,8 @@ jupyterlab==4.0.9
 # docker-compose==1.29.2  # Docker tool, not a Python package
 
 # ============= PRODUCTION DEPLOYMENT =============
-gunicorn==21.2.0
-supervisor==4.2.5
+gunicorn==19.3.0
+supervisor>=4.2.5
 # systemd-python==235  # Requires systemd development libraries
 
 # ============= MONITORING DASHBOARDS =============
@@ -353,11 +354,11 @@ datadog==0.47.0
 
 # ============= SECURITY SCANNING =============
 bandit==1.7.5
-safety==2.3.5
+safety>=2.3.5
 pip-audit==2.6.1
 
 # ============= DEPENDENCY MANAGEMENT =============
-pip-tools==7.3.0
+pip-tools>=7.3.0
 pipdeptree==2.13.0
 pip-check-updates==0.28.0
 
@@ -369,7 +370,7 @@ autopep8==2.0.4
 # ============= DOCUMENTATION GENERATION =============
 pdoc==14.3.0
 autodocsumm==0.2.11
-sphinx-rtd-theme==1.3.0
+# sphinx-rtd-theme - conflicts with sphinx docutils
 
 # ============= API DOCUMENTATION =============
 redoc==0.2.3
@@ -398,7 +399,7 @@ bump2version==1.0.1
 
 # ============= PACKAGE MANAGEMENT =============
 poetry==1.7.1
-pipenv==2023.11.15
+pipenv>=2023.11.15
 # conda==23.11.0  # Conda package manager, not a Python package
 
 # ============= VIRTUALIZATION =============
@@ -407,12 +408,12 @@ virtualenv==20.24.7
 tox==4.11.4
 
 # ============= CONTAINER TOOLS =============
-docker==6.1.3
+docker>=6.1.3
 podman==5.8.0
 # buildah==1.32.0  # Container build tool, not a Python package
 
 # ============= ORCHESTRATION =============
-kubernetes==28.1.0
+kubernetes>=28.1.0
 # helm==3.13.0  # Kubernetes Helm package manager, different from PyPI helm
 # kubectl==1.29.0  # Kubernetes CLI tool, not a Python package
 
@@ -427,7 +428,7 @@ jaeger-client==4.8.0
 zipkin==0.1.0  # Available version
 
 # ============= LOGGING AGENTS =============
-fluentd-logger==1.0.0
+# fluentd-logger - conflicts with setuptools
 # logstash-async==2.8.0  # Logstash async logging, not a Python package
 # vector-client==0.1.0  # Vector observability pipeline, not available
 
@@ -460,7 +461,7 @@ joblib==1.3.2
 # ============= DISTRIBUTED SYSTEMS =============
 # pykka removed - unavailable for Python 3.13
 ray>=2.45.0
-dask==2023.11.0
+dask>=2023.11.0
 
 # ============= CLOUD PROVIDERS =============
 boto3==1.34.0
