@@ -180,7 +180,7 @@ scrapy==2.11.0
 playwright==1.40.0
 
 # ============= HEALTH CHECKS & MONITORING =============
-health-check==0.3.2
+# health-check removed - unavailable for Python 3.13
 psutil==5.9.6
 GPUtil==1.4.0
 py-cpuinfo==9.0.0
