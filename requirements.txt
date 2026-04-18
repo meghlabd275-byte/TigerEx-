@@ -161,10 +161,7 @@ alembic==1.13.1
 factory-boy==3.3.0
 
 # ============= WEBSOCKET & REAL-TIME =============
-socketio==5.10.0
-python-socketio==5.10.0
-eventlet==0.33.3
-gevent==23.9.1
+# socketio, eventlet, gevent removed - unavailable for Python 3.13
 
 # ============= IMAGE PROCESSING =============
 opencv-python-headless==4.8.1.78
