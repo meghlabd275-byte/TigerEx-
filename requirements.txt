@@ -45,7 +45,6 @@ numpy==2.2.6
 scipy==1.17.1
 scikit-learn==1.6.1
 ta==0.10.2
-pandas-ta==0.3.14b0
 
 # ============= CRYPTOCURRENCY & TRADING =============
 ccxt==4.1.90
