@@ -115,11 +115,11 @@ python-dotenv==1.0.0
 fastapi-users==12.1.2
 fastapi-pagination==0.12.13
 fastapi-limiter==0.1.5
-fastapi-cache==0.2.1
+fastapi-cache==0.1.0
+# grpcio removed - compilation issues
 
 # ============= MESSAGING & COMMUNICATION =============
-grpcio==1.59.3
-grpcio-tools==1.59.3
+# grpcio removed - compilation issues
 protobuf==4.25.1
 thrift==0.20.0
 
