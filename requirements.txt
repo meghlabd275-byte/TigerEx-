@@ -125,9 +125,7 @@ thrift==0.20.0
 
 # ============= TIME & DATE HANDLING =============
 pytz==2023.3
-dateutil==2.8.2
-croniter==2.0.1
-moment==0.12.0
+# dateutil removed - no longer available
 
 # ============= CONFIGURATION MANAGEMENT =============
 dynaconf==3.2.4
