@@ -460,7 +460,7 @@ memory-profiler==0.61.0
 line-profiler==4.1.1
 
 # ============= DEBUGGING =============
-pdb++==0.10.3
+pdbpp==0.10.3
 ipdb==0.13.13
 pudb==2023.1
 
