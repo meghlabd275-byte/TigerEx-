@@ -15,7 +15,7 @@ sqlalchemy==2.0.23
 alembic==1.13.1
 psycopg2-binary==2.9.11
 pymongo==4.10.1
-redis==5.0.1
+# redis==5.0.1  # Let pip resolve
 cassandra-driver==3.30.0
 
 # ============= AUTHENTICATION & SECURITY =============
@@ -41,7 +41,7 @@ pika==1.3.2
 
 # ============= DATA PROCESSING & ANALYTICS =============
 pandas==2.2.3
-numpy==2.2.6
+# numpy==2.2.6  # Let pip resolve version based on dependencies
 scipy==1.17.1
 scikit-learn==1.6.1
 ta==0.10.2
@@ -226,7 +226,7 @@ rich==13.7.0
 asyncpg==0.29.0
 aiomysql==0.2.0
 motor==3.3.2
-aioredis==2.0.1
+# aioredis==2.0.1  # Let pip resolve, also needed by fastapi-cache
 
 # ============= GRAPH DATABASES =============
 neo4j==5.15.0
@@ -244,9 +244,9 @@ influxdb-client==1.39.0
 clickhouse-driver==0.2.6
 
 # ============= EVENT STREAMING =============
-faust==1.10.4
+faust==1.10.4; python_version < "3.11"
 # pykka removed - unavailable for Python 3.13
-ray==2.8.0
+ray>=2.45.0
 
 # ============= DISTRIBUTED COMPUTING =============
 dask==2023.11.0
@@ -254,7 +254,7 @@ joblib==1.3.2
 distributed==2023.11.0
 
 # ============= MESSAGING PROTOCOLS =============
-mqtt==1.1.0
+mqtt==0.0.1
 amqp==5.2.0
 stomp.py==8.1.0
 
@@ -264,24 +264,25 @@ mkdocs-material==9.4.8
 sphinx==7.2.6
 
 # ============= API GATEWAY =============
-kong==0.14.0
-tyk==2.2.0
-ambassador==0.1.0
+# kong - using latest available version (API gateway, not Python package)
+# kong==0.14.0  # No longer available, using kongpy or direct API
+# tyk==2.2.0  # Tyk API Gateway - separate product, not a Python package
+# ambassador==0.1.0  # Ambassador API Gateway - separate product
 
 # ============= SERVICE MESH =============
-istio==1.19.0
-linkerd==2.10.0
-consul==1.1.10
+# istio==1.19.0  # Istio service mesh - not a Python package
+# linkerd==2.10.0  # Linkerd service mesh - not a Python package
+# consul==1.1.10  # Consul by HashiCorp - not a Python package
 
 # ============= OBSERVABILITY =============
 jaeger-client==4.8.0
-zipkin==2.4.2
+zipkin==0.1.0  # Available version
 opencensus==0.11.3
 
 # ============= LOAD BALANCING =============
-nginx==1.25.3
-haproxy==2.8.0
-traefik==2.10.0
+# nginx==1.25.3  # NGINX web server - not a Python package
+# haproxy==2.8.0  # HAProxy - not a Python package
+# traefik==2.10.0  # Traefik - not a Python package
 
 # ============= CERTIFICATE MANAGEMENT =============
 certbot==2.7.4
@@ -296,7 +297,7 @@ mnemonic==0.20
 # ============= FINANCIAL COMPLIANCE =============
 plaid-python==12.0.0
 stripe==7.6.0
-adyen==6.1.0
+adyen==15.0.1
 
 # ============= TRADING ALGORITHMS =============
 # (bt, zipline, backtrader removed - Python 3.13 compatibility issues)
@@ -307,46 +308,46 @@ adyen==6.1.0
 # ============= PORTFOLIO OPTIMIZATION =============
 pyportfolioopt==1.5.5
 cvxpy==1.3.2
-riskparity==1.0.0
+# riskparity==1.0.0  # Not available on PyPI
 
 # ============= TECHNICAL ANALYSIS =============
-talib-binary==0.4.28
+TA-Lib==0.4.28
 ta==0.10.2
-pandas-ta==0.3.14b0
+pandas-ta==0.4.71b0
 
 # ============= MARKET DATA FEEDS =============
 yfinance==0.2.28
 alpha_vantage==2.3.1
 iexfinance==0.4.3
-polygon-api-client==1.13.8
+polygon-api-client==1.16.3
 
 # ============= SOCIAL TRADING =============
-twitter-api-v2==1.1.0
+# twitter-api-v2==1.1.0  # Not available, use python-twitter
 telegram==0.0.1
 discord-webhook==1.3.0
 
 # ============= BACKUP & DISASTER RECOVERY =============
-pg_dump==1.0.0
-mongodump==1.0.0
-rclone==1.64.2
+# pg_dump - PostgreSQL dump tool, not a Python package
+# mongodump - MongoDB dump tool, not a Python package
+# rclone==1.64.2  # Cloud storage sync tool, not a Python package
 
 # ============= DEVELOPMENT ENVIRONMENTS =============
 jupyterlab==4.0.9
-vscode-python==2023.22.1
-docker-compose==1.29.2
+# vscode-python==2023.22.1  # VS Code extension, not a Python package
+# docker-compose==1.29.2  # Docker tool, not a Python package
 
 # ============= PRODUCTION DEPLOYMENT =============
 gunicorn==21.2.0
 supervisor==4.2.5
-systemd-python==235
+# systemd-python==235  # Requires systemd development libraries
 
 # ============= MONITORING DASHBOARDS =============
 grafana-api==1.0.3
-kibana-api==1.0.0
-prometheus-api==0.1.0
+# kibana-api==1.0.0  # Use elasticsearch-py or opensearch-py instead
+prometheus-api==0.0.1
 
 # ============= LOGGING & ANALYTICS =============
-splunk-sdk==1.7.4
+# splunk-sdk==1.7.4  # Fails to build on Python 3.13
 elastic-apm==6.16.1
 datadog==0.47.0
 
@@ -358,7 +359,7 @@ pip-audit==2.6.1
 # ============= DEPENDENCY MANAGEMENT =============
 pip-tools==7.3.0
 pipdeptree==2.13.0
-pip-check-updates==2.14.0
+pip-check-updates==0.28.0
 
 # ============= CODE QUALITY =============
 pre-commit==3.6.0
@@ -371,23 +372,23 @@ autodocsumm==0.2.11
 sphinx-rtd-theme==1.3.0
 
 # ============= API DOCUMENTATION =============
-redoc==2.0.0
+redoc==0.2.3
 swagger-ui-bundle==0.0.9
 prance==23.6.21.0
 
 # ============= CONTAINER SECURITY =============
-trivy==0.48.1
-clair==4.6.0
-anchore==0.9.2
+# trivy - Container security scanner, not a Python package
+# clair==4.6.0  # Container vulnerability scanner, not a Python package
+# anchore==0.9.2  # Container analysis platform, not a Python package
 
 # ============= INFRASTRUCTURE AS CODE =============
-terraform==1.6.6
-pulumi==3.108.0
-ansible==8.7.0
+# terraform - Infrastructure as Code tool, not a Python package
+# pulumi==3.108.0  # Pulumi SDK, not available on PyPI
+# ansible==8.7.0  # Ansible automation platform, not a Python package
 
 # ============= CI/CD PIPELINES =============
-jenkinsapi==1.7.0
-gitlab==3.14.0
+jenkinsapi==0.3.22  # Latest available version
+python-gitlab==3.14.0
 github3.py==4.0.1
 
 # ============= VERSION CONTROL =============
@@ -398,47 +399,47 @@ bump2version==1.0.1
 # ============= PACKAGE MANAGEMENT =============
 poetry==1.7.1
 pipenv==2023.11.15
-conda==23.11.0
+# conda==23.11.0  # Conda package manager, not a Python package
 
 # ============= VIRTUALIZATION =============
 virtualenv==20.24.7
-pyenv==2.3.30
+# pyenv==2.3.30  # Python version manager, not a Python package
 tox==4.11.4
 
 # ============= CONTAINER TOOLS =============
 docker==6.1.3
-podman==4.8.0
-buildah==1.32.0
+podman==5.8.0
+# buildah==1.32.0  # Container build tool, not a Python package
 
 # ============= ORCHESTRATION =============
 kubernetes==28.1.0
-helm==3.13.0
-kubectl==1.29.0
+# helm==3.13.0  # Kubernetes Helm package manager, different from PyPI helm
+# kubectl==1.29.0  # Kubernetes CLI tool, not a Python package
 
 # ============= MONITORING =============
 prometheus-client==0.19.0
 statsd==4.0.1
-graphyte==4.0.1
+graphyte==1.7.1
 
 # ============= TRACING =============
 opentelemetry-api==1.21.0
 jaeger-client==4.8.0
-zipkin==2.4.2
+zipkin==0.1.0  # Available version
 
 # ============= LOGGING AGENTS =============
-fluentd-logger==0.10.0
-logstash-async==2.8.0
-vector-client==0.1.0
+fluentd-logger==1.0.0
+# logstash-async==2.8.0  # Logstash async logging, not a Python package
+# vector-client==0.1.0  # Vector observability pipeline, not available
 
 # ============= METRICS ===============
 datadog==0.47.0
-newrelic==9.2.0
-appdynamics==23.11.0
+newrelic==12.1.0
+appdynamics==26.4.0.8689
 
 # ============= PROFILING ==============
 pyinstrument==4.6.2
 memory-profiler==0.61.0
-line-profiler==4.1.1
+# line-profiler==4.1.1  # Requires unavailable Cython version
 
 # ============= DEBUGGING =============
 pdbpp==0.10.3
@@ -446,20 +447,22 @@ ipdb==0.13.13
 pudb==2023.1
 
 # ============= PERFORMANCE ==============
-numba==0.58.1
-pythran==0.14.0
+pyinstrument==4.6.2
+memory-profiler==0.61.0
+# numba==0.58.1  # Does not support Python 3.13
+# pythran==0.14.0  # Requires numba
 
 # ============= PARALLEL COMPUTING =============
 multiprocessing-logging==0.3.4
 joblib==1.3.2
-concurrent-futures==3.1.1
+# concurrent-futures==3.1.1  # Part of Python stdlib since 3.2
 
 # ============= DISTRIBUTED SYSTEMS =============
 # pykka removed - unavailable for Python 3.13
-ray==2.8.0
+ray>=2.45.0
 dask==2023.11.0
 
 # ============= CLOUD PROVIDERS =============
 boto3==1.34.0
 google-cloud==0.34.0
-azure-sdk==1.0.0
+# azure-sdk==1.0.0  # Azure SDK, use individual packages instead
