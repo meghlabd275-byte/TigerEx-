@@ -191,9 +191,7 @@ keyring==24.3.0
 vault==1.1.1
 
 # ============= BACKUP & RECOVERY =============
-pgbackup==0.2.0
-mongo-backup==0.1.0
-s3-backup==1.0.0
+# pgbackup, mongo-backup, s3-backup removed - unavailable for Python 3.13
 
 # ============= API TESTING =============
 httpx==0.25.2
