@@ -7,6 +7,9 @@ uvicorn[standard]==0.24.0
 pydantic==2.5.0
 pydantic-settings==2.1.0
 
+# ============= BUILD TOOLS (required for compiling some packages) =============
+cython==3.0.10
+
 # ============= DATABASES & ORM =============
 sqlalchemy==2.0.23
 alembic==1.13.1
@@ -160,7 +163,6 @@ argon2-cffi==23.1.0
 orjson==3.9.10
 msgpack==1.0.7
 pickle5==0.0.12
-cython==3.0.10
 
 # ============= DATABASE MIGRATIONS & SEEDING =============
 alembic==1.13.1
@@ -465,7 +467,6 @@ ipdb==0.13.13
 pudb==2023.1
 
 # ============= PERFORMANCE ==============
-cython==3.0.10
 numba==0.58.1
 pythran==0.14.0
 
