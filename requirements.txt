@@ -166,7 +166,7 @@ factory-boy==3.3.0
 # ============= IMAGE PROCESSING =============
 opencv-python-headless==4.8.1.78
 imageio==2.33.1
-skimage==0.22.0
+# skimage removed - unavailable for Python 3.13
 
 # ============= NATURAL LANGUAGE PROCESSING =============
 nltk==3.8.1
