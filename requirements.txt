@@ -157,7 +157,7 @@ msgpack==1.0.7
 
 # ============= DATABASE MIGRATIONS & SEEDING =============
 alembic==1.13.1
-seed-faker==0.1.0
+# seed-faker removed - unavailable for Python 3.13
 factory-boy==3.3.0
 
 # ============= WEBSOCKET & REAL-TIME =============
