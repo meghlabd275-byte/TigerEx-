@@ -18,8 +18,16 @@ import { Edit, Delete } from '@mui/icons-material';
 import axios from 'axios';
 import ContractForm from './ContractForm';
 
+interface Contract {
+  contract_id: string;
+  symbol: string;
+  exchange: string;
+  trading_type: string;
+  status: string;
+}
+
 const Contracts: React.FC = () => {
-  const [contracts, setContracts] = useState([]);
+  const [contracts, setContracts] = useState<Contract[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedContract, setSelectedContract] = useState(null);
 

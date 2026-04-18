@@ -54,7 +54,7 @@ export default function ConvertScreen() {
       {/* Promotion Banner */}
       <div className="bg-gray-100 p-3 mx-4 my-4 rounded-lg">
         <div className="flex items-center gap-2 text-sm text-gray-800">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 12V8H6V4H4v4H2v12h10v-4h8v-4h-2zm-6 0v4H4v-4h10z"/><path d="M18 4h-2v4h2V4z"/><path d="M6 12v4H4v-4H2v- металл/svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           <span>Earn Rebates with Convert Recurring from just $1!</span>
         </div>
       </div>

@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 
+interface Wallet {
+    wallet_id: string;
+    blockchain: string;
+    address: string;
+    balance: string;
+    status: string;
+    wallet_type: string;
+}
+
 const WalletManagerDashboard = () => {
-    const [wallets, setWallets] = useState([]);
+    const [wallets, setWallets] = useState<Wallet[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [transferData, setTransferData] = useState({ from: '', to: '', amount: '', currency: '' });
@@ -17,25 +26,26 @@ const WalletManagerDashboard = () => {
             const response = await api.get('/admin/wallets');
             setWallets(response.data);
             setLoading(false);
-        } catch (err) {
-            setError(err.response?.data?.detail || 'Failed to fetch wallets');
+        } catch (err: unknown) {
+            const errorMsg = err && typeof err === 'object' && 'response' in err ? (err as any).response?.data?.detail : 'Failed to fetch wallets';
+            setError(errorMsg || 'Failed to fetch wallets');
             setLoading(false);
-        }
+                }
     };
 
-    const handleCreateWallet = async (blockchain, walletType) => {
+    const handleCreateWallet = async (blockchain: string, walletType: string) => {
         try {
             await api.post(`/admin/wallets?blockchain=${blockchain}&wallet_type=${walletType}`);
             fetchWallets();
-        } catch (err) {
-            setError(err.response?.data?.detail || 'Failed to create wallet');
+        } catch (err: unknown) {
+            setError((err as any).response?.data?.detail || 'Failed to create wallet');
         }
     };
 
-    const handleTransfer = async (e) => {
+    const handleTransfer = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await api.post('/admin/wallets/transfer', null, {
+            await api.post('/admin/wallets/transfer', {
                 params: {
                     from_wallet_id: transferData.from,
                     to_wallet_id: transferData.to,
@@ -45,8 +55,8 @@ const WalletManagerDashboard = () => {
             });
             fetchWallets();
             setTransferData({ from: '', to: '', amount: '', currency: '' });
-        } catch (err) {
-            setError(err.response?.data?.detail || 'Transfer failed');
+        } catch (err: unknown) {
+            setError((err as any).response?.data?.detail || 'Transfer failed');
         }
     };
 
@@ -82,7 +92,7 @@ const WalletManagerDashboard = () => {
                                 <td>{wallet.wallet_type}</td>
                                 <td>{wallet.balance}</td>
                             </tr>
-                        ))}
+                        ))});
                     </tbody>
                 </table>
             </div>
@@ -101,3 +111,4 @@ const WalletManagerDashboard = () => {
 };
 
 export default WalletManagerDashboard;
+export { WalletManagerDashboard };

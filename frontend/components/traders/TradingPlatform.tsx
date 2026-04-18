@@ -59,8 +59,8 @@ import {
   AreaChart,
   Area,
 } from 'recharts';
-import { useWebSocket } from '../../hooks/useWebSocket';
-import { useAuth } from '../../hooks/useAuth';
+import { useWebSocket } from '@/hooks/useWebSocket';
+import { useAuth } from '@/hooks/useAuth';
 import { OrderBook } from './components/OrderBook';
 import { TradeHistory } from './components/TradeHistory';
 import { MarketData } from './components/MarketData';

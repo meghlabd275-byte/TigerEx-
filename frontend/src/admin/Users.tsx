@@ -18,8 +18,16 @@ import { Edit, Delete } from '@mui/icons-material';
 import axios from 'axios';
 import UserForm from './UserForm';
 
+interface User {
+  user_id: string;
+  username: string;
+  email: string;
+  role: string;
+  status: string;
+}
+
 const Users: React.FC = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 

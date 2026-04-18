@@ -325,7 +325,7 @@ export default function HomePage() {
                 <ChevronRight size={20} />
               </button>
               <button 
-                onClick={handleTrade}
+                onClick={handleMarkets}
                 className="px-8 py-4 bg-blue-500 hover:bg-blue-400 text-white rounded-lg font-semibold transition-colors flex items-center justify-center space-x-2"
               >
                 <span>Trade Now</span>

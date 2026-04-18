@@ -89,6 +89,7 @@ import {
   Pie,
   Cell,
   ComposedChart,
+  Brush,
 } from 'recharts';
 
 interface TradingPair {
@@ -160,7 +161,7 @@ const AdvancedTradingDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [chartType, setChartType] = useState<'line' | 'candlestick' | 'area'>('candlestick');
   const [timeframe, setTimeframe] = useState('1h');
-  const [orderType, setOrderType] = useState<'MARKET' | 'LIMIT' | 'STOP_LOSS' | 'OCO'>('LIMIT');
+  const [orderType, setOrderType] = useState<'MARKET' | 'LIMIT' | 'STOP_LOSS' | 'STOP_LIMIT' | 'OCO'>('LIMIT');
   const [orderSide, setOrderSide] = useState<'BUY' | 'SELL'>('BUY');
   const [orderQuantity, setOrderQuantity] = useState<string>('');
   const [orderPrice, setOrderPrice] = useState<string>('');
@@ -270,12 +271,13 @@ const AdvancedTradingDashboard: React.FC = () => {
 
   const chartData = useMemo(() => {
     const dataPoints = timeframe === '1m' ? 60 : timeframe === '5m' ? 288 : timeframe === '1h' ? 168 : 30;
+    const basePrice = selectedPairData?.price || 0;
     return Array.from({ length: dataPoints }, (_, i) => ({
       time: new Date(Date.now() - (dataPoints - i) * (timeframe === '1m' ? 60000 : timeframe === '5m' ? 300000 : timeframe === '1h' ? 3600000 : 86400000)),
-      open: selectedPairData?.price * (0.98 + Math.random() * 0.04) || 0,
-      high: selectedPairData?.price * (1.01 + Math.random() * 0.02) || 0,
-      low: selectedPairData?.price * (0.97 + Math.random() * 0.02) || 0,
-      close: selectedPairData?.price * (0.98 + Math.random() * 0.04) || 0,
+      open: basePrice * (0.98 + Math.random() * 0.04) || 0,
+      high: basePrice * (1.01 + Math.random() * 0.02) || 0,
+      low: basePrice * (0.97 + Math.random() * 0.02) || 0,
+      close: basePrice * (0.98 + Math.random() * 0.04) || 0,
       volume: Math.random() * 1000000,
     }));
   }, [selectedPairData, timeframe]);

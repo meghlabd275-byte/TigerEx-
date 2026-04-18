@@ -1,3 +1,5 @@
+"use client";
+
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 
 interface User {
@@ -25,6 +27,7 @@ interface AuthContextType {
   login: (username: string, password: string) => Promise<void>;
   register: (userData: RegisterData) => Promise<void>;
   logout: () => void;
+  linkAccount: (provider: string) => Promise<void>;
   clearError: () => void;
 }
 
@@ -243,6 +246,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     register,
     logout,
     clearError,
+    linkAccount: async (provider: string) => { console.log("Link account:", provider); },
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

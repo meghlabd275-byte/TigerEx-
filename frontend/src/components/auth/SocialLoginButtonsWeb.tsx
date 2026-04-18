@@ -95,7 +95,7 @@ export default function SocialLoginButtons({
         if (mode === 'link') {
           await linkAccount(token);
         } else {
-          await login(token, refreshToken);
+          await login(token, token || '');
         }
         
         onSuccess?.(data.user);

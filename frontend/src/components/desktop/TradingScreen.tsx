@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import axios from 'axios';
+const api = axios.create({ baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001' });
+import React, { useState, useEffect } from 'react';
 import { 
   Search, 
   Bell, 

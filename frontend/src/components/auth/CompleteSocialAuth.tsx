@@ -3,14 +3,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Google,
   Facebook,
   Twitter,
+  Mail,
   Github,
   Linkedin,
   MessageCircle,
   Apple,
-  Mail,
   Lock,
   Eye,
   EyeOff,
@@ -25,8 +24,8 @@ import { useRouter } from 'next/navigation';
 const SOCIAL_PROVIDERS = [
   {
     id: 'google',
-    name: 'Google',
-    icon: Google,
+    name: 'Mail',
+    icon: Mail,
     color: '#EA4335',
     bgColor: 'bg-red-50 hover:bg-red-100',
     borderColor: 'border-red-200',

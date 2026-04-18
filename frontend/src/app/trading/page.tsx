@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Line, CandlestickChart, TrendingUp, TrendingDown, Activity, DollarSign, BarChart3, Settings, Bell, User, Search, Menu, X, ArrowUpRight, ArrowDownRight, Clock, Globe, Shield, Star, ChevronRight, Plus, Minus, Info, Wallet, History, BookOpen, HelpCircle, LogOut, Home, PieChart, FileText, Users, Lock, Eye, EyeOff, ChevronDown, Filter, Grid, List, Download, Upload, RefreshCw, Copy, ExternalLink, CheckCircle, AlertCircle, AlertTriangle, Zap, Package, CreditCard, ArrowLeft, ArrowRight, MoreVertical } from 'lucide-react'
+import { TrendingUp, TrendingDown, Activity, DollarSign, BarChart3, Settings, Bell, User, Search, Menu, X, ArrowUpRight, ArrowDownRight, Clock, Globe, Shield, Star, ChevronRight, Plus, Minus, Info, Wallet, History, BookOpen, HelpCircle, LogOut, Home, PieChart, FileText, Users, Lock, Eye, EyeOff, ChevronDown, Filter, Grid, List, Download, Upload, RefreshCw, Copy, ExternalLink, CheckCircle, AlertCircle, AlertTriangle, Zap, Package, CreditCard, ArrowLeft, ArrowRight, MoreVertical } from 'lucide-react'
 
 interface TradingPair {
   symbol: string
@@ -321,7 +321,7 @@ export default function TradingPage() {
                 {/* Chart */}
                 <div className="h-80 bg-gray-800 rounded-lg flex items-center justify-center mb-4">
                   <div className="text-center">
-                    <CandlestickChart size={48} className="mx-auto mb-2 text-gray-600" />
+                    <BarChart3 size={48} className="mx-auto mb-2 text-gray-600" />
                     <p className="text-gray-400">Trading Chart</p>
                   </div>
                 </div>

@@ -87,7 +87,7 @@ import {
 interface TradingType {
   id: string;
   name: string;
-  status: 'active' | 'paused' | 'suspended' | 'emergency_stop';
+  status: 'active' | 'paused' | 'suspended' | 'emergency_stop' | 'suspend';
   enabled: boolean;
   volume24h: number;
   orders24h: number;

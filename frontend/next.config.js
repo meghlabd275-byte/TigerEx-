@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // output: 'export',
+  // trailingSlash: true,
   images: {
     domains: [
       'localhost',
@@ -27,26 +29,6 @@ const nextConfig = {
       '@': require('path').resolve(__dirname, 'src'),
     };
     return config;
-  },
-};
-
-const path = require('path');
-
-nextConfig.experimental = {
-  ...nextConfig.experimental,
-  turbopack: {
-    ...nextConfig.experimental?.turbopack,
-    rules: {
-      ...nextConfig.experimental?.turbopack?.rules,
-      '*.svg': {
-        loaders: ['@svgr/webpack'],
-        as: '*.js',
-      },
-    },
-    resolveAlias: {
-      ...nextConfig.experimental?.turbopack?.resolveAlias,
-      '@': path.resolve(__dirname, 'src'),
-    },
   },
 };
 

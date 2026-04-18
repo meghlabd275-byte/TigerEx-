@@ -1,23 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 
-const TradingForm = () => {
+interface TradingFormProps {
+  symbol?: string;
+}
+
+const TradingForm: React.FC<TradingFormProps> = ({ symbol }) => {
   const [orderType, setOrderType] = useState('limit');
   const [side, setSide] = useState('buy');
   const [price, setPrice] = useState('');
   const [amount, setAmount] = useState('');
   const [total, setTotal] = useState('');
 
-  const handlePriceChange = (e) => {
+  const handlePriceChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPrice(e.target.value);
-    setTotal(parseFloat(e.target.value) * parseFloat(amount) || '');
+    const totalValue = parseFloat(e.target.value) * parseFloat(amount);
+    setTotal(isNaN(totalValue) ? '' : totalValue.toString());
   };
 
-  const handleAmountChange = (e) => {
+  const handleAmountChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
-    setTotal(parseFloat(price) * parseFloat(e.target.value) || '');
+    const totalValue = parseFloat(price) * parseFloat(e.target.value);
+    setTotal(isNaN(totalValue) ? '' : totalValue.toString());
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     // Handle order submission logic here
     console.log({

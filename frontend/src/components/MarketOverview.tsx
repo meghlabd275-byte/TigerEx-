@@ -187,4 +187,3 @@ export const MarketOverview: React.FC = () => {
     </div>
   )
 }
-</create_file>

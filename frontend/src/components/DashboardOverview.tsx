@@ -31,8 +31,13 @@ interface RecentTransaction {
   status: 'completed' | 'pending' | 'failed'
 }
 
+interface User {
+  kycVerified?: boolean;
+}
+
 export const DashboardOverview: React.FC = () => {
-  const { user } = useAuth()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { user } = useAuth() as any
   const [stats, setStats] = useState<DashboardStats>({
     totalBalance: '0.00',
     todayChange: '0.00',

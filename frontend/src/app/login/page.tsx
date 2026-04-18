@@ -1,6 +1,8 @@
+"use client";
+
 import React, { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import Link from 'next/link';
 
 const LoginPage: React.FC = () => {

@@ -13,36 +13,36 @@ import WhiteLabelClientDashboard from './WhiteLabelClientDashboard';
 import PrimeBrokerageDashboard from './PrimeBrokerageDashboard';
 import LiquidityProviderDashboard from './LiquidityProviderDashboard';
 import MarketMakerDashboard from './MarketMakerDashboard';
-import TradingDashboard from '../../pages/TradingInterface'; // Default for traders
-import UserDashboard from '../../pages/Dashboard'; // Default for users
+import TradingDashboard from '../../pages/advanced-trading'; // Default for traders
+import UserDashboard from '@/app/page'; // Default for users
 
 const DashboardRouter: React.FC = () => {
   const { userRole } = useRBAC();
 
   switch (userRole) {
-    case UserRole.SUPER_ADMIN:
+    case 'superadmin':
       return <SuperAdminDashboard />;
-    case UserRole.ADMIN:
+    case 'admin':
       return <AdminDashboard />;
-    case UserRole.MODERATOR:
+    case 'moderator':
       return <ModeratorDashboard />;
-    case UserRole.TECHNICAL_TEAM:
+    case 'technical_team':
       return <TechnicalTeamDashboard />;
-    case UserRole.LISTING_MANAGER:
+    case 'listings_manager':
       return <ListingsManagerDashboard />;
-    case UserRole.BUSINESS_HEAD:
+    case 'business_head':
       return <BusinessHeadDashboard />;
-    case UserRole.WHITE_LEVEL_CLIENT:
+    case 'white_label_client':
       return <WhiteLabelClientDashboard />;
-    case UserRole.PRIME_BROKERAGE:
+    case 'prime_brokerage':
       return <PrimeBrokerageDashboard />;
-    case UserRole.LIQUIDITY_PROVIDER:
+    case 'liquidity_provider':
       return <LiquidityProviderDashboard />;
-    case UserRole.MARKET_MAKER:
+    case 'market_maker':
       return <MarketMakerDashboard />;
-    case UserRole.TRADER:
+    case 'trader':
         return <TradingDashboard />;
-    case UserRole.USER:
+    case 'user':
     default:
       return <UserDashboard />;
   }

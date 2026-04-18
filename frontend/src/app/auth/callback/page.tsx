@@ -11,6 +11,12 @@ export default function AuthCallbackPage() {
 
   useEffect(() => {
     const handleCallback = async () => {
+      if (!searchParams) {
+        setStatus('error');
+        setError('Invalid URL parameters');
+        return;
+      }
+      
       const token = searchParams.get('token');
       const refreshToken = searchParams.get('refreshToken');
       const errorParam = searchParams.get('error');

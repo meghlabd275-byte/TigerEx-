@@ -73,9 +73,10 @@ import {
   AlertCircle,
   Info,
   Check,
-  X,
   ChevronDownSquare,
-  ChevronUpSquare
+  ChevronUpSquare,
+  Sun,
+  Moon
 } from 'lucide-react'
 
 interface User {

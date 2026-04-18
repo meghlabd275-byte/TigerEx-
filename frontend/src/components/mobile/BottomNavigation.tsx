@@ -13,7 +13,7 @@ import {
 interface NavItem {
   id: string;
   label: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: React.ComponentType<{ size?: number | string; className?: string }>;
   path: string;
 }
 

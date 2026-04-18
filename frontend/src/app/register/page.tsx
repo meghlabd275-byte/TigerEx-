@@ -1,6 +1,8 @@
+"use client";
+
 import React, { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import Link from 'next/link';
 
 interface FormData {
@@ -19,13 +21,13 @@ const RegisterPage: React.FC = () => {
     confirmPassword: '',
     agreeToTerms: false,
   });
-  const [errors, setErrors] = useState<Partial<FormData>>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const { register, error, clearError } = useAuth();
   const router = useRouter();
 
   const validateForm = (): boolean => {
-    const newErrors: Partial<FormData> = {};
+    const newErrors: Record<string, string> = {};
 
     if (!formData.username || formData.username.length < 3) {
       newErrors.username = 'Username must be at least 3 characters long';
@@ -60,10 +62,9 @@ const RegisterPage: React.FC = () => {
     
     // Clear error for this field when user starts typing
     if (errors[name as keyof FormData]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: undefined,
-      }));
+      const newErrors = { ...errors };
+      delete newErrors[name];
+      setErrors(newErrors);
     }
   };
 

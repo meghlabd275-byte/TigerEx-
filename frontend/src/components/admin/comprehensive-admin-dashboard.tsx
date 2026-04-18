@@ -193,7 +193,7 @@ interface VirtualCoin {
   isVirtual: boolean;
 }
 
-const ComprehensiveAdminDashboard: React.FC = () => {
+const ComprehensiveAdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>(null);
@@ -550,23 +550,25 @@ const ComprehensiveAdminDashboard: React.FC = () => {
   };
 
   // Chart data generators
-  const generateVolumeData = () => ({
-    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
-    datasets: [{
-      label: 'Trading Volume',
-      data: [120, 190, 300, 500, 200, 300],
-      borderColor: '#3B82F6',
-      backgroundColor: 'rgba(59, 130, 246, 0.1)',
-    }],
-  });
+  const generateVolumeData = () => [
+    { labels: '00:00', Volume: 120 },
+    { labels: '04:00', Volume: 190 },
+    { labels: '08:00', Volume: 300 },
+    { labels: '12:00', Volume: 500 },
+    { labels: '16:00', Volume: 200 },
+    { labels: '20:00', Volume: 300 },
+  ];
 
-  const generateProfitData = () => ({
-    labels: ['Spot', 'Futures', 'Grid', 'Copy', 'Options', 'Others'],
-    datasets: [{
-      data: [30, 25, 20, 15, 7, 3],
-      backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#8B5CF6', '#EF4444', '#6B7280'],
-    }],
-  });
+  const profitData = [
+    { name: 'Spot', value: 30 },
+    { name: 'Futures', value: 25 },
+    { name: 'Grid', value: 20 },
+    { name: 'Copy', value: 15 },
+    { name: 'Options', value: 7 },
+    { name: 'Others', value: 3 },
+  ];
+  
+  const profitColors = ['#3B82F6', '#10B981', '#F59E0B', '#8B5CF6', '#EF4444', '#6B7280'];
 
   // Render methods
   const renderOverview = () => (
@@ -654,17 +656,17 @@ const ComprehensiveAdminDashboard: React.FC = () => {
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
-                  data={generateProfitData()}
+                  data={profitData}
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="data"
                 >
-                  {generateProfitData().datasets[0].data.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={generateProfitData().datasets[0].backgroundColor[index]} />
+                  {profitData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={profitColors[index]} />
                   ))}
                 </Pie>
                 <Tooltip />

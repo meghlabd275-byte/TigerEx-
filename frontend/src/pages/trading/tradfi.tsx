@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 
 // TradFi Instrument Types
-const INSTRUMENT_TYPES = {
+const INSTRUMENT_TYPES: Record<string, { name: string; color: string; description: string }> = {
   CFD: { name: 'CFD', color: '#f59e0b', description: 'Contract for Difference' },
   FOREX: { name: 'Forex', color: '#8b5cf6', description: 'Currency Trading' },
   ETF: { name: 'ETF', color: '#10b981', description: 'Exchange Traded Funds' },
@@ -46,7 +46,7 @@ const TRADFI_INSTRUMENTS = [
 ];
 
 // Sample price history
-const generatePriceHistory = (basePrice, volatility = 0.02) => {
+const generatePriceHistory = (basePrice: number, volatility = 0.02) => {
   const data = [];
   let price = basePrice * (1 - volatility);
   for (let i = 0; i < 50; i++) {
@@ -64,7 +64,7 @@ export default function TradFiTrading() {
   const [leverage, setLeverage] = useState(1);
   const [stopLoss, setStopLoss] = useState('');
   const [takeProfit, setTakeProfit] = useState('');
-  const [positions, setPositions] = useState([]);
+  const [positions, setPositions] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState('trade');
   const [filterType, setFilterType] = useState('ALL');
 
