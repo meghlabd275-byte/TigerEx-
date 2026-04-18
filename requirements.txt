@@ -240,7 +240,7 @@ whoosh==2.7.4
 
 # ============= TIME SERIES DATABASES =============
 influxdb-client==1.39.0
-timescaledb-psycopg2==0.1.0
+# timescaledb-psycopg2 removed - unavailable for Python 3.13
 clickhouse-driver==0.2.6
 
 # ============= EVENT STREAMING =============
