@@ -25,6 +25,8 @@ import redis.asyncio as redis
 from dataclasses import dataclass
 import jwt
 
+# @file enhanced_main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

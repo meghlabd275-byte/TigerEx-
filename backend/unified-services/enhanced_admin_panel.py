@@ -19,6 +19,8 @@ import json
 import random
 import secrets
 
+# @file enhanced_admin_panel.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx ENHANCED Admin Panel",
     version="5.1.0",

@@ -8,6 +8,8 @@ from typing import Optional, List
 import asyncio
 from datetime import datetime
 
+# @file unified_fetcher_service.py
+# @author TigerEx Development Team
 app = FastAPI(title="TigerEx Unified Fetcher Service")
 
 # ============================================================================

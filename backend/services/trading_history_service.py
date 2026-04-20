@@ -8,6 +8,8 @@ from ..models import User, Trade, Order, Transaction
 from ..auth import get_current_user
 from pydantic import BaseModel
 
+# @file trading_history_service.py
+# @author TigerEx Development Team
 router = APIRouter()
 
 class TradeHistoryItem(BaseModel):

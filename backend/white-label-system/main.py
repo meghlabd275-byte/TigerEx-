@@ -19,6 +19,8 @@ from pydantic import BaseModel
 import asyncpg
 import redis
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

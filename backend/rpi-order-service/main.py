@@ -13,6 +13,8 @@ from enum import Enum
 import uuid
 import random
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(title="TigerEx RPI Order Service", version="1.0.0")
 
 # CORS middleware

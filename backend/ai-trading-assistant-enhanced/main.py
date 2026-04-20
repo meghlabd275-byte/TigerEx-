@@ -33,6 +33,8 @@ from scipy import stats
 import warnings
 warnings.filterwarnings('ignore')
 
+# @file main.py
+# @author TigerEx Development Team
 # FastAPI app
 app = FastAPI(
     title="TigerEx AI Trading Assistant",

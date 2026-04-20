@@ -22,6 +22,8 @@ import threading
 import time
 import uuid
 
+# @file microservices_complete_trading_system.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

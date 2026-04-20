@@ -20,6 +20,8 @@ import logging
 import asyncio
 from decimal import Decimal
 
+# @file main.py
+# @author TigerEx Development Team
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 

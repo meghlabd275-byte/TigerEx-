@@ -16,6 +16,8 @@ import base64
 import json
 import logging
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(title="KuCoin Advanced Service v1.0.0", version="1.0.0")
 security = HTTPBearer()
 

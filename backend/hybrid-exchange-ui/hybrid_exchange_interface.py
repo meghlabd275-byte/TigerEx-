@@ -11,6 +11,8 @@ from enum import Enum
 from dataclasses import dataclass
 import json
 
+# @file hybrid_exchange_interface.py
+# @author TigerEx Development Team
 class ExchangeMode(Enum):
     CEX = "cex"
     DEX = "dex"

@@ -1,6 +1,8 @@
 from kucoin.client import Client
 from .exchange_connector import ExchangeConnector
 
+# @file kucoin_connector.py
+# @author TigerEx Development Team
 class KuCoinConnector(ExchangeConnector):
     """
     A connector for the KuCoin exchange.

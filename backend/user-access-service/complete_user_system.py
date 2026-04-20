@@ -16,6 +16,8 @@ import jwt
 import asyncio
 import json
 
+# @file complete_user_system.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx Complete User System",
     version="3.0.0",

@@ -1,5 +1,7 @@
 from fastapi import APIRouter
 
+# @file admin_routes.py
+# @author TigerEx Development Team
 router = APIRouter(prefix="/admin", tags=["admin"])
 
 @router.get("/status")

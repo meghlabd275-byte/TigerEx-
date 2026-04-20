@@ -21,6 +21,8 @@ import time
 import urllib.parse
 from dataclasses import dataclass
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx WhiteBit Advanced Service v1.0.0", 
     version="1.0.0",

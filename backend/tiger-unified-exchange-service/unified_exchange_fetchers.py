@@ -15,6 +15,8 @@ import hmac
 import json
 from abc import ABC, abstractmethod
 
+# @file unified_exchange_fetchers.py
+# @author TigerEx Development Team
 class BaseExchangeFetcher(ABC):
     """Base class for exchange fetchers"""
     

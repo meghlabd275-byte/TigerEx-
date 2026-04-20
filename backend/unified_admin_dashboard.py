@@ -21,6 +21,8 @@ from dataclasses import dataclass
 import uuid
 import hashlib
 
+# @file unified_admin_dashboard.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

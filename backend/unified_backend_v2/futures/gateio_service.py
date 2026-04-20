@@ -1,5 +1,7 @@
 from gate import GateSync
 
+# @file gateio_service.py
+# @author TigerEx Development Team
 class GateioService:
     def __init__(self, api_key: str, api_secret: str):
         self.client = GateSync(api_key=api_key, api_secret=api_secret)

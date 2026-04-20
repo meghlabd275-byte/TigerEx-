@@ -25,6 +25,8 @@ from unified_exchange_fetchers import UnifiedExchangeFetcher, BinanceFetcher
 from unified_admin_operations import AdminOperations
 from unified_user_operations import UserOperations
 
+# @file main.py
+# @author TigerEx Development Team
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:password@localhost/tigerex')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

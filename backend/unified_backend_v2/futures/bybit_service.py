@@ -1,5 +1,7 @@
 from bybit import BybitSync
 
+# @file bybit_service.py
+# @author TigerEx Development Team
 class BybitService:
     def __init__(self, api_key: str, api_secret: str):
         self.client = BybitSync(api_key=api_key, api_secret=api_secret)

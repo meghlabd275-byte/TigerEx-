@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+# @file exchange_connector.py
+# @author TigerEx Development Team
 class ExchangeConnector(ABC):
     """
     An abstract base class for connecting to external cryptocurrency exchanges.

@@ -1,6 +1,8 @@
 from binance.client import Client
 from .exchange_connector import ExchangeConnector
 
+# @file binance_connector.py
+# @author TigerEx Development Team
 class BinanceConnector(ExchangeConnector):
     """
     A connector for the Binance exchange.

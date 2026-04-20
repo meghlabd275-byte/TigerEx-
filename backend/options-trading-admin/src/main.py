@@ -22,6 +22,8 @@ import redis
 import numpy as np
 from scipy.stats import norm
 
+# @file main.py
+# @author TigerEx Development Team
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 

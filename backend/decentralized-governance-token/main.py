@@ -23,6 +23,8 @@ import numpy as np
 from web3 import Web3
 from eth_account import Account
 
+# @file main.py
+# @author TigerEx Development Team
 # FastAPI app
 app = FastAPI(
     title="TigerEx Decentralized Governance Token",

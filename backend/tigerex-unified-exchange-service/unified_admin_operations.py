@@ -13,6 +13,8 @@ import hmac
 import json
 from abc import ABC, abstractmethod
 
+# @file unified_admin_operations.py
+# @author TigerEx Development Team
 class BaseAdminOperations(ABC):
     """Base class for admin operations"""
     

@@ -22,6 +22,8 @@ from typing import Dict, List, Optional, Tuple
 import redis
 import hashlib
 
+# @file main.py
+# @author TigerEx Development Team
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:password@localhost/tigerex')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

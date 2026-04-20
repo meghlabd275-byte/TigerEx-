@@ -15,6 +15,8 @@ from enum import Enum
 import uvicorn
 from decimal import Decimal
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="Auto-Invest Service",
     description="Automated recurring cryptocurrency purchases with DCA strategy",

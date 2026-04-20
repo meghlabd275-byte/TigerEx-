@@ -16,6 +16,8 @@ import uvicorn
 import os
 import asyncio
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx Convert Service",
     description="Instant cryptocurrency conversion service",

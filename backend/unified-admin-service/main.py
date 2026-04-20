@@ -28,6 +28,8 @@ from functools import wraps
 from dataclasses import dataclass
 import hashlib
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(
     processors=[

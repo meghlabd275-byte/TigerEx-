@@ -23,6 +23,8 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, validator
 import uvicorn
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

@@ -12,6 +12,8 @@ import asyncio
 import json
 import logging
 
+# @file comprehensive_copy_trading_admin.py
+# @author TigerEx Development Team
 router = APIRouter(prefix="/admin/copy-trading", tags=["copy-trading-admin"])
 
 class CopyStatus(str, Enum):

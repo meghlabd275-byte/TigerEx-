@@ -8,6 +8,8 @@ from typing import Optional, List
 from pydantic import BaseModel
 from datetime import datetime
 
+# @file complete_user_operations.py
+# @author TigerEx Development Team
 app = FastAPI(title="TigerEx User Operations Service")
 
 # ============================================================================

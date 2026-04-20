@@ -23,6 +23,8 @@ from web3 import Web3
 from decimal import Decimal
 import numpy as np
 
+# @file main.py
+# @author TigerEx Development Team
 # FastAPI app
 app = FastAPI(
     title="TigerEx Cross-Chain DEX Aggregator",

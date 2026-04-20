@@ -26,6 +26,8 @@ import hashlib
 import secrets
 import uuid
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 structlog.configure(
     processors=[

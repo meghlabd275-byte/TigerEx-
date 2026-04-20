@@ -13,6 +13,8 @@ from enum import Enum
 import uuid
 import asyncio
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(title="TigerEx Pegged Order Service", version="1.0.0")
 
 app.add_middleware(

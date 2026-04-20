@@ -18,6 +18,8 @@ from enum import Enum
 from dataclasses import dataclass, asdict
 from pathlib import Path
 
+# @file white_label_master.py
+# @author TigerEx Development Team
 # ==================== ENUMS & DATA CLASSES ====================
 
 class DeploymentType(Enum):

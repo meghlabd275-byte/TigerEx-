@@ -12,6 +12,8 @@ from enum import Enum
 import jwt
 import os
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(title="Universal Admin Controls", version="3.0.0")
 
 # CORS

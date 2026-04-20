@@ -32,6 +32,8 @@ import aiofiles
 import structlog
 import uvicorn
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(
     processors=[

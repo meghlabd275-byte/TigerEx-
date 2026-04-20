@@ -23,6 +23,8 @@ import secrets
 import re
 from dataclasses import dataclass
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

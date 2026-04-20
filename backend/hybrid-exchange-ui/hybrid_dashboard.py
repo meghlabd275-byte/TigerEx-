@@ -10,6 +10,8 @@ from datetime import datetime
 from hybrid_exchange_interface import HybridExchangeInterface, ExchangeMode, TradingMode
 import json
 
+# @file hybrid_dashboard.py
+# @author TigerEx Development Team
 class HybridExchangeDashboard:
     """Complete dashboard for TigerEx hybrid exchange"""
     

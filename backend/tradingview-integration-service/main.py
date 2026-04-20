@@ -19,6 +19,8 @@ from pydantic import BaseModel
 import hashlib
 import random
 
+# @file main.py
+# @author TigerEx Development Team
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 

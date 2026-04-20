@@ -12,6 +12,8 @@ import asyncio
 import json
 import logging
 
+# @file comprehensive_futures_admin.py
+# @author TigerEx Development Team
 router = APIRouter(prefix="/admin/futures-trading", tags=["futures-trading-admin"])
 
 class FuturesType(str, Enum):

@@ -18,6 +18,8 @@ from admin_control_template import (
     get_current_admin, require_permission, require_role
 )
 
+# @file admin_routes.py
+# @author TigerEx Development Team
 router = APIRouter(prefix="/admin", tags=["admin"])
 
 # ============================================================================

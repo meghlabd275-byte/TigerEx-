@@ -28,6 +28,8 @@ from web3 import Web3
 from solana.rpc.api import Client as SolanaClient
 import base58
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

@@ -8,6 +8,8 @@ from ..auth import get_current_admin_user
 from pydantic import BaseModel
 import json
 
+# @file admin_advanced_service.py
+# @author TigerEx Development Team
 router = APIRouter()
 
 class AdminTransferControl(BaseModel):

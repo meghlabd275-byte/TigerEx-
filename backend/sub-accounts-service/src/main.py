@@ -12,6 +12,8 @@ from enum import Enum
 import uvicorn
 import os
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx sub-accounts-service",
     description="Sub-Accounts Management",

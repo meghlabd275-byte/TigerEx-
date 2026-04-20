@@ -19,6 +19,8 @@ from typing import Dict, List, Optional, Callable, Any
 import json
 import ssl
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

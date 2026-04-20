@@ -12,6 +12,8 @@ import asyncio
 import json
 import logging
 
+# @file comprehensive_grid_trading_admin.py
+# @author TigerEx Development Team
 router = APIRouter(prefix="/admin/grid-trading", tags=["grid-trading-admin"])
 
 class GridType(str, Enum):

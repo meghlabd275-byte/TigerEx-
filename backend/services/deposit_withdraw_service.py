@@ -9,6 +9,8 @@ from ..models import User, Transaction, Wallet
 from ..auth import get_current_user
 from pydantic import BaseModel
 
+# @file deposit_withdraw_service.py
+# @author TigerEx Development Team
 router = APIRouter()
 
 class DepositMethod(BaseModel):

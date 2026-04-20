@@ -7,6 +7,8 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
 from backend.unified_backend_v2.main import app, get_db, Base
 
+# @file test_main.py
+# @author TigerEx Development Team
 # Test database setup
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})

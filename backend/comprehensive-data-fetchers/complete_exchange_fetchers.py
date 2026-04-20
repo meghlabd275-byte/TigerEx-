@@ -19,6 +19,8 @@ import logging
 import hashlib
 import json
 
+# @file complete_exchange_fetchers.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

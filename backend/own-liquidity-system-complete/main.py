@@ -14,6 +14,8 @@ import json
 import logging
 import math
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(title="Complete Own Liquidity System", version="1.0.0")
 security = HTTPBearer()
 

@@ -11,6 +11,8 @@ from enum import Enum
 import asyncio
 import json
 
+# @file enhanced_admin_routes.py
+# @author TigerEx Development Team
 router = APIRouter(prefix="/admin/copy-trading", tags=["copy-trading-admin"])
 
 class CopyStatus(str, Enum):

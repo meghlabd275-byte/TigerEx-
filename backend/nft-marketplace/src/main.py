@@ -31,6 +31,8 @@ import boto3
 from PIL import Image
 import requests
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

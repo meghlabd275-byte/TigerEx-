@@ -11,6 +11,8 @@ from enum import Enum
 import asyncio
 import json
 
+# @file enhanced_admin_routes.py
+# @author TigerEx Development Team
 router = APIRouter(prefix="/admin/virtual-coin-trading", tags=["virtual-coin-admin"])
 
 class CoinStatus(str, Enum):

@@ -17,6 +17,8 @@ import logging
 import random
 import math
 
+# @file complete_liquidity_provider.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx Own Liquidity Providing System",
     version="1.0.0",

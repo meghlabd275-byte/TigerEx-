@@ -18,6 +18,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 import logging
 
+# @file main.py
+# @author TigerEx Development Team
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 

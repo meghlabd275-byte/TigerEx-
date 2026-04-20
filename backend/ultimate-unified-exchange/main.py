@@ -12,6 +12,8 @@ from datetime import datetime
 from enum import Enum
 import logging
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(title="TigerEx Ultimate Unified Exchange v10.0.0", version="10.0.0")
 
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])

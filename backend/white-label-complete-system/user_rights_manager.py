@@ -11,6 +11,8 @@ from enum import Enum
 from dataclasses import dataclass, field
 import json
 
+# @file user_rights_manager.py
+# @author TigerEx Development Team
 # ==================== USER RIGHTS ENUMS ====================
 
 class UserType(Enum):

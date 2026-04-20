@@ -24,6 +24,8 @@ import redis
 import aiohttp
 from collections import defaultdict, deque
 
+# @file consolidated_main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

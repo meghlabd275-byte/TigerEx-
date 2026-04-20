@@ -21,6 +21,8 @@ import os
 import json
 import jwt
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 structlog.configure(
     processors=[

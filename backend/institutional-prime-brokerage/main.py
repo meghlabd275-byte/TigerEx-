@@ -21,6 +21,8 @@ import json
 from decimal import Decimal
 import numpy as np
 
+# @file main.py
+# @author TigerEx Development Team
 # FastAPI app
 app = FastAPI(
     title="TigerEx Institutional Prime Brokerage",

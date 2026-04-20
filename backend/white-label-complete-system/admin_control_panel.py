@@ -21,6 +21,8 @@ from white_label_master import (
     InstitutionalClient
 )
 
+# @file admin_control_panel.py
+# @author TigerEx Development Team
 # ==================== ADMIN CONTROL PANEL ====================
 
 class AdminControlPanel:

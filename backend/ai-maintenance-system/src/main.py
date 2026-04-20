@@ -26,6 +26,8 @@ import httpx
 from sqlalchemy import create_engine, text
 import structlog
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(
     processors=[

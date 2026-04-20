@@ -21,6 +21,8 @@ import aioredis
 from web3 import Web3
 import json
 
+# @file main.py
+# @author TigerEx Development Team
 # FastAPI app
 app = FastAPI(
     title="TigerEx Advanced NFT Marketplace",

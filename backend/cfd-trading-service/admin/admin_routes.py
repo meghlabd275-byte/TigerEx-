@@ -15,6 +15,8 @@ import json
 import jwt
 import os
 
+# @file admin_routes.py
+# @author TigerEx Development Team
 router = APIRouter(prefix="/api/cfd/admin", tags=["CFD Admin"])
 security = HTTPBearer()
 

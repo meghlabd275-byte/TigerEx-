@@ -29,6 +29,8 @@ from enum import Enum
 import bcrypt
 from dataclasses import dataclass
 
+# @file enhanced_unified_backend.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

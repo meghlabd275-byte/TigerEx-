@@ -18,6 +18,8 @@ from dataclasses import dataclass
 import numpy as np
 from collections import defaultdict
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

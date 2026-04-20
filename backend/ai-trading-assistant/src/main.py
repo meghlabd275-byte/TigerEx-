@@ -26,6 +26,8 @@ from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 import ccxt
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

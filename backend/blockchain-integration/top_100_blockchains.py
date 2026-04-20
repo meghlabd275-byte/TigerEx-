@@ -16,6 +16,8 @@ import hashlib
 import time
 import logging
 
+# @file top_100_blockchains.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx Top 100 Blockchain Networks Integration",
     version="1.0.0",

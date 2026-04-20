@@ -14,6 +14,8 @@ from enum import Enum
 import uvicorn
 import os
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx leveraged-tokens-service",
     description="Leveraged Tokens Service",

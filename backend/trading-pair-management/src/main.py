@@ -22,6 +22,8 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 import structlog
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(
     processors=[

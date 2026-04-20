@@ -17,6 +17,8 @@ import aiohttp
 from decimal import Decimal
 import uuid
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx DEX Integration Service",
     description="Decentralized Exchange Integration with Multi-Chain Support",

@@ -20,6 +20,8 @@ import json
 import random
 import secrets
 
+# @file enhanced_unified_exchange_api.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx COMPLETE Unified Exchange API",
     version="5.1.0",

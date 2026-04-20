@@ -13,6 +13,8 @@ from datetime import datetime, timedelta
 import uuid
 import enum
 
+# @file enhanced_database_schema.py
+# @author TigerEx Development Team
 Base = declarative_base()
 
 # Enhanced Enums for better type safety

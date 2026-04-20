@@ -11,6 +11,8 @@ from datetime import datetime, timedelta
 from enum import Enum
 import asyncio
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(title="Advanced Order Types", version="3.0.0")
 
 app.add_middleware(

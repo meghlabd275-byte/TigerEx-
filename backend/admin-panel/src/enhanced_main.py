@@ -29,6 +29,8 @@ import boto3
 from web3 import Web3
 import requests
 
+# @file enhanced_main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

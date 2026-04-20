@@ -12,6 +12,8 @@ import asyncio
 import json
 import logging
 
+# @file comprehensive_virtual_coin_admin.py
+# @author TigerEx Development Team
 router = APIRouter(prefix="/admin/virtual-coin", tags=["virtual-coin-admin"])
 
 class CoinStatus(str, Enum):

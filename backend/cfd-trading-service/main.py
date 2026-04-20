@@ -29,6 +29,8 @@ import uuid
 import numpy as np
 from collections import defaultdict
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 structlog.configure(
     processors=[

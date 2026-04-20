@@ -23,6 +23,8 @@ from dataclasses import dataclass
 import redis
 from collections import defaultdict
 
+# @file consolidated_main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

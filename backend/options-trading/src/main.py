@@ -10,6 +10,8 @@ import uvicorn
 # Import admin router
 from admin.admin_routes import router as admin_router
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="options-trading",
     version="3.0.0",

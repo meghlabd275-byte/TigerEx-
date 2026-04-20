@@ -41,6 +41,8 @@ from main import (
     OrderType, OrderStatus, TradeStatus, PaymentMethodType, DisputeStatus, UserRole
 )
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

@@ -17,6 +17,8 @@ from dataclasses import dataclass
 from enum import Enum
 import math
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

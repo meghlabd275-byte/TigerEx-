@@ -18,6 +18,8 @@ import logging
 from decimal import Decimal
 import json
 
+# @file complete_admin_service.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

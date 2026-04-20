@@ -15,6 +15,8 @@ from enum import Enum
 import uvicorn
 from decimal import Decimal
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="Margin Trading Service",
     description="Leveraged spot trading with margin accounts",

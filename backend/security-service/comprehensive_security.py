@@ -20,6 +20,8 @@ import qrcode
 from io import BytesIO
 import base64
 
+# @file comprehensive_security.py
+# @author TigerEx Development Team
 app = FastAPI(title="TigerEx Security Service", version="1.0.0")
 
 # Security configuration

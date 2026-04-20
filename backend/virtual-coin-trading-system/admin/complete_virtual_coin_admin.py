@@ -18,6 +18,8 @@ from dataclasses import dataclass
 import uuid
 import hashlib
 
+# @file complete_virtual_coin_admin.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

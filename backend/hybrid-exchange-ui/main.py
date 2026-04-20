@@ -18,6 +18,8 @@ from hybrid_dashboard import HybridExchangeDashboard
 from white_label_master import WhiteLabelMasterSystem, DeploymentType
 from admin_control_panel import AdminControlPanel
 
+# @file main.py
+# @author TigerEx Development Team
 # Initialize main application
 app = FastAPI(
     title="TigerEx Hybrid Exchange",

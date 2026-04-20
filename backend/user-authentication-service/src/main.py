@@ -32,6 +32,8 @@ import smtplib
 # Import admin routes
 from admin.admin_routes import router as admin_router
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(
     processors=[

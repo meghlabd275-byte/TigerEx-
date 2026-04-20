@@ -22,6 +22,8 @@ from decimal import Decimal
 from collections import defaultdict
 import aiofiles
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

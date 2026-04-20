@@ -20,6 +20,8 @@ import uvicorn
 import os
 from contextlib import asynccontextmanager
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(
     processors=[

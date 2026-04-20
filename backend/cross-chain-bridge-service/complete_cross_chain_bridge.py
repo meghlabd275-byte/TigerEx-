@@ -11,6 +11,8 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 import uuid
 
+# @file complete_cross_chain_bridge.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx Cross-Chain Bridge Service",
     description="Complete cross-chain bridge for multi-blockchain asset transfers",

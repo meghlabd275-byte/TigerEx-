@@ -14,6 +14,8 @@ import asyncio
 import json
 import logging
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(title="CoinMarketCap Integration Complete", version="1.0.0")
 security = HTTPBearer()
 

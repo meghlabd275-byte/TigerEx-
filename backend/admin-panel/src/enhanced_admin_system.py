@@ -30,6 +30,8 @@ from sqlalchemy.dialects.postgresql import UUID
 import pandas as pd
 import numpy as np
 
+# @file enhanced_admin_system.py
+# @author TigerEx Development Team
 # Initialize FastAPI
 app = FastAPI(
     title="TigerEx Enhanced Admin System",

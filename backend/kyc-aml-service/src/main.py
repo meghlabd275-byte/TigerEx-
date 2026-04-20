@@ -31,6 +31,8 @@ import magic
 import aiofiles
 from jose import jwt
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(
     processors=[

@@ -21,6 +21,8 @@ from enum import Enum
 import jwt
 from collections import defaultdict
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

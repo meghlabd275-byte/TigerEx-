@@ -17,6 +17,8 @@ import hmac
 import time
 import logging
 
+# @file top_200_cryptocurrencies.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx Top 200 Cryptocurrencies Integration",
     version="1.0.0",

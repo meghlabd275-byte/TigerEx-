@@ -36,6 +36,8 @@ import uvicorn
 from pydantic import BaseModel
 import structlog
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(
     processors=[

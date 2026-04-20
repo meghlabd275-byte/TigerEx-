@@ -16,6 +16,8 @@ import uvicorn
 import asyncio
 from decimal import Decimal
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="Futures Trading Service",
     description="Advanced futures trading with perpetual and delivery contracts",

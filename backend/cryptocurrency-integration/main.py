@@ -695,6 +695,8 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 from typing import List, Optional
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(title="TigerEx Cryptocurrency Integration API", version="1.0.0")
 security = HTTPBearer()
 

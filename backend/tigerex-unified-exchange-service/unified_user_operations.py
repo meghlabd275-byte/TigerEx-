@@ -14,6 +14,8 @@ import json
 from abc import ABC, abstractmethod
 from enum import Enum
 
+# @file unified_user_operations.py
+# @author TigerEx Development Team
 class OrderSide(Enum):
     BUY = "BUY"
     SELL = "SELL"

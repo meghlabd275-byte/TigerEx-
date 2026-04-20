@@ -21,6 +21,8 @@ from pydantic import BaseModel
 import websockets
 import hashlib
 
+# @file main.py
+# @author TigerEx Development Team
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 

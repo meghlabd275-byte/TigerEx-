@@ -9,6 +9,8 @@ from admin.admin_routes import router as admin_router
 import uvicorn
 import os
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx futures-earn-service",
     description="Backend service for futures-earn-service",

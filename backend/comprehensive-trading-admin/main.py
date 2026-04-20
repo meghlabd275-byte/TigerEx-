@@ -12,6 +12,8 @@ import uvicorn
 from admin_routes import router as admin_router
 from typing import Dict, Any
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,

@@ -11,6 +11,8 @@ from datetime import datetime, timedelta
 from enum import Enum
 import uuid
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(title="Liquidity Provider Program", version="3.0.0")
 
 app.add_middleware(

@@ -12,6 +12,8 @@ import asyncio
 import random
 from decimal import Decimal
 
+# @file complete_fetchers.py
+# @author TigerEx Development Team
 app = FastAPI(title="TigerEx Comprehensive Data Fetchers", version="1.0.0")
 
 # ==================== ENUMS ====================

@@ -21,6 +21,8 @@ import aioredis
 import json
 from collections import defaultdict
 
+# @file main.py
+# @author TigerEx Development Team
 # FastAPI app
 app = FastAPI(
     title="TigerEx Social Trading Platform",

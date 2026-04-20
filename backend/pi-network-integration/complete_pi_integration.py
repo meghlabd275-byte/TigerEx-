@@ -11,6 +11,8 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 import uuid
 
+# @file complete_pi_integration.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx Pi Network Integration Service",
     description="Complete Pi Network blockchain integration",

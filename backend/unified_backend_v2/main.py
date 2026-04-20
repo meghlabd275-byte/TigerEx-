@@ -31,6 +31,8 @@ from sqlalchemy.sql import func
 import secrets
 from decimal import Decimal
 
+# @file main.py
+# @author TigerEx Development Team
 # Initialize FastAPI
 app = FastAPI(
     title="TigerEx Unified Backend v2",

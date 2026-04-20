@@ -15,6 +15,8 @@ import hashlib
 import jwt
 import asyncio
 
+# @file complete_admin_system.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx Complete Admin System",
     version="3.0.0",

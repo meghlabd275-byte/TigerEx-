@@ -22,6 +22,8 @@ import jwt
 import logging
 from functools import wraps
 
+# @file admin-control-template.py
+# @author TigerEx Development Team
 # Version
 VERSION = "3.0.0"
 

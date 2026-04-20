@@ -17,6 +17,8 @@ import ccxt
 from decimal import Decimal
 import uuid
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx Hex Trading Engine",
     description="Hybrid CEX+DEX Trading Engine with Binance-like functionality",

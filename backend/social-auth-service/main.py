@@ -21,6 +21,8 @@ import os
 import structlog
 from urllib.parse import urlencode, parse_qs, urlparse
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 structlog.configure(
     processors=[

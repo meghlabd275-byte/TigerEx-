@@ -21,6 +21,8 @@ from decimal import Decimal
 from dataclasses import dataclass
 from collections import defaultdict
 
+# @file enhanced_main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

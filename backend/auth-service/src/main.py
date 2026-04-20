@@ -42,6 +42,8 @@ import sendgrid
 from sendgrid.helpers.mail import Mail
 import httpx
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

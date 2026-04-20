@@ -8,6 +8,8 @@ from typing import List, Optional, Dict, Any
 from datetime import datetime
 from pydantic import BaseModel
 
+# @file admin_routes.py
+# @author TigerEx Development Team
 router = APIRouter(prefix="/admin", tags=["admin"])
 
 # ============================================================================

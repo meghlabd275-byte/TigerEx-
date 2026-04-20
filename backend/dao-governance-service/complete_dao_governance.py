@@ -11,6 +11,8 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 import uuid
 
+# @file complete_dao_governance.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx DAO Governance Service",
     description="Decentralized Autonomous Organization governance system",

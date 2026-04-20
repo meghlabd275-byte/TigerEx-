@@ -9,6 +9,8 @@ from pydantic import BaseModel
 from typing import List, Optional
 import uvicorn
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(title="Copy Trading Service", version="1.0.0")
 
 class CopyTradeRequest(BaseModel):

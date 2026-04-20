@@ -11,6 +11,8 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 import uuid
 
+# @file complete_cardano_integration.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx Cardano Integration Service",
     description="Complete Cardano blockchain integration with staking and smart contracts",

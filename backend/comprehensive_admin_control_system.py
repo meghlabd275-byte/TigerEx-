@@ -16,6 +16,8 @@ import redis
 import numpy as np
 from enum import Enum
 
+# @file comprehensive_admin_control_system.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

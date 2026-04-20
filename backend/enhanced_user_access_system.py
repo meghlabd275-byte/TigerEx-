@@ -19,6 +19,8 @@ import json
 from dataclasses import dataclass
 import logging
 
+# @file enhanced_user_access_system.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

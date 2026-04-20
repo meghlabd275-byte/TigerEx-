@@ -25,6 +25,8 @@ from sqlalchemy.orm import sessionmaker
 import structlog
 from decimal import Decimal
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(
     processors=[

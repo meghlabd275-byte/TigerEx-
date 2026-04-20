@@ -14,6 +14,8 @@ import random
 import json
 from pydantic import BaseModel
 
+# @file complete_fetcher_service.py
+# @author TigerEx Development Team
 app = FastAPI(title="TigerEx COMPLETE Fetcher Service", version="5.1.0")
 
 # CORS

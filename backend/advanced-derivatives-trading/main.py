@@ -24,6 +24,8 @@ import scipy.stats as stats
 from scipy.optimize import minimize_scalar
 import math
 
+# @file main.py
+# @author TigerEx Development Team
 # FastAPI app
 app = FastAPI(
     title="TigerEx Advanced Derivatives Trading",

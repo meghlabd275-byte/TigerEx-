@@ -24,6 +24,8 @@ import secrets
 import hashlib
 from contextlib import asynccontextmanager
 
+# @file enhanced_admin_control.py
+# @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(
     processors=[

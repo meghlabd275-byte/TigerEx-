@@ -25,6 +25,8 @@ import pyotp
 import qrcode
 from io import BytesIO
 
+# @file comprehensive-security.py
+# @author TigerEx Development Team
 logger = logging.getLogger(__name__)
 
 # ============================================================================

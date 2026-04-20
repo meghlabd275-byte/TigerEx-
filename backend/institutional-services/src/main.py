@@ -35,6 +35,8 @@ from email.mime.multipart import MIMEMultipart
 import boto3
 from botocore.exceptions import ClientError
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

@@ -29,6 +29,8 @@ import sqlparse
 import bandit
 from bandit.core import manager
 
+# @file complete_security_audit.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

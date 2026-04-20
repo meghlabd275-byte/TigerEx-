@@ -16,6 +16,8 @@ import aiohttp
 import numpy as np
 import pandas as pd
 
+# @file enhanced_trading_interface.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

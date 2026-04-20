@@ -34,6 +34,8 @@ from tonclient.types import KeyPair
 import hashlib
 import secrets
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(
     processors=[

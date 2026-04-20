@@ -12,6 +12,8 @@ from decimal import Decimal
 import uuid
 import random
 
+# @file complete_ml_signals.py
+# @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx ML Trading Signals Service",
     description="AI-powered trading signals with machine learning models",

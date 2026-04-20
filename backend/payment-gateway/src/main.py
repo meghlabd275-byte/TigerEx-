@@ -49,6 +49,8 @@ import numpy as np
 from sklearn.ensemble import IsolationForest
 import tensorflow as tf
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

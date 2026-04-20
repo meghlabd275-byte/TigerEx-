@@ -30,6 +30,8 @@ from sqlalchemy.sql import func
 from web3 import Web3
 import solcx
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

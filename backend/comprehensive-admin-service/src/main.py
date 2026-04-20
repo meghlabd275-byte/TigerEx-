@@ -24,6 +24,8 @@ from contextlib import asynccontextmanager
 from web3 import Web3
 import ccxt.async_support as ccxt
 
+# @file main.py
+# @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(
     processors=[
