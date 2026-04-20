@@ -1,3 +1,10 @@
+/**
+ * TigerEx Admin Dashboard - Enhanced
+ * @file enhanced_admin_dashboard.tsx
+ * @description Enhanced admin dashboard with full user management
+ * @author TigerEx Development Team
+ */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
   LineChart, Line, AreaChart, Area, BarChart, Bar, 
