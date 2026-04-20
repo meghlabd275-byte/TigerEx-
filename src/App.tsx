@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend - Main Application Entry
+ * @file App.tsx
+ * @description React application component
+ * @author TigerEx Development Team
+ */
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
