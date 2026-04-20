@@ -1,3 +1,9 @@
+/**
+ * TigerEx Android Application
+ * @file mobile_app_native_kotlin.kt
+ * @description Android native mobile app
+ * @author TigerEx Development Team
+ */
 package com.tigerex.mobile
 
 import android.os.Bundle

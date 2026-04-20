@@ -1,3 +1,9 @@
+/**
+ * TigerEx iOS Application
+ * @file ios_native_app_complete.swift
+ * @description iOS native mobile app
+ * @author TigerEx Development Team
+ */
 import SwiftUI
 import Combine
 import Foundation

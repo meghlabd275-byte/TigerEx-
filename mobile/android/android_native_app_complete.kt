@@ -1,3 +1,9 @@
+/**
+ * TigerEx Android Application
+ * @file android_native_app_complete.kt
+ * @description Android native mobile app
+ * @author TigerEx Development Team
+ */
 package com.tigerex.trading
 
 import android.app.Application
