@@ -1,4 +1,10 @@
 /**
+ * TigerEx Admin Component
+ * @file auth.ts
+ * @description Admin dashboard component
+ * @author TigerEx Development Team
+ */
+/**
  * TigerEx Admin Dashboard - Authentication Types
  * @file auth.ts
  * @description Type definitions for authentication and authorization

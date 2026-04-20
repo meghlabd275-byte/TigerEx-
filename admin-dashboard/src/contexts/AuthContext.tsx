@@ -1,3 +1,9 @@
+/**
+ * TigerEx Admin Component
+ * @file AuthContext.tsx
+ * @description Admin dashboard component
+ * @author TigerEx Development Team
+ */
 import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
 import { AdminUser, LoginCredentials, AuthResponse } from '../types/auth';
 import { authService } from '../services/authService';

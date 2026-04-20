@@ -1,3 +1,9 @@
+/**
+ * TigerEx Admin Component
+ * @file AdminDashboard.tsx
+ * @description Admin dashboard component
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect } from 'react';
 import { 
   Card, 

@@ -1,3 +1,9 @@
+<!--
+ * TigerEx Admin Module
+ * @file enhanced_admin_dashboard.tsx
+ * @description Admin dashboard component
+ * @author TigerEx Development Team
+-->
 /**
  * TigerEx Admin Dashboard - Enhanced
  * @file enhanced_admin_dashboard.tsx

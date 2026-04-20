@@ -1,3 +1,9 @@
+/**
+ * TigerEx Admin Component
+ * @file CompleteAdminDashboard.tsx
+ * @description Admin dashboard component
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect, useCallback } from 'react';
 import { Line, Bar, Pie, Doughnut } from 'react-chartjs-2';
 import {

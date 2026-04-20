@@ -1,3 +1,9 @@
+/**
+ * TigerEx Admin Component
+ * @file ExchangeManagementDashboard.tsx
+ * @description Admin dashboard component
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box, Container, Typography, Button, Card, CardContent, Grid,

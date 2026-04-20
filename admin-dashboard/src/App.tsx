@@ -1,4 +1,10 @@
 /**
+ * TigerEx Admin Component
+ * @file App.tsx
+ * @description Admin dashboard component
+ * @author TigerEx Development Team
+ */
+/**
  * TigerEx Admin Dashboard - Main Application
  * @file App.tsx
  * @description React application entry point for TigerEx admin dashboard
