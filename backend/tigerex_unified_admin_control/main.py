@@ -11,6 +11,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
 
+# @file main.py
+# @author TigerEx Development Team
 JWT_SECRET = os.getenv("JWT_SECRET", "tigerex-ultra-secure-admin-secret-2024")
 JWT_ALGORITHM = "HS256"
 ADMIN_DB_PATH = os.getenv("ADMIN_DB_PATH", "/tmp/tigerex_admin_db.json")

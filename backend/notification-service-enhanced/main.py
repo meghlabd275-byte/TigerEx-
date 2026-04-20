@@ -4,6 +4,8 @@ TigerEx Enhanced Notification Service
 Multi-channel notifications: Email, SMS, Push, In-App
 """
 
+# @file main.py
+# @author TigerEx Development Team
 from fastapi import FastAPI
 from admin.admin_routes import router as admin_router
 from fastapi import HTTPException, Depends, BackgroundTasks

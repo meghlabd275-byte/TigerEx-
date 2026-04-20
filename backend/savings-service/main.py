@@ -5,6 +5,8 @@ from datetime import datetime
 from decimal import Decimal
 import os
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(title="TigerEx Savings Service")
 
 # Include admin router

@@ -4,6 +4,8 @@ TigerEx Enhanced Wallet Service
 Complete wallet management with deposits, withdrawals, and balance tracking
 """
 
+# @file main.py
+# @author TigerEx Development Team
 from fastapi import FastAPI
 from admin.admin_routes import router as admin_router
 from fastapi import HTTPException, Depends, BackgroundTasks

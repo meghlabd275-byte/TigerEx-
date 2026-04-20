@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from admin.admin_routes import router as admin_router
 
+# @file main.py
+# @author TigerEx Development Team
 from datetime import datetime
 
 app = FastAPI(title="TigerEx Sub-Accounts Service")

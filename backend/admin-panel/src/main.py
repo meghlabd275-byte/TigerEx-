@@ -3,6 +3,8 @@ from typing import List, Optional
 from datetime import datetime
 from pydantic import BaseModel
 
+# @file main.py
+# @author TigerEx Development Team
 # Complete RBAC System for admin-panel
 class UserRole(str, Enum):
     SUPER_ADMIN = "super_admin"

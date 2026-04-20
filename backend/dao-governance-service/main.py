@@ -4,6 +4,8 @@ from fastapi import HTTPException
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 
+# @file main.py
+# @author TigerEx Development Team
 app = FastAPI(title="TigerEx DAO Governance Service")
 
 # Include admin router
