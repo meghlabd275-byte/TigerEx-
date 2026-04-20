@@ -1,0 +1,2403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TigerEx - Trade Crypto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #F0B90B;
+      --primary-dark: #F0B90B;
+      --bg-dark: #0B0E11;
+      --bg-card: #1E2329;
+      --bg-elevated: #252A32;
+      --text-primary: #EAECEF;
+      --text-secondary: #848E9C;
+      --accent-green: #00C087;
+      --accent-red: #F6465D;
+      --border-color: #2B3139;
+      --hover-bg: #2B3139;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .header {
+      background: var(--bg-dark);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary-color), #FF6B6B);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .price-ticker {
+      display: flex;
+      gap: 20px;
+      padding-left: 20px;
+      border-left: 1px solid var(--border-color);
+    }
+
+    .ticker-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .ticker-symbol {
+      font-weight: 600;
+    }
+
+    .ticker-price {
+      color: var(--text-primary);
+    }
+
+    .ticker-change {
+      font-size: 12px;
+    }
+
+    .ticker-change.positive {
+      color: var(--accent-green);
+    }
+
+    .ticker-change.negative {
+      color: var(--accent-red);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-btn {
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    .header-btn-ghost {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .header-btn-ghost:hover {
+      background: var(--hover-bg);
+    }
+
+    .header-btn-primary {
+      background: var(--primary-color);
+      color: var(--bg-dark);
+      border: none;
+    }
+
+    .header-btn-primary:hover {
+      background: #E5A809;
+    }
+
+    /* Profile Button */
+    .profile-btn {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary-color), #FF6B6B);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--bg-dark);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .profile-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* Profile Drawer */
+    .profile-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      z-index: 200;
+    }
+
+    .profile-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .profile-drawer {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 85%;
+      max-width: 400px;
+      height: 100%;
+      background: var(--bg-dark);
+      transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 201;
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid var(--border-color);
+    }
+
+    .profile-drawer.active {
+      right: 0;
+    }
+
+    .profile-header {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .profile-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .profile-close {
+      width: 36px;
+      height: 36px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .profile-close:hover {
+      background: var(--hover-bg);
+    }
+
+    .profile-close svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--text-primary);
+    }
+
+    .profile-user {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .profile-avatar {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--primary-color), #FF6B6B);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--bg-dark);
+    }
+
+    .profile-info {
+      flex: 1;
+    }
+
+    .profile-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .profile-email {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .profile-verified {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--accent-green);
+    }
+
+    .profile-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    .profile-section {
+      margin-bottom: 20px;
+    }
+
+    .profile-section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      padding: 0 8px;
+    }
+
+    .profile-items {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .profile-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .profile-item:hover {
+      background: var(--bg-card);
+    }
+
+    .profile-item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .profile-item-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--bg-card);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .profile-item-text {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .profile-item-arrow {
+      width: 18px;
+      height: 18px;
+      stroke: var(--text-secondary);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .profile-item:hover .profile-item-arrow {
+      opacity: 1;
+    }
+
+    .profile-balance {
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .profile-balance-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .profile-balance-value {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .profile-balance-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .profile-balance-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .profile-balance-btn.deposit {
+      background: var(--primary-color);
+      color: var(--bg-dark);
+      border: none;
+    }
+
+    .profile-balance-btn.withdraw {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .profile-footer {
+      padding: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .profile-footer-btn {
+      width: 100%;
+      padding: 14px;
+      background: transparent;
+      color: var(--accent-red);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .profile-footer-btn:hover {
+      background: rgba(246, 70, 93, 0.1);
+    }
+
+    /* Navigation */
+    .nav {
+      display: flex;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--border-color);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-item {
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .nav-item:hover {
+      color: var(--text-primary);
+    }
+
+    .nav-item.active {
+      color: var(--primary-color);
+      border-bottom-color: var(--primary-color);
+    }
+
+    /* Main Content */
+    .main {
+      flex: 1;
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: var(--bg-card);
+      border-right: 1px solid var(--border-color);
+      display: none;
+      flex-direction: column;
+      height: calc(100vh - 110px);
+      position: sticky;
+      top: 110px;
+    }
+
+    @media (min-width: 1024px) {
+      .sidebar {
+        display: flex;
+      }
+    }
+
+    .sidebar-section {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .sidebar-search {
+      width: 100%;
+      padding: 10px 12px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .sidebar-search:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .sidebar-search::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .sidebar-pair {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .sidebar-pair:hover {
+      background: var(--hover-bg);
+    }
+
+    .sidebar-pair.active {
+      background: var(--hover-bg);
+    }
+
+    .pair-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pair-icon {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #F7931A, #FF9F43);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .pair-name {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .pair-price {
+      text-align: right;
+      font-size: 13px;
+    }
+
+    .pair-change {
+      font-size: 11px;
+    }
+
+    /* Content Area */
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Tab Pages */
+    .tab-page {
+      display: none;
+      flex: 1;
+    }
+
+    .tab-page.active {
+      display: block;
+    }
+
+    /* Home Page */
+    .home-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .home-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .home-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid var(--border-color);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .card-icon {
+      font-size: 18px;
+    }
+
+    .balance-card {
+      padding: 24px;
+    }
+
+    .balance-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .balance-value {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .balance-change {
+      font-size: 13px;
+    }
+
+    .balance-change.positive {
+      color: var(--accent-green);
+    }
+
+    .balance-change.negative {
+      color: var(--accent-red);
+    }
+
+    /* Markets Page */
+    .markets-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      border-bottom: 1px solid var(--border-color);
+      overflow-x: auto;
+    }
+
+    .markets-tabs {
+      display: flex;
+      gap: 8px;
+    }
+
+    .markets-tab {
+      padding: 8px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .markets-tab.active {
+      background: var(--primary-color);
+      color: var(--bg-dark);
+      border-color: var(--primary-color);
+    }
+
+    .markets-search {
+      flex: 1;
+      min-width: 200px;
+      padding: 10px 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--text-primary);
+    }
+
+    .markets-search:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .markets-list {
+      padding: 0 16px;
+    }
+
+    .market-row {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .market-row:hover {
+      background: var(--bg-card);
+    }
+
+    .market-row-header {
+      display: none;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    @media (min-width: 768px) {
+      .market-row-header {
+        display: flex;
+      }
+    }
+
+    .market-name-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .market-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .market-icon.bitcoin { background: linear-gradient(135deg, #F7931A, #FF9F43); }
+    .market-icon.ethereum { background: linear-gradient(135deg, #627EEA, #8B9FFF); }
+    .market-icon.bnb { background: linear-gradient(135deg, #F0B90B, #FFEB3B); }
+    .market-icon.xrp { background: linear-gradient(135deg, #23292F, #4A5568); }
+
+    .market-info {
+      flex: 1;
+    }
+
+    .market-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .market-symbol {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .market-price-cell {
+      flex: 1;
+      text-align: right;
+      min-width: 100px;
+    }
+
+    .market-price {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .market-change-cell {
+      flex: 1;
+      text-align: right;
+      min-width: 80px;
+    }
+
+    .market-change {
+      font-size: 13px;
+      font-weight: 500;
+      padding: 4px 8px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .market-change.positive {
+      background: rgba(0, 192, 135, 0.15);
+      color: var(--accent-green);
+    }
+
+    .market-change.negative {
+      background: rgba(246, 70, 93, 0.15);
+      color: var(--accent-red);
+    }
+
+    /* Trade Page */
+    .trade-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      height: 100%;
+    }
+
+    @media (min-width: 1024px) {
+      .trade-layout {
+        grid-template-columns: 1fr 340px;
+      }
+    }
+
+    .trade-chart {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .trade-pair-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .trade-pair-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .trade-pair-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #F7931A, #FF9F43);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .trade-pair-name {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .trade-pair-sub {
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .trade-price {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .trade-change {
+      font-size: 14px;
+    }
+
+    .trade-change.positive { color: var(--accent-green); }
+    .trade-change.negative { color: var(--accent-red); }
+
+    .trade-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .trade-tab {
+      padding: 8px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .trade-tab.active {
+      background: var(--primary-color);
+      color: var(--bg-dark);
+      border-color: var(--primary-color);
+    }
+
+    .chart-area {
+      flex: 1;
+      background: var(--bg-card);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      min-height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chart-area::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, transparent 50%, var(--accent-green) 50%);
+      opacity: 0.1;
+    }
+
+    .chart-placeholder {
+      text-align: center;
+      color: var(--text-secondary);
+    }
+
+    .chart-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .order-book {
+      border-left: 1px solid var(--border-color);
+      display: none;
+      flex-direction: column;
+    }
+
+    @media (min-width: 1024px) {
+      .order-book {
+        display: flex;
+      }
+    }
+
+    .order-book-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    .order-book-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .order-book-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      padding: 12px 16px;
+      font-size: 11px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .order-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+    }
+
+    .order-row.sell .order-price { color: var(--accent-red); }
+    .order-row.buy .order-price { color: var(--accent-green); }
+
+    /* Trade Form */
+    .trade-form {
+      padding: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .trade-form-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .trade-form-input {
+      width: 100%;
+      padding: 12px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .trade-form-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .trade-form-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .trade-form-percent {
+      flex: 1;
+      padding: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 12px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .trade-form-percent:hover {
+      background: var(--hover-bg);
+    }
+
+    .trade-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .trade-btn {
+      flex: 1;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .trade-btn-buy {
+      background: var(--accent-green);
+      color: white;
+    }
+
+    .trade-btn-sell {
+      background: var(--accent-red);
+      color: white;
+    }
+
+    /* TradFi Page */
+    .tradfi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      padding: 16px;
+    }
+
+    .tradfi-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid var(--border-color);
+    }
+
+    .tradfi-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .tradfi-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--hover-bg);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .tradfi-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .tradfi-desc {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .tradfi-stats {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 20px;
+    }
+
+    .tradfi-stat-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .tradfi-stat-value {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .tradfi-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary-color);
+      color: var(--bg-dark);
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tradfi-btn:hover {
+      background: #E5A809;
+    }
+
+    /* Assets Page */
+    .assets-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .assets-filters {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+    }
+
+    .assets-filter {
+      padding: 8px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .assets-filter.active {
+      background: var(--primary-color);
+      color: var(--bg-dark);
+      border-color: var(--primary-color);
+    }
+
+    .assets-summary {
+      display: flex;
+      gap: 32px;
+    }
+
+    .assets-summary-item {
+      flex: 1;
+    }
+
+    .assets-summary-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .assets-summary-value {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .assets-list {
+      padding: 0 16px;
+    }
+
+    .asset-row {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .asset-row-header {
+      display: none;
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    @media (min-width: 768px) {
+      .asset-row-header {
+        display: flex;
+      }
+    }
+
+    .asset-cell-name {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .asset-cell-balance {
+      flex: 1;
+      text-align: right;
+      min-width: 100px;
+    }
+
+    .asset-cell-available {
+      display: none;
+      flex: 1;
+      text-align: right;
+      min-width: 100px;
+    }
+
+    @media (min-width: 768px) {
+      .asset-cell-available {
+        display: block;
+      }
+    }
+
+    .asset-cell-action {
+      flex: 1;
+      text-align: right;
+      min-width: 100px;
+    }
+
+    .asset-action-btn {
+      padding: 6px 12px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 12px;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+
+    .asset-action-btn:hover {
+      background: var(--hover-bg);
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      display: flex;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border-color);
+      position: sticky;
+      bottom: 0;
+    }
+
+    @media (min-width: 768px) {
+      .bottom-nav {
+        display: none;
+      }
+    }
+
+    .bottom-nav-item {
+      flex: 1;
+      padding: 12px 8px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .bottom-nav-item.active {
+      color: var(--primary-color);
+    }
+
+    .bottom-nav-icon {
+      font-size: 20px;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    /* Mobile Header */
+    .mobile-header {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    @media (max-width: 767px) {
+      .mobile-header {
+        display: flex;
+      }
+    }
+
+    .mobile-nav {
+      display: none;
+      padding: 8px 16px;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      overflow-x: auto;
+    }
+
+    @media (max-width: 767px) {
+      .mobile-nav {
+        display: flex;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-top">
+      <div class="header-left">
+        <a href="#" class="logo">
+          <div class="logo-icon">🐯</div>
+          <span>TigerEx</span>
+        </a>
+        <div class="price-ticker">
+          <div class="ticker-item">
+            <span class="ticker-symbol">BTC</span>
+            <span class="ticker-price">$74,304.45</span>
+            <span class="ticker-change negative">-1.65%</span>
+          </div>
+          <div class="ticker-item">
+            <span class="ticker-symbol">ETH</span>
+            <span class="ticker-price">$2,271.99</span>
+            <span class="ticker-change negative">-2.57%</span>
+          </div>
+          <div class="ticker-item">
+            <span class="ticker-symbol">BNB</span>
+            <span class="ticker-price">$618.50</span>
+            <span class="ticker-change negative">-0.68%</span>
+          </div>
+          <div class="ticker-item">
+            <span class="ticker-symbol">XRP</span>
+            <span class="ticker-price">$1.40</span>
+            <span class="ticker-change negative">-2.16%</span>
+          </div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="profile-btn" onclick="toggleProfile()">U</div>
+      </div>
+    </div>
+
+    <!-- Profile Drawer -->
+    <div class="profile-overlay" id="profileOverlay" onclick="toggleProfile()"></div>
+    <div class="profile-drawer" id="profileDrawer">
+      <div class="profile-header">
+        <div class="profile-title">Account</div>
+        <button class="profile-close" onclick="toggleProfile()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="profile-user">
+        <div class="profile-avatar">U</div>
+        <div class="profile-info">
+          <div class="profile-name">User Account</div>
+          <div class="profile-email">user@example.com</div>
+          <div class="profile-verified">✓ Verified</div>
+        </div>
+      </div>
+
+      <div class="profile-balance">
+        <div class="profile-balance-label">Total Balance</div>
+        <div class="profile-balance-value">$12,458.32</div>
+        <div class="profile-balance-actions">
+          <button class="profile-balance-btn deposit">Deposit</button>
+          <button class="profile-balance-btn withdraw">Withdraw</button>
+        </div>
+      </div>
+
+      <div class="profile-content">
+        <!-- Account Services -->
+        <div class="profile-section">
+          <div class="profile-section-title">Account</div>
+          <div class="profile-items">
+            <div class="profile-item">
+              <div class="profile-item-left">
+                <div class="profile-item-icon">👤</div>
+                <span class="profile-item-text">Profile</span>
+              </div>
+              <svg class="profile-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+            <div class="profile-item">
+              <div class="profile-item-left">
+                <div class="profile-item-icon">🔐</div>
+                <span class="profile-item-text">Security</span>
+              </div>
+              <svg class="profile-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+            <div class="profile-item">
+              <div class="profile-item-left">
+                <div class="profile-item-icon">💳</div>
+                <span class="profile-item-text">Payment Methods</span>
+              </div>
+              <svg class="profile-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+            <div class="profile-item">
+              <div class="profile-item-left">
+                <div class="profile-item-icon">🆔</div>
+                <span class="profile-item-text">Verification</span>
+              </div>
+              <svg class="profile-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+            <div class="profile-item">
+              <div class="profile-item-left">
+                <div class="profile-item-icon">🔔</div>
+                <span class="profile-item-text">Preferences</span>
+              </div>
+              <svg class="profile-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orders -->
+        <div class="profile-section">
+          <div class="profile-section-title">Orders</div>
+          <div class="profile-items">
+            <div class="profile-item">
+              <div class="profile-item-left">
+                <div class="profile-item-icon">📋</div>
+                <span class="profile-item-text">Order History</span>
+              </div>
+              <svg class="profile-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+            <div class="profile-item">
+              <div class="profile-item-left">
+                <div class="profile-item-icon">📱</div>
+                <span class="profile-item-text">Trade History</span>
+              </div>
+              <svg class="profile-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+            <div class="profile-item">
+              <div class="profile-item-left">
+                <div class="profile-item-icon">💰</div>
+                <span class="profile-item-text">Transaction History</span>
+              </div>
+              <svg class="profile-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Finance -->
+        <div class="profile-section">
+          <div class="profile-section-title">Finance</div>
+          <div class="profile-items">
+            <div class="profile-item">
+              <div class="profile-item-left">
+                <div class="profile-item-icon">💎</div>
+                <span class="profile-item-text">Earn</span>
+              </div>
+              <svg class="profile-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+            <div class="profile-item">
+              <div class="profile-item-left">
+                <div class="profile-item-icon">🎯</div>
+                <span class="profile-item-text">Launchpool</span>
+              </div>
+              <svg class="profile-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+            <div class="profile-item">
+              <div class="profile-item-left">
+                <div class="profile-item-icon">🏦</div>
+                <span class="profile-item-text">Staking</span>
+              </div>
+              <svg class="profile-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+            <div class="profile-item">
+              <div class="profile-item-left">
+                <div class="profile-item-icon">🎁</div>
+                <span class="profile-item-text">Coupons</span>
+              </div>
+              <svg class="profile-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- API & Referrals -->
+        <div class="profile-section">
+          <div class="profile-section-title">API & Referrals</div>
+          <div class="profile-items">
+            <div class="profile-item">
+              <div class="profile-item-left">
+                <div class="profile-item-icon">🔑</div>
+                <span class="profile-item-text">API Management</span>
+              </div>
+              <svg class="profile-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+            <div class="profile-item">
+              <div class="profile-item-left">
+                <div class="profile-item-icon">🤝</div>
+                <span class="profile-item-text">Referral</span>
+              </div>
+              <svg class="profile-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+            <div class="profile-item">
+              <div class="profile-item-left">
+                <div class="profile-item-icon">📊</div>
+                <span class="profile-item-text">Rebate Center</span>
+              </div>
+              <svg class="profile-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Support -->
+        <div class="profile-section">
+          <div class="profile-section-title">Support</div>
+          <div class="profile-items">
+            <div class="profile-item">
+              <div class="profile-item-left">
+                <div class="profile-item-icon">❓</div>
+                <span class="profile-item-text">Help Center</span>
+              </div>
+              <svg class="profile-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+            <div class="profile-item">
+              <div class="profile-item-left">
+                <div class="profile-item-icon">💬</div>
+                <span class="profile-item-text">Live Chat</span>
+              </div>
+              <svg class="profile-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+            <div class="profile-item">
+              <div class="profile-item-left">
+                <div class="profile-item-icon">📝</div>
+                <span class="profile-item-text">Submit Request</span>
+              </div>
+              <svg class="profile-item-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-footer">
+        <button class="profile-footer-btn">Log Out</button>
+      </div>
+    </div>
+
+    <script>
+      function toggleProfile() {
+        const overlay = document.getElementById('profileOverlay');
+        const drawer = document.getElementById('profileDrawer');
+        overlay.classList.toggle('active');
+        drawer.classList.toggle('active');
+        document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : '';
+      }
+    </script>
+
+    <!-- Navigation -->
+    <nav class="nav">
+      <a href="#" class="nav-item active" data-tab="home">Home</a>
+      <a href="#" class="nav-item" data-tab="markets">Markets</a>
+      <a href="#" class="nav-item" data-tab="trade">Trade</a>
+      <a href="#" class="nav-item" data-tab="tradfi">TradFi</a>
+      <a href="#" class="nav-item" data-tab="assets">Assets</a>
+    </nav>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-header">
+      <a href="#" class="logo">
+        <div class="logo-icon">🐯</div>
+        <span>TigerEx</span>
+      </a>
+      <div class="header-right">
+        <div class="profile-btn" onclick="toggleProfile()">U</div>
+      </div>
+    </div>
+    <div class="mobile-nav">
+      <a href="#" class="nav-item active" data-tab="home">Home</a>
+      <a href="#" class="nav-item" data-tab="markets">Markets</a>
+      <a href="#" class="nav-item" data-tab="trade">Trade</a>
+      <a href="#" class="nav-item" data-tab="tradfi">TradFi</a>
+      <a href="#" class="nav-item" data-tab="assets">Assets</a>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="main">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Favorites</div>
+        <input type="text" class="sidebar-search" placeholder="Search">
+      </div>
+      <div class="sidebar-section" style="flex:1;overflow-y:auto">
+        <div class="sidebar-pair active">
+          <div class="pair-info">
+            <div class="pair-icon">₿</div>
+            <div>
+              <div class="pair-name">BTC/USDT</div>
+            </div>
+          </div>
+          <div class="pair-price">
+            <div>$74,304.45</div>
+            <div class="ticker-change negative">-1.65%</div>
+          </div>
+        </div>
+        <div class="sidebar-pair">
+          <div class="pair-info">
+            <div class="pair-icon" style="background:linear-gradient(135deg,#627EEA,#8B9FFF)">Ξ</div>
+            <div>
+              <div class="pair-name">ETH/USDT</div>
+            </div>
+          </div>
+          <div class="pair-price">
+            <div>$2,271.99</div>
+            <div class="ticker-change negative">-2.57%</div>
+          </div>
+        </div>
+        <div class="sidebar-pair">
+          <div class="pair-info">
+            <div class="pair-icon" style="background:linear-gradient(135deg,#F0B90B,#FFEB3B)">B</div>
+            <div>
+              <div class="pair-name">BNB/USDT</div>
+            </div>
+          </div>
+          <div class="pair-price">
+            <div>$618.50</div>
+            <div class="ticker-change negative">-0.68%</div>
+          </div>
+        </div>
+        <div class="sidebar-pair">
+          <div class="pair-info">
+            <div class="pair-icon" style="background:linear-gradient(135deg,#23292F,#4A5568)">X</div>
+            <div>
+              <div class="pair-name">XRP/USDT</div>
+            </div>
+          </div>
+          <div class="pair-price">
+            <div>$1.40</div>
+            <div class="ticker-change negative">-2.16%</div>
+          </div>
+        </div>
+        <div class="sidebar-pair">
+          <div class="pair-info">
+            <div class="pair-icon" style="background:linear-gradient(135deg,#E91E63,#F06292)">S</div>
+            <div>
+              <div class="pair-name">SOL/USDT</div>
+            </div>
+          </div>
+          <div class="pair-price">
+            <div>$182.45</div>
+            <div class="ticker-change negative">-3.21%</div>
+          </div>
+        </div>
+        <div class="sidebar-pair">
+          <div class="pair-info">
+            <div class="pair-icon" style="background:linear-gradient(135deg,#9C27B0,#BA68C8)">D</div>
+            <div>
+              <div class="pair-name">DOGE/USDT</div>
+            </div>
+          </div>
+          <div class="pair-price">
+            <div>$0.32</div>
+            <div class="ticker-change negative">-4.51%</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Home Page -->
+      <div class="tab-page active" id="home-page">
+        <div class="home-grid">
+          <!-- Balance Card -->
+          <div class="card balance-card">
+            <div class="card-header">
+              <div class="card-title">Total Balance</div>
+              <div class="card-icon">👛</div>
+            </div>
+            <div class="balance-label">Total Assets (USDT)</div>
+            <div class="balance-value">$12,458.32</div>
+            <div class="balance-change negative">-$184.32 (-1.46%) today</div>
+          </div>
+
+          <!-- PnL Card -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Total PnL</div>
+              <div class="card-icon">📊</div>
+            </div>
+            <div class="balance-label">Unrealized PnL</div>
+            <div class="balance-value" style="color:var(--accent-green)">+$1,294.56</div>
+            <div class="balance-change positive">+12.4% all time</div>
+          </div>
+
+          <!-- Quick Trade -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Quick Trade</div>
+              <div class="card-icon">⚡</div>
+            </div>
+            <div style="margin-bottom:12px">
+              <select class="form-select" style="width:100%;padding:10px;background:var(--bg-dark);border:1px solid var(--border-color);border-radius:8px;color:var(--text-primary)">
+                <option>BTC/USDT</option>
+                <option>ETH/USDT</option>
+                <option>BNB/USDT</option>
+              </select>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button style="flex:1;padding:10px;background:var(--accent-green);color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer">Buy</button>
+              <button style="flex:1;padding:10px;background:var(--accent-red);color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer">Sell</button>
+            </div>
+          </div>
+
+          <!-- Top Movers -->
+          <div class="card" style="grid-column:span 2">
+            <div class="card-header">
+              <div class="card-title">Today's Top Movers</div>
+              <a href="#" style="color:var(--primary-color);font-size:13px;text-decoration:none">View All</a>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
+              <div style="padding:12px;background:var(--bg-dark);border-radius:12px">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                  <div style="width:32px;height:32px;background:linear-gradient(135deg,#F7931A,#FF9F43);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">₿</div>
+                  <div>
+                    <div style="font-size:14px;font-weight:600">BTC</div>
+                    <div style="font-size:12px;color:var(--text-secondary)">Bitcoin</div>
+                  </div>
+                </div>
+                <div style="font-size:16px;font-weight:700">$74,304.45</div>
+                <div style="font-size:13px;color:var(--accent-red)">-1.65%</div>
+              </div>
+              <div style="padding:12px;background:var(--bg-dark);border-radius:12px">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                  <div style="width:32px;height:32px;background:linear-gradient(135deg,#627EEA,#8B9FFF);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">Ξ</div>
+                  <div>
+                    <div style="font-size:14px;font-weight:600">ETH</div>
+                    <div style="font-size:12px;color:var(--text-secondary)">Ethereum</div>
+                  </div>
+                </div>
+                <div style="font-size:16px;font-weight:700">$2,271.99</div>
+                <div style="font-size:13px;color:var(--accent-red)">-2.57%</div>
+              </div>
+              <div style="padding:12px;background:var(--bg-dark);border-radius:12px">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                  <div style="width:32px;height:32px;background:linear-gradient(135deg,#F0B90B,#FFEB3B);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">B</div>
+                  <div>
+                    <div style="font-size:14px;font-weight:600">BNB</div>
+                    <div style="font-size:12px;color:var(--text-secondary)">BNB</div>
+                  </div>
+                </div>
+                <div style="font-size:16px;font-weight:700">$618.50</div>
+                <div style="font-size:13px;color:var(--accent-red)">-0.68%</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Trades -->
+          <div class="card" style="grid-column:span 2">
+            <div class="card-header">
+              <div class="card-title">Recent Activity</div>
+              <a href="#" style="color:var(--primary-color);font-size:13px;text-decoration:none">View All</a>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;justify-content:space-between;padding:12px;background:var(--bg-dark);border-radius:8px">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div style="width:32px;height:32px;background:linear-gradient(135deg,#F7931A,#FF9F43);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">₿</div>
+                  <div>
+                    <div style="font-size:14px;font-weight:600">Buy BTC</div>
+                    <div style="font-size:12px;color:var(--text-secondary)">Today, 10:32 AM</div>
+                  </div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-size:14px;font-weight:600">0.025 BTC</div>
+                  <div style="font-size:12px;color:var(--accent-green)">+$124.56</div>
+                </div>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:12px;background:var(--bg-dark);border-radius:8px">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div style="width:32px;height:32px;background:linear-gradient(135deg,#627EEA,#8B9FFF);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700">Ξ</div>
+                  <div>
+                    <div style="font-size:14px;font-weight:600">Buy ETH</div>
+                    <div style="font-size:12px;color:var(--text-secondary)">Yesterday, 3:45 PM</div>
+                  </div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-size:14px;font-weight:600">2.5 ETH</div>
+                  <div style="font-size:12px;color:var(--accent-green)">+$89.32</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Markets Page -->
+      <div class="tab-page" id="markets-page">
+        <div class="markets-header">
+          <div class="markets-tabs">
+            <div class="markets-tab active">All</div>
+            <div class="markets-tab">Favorites</div>
+            <div class="markets-tab">gainers</div>
+            <div class="markets-tab">Losers</div>
+            <div class="markets-tab">New Listings</div>
+          </div>
+          <input type="text" class="markets-search" placeholder="Search markets">
+        </div>
+        <div class="markets-list">
+          <div class="market-row-header" style="display:flex">
+            <div style="flex:1">Name</div>
+            <div style="flex:1;text-align:right">Price</div>
+            <div style="flex:1;text-align:right">24h Change</div>
+          </div>
+          <div class="market-row">
+            <div class="market-name-cell">
+              <div class="market-icon bitcoin">₿</div>
+              <div class="market-info">
+                <div class="market-name">Bitcoin</div>
+                <div class="market-symbol">BTC/USDT</div>
+              </div>
+            </div>
+            <div class="market-price-cell">
+              <div class="market-price">$74,304.45</div>
+            </div>
+            <div class="market-change-cell">
+              <span class="market-change negative">-1.65%</span>
+            </div>
+          </div>
+          <div class="market-row">
+            <div class="market-name-cell">
+              <div class="market-icon ethereum">Ξ</div>
+              <div class="market-info">
+                <div class="market-name">Ethereum</div>
+                <div class="market-symbol">ETH/USDT</div>
+              </div>
+            </div>
+            <div class="market-price-cell">
+              <div class="market-price">$2,271.99</div>
+            </div>
+            <div class="market-change-cell">
+              <span class="market-change negative">-2.57%</span>
+            </div>
+          </div>
+          <div class="market-row">
+            <div class="market-name-cell">
+              <div class="market-icon bnb">B</div>
+              <div class="market-info">
+                <div class="market-name">BNB</div>
+                <div class="market-symbol">BNB/USDT</div>
+              </div>
+            </div>
+            <div class="market-price-cell">
+              <div class="market-price">$618.50</div>
+            </div>
+            <div class="market-change-cell">
+              <span class="market-change negative">-0.68%</span>
+            </div>
+          </div>
+          <div class="market-row">
+            <div class="market-name-cell">
+              <div class="market-icon xrp">X</div>
+              <div class="market-info">
+                <div class="market-name">XRP</div>
+                <div class="market-symbol">XRP/USDT</div>
+              </div>
+            </div>
+            <div class="market-price-cell">
+              <div class="market-price">$1.40</div>
+            </div>
+            <div class="market-change-cell">
+              <span class="market-change negative">-2.16%</span>
+            </div>
+          </div>
+          <div class="market-row">
+            <div class="market-name-cell">
+              <div class="market-icon" style="background:linear-gradient(135deg,#E91E63,#F06292)">S</div>
+              <div class="market-info">
+                <div class="market-name">Solana</div>
+                <div class="market-symbol">SOL/USDT</div>
+              </div>
+            </div>
+            <div class="market-price-cell">
+              <div class="market-price">$182.45</div>
+            </div>
+            <div class="market-change-cell">
+              <span class="market-change negative">-3.21%</span>
+            </div>
+          </div>
+          <div class="market-row">
+            <div class="market-name-cell">
+              <div class="market-icon" style="background:linear-gradient(135deg,#9C27B0,#BA68C8)">D</div>
+              <div class="market-info">
+                <div class="market-name">Dogecoin</div>
+                <div class="market-symbol">DOGE/USDT</div>
+              </div>
+            </div>
+            <div class="market-price-cell">
+              <div class="market-price">$0.32</div>
+            </div>
+            <div class="market-change-cell">
+              <span class="market-change negative">-4.51%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trade Page -->
+      <div class="tab-page" id="trade-page">
+        <div class="trade-layout">
+          <div class="trade-chart">
+            <div class="trade-pair-header">
+              <div class="trade-pair-title">
+                <div class="trade-pair-icon">₿</div>
+                <div>
+                  <div class="trade-pair-name">BTC/USDT</div>
+                  <div class="trade-pair-sub">Bitcoin / Tether</div>
+                </div>
+              </div>
+              <div>
+                <div class="trade-price">$74,304.45</div>
+                <div class="trade-change negative">-$1,246.32 (-1.65%)</div>
+              </div>
+            </div>
+            <div class="trade-tabs">
+              <div class="trade-tab active">Spot</div>
+              <div class="trade-tab">Margin</div>
+              <div class="trade-tab">Futures</div>
+              <div class="trade-tab">p2p</div>
+            </div>
+            <div class="chart-area">
+              <div class="chart-placeholder">
+                <div class="chart-icon">📈</div>
+                <div>Trading Chart</div>
+              </div>
+            </div>
+          </div>
+          <div class="order-book">
+            <div class="order-book-header">
+              <div class="order-book-title">Place Order</div>
+            </div>
+            <div class="order-book-grid">
+              <div>Price(USDT)</div>
+              <div>Amount(BTC)</div>
+              <div>Total(USDT)</div>
+            </div>
+            <div class="order-row sell">
+              <div>74,450.00</div>
+              <div>0.5234</div>
+              <div>38,905.81</div>
+            </div>
+            <div class="order-row sell">
+              <div>74,440.50</div>
+              <div>0.3156</div>
+              <div>23,459.82</div>
+            </div>
+            <div class="order-row sell">
+              <div>74,420.00</div>
+              <div>0.8921</div>
+              <div>66,387.24</div>
+            </div>
+            <div style="padding:12px 16px;text-align:center;font-weight:700;font-size:18px">$74,304.45</div>
+            <div class="order-row buy">
+              <div>74,300.00</div>
+              <div>0.7562</div>
+              <div>56,189.58</div>
+            </div>
+            <div class="order-row buy">
+              <div>74,280.50</div>
+              <div>0.4123</div>
+              <div>30,629.15</div>
+            </div>
+            <div class="order-row buy">
+              <div>74,250.00</div>
+              <div>1.2345</div>
+              <div>91,646.25</div>
+            </div>
+            <div class="trade-form">
+              <div class="trade-form-label">Price</div>
+              <input type="text" class="trade-form-input" value="74,304.45" placeholder="Price">
+              <div class="trade-form-label">Amount</div>
+              <input type="text" class="trade-form-input" placeholder="Amount (BTC)">
+              <div class="trade-form-row">
+                <div class="trade-form-percent">25%</div>
+                <div class="trade-form-percent">50%</div>
+                <div class="trade-form-percent">75%</div>
+                <div class="trade-form-percent">100%</div>
+              </div>
+              <div class="trade-buttons">
+                <button class="trade-btn trade-btn-buy">Buy BTC</button>
+                <button class="trade-btn trade-btn-sell">Sell BTC</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TradFi Page -->
+      <div class="tab-page" id="tradfi-page">
+        <div class="tradfi-grid">
+          <div class="tradfi-card">
+            <div class="tradfi-card-header">
+              <div class="tradfi-icon">🏦</div>
+              <div>
+                <div class="tradfi-title">Bank Transfer</div>
+              </div>
+            </div>
+            <div class="tradfi-desc">Deposit and withdraw funds directly from your bank account with low fees and fast processing.</div>
+            <div class="tradfi-stats">
+              <div>
+                <div class="tradfi-stat-label">Fee</div>
+                <div class="tradfi-stat-value">0.5%</div>
+              </div>
+              <div>
+                <div class="tradfi-stat-label">Time</div>
+                <div class="tradfi-stat-value">1-2 days</div>
+              </div>
+            </div>
+            <button class="tradfi-btn">Get Started</button>
+          </div>
+          <div class="tradfi-card">
+            <div class="tradfi-card-header">
+              <div class="tradfi-icon">💳</div>
+              <div>
+                <div class="tradfi-title">Debit/Credit Card</div>
+              </div>
+            </div>
+            <div class="tradfi-desc">Buy crypto instantly using your Visa or Mastercard. Secure and instant delivery.</div>
+            <div class="tradfi-stats">
+              <div>
+                <div class="tradfi-stat-label">Fee</div>
+                <div class="tradfi-stat-value">1.8%</div>
+              </div>
+              <div>
+                <div class="tradfi-stat-label">Time</div>
+                <div class="tradfi-stat-value">Instant</div>
+              </div>
+            </div>
+            <button class="tradfi-btn">Buy Crypto</button>
+          </div>
+          <div class="tradfi-card">
+            <div class="tradfi-card-header">
+              <div class="tradfi-icon">💰</div>
+              <div>
+                <div class="tradfi-title">Apple Pay / Google Pay</div>
+              </div>
+            </div>
+            <div class="tradfi-desc">Use your mobile wallet for fast and secure payments on the go.</div>
+            <div class="tradfi-stats">
+              <div>
+                <div class="tradfi-stat-label">Fee</div>
+                <div class="tradfi-stat-value">1.8%</div>
+              </div>
+              <div>
+                <div class="tradfi-stat-label">Time</div>
+                <div class="tradfi-stat-value">Instant</div>
+              </div>
+            </div>
+            <button class="tradfi-btn">Buy Crypto</button>
+          </div>
+          <div class="tradfi-card">
+            <div class="tradfi-card-header">
+              <div class="tradfi-icon">🤝</div>
+              <div>
+                <div class="tradfi-title">P2P Trading</div>
+              </div>
+            </div>
+            <div class="tradfi-desc">Trade crypto directly with other users at your preferred price with zero fees.</div>
+            <div class="tradfi-stats">
+              <div>
+                <div class="tradfi-stat-label">Fee</div>
+                <div class="tradfi-stat-value">0%</div>
+              </div>
+              <div>
+                <div class="tradfi-stat-label">Time</div>
+                <div class="tradfi-stat-value">Varies</div>
+              </div>
+            </div>
+            <button class="tradfi-btn">Start Trading</button>
+          </div>
+          <div class="tradfi-card">
+            <div class="tradfi-card-header">
+              <div class="tradfi-icon">📱</div>
+              <div>
+                <div class="tradfi-title">Mobile Balance</div>
+              </div>
+            </div>
+            <div class="tradfi-desc">Buy crypto using your mobile carrier billing. Available in select regions.</div>
+            <div class="tradfi-stats">
+              <div>
+                <div class="tradfi-stat-label">Fee</div>
+                <div class="tradfi-stat-value">2%</div>
+              </div>
+              <div>
+                <div class="tradfi-stat-label">Time</div>
+                <div class="tradfi-stat-value">Instant</div>
+              </div>
+            </div>
+            <button class="tradfi-btn">Get Started</button>
+          </div>
+          <div class="tradfi-card">
+            <div class="tradfi-card-header">
+              <div class="tradfi-icon">🎁</div>
+              <div>
+                <div class="tradfi-title">Gift Cards</div>
+              </div>
+            </div>
+            <div class="tradfi-desc">Buy crypto with gift cards from popular retailers worldwide.</div>
+            <div class="tradfi-stats">
+              <div>
+                <div class="tradfi-stat-label">Fee</div>
+                <div class="tradfi-stat-value">0%</div>
+              </div>
+              <div>
+                <div class="tradfi-stat-label">Time</div>
+                <div class="tradfi-stat-value">Instant</div>
+              </div>
+            </div>
+            <button class="tradfi-btn">Browse Cards</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Assets Page -->
+      <div class="tab-page" id="assets-page">
+        <div class="assets-header">
+          <div class="assets-filters">
+            <div class="assets-filter active">All</div>
+            <div class="assets-filter">Spot</div>
+            <div class="assets-filter">Funding</div>
+            <div class="assets-filter">Futures</div>
+            <div class="assets-filter">Earn</div>
+            <div class="assets-filter">Pool</div>
+          </div>
+          <div class="assets-summary">
+            <div class="assets-summary-item">
+              <div class="assets-summary-label">Total Balance</div>
+              <div class="assets-summary-value">$12,458.32</div>
+            </div>
+            <div class="assets-summary-item">
+              <div class="assets-summary-label">Available</div>
+              <div class="assets-summary-value">$10,234.56</div>
+            </div>
+          </div>
+        </div>
+        <div class="assets-list">
+          <div class="asset-row-header" style="display:flex">
+            <div style="flex:1">Asset</div>
+            <div style="flex:1;text-align:right">Balance</div>
+            <div style="flex:1;text-align:right">Available</div>
+            <div style="flex:1;text-align:right">Action</div>
+          </div>
+          <div class="asset-row">
+            <div class="asset-cell-name">
+              <div class="market-icon bitcoin">₿</div>
+              <div>
+                <div class="market-name">Bitcoin</div>
+                <div class="market-symbol">BTC</div>
+              </div>
+            </div>
+            <div class="asset-cell-balance">
+              <div>0.12543 BTC</div>
+              <div>$9,318.56</div>
+            </div>
+            <div class="asset-cell-available">
+              <div>0.12543 BTC</div>
+              <div>$9,318.56</div>
+            </div>
+            <div class="asset-cell-action">
+              <button class="asset-action-btn">Deposit</button>
+            </div>
+          </div>
+          <div class="asset-row">
+            <div class="asset-cell-name">
+              <div class="market-icon ethereum">Ξ</div>
+              <div>
+                <div class="market-name">Ethereum</div>
+                <div class="market-symbol">ETH</div>
+              </div>
+            </div>
+            <div class="asset-cell-balance">
+              <div>2.5 ETH</div>
+              <div>$5,679.98</div>
+            </div>
+            <div class="asset-cell-available">
+              <div>2.5 ETH</div>
+              <div>$5,679.98</div>
+            </div>
+            <div class="asset-cell-action">
+              <button class="asset-action-btn">Deposit</button>
+            </div>
+          </div>
+          <div class="asset-row">
+            <div class="asset-cell-name">
+              <div class="market-icon bnb">B</div>
+              <div>
+                <div class="market-name">BNB</div>
+                <div class="market-symbol">BNB</div>
+              </div>
+            </div>
+            <div class="asset-cell-balance">
+              <div>12.5 BNB</div>
+              <div>$7,731.25</div>
+            </div>
+            <div class="asset-cell-available">
+              <div>10 BNB</div>
+              <div>$6,185.00</div>
+            </div>
+            <div class="asset-cell-action">
+              <button class="asset-action-btn">Deposit</button>
+            </div>
+          </div>
+          <div class="asset-row">
+            <div class="asset-cell-name">
+              <div class="market-icon xrp">X</div>
+              <div>
+                <div class="market-name">XRP</div>
+                <div class="market-symbol">XRP</div>
+              </div>
+            </div>
+            <div class="asset-cell-balance">
+              <div>5,000 XRP</div>
+              <div>$7,000.00</div>
+            </div>
+            <div class="asset-cell-available">
+              <div>5,000 XRP</div>
+              <div>$7,000.00</div>
+            </div>
+            <div class="asset-cell-action">
+              <button class="asset-action-btn">Deposit</button>
+            </div>
+          </div>
+          <div class="asset-row">
+            <div class="asset-cell-name">
+              <div class="market-icon tether">T</div>
+              <div>
+                <div class="market-name">Tether</div>
+                <div class="market-symbol">USDT</div>
+              </div>
+            </div>
+            <div class="asset-cell-balance">
+              <div>2,234.56 USDT</div>
+              <div>$2,234.56</div>
+            </div>
+            <div class="asset-cell-available">
+              <div>2,234.56 USDT</div>
+              <div>$2,234.56</div>
+            </div>
+            <div class="asset-cell-action">
+              <button class="asset-action-btn">Deposit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <div class="bottom-nav-item active" data-tab="home">
+      <span class="bottom-nav-icon">🏠</span>
+      Home
+    </div>
+    <div class="bottom-nav-item" data-tab="markets">
+      <span class="bottom-nav-icon">📊</span>
+      Markets
+    </div>
+    <div class="bottom-nav-item" data-tab="trade">
+      <span class="bottom-nav-icon">🔄</span>
+      Trade
+    </div>
+    <div class="bottom-nav-item" data-tab="tradfi">
+      <span class="bottom-nav-icon">💰</span>
+      TradFi
+    </div>
+    <div class="bottom-nav-item" data-tab="assets">
+      <span class="bottom-nav-icon">👛</span>
+      Assets
+    </div>
+  </nav>
+
+  <script>
+    // Tab switching
+    const navItems = document.querySelectorAll('[data-tab]');
+    const tabPages = document.querySelectorAll('.tab-page');
+
+    function switchTab(tabName) {
+      // Update nav items
+      navItems.forEach(item => {
+        if (item.dataset.tab === tabName) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+
+      // Update pages
+      tabPages.forEach(page => {
+        if (page.id === tabName + '-page') {
+          page.classList.add('active');
+        } else {
+          page.classList.remove('active');
+        }
+      });
+    }
+
+    navItems.forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.preventDefault();
+        switchTab(this.dataset.tab);
+      });
+    });
+
+    // Market tabs
+    document.querySelectorAll('.markets-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.markets-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Asset filters
+    document.querySelectorAll('.assets-filter').forEach(filter => {
+      filter.addEventListener('click', function() {
+        document.querySelectorAll('.assets-filter').forEach(f => f.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Trade tabs
+    document.querySelectorAll('.trade-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.trade-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

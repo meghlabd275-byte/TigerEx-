@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up | TigerEx</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #F0B90B;
+      --primary-dark: #F0B90B;
+      --bg-dark: #0B0E11;
+      --bg-card: #1E2329;
+      --bg-elevated: #252A32;
+      --text-primary: #EAECEF;
+      --text-secondary: #848E9C;
+      --accent-green: #00C087;
+      --accent-red: #F6465D;
+      --border-color: #2B3139;
+      --hover-bg: #2B3139;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .auth-header {
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .auth-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary-color), #FF6B6B);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .header-lang {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .header-lang:hover {
+      background: var(--hover-bg);
+    }
+
+    /* Main Content */
+    .auth-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+
+    .auth-container {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .auth-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .auth-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .auth-form {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 32px;
+      border: 1px solid var(--border-color);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 15px;
+      color: var(--text-primary);
+      transition: all 0.2s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .form-select {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 15px;
+      color: var(--text-primary);
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23848E9C' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 20px;
+    }
+
+    .form-select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .form-error {
+      color: var(--accent-red);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary-color);
+      color: var(--bg-dark);
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #E5A809;
+    }
+
+    .btn-primary:disabled {
+      background: var(--border-color);
+      color: var(--text-secondary);
+      cursor: not-allowed;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 24px 0;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-color);
+    }
+
+    .social-login {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 14px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .social-btn:hover {
+      background: var(--hover-bg);
+    }
+
+    .social-icon {
+      font-size: 20px;
+    }
+
+    .auth-footer {
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    .auth-footer-text {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .auth-footer-link {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .auth-footer-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer */
+    .auth-footer-outer {
+      padding: 20px 24px;
+      text-align: center;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 12px;
+    }
+
+    .footer-link {
+      color: var(--text-secondary);
+      font-size: 12px;
+      text-decoration: none;
+    }
+
+    .footer-link:hover {
+      color: var(--text-primary);
+    }
+
+    .footer-copyright {
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    /* Checkbox */
+    .checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .checkbox-input {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: var(--primary-color);
+      cursor: pointer;
+    }
+
+    .checkbox-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .checkbox-label a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .checkbox-label a:hover {
+      text-decoration: underline;
+    }
+
+    /* Referral Code */
+    .referral-toggle {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 16px;
+    }
+
+    .referral-btn {
+      background: none;
+      border: none;
+      color: var(--primary-color);
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .referral-btn:hover {
+      text-decoration: underline;
+    }
+
+    .referral-box {
+      display: none;
+      margin-bottom: 20px;
+    }
+
+    .referral-box.show {
+      display: block;
+    }
+
+    /* Password Strength */
+    .password-strength {
+      margin-top: 12px;
+    }
+
+    .strength-bar {
+      height: 4px;
+      background: var(--border-color);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .strength-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    .strength-fill.weak {
+      width: 33%;
+      background: var(--accent-red);
+    }
+
+    .strength-fill.medium {
+      width: 66%;
+      background: var(--primary-color);
+    }
+
+    .strength-fill.strong {
+      width: 100%;
+      background: var(--accent-green);
+    }
+
+    .strength-text {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* Success Message */
+    .success-message {
+      display: none;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: rgba(0, 192, 135, 0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 40px;
+    }
+
+    .success-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .success-text {
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="auth-header">
+    <a href="/" class="auth-logo">
+      <div class="logo-icon">🐯</div>
+      <span>TigerEx</span>
+    </a>
+    <div class="header-lang">
+      <span>🌐</span>
+      <span>English</span>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="auth-main">
+    <div class="auth-container">
+      <h1 class="auth-title">Create a TigerEx Account</h1>
+      <p class="auth-subtitle">Join the world's most trusted crypto exchange.</p>
+
+      <div class="auth-form" id="registerFormContainer">
+        <form id="registerForm">
+          <div class="form-group">
+            <label class="form-label">Country of Residence</label>
+            <select class="form-select" required>
+              <option value="">Select your country</option>
+              <option value="US">United States</option>
+              <option value="GB">United Kingdom</option>
+              <option value="AU">Australia</option>
+              <option value="CA">Canada</option>
+              <option value="DE">Germany</option>
+              <option value="FR">France</option>
+              <option value="JP">Japan</option>
+              <option value="SG">Singapore</option>
+              <option value="KR">South Korea</option>
+              <option value="IN">India</option>
+              <option value="BR">Brazil</option>
+              <option value="AE">United Arab Emirates</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" placeholder="Enter your email" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-input" id="password" placeholder="Create a password (8+ characters)" minlength="8" required>
+            <div class="password-strength">
+              <div class="strength-bar">
+                <div class="strength-fill" id="strengthFill"></div>
+              </div>
+              <span class="strength-text" id="strengthText"></span>
+            </div>
+          </div>
+
+          <div class="referral-toggle">
+            <button type="button" class="referral-btn" onclick="toggleReferral()">
+              <span id="referralIcon">+</span> Have a referral code?
+            </button>
+          </div>
+
+          <div class="referral-box" id="referralBox">
+            <input type="text" class="form-input" placeholder="Referral code (optional)">
+          </div>
+
+          <div class="checkbox-group">
+            <input type="checkbox" class="checkbox-input" id="terms" required>
+            <label class="checkbox-label" for="terms">
+              I agree to TigerEx's 
+              <a href="#">Terms of Use</a> 
+              and 
+              <a href="#">Privacy Policy</a>
+            </label>
+          </div>
+
+          <button type="submit" class="btn-primary">Create Account</button>
+        </form>
+
+        <div class="divider">or</div>
+
+        <div class="social-login">
+          <button class="social-btn">
+            <span class="social-icon">🔴</span>
+            Continue with Google
+          </button>
+          <button class="social-btn">
+            <span class="social-icon">🍎</span>
+            Continue with Apple
+          </button>
+          <button class="social-btn">
+            <span class="social-icon">✈️</span>
+            Continue with Telegram
+          </button>
+        </div>
+
+        <div class="auth-footer">
+          <p class="auth-footer-text">
+            Already have an account? 
+            <a href="/login.html" class="auth-footer-link">Log In</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- Success Message -->
+      <div class="success-message" id="successMessage">
+        <div class="success-icon">✓</div>
+        <h2 class="success-title">Account Created!</h2>
+        <p class="success-text">We've sent a verification email to your inbox. Please check and verify your email to start trading.</p>
+        <a href="/login.html" class="btn-primary" style="max-width: 200px; margin: 0 auto;">Go to Log In</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="auth-footer-outer">
+    <div class="footer-links">
+      <a href="#" class="footer-link">Cookies</a>
+      <a href="#" class="footer-link">Privacy</a>
+      <a href="#" class="footer-link">Terms</a>
+    </div>
+    <p class="footer-copyright">© 2026 TigerEx. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Password strength indicator
+    document.getElementById('password').addEventListener('input', function(e) {
+      const password = e.target.value;
+      const fill = document.getElementById('strengthFill');
+      const text = document.getElementById('strengthText');
+      
+      if (password.length < 6) {
+        fill.className = 'strength-fill weak';
+        text.textContent = '';
+      } else if (password.length < 10) {
+        fill.className = 'strength-fill medium';
+        text.textContent = 'Medium strength';
+      } else {
+        fill.className = 'strength-fill strong';
+        text.textContent = 'Strong password';
+      }
+    });
+
+    // Referral code toggle
+    function toggleReferral() {
+      const box = document.getElementById('referralBox');
+      const icon = document.getElementById('referralIcon');
+      box.classList.toggle('show');
+      icon.textContent = box.classList.contains('show') ? '−' : '+';
+    }
+
+    // Form submission
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const form = document.getElementById('registerFormContainer');
+      const success = document.getElementById('successMessage');
+      
+      // Show success and redirect to login after a delay
+      form.style.display = 'none';
+      success.classList.add('show');
+      
+      // Redirect to login after 3 seconds
+      setTimeout(() => {
+        window.location.href = '/login.html';
+      }, 3000);
+    });
+  </script>
+</body>
+</html>

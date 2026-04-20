@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TigerEx - The World's Most Trusted Cryptocurrency Exchange</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #F0B90B;
+      --primary-dark: #F0B90B;
+      --bg-dark: #0B0E11;
+      --bg-card: #1E2329;
+      --bg-elevated: #252A32;
+      --text-primary: #EAECEF;
+      --text-secondary: #848E9C;
+      --accent-green: #00C087;
+      --accent-red: #F6465D;
+      --border-color: #2B3139;
+      --hover-bg: #2B3139;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    .header {
+      background: var(--bg-dark);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary-color), #FF6B6B);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 0;
+      position: relative;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--text-primary);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary-color);
+      transition: width 0.3s;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-ghost:hover {
+      background: var(--hover-bg);
+    }
+
+    .btn-primary {
+      background: var(--primary-color);
+      color: var(--bg-dark);
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background: #E5A809;
+      transform: translateY(-1px);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 80px 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-content {
+      animation: slideInLeft 0.8s ease-out;
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card);
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      border: 1px solid var(--border-color);
+    }
+
+    .hero-badge-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .hero-title {
+      font-size: 56px;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, var(--primary-color), #FF6B6B);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      line-height: 1.7;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 48px;
+      margin-bottom: 40px;
+    }
+
+    .stat {
+      text-align: left;
+    }
+
+    .stat-value {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+    }
+
+    .btn-large {
+      padding: 16px 32px;
+      font-size: 16px;
+    }
+
+    .hero-visual {
+      position: relative;
+      animation: slideInRight 0.8s ease-out;
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .crypto-card {
+      background: var(--bg-card);
+      border-radius: 24px;
+      padding: 32px;
+      border: 1px solid var(--border-color);
+    }
+
+    .crypto-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .crypto-header-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #F7931A, #FF6B6B);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .crypto-name {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .crypto-symbol {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .crypto-price {
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .crypto-change {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .crypto-change.positive {
+      background: rgba(0, 192, 135, 0.15);
+      color: var(--accent-green);
+    }
+
+    .crypto-change.negative {
+      background: rgba(246, 70, 93, 0.15);
+      color: var(--accent-red);
+    }
+
+    .crypto-chart {
+      height: 120px;
+      margin-top: 24px;
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .chart-bar {
+      flex: 1;
+      background: linear-gradient(180deg, var(--primary-color), transparent);
+      border-radius: 4px 4px 0 0;
+      opacity: 0.3;
+      transition: opacity 0.3s;
+    }
+
+    .chart-bar:hover {
+      opacity: 0.8;
+    }
+
+    /* Markets Section */
+    .markets {
+      padding: 60px 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+
+    .section-title {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .markets-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .market-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid var(--border-color);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .market-card:hover {
+      border-color: var(--primary-color);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .market-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .market-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .market-name {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .market-symbol {
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .market-price {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    /* Trust Section */
+    .trust {
+      padding: 80px 24px;
+      background: var(--bg-card);
+    }
+
+    .trust-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .trust-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .trust-title {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .trust-subtitle {
+      color: var(--text-secondary);
+      font-size: 18px;
+    }
+
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .trust-card {
+      text-align: center;
+      padding: 32px;
+    }
+
+    .trust-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--primary-color), #FF6B6B);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 24px;
+    }
+
+    .trust-card-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .trust-card-text {
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* CTA Section */
+    .cta {
+      padding: 100px 24px;
+      text-align: center;
+      background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-card) 100%);
+    }
+
+    .cta-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .cta-title {
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+
+    .cta-subtitle {
+      font-size: 20px;
+      color: var(--text-secondary);
+      margin-bottom: 40px;
+    }
+
+    /* Menu Drawer */
+    .menu-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .menu-btn:hover {
+      background: var(--hover-bg);
+    }
+
+    .menu-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--text-primary);
+    }
+
+    .menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      z-index: 200;
+    }
+
+    .menu-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .menu-drawer {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 85%;
+      max-width: 400px;
+      height: 100%;
+      background: var(--bg-dark);
+      transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 201;
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid var(--border-color);
+    }
+
+    .menu-drawer.active {
+      right: 0;
+    }
+
+    .menu-header {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .menu-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .menu-close {
+      width: 40px;
+      height: 40px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .menu-close:hover {
+      background: var(--hover-bg);
+    }
+
+    .menu-close svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--text-primary);
+    }
+
+    .menu-user {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .menu-user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .menu-user-avatar {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--primary-color), #FF6B6B);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--bg-dark);
+    }
+
+    .menu-user-name {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .menu-user-email {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .menu-user-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .menu-user-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .menu-user-btn.primary {
+      background: var(--primary-color);
+      color: var(--bg-dark);
+      border: none;
+    }
+
+    .menu-user-btn.primary:hover {
+      background: #E5A809;
+    }
+
+    .menu-user-btn.secondary {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .menu-user-btn.secondary:hover {
+      background: var(--hover-bg);
+    }
+
+    .menu-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .menu-section {
+      margin-bottom: 24px;
+    }
+
+    .menu-section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      padding: 0 12px;
+    }
+
+    .menu-links {
+      list-style: none;
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 12px;
+      border-radius: 12px;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .menu-link:hover {
+      background: var(--bg-card);
+    }
+
+    .menu-link-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .menu-link-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--bg-card);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .menu-link-arrow {
+      width: 20px;
+      height: 20px;
+      stroke: var(--text-secondary);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .menu-link:hover .menu-link-arrow {
+      opacity: 1;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .menu-grid-item {
+      padding: 16px;
+      background: var(--bg-card);
+      border-radius: 12px;
+      text-align: center;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all 0.2s;
+    }
+
+    .menu-grid-item:hover {
+      background: var(--hover-bg);
+    }
+
+    .menu-grid-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .menu-grid-label {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .menu-footer {
+      padding: 20px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .menu-footer-links {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .menu-footer-link {
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .menu-footer-link:hover {
+      color: var(--primary-color);
+    }
+
+    .menu-footer-lang {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px;
+      background: var(--bg-card);
+      border-radius: 12px;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+
+    .menu-footer-lang-icon {
+      font-size: 18px;
+    }
+
+    .menu-footer-lang-text {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .menu-footer-lang-arrow {
+      width: 16px;
+      height: 16px;
+      stroke: var(--text-secondary);
+    }
+
+    .menu-social {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .menu-social-link {
+      width: 40px;
+      height: 40px;
+      background: var(--bg-card);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 18px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .menu-social-link:hover {
+      background: var(--primary-color);
+      color: var(--bg-dark);
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--bg-card);
+      padding: 60px 24px 30px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .footer-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(4, 1fr);
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand {
+      max-width: 300px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .footer-desc {
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .footer-column-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary-color);
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-color);
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 16px;
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+      background: var(--bg-elevated);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .social-link:hover {
+      background: var(--primary-color);
+      color: var(--bg-dark);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 60px 24px;
+      }
+
+      .hero-content {
+        order: 1;
+      }
+
+      .hero-visual {
+        order: 0;
+      }
+
+      .hero-stats {
+        justify-content: center;
+      }
+
+      .hero-buttons {
+        justify-content: center;
+      }
+
+      .markets-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .trust-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .menu-btn {
+        display: flex;
+      }
+
+      .nav {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav {
+        display: none;
+      }
+
+      .hero-title {
+        font-size: 36px;
+      }
+
+      .markets-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Floating elements */
+    .floating-shapes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+    }
+
+    .shape-1 {
+      width: 400px;
+      height: 400px;
+      background: var(--primary-color);
+      top: -100px;
+      right: -100px;
+    }
+
+    .shape-2 {
+      width: 300px;
+      height: 300px;
+      background: #FF6B6B;
+      bottom: -50px;
+      left: -50px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <a href="/" class="logo">
+        <div class="logo-icon">🐯</div>
+        <span>TigerEx</span>
+      </a>
+      <nav class="nav">
+        <a href="#" class="nav-link">Buy Crypto</a>
+        <a href="#" class="nav-link">Markets</a>
+        <a href="#" class="nav-link">Trade</a>
+        <a href="#" class="nav-link">Earn</a>
+        <a href="#" class="nav-link">NFT</a>
+        <a href="#" class="nav-link">Learn</a>
+      </nav>
+      <div class="header-actions">
+        <button class="menu-btn" onclick="toggleMenu()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <a href="/login.html" class="btn btn-ghost">Log In</a>
+        <a href="/dashboard.html" class="btn btn-primary">Trade Now</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Menu Overlay -->
+  <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+
+  <!-- Menu Drawer -->
+  <div class="menu-drawer" id="menuDrawer">
+    <div class="menu-header">
+      <div class="menu-logo">
+        <div class="logo-icon">🐯</div>
+        <span>TigerEx</span>
+      </div>
+      <button class="menu-close" onclick="toggleMenu()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="menu-user">
+      <div class="menu-user-info">
+        <div class="menu-user-avatar">U</div>
+        <div>
+          <div class="menu-user-name">Welcome!</div>
+          <div class="menu-user-email">Log in to trade</div>
+        </div>
+      </div>
+      <div class="menu-user-actions">
+        <a href="/register.html" class="menu-user-btn primary">Sign Up</a>
+        <a href="/login.html" class="menu-user-btn secondary">Log In</a>
+      </div>
+    </div>
+
+    <div class="menu-content">
+      <!-- Quick Actions -->
+      <div class="menu-section">
+        <div class="menu-section-title">Quick Actions</div>
+        <div class="menu-grid">
+          <a href="#" class="menu-grid-item">
+            <div class="menu-grid-icon">💰</div>
+            <div class="menu-grid-label">Buy Crypto</div>
+          </a>
+          <a href="#" class="menu-grid-item">
+            <div class="menu-grid-icon">📊</div>
+            <div class="menu-grid-label">Markets</div>
+          </a>
+          <a href="#" class="menu-grid-item">
+            <div class="menu-grid-icon">🔄</div>
+            <div class="menu-grid-label">Exchange</div>
+          </a>
+          <a href="#" class="menu-grid-item">
+            <div class="menu-grid-icon">📈</div>
+            <div class="menu-grid-label">Futures</div>
+          </a>
+          <a href="#" class="menu-grid-item">
+            <div class="menu-grid-icon">💎</div>
+            <div class="menu-grid-label">Earn</div>
+          </a>
+          <a href="#" class="menu-grid-item">
+            <div class="menu-grid-icon">🎨</div>
+            <div class="menu-grid-label">NFT</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Products -->
+      <div class="menu-section">
+        <div class="menu-section-title">Products</div>
+        <ul class="menu-links">
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">💱</div>
+                <span>Buy & Sell Crypto</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">📊</div>
+                <span>Spot Trading</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">📈</div>
+                <span>Futures Trading</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">💎</div>
+                <span>CoinFLEX</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">🏦</div>
+                <span>Staking</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">🤖</div>
+                <span>Trading Bots</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">🎨</div>
+                <span>NFT</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Services -->
+      <div class="menu-section">
+        <div class="menu-section-title">Services</div>
+        <ul class="menu-links">
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">💳</div>
+                <span>Orders & History</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">👛</div>
+                <span>Wallet</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">🎁</div>
+                <span>Referral</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">🎫</div>
+                <span>Coupons</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">🎟️</div>
+                <span>Launchpool</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">💰</div>
+                <span>Pay</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">🎁</div>
+                <span>Card</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">🪙</div>
+                <span>Token</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Support -->
+      <div class="menu-section">
+        <div class="menu-section-title">Support</div>
+        <ul class="menu-links">
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">❓</div>
+                <span>Help Center</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">💬</div>
+                <span>Support Chat</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">🪙</div>
+                <span>Fees</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">🔐</div>
+                <span>APIs</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Download -->
+      <div class="menu-section">
+        <div class="menu-section-title">Download App</div>
+        <ul class="menu-links">
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">📱</div>
+                <span>iOS App</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">🤖</div>
+                <span>Android App</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="menu-link">
+              <div class="menu-link-left">
+                <div class="menu-link-icon">💻</div>
+                <span>Desktop App</span>
+              </div>
+              <svg class="menu-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="menu-footer">
+      <div class="menu-footer-links">
+        <a href="#" class="menu-footer-link">About</a>
+        <a href="#" class="menu-footer-link">Careers</a>
+        <a href="#" class="menu-footer-link">News</a>
+        <a href="#" class="menu-footer-link">Terms</a>
+        <a href="#" class="menu-footer-link">Privacy</a>
+      </div>
+      <div class="menu-footer-lang">
+        <span class="menu-footer-lang-icon">🌐</span>
+        <span class="menu-footer-lang-text">English</span>
+        <svg class="menu-footer-lang-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </div>
+      <div class="menu-social">
+        <a href="#" class="menu-social-link">𝕏</a>
+        <a href="#" class="menu-social-link">in</a>
+        <a href="#" class="menu-social-link">📘</a>
+        <a href="#" class="menu-social-link">📸</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      const overlay = document.getElementById('menuOverlay');
+      const drawer = document.getElementById('menuDrawer');
+      overlay.classList.toggle('active');
+      drawer.classList.toggle('active');
+      document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : '';
+    }
+  </script>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        <span>The World's Leading Crypto Exchange</span>
+      </div>
+      <h1 class="hero-title">Trade Crypto with <span>Confidence</span></h1>
+      <p class="hero-subtitle">Join 50+ million users worldwide on the most trusted cryptocurrency exchange. Buy, sell, and trade Bitcoin, Ethereum, and 500+ altcoins with the lowest fees.</p>
+      
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-value">$142B+</div>
+          <div class="stat-label">Customer Assets</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">$54B+</div>
+          <div class="stat-label">24H Trading Volume</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">500+</div>
+          <div class="stat-label">Cryptocurrencies</div>
+        </div>
+      </div>
+
+      <div class="hero-buttons">
+        <a href="#" class="btn btn-primary btn-large">Get Started</a>
+        <a href="#" class="btn btn-ghost btn-large">Start Trading</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="crypto-card">
+        <div class="crypto-header">
+          <div class="crypto-header-icon">₿</div>
+          <div>
+            <div class="crypto-name">Bitcoin</div>
+            <div class="crypto-symbol">BTC/USDT</div>
+          </div>
+        </div>
+        <div class="crypto-price">$74,546.53</div>
+        <span class="crypto-change negative">▼ 1.47%</span>
+        <div class="crypto-chart">
+          <div class="chart-bar" style="height: 60%"></div>
+          <div class="chart-bar" style="height: 75%"></div>
+          <div class="chart-bar" style="height: 45%"></div>
+          <div class="chart-bar" style="height: 80%"></div>
+          <div class="chart-bar" style="height: 65%"></div>
+          <div class="chart-bar" style="height: 90%"></div>
+          <div class="chart-bar" style="height: 55%"></div>
+          <div class="chart-bar" style="height: 70%"></div>
+          <div class="chart-bar" style="height: 85%"></div>
+          <div class="chart-bar" style="height: 60%"></div>
+          <div class="chart-bar" style="height: 95%"></div>
+          <div class="chart-bar" style="height: 70%"></div>
+        </div>
+      </div>
+    </div>
+    <div class="floating-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+    </div>
+  </section>
+
+  <!-- Markets -->
+  <section class="markets">
+    <div class="section-header">
+      <h2 class="section-title">Popular Cryptocurrencies</h2>
+      <a href="#" class="btn btn-ghost">View All</a>
+    </div>
+    <div class="markets-grid">
+      <div class="market-card">
+        <div class="market-card-header">
+          <div class="market-icon" style="background: linear-gradient(135deg, #F7931A, #FF9F43)">₿</div>
+          <div>
+            <div class="market-name">Bitcoin</div>
+            <div class="market-symbol">BTC</div>
+          </div>
+        </div>
+        <div class="market-price">$74,546.53</div>
+        <span class="crypto-change negative">▼ 1.47%</span>
+      </div>
+
+      <div class="market-card">
+        <div class="market-card-header">
+          <div class="market-icon" style="background: linear-gradient(135deg, #627EEA, #8B9FFF)">Ξ</div>
+          <div>
+            <div class="market-name">Ethereum</div>
+            <div class="market-symbol">ETH</div>
+          </div>
+        </div>
+        <div class="market-price">$2,282.69</div>
+        <span class="crypto-change negative">▼ 2.15%</span>
+      </div>
+
+      <div class="market-card">
+        <div class="market-card-header">
+          <div class="market-icon" style="background: linear-gradient(135deg, #F0B90B, #FFEB3B)">B</div>
+          <div>
+            <div class="market-name">BNB</div>
+            <div class="market-symbol">BNB</div>
+          </div>
+        </div>
+        <div class="market-price">$620.87</div>
+        <span class="crypto-change negative">▼ 0.25%</span>
+      </div>
+
+      <div class="market-card">
+        <div class="market-card-header">
+          <div class="market-icon" style="background: linear-gradient(135deg, #23292F, #4A5568)">X</div>
+          <div>
+            <div class="market-name">XRP</div>
+            <div class="market-symbol">XRP</div>
+          </div>
+        </div>
+        <div class="market-price">$1.41</div>
+        <span class="crypto-change negative">▼ 1.43%</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust -->
+  <section class="trust">
+    <div class="trust-container">
+      <div class="trust-header">
+        <h2 class="trust-title">Your Security is Our Priority</h2>
+        <p class="trust-subtitle">We take security seriously. Your funds are protected by industry-leading measures.</p>
+      </div>
+      <div class="trust-grid">
+        <div class="trust-card">
+          <div class="trust-icon">🛡️</div>
+          <h3 class="trust-card-title">SAFU Fund</h3>
+          <p class="trust-card-text">The Security of User Assets Fund protects your funds in rare emergencies. As of 2026, our SAFU reserve holds 15,000 BTC.</p>
+        </div>
+        <div class="trust-card">
+          <div class="trust-icon">🔒</div>
+          <h3 class="trust-card-title">Industry-Leading Security</h3>
+          <p class="trust-card-text">Your assets are protected by multi-tier security systems, including cold storage, encryption, and 2FA.</p>
+        </div>
+        <div class="trust-card">
+          <div class="trust-icon">🌍</div>
+          <h3 class="trust-card-title">Global Trust</h3>
+          <p class="trust-card-text">Trusted by millions of users in 180+ countries. Recognized by Forbes, Fortune, and CNBC.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-container">
+      <h2 class="cta-title">Start Your Crypto Journey Today</h2>
+      <p class="cta-subtitle">Join the world's most trusted cryptocurrency exchange and trade with confidence.</p>
+      <a href="#" class="btn btn-primary btn-large">Create Free Account</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="logo-icon">🐯</div>
+            <span>TigerEx</span>
+          </div>
+          <p class="footer-desc">The world's most trusted cryptocurrency exchange. Buy, sell, and trade Bitcoin, Ethereum, and hundreds of altcoins.</p>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-column-title">About</h4>
+          <ul class="footer-links">
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-column-title">Support</h4>
+          <ul class="footer-links">
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">API Support</a></li>
+            <li><a href="#">Fees</a></li>
+            <li><a href="#">Verification</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-column-title">Products</h4>
+          <ul class="footer-links">
+            <li><a href="#">Spot Trading</a></li>
+            <li><a href="#">Futures</a></li>
+            <li><a href="#">Earn</a></li>
+            <li><a href="#">NFT</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4 class="footer-column-title">Legal</h4>
+          <ul class="footer-links">
+            <li><a href="#">Terms of Use</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Risk Warning</a></li>
+            <li><a href="#">Cookie Preferences</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 TigerEx. All rights reserved.</p>
+        <div class="footer-social">
+          <a href="#" class="social-link">𝕏</a>
+          <a href="#" class="social-link">in</a>
+          <a href="#" class="social-link">📘</a>
+          <a href="#" class="social-link">📸</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
