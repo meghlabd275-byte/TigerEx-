@@ -1,0 +1,92 @@
+# ==========================================
+# TigerEx Production Docker Compose
+# @file docker-compose.production.yml
+# @description Production deployment configuration
+# @author TigerEx Development Team
+# @version v12.0.0
+# ==========================================
+
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: tigerex-postgres
+    environment:
+      POSTGRES_DB: tigerex
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - tigerex-network
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: tigerex-redis
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+    networks:
+      - tigerex-network
+    restart: always
+
+  api-gateway:
+    image: ghcr.io/meghlabd275-byte/tigerex-/api-gateway:latest
+    container_name: tigerex-api-gateway
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/tigerex
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - tigerex-network
+    restart: always
+
+  user-service:
+    image: ghcr.io/meghlabd275-byte/tigerex-/user-service:latest
+    container_name: tigerex-user-service
+    ports:
+      - "8001:8001"
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/tigerex
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - tigerex-network
+    restart: always
+
+  frontend:
+    image: ghcr.io/meghlabd275-byte/tigerex-/frontend:latest
+    container_name: tigerex-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=${API_URL:-http://api-gateway:8000}
+    depends_on:
+      - api-gateway
+    networks:
+      - tigerex-network
+    restart: always
+
+networks:
+  tigerex-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
