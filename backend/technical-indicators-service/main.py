@@ -25,6 +25,7 @@ from enum import Enum
 import talib
 
 # @file main.py
+# @description TigerEx technical-indicators-service service
 # @author TigerEx Development Team
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:password@localhost/tigerex')

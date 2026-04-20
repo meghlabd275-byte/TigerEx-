@@ -14,6 +14,7 @@ import uuid
 import asyncio
 
 # @file main.py
+# @description TigerEx pegged-order-service service
 # @author TigerEx Development Team
 app = FastAPI(title="TigerEx Pegged Order Service", version="1.0.0")
 

@@ -15,6 +15,7 @@ import json
 import logging
 
 # @file main.py
+# @description TigerEx coinmarketcap-integration-complete service
 # @author TigerEx Development Team
 app = FastAPI(title="CoinMarketCap Integration Complete", version="1.0.0")
 security = HTTPBearer()

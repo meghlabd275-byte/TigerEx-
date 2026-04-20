@@ -22,6 +22,7 @@ from decimal import Decimal
 from collections import defaultdict
 
 # @file main.py
+# @description TigerEx institutional-features service
 # @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)

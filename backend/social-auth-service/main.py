@@ -22,6 +22,7 @@ import structlog
 from urllib.parse import urlencode, parse_qs, urlparse
 
 # @file main.py
+# @description TigerEx social-auth-service service
 # @author TigerEx Development Team
 # Configure logging
 structlog.configure(

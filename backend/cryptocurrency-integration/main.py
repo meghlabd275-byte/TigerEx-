@@ -696,6 +696,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 
 # @file main.py
+# @description TigerEx cryptocurrency-integration service
 # @author TigerEx Development Team
 app = FastAPI(title="TigerEx Cryptocurrency Integration API", version="1.0.0")
 security = HTTPBearer()

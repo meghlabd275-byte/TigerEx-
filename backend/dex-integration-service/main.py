@@ -18,6 +18,7 @@ from decimal import Decimal
 import uuid
 
 # @file main.py
+# @description TigerEx dex-integration-service service
 # @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx DEX Integration Service",

@@ -10,6 +10,7 @@ import uvicorn
 import os
 
 # @file main.py
+# @description TigerEx kyc-service service
 # @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx kyc-service",

@@ -18,6 +18,7 @@ from decimal import Decimal
 import uuid
 
 # @file main.py
+# @description TigerEx hex-trading-engine service
 # @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx Hex Trading Engine",

@@ -35,6 +35,7 @@ import hashlib
 import secrets
 
 # @file main.py
+# @description TigerEx blockchain-integration-service service
 # @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(

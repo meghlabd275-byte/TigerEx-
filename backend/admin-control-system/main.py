@@ -695,6 +695,7 @@ from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 
 # @file main.py
+# @description TigerEx admin-control-system service
 # @author TigerEx Development Team
 app = FastAPI(title="TigerEx Admin Control System API", version="1.0.0")
 security = HTTPBearer()

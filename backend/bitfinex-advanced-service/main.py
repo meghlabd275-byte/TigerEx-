@@ -5,6 +5,7 @@ import time
 import uuid
 
 # @file main.py
+# @description TigerEx bitfinex-advanced-service service
 # @author TigerEx Development Team
 app = FastAPI(title="TigerEx bitfinex Advanced Service")
 

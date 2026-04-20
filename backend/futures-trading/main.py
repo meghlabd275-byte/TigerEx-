@@ -17,6 +17,7 @@ import asyncio
 from decimal import Decimal
 
 # @file main.py
+# @description TigerEx futures-trading service
 # @author TigerEx Development Team
 app = FastAPI(
     title="Futures Trading Service",

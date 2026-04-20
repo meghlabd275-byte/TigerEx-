@@ -30,6 +30,7 @@ import numpy as np
 from collections import defaultdict
 
 # @file main.py
+# @description TigerEx cfd-trading-service service
 # @author TigerEx Development Team
 # Configure logging
 structlog.configure(

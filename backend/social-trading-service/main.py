@@ -520,6 +520,7 @@ from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
 
 # @file main.py
+# @description TigerEx social-trading-service service
 # @author TigerEx Development Team
 app = FastAPI(title="Social Trading Network Service", version="7.0.0")
 social_service = SocialTradingService()

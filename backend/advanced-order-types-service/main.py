@@ -27,6 +27,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 # @file main.py
+# @description TigerEx advanced-order-types-service service
 # @author TigerEx Development Team
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:password@localhost/tigerex')

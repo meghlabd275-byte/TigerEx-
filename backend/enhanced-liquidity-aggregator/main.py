@@ -18,6 +18,7 @@ import json
 import logging
 
 # @file main.py
+# @description TigerEx enhanced-liquidity-aggregator service
 # @author TigerEx Development Team
 app = FastAPI(title="Enhanced Liquidity Aggregator", version="1.0.0")
 security = HTTPBearer()

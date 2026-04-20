@@ -5,6 +5,7 @@ Comprehensive analytics and metrics for admin dashboard
 """
 
 # @file main.py
+# @description TigerEx analytics-dashboard-service service
 # @author TigerEx Development Team
 from fastapi import FastAPI
 from admin.admin_routes import router as admin_router

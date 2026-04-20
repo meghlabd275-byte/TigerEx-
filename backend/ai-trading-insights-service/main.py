@@ -21,6 +21,7 @@ import redis
 import json
 
 # @file main.py
+# @description TigerEx ai-trading-insights-service service
 # @author TigerEx Development Team
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:password@localhost/tigerex')

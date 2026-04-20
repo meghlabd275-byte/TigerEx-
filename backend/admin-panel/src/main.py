@@ -4,6 +4,7 @@ from datetime import datetime
 from pydantic import BaseModel
 
 # @file main.py
+# @description TigerEx src service
 # @author TigerEx Development Team
 # Complete RBAC System for admin-panel
 class UserRole(str, Enum):

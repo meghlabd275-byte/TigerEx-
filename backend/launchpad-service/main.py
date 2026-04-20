@@ -10,6 +10,7 @@ import uvicorn
 import os
 
 # @file main.py
+# @description TigerEx launchpad-service service
 # @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx launchpad-service",

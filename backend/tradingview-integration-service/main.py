@@ -20,6 +20,7 @@ import hashlib
 import random
 
 # @file main.py
+# @description TigerEx tradingview-integration-service service
 # @author TigerEx Development Team
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

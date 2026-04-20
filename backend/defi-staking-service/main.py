@@ -29,6 +29,7 @@ import uvicorn
 from decimal import Decimal
 
 # @file main.py
+# @description TigerEx defi-staking-service service
 # @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)

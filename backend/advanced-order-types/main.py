@@ -12,6 +12,7 @@ from enum import Enum
 import asyncio
 
 # @file main.py
+# @description TigerEx advanced-order-types service
 # @author TigerEx Development Team
 app = FastAPI(title="Advanced Order Types", version="3.0.0")
 

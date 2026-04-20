@@ -506,6 +506,7 @@ from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
 
 # @file main.py
+# @description TigerEx multisig-wallet-service service
 # @author TigerEx Development Team
 app = FastAPI(title="Multi-Signature Wallet Service", version="7.0.0")
 multisig_service = MultiSigWalletService()

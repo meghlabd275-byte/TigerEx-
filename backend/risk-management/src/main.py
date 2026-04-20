@@ -37,6 +37,7 @@ from pydantic import BaseModel
 import structlog
 
 # @file main.py
+# @description TigerEx src service
 # @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(

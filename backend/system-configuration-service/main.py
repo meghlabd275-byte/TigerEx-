@@ -5,6 +5,7 @@ Manages platform-wide settings, fees, limits, and configurations
 """
 
 # @file main.py
+# @description TigerEx system-configuration-service service
 # @author TigerEx Development Team
 from fastapi import FastAPI
 from admin.admin_routes import router as admin_router

@@ -29,6 +29,7 @@ from solana.rpc.api import Client as SolanaClient
 import base58
 
 # @file main.py
+# @description TigerEx src service
 # @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)

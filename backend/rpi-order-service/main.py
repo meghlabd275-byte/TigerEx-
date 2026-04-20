@@ -14,6 +14,7 @@ import uuid
 import random
 
 # @file main.py
+# @description TigerEx rpi-order-service service
 # @author TigerEx Development Team
 app = FastAPI(title="TigerEx RPI Order Service", version="1.0.0")
 

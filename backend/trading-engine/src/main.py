@@ -24,6 +24,7 @@ from pydantic import BaseModel, validator
 import uvicorn
 
 # @file main.py
+# @description TigerEx src service
 # @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)

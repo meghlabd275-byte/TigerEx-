@@ -18,6 +18,7 @@ from enum import Enum
 import math
 
 # @file main.py
+# @description TigerEx options-trading-service service
 # @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)

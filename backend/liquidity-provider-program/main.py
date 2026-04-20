@@ -12,6 +12,7 @@ from enum import Enum
 import uuid
 
 # @file main.py
+# @description TigerEx liquidity-provider-program service
 # @author TigerEx Development Team
 app = FastAPI(title="Liquidity Provider Program", version="3.0.0")
 

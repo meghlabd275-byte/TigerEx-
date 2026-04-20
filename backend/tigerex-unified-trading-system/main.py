@@ -26,6 +26,7 @@ import redis.asyncio as redis
 import jwt
 
 # @file main.py
+# @description TigerEx tigerex-unified-trading-system service
 # @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)

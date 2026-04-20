@@ -33,6 +33,7 @@ import structlog
 import uvicorn
 
 # @file main.py
+# @description TigerEx src service
 # @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(

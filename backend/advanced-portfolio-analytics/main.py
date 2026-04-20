@@ -19,6 +19,7 @@ import numpy as np
 from collections import defaultdict
 
 # @file main.py
+# @description TigerEx advanced-portfolio-analytics service
 # @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)

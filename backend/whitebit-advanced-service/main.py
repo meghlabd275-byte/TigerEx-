@@ -22,6 +22,7 @@ import urllib.parse
 from dataclasses import dataclass
 
 # @file main.py
+# @description TigerEx whitebit-advanced-service service
 # @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx WhiteBit Advanced Service v1.0.0", 

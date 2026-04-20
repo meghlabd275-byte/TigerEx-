@@ -18,6 +18,7 @@ from sqlalchemy import event
 from sqlalchemy.schema import CreateTable
 
 # @file main.py
+# @description TigerEx multi-tenant-service service
 # @author TigerEx Development Team
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:password@localhost/tigerex')

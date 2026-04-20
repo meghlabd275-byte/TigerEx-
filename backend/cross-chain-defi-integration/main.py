@@ -23,6 +23,7 @@ from collections import defaultdict
 import aiohttp
 
 # @file main.py
+# @description TigerEx cross-chain-defi-integration service
 # @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)

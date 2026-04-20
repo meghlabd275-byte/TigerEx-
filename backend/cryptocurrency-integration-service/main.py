@@ -14,6 +14,7 @@ import json
 import logging
 
 # @file main.py
+# @description TigerEx cryptocurrency-integration-service service
 # @author TigerEx Development Team
 app = FastAPI(title="Cryptocurrency Integration Service", version="1.0.0")
 security = HTTPBearer()

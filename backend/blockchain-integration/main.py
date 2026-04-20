@@ -826,6 +826,7 @@ from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 
 # @file main.py
+# @description TigerEx blockchain-integration service
 # @author TigerEx Development Team
 app = FastAPI(title="TigerEx Blockchain Integration API", version="1.0.0")
 security = HTTPBearer()

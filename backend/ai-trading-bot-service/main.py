@@ -461,6 +461,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 # @file main.py
+# @description TigerEx ai-trading-bot-service service
 # @author TigerEx Development Team
 app = FastAPI(title="AI Trading Bot Service", version="7.0.0")
 bot_service = AITradingBotService()

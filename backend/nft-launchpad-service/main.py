@@ -10,6 +10,7 @@ import uvicorn
 import os
 
 # @file main.py
+# @description TigerEx nft-launchpad-service service
 # @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx nft-launchpad-service",

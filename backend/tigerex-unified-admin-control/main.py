@@ -20,6 +20,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, Field
 
 # @file main.py
+# @description TigerEx tigerex-unified-admin-control service
 # @author TigerEx Development Team
 # Configuration
 JWT_SECRET = os.getenv("JWT_SECRET", "tigerex-ultra-secure-admin-secret-2024")

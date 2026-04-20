@@ -14,6 +14,7 @@ import json
 import logging
 
 # @file main.py
+# @description TigerEx advanced-liquidity-system service
 # @author TigerEx Development Team
 app = FastAPI(title="Advanced Liquidity System", version="1.0.0")
 security = HTTPBearer()

@@ -22,6 +22,7 @@ import redis
 import uuid
 
 # @file main.py
+# @description TigerEx ai-trading-assistant-service service
 # @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)

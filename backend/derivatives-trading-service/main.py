@@ -17,6 +17,7 @@ from decimal import Decimal
 from enum import Enum
 
 # @file main.py
+# @description TigerEx derivatives-trading-service service
 # @author TigerEx Development Team
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:password@localhost/tigerex')

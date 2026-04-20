@@ -14,6 +14,7 @@ import json
 import logging
 
 # @file main.py
+# @description TigerEx unified-admin-control-system service
 # @author TigerEx Development Team
 app = FastAPI(title="Unified Admin Control System", version="1.0.0")
 security = HTTPBearer()

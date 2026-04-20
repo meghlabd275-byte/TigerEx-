@@ -23,6 +23,7 @@ from collections import defaultdict
 import numpy as np
 
 # @file main.py
+# @description TigerEx advanced-algorithmic-trading service
 # @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)

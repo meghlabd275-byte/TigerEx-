@@ -22,6 +22,7 @@ import json
 from collections import defaultdict
 
 # @file main.py
+# @description TigerEx social-trading-platform service
 # @author TigerEx Development Team
 # FastAPI app
 app = FastAPI(

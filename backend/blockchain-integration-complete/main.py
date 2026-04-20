@@ -14,6 +14,7 @@ import json
 import logging
 
 # @file main.py
+# @description TigerEx blockchain-integration-complete service
 # @author TigerEx Development Team
 app = FastAPI(title="Complete Blockchain Integration", version="1.0.0")
 security = HTTPBearer()

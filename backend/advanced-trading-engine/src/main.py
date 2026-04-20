@@ -23,6 +23,7 @@ import redis
 import hashlib
 
 # @file main.py
+# @description TigerEx src service
 # @author TigerEx Development Team
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:password@localhost/tigerex')

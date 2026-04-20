@@ -5,6 +5,7 @@ Complete admin interface for managing users, permissions, and accounts
 """
 
 # @file main.py
+# @description TigerEx user-management-admin-service service
 # @author TigerEx Development Team
 from fastapi import FastAPI, HTTPException, Depends, Query
 from fastapi.middleware.cors import CORSMiddleware

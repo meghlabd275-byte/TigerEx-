@@ -16,6 +16,7 @@ import uvicorn
 from decimal import Decimal
 
 # @file main.py
+# @description TigerEx margin-trading service
 # @author TigerEx Development Team
 app = FastAPI(
     title="Margin Trading Service",

@@ -19,6 +19,7 @@ from white_label_master import WhiteLabelMasterSystem, DeploymentType
 from admin_control_panel import AdminControlPanel
 
 # @file main.py
+# @description TigerEx hybrid-exchange-ui service
 # @author TigerEx Development Team
 # Initialize main application
 app = FastAPI(

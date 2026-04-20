@@ -13,6 +13,7 @@ import jwt
 import os
 
 # @file main.py
+# @description TigerEx universal-admin-controls service
 # @author TigerEx Development Team
 app = FastAPI(title="Universal Admin Controls", version="3.0.0")
 

@@ -26,6 +26,7 @@ import structlog
 from decimal import Decimal
 
 # @file main.py
+# @description TigerEx src service
 # @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(

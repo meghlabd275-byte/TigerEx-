@@ -34,6 +34,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # @file main.py
+# @description TigerEx ai-trading-assistant-enhanced service
 # @author TigerEx Development Team
 # FastAPI app
 app = FastAPI(

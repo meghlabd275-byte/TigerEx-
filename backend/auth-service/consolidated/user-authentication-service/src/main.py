@@ -32,6 +32,7 @@ from email.mime.multipart import MIMEMultipart
 import smtplib
 
 # @file main.py
+# @description TigerEx src service
 # @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(

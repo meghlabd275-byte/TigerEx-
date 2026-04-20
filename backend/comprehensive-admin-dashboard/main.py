@@ -24,6 +24,7 @@ import redis
 import jwt
 
 # @file main.py
+# @description TigerEx comprehensive-admin-dashboard service
 # @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)

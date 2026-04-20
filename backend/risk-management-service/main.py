@@ -5,6 +5,7 @@ Real-time risk monitoring, fraud detection, and compliance
 """
 
 # @file main.py
+# @description TigerEx risk-management-service service
 # @author TigerEx Development Team
 from fastapi import FastAPI
 from admin.admin_routes import router as admin_router

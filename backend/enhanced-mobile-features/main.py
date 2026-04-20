@@ -23,6 +23,7 @@ from collections import defaultdict
 import aiofiles
 
 # @file main.py
+# @description TigerEx enhanced-mobile-features service
 # @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)

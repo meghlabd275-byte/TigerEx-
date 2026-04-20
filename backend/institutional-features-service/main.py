@@ -18,6 +18,7 @@ from enum import Enum
 import pandas as pd
 
 # @file main.py
+# @description TigerEx institutional-features-service service
 # @author TigerEx Development Team
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:password@localhost/tigerex')

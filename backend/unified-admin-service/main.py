@@ -29,6 +29,7 @@ from dataclasses import dataclass
 import hashlib
 
 # @file main.py
+# @description TigerEx unified-admin-service service
 # @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(

@@ -17,6 +17,7 @@ import json
 import logging
 
 # @file main.py
+# @description TigerEx gemini-advanced-service service
 # @author TigerEx Development Team
 app = FastAPI(title="Gemini Advanced Service v1.0.0", version="1.0.0")
 security = HTTPBearer()

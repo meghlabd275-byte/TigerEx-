@@ -22,6 +22,7 @@ from decimal import Decimal
 import numpy as np
 
 # @file main.py
+# @description TigerEx mobile-app-enhanced-ux service
 # @author TigerEx Development Team
 # FastAPI app
 app = FastAPI(

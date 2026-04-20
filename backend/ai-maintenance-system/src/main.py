@@ -27,6 +27,7 @@ from sqlalchemy import create_engine, text
 import structlog
 
 # @file main.py
+# @description TigerEx src service
 # @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(

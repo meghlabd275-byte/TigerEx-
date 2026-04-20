@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 
 # @file main.py
+# @description TigerEx dao-governance-service service
 # @author TigerEx Development Team
 app = FastAPI(title="TigerEx DAO Governance Service")
 

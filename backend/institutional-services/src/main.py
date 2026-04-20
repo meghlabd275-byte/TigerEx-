@@ -36,6 +36,7 @@ import boto3
 from botocore.exceptions import ClientError
 
 # @file main.py
+# @description TigerEx src service
 # @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)

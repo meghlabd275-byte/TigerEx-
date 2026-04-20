@@ -21,6 +21,7 @@ import asyncio
 from decimal import Decimal
 
 # @file main.py
+# @description TigerEx src service
 # @author TigerEx Development Team
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

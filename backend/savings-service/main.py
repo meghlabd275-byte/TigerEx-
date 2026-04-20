@@ -6,6 +6,7 @@ from decimal import Decimal
 import os
 
 # @file main.py
+# @description TigerEx savings-service service
 # @author TigerEx Development Team
 app = FastAPI(title="TigerEx Savings Service")
 

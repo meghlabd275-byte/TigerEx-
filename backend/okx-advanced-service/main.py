@@ -5,6 +5,7 @@ import time
 import uuid
 
 # @file main.py
+# @description TigerEx okx-advanced-service service
 # @author TigerEx Development Team
 app = FastAPI(title="TigerEx okx Advanced Service")
 

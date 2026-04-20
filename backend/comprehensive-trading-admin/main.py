@@ -13,6 +13,7 @@ from admin_routes import router as admin_router
 from typing import Dict, Any
 
 # @file main.py
+# @description TigerEx comprehensive-trading-admin service
 # @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(

@@ -5,6 +5,7 @@ Real-time market data, price feeds, and candlestick data
 """
 
 # @file main.py
+# @description TigerEx market-data-service service
 # @author TigerEx Development Team
 from fastapi import FastAPI
 from admin.admin_routes import router as admin_router

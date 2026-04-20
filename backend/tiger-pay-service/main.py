@@ -19,6 +19,7 @@ from decimal import Decimal
 import requests
 
 # @file main.py
+# @description TigerEx tiger-pay-service service
 # @author TigerEx Development Team
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:password@localhost/tigerex')

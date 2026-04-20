@@ -10,6 +10,7 @@ from typing import List, Optional
 import uvicorn
 
 # @file main.py
+# @description TigerEx grid-trading service
 # @author TigerEx Development Team
 app = FastAPI(title="Grid Trading Service", version="1.0.0")
 

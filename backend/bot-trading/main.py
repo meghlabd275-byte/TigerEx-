@@ -10,6 +10,7 @@ from typing import List, Optional
 import uvicorn
 
 # @file main.py
+# @description TigerEx bot-trading service
 # @author TigerEx Development Team
 app = FastAPI(title="Bot Trading Service", version="1.0.0")
 

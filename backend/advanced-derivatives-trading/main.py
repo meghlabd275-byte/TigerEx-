@@ -25,6 +25,7 @@ from scipy.optimize import minimize_scalar
 import math
 
 # @file main.py
+# @description TigerEx advanced-derivatives-trading service
 # @author TigerEx Development Team
 # FastAPI app
 app = FastAPI(

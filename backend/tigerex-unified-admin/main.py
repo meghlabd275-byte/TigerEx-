@@ -27,6 +27,7 @@ import secrets
 import uuid
 
 # @file main.py
+# @description TigerEx tigerex-unified-admin service
 # @author TigerEx Development Team
 # Configure logging
 structlog.configure(

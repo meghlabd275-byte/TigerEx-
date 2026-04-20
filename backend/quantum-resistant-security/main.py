@@ -30,6 +30,7 @@ from cryptography.hazmat.backends import default_backend
 import base64
 
 # @file main.py
+# @description TigerEx quantum-resistant-security service
 # @author TigerEx Development Team
 # FastAPI app
 app = FastAPI(

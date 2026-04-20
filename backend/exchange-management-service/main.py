@@ -24,6 +24,7 @@ from pydantic import BaseModel, validator, EmailStr
 import jwt
 
 # @file main.py
+# @description TigerEx exchange-management-service service
 # @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)

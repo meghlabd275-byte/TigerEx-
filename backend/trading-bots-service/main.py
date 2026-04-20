@@ -24,6 +24,7 @@ import aiohttp
 import websockets
 
 # @file main.py
+# @description TigerEx trading-bots-service service
 # @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)

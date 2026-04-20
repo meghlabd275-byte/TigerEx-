@@ -22,6 +22,7 @@ import websockets
 import hashlib
 
 # @file main.py
+# @description TigerEx price-aggregation-service service
 # @author TigerEx Development Team
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

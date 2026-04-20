@@ -22,6 +22,7 @@ import os
 from contextlib import asynccontextmanager
 
 # @file main.py
+# @description TigerEx src service
 # @author TigerEx Development Team
 # Configure structured logging
 structlog.configure(

@@ -19,6 +19,7 @@ from functools import wraps
 import requests
 
 # @file main.py
+# @description TigerEx tiger-trading-service service
 # @author TigerEx Development Team
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:password@localhost/tigerex')

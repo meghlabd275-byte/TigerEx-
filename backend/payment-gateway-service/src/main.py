@@ -22,6 +22,7 @@ import hmac
 import json
 
 # @file main.py
+# @description TigerEx src service
 # @author TigerEx Development Team
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

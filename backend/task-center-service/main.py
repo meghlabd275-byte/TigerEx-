@@ -23,6 +23,7 @@ from enum import Enum
 import calendar
 
 # @file main.py
+# @description TigerEx task-center-service service
 # @author TigerEx Development Team
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://user:password@localhost/tigerex')

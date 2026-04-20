@@ -6,6 +6,7 @@ from datetime import datetime
 from pydantic import BaseModel
 
 # @file main.py
+# @description TigerEx advanced-risk-management-service service
 # @author TigerEx Development Team
 # Complete RBAC System for advanced-risk-management-service
 class UserRole(str, Enum):

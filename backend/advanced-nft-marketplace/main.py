@@ -22,6 +22,7 @@ from web3 import Web3
 import json
 
 # @file main.py
+# @description TigerEx advanced-nft-marketplace service
 # @author TigerEx Development Team
 # FastAPI app
 app = FastAPI(

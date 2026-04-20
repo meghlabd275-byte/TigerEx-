@@ -22,6 +22,7 @@ import json
 import jwt
 
 # @file main.py
+# @description TigerEx fee-management-service service
 # @author TigerEx Development Team
 # Configure logging
 structlog.configure(

@@ -5,6 +5,7 @@ from datetime import datetime
 from pydantic import BaseModel
 
 # @file main.py
+# @description TigerEx address-generation-service service
 # @author TigerEx Development Team
 # Complete RBAC System for address-generation-service
 class UserRole(str, Enum):

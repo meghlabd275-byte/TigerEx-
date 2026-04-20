@@ -20,6 +20,7 @@ import asyncpg
 import redis
 
 # @file main.py
+# @description TigerEx white-label-system service
 # @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)

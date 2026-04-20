@@ -23,6 +23,7 @@ import redis
 import uuid
 
 # @file main.py
+# @description TigerEx liquidity-aggregator-service service
 # @author TigerEx Development Team
 # Configure logging
 logging.basicConfig(level=logging.INFO)

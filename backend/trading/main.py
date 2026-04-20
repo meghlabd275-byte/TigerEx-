@@ -10,6 +10,7 @@ import uvicorn
 import os
 
 # @file main.py
+# @description TigerEx trading service
 # @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx trading",

@@ -10,6 +10,7 @@ import uvicorn
 import os
 
 # @file main.py
+# @description TigerEx futures-earn-service service
 # @author TigerEx Development Team
 app = FastAPI(
     title="TigerEx futures-earn-service",
