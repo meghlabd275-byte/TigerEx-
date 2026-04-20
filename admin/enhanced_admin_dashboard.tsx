@@ -1,6 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import React, { useState, useEffect, useCallback } from 'react';
+import { 
+  LineChart, Line, AreaChart, Area, BarChart, Bar, 
+  PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, 
+  Tooltip, Legend, ResponsiveContainer 
+} from 'recharts';
 
+// Types
 interface User {
   id: string;
   name: string;
@@ -9,6 +14,8 @@ interface User {
   status: 'active' | 'suspended' | 'pending' | 'banned';
   lastLogin: string;
   balance: number;
+  kycStatus: 'verified' | 'pending' | 'rejected' | 'not_submitted';
+  createdAt: string;
 }
 
 interface ExchangeService {
@@ -17,16 +24,19 @@ interface ExchangeService {
   status: 'active' | 'paused' | 'halted' | 'stopped';
   load: number;
   uptime: string;
+  responseTime: number;
+  errorRate: number;
 }
 
 interface Transaction {
   id: string;
   userId: string;
-  type: 'buy' | 'sell' | 'deposit' | 'withdrawal';
+  type: 'buy' | 'sell' | 'deposit' | 'withdrawal' | 'transfer';
   amount: number;
   currency: string;
-  status: 'completed' | 'pending' | 'failed';
+  status: 'completed' | 'pending' | 'failed' | 'cancelled';
   timestamp: string;
+  fee: number;
 }
 
 interface SystemMetrics {
@@ -35,7 +45,26 @@ interface SystemMetrics {
   totalTrades: number;
   volume: number;
   serverLoad: number;
+  apiLatency: number;
 }
+
+// Constants
+const STATUS_COLORS = {
+  active: '#22c55e',
+  suspended: '#eab308',
+  pending: '#f59e0b',
+  banned: '#ef4444',
+  completed: '#22c55e',
+  failed: '#ef4444',
+  cancelled: '#6b7280'
+};
+
+const CURRENCY_ICONS: Record<string, string> = {
+  BTC: '₿',
+  ETH: 'Ξ',
+  USDT: '$',
+  BNB: '◈'
+};
 
 const EnhancedAdminDashboard: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -49,45 +78,51 @@ const EnhancedAdminDashboard: React.FC = () => {
   // Mock data generation
   useEffect(() => {
     const generateMockData = () => {
-      // Generate users
+      // Generate users with enhanced data
       const mockUsers: User[] = Array.from({ length: 50 }, (_, i) => ({
         id: `user_${i + 1}`,
         name: `User ${i + 1}`,
         email: `user${i + 1}@example.com`,
-        role: ['admin', 'trader', 'user'][Math.floor(Math.random() * 3)],
+        role: ['admin', 'trader', 'user', 'vip'][Math.floor(Math.random() * 4)],
         status: ['active', 'suspended', 'pending', 'banned'][Math.floor(Math.random() * 4)] as User['status'],
         lastLogin: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString(),
-        balance: Math.random() * 100000
+        balance: Math.random() * 100000,
+        kycStatus: ['verified', 'pending', 'rejected', 'not_submitted'][Math.floor(Math.random() * 4)] as User['kycStatus'],
+        createdAt: new Date(Date.now() - Math.random() * 90 * 24 * 60 * 60 * 1000).toISOString()
       }));
 
-      // Generate services
+      // Generate exchange services with enhanced metrics
       const exchangeNames = ['Binance', 'Bybit', 'OKX', 'Bitget', 'Bitfinex', 'MEXC', 'Kraken', 'Robinhood', 'Gate.io', 'Coinbase', 'HTX'];
       const mockServices: ExchangeService[] = exchangeNames.map(name => ({
         id: name.toLowerCase().replace('.', ''),
         name: name,
         status: ['active', 'paused', 'halted', 'stopped'][Math.floor(Math.random() * 4)] as ExchangeService['status'],
         load: Math.random() * 100,
-        uptime: '99.9%'
+        uptime: '99.9%',
+        responseTime: Math.random() * 500 + 50,
+        errorRate: Math.random() * 2
       }));
 
-      // Generate transactions
+      // Generate transactions with enhanced data
       const mockTransactions: Transaction[] = Array.from({ length: 100 }, (_, i) => ({
         id: `tx_${i + 1}`,
         userId: `user_${Math.floor(Math.random() * 50) + 1}`,
-        type: ['buy', 'sell', 'deposit', 'withdrawal'][Math.floor(Math.random() * 4)] as Transaction['type'],
+        type: ['buy', 'sell', 'deposit', 'withdrawal', 'transfer'][Math.floor(Math.random() * 5)] as Transaction['type'],
         amount: Math.random() * 10000,
-        currency: ['BTC', 'ETH', 'USDT', 'BNB'][Math.floor(Math.random() * 4)],
-        status: ['completed', 'pending', 'failed'][Math.floor(Math.random() * 3)] as Transaction['status'],
-        timestamp: new Date(Date.now() - Math.random() * 24 * 60 * 60 * 1000).toISOString()
+        currency: ['BTC', 'ETH', 'USDT', 'BNB', 'SOL'][Math.floor(Math.random() * 5)],
+        status: ['completed', 'pending', 'failed', 'cancelled'][Math.floor(Math.random() * 4)] as Transaction['status'],
+        timestamp: new Date(Date.now() - Math.random() * 24 * 60 * 60 * 1000).toISOString(),
+        fee: Math.random() * 10
       }));
 
-      // Generate metrics
+      // Generate system metrics
       const mockMetrics: SystemMetrics[] = Array.from({ length: 24 }, (_, i) => ({
         timestamp: new Date(Date.now() - (23 - i) * 60 * 60 * 1000).toISOString(),
         activeUsers: Math.floor(Math.random() * 1000) + 500,
         totalTrades: Math.floor(Math.random() * 500) + 200,
         volume: Math.random() * 1000000 + 500000,
-        serverLoad: Math.random() * 100
+        serverLoad: Math.random() * 100,
+        apiLatency: Math.random() * 200 + 20
       }));
 
       setUsers(mockUsers);
@@ -100,21 +135,65 @@ const EnhancedAdminDashboard: React.FC = () => {
     generateMockData();
   }, []);
 
+  // Filter functions
   const filteredUsers = users.filter(user =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Helper functions
+  const formatCurrency = (amount: number): string => {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+  };
+
+  const formatNumber = (num: number): string => {
+    return new Intl.NumberFormat('en-US').format(num);
+  };
+
+  const formatDate = (dateString: string): string => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  const getStatusColor = (status: string): string => {
+    return STATUS_COLORS[status] || '#6b7280';
+  };
+
+  const getTotalVolume = (): number => {
+    return transactions
+      .filter(t => t.status === 'completed')
+      .reduce((sum, t) => sum + t.amount, 0);
+  };
+
+  const getActiveServices = (): number => {
+    return services.filter(s => s.status === 'active').length;
+  };
+
+  // Chart data
   const pieData = [
     { name: 'Active Users', value: users.filter(u => u.status === 'active').length, color: '#10B981' },
     { name: 'Suspended', value: users.filter(u => u.status === 'suspended').length, color: '#EF4444' },
-    { name: 'Pending', value: users.filter(u => u.status === 'pending').length, color: '#F59E0B' }
+    { name: 'Pending', value: users.filter(u => u.status === 'pending').length, color: '#F59E0B' },
+    { name: 'Banned', value: users.filter(u => u.status === 'banned').length, color: '#6B7280' }
   ];
 
   const roleData = [
     { name: 'Admin', value: users.filter(u => u.role === 'admin').length, color: '#8B5CF6' },
     { name: 'Trader', value: users.filter(u => u.role === 'trader').length, color: '#3B82F6' },
+    { name: 'VIP', value: users.filter(u => u.role === 'vip').length, color: '#F59E0B' },
     { name: 'User', value: users.filter(u => u.role === 'user').length, color: '#6B7280' }
+  ];
+
+  const transactionTypeData = [
+    { name: 'Buy', value: transactions.filter(t => t.type === 'buy').length, color: '#22c55e' },
+    { name: 'Sell', value: transactions.filter(t => t.type === 'sell').length, color: '#ef4444' },
+    { name: 'Deposit', value: transactions.filter(t => t.type === 'deposit').length, color: '#3b82f6' },
+    { name: 'Withdrawal', value: transactions.filter(t => t.type === 'withdrawal').length, color: '#f59e0b' }
   ];
 
   if (loading) {
