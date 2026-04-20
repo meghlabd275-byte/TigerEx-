@@ -1,3 +1,7 @@
+# @file main.py
+# @description TigerEx backend service
+# @author TigerEx Development Team
+
 from fastapi import FastAPI
 app = FastAPI(title="TigerEx binance-unified-service")
 @app.get("/")
