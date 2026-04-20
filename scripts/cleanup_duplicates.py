@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-TigerEx Duplicate File Cleanup Script
-Removes duplicate files and unnecessary files from the repository
+@file cleanup_duplicates.py
+@description TigerEx Duplicate File Cleanup Script - Removes duplicate files and unnecessary files
+@author TigerEx Development Team
 """
 
 import os

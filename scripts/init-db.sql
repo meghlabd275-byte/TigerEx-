@@ -1,3 +1,7 @@
+-- @file init-db.sql
+-- @description TigerEx Database Initialization Script
+-- @author TigerEx DevOps Team
+
 -- TigerEx Database Initialization Script
 -- This script creates the initial database schema for the TigerEx platform
 

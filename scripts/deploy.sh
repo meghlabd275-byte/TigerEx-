@@ -1,6 +1,9 @@
 #!/bin/bash
 
 # TigerEx Production Deployment Script
+# @file deploy.sh
+# @description TigerEx deployment script
+# @author TigerEx DevOps Team
 # This script deploys the TigerEx platform to production environment
 
 set -e  # Exit on any error
