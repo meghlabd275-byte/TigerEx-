@@ -1,3 +1,9 @@
+/**
+ * TigerEx Desktop Component
+ * @file comprehensive-desktop-admin-app.tsx
+ * @description Desktop trading component
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect } from 'react';
 import {
   AppBar,

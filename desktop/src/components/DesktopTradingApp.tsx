@@ -1,3 +1,9 @@
+/**
+ * TigerEx Desktop Component
+ * @file DesktopTradingApp.tsx
+ * @description Desktop trading component
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Box,
