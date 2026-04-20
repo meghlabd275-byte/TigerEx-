@@ -1,3 +1,7 @@
+# @file deployment.yaml
+# @description DevOps configuration
+# @author TigerEx Development Team
+
 apiVersion: v1
 kind: Namespace
 metadata:

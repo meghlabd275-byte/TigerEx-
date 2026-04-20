@@ -1,3 +1,7 @@
+# @file build.yml
+# @description DevOps configuration
+# @author TigerEx Development Team
+
 name: TigerEx CI/CD Pipeline
 
 on:
