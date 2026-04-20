@@ -1,3 +1,10 @@
+/**
+ * TigerEx Web - Advanced Trading Platform
+ * @file advanced_trading_platform.tsx
+ * @description Advanced trading platform component with charts
+ * @author TigerEx Development Team
+ */
+
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, AreaChart, Area, CandlestickChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
