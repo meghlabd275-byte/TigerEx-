@@ -1,3 +1,13 @@
+/**
+ * TigerEx Admin Dashboard - Authentication Types
+ * @file auth.ts
+ * @description Type definitions for authentication and authorization
+ * @author TigerEx Development Team
+ */
+
+/**
+ * Admin role types for role-based access control
+ */
 export type AdminRole = 
   | 'super_admin'
   | 'kyc_admin'
@@ -10,6 +20,9 @@ export type AdminRole =
   | 'compliance_officer'
   | 'risk_manager';
 
+/**
+ * Admin user interface
+ */
 export interface AdminUser {
   id: string;
   email: string;
@@ -24,6 +37,9 @@ export interface AdminUser {
   twoFactorEnabled: boolean;
 }
 
+/**
+ * Login credentials interface
+ */
 export interface LoginCredentials {
   email: string;
   password: string;
@@ -31,6 +47,9 @@ export interface LoginCredentials {
   rememberMe?: boolean;
 }
 
+/**
+ * Authentication response interface
+ */
 export interface AuthResponse {
   token: string;
   refreshToken: string;
@@ -38,6 +57,9 @@ export interface AuthResponse {
   expiresIn: number;
 }
 
+/**
+ * Permission interface
+ */
 export interface Permission {
   id: string;
   name: string;

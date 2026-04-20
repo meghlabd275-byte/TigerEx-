@@ -1,3 +1,10 @@
+/**
+ * TigerEx Admin Dashboard - Main Application
+ * @file App.tsx
+ * @description React application entry point for TigerEx admin dashboard
+ * @author TigerEx Development Team
+ */
+
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -6,13 +13,17 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { SnackbarProvider } from 'notistack';
 
-// Components
+/* ==========================================
+   IMPORTS - Components
+   ========================================== */
 import Sidebar from './components/Layout/Sidebar';
 import Header from './components/Layout/Header';
 import LoginPage from './pages/Auth/LoginPage';
 import LoadingScreen from './components/Common/LoadingScreen';
 
-// Pages
+/* ==========================================
+   IMPORTS - Pages
+   ========================================== */
 import Dashboard from './pages/Dashboard/Dashboard';
 import UserManagement from './pages/Users/UserManagement';
 import KYCManagement from './pages/KYC/KYCManagement';
@@ -27,15 +38,21 @@ import CustomerSupport from './pages/Support/CustomerSupport';
 import TechnicalDashboard from './pages/Technical/TechnicalDashboard';
 import ListingManagement from './pages/Listing/ListingManagement';
 
-// Contexts
+/* ==========================================
+   IMPORTS - Contexts
+   ========================================== */
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { WebSocketProvider } from './contexts/WebSocketContext';
 import { NotificationProvider } from './contexts/NotificationContext';
 
-// Types
+/* ==========================================
+   IMPORTS - Types
+   ========================================== */
 import { AdminRole } from './types/auth';
 
-// Create theme
+/* ==========================================
+   THEME CONFIGURATION
+   ========================================== */
 const theme = createTheme({
   palette: {
     mode: 'dark',
