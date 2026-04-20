@@ -1,3 +1,8 @@
+# TigerEx Backend Module
+# @file find_duplicates.py
+# @description Backend Python module
+# @author TigerEx Development Team
+
 import os
 
 # Find similar service names

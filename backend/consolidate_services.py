@@ -1,3 +1,8 @@
+# TigerEx Backend Module
+# @file consolidate_services.py
+# @description Backend Python module
+# @author TigerEx Development Team
+
 import os
 import shutil
 
