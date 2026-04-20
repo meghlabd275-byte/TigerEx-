@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Comprehensive testing script for enhanced TigerEx services
-Tests all new unique features across exchanges
+@file test_enhanced_services.py
+@description Comprehensive testing script for enhanced TigerEx services
+@author TigerEx Development Team
 """
 
 import requests

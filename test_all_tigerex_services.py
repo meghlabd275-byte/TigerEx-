@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-
 """
-Comprehensive Test Suite for All TigerEx Services
-Tests all endpoints, functionality, and admin controls
+@file test_all_tigerex_services.py
+@description Comprehensive Test Suite for All TigerEx Services
+@author TigerEx Development Team
 """
 
 import requests

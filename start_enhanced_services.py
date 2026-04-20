@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-TigerEx Enhanced Services Startup Script
-Launches all consolidated and enhanced services with proper configuration
+@file start_enhanced_services.py
+@description TigerEx services startup/initialization script
+@author TigerEx Development Team
 """
 
 import asyncio
