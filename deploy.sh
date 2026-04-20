@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# @file deploy.sh
+# @description TigerEx Hex Deployment Script
+# @author TigerEx DevOps Team
+
 # TigerEx Hex Deployment Script
 # Automated deployment for production and development environments
 
