@@ -1,4 +1,10 @@
 /**
+ * TigerEx React Component
+ * @file useAuth.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
+/**
  * TigerEx Authentication Hook
  * Provides authentication state and methods throughout the application
  */

@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file index.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { Users, DollarSign, Gift, TrendingUp, Link, Copy, Check, Award, ChevronRight, Wallet } from 'lucide-react';
 

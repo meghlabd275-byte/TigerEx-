@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file trading.ts
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 export interface TradingPair {
   symbol: string;
   baseAsset: string;

@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file index.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { BookOpen, Play, CheckCircle, Clock, Star, Users, Search, Award, Video } from 'lucide-react';
 

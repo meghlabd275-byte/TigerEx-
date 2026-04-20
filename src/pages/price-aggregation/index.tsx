@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file index.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect } from 'react';
 import { Activity, TrendingUp, TrendingDown, RefreshCw, Search, Wifi, WifiOff, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 
