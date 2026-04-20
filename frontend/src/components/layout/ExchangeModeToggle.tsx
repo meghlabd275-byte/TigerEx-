@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend - Layout Component
+ * @file ExchangeModeToggle.tsx
+ * @description React layout component
+ * @author TigerEx Development Team
+ */
+
 import React from 'react';
 import { useWallet } from '../../contexts/WalletContext';
 import { Wallet, Building2, AlertCircle } from 'lucide-react';

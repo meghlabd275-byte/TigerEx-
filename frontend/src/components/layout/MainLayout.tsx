@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend - Layout Component
+ * @file MainLayout.tsx
+ * @description React layout component
+ * @author TigerEx Development Team
+ */
+
 'use client';
 
 import React from 'react';

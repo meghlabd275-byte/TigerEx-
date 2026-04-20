@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend - Layout Component
+ * @file Navigation.tsx
+ * @description React layout component
+ * @author TigerEx Development Team
+ */
+
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';

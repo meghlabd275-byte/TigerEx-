@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend - Layout Component
+ * @file ExchangeWalletTabs.tsx
+ * @description React layout component
+ * @author TigerEx Development Team
+ */
+
 import React, { useState } from 'react';
 import { Search, Bell, Headphones, QrCode } from 'lucide-react';
 

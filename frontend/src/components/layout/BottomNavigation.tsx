@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend - Layout Component
+ * @file BottomNavigation.tsx
+ * @description React layout component
+ * @author TigerEx Development Team
+ */
+
 import React from 'react';
 import { Home, TrendingUp, BarChart3, FileText, Wallet } from 'lucide-react';
 
