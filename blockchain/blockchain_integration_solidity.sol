@@ -1,8 +1,16 @@
-// TigerEx Blockchain Integration - Smart Contracts
-// Complete Solidity Implementation for Trading Platform
+// SPDX-License-Identifier: MIT
+/**
+ * TigerEx Blockchain Integration - Smart Contracts
+ * @title TigerEx Trading Contract
+ * @dev Complete Solidity Implementation for Decentralized Trading Platform
+ * @author TigerEx Development Team
+ * @notice Enterprise-grade smart contracts for crypto trading
+ * @dev Production-ready with extensive security features
+ */
 
 pragma solidity ^0.8.20;
 
+// OpenZeppelin Contracts - Import statements
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
@@ -10,15 +18,37 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
+/* ==========================================
+   CONTRACT INTERFACE DEFINITIONS
+   ========================================== */
+
 /**
- * @title TigerEx Trading Contract
- * @dev Complete decentralized trading platform with advanced features
+ * @title ITigerExOracle - Price Oracle Interface
+ * @dev Interface for fetching external price data
  */
+interface ITigerExOracle {
+    function getPrice(address token) external view returns (uint256);
+    function getLatestRoundData(address token) external view returns (uint256, uint256, uint256);
+}
+
+/**
+ * @title ITigerExFeeManager - Fee Manager Interface  
+ * @dev Interface for managing platform fees
+ */
+interface ITigerExFeeManager {
+    function calculateFee(uint256 amount, uint256 feeTier) external view returns (uint256);
+    function setFeeTier(address user, uint256 tier) external;
+}
+
 contract TigerExTrading is ReentrancyGuard, Ownable, Pausable {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
-    // Structs
+    /* ==========================================
+       DATA STRUCTURES
+       ========================================== */
+    
+    /** Order - Trading order structure */
     struct Order {
         uint256 id;
         address trader;
@@ -32,6 +62,7 @@ contract TigerExTrading is ReentrancyGuard, Ownable, Pausable {
         uint256 filledAmount;
     }
 
+    /** Trade - Executed trade structure */
     struct Trade {
         uint256 id;
         uint256 order1Id;
@@ -46,6 +77,7 @@ contract TigerExTrading is ReentrancyGuard, Ownable, Pausable {
         uint256 price;
     }
 
+    /** LiquidityPool - AMM liquidity pool structure */
     struct LiquidityPool {
         IERC20 tokenA;
         IERC20 tokenB;
@@ -55,21 +87,33 @@ contract TigerExTrading is ReentrancyGuard, Ownable, Pausable {
         mapping(address => uint256) liquidityProviders;
     }
 
-    // State variables
-    mapping(uint256 => Order) public orders;
-    mapping(address => uint256[]) public userOrders;
-    mapping(uint256 => Trade) public trades;
-    mapping(bytes32 => LiquidityPool) public liquidityPools;
-    mapping(address => mapping(address => bool)) public authorizedTraders;
-    mapping(address => bool) public supportedTokens;
-    mapping(address => uint256) public userBalances;
+    /* ==========================================
+       STATE VARIABLES
+       ========================================== */
     
+    // Order and Trade Storage
+    mapping(uint256 => Order) public orders;                    // orderId -> Order
+    mapping(address => uint256[]) public userOrders;           // user -> orderIds
+    mapping(uint256 => Trade) public trades;                   // tradeId -> Trade
+    mapping(bytes32 => LiquidityPool) public liquidityPools; // poolKey -> LiquidityPool
+    
+    // User Permissions and Balances
+    mapping(address => mapping(address => bool)) public authorizedTraders;  // user -> token -> authorized
+    mapping(address => bool) public supportedTokens;    // token -> supported
+    mapping(address => uint256) public userBalances;        // user -> balance
+    
+    // Counters
     uint256 public orderCounter;
     uint256 public tradeCounter;
-    uint256 public constant FEE_RATE = 30; // 0.3%
-    uint256 public constant MAX_ORDERS_PER_USER = 100;
     
+    // Fee Configuration
+    uint256 public constant FEE_RATE = 30;                 // 0.3%
+    uint256 public constant MAX_ORDERS_PER_USER = 100;
+    uint256 public constant MIN_ORDER_AMOUNT = 1000;        // Minimum order amount
+    
+    // Contract Addresses
     address public feeCollector;
+    ITigerExOracle public priceOracle;
     
     // Events
     event OrderCreated(
