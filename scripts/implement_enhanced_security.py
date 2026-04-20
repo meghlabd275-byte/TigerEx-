@@ -1,3 +1,7 @@
+# @file implement_enhanced_security.py
+# @description TigerEx deployment and automation script
+# @author TigerEx Development Team
+
 #!/usr/bin/env python3
 """
 Enhanced Security & Account Management Implementation

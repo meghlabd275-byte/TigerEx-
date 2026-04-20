@@ -1,3 +1,7 @@
+# @file create_cross_platform_apps.py
+# @description TigerEx deployment and automation script
+# @author TigerEx Development Team
+
 #!/usr/bin/env python3
 """
 Create Cross-Platform Applications (Web, Mobile, Desktop)

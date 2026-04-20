@@ -1,3 +1,8 @@
+#!/bin/bash
+# @file push_main.sh
+# @description TigerEx shell script
+# @author TigerEx Development Team
+
 #!/usr/bin/env bash
 set -euo pipefail
 

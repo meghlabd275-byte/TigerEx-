@@ -1,4 +1,9 @@
 #!/bin/bash
+# @file test.sh
+# @description TigerEx shell script
+# @author TigerEx Development Team
+
+#!/bin/bash
 
 # TigerEx Testing Script
 # Comprehensive testing suite for all components
