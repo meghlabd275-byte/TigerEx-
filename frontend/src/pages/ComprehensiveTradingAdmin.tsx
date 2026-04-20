@@ -1,4 +1,11 @@
 /**
+ * TigerEx Frontend - Page Component
+ * @file ComprehensiveTradingAdmin.tsx
+ * @description React page component
+ * @author TigerEx Development Team
+ */
+
+/**
  * Comprehensive Trading Admin Dashboard
  * Complete admin interface for all trading types
  */

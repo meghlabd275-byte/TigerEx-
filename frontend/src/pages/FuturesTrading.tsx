@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend - Page Component
+ * @file FuturesTrading.tsx
+ * @description React page component
+ * @author TigerEx Development Team
+ */
+
 import React from 'react';
 import TradingForm from '../components/TradingForm';
 

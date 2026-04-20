@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend - Component
+ * @file AdminDashboard.tsx
+ * @description React component
+ * @author TigerEx Development Team
+ */
+
 import React, { useState, useEffect } from 'react';
 import {
   Grid,

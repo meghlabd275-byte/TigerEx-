@@ -1,7 +1,9 @@
 /**
  * TigerEx Complete Web Application with Full Admin Controls
- * Comprehensive web app with complete backend integration, admin controls, and all trading functionality
+ * @file CompleteWebAppWithAdmin.jsx
+ * @description Comprehensive web app with backend integration, admin controls, and all trading functionality
  * Enhanced with complete admin panel, user access management, and social login
+ * @author TigerEx Development Team
  */
 
 import React, { useState, useEffect, useCallback, useContext } from 'react';

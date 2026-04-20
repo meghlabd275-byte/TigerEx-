@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend - Component
+ * @file ServicesPage.tsx
+ * @description React component
+ * @author TigerEx Development Team
+ */
+
 import React, { useState, useEffect } from 'react';
 import { Search, Grid, List, Settings, User, Bell, HelpCircle, Gift, TrendingUp, DollarSign, Info, Users, MoreHorizontal } from 'lucide-react';
 

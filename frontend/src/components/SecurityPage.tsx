@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend - Component
+ * @file SecurityPage.tsx
+ * @description React component
+ * @author TigerEx Development Team
+ */
+
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Shield, Smartphone, Mail, Lock, Key, AlertTriangle, CheckCircle, Settings } from 'lucide-react';
 

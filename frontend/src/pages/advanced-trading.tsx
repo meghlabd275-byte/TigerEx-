@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend - Page Component
+ * @file advanced-trading.tsx
+ * @description React page component
+ * @author TigerEx Development Team
+ */
+
 import React, { useState } from 'react';
 import TradingViewChart from '../components/trading/TradingViewChart';
 import AdvancedOrderForm from '../components/trading/AdvancedOrderForm';
