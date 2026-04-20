@@ -1,3 +1,9 @@
+/**
+ * TigerEx Frontend Component
+ * @file layout.tsx
+ * @description React component for TigerEx platform
+ * @author TigerEx Development Team
+ */
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'

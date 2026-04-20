@@ -1,3 +1,9 @@
+/**
+ * TigerEx Frontend Component
+ * @file TraderDashboard.tsx
+ * @description React component for TigerEx platform
+ * @author TigerEx Development Team
+ */
 import React from 'react';
 import TradingForm from '@/components/TradingForm';
 

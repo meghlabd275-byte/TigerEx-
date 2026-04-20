@@ -1,3 +1,9 @@
+/**
+ * TigerEx Frontend Component
+ * @file Contracts.tsx
+ * @description React component for TigerEx platform
+ * @author TigerEx Development Team
+ */
 
 import React, { useState, useEffect } from 'react';
 import {

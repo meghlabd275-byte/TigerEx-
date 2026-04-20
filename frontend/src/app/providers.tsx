@@ -1,3 +1,9 @@
+/**
+ * TigerEx Frontend Component
+ * @file providers.tsx
+ * @description React component for TigerEx platform
+ * @author TigerEx Development Team
+ */
 "use client"
 
 import { ReactNode } from "react"
