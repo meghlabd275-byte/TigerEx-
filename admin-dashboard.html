@@ -135,9 +135,30 @@
     </div>
 
     <div class="nav-section">
+      <div class="nav-title">Compliance</div>
+      <a class="nav-item" onclick="showModal('kyc')"><span class="nav-icon">🆔</span>KYC Review</a>
+      <a class="nav-item"><span class="nav-icon">📊</span>Audit Logs</a>
+      <a class="nav-item"><span class="nav-icon">📋</span>Reports</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-title">Partners</div>
+      <a class="nav-item"><span class="nav-icon">🤝</span>Partners</a>
+      <a class="nav-item"><span class="nav-icon">🏢</span>White Label</a>
+      <a class="nav-item"><span class="nav-icon">🏦</span>Institutional</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-title">Departments</div>
+      <a class="nav-item"><span class="nav-icon">📝</span>Listing</a>
+      <a class="nav-item"><span class="nav-icon">📈</span>Trading</a>
+      <a class="nav-item"><span class="nav-icon">🎧</span>Support</a>
+    </div>
+
+    <div class="nav-section">
       <div class="nav-title">System</div>
       <a class="nav-item"><span class="nav-icon">🔧</span>Settings</a>
-      <a class="nav-icon">🔐</span>Security</a>
+      <a class="nav-item"><span class="nav-icon">🔐</span>Security</a>
       <a class="nav-item"><span class="nav-icon">📝</span>Logs</a>
     </div>
   </aside>
@@ -276,9 +297,17 @@
       <label class="form-label">Role</label>
       <select class="form-select">
         <option>Trader</option>
-        <option selected>VIP</option>
+        <option>VIP</option>
         <option>Admin</option>
-        <option>Super Admin</option>
+        <option selected>Super Admin</option>
+        <option>Moderator</option>
+        <option>Partner</option>
+        <option>White Level</option>
+        <option>Institutional</option>
+        <option>Listing Manager</option>
+        <option>Trading Manager</option>
+        <option>Compliance</option>
+        <option>Support</option>
       </select>
     </div>
     <div class="form-group">
@@ -376,6 +405,63 @@
     <div class="modal-actions">
       <button class="btn btn-primary" onclick="closeModal()">Save Settings</button>
       <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Role Management Modal -->
+<div class="modal" id="roles">
+  <div class="modal-content" style="width:600px">
+    <h2 class="modal-title">Role Management</h2>
+    
+    <table class="table" style="margin-bottom:20px">
+      <tr style="background:var(--bg);font-weight:600">
+        <td>Role</td>
+        <td>Users</td>
+        <td>Permissions</td>
+        <td>Actions</td>
+      </tr>
+      <tr><td>Super Admin</td><td>1</td><td>All Access</td><td><button class="action-btn">Edit</button></td></tr>
+      <tr><td>Admin</td><td>5</td><td>Manage Users</td><td><button class="action-btn">Edit</button></td></tr>
+      <tr><td>Moderator</td><td>12</td><td>View/Review</td><td><button class="action-btn">Edit</button></td></tr>
+      <tr><td>Partner</td><td>28</td><td>Referrals</td><td><button class="action-btn">Edit</button></td></tr>
+      <tr><td>White Level</td><td>5</td><td>Custom Brand</td><td><button class="action-btn">Edit</button></td></tr>
+      <tr><td>Institutional</td><td>15</td><td>OTC Trading</td><td><button class="action-btn">Edit</button></td></tr>
+      <tr><td>Listing Manager</td><td>3</td><td>List Tokens</td><td><button class="action-btn">Edit</button></td></tr>
+      <tr><td>Trading Manager</td><td>4</td><td>Markets</td><td><button class="action-btn">Edit</button></td></tr>
+      <tr><td>Compliance</td><td>6</td><td>KYC/Reports</td><td><button class="action-btn">Edit</button></td></tr>
+      <tr><td>Support</td><td>20</td><td>Tickets</td><td><button class="action-btn">Edit</button></td></tr>
+      <tr><td>VIP</td><td>156</td><td>Reduced Fees</td><td><button class="action-btn">Edit</button></td></tr>
+      <tr><td>Trader</td><td>245000</td><td>Trade</td><td><button class="action-btn">Edit</button></td></tr>
+    </table>
+    
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="closeModal()">Add Role</button>
+      <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- KYC Review Modal -->
+<div class="modal" id="kyc">
+  <div class="modal-content" style="width:700px">
+    <h2 class="modal-title">KYC Verification</h2>
+    
+    <table class="table">
+      <tr style="background:var(--bg);font-weight:600">
+        <td>User</td>
+        <td>Submitted</td>
+        <td>Documents</td>
+        <td>Status</td>
+        <td>Actions</td>
+      </tr>
+      <tr><td>John Doe</td><td>2026-04-20</td><td>ID, Selfie</td><td><span class="status-badge" style="background:rgba(240,185,11,0.15);color:var(--primary)">Pending</span></td><td><button class="action-btn" style="color:var(--green)">Approve</button><button class="action-btn" style="color:var(--red)">Reject</button></td></tr>
+      <tr><td>Sarah Smith</td><td>2026-04-19</td><td>Passport</td><td><span class="status-badge" style="background:rgba(240,185,11,0.15);color:var(--primary)">Pending</span></td><td><button class="action-btn" style="color:var(--green)">Approve</button><button class="action-btn" style="color:var(--red)">Reject</button></td></tr>
+      <tr><td>Mike Johnson</td><td>2026-04-18</td><td>ID</td><td><span class="status-badge active">Verified</span></td><td><button class="action-btn">View</button></td></tr>
+    </table>
+    
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal()">Close</button>
     </div>
   </div>
 </div>
