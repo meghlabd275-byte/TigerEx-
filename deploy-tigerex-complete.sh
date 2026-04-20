@@ -1,4 +1,9 @@
 #!/bin/bash
+# @file deploy-tigerex-complete.sh
+# @description TigerEx deployment script
+# @author TigerEx Development Team
+
+#!/bin/bash
 
 # ===========================================
 # TigerEx Complete Deployment Script

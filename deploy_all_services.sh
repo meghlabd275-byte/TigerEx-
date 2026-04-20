@@ -1,4 +1,9 @@
 #!/bin/bash
+# @file deploy_all_services.sh
+# @description TigerEx deployment script
+# @author TigerEx Development Team
+
+#!/bin/bash
 
 # TigerEx Complete Deployment Script
 # This script deploys all services including the new market making bot system

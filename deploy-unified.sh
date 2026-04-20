@@ -1,4 +1,9 @@
 #!/bin/bash
+# @file deploy-unified.sh
+# @description TigerEx deployment script
+# @author TigerEx Development Team
+
+#!/bin/bash
 
 echo "🚀 TigerEx Ultimate Unified Exchange v10.0.0 Deployment"
 echo "====================================================="

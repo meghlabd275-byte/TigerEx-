@@ -1,4 +1,9 @@
 #!/bin/bash
+# @file deploy_and_test.sh
+# @description TigerEx deployment script
+# @author TigerEx Development Team
+
+#!/bin/bash
 
 # TigerEx Deployment and Testing Script
 # Comprehensive deployment and testing of all enhanced services

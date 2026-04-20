@@ -1,4 +1,9 @@
 #!/bin/bash
+# @file deploy-enhanced-features.sh
+# @description TigerEx deployment script
+# @author TigerEx Development Team
+
+#!/bin/bash
 
 # TigerEx Enhanced Features Deployment Script
 # This script deploys all the new advanced features to make TigerEx competitive

@@ -1,4 +1,9 @@
 #!/bin/bash
+# @file deploy-comprehensive.sh
+# @description TigerEx deployment script
+# @author TigerEx Development Team
+
+#!/bin/bash
 
 # TigerEx v11.0.0 - Comprehensive Deployment Script
 # Deploys all advanced backend services with monitoring and infrastructure
