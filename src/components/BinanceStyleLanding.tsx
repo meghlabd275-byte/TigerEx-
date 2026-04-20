@@ -1,5 +1,12 @@
 'use client';
 
+/**
+ * TigerEx Frontend - Binance Style Landing
+ * @file BinanceStyleLanding.tsx
+ * @description Landing page component with Binance-style design
+ * @author TigerEx Development Team
+ */
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 

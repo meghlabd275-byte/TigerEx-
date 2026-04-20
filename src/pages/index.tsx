@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend - Index Page
+ * @file index.tsx
+ * @description Index/home page component
+ * @author TigerEx Development Team
+ */
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 

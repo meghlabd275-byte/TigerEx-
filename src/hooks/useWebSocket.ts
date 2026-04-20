@@ -1,5 +1,12 @@
 'use client';
 
+/**
+ * TigerEx Frontend - WebSocket Hook
+ * @file useWebSocket.ts
+ * @description Custom hook for WebSocket connections
+ * @author TigerEx Development Team
+ */
+
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 
