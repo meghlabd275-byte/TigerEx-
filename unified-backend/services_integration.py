@@ -1,3 +1,7 @@
+# @file services_integration.py
+# @description TigerEx unified backend service
+# @author TigerEx Development Team
+
 """
 TigerEx Services Integration Module
 Integrates all backend services into unified API

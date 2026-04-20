@@ -1,3 +1,7 @@
+# @file security_enhancements.py
+# @description TigerEx unified backend service
+# @author TigerEx Development Team
+
 """
 TigerEx Enhanced Security Module
 Complete security implementation with advanced features

@@ -1,3 +1,7 @@
+# @file enhanced_main.py
+# @description TigerEx unified backend service
+# @author TigerEx Development Team
+
 """
 TigerEx Enhanced Unified Backend
 Complete integration of all enhanced modules with full functionality

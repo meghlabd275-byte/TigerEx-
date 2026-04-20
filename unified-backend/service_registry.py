@@ -1,3 +1,7 @@
+# @file service_registry.py
+# @description TigerEx unified backend service
+# @author TigerEx Development Team
+
 """
 TigerEx Service Registry - Complete Service Catalog
 Registry of all 121+ backend services with their endpoints and capabilities

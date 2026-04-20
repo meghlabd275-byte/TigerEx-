@@ -1,3 +1,7 @@
+# @file CompleteExchangeFetchers.py
+# @description TigerEx unified backend service
+# @author TigerEx Development Team
+
 """
 TigerEx Complete Exchange Fetchers System
 Comprehensive implementation of all major exchange fetchers with unique functionality

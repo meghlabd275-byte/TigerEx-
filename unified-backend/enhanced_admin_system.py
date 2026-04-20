@@ -1,3 +1,7 @@
+# @file enhanced_admin_system.py
+# @description TigerEx unified backend service
+# @author TigerEx Development Team
+
 """
 TigerEx Enhanced Admin Control System
 Complete admin functionality with comprehensive user management

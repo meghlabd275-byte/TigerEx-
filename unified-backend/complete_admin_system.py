@@ -1,3 +1,7 @@
+# @file complete_admin_system.py
+# @description TigerEx unified backend service
+# @author TigerEx Development Team
+
 """
 TigerEx Complete Unified Admin Control System
 Comprehensive admin system with full control over all trading operations

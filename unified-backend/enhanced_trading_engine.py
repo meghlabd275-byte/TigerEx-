@@ -1,3 +1,7 @@
+# @file enhanced_trading_engine.py
+# @description TigerEx unified backend service
+# @author TigerEx Development Team
+
 """
 TigerEx Enhanced Trading Engine
 Complete trading functionality with advanced features
