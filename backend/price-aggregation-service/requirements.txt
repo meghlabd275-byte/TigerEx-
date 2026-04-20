@@ -1,0 +1,15 @@
+{
+    "name": "price-aggregation-service",
+    "version": "1.0.0",
+    "description": "TigerEx Price Aggregation Service - Real-time prices from major exchanges",
+    "main": "main.py",
+    "dependencies": {
+        "fastapi": "^0.104.0",
+        "uvicorn": "^0.24.0",
+        "aiohttp": "^3.9.0",
+        "aioredis": "^2.0.1",
+        "websockets": "^12.0",
+        "pydantic": "^2.5.0",
+        "python-dotenv": "^1.0.0"
+    }
+}
