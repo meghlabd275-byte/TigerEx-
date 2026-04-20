@@ -1,3 +1,7 @@
+// @file LiquidityPool.sol
+// @description TigerEx blockchain smart contract
+// @author TigerEx Development Team
+
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 

@@ -1,3 +1,7 @@
+// @file hardhat.config.js
+// @description TigerEx blockchain configuration
+// @author TigerEx Development Team
+
 require("@nomicfoundation/hardhat-toolbox");
 require("@nomiclabs/hardhat-etherscan");
 require("hardhat-gas-reporter");
