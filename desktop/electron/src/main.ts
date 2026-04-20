@@ -1,3 +1,9 @@
+/**
+ * TigerEx Desktop Component
+ * @file main.ts
+ * @description Electron main process
+ * @author TigerEx Development Team
+ */
 import { app, BrowserWindow, Menu, ipcMain, shell, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import * as path from 'path';
