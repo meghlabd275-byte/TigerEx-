@@ -1,15 +1,60 @@
+/**
+ * TigerEx Desktop - Preload Script
+ * @file preload.js
+ * @description Secure context bridge between main and renderer processes
+ * @author TigerEx Development Team
+ */
+
 const { contextBridge, ipcRenderer } = require('electron');
 
-// Expose protected methods that allow the renderer process to use
-// the ipcRenderer without exposing the entire object
+/* ==========================================
+   CHANNELS DEFINITION
+   ========================================== */
+const CHANNELS = {
+  APP: 'app-version',
+  DIALOG: {
+    MESSAGE: 'show-message-box',
+    SAVE: 'show-save-dialog',
+    OPEN: 'show-open-dialog'
+  },
+  MENU: {
+    NEW_ORDER: 'menu-new-order',
+    EXPORT_DATA: 'menu-export-data',
+    SWITCH_CEX: 'menu-switch-cex',
+    SWITCH_DEX: 'menu-switch-dex',
+    MARKET_DATA: 'menu-market-data',
+    ORDER_BOOK: 'menu-order-book',
+    VIEW_BALANCES: 'menu-view-balances',
+    TRANSFER_FUNDS: 'menu-transfer-funds',
+    TRANSACTION_HISTORY: 'menu-transaction-history',
+    SHOW_SHORTCUTS: 'menu-show-shortcuts'
+  },
+  WINDOW: {
+    MINIMIZE: 'window-minimize',
+    MAXIMIZE: 'window-maximize',
+    CLOSE: 'window-close'
+  },
+  FILE: {
+    SELECT: 'select-file',
+    SAVE: 'save-file'
+  }
+};
+
+/* ==========================================
+   EXPOSED API
+   ========================================== */
+
+/**
+ * Secure API exposed to renderer process
+ */
 contextBridge.exposeInMainWorld('electronAPI', {
-  // App info
-  getVersion: () => ipcRenderer.invoke('app-version'),
+  // App Information
+  getVersion: () => ipcRenderer.invoke(CHANNELS.APP),
   
-  // Dialog methods
-  showMessageBox: (options) => ipcRenderer.invoke('show-message-box', options),
-  showSaveDialog: (options) => ipcRenderer.invoke('show-save-dialog', options),
-  showOpenDialog: (options) => ipcRenderer.invoke('show-open-dialog', options),
+  // Dialog Methods
+  showMessageBox: (options) => ipcRenderer.invoke(CHANNELS.DIALOG.MESSAGE, options),
+  showSaveDialog: (options) => ipcRenderer.invoke(CHANNELS.DIALOG.SAVE, options),
+  showOpenDialog: (options) => ipcRenderer.invoke(CHANNELS.DIALOG.OPEN, options),
   
   // Menu event listeners
   onMenuNewOrder: (callback) => ipcRenderer.on('menu-new-order', callback),

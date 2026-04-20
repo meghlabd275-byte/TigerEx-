@@ -1,15 +1,57 @@
+/**
+ * TigerEx Desktop Application - Main Process
+ * @file main.js
+ * @description Electron main process for TigerEx trading platform
+ * @author TigerEx Development Team
+ * @version 1.0.0
+ */
+
+// Module Dependencies
 const { app, BrowserWindow, Menu, ipcMain, shell, dialog, globalShortcut, protocol, net } = require('electron');
 const path = require('path');
+
+// Environment Configuration
 const isDev = process.env.NODE_ENV === 'development';
 
-// Keep a global reference of the window object
+/* ==========================================
+   GLOBAL REFERENCES
+   ========================================== */
 let mainWindow;
 let splashWindow;
 
+/* ==========================================
+   CONSTANTS
+   ========================================== */
+const WINDOW_CONFIG = {
+  main: {
+    width: 1400,
+    height: 900,
+    minWidth: 1200,
+    minHeight: 800
+  },
+  splash: {
+    width: 400,
+    height: 300
+  }
+};
+
+const APP_CONFIG = {
+  name: 'TigerEx',
+  version: '1.0.0',
+  company: 'TigerEx Inc.'
+};
+
+/* ==========================================
+   WINDOW CREATION FUNCTIONS
+   ========================================== */
+
+/**
+ * Create splash screen window
+ */
 function createSplashWindow() {
   splashWindow = new BrowserWindow({
-    width: 400,
-    height: 300,
+    width: WINDOW_CONFIG.splash.width,
+    height: WINDOW_CONFIG.splash.height,
     frame: false,
     alwaysOnTop: true,
     transparent: true,
@@ -26,13 +68,16 @@ function createSplashWindow() {
   });
 }
 
+/**
+ * Create main application window
+ */
 function createMainWindow() {
   // Create the browser window
   mainWindow = new BrowserWindow({
-    width: 1400,
-    height: 900,
-    minWidth: 1200,
-    minHeight: 800,
+    width: WINDOW_CONFIG.main.width,
+    height: WINDOW_CONFIG.main.height,
+    minWidth: WINDOW_CONFIG.main.minWidth,
+    minHeight: WINDOW_CONFIG.main.minHeight,
     show: false,
     icon: path.join(__dirname, 'assets/icon.png'),
     webPreferences: {
