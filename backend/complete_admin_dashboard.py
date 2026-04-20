@@ -1,3 +1,8 @@
+"""TigerEx Backend - Complete Admin Dashboard Module
+@file complete_admin_dashboard.py
+@description Admin dashboard with full control features
+@author TigerEx Development Team
+"""
 #!/usr/bin/env python3
 """
 Complete Admin Dashboard with Full Control Features

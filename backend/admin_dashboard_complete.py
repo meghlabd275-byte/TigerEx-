@@ -1,3 +1,9 @@
+"""TigerEx Backend Module
+@file $(basename $f)
+@description TigerEx backend service
+@author TigerEx Development Team
+"""
+
 from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session

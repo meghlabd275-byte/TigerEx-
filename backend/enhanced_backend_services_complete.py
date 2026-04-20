@@ -1,3 +1,9 @@
+"""TigerEx Backend Module
+@file $(basename $f)
+@description TigerEx backend service
+@author TigerEx Development Team
+"""
+
 #!/usr/bin/env python3
 """
 TigerEx Complete Backend Services System
