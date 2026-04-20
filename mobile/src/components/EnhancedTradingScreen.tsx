@@ -1,3 +1,9 @@
+/**
+ * TigerEx Mobile Component
+ * @file EnhancedTradingScreen.tsx
+ * @description Mobile application component
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,

@@ -1,3 +1,9 @@
+/**
+ * TigerEx Mobile Component
+ * @file comprehensive-mobile-admin-app.tsx
+ * @description Mobile application component
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect } from 'react';
 import {
   View,

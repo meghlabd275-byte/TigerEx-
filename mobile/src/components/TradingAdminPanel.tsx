@@ -1,4 +1,10 @@
 /**
+ * TigerEx Mobile Component
+ * @file TradingAdminPanel.tsx
+ * @description Mobile application component
+ * @author TigerEx Development Team
+ */
+/**
  * Trading Admin Panel for Mobile
  * Complete admin controls for all trading types
  */
