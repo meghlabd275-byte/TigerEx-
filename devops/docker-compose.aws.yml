@@ -1,3 +1,8 @@
+# ==========================================
+# TigerEx Cloud Deployment Config
+# @author TigerEx DevOps Team
+# ==========================================
+
 # ============================================
 # TigerEx AWS ECS/EKS Docker Compose
 # AWS-specific deployment configuration
