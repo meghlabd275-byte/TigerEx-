@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend Component
+ * @file MarketMakerDashboard.tsx
+ * @description React component for TigerEx exchange
+ * @author TigerEx Development Team
+ */
+
 import React from 'react';
 
 const MarketMakerDashboard = () => {

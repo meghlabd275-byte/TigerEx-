@@ -1,4 +1,11 @@
 /**
+ * TigerEx Frontend Component
+ * @file tradfi.tsx
+ * @description React component for TigerEx exchange
+ * @author TigerEx Development Team
+ */
+
+/**
  * TigerEx TradFi Trading Interface
  * Complete CFD, Forex, ETF, Derivatives Trading
  */

@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend Component
+ * @file LiquidityProviderDashboard.tsx
+ * @description React component for TigerEx exchange
+ * @author TigerEx Development Team
+ */
+
 import React from 'react';
 
 const LiquidityProviderDashboard = () => {

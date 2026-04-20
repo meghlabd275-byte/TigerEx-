@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend Component
+ * @file page.tsx
+ * @description React component for TigerEx exchange
+ * @author TigerEx Development Team
+ */
+
 'use client'
 
 import React, { useState, useEffect, useCallback } from 'react'
