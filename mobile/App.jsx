@@ -1,3 +1,10 @@
+/**
+ * TigerEx Mobile Application
+ * @file App.jsx
+ * @description Main React Native mobile app entry point
+ * @author TigerEx Development Team
+ */
+
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';

@@ -1,6 +1,8 @@
 /**
  * TigerEx Enhanced Mobile Application
- * Complete cryptocurrency exchange mobile app with full admin controls
+ * @file EnhancedMobileApp.jsx
+ * @description Complete cryptocurrency exchange mobile app with full admin controls
+ * @author TigerEx Development Team
  */
 
 import React, { useState, useEffect } from 'react';

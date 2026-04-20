@@ -1,7 +1,9 @@
 /**
  * TigerEx Complete Mobile Application with Full Admin Control
- * Comprehensive mobile trading platform with all features and admin functionality
+ * @file CompleteMobileAppWithAdmin.js
+ * @description Comprehensive mobile trading platform with all features and admin functionality
  * React Native - iOS & Android Support
+ * @author TigerEx Development Team
  */
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';

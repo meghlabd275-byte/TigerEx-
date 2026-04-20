@@ -1,8 +1,13 @@
 /**
- * TigerEx Complete Mobile Trading Application
- * Full-featured mobile trading platform with admin controls
- * React Native - iOS & Android
+ * TigerEx Mobile App
+ * @file CompleteMobileTradingApp.tsx
+ * @description React Native mobile component
+ * @author TigerEx Development Team
  */
+/TigerEx Complete Mobile Trading Application
+/Full-featured mobile trading platform with admin controls
+/React Native - iOS & Android
+*/
 
 import React, { useState, useEffect, useRef } from 'react';
 import {

@@ -1,3 +1,10 @@
+/**
+ * TigerEx Complete Mobile App - React Native
+ * @file complete_mobile_app_react_native.tsx
+ * @description Complete React Native mobile application for trading
+ * @author TigerEx Development Team
+ */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,

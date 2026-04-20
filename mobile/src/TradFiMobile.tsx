@@ -1,7 +1,12 @@
 /**
- * TigerEx TradFi Mobile Interface
- * CFD, Forex, ETF, Derivatives Trading for Mobile
+ * TigerEx Mobile App
+ * @file TradFiMobile.tsx
+ * @description React Native mobile component
+ * @author TigerEx Development Team
  */
+/TigerEx TradFi Mobile Interface
+/CFD, Forex, ETF, Derivatives Trading for Mobile
+*/
 
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
