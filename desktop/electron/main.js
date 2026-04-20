@@ -1,3 +1,10 @@
+/**
+ * TigerEx Desktop Application
+ * @file main.js
+ * @description Desktop app component for TigerEx
+ * @author TigerEx Development Team
+ */
+
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 

@@ -1,4 +1,11 @@
 /**
+ * TigerEx Desktop Application
+ * @file CompleteDesktopAppWithAdmin.js
+ * @description Desktop app component for TigerEx
+ * @author TigerEx Development Team
+ */
+
+/**
  * TigerEx Complete Desktop Application with Full Admin Control
  * Comprehensive desktop trading platform with all features and admin functionality
  * Electron - Windows, macOS, Linux Support

@@ -1,4 +1,11 @@
 /**
+ * TigerEx Desktop Application
+ * @file EnhancedDesktopApp.jsx
+ * @description Desktop app component for TigerEx
+ * @author TigerEx Development Team
+ */
+
+/**
  * TigerEx Enhanced Desktop Application
  * Complete cryptocurrency exchange desktop app with Electron and full admin controls
  */
