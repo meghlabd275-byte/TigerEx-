@@ -1,4 +1,9 @@
 {
+  "comment": "TigerEx security_audit_report.json",
+  "@file": "security_audit_report.json",
+  "@description": "TigerEx configuration",
+  "@author": "TigerEx Development Team",
+{
   "errors": [
     {
       "filename": "./backend/blockchain-integration/admin/comprehensive_blockchain_admin.py",

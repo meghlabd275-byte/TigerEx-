@@ -1,3 +1,8 @@
+# TigerEx Documentation
+# @file todo.md
+# @description TigerEx project documentation
+# @author TigerEx Development Team
+
 # 🏆 TigerEx Platform - Complete Implementation Status
 
 ## 📊 **FINAL STATUS: 100% COMPLETE ✅**
