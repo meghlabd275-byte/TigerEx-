@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend
+ * @file dashboard.tsx
+ * @description TigerEx React component
+ * @author TigerEx Development Team
+ */
+
 import React, { useState, useEffect } from 'react';
 import {
   Box,

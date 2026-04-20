@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend
+ * @file tradingSlice.ts
+ * @description TigerEx React component
+ * @author TigerEx Development Team
+ */
+
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface Order {

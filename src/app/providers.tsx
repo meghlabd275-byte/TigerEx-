@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend
+ * @file providers.tsx
+ * @description TigerEx React component
+ * @author TigerEx Development Team
+ */
+
 'use client';
 
 import { ThemeProvider } from 'next-themes';

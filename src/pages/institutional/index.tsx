@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend
+ * @file index.tsx
+ * @description TigerEx React component
+ * @author TigerEx Development Team
+ */
+
 import React from 'react';
 import { Building2, TrendingUp, Shield, Globe, DollarSign, Users, Lock, ArrowRight, Clock, Headphones } from 'lucide-react';
 

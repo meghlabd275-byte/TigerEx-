@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend
+ * @file page.tsx
+ * @description TigerEx React component
+ * @author TigerEx Development Team
+ */
+
 'use client';
 
 import React from 'react';

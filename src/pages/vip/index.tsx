@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend
+ * @file index.tsx
+ * @description TigerEx React component
+ * @author TigerEx Development Team
+ */
+
 import React from 'react';
 import { Crown, TrendingUp, Wallet, CreditCard, Users, Gift, Shield, Zap } from 'lucide-react';
 

@@ -1,3 +1,8 @@
+"""
+@file main.py
+@description TigerEx unified backend - Complete exchange system
+@author TigerEx Development Team
+"""
 #!/usr/bin/env python3
 """
 @file main.py

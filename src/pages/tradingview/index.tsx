@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend
+ * @file index.tsx
+ * @description TigerEx React component
+ * @author TigerEx Development Team
+ */
+
 import React, { useState } from 'react';
 import { TrendingUp, TrendingDown, Search, Activity, Settings, Maximize, RefreshCw } from 'lucide-react';
 

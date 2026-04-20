@@ -1,3 +1,8 @@
+"""
+@file complete_api.py
+@description TigerEx unified backend - Complete exchange system
+@author TigerEx Development Team
+"""
 #!/usr/bin/env python3
 """
 @file complete_api.py

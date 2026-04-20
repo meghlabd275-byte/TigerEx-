@@ -1,5 +1,12 @@
 'use client';
 
+/**
+ * TigerEx Main Application Page
+ * @file page.tsx
+ * @description Main landing page for TigerEx exchange platform
+ * @author TigerEx Development Team
+ */
+
 import { Suspense, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Header } from '@/components/layout/Header';

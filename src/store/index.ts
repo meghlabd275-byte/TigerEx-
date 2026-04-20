@@ -1,3 +1,10 @@
+/**
+ * TigerEx Frontend
+ * @file index.ts
+ * @description TigerEx React component
+ * @author TigerEx Development Team
+ */
+
 import { configureStore } from '@reduxjs/toolkit';
 import { authSlice } from './slices/authSlice';
 import { tradingSlice } from './slices/tradingSlice';
