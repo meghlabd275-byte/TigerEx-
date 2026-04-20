@@ -1,6 +1,7 @@
 """
-Comprehensive Security System for TigerEx Platform
-Advanced security implementation with multi-layer protection
+@file comprehensive_security_system.py
+@description TigerEx Comprehensive Security System - Advanced multi-layer protection
+@author TigerEx Security Team
 """
 
 import asyncio

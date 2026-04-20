@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Enhanced Security System for TigerEx Platform
-Complete security framework with advanced protection, monitoring, and compliance
+@file enhanced_security_system.py
+@description TigerEx Enhanced Security System - Complete security framework with advanced protection
+@author TigerEx Security Team
 """
 
 import hashlib
