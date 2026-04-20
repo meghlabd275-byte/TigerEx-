@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file DEXStaking.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { Lock, Unlock, TrendingUp, Clock, Info } from 'lucide-react';
 

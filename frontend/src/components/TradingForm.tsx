@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file TradingForm.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 
 interface TradingFormProps {

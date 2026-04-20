@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file DEXLiquidityPools.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { Plus, Minus, Info, TrendingUp } from 'lucide-react';
 

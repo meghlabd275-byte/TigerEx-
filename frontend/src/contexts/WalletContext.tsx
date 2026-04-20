@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file WalletContext.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface Wallet {

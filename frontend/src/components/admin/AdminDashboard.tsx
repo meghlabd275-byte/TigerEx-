@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file AdminDashboard.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 

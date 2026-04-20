@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file table.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 
 import * as React from "react"
 

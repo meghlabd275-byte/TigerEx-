@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file Sidebar.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 'use client';
 
 import React, { useState } from 'react';

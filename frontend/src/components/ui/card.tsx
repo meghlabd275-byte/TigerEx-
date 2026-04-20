@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file card.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import * as React from "react"
 
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (

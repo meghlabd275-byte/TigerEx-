@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file AdvancedTradingInterface.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Box,

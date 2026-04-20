@@ -1,4 +1,10 @@
 /**
+ * TigerEx React Component
+ * @file CompleteTradingInterface.jsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
+/**
  * TigerEx Complete Trading Interface
  * Modern trading platform with all features from screenshot analysis
  * Includes Spot, Futures, Margin, Options, Alpha Trading, and ETF Trading

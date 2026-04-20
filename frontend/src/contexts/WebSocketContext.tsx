@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file WebSocketContext.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 'use client'
 
 import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react'

@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file Web3Onboarding.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { useWallet } from '../../contexts/WalletContext';
 

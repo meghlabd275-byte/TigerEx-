@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file DashboardRouter.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React from 'react';
 import { useRBAC } from '../../contexts/RBACProvider';
 import { UserRole } from '../../lib/roles';

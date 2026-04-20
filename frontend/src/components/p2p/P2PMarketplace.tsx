@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file P2PMarketplace.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { Search, Filter, Bell, ChevronDown, TrendingUp } from 'lucide-react';
 

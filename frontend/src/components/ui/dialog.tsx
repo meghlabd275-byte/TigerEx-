@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file dialog.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 "use client"
 
 import * as React from "react"

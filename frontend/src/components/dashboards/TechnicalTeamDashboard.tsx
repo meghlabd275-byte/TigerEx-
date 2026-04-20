@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file TechnicalTeamDashboard.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React from 'react';
 
 const TechnicalTeamDashboard: React.FC = () => {

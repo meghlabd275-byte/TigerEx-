@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file DiscoverFeed.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { TrendingUp, Users, MessageCircle, Share2, Bookmark } from 'lucide-react';
 

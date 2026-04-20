@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file ListingsManagerDashboard.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect } from 'react';
 import { getTokenListings } from '../../lib/api';
 

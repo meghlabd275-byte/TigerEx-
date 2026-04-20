@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file TradingScreen.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 'use client';
 
 import axios from 'axios';

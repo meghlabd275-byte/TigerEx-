@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file TradingViewChart.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useEffect, useRef, useState } from 'react';
 import { Maximize2, Settings, TrendingUp } from 'lucide-react';
 

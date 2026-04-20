@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file api.ts
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
 const api = {

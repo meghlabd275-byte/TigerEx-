@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file NotificationContext.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 'use client'
 
 import React, { createContext, useContext, useState, ReactNode } from 'react'

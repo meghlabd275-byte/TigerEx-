@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file badge.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"

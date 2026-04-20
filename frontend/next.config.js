@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file next.config.js
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Enable standalone output for Docker multi-stage builds

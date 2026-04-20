@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file SuperAdminDashboard.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 'use client';
 
 import React, { useState, useEffect } from 'react';

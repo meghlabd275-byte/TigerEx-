@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file DEXSwap.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { ArrowDown, Settings, RefreshCw, Info } from 'lucide-react';
 import { useWallet } from '../../contexts/WalletContext';

@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file tailwind.config.js
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [

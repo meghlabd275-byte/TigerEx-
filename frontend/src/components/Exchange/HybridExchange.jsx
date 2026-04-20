@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file HybridExchange.jsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect } from 'react';
 import { Card, Tabs, Button, Select, Input, Table, Switch, message } from 'antd';
 import { SwapOutlined, TradingViewOutlined, WalletOutlined } from '@ant-design/icons';

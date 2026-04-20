@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file textarea.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import * as React from "react"
 import { cn } from "@/lib/utils"
 

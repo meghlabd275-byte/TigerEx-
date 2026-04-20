@@ -1,4 +1,10 @@
 /**
+ * TigerEx React Component
+ * @file App.js
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
+/**
  * TigerEx Advanced Web Application v11.0.0
  * Modern responsive web trading platform with comprehensive features
  * Built with React, Redux, and Material-UI for optimal user experience

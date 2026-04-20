@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file DEXBridge.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { ArrowDown, Info, AlertCircle } from 'lucide-react';
 

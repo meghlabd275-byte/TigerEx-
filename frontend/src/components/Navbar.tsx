@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file Navbar.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 'use client';
 
 import React from 'react';

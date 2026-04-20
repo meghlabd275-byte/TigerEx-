@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file AuthContext.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 "use client";
 
 import React, { createContext, useContext, useReducer, useEffect } from 'react';

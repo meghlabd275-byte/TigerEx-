@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file next-env.d.ts
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 /// <reference types="next" />
 /// <reference types="next/image-types/global" />
 /// <reference types="next/navigation-types/compat/navigation" />

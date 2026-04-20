@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file WalletSetup.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { useWallet } from '../../contexts/WalletContext';
 import { Copy, Eye, EyeOff, Check, AlertCircle, Wallet as WalletIcon, Download } from 'lucide-react';

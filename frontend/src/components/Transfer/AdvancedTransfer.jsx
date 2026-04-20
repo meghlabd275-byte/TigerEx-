@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file AdvancedTransfer.jsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Modal, Select, Input, message, Spin, List, Avatar } from 'antd';
 import { ArrowRightOutlined, SwapOutlined, HistoryOutlined } from '@ant-design/icons';

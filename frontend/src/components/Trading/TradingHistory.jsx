@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file TradingHistory.jsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect } from 'react';
 import { Card, Tabs, Table, Select, Button, Tag, DatePicker, Space } from 'antd';
 import { FilterOutlined, DownloadOutlined } from '@ant-design/icons';

@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file CEXTrading.jsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect } from 'react';
 import { Card, Row, Col, Select, Input, Button, Table, Tabs, Progress, Statistic } from 'antd';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';

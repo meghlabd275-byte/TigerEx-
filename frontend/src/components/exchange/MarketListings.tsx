@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file MarketListings.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { Search, TrendingUp, TrendingDown, Star } from 'lucide-react';
 

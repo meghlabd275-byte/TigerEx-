@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file input.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import * as React from "react"
 
 const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(({ className, type, ...props }, ref) => {

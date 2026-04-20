@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file RBACProvider.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { createContext, useContext, useState } from 'react';
 import { UserRole, PERMISSIONS } from '../lib/roles';
 

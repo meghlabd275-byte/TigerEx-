@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file useAuth.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import {
   useState,
   useEffect,

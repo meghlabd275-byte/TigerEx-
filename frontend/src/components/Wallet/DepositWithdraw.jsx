@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file DepositWithdraw.jsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect } from 'react';
 import { Card, Tabs, List, Button, Modal, Input, Select, message, Avatar, Space } from 'antd';
 import { DownOutlined, CopyOutlined, QrcodeOutlined } from '@ant-design/icons';

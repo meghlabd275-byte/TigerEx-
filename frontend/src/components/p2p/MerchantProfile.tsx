@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file MerchantProfile.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { Share2, ChevronRight, ThumbsUp } from 'lucide-react';
 

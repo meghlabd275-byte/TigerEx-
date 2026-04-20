@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file AccountInfoPage.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, User, Shield, Twitter, Settings, Copy, Eye, EyeOff, Crown, TrendingUp } from 'lucide-react';
 

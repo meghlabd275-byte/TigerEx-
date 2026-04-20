@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file OrderBookDisplay.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 

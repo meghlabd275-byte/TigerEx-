@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file AdminUserMgmt.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React from 'react';
 
 const AdminUserMgmt: React.FC = () => {

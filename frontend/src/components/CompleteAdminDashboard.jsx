@@ -1,4 +1,10 @@
 /**
+ * TigerEx React Component
+ * @file CompleteAdminDashboard.jsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
+/**
  * TigerEx Complete Admin Dashboard
  * Full administrative control system with all features
  */

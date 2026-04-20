@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file DEXTrading.jsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect } from 'react';
 import { Card, Row, Col, Select, Input, Button, Table, Tabs, Switch, message, Modal } from 'antd';
 import { WalletOutlined, SwapOutlined, LinkOutlined, DisconnectOutlined } from '@ant-design/icons';

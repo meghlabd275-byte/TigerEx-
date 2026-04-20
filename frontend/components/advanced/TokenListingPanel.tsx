@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file TokenListingPanel.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {

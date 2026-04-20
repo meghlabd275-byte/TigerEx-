@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file WalletOverview.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { TrendingUp, Eye, EyeOff, BarChart2, QrCode } from 'lucide-react';
 

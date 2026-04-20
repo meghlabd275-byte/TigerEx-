@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file MarketsScreen.tsx
+ * @description React component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState, useEffect } from 'react';
 import { Search, Edit } from 'lucide-react';
 import { getTradingPairs } from '../../lib/api';
