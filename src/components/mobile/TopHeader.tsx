@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file TopHeader.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React from 'react';
 import { ArrowLeft, QrCode, Headphones, MoreHorizontal } from 'lucide-react';
 

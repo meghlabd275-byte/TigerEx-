@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file TradingPairs.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 'use client';
 
 import { useState, useEffect } from 'react';

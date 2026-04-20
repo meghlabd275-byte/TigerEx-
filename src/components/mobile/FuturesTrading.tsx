@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file FuturesTrading.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { ChevronDown, BarChart3, Settings, TrendingUp, TrendingDown } from 'lucide-react';
 

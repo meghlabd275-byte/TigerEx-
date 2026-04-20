@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file dropdown-menu.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState, useRef, useEffect } from 'react';
 
 interface DropdownMenuProps {

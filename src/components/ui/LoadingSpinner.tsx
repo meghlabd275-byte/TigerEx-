@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file LoadingSpinner.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 'use client';
 
 import { motion } from 'framer-motion';

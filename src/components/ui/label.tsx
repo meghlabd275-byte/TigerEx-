@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file label.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 import * as React from 'react';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import { cva, type VariantProps } from 'class-variance-authority';

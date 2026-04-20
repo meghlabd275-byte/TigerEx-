@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file button.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React from 'react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

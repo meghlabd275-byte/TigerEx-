@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file AssetsOverview.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { 
   Eye, 

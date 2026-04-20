@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file Footer.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 'use client';
 
 import Link from 'next/link';

@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file input.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React from 'react';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {

@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file GridTrading.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { 
   Grid3X3, 

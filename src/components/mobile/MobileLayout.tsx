@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file MobileLayout.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React from 'react';
 import { useState } from 'react';
 import BottomNavigation from './BottomNavigation';

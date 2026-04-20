@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file card.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React from 'react';
 
 interface CardProps {

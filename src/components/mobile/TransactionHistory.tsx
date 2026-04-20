@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file TransactionHistory.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { Filter, Download, ChevronDown } from 'lucide-react';
 

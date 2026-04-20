@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file TransferInterface.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { ChevronRight, ChevronDown, RefreshCw } from 'lucide-react';
 import WalletSelector from './WalletSelector';

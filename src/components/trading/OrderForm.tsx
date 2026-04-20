@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file OrderForm.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 
 interface OrderFormProps {

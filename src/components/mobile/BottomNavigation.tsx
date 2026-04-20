@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file BottomNavigation.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React from 'react';
 import { Home, TrendingUp, Repeat, Search, User } from 'lucide-react';
 import { useRouter } from 'next/router';

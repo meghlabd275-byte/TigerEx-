@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file tabs.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 import * as React from 'react';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import { cn } from '@/lib/utils';

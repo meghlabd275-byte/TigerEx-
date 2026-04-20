@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file TradingHeader.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React from 'react';
 import Link from 'next/link';
 

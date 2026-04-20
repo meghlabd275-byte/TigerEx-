@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file AdminDashboard.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { 
   Users, 

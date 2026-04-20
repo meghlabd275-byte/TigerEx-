@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file MarketSelector.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 'use client';
 
 import { useState } from 'react';

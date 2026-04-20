@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file WalletSelector.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React from 'react';
 import { ChevronRight, Wallet, TrendingUp, BarChart3, Coins, Gift, FileText } from 'lucide-react';
 

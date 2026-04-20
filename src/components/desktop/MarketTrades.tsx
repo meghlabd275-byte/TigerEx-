@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file MarketTrades.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 import React, { useState } from 'react';
 import { Clock, TrendingUp, TrendingDown } from 'lucide-react';
 

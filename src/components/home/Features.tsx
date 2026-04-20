@@ -1,3 +1,9 @@
+/**
+ * TigerEx React Component
+ * @file Features.tsx
+ * @description UI component for TigerEx
+ * @author TigerEx Development Team
+ */
 'use client';
 
 import { motion } from 'framer-motion';
