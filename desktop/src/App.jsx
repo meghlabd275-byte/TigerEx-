@@ -2,6 +2,9 @@
  * TigerEx Advanced Desktop Application v11.0.0
  * Professional trading desktop app with advanced features and modern UI
  * Built with Electron + React for cross-platform desktop support
+ * @file App.jsx
+ * @description Main desktop application component
+ * @author TigerEx Development Team
  */
 
 import React, { useState, useEffect, useCallback } from 'react';

@@ -1,6 +1,9 @@
 /**
  * TigerEx TradFi Desktop Trading Application
  * CFD, Forex, ETF, Derivatives Trading
+ * @file TradFiDesktop.tsx
+ * @description TradFi desktop trading component
+ * @author TigerEx Development Team
  */
 
 import React, { useState, useEffect } from 'react';

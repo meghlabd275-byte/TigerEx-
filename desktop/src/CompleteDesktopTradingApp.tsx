@@ -1,6 +1,9 @@
 /**
  * TigerEx Complete Desktop Trading Application
  * Full-featured desktop trading platform with Electron
+ * @file CompleteDesktopTradingApp.tsx
+ * @description Complete desktop trading app component
+ * @author TigerEx Development Team
  */
 
 import React, { useState, useEffect } from 'react';
