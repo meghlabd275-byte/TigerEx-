@@ -158,7 +158,7 @@ export function UltimateAdminDashboard({
 
       if (pairsRes?.ok) {
         const data = await pairsRes.json();
-        setTradingPairs(data.pairs || []);
+        setTradingPairs(data);
       }
 
       setLoading(false);

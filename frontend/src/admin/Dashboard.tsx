@@ -16,6 +16,7 @@ import {
   CardContent,
   List,
   ListItem,
+  ListItemButton,
   ListItemText,
   ListItemIcon,
   Divider,
@@ -168,12 +169,12 @@ const AdminDashboard: React.FC = () => {
       <Divider />
       <List>
         {menuItems.map((item) => (
-          <ListItem button component="a" href={item.path} key={item.text}>
+          <ListItemButton component="a" href={item.path} key={item.text}>
             <ListItemIcon sx={{ color: 'inherit' }}>
               {item.icon}
             </ListItemIcon>
             <ListItemText primary={item.text} />
-          </ListItem>
+          </ListItemButton>
         ))}
       </List>
     </Box>

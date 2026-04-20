@@ -10,9 +10,9 @@ import { getTradingPairs } from '../../lib/api';
 
 interface TradingPair {
   symbol: string;
-  volume_24h: string;
-  last_price: string;
-  price_change_24h: string;
+  volume_24h?: string;
+  last_price?: string;
+  price_change_24h?: string;
 }
 
 const MarketsScreen: React.FC = () => {
@@ -24,7 +24,7 @@ const MarketsScreen: React.FC = () => {
     const fetchTradingPairs = async () => {
       try {
         const data = await getTradingPairs();
-        setTradingPairs(data.trading_pairs);
+        setTradingPairs(data);
         setLoading(false);
       } catch (err) {
         setError('Failed to fetch trading pairs');
@@ -76,7 +76,7 @@ const MarketsScreen: React.FC = () => {
           {loading && <p>Loading...</p>}
           {error && <p className="text-red-500">{error}</p>}
           {!loading && !error && tradingPairs.map((pair, index) => {
-            const priceChange = parseFloat(pair.price_change_24h);
+            const priceChange = parseFloat(pair.price_change_24h || "0");
             const changeColor = priceChange >= 0 ? 'green' : 'red';
 
             return (

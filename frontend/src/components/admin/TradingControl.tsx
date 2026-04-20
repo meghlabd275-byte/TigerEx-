@@ -199,7 +199,7 @@ const TradingControl: React.FC = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setTradingPairs(data.trading_pairs);
+        setTradingPairs(data);
       }
     } catch (error) {
       console.error('Error loading trading pairs:', error);

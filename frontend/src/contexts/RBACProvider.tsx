@@ -5,7 +5,7 @@
  * @author TigerEx Development Team
  */
 import React, { createContext, useContext, useState } from 'react';
-import { UserRole, PERMISSIONS } from '../lib/roles';
+import { UserRole, RolePermissions } from '../lib/roles';
 
 interface RBACContextType {
   userRole: UserRole | null;
@@ -20,7 +20,7 @@ export const RBACProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const hasPermission = (permission: string) => {
     if (!userRole) return false;
-    const userPermissions = PERMISSIONS[userRole];
+    const userPermissions = RolePermissions[userRole];
     if (userPermissions.includes('*')) return true;
     return userPermissions.includes(permission);
   };

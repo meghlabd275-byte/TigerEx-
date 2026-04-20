@@ -26,29 +26,29 @@ const DashboardRouter: React.FC = () => {
   const { userRole } = useRBAC();
 
   switch (userRole) {
-    case 'superadmin':
+    case UserRole.SUPER_ADMIN:
       return <SuperAdminDashboard />;
-    case 'admin':
+    case UserRole.ADMIN:
       return <AdminDashboard />;
-    case 'moderator':
+    case UserRole.MODERATOR:
       return <ModeratorDashboard />;
-    case 'technical_team':
+    case UserRole.TECHNICAL_TEAM:
       return <TechnicalTeamDashboard />;
-    case 'listings_manager':
+    case UserRole.LISTINGS_MANAGER:
       return <ListingsManagerDashboard />;
-    case 'business_head':
+    case UserRole.BUSINESS_HEAD:
       return <BusinessHeadDashboard />;
-    case 'white_label_client':
+    case 'white_label_client' as UserRole:
       return <WhiteLabelClientDashboard />;
-    case 'prime_brokerage':
+    case 'prime_brokerage' as UserRole:
       return <PrimeBrokerageDashboard />;
-    case 'liquidity_provider':
+    case UserRole.LIQUIDITY_PROVIDER:
       return <LiquidityProviderDashboard />;
-    case 'market_maker':
+    case UserRole.MARKET_MAKER:
       return <MarketMakerDashboard />;
-    case 'trader':
+    case UserRole.TRADER:
         return <TradingDashboard />;
-    case 'user':
+    case 'user' as UserRole:
     default:
       return <UserDashboard />;
   }

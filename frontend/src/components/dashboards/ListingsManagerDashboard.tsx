@@ -24,7 +24,7 @@ const ListingsManagerDashboard: React.FC = () => {
     const fetchListings = async () => {
       try {
         const data = await getTokenListings();
-        setListings(data.listings);
+        setListings(data);
         setLoading(false);
       } catch (err) {
         setError('Failed to fetch token listings');
