@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """
-Database initialization script for TigerEx Unified Backend
+@file init_db.py
+@description Database initialization script for TigerEx Unified Backend
+@author TigerEx Development Team
 """
 
 import os

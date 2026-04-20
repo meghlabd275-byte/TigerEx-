@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-TigerEx Complete Backend Services
-All Services with Role-Based Access Control
+@file complete_api.py
+@description TigerEx Complete Backend Services with Role-Based Access Control
+@author TigerEx Development Team
 """
 
 from fastapi import FastAPI, HTTPException, Depends, Request, Response

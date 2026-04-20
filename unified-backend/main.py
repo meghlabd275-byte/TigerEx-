@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """
-TigerEx Unified Backend - Complete Admin and User Controls
+@file main.py
+@description TigerEx Unified Backend - Complete Admin and User Controls
 Comprehensive backend system with full administrative and user functionality
 Version: 3.0.0 - Complete Implementation with All Services
+@author TigerEx Development Team
 
 This unified backend integrates ALL 121+ backend services including:
 - Cross-chain Bridge Service
