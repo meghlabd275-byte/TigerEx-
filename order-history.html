@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order History | TigerEx</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #F0B90B;
+      --bg-dark: #0B0E11;
+      --bg-card: #1E2329;
+      --text-primary: #EAECEF;
+      --text-secondary: #848E9C;
+      --accent-green: #00C087;
+      --accent-red: #F6465D;
+      --border-color: #2B3139;
+      --hover-bg: #2B3139;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    .header {
+      background: var(--bg-card);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary-color), #FF6B6B);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 8px 12px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .back-btn:hover {
+      background: var(--hover-bg);
+    }
+
+    .page-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 10px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover {
+      background: var(--hover-bg);
+    }
+
+    .filter-btn.active {
+      background: var(--primary-color);
+      color: var(--bg-dark);
+      border-color: var(--primary-color);
+    }
+
+    .search-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 12px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text-primary);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .date-filter {
+      padding: 12px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+
+    .orders-table {
+      width: 100%;
+      background: var(--bg-card);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    .table-header {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
+      padding: 16px 20px;
+      background: var(--bg-dark);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    .order-row {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .order-row:hover {
+      background: var(--hover-bg);
+    }
+
+    .order-row:last-child {
+      border-bottom: none;
+    }
+
+    .order-pair {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pair-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .pair-icon.buy { background: linear-gradient(135deg, #F7931A, #FF9F43); color: #fff; }
+    .pair-icon.sell { background: linear-gradient(135deg, #627EEA, #8B9FFF); color: #fff; }
+
+    .pair-info {
+      flex: 1;
+    }
+
+    .pair-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .pair-type {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .order-type {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .order-type.buy {
+      background: rgba(0, 192, 135, 0.15);
+      color: var(--accent-green);
+    }
+
+    .order-type.sell {
+      background: rgba(246, 70, 93, 0.15);
+      color: var(--accent-red);
+    }
+
+    .order-amount {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .order-price {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .order-total {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .order-time {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .order-status {
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .order-status.filled {
+      background: rgba(0, 192, 135, 0.15);
+      color: var(--accent-green);
+    }
+
+    .order-status.pending {
+      background: rgba(240, 185, 11, 0.15);
+      color: var(--primary-color);
+    }
+
+    .order-status.cancelled {
+      background: rgba(132, 142, 156, 0.15);
+      color: var(--text-secondary);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .empty-text {
+      font-size: 16px;
+      color: var(--text-secondary);
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .page-btn {
+      padding: 8px 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .page-btn:hover {
+      background: var(--hover-bg);
+    }
+
+    .page-btn.active {
+      background: var(--primary-color);
+      color: var(--bg-dark);
+      border-color: var(--primary-color);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .table-header {
+        display: none;
+      }
+      
+      .order-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-left">
+      <a href="dashboard.html" class="back-btn">← Back</a>
+      <a href="dashboard.html" class="logo">
+        <div class="logo-icon">🐯</div>
+        <span>TigerEx</span>
+      </a>
+    </div>
+    <h1 class="page-title">Order History</h1>
+  </header>
+
+  <div class="container">
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterOrders('all')">All</button>
+      <button class="filter-btn" onclick="filterOrders('filled')">Filled</button>
+      <button class="filter-btn" onclick="filterOrders('pending')">Partial Filled</button>
+      <button class="filter-btn" onclick="filterOrders('cancelled')">Cancelled</button>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" class="search-input" placeholder="Search by pair, ID or amount..." id="searchInput">
+      <select class="date-filter">
+        <option>Last 7 Days</option>
+        <option>Last 30 Days</option>
+        <option>Last 90 Days</option>
+        <option>This Year</option>
+        <option>All Time</option>
+      </select>
+    </div>
+
+    <div class="orders-table">
+      <div class="table-header">
+        <div>Pair</div>
+        <div>Type</div>
+        <div>Amount</div>
+        <div>Price</div>
+        <div>Time</div>
+      </div>
+
+      <div class="order-row" onclick="showOrderDetails('1')">
+        <div class="order-pair">
+          <div class="pair-icon buy">B</div>
+          <div class="pair-info">
+            <div class="pair-name">BTC/USDT</div>
+            <div class="pair-type">Spot</div>
+          </div>
+        </div>
+        <div>
+          <span class="order-type buy">Buy</span>
+        </div>
+        <div class="order-amount">
+          <div>0.5 BTC</div>
+          <div class="order-price">$37,152.23</div>
+        </div>
+        <div class="order-total">
+          <div>$74,304.45</div>
+          <div class="order-price">@ 74,304.45</div>
+        </div>
+        <div class="order-time">
+          <div>2026-04-20</div>
+          <div>10:32:15</div>
+        </div>
+      </div>
+
+      <div class="order-row">
+        <div class="order-pair">
+          <div class="pair-icon sell">E</div>
+          <div class="pair-info">
+            <div class="pair-name">ETH/USDT</div>
+            <div class="pair-type">Spot</div>
+          </div>
+        </div>
+        <div>
+          <span class="order-type sell">Sell</span>
+        </div>
+        <div class="order-amount">
+          <div>5.0 ETH</div>
+          <div class="order-price">$2,271.99</div>
+        </div>
+        <div class="order-total">
+          <div>$11,359.95</div>
+          <div class="order-price">@ 2,271.99</div>
+        </div>
+        <div class="order-time">
+          <div>2026-04-19</div>
+          <div>15:45:22</div>
+        </div>
+      </div>
+
+      <div class="order-row">
+        <div class="order-pair">
+          <div class="pair-icon buy">B</div>
+          <div class="pair-info">
+            <div class="pair-name">BNB/USDT</div>
+            <div class="pair-type">Spot</div>
+          </div>
+        </div>
+        <div>
+          <span class="order-type buy">Buy</span>
+        </div>
+        <div class="order-amount">
+          <div>10 BNB</div>
+          <div class="order-price">$618.50</div>
+        </div>
+        <div class="order-total">
+          <div>$6,185.00</div>
+          <div class="order-price">@ 618.50</div>
+        </div>
+        <div class="order-time">
+          <div>2026-04-18</div>
+          <div>09:12:08</div>
+        </div>
+      </div>
+
+      <div class="order-row">
+        <div class="order-pair">
+          <div class="pair-icon sell">X</div>
+          <div class="pair-info">
+            <div class="pair-name">XRP/USDT</div>
+            <div class="pair-type">Spot</div>
+          </div>
+        </div>
+        <div>
+          <span class="order-type sell">Sell</span>
+        </div>
+        <div class="order-amount">
+          <div>5000 XRP</div>
+          <div class="order-price">$1.40</div>
+        </div>
+        <div class="order-total">
+          <div>$7,000.00</div>
+          <div class="order-price">@ 1.40</div>
+        </div>
+        <div class="order-time">
+          <div>2026-04-17</div>
+          <div>14:22:35</div>
+        </div>
+      </div>
+
+      <div class="order-row">
+        <div class="order-pair">
+          <div class="pair-icon buy">S</div>
+          <div class="pair-info">
+            <div class="pair-name">SOL/USDT</div>
+            <div class="pair-type">Spot</div>
+          </div>
+        </div>
+        <div>
+          <span class="order-type buy">Buy</span>
+        </div>
+        <div class="order-amount">
+          <div>25 SOL</div>
+          <div class="order-price">$182.45</div>
+        </div>
+        <div class="order-total">
+          <div>$4,561.25</div>
+          <div class="order-price">@ 182.45</div>
+        </div>
+        <div class="order-time">
+          <div>2026-04-16</div>
+          <div>11:05:19</div>
+        </div>
+      </div>
+
+      <div class="order-row">
+        <div class="order-pair">
+          <div class="pair-icon sell">D</div>
+          <div class="pair-info">
+            <div class="pair-name">DOGE/USDT</div>
+            <div class="pair-type">Spot</div>
+          </div>
+        </div>
+        <div>
+          <span class="order-type sell">Sell</span>
+        </div>
+        <div class="order-amount">
+          <div>10000 DOGE</div>
+          <div class="order-price">$0.32</div>
+        </div>
+        <div class="order-total">
+          <div>$3,200.00</div>
+          <div class="order-price">@ 0.32</div>
+        </div>
+        <div class="order-time">
+          <div>2026-04-15</div>
+          <div>16:38:42</div>
+        </div>
+      </div>
+
+      <div class="order-row">
+        <div class="order-pair">
+          <div class="pair-icon buy">T</div>
+          <div class="pair-info">
+            <div class="pair-name">BTC/USDT</div>
+            <div class="pair-type">Spot</div>
+          </div>
+        </div>
+        <div>
+          <span class="order-type buy">Buy</span>
+        </div>
+        <div class="order-amount">
+          <div>0.25 BTC</div>
+          <div class="order-price">$74,304.45</div>
+        </div>
+        <div class="order-total">
+          <div>$18,576.11</div>
+          <div class="order-price">@ 74,304.45</div>
+        </div>
+        <div class="order-time">
+          <div>2026-04-14</div>
+          <div>08:15:55</div>
+        </div>
+      </div>
+
+      <div class="order-row">
+        <div class="order-pair">
+          <div class="pair-icon sell">A</div>
+          <div class="pair-info">
+            <div class="pair-name">ADA/USDT</div>
+            <div class="pair-type">Spot</div>
+          </div>
+        </div>
+        <div>
+          <span class="order-type sell">Sell</span>
+        </div>
+        <div class="order-amount">
+          <div>2500 ADA</div>
+          <div class="order-price">$0.65</div>
+        </div>
+        <div class="order-total">
+          <div>$1,625.00</div>
+          <div class="order-price">@ 0.65</div>
+        </div>
+        <div class="order-time">
+          <div>2026-04-13</div>
+          <div>12:42:18</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pagination">
+      <button class="page-btn">←</button>
+      <button class="page-btn active">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn">3</button>
+      <button class="page-btn">4</button>
+      <button class="page-btn">5</button>
+      <button class="page-btn">→</button>
+    </div>
+  </div>
+
+  <script>
+    function filterOrders(status) {
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      // In real app, this would filter the orders
+    }
+
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+      const search = e.target.value.toLowerCase();
+      document.querySelectorAll('.order-row').forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(search) ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security | TigerEx</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #F0B90B;
+      --bg-dark: #0B0E11;
+      --bg-card: #1E2329;
+      --text-primary: #EAECEF;
+      --text-secondary: #848E9C;
+      --accent-green: #00C087;
+      --accent-red: #F6465D;
+      --border-color: #2B3139;
+      --hover-bg: #2B3139;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg-dark); color: var(--text-primary); min-height: 100vh; }
+
+    .header {
+      background: var(--bg-card);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .back-btn {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 8px 12px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+
+    .logo { display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 700; text-decoration: none; color: var(--text-primary); }
+    .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary-color), #FF6B6B); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .page-title { font-size: 20px; font-weight: 600; }
+
+    .container { max-width: 800px; margin: 0 auto; padding: 24px; }
+
+    .security-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    .security-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .security-title { font-size: 16px; font-weight: 600; }
+
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .status-badge.enabled { background: rgba(0,192,135,0.15); color: var(--accent-green); }
+    .status-badge.disabled { background: rgba(132,142,156,0.15); color: var(--text-secondary); }
+
+    .security-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 16px; }
+
+    .security-btn {
+      padding: 12px 20px;
+      background: var(--primary-color);
+      color: var(--bg-dark);
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .security-btn.secondary {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .security-btn:hover { opacity: 0.9; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; }
+    .form-input { width: 100%; padding: 14px 16px; background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 10px; font-size: 14px; color: var(--text-primary); }
+    .form-input:focus { outline: none; border-color: var(--primary-color); }
+
+    .qr-section {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      padding: 20px;
+      background: white;
+      border-radius: 12px;
+    }
+
+    .qr-code {
+      width: 150px;
+      height: 150px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #000;
+    }
+
+    .scan-instructions { flex: 1; }
+    .scan-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: #000; }
+    .scan-steps { font-size: 14px; color: #666; line-height: 1.8; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div style="display:flex;align-items:center;gap:16px">
+      <a href="dashboard.html" class="back-btn">← Back</a>
+      <a href="dashboard.html" class="logo"><div class="logo-icon">🐯</div><span>TigerEx</span></a>
+    </div>
+    <h1 class="page-title">Security</h1>
+  </header>
+
+  <div class="container">
+    <div class="security-card">
+      <div class="security-header">
+        <div class="security-title">Password</div>
+        <span class="status-badge enabled">Enabled</span>
+      </div>
+      <div class="security-desc">Change your password to keep your account secure.</div>
+      <div class="form-group">
+        <label class="form-label">Current Password</label>
+        <input type="password" class="form-input" placeholder="Enter current password">
+      </div>
+      <div class="form-group">
+        <label class="form-label">New Password</label>
+        <input type="password" class="form-input" placeholder="Enter new password">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm New Password</label>
+        <input type="password" class="form-input" placeholder="Confirm new password">
+      </div>
+      <button class="security-btn">Update Password</button>
+    </div>
+
+    <div class="security-card">
+      <div class="security-header">
+        <div class="security-title">Two-Factor Authentication (2FA)</div>
+        <span class="status-badge disabled">Not Enabled</span>
+      </div>
+      <div class="security-desc">Add an extra layer of security to your account by requiring a verification code.</div>
+      <div class="qr-section">
+        <div class="qr-code"> [QR Code] </div>
+        <div class="scan-instructions">
+          <div class="scan-title">Set up Google Authenticator</div>
+          <div class="scan-steps">
+            1. Download Google Authenticator app<br>
+            2. Tap + and select "Scan barcode"<br>
+            3. Scan the QR code above<br>
+            4. Enter the 6-digit code below
+          </div>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:16px">
+        <label class="form-label">Verification Code</label>
+        <input type="text" class="form-input" placeholder="Enter 6-digit code">
+      </div>
+      <button class="security-btn">Enable 2FA</button>
+    </div>
+
+    <div class="security-card">
+      <div class="security-header">
+        <div class="security-title">Email Verification</div>
+        <span class="status-badge enabled">Verified</span>
+      </div>
+      <div class="security-desc">user@example.com</div>
+      <button class="security-btn secondary">Change Email</button>
+    </div>
+
+    <div class="security-card">
+      <div class="security-header">
+        <div class="security-title">Phone Number</div>
+        <span class="status-badge disabled">Not Verified</span>
+      </div>
+      <div class="security-desc">Add your phone number to receive verification codes.</div>
+      <button class="security-btn">Add Phone Number</button>
+    </div>
+
+    <div class="security-card">
+      <div class="security-header">
+        <div class="security-title">Anti-Phishing Code</div>
+        <span class="status-badge disabled">Not Set</span>
+      </div>
+      <div class="security-desc">Create a custom code to identify genuine TigerEx emails.</div>
+      <button class="security-btn">Set Anti-Phishing Code</button>
+    </div>
+  </div>
+</body>
+</html>

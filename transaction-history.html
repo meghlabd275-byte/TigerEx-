@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transaction History | TigerEx</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #F0B90B;
+      --bg-dark: #0B0E11;
+      --bg-card: #1E2329;
+      --text-primary: #EAECEF;
+      --text-secondary: #848E9C;
+      --accent-green: #00C087;
+      --accent-red: #F6465D;
+      --border-color: #2B3139;
+      --hover-bg: #2B3139;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    .header {
+      background: var(--bg-card);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary-color), #FF6B6B);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 8px 12px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+
+    .page-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 12px;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      background: transparent;
+      border: none;
+      border-radius: 8px 8px 0 0;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .tab:hover {
+      color: var(--text-primary);
+    }
+
+    .tab.active {
+      color: var(--primary-color);
+    }
+
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -13px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--primary-color);
+    }
+
+    .summary-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .summary-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .summary-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .summary-value {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .summary-value.deposit { color: var(--accent-green); }
+    .summary-value.withdraw { color: var(--accent-red); }
+
+    .txn-list {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .txn-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      padding: 16px 20px;
+      background: var(--bg-dark);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    .txn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      align-items: center;
+    }
+
+    .txn-row:hover {
+      background: var(--hover-bg);
+    }
+
+    .txn-row:last-child {
+      border-bottom: none;
+    }
+
+    .txn-asset {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .asset-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .txn-type {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .txn-type.deposit { color: var(--accent-green); }
+    .txn-type.withdraw { color: var(--accent-red); }
+
+    .txn-amount {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .txn-amount.deposit { color: var(--accent-green); }
+    .txn-amount.withdraw { color: var(--accent-red); }
+
+    .txn-status {
+      display: inline-flex;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .txn-status.completed {
+      background: rgba(0, 192, 135, 0.15);
+      color: var(--accent-green);
+    }
+
+    .txn-status.pending {
+      background: rgba(240, 185, 11, 0.15);
+      color: var(--primary-color);
+    }
+
+    .txn-status.failed {
+      background: rgba(246, 70, 93, 0.15);
+      color: var(--accent-red);
+    }
+
+    .txn-date {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 768px) {
+      .txn-header { display: none; }
+      .txn-row { grid-template-columns: 1fr; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div style="display:flex;align-items:center;gap:16px">
+      <a href="dashboard.html" class="back-btn">← Back</a>
+      <a href="dashboard.html" class="logo">
+        <div class="logo-icon">🐯</div>
+        <span>TigerEx</span>
+      </a>
+    </div>
+    <h1 class="page-title">Transaction History</h1>
+  </header>
+
+  <div class="container">
+    <div class="tabs">
+      <button class="tab active">All</button>
+      <button class="tab">Deposits</button>
+      <button class="tab">Withdrawals</button>
+      <button class="tab">Transfers</button>
+    </div>
+
+    <div class="summary-cards">
+      <div class="summary-card">
+        <div class="summary-label">Total Deposits</div>
+        <div class="summary-value deposit">+$45,230.50</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Total Withdrawals</div>
+        <div class="summary-value withdraw">-$23,450.00</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Net Change</div>
+        <div class="summary-value deposit">+$21,780.50</div>
+      </div>
+    </div>
+
+    <div class="txn-list">
+      <div class="txn-header">
+        <div>Asset</div>
+        <div>Type</div>
+        <div>Amount</div>
+        <div>Status</div>
+      </div>
+
+      <div class="txn-row">
+        <div class="txn-asset">
+          <div class="asset-icon" style="background:linear-gradient(135deg,#F7931A,#FF9F43)">₿</div>
+          <div>
+            <div style="font-weight:600">Bitcoin</div>
+            <div style="font-size:12px;color:var(--text-secondary)">BTC</div>
+          </div>
+        </div>
+        <div class="txn-type deposit">↓ Deposit</div>
+        <div class="txn-amount deposit">+ 1.5 BTC</div>
+        <div class="txn-status completed">Completed</div>
+      </div>
+
+      <div class="txn-row">
+        <div class="txn-asset">
+          <div class="asset-icon" style="background:linear-gradient(135deg,#627EEA,#8B9FFF)">Ξ</div>
+          <div>
+            <div style="font-weight:600">Ethereum</div>
+            <div style="font-size:12px;color:var(--text-secondary)">ETH</div>
+          </div>
+        </div>
+        <div class="txn-type withdraw">↑ Withdrawal</div>
+        <div class="txn-amount withdraw">- 10 ETH</div>
+        <div class="txn-status completed">Completed</div>
+      </div>
+
+      <div class="txn-row">
+        <div class="txn-asset">
+          <div class="asset-icon" style="background:linear-gradient(135deg,#F0B90B,#FFEB3B)">T</div>
+          <div>
+            <div style="font-weight:600">Tether</div>
+            <div style="font-size:12px;color:var(--text-secondary)">USDT</div>
+          </div>
+        </div>
+        <div class="txn-type deposit">↓ Deposit</div>
+        <div class="txn-amount deposit">+ $25,000</div>
+        <div class="txn-status completed">Completed</div>
+      </div>
+
+      <div class="txn-row">
+        <div class="txn-asset">
+          <div class="asset-icon" style="background:linear-gradient(135deg,#F0B90B,#FFEB3B)">B</div>
+          <div>
+            <div style="font-weight:600">BNB</div>
+            <div style="font-size:12px;color:var(--text-secondary)">BNB</div>
+          </div>
+        </div>
+        <div class="txn-type withdraw">↑ Withdrawal</div>
+        <div class="txn-amount withdraw">- 50 BNB</div>
+        <div class="txn-status pending">Processing</div>
+      </div>
+
+      <div class="txn-row">
+        <div class="txn-asset">
+          <div class="asset-icon" style="background:linear-gradient(135deg,#23292F,#4A5568)">T</div>
+          <div>
+            <div style="font-weight:600">_TRX</div>
+            <div style="font-size:12px;color:var(--text-secondary)">TRX</div>
+          </div>
+        </div>
+        <div class="txn-type deposit">↓ Deposit</div>
+        <div class="txn-amount deposit">+ 5000 TRX</div>
+        <div class="txn-status completed">Completed</div>
+      </div>
+
+      <div class="txn-row">
+        <div class="txn-asset">
+          <div class="asset-icon" style="background:linear-gradient(135deg,#F7931A,#FF9F43)">₿</div>
+          <div>
+            <div style="font-weight:600">Bitcoin</div>
+            <div style="font-size:12px;color:var(--text-secondary)">BTC</div>
+          </div>
+        </div>
+        <div class="txn-type withdraw">↑ Withdrawal</div>
+        <div class="txn-amount withdraw">- 0.5 BTC</div>
+        <div class="txn-status failed">Failed</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
