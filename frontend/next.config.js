@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // output: 'export',
+  // Enable standalone output for Docker multi-stage builds
+  output: 'standalone',
   // trailingSlash: true,
   images: {
     domains: [
@@ -14,6 +15,10 @@ const nextConfig = {
       'wikimedia.org',
       'placeholder.com',
     ],
+  },
+  // Enable image optimization
+  experimental: {
+    optimizePackageFonts: true,
   },
   async rewrites() {
     return [

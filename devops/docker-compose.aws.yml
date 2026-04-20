@@ -1,0 +1,84 @@
+# ============================================
+# TigerEx AWS ECS/EKS Docker Compose
+# AWS-specific deployment configuration
+# ============================================
+# Usage with AWS ECS:
+#   docker compose -f docker-compose.aws.yml up
+# ============================================
+
+version: '3.8'
+
+services:
+  # ============================================
+  # Backend Services (AWS Optimized)
+  # ============================================
+  
+  backend:
+    build:
+      context: ../unified-backend
+      dockerfile: Dockerfile
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/tigerex-backend:${IMAGE_TAG:-latest}
+    container_name: tigerex-backend
+    ports:
+      - "8005:8005"
+    environment:
+      - DATABASE_URL=${RDS_ENDPOINT}
+      - REDIS_URL=${ELASTICACHE_ENDPOINT}
+      - AWS_REGION=${AWS_REGION}
+      - AWS_S3_BUCKET=${S3_BUCKET}
+      - JWT_SECRET=${JWT_SECRET}
+      - ENVIRONMENT=production
+      - DEBUG=false
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: /ecs/tigerex-backend
+        awslogs-region: ${AWS_REGION}
+        awslogs-stream-prefix: ecs
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+      restart_policy:
+        condition: on-failure
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8005/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    x-aws-logs_retention_in_days: 7
+
+  # ============================================
+  # Frontend Services (AWS Optimized)
+  # ============================================
+  
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/tigerex-frontend:${IMAGE_TAG:-latest}
+    container_name: tigerex-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=${API_URL}
+      - NEXT_PUBLIC_WS_URL=${WS_URL}
+      - AWS_REGION=${AWS_REGION}
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: /ecs/tigerex-frontend
+        awslogs-region: ${AWS_REGION}
+        awslogs-stream-prefix: ecs
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+
+networks:
+  default:
+    name: ${AWS_VPC_NAME:-default}

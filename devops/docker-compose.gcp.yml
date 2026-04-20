@@ -1,0 +1,80 @@
+# ============================================
+# TigerEx GCP Cloud Run Docker Compose
+# GCP-specific deployment configuration
+# ============================================
+# Usage:
+#   docker compose -f docker-compose.gcp.yml config > cloudbuild.yaml
+#   gcloud run deploy tigerex --image gcr.io/$PROJECT_ID/tigerex
+# ============================================
+
+version: '3.8'
+
+services:
+  # ============================================
+  # Backend Services (GCP Optimized)
+  # ============================================
+  
+  backend:
+    build:
+      context: ../unified-backend
+      dockerfile: Dockerfile
+    image: gcr.io/${GCP_PROJECT_ID}/tigerex-backend:${IMAGE_TAG:-latest}
+    container_name: tigerex-backend
+    ports:
+      - "8005:8005"
+    environment:
+      - DATABASE_URL=${CLOUD_SQL_CONNECTION_NAME}
+      - REDIS_URL=${REDIS_HOST}:${REDIS_PORT}
+      - GCP_PROJECT_ID=${GCP_PROJECT_ID}
+      - JWT_SECRET=${JWT_SECRET}
+      - ENVIRONMENT=production
+    logging:
+      driver: gcplogs
+      options:
+        gcp-project: ${GCP_PROJECT_ID}
+        gcp-log-name: tigerex-backend
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+      placement:
+        constraints:
+          - "node.arch == amd64"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8005/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ============================================
+  # Frontend Services (GCP Optimized)
+  # ============================================
+  
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    image: gcr.io/${GCP_PROJECT_ID}/tigerex-frontend:${IMAGE_TAG:-latest}
+    container_name: tigerex-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=${API_URL}
+      - NEXT_PUBLIC_WS_URL=${WS_URL}
+      - GCP_PROJECT_ID=${GCP_PROJECT_ID}
+    logging:
+      driver: gcplogs
+      options:
+        gcp-project: ${GCP_PROJECT_ID}
+        gcp-log-name: tigerex-frontend
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+
+networks:
+  default:
+    name: ${GCP_NETWORK:-default}

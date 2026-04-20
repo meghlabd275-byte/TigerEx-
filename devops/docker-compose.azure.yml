@@ -1,0 +1,80 @@
+# ============================================
+# TigerEx Azure Container Apps Compose
+# Azure-specific deployment configuration
+# ============================================
+# Usage:
+#   docker compose -f docker-compose.azure.yml up
+# ============================================
+
+version: '3.8'
+
+services:
+  # ============================================
+  # Backend Services (Azure Optimized)
+  # ============================================
+  
+  backend:
+    build:
+      context: ../unified-backend
+      dockerfile: Dockerfile
+    image: tigerex.azurecr.io/tigerex-backend:${IMAGE_TAG:-latest}
+    container_name: tigerex-backend
+    ports:
+      - "8005:8005"
+    environment:
+      - DATABASE_URL=${AZURE_SQL_CONNECTION_STRING}
+      - REDIS_URL=${AZURE_REDIS_CONNECTION_STRING}
+      - JWT_SECRET=${JWT_SECRET}
+      - ENVIRONMENT=production
+      - AZURE_STORAGE_CONNECTION=${AZURE_STORAGE_CONNECTION}
+    logging:
+      driver: azure_file
+      options:
+        container: tigerex-logs
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2Gi
+      scale:
+        min: 1
+        max: 10
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8005/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ============================================
+  # Frontend Services (Azure Optimized)
+  # ============================================
+  
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    image: tigerex.azurecr.io/tigerex-frontend:${IMAGE_TAG:-latest}
+    container_name: tigerex-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=${API_URL}
+      - NEXT_PUBLIC_WS_URL=${WS_URL}
+      - AZURE_STORAGE_CONNECTION=${AZURE_STORAGE_CONNECTION}
+    logging:
+      driver: azure_file
+      options:
+        container: tigerex-logs
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1Gi
+      scale:
+        min: 1
+        max: 5
+
+networks:
+  default:
+    name: ${AZURE_VNET:-default}
