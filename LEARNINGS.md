@@ -1,3 +1,8 @@
+# TigerEx Documentation
+# @file LEARNINGS.md
+# @description TigerEx project documentation
+# @author TigerEx Development Team
+
 # TigerEx Implementation Learnings
 
 ## Multi-Exchange Integration

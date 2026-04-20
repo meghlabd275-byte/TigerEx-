@@ -1,4 +1,9 @@
 {
+  "comment": "TigerEx unified-config.json",
+  "@file": "unified-config.json",
+  "@description": "TigerEx configuration",
+  "@author": "TigerEx Development Team",
+{
   "platform": "TigerEx",
   "version": "4.0.0",
   "environment": "production",

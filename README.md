@@ -1,3 +1,8 @@
+# TigerEx Documentation
+# @file README.md
+# @description TigerEx project documentation
+# @author TigerEx Development Team
+
 # 🐅 TigerEx - Enterprise Cryptocurrency Exchange Platform
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
