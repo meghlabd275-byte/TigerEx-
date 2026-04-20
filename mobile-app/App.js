@@ -1,6 +1,8 @@
 /**
  * TigerEx Market Maker Bot Mobile App - Complete Version
- * Advanced monitoring and control application with all features
+ * @file App.js
+ * @description Advanced monitoring and control application with all features
+ * @author TigerEx Development Team
  */
 
 import React, { useState, useEffect, useCallback } from 'react';

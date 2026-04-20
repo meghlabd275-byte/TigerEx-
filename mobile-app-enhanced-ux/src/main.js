@@ -1,7 +1,9 @@
 /**
  * TigerEx Enhanced Mobile Application v11.0.0
- * Advanced trading mobile app with modern UX/UI and comprehensive features
+ * @file main.js
+ * @description Advanced trading mobile app with modern UX/UI and comprehensive features
  * Built with React Native for iOS and Android platforms
+ * @author TigerEx Development Team
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
