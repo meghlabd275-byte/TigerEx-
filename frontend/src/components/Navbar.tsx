@@ -31,9 +31,11 @@ export default function Navbar() {
       <div className="flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center">
-            <span className="text-2xl font-bold text-black">T</span>
-          </div>
+          <img 
+            src="/assets/logo/tigerex-logo.png" 
+            alt="TigerEx Logo" 
+            className="w-10 h-10 rounded-xl object-cover"
+          />
           <span className="text-xl font-bold">TigerEx</span>
         </Link>
 

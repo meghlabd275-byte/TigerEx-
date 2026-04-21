@@ -22,6 +22,14 @@ export const metadata: Metadata = {
   viewport: 'width=device-width, initial-scale=1',
   themeColor: '#000000',
   manifest: '/manifest.json',
+  icons: {
+    icon: '/assets/logo/tigerex-logo.png',
+    apple: '/assets/logo/tigerex-logo.png',
+    other: {
+      rel: 'apple-touch-icon',
+      url: '/assets/logo/tigerex-logo.png',
+    },
+  },
 }
 
 export default function RootLayout({

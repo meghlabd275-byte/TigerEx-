@@ -164,9 +164,7 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="p-4 border-b border-border-primary">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <span className="text-black font-bold text-sm">T</span>
-          </div>
+          <img src="/assets/logo/tigerex-logo.png" alt="TigerEx" className="w-8 h-8 rounded-lg object-cover" />
           <span className="text-primary font-bold text-xl">TigerEx</span>
         </div>
       </div>
