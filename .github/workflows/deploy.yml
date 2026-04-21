@@ -1,12 +1,5 @@
-# ==========================================
 # TigerEx Production Deployment Workflow
-# @file deploy.yml
-# @description CI/CD pipeline for TigerEx deployment
-# @author TigerEx Development Team
-# @version v12.0.0
-# ==========================================
-
-name: Deploy TigerEx
+name: Deploy to Vercel
 
 on:
   push:
@@ -17,24 +10,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Create Deployment Summary
-        run: |
-          echo "# TigerEx Deployment Triggered"
-          echo "Commit: ${{ github.sha }}"
-          echo "Branch: ${{ github.ref_name }}"
-          echo "Repository: ${{ github.repository }}"
-          echo ""
-          echo "## Next Steps"
-          echo "1. Set up required secrets in GitHub repository"
-          echo "2. Configure deployment target (AWS, GCP, Azure, or self-hosted)"
-          echo "3. Update docker-compose.production.yml with your configuration"
-          echo ""
-          echo "## Available Services"
-          echo "- Frontend (Next.js)"
-          echo "- API Gateway"
-          echo "- User Service"
-          echo "- Trading Engine"
-          echo "- Wallet Service"
+      - uses: actions/checkout@v4
+      
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+          working-directory: ./
