@@ -1019,125 +1019,78 @@ body.light-mode .megamenu {
         </div>
     </header>
 
-    <!-- Mobile Menu Overlay -->
+    <!-- Mobile Menu Overlay - Binance Style Full Menu -->
     <div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileMenu()">
-        <div class="mobile-menu" onclick="event.stopPropagation()">
-            <div class="mobile-menu-actions">
-                <a href="login.html" class="btn btn-secondary" style="flex:1;">Log In</a>
-                <a href="register.html" class="btn btn-primary" style="flex:1;">Sign Up</a>
+        <div class="mobile-menu-full" onclick="event.stopPropagation()">
+            
+            <!-- Menu Header -->
+            <div class="mobile-menu-header">
+                <a href="login.html" class="mobile-menu-link">Log In</a>
+                <a href="register.html" class="mobile-menu-link mobile-menu-link-primary">Sign Up</a>
             </div>
             
-            <div class="mobile-menu-category">
-                <div class="mobile-menu-title">Popular</div>
-                <div class="mobile-menu-item">
-                    <div class="mobile-menu-item-left">
-                        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#F7931A,#F9A825);display:flex;align-items:center;justify-content:center;font-weight:700;">₿</div>
-                        <div>
-                            <div class="mobile-menu-item-name">Bitcoin</div>
-                            <div class="mobile-menu-item-symbol">BTC</div>
-                        </div>
-                    </div>
-                    <div class="mobile-menu-item-arrow">›</div>
-                </div>
-                <div class="mobile-menu-item">
-                    <div class="mobile-menu-item-left">
-                        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#627EEA,#8B9FFF);display:flex;align-items:center;justify-content:center;font-weight:700;">Ξ</div>
-                        <div>
-                            <div class="mobile-menu-item-name">Ethereum</div>
-                            <div class="mobile-menu-item-symbol">ETH</div>
-                        </div>
-                    </div>
-                    <div class="mobile-menu-item-arrow">›</div>
-                </div>
-                <div class="mobile-menu-item">
-                    <div class="mobile-menu-item-left">
-                        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#F0B90B,#F5D033);display:flex;align-items:center;justify-content:center;font-weight:700;">B</div>
-                        <div>
-                            <div class="mobile-menu-item-name">BNB</div>
-                            <div class="mobile-menu-item-symbol">BNB</div>
-                        </div>
-                    </div>
-                    <div class="mobile-menu-item-arrow">›</div>
-                </div>
-                <div class="mobile-menu-item">
-                    <div class="mobile-menu-item-left">
-                        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#00D4A1,#2AE2B1);display:flex;align-items:center;justify-content:center;font-weight:700;">S</div>
-                        <div>
-                            <div class="mobile-menu-item-name">Solana</div>
-                            <div class="mobile-menu-item-symbol">SOL</div>
-                        </div>
-                    </div>
-                    <div class="mobile-menu-item-arrow">›</div>
-                </div>
+            <!-- Products Section -->
+            <div class="mobile-menu-section">
+                <div class="mobile-menu-section-title">Products</div>
+                <a href="#" class="mobile-menu-item-link">Exchange</a>
+                <a href="#" class="mobile-menu-item-link">Buy Crypto</a>
+                <a href="#" class="mobile-menu-item-link">Pay</a>
+                <a href="#" class="mobile-menu-item-link">Crypto Payments</a>
+                <a href="#" class="mobile-menu-item-link">Binance Junior</a>
+                <a href="#" class="mobile-menu-item-link">Academy</a>
+                <a href="#" class="mobile-menu-item-link">Gift Card</a>
+                <a href="#" class="mobile-menu-item-link">Launchpool</a>
+                <a href="#" class="mobile-menu-item-link">Auto-Invest</a>
+                <a href="#" class="mobile-menu-item-link">ETH Staking</a>
+                <a href="#" class="mobile-menu-item-link">NFT</a>
+                <a href="#" class="mobile-menu-item-link">BABT</a>
+                <a href="#" class="mobile-menu-item-link">Research</a>
+                <a href="#" class="mobile-menu-item-link">Charity</a>
             </div>
             
-            <div class="mobile-menu-category">
-                <div class="mobile-menu-title">Market</div>
-                <div class="mobile-menu-item">
-                    <div class="mobile-menu-item-left">
-                        <span>📈</span>
-                        <span class="mobile-menu-item-name">Buy Crypto</span>
-                    </div>
-                    <div class="mobile-menu-item-arrow">›</div>
-                </div>
-                <div class="mobile-menu-item">
-                    <div class="mobile-menu-item-left">
-                        <span>📊</span>
-                        <span class="mobile-menu-item-name">Markets</span>
-                    </div>
-                    <div class="mobile-menu-item-arrow">›</div>
-                </div>
-                <div class="mobile-menu-item">
-                    <div class="mobile-menu-item-left">
-                        <span>🔄</span>
-                        <span class="mobile-menu-item-name">Trade</span>
-                    </div>
-                    <div class="mobile-menu-item-arrow">›</div>
-                </div>
-                <div class="mobile-menu-item">
-                    <div class="mobile-menu-item-left">
-                        <span>💰</span>
-                        <span class="mobile-menu-item-name">Earn</span>
-                    </div>
-                    <div class="mobile-menu-item-arrow">›</div>
-                </div>
-                <div class="mobile-menu-item">
-                    <div class="mobile-menu-item-left">
-                        <span>🖼️</span>
-                        <span class="mobile-menu-item-name">NFT</span>
-                    </div>
-                    <div class="mobile-menu-item-arrow">›</div>
-                </div>
-                <div class="mobile-menu-item">
-                    <div class="mobile-menu-item-left">
-                        <span>📱</span>
-                        <span class="mobile-menu-item-name">Download</span>
-                    </div>
-                    <div class="mobile-menu-item-arrow">›</div>
-                </div>
+            <!-- About Us Section -->
+            <div class="mobile-menu-section">
+                <div class="mobile-menu-section-title">About Us</div>
+                <a href="#" class="mobile-menu-item-link">About</a>
+                <a href="#" class="mobile-menu-item-link">Careers</a>
+                <a href="#" class="mobile-menu-item-link">Announcements</a>
+                <a href="#" class="mobile-menu-item-link">News</a>
+                <a href="#" class="mobile-menu-item-link">Press</a>
+                <a href="#" class="mobile-menu-item-link">Legal</a>
+                <a href="#" class="mobile-menu-item-link">Terms</a>
+                <a href="#" class="mobile-menu-item-link">Privacy</a>
+                <a href="#" class="mobile-menu-item-link">Building Trust</a>
+                <a href="#" class="mobile-menu-item-link">Blog</a>
+                <a href="#" class="mobile-menu-item-link">Community</a>
+                <a href="#" class="mobile-menu-item-link">Risk Warning</a>
+                <a href="#" class="mobile-menu-item-link">Notices</a>
+                <a href="#" class="mobile-menu-item-link">Downloads</a>
+                <a href="#" class="mobile-menu-item-link">Desktop Application</a>
             </div>
             
-            <div class="mobile-menu-category">
-                <div class="mobile-menu-title">Support</div>
-                <div class="mobile-menu-item">
-                    <div class="mobile-menu-item-left">
-                        <span>📚</span>
-                        <span class="mobile-menu-item-name">Help Center</span>
-                    </div>
-                    <div class="mobile-menu-item-arrow">›</div>
-                </div>
-                <div class="mobile-menu-item">
-                    <div class="mobile-menu-item-left">
-                        <span>🎫</span>
-                        <span class="mobile-menu-item-name">Submit a Request</span>
-                    </div>
-                    <div class="mobile-menu-item-arrow">›</div>
+            <!-- Support Section -->
+            <div class="mobile-menu-section">
+                <div class="mobile-menu-section-title">Support</div>
+                <a href="#" class="mobile-menu-item-link">24/7 Chat Support</a>
+                <a href="#" class="mobile-menu-item-link">Support Center</a>
+                <a href="#" class="mobile-menu-item-link">Product Feedback</a>
+                <a href="#" class="mobile-menu-item-link">Fees</a>
+                <a href="#" class="mobile-menu-item-link">APIs</a>
+                <a href="#" class="mobile-menu-item-link">Trading Parameters</a>
+                <a href="#" class="mobile-menu-item-link">How to Raise a Complaint</a>
+            </div>
+            
+            <!-- Language & Currency -->
+            <div class="mobile-menu-footer">
+                <div class="mobile-menu-footer-row">
+                    <span>🌐 English</span>
+                    <span>$ USD</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Hero -->
+    <!-- Hero Section -->
     <section class="hero">
         <div class="container hero-content">
             <div class="hero-text">
