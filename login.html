@@ -376,15 +376,23 @@
         <form id="loginForm">
           <div class="form-group">
             <label class="form-label">Email / Phone Number</label>
-            <input type="text" class="form-input" placeholder="Email or phone number" required>
+            <input type="text" id="emailInput" class="form-input" placeholder="Email or phone number" required>
           </div>
 
           <div class="form-group">
             <label class="form-label">Password</label>
-            <input type="password" class="form-input" placeholder="Enter your password" required>
+            <input type="password" id="passwordInput" class="form-input" placeholder="Enter your password" required>
+          </div>
+          
+          <div class="form-group" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="checkbox" id="rememberCheckbox" style="width: 18px; height: 18px; accent-color: var(--primary-color); cursor: pointer;">
+              <label for="rememberCheckbox" style="font-size: 14px; color: var(--text-secondary); cursor: pointer;">Keep me logged in</label>
+            </div>
+            <a href="#" style="font-size: 14px; color: var(--primary-color); text-decoration: none;">Forgot password?</a>
           </div>
 
-          <button type="submit" class="btn-primary">Log In</button>
+          <button type="submit" class="btn-primary" id="loginBtn">Log In</button>
         </form>
 
         <div class="divider">or</div>
@@ -432,16 +440,119 @@
   </footer>
 
   <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    // Login functionality
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault();
-      const email = this.querySelector('input[type="text"]').value;
-      const password = this.querySelector('input[type="password"]').value;
       
-      if (email && password) {
-        // Redirect to dashboard after successful login
-        window.location.href = '/dashboard.html';
+      const email = document.getElementById('emailInput').value.trim();
+      const password = document.getElementById('passwordInput').value;
+      const rememberMe = document.getElementById('rememberCheckbox').checked;
+      const submitBtn = document.getElementById('loginBtn');
+      
+      // Validate inputs
+      if (!email) {
+        showError('Please enter your email or phone number');
+        return;
       }
+      if (!password) {
+        showError('Please enter your password');
+        return;
+      }
+      
+      // Show loading state
+      submitBtn.textContent = 'Logging in...';
+      submitBtn.disabled = true;
+      
+      try {
+        // Simulate API call - Replace with actual API endpoint
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password, rememberMe })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          // Save token to localStorage
+          if (rememberMe) {
+            localStorage.setItem('tigerex_token', data.token);
+            localStorage.setItem('tigerex_user', JSON.stringify(data.user));
+          } else {
+            sessionStorage.setItem('tigerex_token', data.token);
+            sessionStorage.setItem('tigerex_user', JSON.stringify(data.user));
+          }
+          
+          // Redirect to dashboard
+          window.location.href = 'dashboard.html';
+        } else {
+          showError(data.message || 'Invalid credentials');
+        }
+      } catch (error) {
+        // Demo mode - for testing without backend
+        console.log('Demo login:', { email, password, rememberMe });
+        
+        // Check demo credentials
+        if (email && password) {
+          // Save to localStorage
+          const demoUser = {
+            id: 'demo_user',
+            email: email,
+            username: email.split('@')[0],
+            createdAt: new Date().toISOString()
+          };
+          
+          if (rememberMe) {
+            localStorage.setItem('tigerex_token', 'demo_token_' + Date.now());
+            localStorage.setItem('tigerex_user', JSON.stringify(demoUser));
+          } else {
+            sessionStorage.setItem('tigerex_token', 'demo_token_' + Date.now());
+            sessionStorage.setItem('tigerex_user', JSON.stringify(demoUser));
+          }
+          
+          // Show success and redirect
+          submitBtn.textContent = 'Success! Redirecting...';
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 500);
+        }
+      }
+      
+      // Reset button
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Log In';
     });
+    
+    function showError(message) {
+      const existingError = document.querySelector('.form-error-message');
+      if (existingError) existingError.remove();
+      
+      const formGroup = document.getElementById('passwordInput').parentNode;
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'form-error-message';
+      errorDiv.style.cssText = 'color: #F6465D; font-size: 13px; margin-top: 8px; padding: 12px; background: rgba(246, 69, 93, 0.1); border-radius: 8px;';
+      errorDiv.textContent = message;
+      formGroup.parentNode.insertBefore(errorDiv, formGroup.nextSibling);
+      
+      setTimeout(() => errorDiv.remove(), 5000);
+    }
+    
+    // Social login handlers
+    document.querySelectorAll('.social-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const provider = this.textContent.trim();
+        console.log('Login with:', provider);
+        alert(provider + ' login coming soon!');
+      });
+    });
+    
+    // Check if already logged in
+    const token = localStorage.getItem('tigerex_token') || sessionStorage.getItem('tigerex_token');
+    if (token) {
+      window.location.href = 'dashboard.html';
+    }
   </script>
 </body>
 </html>
