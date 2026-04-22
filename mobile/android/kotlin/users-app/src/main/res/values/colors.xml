@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Colors -->
+    <color name="primary">#F0B90B</color>
+    <color name="primary_dark">#D69E0A</color>
+    <color name="primary_light">#FFCA28</color>
+    
+    <!-- Background Colors -->
+    <color name="background_light">#FFFFFF</color>
+    <color name="background_dark">#0B0B0F</color>
+    <color name="surface_light">#F5F5F5</color>
+    <color name="surface_dark">#1C1C1E</color>
+    <color name="card_light">#FFFFFF</color>
+    <color name="card_dark">#1E1E1E</color>
+    
+    <!-- Text Colors -->
+    <color name="text_primary_light">#1A1A1A</color>
+    <color name="text_primary_dark">#FFFFFF</color>
+    <color name="text_secondary_light">#757575</color>
+    <color name="text_secondary_dark">#A0A0A0</color>
+    
+    <!-- Status Colors -->
+    <color name="success">#0ECB81</color>
+    <color name="error">#F6465D</color>
+    <color name="warning">#FF9E00</color>
+    <color name="info">#0067C5</color>
+    
+    <!-- Buy/Sell Colors -->
+    <color name="buy_green">#0ECB81</color>
+    <color name="sell_red">#F6465D</color>
+    
+    <!-- Chart Colors -->
+    <color name="chart_green">#0ECB81</color>
+    <color name="chart_red">#F6465D</color>
+    <color name="chart_line">#F0B90B</color>
+    
+    <!-- Border Colors -->
+    <color name="border_light">#E5E5E5</color>
+    <color name="border_dark">#2C2C2E</color>
+    
+    <!-- Bottom Navigation -->
+    <color name="nav_selected">#F0B90B</color>
+    <color name="nav_unselected_light">#757575</color>
+    <color name="nav_unselected_dark">#A0A0A0</color>
+</resources>

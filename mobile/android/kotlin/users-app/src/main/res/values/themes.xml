@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Light Theme -->
+    <style name="TigerExTheme.Light" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/primary</item>
+        <item name="android:colorBackground">@color/background_light</item>
+        <item name="android:windowBackground">@color/background_light</item>
+        <item name="cardBackground">@color/card_light</item>
+        <item name="textPrimary">@color/text_primary_light</item>
+        <item name="textSecondary">@color/text_secondary_light</item>
+        <item name="borderColor">@color/border_light</item>
+        <item name="bottomNavBackground">@color/background_light</item>
+        <item name="bottomNavSelected">@color/nav_selected</item>
+        <item name="bottomNavUnselected">@color/nav_unselected_light</item>
+    </style>
+    
+    <!-- Dark Theme -->
+    <style name="TigerExTheme.Dark" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/primary</item>
+        <item name="android:colorBackground">@color/background_dark</item>
+        <item name="android:windowBackground">@color/background_dark</item>
+        <item name="cardBackground">@color/card_dark</item>
+        <item name="textPrimary">@color/text_primary_dark</item>
+        <item name="textSecondary">@color/text_secondary_dark</item>
+        <item name="borderColor">@color/border_dark</item>
+        <item name="bottomNavBackground">@color/background_dark</item>
+        <item name="bottomNavSelected">@color/nav_selected</item>
+        <item name="bottomNavUnselected">@color/nav_unselected_dark</item>
+        <item name="android:statusBarColor">@color/background_dark</item>
+        <item name="android:navigationBarColor">@color/background_dark</item>
+    </style>
+</resources>
