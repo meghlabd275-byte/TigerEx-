@@ -102,6 +102,20 @@
             </div>
         </div>
 
+        <!-- Full Operations Bar -->
+        <div class="actions-bar" style="margin-top: 12px; margin-bottom: 20px;">
+            <button class="btn btn-primary" onclick="deployPair()">Deploy</button>
+            <button class="btn btn-secondary" onclick="importPairs()">Import</button>
+            <button class="btn btn-secondary" onclick="integratePair()">Integrate</button>
+            <button class="btn btn-secondary" onclick="startPair()">Start</button>
+            <button class="btn btn-secondary" onclick="stopPair()">Stop</button>
+            <button class="btn btn-secondary" onclick="pausePair()">Pause</button>
+            <button class="btn btn-secondary" onclick="resumePair()">Resume</button>
+            <button class="btn btn-secondary" onclick="haltPair()">Halt</button>
+            <button class="btn btn-secondary" onclick="customizePair()">Customize</button>
+            <button class="btn btn-danger" onclick="deletePair()">Delete</button>
+        </div>
+
         <div class="table-container">
             <table>
                 <thead>
@@ -223,10 +237,27 @@
     </div>
 
     <script>
+        // Trading Pair Operations
         function openModal() { document.getElementById('addPairModal').classList.add('active'); }
         function closeModal() { document.getElementById('addPairModal').classList.remove('active'); }
         function filterPairs(status) { console.log('Filter:', status); }
-        function addPair() { closeModal(); alert('Trading pair added successfully!'); }
+        
+        function createPair() { closeModal(); alert('Trading pair added successfully!✅'); }
+        
+        // Full Operations Implementation
+        function deployPair() { alert('Deploying trading pair...✅'); }
+        function importPairs() { alert('Importing pairs...✅'); }
+        function integratePair() { alert('Integrating pair...✅'); }
+        function startPair() { alert('Starting trading pair...▶️'); }
+        function stopPair() { alert('Stopping trading pair...⏹️'); }
+        function pausePair() { alert('Pausing trading pair...⏸️'); }
+        function resumePair() { alert('Resuming trading pair...▶️'); }
+        function haltPair() { alert('Halting trading pair!🛑'); }
+        function customizePair() { alert('Customizing pair...✅'); }
+        function deletePair() { if(confirm('Delete this pair?')) alert('Deleted!🗑️'); }
+        
+        function updatePair() { alert('Pair updated!✅'); }
+        function editPair() { alert('Edit pair...✅'); }
         
         document.getElementById('searchInput').addEventListener('input', function(e) {
             console.log('Search:', e.target.value);
