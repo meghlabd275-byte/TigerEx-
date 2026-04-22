@@ -67,17 +67,101 @@
 
         .header {
             position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-            background: rgba(11, 14, 20, 0.85); backdrop-filter: blur(20px);
+            background: var(--bg-dark);
             border-bottom: 1px solid var(--border);
+            height: 64px;
         }
         .header-inner {
-            display: flex; align-items: center; justify-content: space-between; height: 72px;
+            display: flex; align-items: center; justify-content: space-between; height: 64px;
+            max-width: 1400px; margin: 0 auto; padding: 0 24px;
         }
-        .logo { display: flex; align-items: center; gap: 10px; font-size: 24px; font-weight: 800; }
-        .logo-icon {
-            width: 40px; height: 40px; background: var(--gradient-primary);
-            border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px;
+        
+        /* Logo - Binance style */
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
         }
+        .header-logo img {
+            height: 32px;
+            width: auto;
+        }
+        .header-logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        /* Navigation - Binance style */
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 100%;
+        }
+        .header-nav-item {
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+        .header-nav-item:hover {
+            background: var(--bg-card);
+        }
+        
+        /* Header Right - Binance style */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-right-link {
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .header-right-link:hover {
+            background: var(--bg-card);
+        }
+        .header-right-link.btn-primary {
+            background: var(--primary);
+            color: #000;
+        }
+        .header-right-link.btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* Mobile Menu Button - Always visible like Binance */
+        .header-menu-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+        .header-menu-btn:hover {
+            background: var(--bg-card);
+        }
+        .header-menu-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--text-primary);
+        }
+
+        /* Desktop Nav - Hidden on mobile */
         .nav { display: flex; align-items: center; gap: 32px; }
         .nav-link {
             position: relative; padding: 8px 0; font-size: 14px; font-weight: 500;
@@ -89,26 +173,26 @@
         }
         .nav-link:hover { color: var(--text-primary); }
         .nav-link:hover::after { width: 100%; }
-        .header-actions { display: flex; align-items: center; gap: 16px; }
+        
         .mobile-menu-btn { 
             display: none; 
             width: 40px; height: 40px; 
             align-items: center; justify-content: center;
-            background: var(--bg-card);
-            border-radius: 8px;
+            background: transparent;
+            border: none;
             cursor: pointer;
         }
-        .mobile-menu-btn svg { stroke: var(--text-primary); }
+        .mobile-menu-btn svg { stroke: var(--text-primary); width: 24px; height: 24px; }
 
         /* Mobile Menu Overlay */
         .mobile-overlay {
             display: none;
             position: fixed;
-            top: 72px;
+            top: 64px;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             z-index: 999;
             overflow-y: auto;
         }
@@ -690,7 +774,9 @@ body.light-mode .megamenu {
 }
 
 .hero {
-            padding: 160px 0 100px; position: relative; overflow: hidden;
+            padding: 100px 0 80px; position: relative; overflow: hidden;
+            background: var(--bg-dark);
+            text-align: center;
         }
         .hero::before {
             content: ''; position: absolute; top: -50%; right: -20%;
@@ -893,91 +979,40 @@ body.light-mode .megamenu {
 </head>
 <body>
 
-    <!-- Header -->
+    <!-- Header - Binance Style -->
     <header class="header">
-        <div class="container header-inner">
-            <a href="#" class="logo">
-                <img src="assets/logo/tiger-logo.jpg" alt="TigerEx Logo" style="width:40px;height:40px;border-radius:8px;">
-                TigerEx
+        <div class="header-inner">
+            <!-- Logo -->
+            <a href="#" class="header-logo">
+                <img src="assets/logo/tiger-logo.jpg" alt="TigerEx">
+                <span class="header-logo-text">TigerEx</span>
             </a>
             
-            <!-- Desktop Mega Menu -->
-            <nav class="nav">
-                <div class="nav-dropdown">
-                    <a href="#markets" class="nav-link">Buy Crypto</a>
-                </div>
-                <div class="nav-dropdown">
-                    <a href="#markets" class="nav-link">Markets</a>
-                    <div class="nav-dropdown-menu">
-                        <a href="#">Spot Trading</a>
-                        <a href="#">Margin Trading</a>
-                        <a href="#">Futures Trading</a>
-                        <a href="#">P2P Trading</a>
-                    </div>
-                </div>
-                <div class="nav-dropdown">
-                    <a href="#" class="nav-link">Trade</a>
-                    <div class="nav-dropdown-menu">
-                        <a href="#">Classic</a>
-                        <a href="#">Advanced</a>
-                        <a href="#">Margin</a>
-                        <a href="#">Futures</a>
-                        <a href="#">Strategy</a>
-                    </div>
-                </div>
-                <div class="nav-dropdown">
-                    <a href="#" class="nav-link">Earn</a>
-                    <div class="nav-dropdown-menu">
-                        <a href="#">Simple Earn</a>
-                        <a href="#">Staking</a>
-                        <a href="#">Launchpool</a>
-                        <a href="#">Dual Mining</a>
-                    </div>
-                </div>
-                <div class="nav-dropdown">
-                    <a href="#" class="nav-link">NFT</a>
-                    <div class="nav-dropdown-menu">
-                        <a href="#">Marketplace</a>
-                        <a href="#">Collections</a>
-                        <a href="#">Activity</a>
-                    </div>
-                </div>
-                <div class="nav-dropdown">
-                    <a href="#" class="nav-link">More</a>
-                    <div class="nav-dropdown-menu">
-                        <a href="#">API</a>
-                        <a href="#">Convert</a>
-                        <a href="#">Pay</a>
-                        <a href="#">Academy</a>
-                    </div>
-                </div>
+            <!-- Navigation Menu -->
+            <nav class="header-nav">
+                <a href="#" class="header-nav-item">Buy Crypto</a>
+                <a href="#markets" class="header-nav-item">Markets</a>
+                <a href="#" class="header-nav-item">Trade</a>
+                <a href="#" class="header-nav-item">Futures</a>
+                <a href="#" class="header-nav-item">Earn</a>
+                <a href="#" class="header-nav-item">Square</a>
+                <a href="#" class="header-nav-item" onclick="toggleMobileMenu()">More</a>
             </nav>
             
-            <div class="header-actions">
+            <!-- Right Side -->
+            <div class="header-right">
+                <a href="login.html" class="header-right-link">Log In</a>
+                <a href="register.html" class="header-right-link btn-primary">Sign Up</a>
+                
                 <!-- Theme Toggle -->
-                <div class="theme-toggle" onclick="toggleTheme()" title="Toggle Light/Dark Mode">
-                    <span class="theme-toggle-icon">🌙</span>
-                    <div class="theme-toggle-switch"></div>
+                <div class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme" style="padding: 8px;">
+                    <span style="font-size: 16px;">🌙</span>
                 </div>
                 
-                <!-- Language Selector -->
-                <div class="lang-selector">
-                    <span>🌐</span>
-                    <span>English</span>
-                    <span>▼</span>
-                </div>
-                
-                <!-- Currency Selector -->
-                <div class="currency-selector">
-                    <span>USD</span>
-                    <span>$</span>
-                </div>
-                
-                <a href="login.html" class="btn btn-secondary">Log In</a>
-                <a href="register.html" class="btn btn-primary">Sign Up</a>
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
-                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                <!-- Mobile Menu Button (☰) -->
+                <button class="header-menu-btn" onclick="toggleMobileMenu()" title="Menu">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
                     </svg>
                 </button>
             </div>
