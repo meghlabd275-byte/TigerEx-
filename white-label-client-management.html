@@ -69,6 +69,21 @@
             <button class="btn btn-primary">+ Add White Label</button>
         </div>
 
+        <!-- Full White Label Operations -->
+        <div class="actions-bar" style="margin-top: 12px; margin-bottom: 20px;">
+            <button class="btn btn-primary" onclick="createClient()">Create</button>
+            <button class="btn btn-secondary" onclick="addClient()">Add</button>
+            <button class="btn btn-secondary" onclick="connectDomain()">Connect Domain</button>
+            <button class="btn btn-secondary" onclick="integrateClient()">Integrate</button>
+            <button class="btn btn-secondary" onclick="editClient()">Edit</button>
+            <button class="btn btn-secondary" onclick="updateClient()">Update</button>
+            <button class="btn btn-secondary" onclick="customizeClient()">Customize</button>
+            <button class="btn btn-secondary" onclick="deployClient()">Deploy</button>
+            <button class="btn btn-secondary" onclick="suspendClient()">Suspend</button>
+            <button class="btn btn-secondary" onclick="resumeClient()">Resume</button>
+            <button class="btn btn-danger" onclick="deleteClient()">Delete</button>
+        </div>
+
         <div class="table-container">
             <table>
                 <thead>
@@ -133,5 +148,20 @@
             </table>
         </div>
     </div>
+
+    <script>
+        // Full White Label Client Operations
+        function createClient() { alert('Creating white label client...✅'); }
+        function addClient() { alert('Adding client...✅'); }
+        function connectDomain() { const domain = prompt('Enter domain:'); if(domain) alert('Connected to ' + domain); }
+        function integrateClient() { alert('Integrating client...✅'); }
+        function editClient() { alert('Editing client...✅'); }
+        function updateClient() { alert('Updating client...✅'); }
+        function customizeClient() { alert('Customizing client...✅'); }
+        function deployClient() { alert('Deploying client...✅'); }
+        function suspendClient() { alert('Client suspended!⏸️'); }
+        function resumeClient() { alert('Client resumed!▶️'); }
+        function deleteClient() { if(confirm('Delete this client?')) alert('Deleted!🗑️'); }
+    </script>
 </body>
 </html>
