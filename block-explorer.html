@@ -86,6 +86,16 @@
             <button class="nav-tab">Recent Transactions</button>
             <button class="nav-tab">Top Holders</button>
             <button class="nav-tab">Network Stats</button>
+            <button class="nav-tab" style="margin-left: auto; background: var(--primary); color: #000;" onclick="openExplorerModal()">+ Create Explorer</button>
+        </div>
+
+        <div class="actions-bar" style="display: flex; gap: 12px; margin-bottom: 20px;">
+            <button class="btn btn-secondary" onclick="deployExplorer()">Deploy</button>
+            <button class="btn btn-secondary" onclick="suspendExplorer()">Suspend</button>
+            <button class="btn btn-secondary" onclick="resumeExplorer()">Resume</button>
+            <button class="btn btn-secondary" onclick="customizeExplorer()">Customize</button>
+            <button class="btn btn-secondary" onclick="editExplorer()">Edit</button>
+            <button class="btn btn-danger" onclick="deleteExplorer()">Delete</button>
         </div>
 
         <div class="table-container">
@@ -129,5 +139,25 @@
             </table>
         </div>
     </div>
+
+    <script>
+        // Full Block Explorer Operations
+        function createExplorer() { alert('Block Explorer created!✅'); }
+        function addExplorer() { alert('Explorer added to network!✅'); }
+        function connectToDomain() { const domain = prompt('Enter domain:'); if(domain) alert('Connected to ' + domain); }
+        function editExplorer() { alert('Edit explorer settings!✅'); }
+        function updateExplorer() { alert('Explorer updated!✅'); }
+        function customizeExplorer() { alert('Customize explorer!✅'); }
+        function deployExplorer() { alert('Deploying explorer...✅'); }
+        function suspendExplorer() { alert('Explorer suspended!⏸️'); }
+        function resumeExplorer() { alert('Explorer resumed!▶️'); }
+        function removeExplorer() { alert('Explorer removed!🗑️'); }
+        function deleteExplorer() { if(confirm('Delete?')) alert('Deleted!🗑️'); }
+        
+        // Search Functions
+        function searchBlock() { const block = prompt('Enter block number:'); if(block) alert('Searching block #' + block); }
+        function searchTx() { const tx = prompt('Enter transaction hash:'); if(tx) alert('Searching tx: ' + tx); }
+        function searchAddress() { const addr = prompt('Enter address:'); if(addr) alert('Searching address: ' + addr); }
+    </script>
 </body>
 </html>

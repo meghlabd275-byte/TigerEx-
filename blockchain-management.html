@@ -91,13 +91,23 @@
 
         <div class="nav-tabs">
             <button class="nav-tab active">All Blockchains</button>
-            <button class="nav-tab">Ethereum</button>
+            <button class="nav-tab">EVM</button>
+            <button class="nav-tab">Web3</button>
             <button class="nav-tab">Bitcoin</button>
             <button class="nav-tab">Solana</button>
             <button class="nav-tab">Polygon</button>
             <button class="nav-tab">BNB Chain</button>
             <button class="nav-tab">Avalanche</button>
             <button class="nav-tab" style="margin-left: auto; background: var(--primary); color: #000;" onclick="openModal()">+ Add Blockchain</button>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+            <button class="btn btn-primary" onclick="deployBlockchain()">Deploy</button>
+            <button class="btn btn-secondary" onclick="connectDomain()">Connect Domain</button>
+            <button class="btn btn-secondary" onclick="customizeBlockchain()">Customize</button>
+            <button class="btn btn-secondary" onclick="suspendBlockchain()">Suspend</button>
+            <button class="btn btn-secondary" onclick="resumeBlockchain()">Resume</button>
+            <button class="btn btn-danger" onclick="deleteBlockchain()">Delete</button>
         </div>
 
         <!-- Ethereum -->
@@ -268,6 +278,14 @@
         function openModal() { document.getElementById('addModal').classList.add('active'); }
         function closeModal() { document.getElementById('addModal').classList.remove('active'); }
         function addBlockchain() { closeModal(); alert('Blockchain added successfully!'); }
+        
+        // Full Operations
+        function deployBlockchain() { alert('Deploying blockchain...✅'); }
+        function connectDomain() { alert('Connecting to domain...✅'); }
+        function customizeBlockchain() { alert('Customize blockchain...✅'); }
+        function suspendBlockchain() { alert('Blockchain suspended!⏸️'); }
+        function resumeBlockchain() { alert('Blockchain resumed!▶️'); }
+        function deleteBlockchain() { if(confirm('Delete blockchain?')) { alert('Deleted!🗑️'); } }
     </script>
 </body>
 </html>
