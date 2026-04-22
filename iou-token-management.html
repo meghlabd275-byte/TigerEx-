@@ -69,6 +69,20 @@
             <button class="btn btn-primary">+ Issue IOU Token</button>
         </div>
 
+        <!-- Full IOU Operations -->
+        <div class="actions-bar" style="margin-top: 12px; margin-bottom: 20px;">
+            <button class="btn btn-primary" onclick="createIOU()">Create</button>
+            <button class="btn btn-secondary" onclick="issueIOU()">Issue</button>
+            <button class="btn btn-secondary" onclick="redeemIOU()">Redeem</button>
+            <button class="btn btn-secondary" onclick="startIOU()">Start</button>
+            <button class="btn btn-secondary" onclick="stopIOU()">Stop</button>
+            <button class="btn btn-secondary" onclick="pauseIOU()">Pause</button>
+            <button class="btn btn-secondary" onclick="resumeIOU()">Resume</button>
+            <button class="btn btn-secondary" onclick="suspendIOU()">Suspend</button>
+            <button class="btn btn-secondary" onclick="customizeIOU()">Customize</button>
+            <button class="btn btn-danger" onclick="deleteIOU()">Delete</button>
+        </div>
+
         <div class="table-container">
             <table>
                 <thead>
@@ -133,5 +147,19 @@
             </table>
         </div>
     </div>
+
+    <script>
+        // Full IOU Token Operations
+        function createIOU() { alert('Creating IOU token...✅'); }
+        function issueIOU() { alert('Issuing IOU...✅'); }
+        function redeemIOU() { alert('Redeeming IOU...✅'); }
+        function startIOU() { alert('Starting IOU...▶️'); }
+        function stopIOU() { alert('Stopping IOU...⏹️'); }
+        function pauseIOU() { alert('Pausing IOU...⏸️'); }
+        function resumeIOU() { alert('Resuming IOU...▶️'); }
+        function suspendIOU() { alert('Suspending IOU!⚠️'); }
+        function customizeIOU() { alert('Customizing IOU...✅'); }
+        function deleteIOU() { if(confirm('Delete IOU?')) alert('Deleted!🗑️'); }
+    </script>
 </body>
 </html>
