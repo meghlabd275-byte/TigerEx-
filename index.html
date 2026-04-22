@@ -233,6 +233,87 @@
             display: block; 
         }
         
+        /* Full Mobile Menu - Binance Style */
+        .mobile-menu-full {
+            background: var(--bg-card);
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .mobile-menu-header {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .mobile-menu-link {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+        
+        .mobile-menu-link:hover {
+            background: var(--bg-card-hover);
+        }
+        
+        .mobile-menu-link-primary {
+            background: var(--primary);
+            color: #000 !important;
+            border-color: var(--primary);
+        }
+        
+        .mobile-menu-section {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .mobile-menu-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        
+        .mobile-menu-item-link {
+            display: block;
+            padding: 12px 0;
+            font-size: 14px;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border);
+            transition: 0.2s;
+        }
+        
+        .mobile-menu-item-link:last-child {
+            border-bottom: none;
+        }
+        
+        .mobile-menu-item-link:hover {
+            color: var(--primary);
+        }
+        
+        .mobile-menu-footer {
+            padding: 16px;
+            background: var(--bg-secondary);
+        }
+        
+        .mobile-menu-footer-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
         .mobile-menu {
             background: var(--bg-card);
             padding: 16px;
