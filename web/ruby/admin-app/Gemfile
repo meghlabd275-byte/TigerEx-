@@ -1,0 +1,41 @@
+# TigerEx Admin Ruby on Rails Application
+# High-performance admin panel with Ruby on Rails
+
+source 'https://rubygems.org'
+ruby '3.2.0'
+
+gem 'rails', '~> 7.1.0'
+gem 'pg', '~> 1.5'
+gem 'puma', '~> 6.4'
+gem 'redis', '~> 5.0'
+gem 'sidekiq', '~> 7.1'
+gem 'jwt', '~> 2.7'
+gem 'bcrypt', '~> 3.1'
+gem 'rack-cors', '~> 2.0'
+gem 'rack-attack', '~> 6.7'
+gem 'bootsnap', require: false
+gem 'tailwindcss-rails', '~> 2.0'
+gem 'hotwire-rails', '~> 0.1'
+gem 'shakapacker', '~> 7.0'
+gem 'propshaft'
+
+group :development, :test do
+  gem 'debug', platforms: %i[mingw mswin x64_mingw]
+  gem 'rspec-rails', '~> 6.0'
+  gem 'factory_bot_rails', '~> 6.2'
+  gem 'faker', '~> 3.2'
+end
+
+group :development do
+  gem 'web-console', '~> 4.2'
+  gem 'bullet', '~> 7.1'
+end
+
+group :test do
+  gem 'capybara', '~> 3.39'
+  gem 'selenium-webdriver', '~> 4.14'
+  gem 'simplecov', '~> 0.22', require: false
+end
+
+gem 'image_processing', '~> 1.12'
+gem 'active_storage_validations', '~> 9.1'
