@@ -114,6 +114,40 @@
             background: var(--bg-card);
         }
         
+        /* Desktop Submenu */
+        .desktop-submenu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 8px;
+            min-width: 180px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+        
+        .desktop-submenu.active {
+            display: block;
+        }
+        
+        .desktop-submenu-item {
+            display: block;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+        
+        .desktop-submenu-item:hover {
+            background: var(--bg-card-hover);
+            color: var(--primary);
+        }
+        
         /* Header Right - Binance style */
         .header-right {
             display: flex;
@@ -1127,8 +1161,21 @@
                 <a href="#" class="header-nav-item">Trade</a>
                 <a href="#" class="header-nav-item">Futures</a>
                 <a href="#" class="header-nav-item">Earn</a>
-                <a href="#" class="header-nav-item">Square</a>
-                <a href="#" class="header-nav-item" onclick="toggleMobileMenu()">More</a>
+                <div class="header-nav-dropdown" style="position:relative;">
+                    <a href="#" class="header-nav-item" onclick="toggleDesktopSubmenu('more-submenu', event)">More ▾</a>
+                    <div class="desktop-submenu" id="more-submenu">
+                        <a href="#" class="desktop-submenu-item">Square</a>
+                        <a href="#" class="desktop-submenu-item">NFT</a>
+                        <a href="#" class="desktop-submenu-item">Gift Card</a>
+                        <a href="#" class="desktop-submenu-item">Academy</a>
+                        <a href="#" class="desktop-submenu-item">Crypto Loans</a>
+                        <a href="#" class="desktop-submenu-item">TABT</a>
+                        <a href="#" class="desktop-submenu-item">TradFi</a>
+                        <a href="#" class="desktop-submenu-item">Research</a>
+                        <a href="#" class="desktop-submenu-item">Charity</a>
+                        <a href="#" class="desktop-submenu-item">API</a>
+                    </div>
+                </div>
             </nav>
             
             <!-- Right Side -->
@@ -1222,6 +1269,7 @@
                 <a href="#" class="mobile-menu-item-link">Gift Card</a>
                 <a href="#" class="mobile-menu-item-link">Launchpool</a>
                 <a href="#" class="mobile-menu-item-link">TABT</a>
+                <a href="#" class="mobile-menu-item-link">TradFi</a>
                 <a href="#" class="mobile-menu-item-link">Research</a>
                 <a href="#" class="mobile-menu-item-link">Charity</a>
                 <a href="#" class="mobile-menu-item-link">BNB</a>
@@ -1686,6 +1734,28 @@
                 event.stopPropagation();
             }
         }
+
+        // Desktop Submenu Toggle
+        function toggleDesktopSubmenu(menuId, event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            const submenu = document.getElementById(menuId);
+            if (submenu) {
+                submenu.classList.toggle('active');
+            }
+        }
+
+        // Close submenus when clicking outside
+        document.addEventListener('click', (e) => {
+            const desktopSubmenus = document.querySelectorAll('.desktop-submenu');
+            desktopSubmenus.forEach(submenu => {
+                if (!submenu.contains(e.target) && !e.target.classList.contains('header-nav-item')) {
+                    submenu.classList.remove('active');
+                }
+            });
+        });
 
         // Theme Toggle
         function toggleTheme() {
