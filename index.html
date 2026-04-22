@@ -90,7 +90,176 @@
         .nav-link:hover { color: var(--text-primary); }
         .nav-link:hover::after { width: 100%; }
         .header-actions { display: flex; align-items: center; gap: 16px; }
-        .mobile-menu-btn { display: none; width: 40px; height: 40px; align-items: center; justify-content: center; }
+        .mobile-menu-btn { 
+            display: none; 
+            width: 40px; height: 40px; 
+            align-items: center; justify-content: center;
+            background: var(--bg-card);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .mobile-menu-btn svg { stroke: var(--text-primary); }
+
+        /* Mobile Menu Overlay */
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 72px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 999;
+            overflow-y: auto;
+        }
+        .mobile-overlay.active { display: block; }
+        
+        .mobile-menu {
+            background: var(--bg-card);
+            padding: 16px;
+        }
+        
+        .mobile-menu-category {
+            margin-bottom: 16px;
+        }
+        
+        .mobile-menu-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 0;
+        }
+        
+        .mobile-menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        
+        .mobile-menu-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .mobile-menu-item-left img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+        
+        .mobile-menu-item-name {
+            font-weight: 600;
+        }
+        
+        .mobile-menu-item-symbol {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .mobile-menu-item-arrow {
+            color: var(--text-secondary);
+        }
+        
+        .mobile-menu-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        /* Mega Menu for Desktop */
+        .megamenu {
+            display: none;
+            position: fixed;
+            top: 72px;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 40px 0;
+            z-index: 1001;
+        }
+        .megamenu.active { display: block; }
+        .megamenu-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        .megamenu-column h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+        .megamenu-column a {
+            display: block;
+            padding: 8px 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+            transition: 0.2s;
+        }
+        .megamenu-column a:hover { color: var(--text-primary); }
+
+        /* Dropdown Menu */
+        .nav-dropdown {
+            position: relative;
+        }
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            min-width: 200px;
+            z-index: 1001;
+        }
+        .nav-dropdown:hover .nav-dropdown-menu {
+            display: block;
+        }
+        .nav-dropdown-menu a {
+            display: block;
+            padding: 12px 16px;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+        .nav-dropdown-menu a:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 1024px) {
+            .nav { display: none; }
+            .mobile-menu-btn { display: flex; }
+            .header-actions .btn-secondary,
+            .header-actions .btn-primary { display: none; }
+            .megamenu { display: none !important; }
+        }
+
+        @media (max-width: 768px) {
+            .nav, .header-actions .btn-secondary { display: none; }
+            .mobile-menu-btn { display: flex; }
+            .hero-title { font-size: 36px; }
+            .hero-stats { flex-direction: column; gap: 24px; text-align: center; }
+            .features-grid { grid-template-columns: 1fr; }
+            .security-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+            .footer-brand { grid-column: span 2; }
+        }
 
         .hero {
             padding: 160px 0 100px; position: relative; overflow: hidden;
@@ -300,20 +469,66 @@
     <header class="header">
         <div class="container header-inner">
             <a href="#" class="logo">
-                <img src="assets/screenshots/IMG_20251112_234200_242.jpg" alt="TigerEx Logo" class="logo-img" style="width:48px;height:48px;border-radius:8px;">
+                <img src="assets/logo/tiger-logo.jpg" alt="TigerEx Logo" style="width:40px;height:40px;border-radius:8px;">
                 TigerEx
             </a>
+            
+            <!-- Desktop Mega Menu -->
             <nav class="nav">
-                <a href="#markets" class="nav-link">Buy Crypto</a>
-                <a href="#markets" class="nav-link">Markets</a>
-                <a href="#" class="nav-link">Trade</a>
-                <a href="#" class="nav-link">Earn</a>
-                <a href="#" class="nav-link">NFT</a>
+                <div class="nav-dropdown">
+                    <a href="#markets" class="nav-link">Buy Crypto</a>
+                </div>
+                <div class="nav-dropdown">
+                    <a href="#markets" class="nav-link">Markets</a>
+                    <div class="nav-dropdown-menu">
+                        <a href="#">Spot Trading</a>
+                        <a href="#">Margin Trading</a>
+                        <a href="#">Futures Trading</a>
+                        <a href="#">P2P Trading</a>
+                    </div>
+                </div>
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-link">Trade</a>
+                    <div class="nav-dropdown-menu">
+                        <a href="#">Classic</a>
+                        <a href="#">Advanced</a>
+                        <a href="#">Margin</a>
+                        <a href="#">Futures</a>
+                        <a href="#">Strategy</a>
+                    </div>
+                </div>
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-link">Earn</a>
+                    <div class="nav-dropdown-menu">
+                        <a href="#">Simple Earn</a>
+                        <a href="#">Staking</a>
+                        <a href="#">Launchpool</a>
+                        <a href="#">Dual Mining</a>
+                    </div>
+                </div>
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-link">NFT</a>
+                    <div class="nav-dropdown-menu">
+                        <a href="#">Marketplace</a>
+                        <a href="#">Collections</a>
+                        <a href="#">Activity</a>
+                    </div>
+                </div>
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-link">More</a>
+                    <div class="nav-dropdown-menu">
+                        <a href="#">API</a>
+                        <a href="#">Convert</a>
+                        <a href="#">Pay</a>
+                        <a href="#">Academy</a>
+                    </div>
+                </div>
             </nav>
+            
             <div class="header-actions">
-                <a href="#" class="btn btn-secondary">Log In</a>
-                <a href="#" class="btn btn-primary">Sign Up</a>
-                <button class="mobile-menu-btn">
+                <a href="login.html" class="btn btn-secondary">Log In</a>
+                <a href="register.html" class="btn btn-primary">Sign Up</a>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
                     <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
@@ -321,6 +536,124 @@
             </div>
         </div>
     </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileMenu()">
+        <div class="mobile-menu" onclick="event.stopPropagation()">
+            <div class="mobile-menu-actions">
+                <a href="login.html" class="btn btn-secondary" style="flex:1;">Log In</a>
+                <a href="register.html" class="btn btn-primary" style="flex:1;">Sign Up</a>
+            </div>
+            
+            <div class="mobile-menu-category">
+                <div class="mobile-menu-title">Popular</div>
+                <div class="mobile-menu-item">
+                    <div class="mobile-menu-item-left">
+                        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#F7931A,#F9A825);display:flex;align-items:center;justify-content:center;font-weight:700;">₿</div>
+                        <div>
+                            <div class="mobile-menu-item-name">Bitcoin</div>
+                            <div class="mobile-menu-item-symbol">BTC</div>
+                        </div>
+                    </div>
+                    <div class="mobile-menu-item-arrow">›</div>
+                </div>
+                <div class="mobile-menu-item">
+                    <div class="mobile-menu-item-left">
+                        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#627EEA,#8B9FFF);display:flex;align-items:center;justify-content:center;font-weight:700;">Ξ</div>
+                        <div>
+                            <div class="mobile-menu-item-name">Ethereum</div>
+                            <div class="mobile-menu-item-symbol">ETH</div>
+                        </div>
+                    </div>
+                    <div class="mobile-menu-item-arrow">›</div>
+                </div>
+                <div class="mobile-menu-item">
+                    <div class="mobile-menu-item-left">
+                        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#F0B90B,#F5D033);display:flex;align-items:center;justify-content:center;font-weight:700;">B</div>
+                        <div>
+                            <div class="mobile-menu-item-name">BNB</div>
+                            <div class="mobile-menu-item-symbol">BNB</div>
+                        </div>
+                    </div>
+                    <div class="mobile-menu-item-arrow">›</div>
+                </div>
+                <div class="mobile-menu-item">
+                    <div class="mobile-menu-item-left">
+                        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#00D4A1,#2AE2B1);display:flex;align-items:center;justify-content:center;font-weight:700;">S</div>
+                        <div>
+                            <div class="mobile-menu-item-name">Solana</div>
+                            <div class="mobile-menu-item-symbol">SOL</div>
+                        </div>
+                    </div>
+                    <div class="mobile-menu-item-arrow">›</div>
+                </div>
+            </div>
+            
+            <div class="mobile-menu-category">
+                <div class="mobile-menu-title">Market</div>
+                <div class="mobile-menu-item">
+                    <div class="mobile-menu-item-left">
+                        <span>📈</span>
+                        <span class="mobile-menu-item-name">Buy Crypto</span>
+                    </div>
+                    <div class="mobile-menu-item-arrow">›</div>
+                </div>
+                <div class="mobile-menu-item">
+                    <div class="mobile-menu-item-left">
+                        <span>📊</span>
+                        <span class="mobile-menu-item-name">Markets</span>
+                    </div>
+                    <div class="mobile-menu-item-arrow">›</div>
+                </div>
+                <div class="mobile-menu-item">
+                    <div class="mobile-menu-item-left">
+                        <span>🔄</span>
+                        <span class="mobile-menu-item-name">Trade</span>
+                    </div>
+                    <div class="mobile-menu-item-arrow">›</div>
+                </div>
+                <div class="mobile-menu-item">
+                    <div class="mobile-menu-item-left">
+                        <span>💰</span>
+                        <span class="mobile-menu-item-name">Earn</span>
+                    </div>
+                    <div class="mobile-menu-item-arrow">›</div>
+                </div>
+                <div class="mobile-menu-item">
+                    <div class="mobile-menu-item-left">
+                        <span>🖼️</span>
+                        <span class="mobile-menu-item-name">NFT</span>
+                    </div>
+                    <div class="mobile-menu-item-arrow">›</div>
+                </div>
+                <div class="mobile-menu-item">
+                    <div class="mobile-menu-item-left">
+                        <span>📱</span>
+                        <span class="mobile-menu-item-name">Download</span>
+                    </div>
+                    <div class="mobile-menu-item-arrow">›</div>
+                </div>
+            </div>
+            
+            <div class="mobile-menu-category">
+                <div class="mobile-menu-title">Support</div>
+                <div class="mobile-menu-item">
+                    <div class="mobile-menu-item-left">
+                        <span>📚</span>
+                        <span class="mobile-menu-item-name">Help Center</span>
+                    </div>
+                    <div class="mobile-menu-item-arrow">›</div>
+                </div>
+                <div class="mobile-menu-item">
+                    <div class="mobile-menu-item-left">
+                        <span>🎫</span>
+                        <span class="mobile-menu-item-name">Submit a Request</span>
+                    </div>
+                    <div class="mobile-menu-item-arrow">›</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Hero -->
     <section class="hero">
@@ -575,7 +908,7 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <a href="#" class="logo"><img src="assets/screenshots/IMG_20251112_234200_242.jpg" alt="TigerEx Logo" class="logo-img" style="width:48px;height:48px;border-radius:8px;">TigerEx</a>
+                    <a href="#" class="logo"><img src="assets/logo/tiger-logo.jpg" alt="TigerEx Logo" style="width:48px;height:48px;border-radius:8px;">TigerEx</a>
                     <p>TigerEx is the world's most trusted cryptocurrency exchange, serving over 140 million users globally.</p>
                 </div>
                 <div class="footer-column">
@@ -608,17 +941,38 @@
     </footer>
 
     <script>
+        // Mobile Menu Functions
+        function toggleMobileMenu() {
+            const overlay = document.getElementById('mobileOverlay');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeMobileMenu() {
+            const overlay = document.getElementById('mobileOverlay');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
         // Interactive functionality
         document.querySelectorAll('.table-row').forEach(row => {
             row.addEventListener('click', () => {
                 const coin = row.querySelector('.coin-name').textContent;
-                alert('Navigating to ' + coin + ' trading page...');
+                localStorage.setItem('selectedCoin', coin);
+                window.location.href = 'dashboard.html';
             });
         });
 
         window.addEventListener('scroll', () => {
             const header = document.querySelector('.header');
             header.style.background = window.scrollY > 50 ? 'rgba(11, 14, 20, 0.95)' : 'rgba(11, 14, 20, 0.85)';
+        });
+
+        // Close mobile menu on resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1024) {
+                closeMobileMenu();
+            }
         });
 
         console.log('🐯 TigerEx Landing Page Loaded Successfully');
