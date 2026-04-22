@@ -1024,8 +1024,8 @@
                     <span style="font-size: 16px;">🌙</span>
                 </div>
                 
-                <!-- Mobile Menu Button (☰) -->
-                <button class="header-menu-btn" onclick="toggleMobileMenu()" title="Menu">
+                <!-- Mobile Menu Button (☰) - Always visible -->
+                <button id="mobileMenuBtn" class="header-menu-btn" onclick="toggleMobileMenu()" title="Menu" style="display:flex;">
                     <svg viewBox="0 0 24 24" fill="currentColor">
                         <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
                     </svg>
@@ -1518,77 +1518,73 @@
             document.body.classList.toggle('light-mode');
             const isLight = document.body.classList.contains('light-mode');
             localStorage.setItem('tigerex_theme', isLight ? 'light' : 'dark');
+            
+            // Update moon icon to sun and vice versa
+            const themeIcon = document.querySelector('.theme-toggle span');
+            themeIcon.textContent = isLight ? '☀️' : '🌙';
         }
 
         // Load saved theme
         const savedTheme = localStorage.getItem('tigerex_theme');
         if (savedTheme === 'light') {
             document.body.classList.add('light-mode');
+            const themeIcon = document.querySelector('.theme-toggle span');
+            if (themeIcon) themeIcon.textContent = '☀️';
         }
 
-        // More Menu Functions
-        function toggleMoreMenu(menuId) {
-            // Close all other menus first
-            document.querySelectorAll('.more-menu, .megamenu').forEach(m => {
-                if (m.id !== menuId) m.classList.remove('active');
-            });
+        // Handle responsive menu button visibility
+        function handleResponsive() {
+            const menuBtn = document.getElementById('mobileMenuBtn');
+            const themeToggle = document.querySelector('.theme-toggle');
+            const nav = document.querySelector('.header-nav');
+            const loginLink = document.querySelector('.header-right-link:not(.btn-primary):not(.theme-toggle)');
+            const signupLink = document.querySelector('.header-right-link.btn-primary');
             
-            const menu = document.getElementById(menuId);
-            if (menu) menu.classList.toggle('active');
-        }
-
-        function closeAllMenus() {
-            document.querySelectorAll('.more-menu, .megamenu').forEach(m => m.classList.remove('active'));
-        }
-
-        // FAQ Toggle
-        function toggleFAQ(element) {
-            const item = element.closest('.faq-item');
-            item.classList.toggle('active');
-        }
-
-        // Download Tab
-        function switchDownloadTab(tabName) {
-            document.querySelectorAll('.download-tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-        }
-
-        // Notice Banner Close
-        function closeNoticeBanner() {
-            document.querySelector('.notice-banner').style.display = 'none';
-            document.querySelector('.header').style.top = '0';
-        }
-
-        // Interactive functionality
-        document.querySelectorAll('.table-row').forEach(row => {
-            row.addEventListener('click', () => {
-                const coin = row.querySelector('.coin-name').textContent;
-                localStorage.setItem('selectedCoin', coin);
-                window.location.href = 'dashboard.html';
-            });
-        });
-
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('.header');
-            header.style.background = window.scrollY > 50 ? 'rgba(11, 14, 20, 0.95)' : 'rgba(11, 14, 20, 0.85)';
-        });
-
-        // Close mobile menu on resize
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > 1024) {
-                closeMobileMenu();
-                closeAllMenus();
+            const isMobile = window.innerWidth <= 1024;
+            
+            if (menuBtn) {
+                menuBtn.style.display = isMobile ? 'flex' : 'none';
             }
-        });
+            
+            if (themeToggle) {
+                themeToggle.style.display = 'flex';
+            }
+            
+            if (nav) {
+                nav.style.display = isMobile ? 'none' : 'flex';
+            }
+            
+            if (loginLink) {
+                loginLink.style.display = isMobile ? 'none' : 'inline-flex';
+            }
+            
+            if (signupLink) {
+                signupLink.style.display = isMobile ? 'none' : 'inline-flex';
+            }
+            
+            // Close mobile menu on resize to desktop
+            if (!isMobile) {
+                closeMobileMenu();
+            }
+        }
+
+        // Run on load and resize
+        window.addEventListener('load', handleResponsive);
+        window.addEventListener('resize', handleResponsive);
 
         // Close menus when clicking outside
         document.addEventListener('click', (e) => {
-            if (!e.target.closest('.nav-dropdown') && !e.target.closest('.megamenu')) {
-                closeAllMenus();
+            const overlay = document.getElementById('mobileOverlay');
+            const menuBtn = document.getElementById('mobileMenuBtn');
+            
+            if (overlay && overlay.classList.contains('active')) {
+                if (!overlay.contains(e.target) && !menuBtn.contains(e.target)) {
+                    closeMobileMenu();
+                }
             }
         });
 
-        console.log('🐯 TigerEx Landing Page Loaded Successfully with Light/Dark Theme');
+        console.log('🐯 TigerEx Loaded - Theme:', localStorage.getItem('tigerex_theme') || 'dark');
     </script>
 </body>
 </html>
