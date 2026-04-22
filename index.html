@@ -1165,21 +1165,21 @@
             <div class="mobile-menu-section">
                 <div class="mobile-menu-section-title">Products</div>
                 <div class="mobile-menu-item-dropdown">
-                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu('exchange')">Exchange</a>
+                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu(this, 'exchange')">Exchange</a>
                 </div>
                 <div class="mobile-menu-item-dropdown">
-                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu('buy-crypto')">Buy Crypto</a>
+                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu(this, 'buy-crypto')">Buy Crypto</a>
                 </div>
                 <div class="mobile-menu-item-dropdown">
-                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu('pay')">Pay ▸</a>
-                    <div class="mobile-menu-submenu" id="submenu-pay">
+                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu(this, 'pay')">Pay ▸</a>
+                    <div class="mobile-menu-submenu">
                         <a href="#" class="mobile-menu-subitem">Crypto Payments</a>
                         <a href="#" class="mobile-menu-subitem">Binance Pay</a>
                     </div>
                 </div>
                 <div class="mobile-menu-item-dropdown">
-                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu('nft')">NFT ▸</a>
-                    <div class="mobile-menu-submenu" id="submenu-nft">
+                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu(this, 'nft')">NFT ▸</a>
+                    <div class="mobile-menu-submenu">
                         <a href="#" class="mobile-menu-subitem">Marketplace</a>
                         <a href="#" class="mobile-menu-subitem">Collections</a>
                         <a href="#" class="mobile-menu-subitem">Activity</a>
@@ -1187,18 +1187,19 @@
                     </div>
                 </div>
                 <div class="mobile-menu-item-dropdown">
-                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu('earn')">Earn ▸</a>
-                    <div class="mobile-menu-submenu" id="submenu-earn">
+                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu(this, 'earn')">Earn ▸</a>
+                    <div class="mobile-menu-submenu">
                         <a href="#" class="mobile-menu-subitem">Simple Earn</a>
                         <a href="#" class="mobile-menu-subitem">Staking</a>
                         <a href="#" class="mobile-menu-subitem">Launchpool</a>
                         <a href="#" class="mobile-menu-subitem">Dual Mining</a>
                         <a href="#" class="mobile-menu-subitem">Auto-Invest</a>
+                        <a href="#" class="mobile-menu-subitem">ETH Staking</a>
                     </div>
                 </div>
                 <div class="mobile-menu-item-dropdown">
-                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu('trade')">Trade ▸</a>
-                    <div class="mobile-menu-submenu" id="submenu-trade">
+                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu(this, 'trade')">Trade ▸</a>
+                    <div class="mobile-menu-submenu">
                         <a href="#" class="mobile-menu-subitem">Classic</a>
                         <a href="#" class="mobile-menu-subitem">Advanced</a>
                         <a href="#" class="mobile-menu-subitem">Margin</a>
@@ -1209,8 +1210,8 @@
                     </div>
                 </div>
                 <div class="mobile-menu-item-dropdown">
-                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu('futures')">Futures ▸</a>
-                    <div class="mobile-menu-submenu" id="submenu-futures">
+                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu(this, 'futures')">Futures ▸</a>
+                    <div class="mobile-menu-submenu">
                         <a href="#" class="mobile-menu-subitem">USDT-M Futures</a>
                         <a href="#" class="mobile-menu-subitem">COIN-M Futures</a>
                         <a href="#" class="mobile-menu-subitem">Delivery Futures</a>
@@ -1220,7 +1221,7 @@
                 <a href="#" class="mobile-menu-item-link">Academy</a>
                 <a href="#" class="mobile-menu-item-link">Gift Card</a>
                 <a href="#" class="mobile-menu-item-link">Launchpool</a>
-                <a href="#" class="mobile-menu-item-link">BABT</a>
+                <a href="#" class="mobile-menu-item-link">TABT</a>
                 <a href="#" class="mobile-menu-item-link">Research</a>
                 <a href="#" class="mobile-menu-item-link">Charity</a>
                 <a href="#" class="mobile-menu-item-link">BNB</a>
@@ -1677,11 +1678,12 @@
         }
 
         // Submenu Toggle
-        function toggleSubmenu(menuId) {
-            const submenu = document.getElementById('submenu-' + menuId);
-            if (submenu) {
+        function toggleSubmenu(element, menuId) {
+            const submenu = element.nextElementSibling;
+            if (submenu && submenu.classList.contains('mobile-menu-submenu')) {
                 submenu.classList.toggle('active');
                 event.preventDefault();
+                event.stopPropagation();
             }
         }
 

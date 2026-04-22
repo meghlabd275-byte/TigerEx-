@@ -2,7 +2,7 @@
 """
 Babt Service Service
 Category: others
-Description: BABT token management
+Description: TABT token management
 """
 
 from flask import Flask, request, jsonify, g

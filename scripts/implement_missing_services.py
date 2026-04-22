@@ -277,7 +277,7 @@ def implement_missing_services():
         "api-management-service": ("others", "API key and access management"),
         "fan-token-service": ("others", "Fan token ecosystem"),
         "binance-nft-service": ("others", "NFT marketplace integration"),
-        "babt-service": ("others", "BABT token management"),
+        "tabt-service": ("others", "TABT token management"),
         "send-cash-service": ("others", "Cash transfer functionality"),
         "charity-service": ("others", "Charitable donation platform")
     }
