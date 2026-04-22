@@ -1,365 +1,314 @@
-<!--
- * TigerEx Web Page
- * @file tradfi-preview.html
- * @description TigerEx trading platform page
- * @author TigerEx Development Team
--->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="assets/css/theme.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TigerEx TradFi System - Live Preview</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>TigerEx TradFi - CFD Trading, Commodities, Stocks, Copy Trading</title>
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <script src="assets/js/theme.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', -apple-system, sans-serif; background: #0a0a0f; color: #fff; }
-        .gradient-bg { background: linear-gradient(135deg, #1e3a8a 0%, #4f46e5 100%); }
-        .card { background: rgba(30, 30, 40, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; }
-        .buy-btn { background: linear-gradient(135deg, #10b981, #059669); }
-        .sell-btn { background: linear-gradient(135deg, #ef4444, #dc2626); }
-        .price-up { color: #10b981; }
-        .price-down { color: #ef4444; }
-        .tab-active { background: linear-gradient(135deg, #1e40af, #3730a3); border-color: #3b82f6; }
-    .theme-toggle { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; padding: 8px; } .theme-toggle:hover { background: var(--bg-card-hover); } body { transition: background-color 0.3s, color 0.3s; }
+        :root {
+            --primary: #F0B90B;
+            --success: #00C087;
+            --danger: #F6465D;
+            --bg-dark: #0B0E11;
+            --bg-card: #1E2329;
+            --text-primary: #EAECEF;
+            --text-secondary: #848E9C;
+        }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg-dark); color: var(--text-primary); transition: all 0.3s; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .header { background: var(--bg-card); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: 700; }
+        .logo-icon { width: 40px; height: 40px; background: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .header-right { display: flex; align-items: center; gap: 16px; }
+        .live-badge { background: var(--success); color: #000; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .tabs { display: flex; gap: 8px; padding: 16px 0; flex-wrap: wrap; }
+        .tab-btn { padding: 12px 20px; background: var(--bg-card); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; cursor: pointer; font-size: 14px; transition: all 0.2s; color: var(--text-primary); }
+        .tab-btn:hover { background: rgba(240,185,11,0.1); border-color: var(--primary); }
+        .tab-btn.active { background: var(--primary); color: #000; border-color: var(--primary); }
+        .grid { display: grid; grid-template-columns: 1fr 350px; gap: 20px; }
+        @media (max-width: 1024px) { .grid { grid-template-columns: 1fr; } }
+        .card { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .card-title { font-size: 16px; font-weight: 600; }
+        .asset-list { display: flex; flex-direction: column; gap: 8px; max-height: 500px; overflow-y: auto; }
+        .asset-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(255,255,255,0.02); border-radius: 10px; cursor: pointer; transition: all 0.2s; }
+        .asset-item:hover { background: rgba(240,185,11,0.1); }
+        .asset-info { display: flex; align-items: center; gap: 12px; }
+        .asset-icon { width: 36px; height: 36px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
+        .asset-name { font-weight: 600; font-size: 14px; }
+        .asset-pair { font-size: 12px; color: var(--text-secondary); }
+        .asset-price { text-align: right; }
+        .price { font-weight: 600; font-size: 14px; }
+        .change { font-size: 12px; }
+        .change.up { color: var(--success); }
+        .change.down { color: var(--danger); }
+        .trading-panel { display: flex; flex-direction: column; gap: 16px; }
+        .chart-container { height: 300px; background: rgba(0,0,0,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); }
+        .entry-types { display: flex; gap: 8px; margin: 16px 0; }
+        .entry-btn { flex: 1; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; text-align: center; cursor: pointer; font-size: 13px; transition: all 0.2s; }
+        .entry-btn:hover { border-color: var(--primary); }
+        .entry-btn.active { background: var(--primary); color: #000; border-color: var(--primary); }
+        .input-group { margin-bottom: 16px; }
+        .input-label { display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+        .input-field { width: 100%; padding: 12px 16px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: var(--text-primary); font-size: 14px; }
+        .input-field:focus { outline: none; border-color: var(--primary); }
+        .leverage-slider { display: flex; align-items: center; gap: 12px; }
+        .leverage-slider input { flex: 1; accent-color: var(--primary); }
+        .leverage-value { font-weight: 600; min-width: 60px; text-align: right; }
+        .trade-buttons { display: flex; gap: 12px; margin-top: 16px; }
+        .btn-buy { flex: 1; padding: 14px; background: var(--success); color: #000; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-sell { flex: 1; padding: 14px; background: var(--danger); color: #fff; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-buy:hover { background: #00A876; }
+        .btn-sell:hover { background: #DC3545; }
+        .positions-table { width: 100%; border-collapse: collapse; }
+        .positions-table th { text-align: left; padding: 12px; font-size: 12px; color: var(--text-secondary); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .positions-table td { padding: 12px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .positions-table .profit { color: var(--success); }
+        .positions-table .loss { color: var(--danger); }
+        .copy-traders { display: flex; flex-direction: column; gap: 12px; }
+        .trader-card { display: flex; gap: 16px; padding: 16px; background: rgba(255,255,255,0.02); border-radius: 12px; cursor: pointer; transition: all 0.2s; }
+        .trader-card:hover { background: rgba(240,185,11,0.1); }
+        .trader-avatar { width: 50px; height: 50px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; }
+        .trader-info { flex: 1; }
+        .trader-name { font-weight: 600; margin-bottom: 4px; }
+        .trader-stats { display: flex; gap: 16px; font-size: 12px; color: var(--text-secondary); }
+        .trader-stat { display: flex; align-items: center; gap: 4px; }
+        .trader-roi { font-size: 18px; font-weight: 700; }
+        .trader-roi.positive { color: var(--success); }
+        .trader-roi.negative { color: var(--danger); }
+        .copy-btn { padding: 8px 16px; background: var(--primary); color: #000; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .order-types { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 20px; }
+        .order-type-card { padding: 20px; background: rgba(255,255,255,0.02); border-radius: 12px; }
+        .order-type-title { font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .order-type-desc { font-size: 13px; color: var(--text-secondary); }
+        .commodities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; }
+        .commodity-card { padding: 20px; background: rgba(255,255,255,0.02); border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .commodity-card:hover { background: rgba(240,185,11,0.1); }
+        .commodity-icon { font-size: 32px; margin-bottom: 12px; }
+        .commodity-name { font-weight: 600; margin-bottom: 4px; }
+        .commodity-price { font-size: 18px; font-weight: 700; }
+        @media (max-width: 768px) {
+            .header { padding: 12px 16px; flex-wrap: wrap; gap: 12px; }
+            .tabs { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; }
+            .tab-btn { white-space: nowrap; }
+            .trade-buttons { flex-direction: column; }
+            .order-types { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
-<body class="min-h-screen">
-    <!-- Header -->
-    <header class="gradient-bg p-4 sticky top-0 z-50">
-        <div class="flex justify-between items-center max-w-7xl mx-auto">
-            <div class="flex items-center gap-3">
-                <i class="fas fa-chart-line text-2xl"></i>
-                <h1 class="text-xl font-bold">TigerEx TradFi System</h1>
-            </div>
-            <div class="flex gap-4">
-                <span class="px-3 py-1 bg-green-500 rounded-full text-sm">● Live</span>
-                <span class="text-sm">Admin: superadmin@tigerex.com</span>
-            </div>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">
+            <div class="logo-icon">🐯</div>
+            <span>TigerEx</span>
+        </a>
+        <div class="header-right">
+            <span class="live-badge">● LIVE</span>
+            <div class="theme-toggle" onclick="toggleTheme()"><span>🌙</span></div>
         </div>
     </header>
-
-    <div class="max-w-7xl mx-auto p-4">
-        <!-- Trading Tabs -->
-        <div class="flex gap-2 mb-4 flex-wrap">
-            <button onclick="showTab('cfd')" class="tab-btn tab-active px-4 py-2 rounded-lg"><i class="fas fa-file-contract mr-2"></i>CFD</button>
-            <button onclick="showTab('forex')" class="tab-btn px-4 py-2 rounded-lg"><i class="fas fa-dollar-sign mr-2"></i>Forex</button>
-            <button onclick="showTab('etf')" class="tab-btn px-4 py-2 rounded-lg"><i class="fas fa-chart-pie mr-2"></i>ETF</button>
-            <button onclick="showTab('stocks')" class="tab-btn px-4 py-2 rounded-lg"><i class="fas fa-building mr-2"></i>Stock Tokens</button>
-            <button onclick="showTab('derivatives')" class="tab-btn px-4 py-2 rounded-lg"><i class="fas fa-gem mr-2"></i>Derivatives</button>
-            <button onclick="showTab('options')" class="tab-btn px-4 py-2 rounded-lg"><i class="fas fa-check-square mr-2"></i>Options</button>
-            <button onclick="showTab('futures')" class="tab-btn px-4 py-2 rounded-lg"><i class="fas fa-forward mr-2"></i>Futures</button>
+    
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('cfd')"><i class="fas fa-file-contract"></i> CFD Trading</button>
+            <button class="tab-btn" onclick="showTab('commodities')"><i class="fas fa-gem"></i> Commodities</button>
+            <button class="tab-btn" onclick="showTab('forex')"><i class="fas fa-dollar-sign"></i> Forex</button>
+            <button class="tab-btn" onclick="showTab('indices')"><i class="fas fa-chart-line"></i> Indices</button>
+            <button class="tab-btn" onclick="showTab('stocks')"><i class="fas fa-building"></i> Stocks</button>
+            <button class="tab-btn" onclick="showTab('crypto')"><i class="fab fa-bitcoin"></i> Crypto</button>
+            <button class="tab-btn" onclick="showTab('copytrading')"><i class="fas fa-users"></i> Copy Trading</button>
         </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
-            <!-- Markets Panel -->
-            <div class="lg:col-span-1">
-                <div class="card p-4">
-                    <h3 class="text-lg font-bold mb-3"><i class="fas fa-list mr-2"></i>Markets</h3>
-                    <div class="space-y-2" id="marketsList">
-                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
-                            <span>EUR/USD</span>
-                            <span class="price-up">1.0892 +0.12%</span>
+        
+        <div class="grid">
+            <div class="trading-panel">
+                <div id="panel-cfd" class="card">
+                    <div class="card-header">
+                        <span class="card-title">CFD Trading - Bitcoin/USDT</span>
+                        <span class="change up">+2.34%</span>
+                    </div>
+                    <div class="chart-container">
+                        <i class="fas fa-chart-line" style="font-size: 48px;"></i>
+                        <span style="margin-left: 12px;">Live Chart</span>
+                    </div>
+                    <div class="entry-types">
+                        <button class="entry-btn active">Market</button>
+                        <button class="entry-btn">Limit</button>
+                        <button class="entry-btn">Stop</button>
+                        <button class="entry-btn">Stop Limit</button>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Amount (USDT)</label>
+                        <input type="number" class="input-field" placeholder="0.00" id="amountInput">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Leverage</label>
+                        <div class="leverage-slider">
+                            <input type="range" min="1" max="125" value="10" id="leverageSlider">
+                            <span class="leverage-value" id="leverageValue">10x</span>
                         </div>
-                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
-                            <span>GBP/USD</span>
-                            <span class="price-down">1.2645 -0.08%</span>
-                        </div>
-                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
-                            <span>USD/JPY</span>
-                            <span class="price-up">154.23 +0.25%</span>
-                        </div>
-                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
-                            <span>AUD/USD</span>
-                            <span class="price-up">0.6543 +0.15%</span>
-                        </div>
-                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
-                            <span>BTC/USD</span>
-                            <span class="price-up">67,234 +2.34%</span>
-                        </div>
-                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
-                            <span>ETH/USD</span>
-                            <span class="price-down">3,456 -1.23%</span>
-                        </div>
-                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
-                            <span>SPY</span>
-                            <span class="price-up">512.45 +0.45%</span>
-                        </div>
-                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
-                            <span>QQQ</span>
-                            <span class="price-up">438.67 +0.78%</span>
-                        </div>
-                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
-                            <span>GLD</span>
-                            <span class="price-down">189.23 -0.12%</span>
-                        </div>
-                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
-                            <span>Gold</span>
-                            <span class="price-up">2,345 +0.56%</span>
-                        </div>
-                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
-                            <span>Silver</span>
-                            <span class="price-up">28.45 +1.23%</span>
-                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 16px;">
+                        <span>Margin Required</span>
+                        <span id="marginRequired">0.00 USDT</span>
+                    </div>
+                    <div class="trade-buttons">
+                        <button class="btn-buy" onclick="openLong()"><i class="fas fa-arrow-up"></i> Long</button>
+                        <button class="btn-sell" onclick="openShort()"><i class="fas fa-arrow-down"></i> Short</button>
                     </div>
                 </div>
-
-                <!-- Admin Control -->
-                <div class="card p-4 mt-4">
-                    <h3 class="text-lg font-bold mb-3"><i class="fas fa-cog mr-2"></i>Admin Control</h3>
-                    <div class="space-y-2">
-                        <button class="w-full text-left p-2 rounded hover:bg-white/10"><i class="fas fa-plus mr-2"></i>Create Trading Pair</button>
-                        <button class="w-full text-left p-2 rounded hover:bg-white/10"><i class="fas fa-edit mr-2"></i>Update Pair</button>
-                        <button class="w-full text-left p-2 rounded hover:bg-white/10"><i class="fas fa-pause mr-2"></i>Halt Trading</button>
-                        <button class="w-full text-left p-2 rounded hover:bg-white/10"><i class="fas fa-stop mr-2"></i>Stop/Delist</button>
-                        <button class="w-full text-left p-2 rounded hover:bg-white/10"><i class="fas fa-water mr-2"></i>Provide Liquidity</button>
-                        <button class="w-full text-left p-2 rounded hover:bg-white/10"><i class="fas fa-pool mr-2"></i>Create Liquidity Pool</button>
+                <div id="panel-copytrading" class="card" style="display: none;">
+                    <div class="card-header">
+                        <span class="card-title">Copy Top Traders</span>
+                        <a href="#" style="color: var(--primary); font-size: 13px;">View All →</a>
                     </div>
-                </div>
-            </div>
-
-            <!-- Main Trading Area -->
-            <div class="lg:col-span-2">
-                <div class="card p-4">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-2xl font-bold">EUR/USD</h2>
-                        <div class="text-right">
-                            <div class="text-3xl font-bold price-up">1.0892</div>
-                            <div class="price-up">+0.12% (24h)</div>
-                        </div>
-                    </div>
-
-                    <!-- Chart -->
-                    <canvas id="chart" height="250" class="w-full mb-4"></canvas>
-
-                    <!-- Time Buttons -->
-                    <div class="flex gap-1 mb-4">
-                        <button class="px-2 py-1 bg-gray-700 rounded text-xs">1m</button>
-                        <button class="px-2 py-1 bg-gray-700 rounded text-xs">5m</button>
-                        <button class="px-2 py-1 bg-gray-700 rounded text-xs">15m</button>
-                        <button class="px-2 py-1 bg-gray-700 rounded text-xs">1h</button>
-                        <button class="px-2 py-1 bg-gray-700 rounded text-xs">4h</button>
-                        <button class="px-2 py-1 bg-blue-600 rounded text-xs">1D</button>
-                        <button class="px-2 py-1 bg-gray-700 rounded text-xs">1W</button>
-                    </div>
-
-                    <!-- Order Book -->
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <h4 class="text-sm text-gray-400 mb-2">Sell Orders</h4>
-                            <div class="space-y-1 text-sm font-mono">
-                                <div class="flex justify-between"><span class="text-red-400">1.0893</span><span>0.50</span></div>
-                                <div class="flex justify-between"><span class="text-red-400">1.0894</span><span>0.75</span></div>
-                                <div class="flex justify-between"><span class="text-red-400">1.0895</span><span>1.20</span></div>
-                                <div class="flex justify-between"><span class="text-red-400">1.0896</span><span>0.30</span></div>
+                    <div class="copy-traders">
+                        <div class="trader-card">
+                            <div class="trader-avatar">T1</div>
+                            <div class="trader-info">
+                                <div class="trader-name">TigerMaster</div>
+                                <div class="trader-stats">
+                                    <span class="trader-stat"><i class="fas fa-chart-line"></i> 2,450 trades</span>
+                                    <span class="trader-stat"><i class="fas fa-users"></i> 1,234 copiers</span>
+                                </div>
                             </div>
+                            <div class="trader-roi positive">+245%</div>
+                            <button class="copy-btn" onclick="copyTrader('TigerMaster')">Copy</button>
                         </div>
-                        <div>
-                            <h4 class="text-sm text-gray-400 mb-2">Buy Orders</h4>
-                            <div class="space-y-1 text-sm font-mono">
-                                <div class="flex justify-between"><span class="text-green-400">1.0891</span><span>0.45</span></div>
-                                <div class="flex justify-between"><span class="text-green-400">1.0890</span><span>1.10</span></div>
-                                <div class="flex justify-between"><span class="text-green-400">1.0889</span><span>0.80</span></div>
-                                <div class="flex justify-between"><span class="text-green-400">1.0888</span><span>0.60</span></div>
+                        <div class="trader-card">
+                            <div class="trader-avatar">C2</div>
+                            <div class="trader-info">
+                                <div class="trader-name">CryptoKing</div>
+                                <div class="trader-stats">
+                                    <span class="trader-stat"><i class="fas fa-chart-line"></i> 1,890 trades</span>
+                                    <span class="trader-stat"><i class="fas fa-users"></i> 890 copiers</span>
+                                </div>
                             </div>
+                            <div class="trader-roi positive">+189%</div>
+                            <button class="copy-btn" onclick="copyTrader('CryptoKing')">Copy</button>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Order Form -->
-                <div class="card p-4 mt-4">
-                    <div class="flex gap-2 mb-4">
-                        <button class="buy-btn px-6 py-2 rounded font-bold">Buy</button>
-                        <button class="sell-btn px-6 py-2 rounded font-bold">Sell</button>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-2 mb-4">
-                        <button class="bg-gray-700 px-3 py-2 rounded text-sm">Market</button>
-                        <button class="bg-gray-700 px-3 py-2 rounded text-sm">Limit</button>
-                        <button class="bg-gray-700 px-3 py-2 rounded text-sm">Stop</button>
-                        <button class="bg-gray-700 px-3 py-2 rounded text-sm">OCO</button>
-                        <button class="bg-gray-700 px-3 py-2 rounded text-sm">OTO</button>
-                        <button class="bg-gray-700 px-3 py-2 rounded text-sm">Stop Loss</button>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label class="text-sm text-gray-400">Price</label>
-                            <input type="text" value="1.0892" class="w-full bg-gray-800 border border-gray-600 rounded p-2">
-                        </div>
-                        <div>
-                            <label class="text-sm text-gray-400">Quantity</label>
-                            <input type="text" placeholder="0.00" class="w-full bg-gray-800 border border-gray-600 rounded p-2">
-                        </div>
-                    </div>
-
-                    <div class="flex gap-2 mb-4">
-                        <button class="bg-gray-700 px-3 py-1 rounded text-sm">25%</button>
-                        <button class="bg-gray-700 px-3 py-1 rounded text-sm">50%</button>
-                        <button class="bg-gray-700 px-3 py-1 rounded text-sm">75%</button>
-                        <button class="bg-gray-700 px-3 py-1 rounded text-sm">100%</button>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="text-sm text-gray-400">Leverage</label>
-                        <div class="flex gap-1 flex-wrap">
-                            <button class="bg-blue-600 px-2 py-1 rounded text-xs">1x</button>
-                            <button class="bg-gray-700 px-2 py-1 rounded text-xs">2x</button>
-                            <button class="bg-gray-700 px-2 py-1 rounded text-xs">5x</button>
-                            <button class="bg-gray-700 px-2 py-1 rounded text-xs">10x</button>
-                            <button class="bg-gray-700 px-2 py-1 rounded text-xs">20x</button>
-                            <button class="bg-gray-700 px-2 py-1 rounded text-xs">50x</button>
-                            <button class="bg-gray-700 px-2 py-1 rounded text-xs">100x</button>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-between p-3 bg-gray-800 rounded mb-4">
-                        <span>Total:</span>
-                        <span class="text-xl font-bold">$0.00</span>
-                    </div>
-
-                    <button class="buy-btn w-full py-3 rounded font-bold text-lg">Place Order</button>
-                </div>
-
-                <!-- Advanced Options -->
-                <div class="card p-4 mt-4">
-                    <details class="cursor-pointer">
-                        <summary class="text-lg font-bold">Advanced Options <i class="fas fa-chevron-down"></i></summary>
-                        <div class="grid grid-cols-2 gap-4 mt-4">
-                            <div>
-                                <label class="text-sm text-gray-400">Stop Loss</label>
-                                <input type="text" placeholder="0.00" class="w-full bg-gray-800 border border-gray-600 rounded p-2">
+                        <div class="trader-card">
+                            <div class="trader-avatar">G3</div>
+                            <div class="trader-info">
+                                <div class="trader-name">GoldTiger</div>
+                                <div class="trader-stats">
+                                    <span class="trader-stat"><i class="fas fa-chart-line"></i> 3,200 trades</span>
+                                    <span class="trader-stat"><i class="fas fa-users"></i> 2,100 copiers</span>
+                                </div>
                             </div>
-                            <div>
-                                <label class="text-sm text-gray-400">Take Profit</label>
-                                <input type="text" placeholder="0.00" class="w-full bg-gray-800 border border-gray-600 rounded p-2">
-                            </div>
-                            <div>
-                                <label class="text-sm text-gray-400">Trailing Stop</label>
-                                <input type="text" placeholder="0.00" class="w-full bg-gray-800 border border-gray-600 rounded p-2">
-                            </div>
-                            <div>
-                                <label class="text-sm text-gray-400">Time In Force</label>
-                                <select class="w-full bg-gray-800 border border-gray-600 rounded p-2">
-                                    <option>GTC (Good Till Cancel)</option>
-                                    <option>IOC (Immediate or Cancel)</option>
-                                    <option>FOK (Fill or Kill)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </details>
-                </div>
-            </div>
-
-            <!-- Positions Panel -->
-            <div class="lg:col-span-1">
-                <div class="card p-4">
-                    <h3 class="text-lg font-bold mb-3"><i class="fas fa-wallet mr-2"></i>Account</h3>
-                    <div class="space-y-3">
-                        <div>
-                            <div class="text-gray-400 text-sm">Balance</div>
-                            <div class="text-xl font-bold">$100,000.00</div>
-                        </div>
-                        <div>
-                            <div class="text-gray-400 text-sm">Unrealized P&L</div>
-                            <div class="text-xl font-bold price-up">+$2,450.00</div>
-                        </div>
-                        <div>
-                            <div class="text-gray-400 text-sm">Margin Used</div>
-                            <div class="text-xl">$5,230.00</div>
-                        </div>
-                        <div>
-                            <div class="text-gray-400 text-sm">Available</div>
-                            <div class="text-xl">$94,770.00</div>
+                            <div class="trader-roi positive">+312%</div>
+                            <button class="copy-btn" onclick="copyTrader('GoldTiger')">Copy</button>
                         </div>
                     </div>
                 </div>
-
-                <div class="card p-4 mt-4">
-                    <h3 class="text-lg font-bold mb-3"><i class="fas fa-list-alt mr-2"></i>Open Positions</h3>
-                    <div class="space-y-2">
-                        <div class="p-2 bg-green-900/30 rounded border-l-4 border-green-500">
-                            <div class="flex justify-between text-sm">
-                                <span>EUR/USD</span>
-                                <span class="text-green-400">Long</span>
+            </div>
+            <div class="sidebar">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Markets</span>
+                    </div>
+                    <div class="asset-list" id="marketsList">
+                        <div class="asset-item" onclick="selectAsset('BTC')">
+                            <div class="asset-info">
+                                <div class="asset-icon">₿</div>
+                                <div><div class="asset-name">Bitcoin</div><div class="asset-pair">BTC/USDT</div></div>
                             </div>
-                            <div class="flex justify-between text-xs text-gray-400">
-                                <span>Size: 0.50</span>
-                                <span>P&L: +$125.00</span>
-                            </div>
+                            <div class="asset-price"><div class="price">$67,234</div><div class="change up">+2.34%</div></div>
                         </div>
-                        <div class="p-2 bg-red-900/30 rounded border-l-4 border-red-500">
-                            <div class="flex justify-between text-sm">
-                                <span>GBP/USD</span>
-                                <span class="text-red-400">Short</span>
+                        <div class="asset-item" onclick="selectAsset('ETH')">
+                            <div class="asset-info">
+                                <div class="asset-icon">Ξ</div>
+                                <div><div class="asset-name">Ethereum</div><div class="asset-pair">ETH/USDT</div></div>
                             </div>
-                            <div class="flex justify-between text-xs text-gray-400">
-                                <span>Size: 0.30</span>
-                                <span class="text-red-400">-$45.00</span>
+                            <div class="asset-price"><div class="price">$3,456</div><div class="change down">-1.23%</div></div>
+                        </div>
+                        <div class="asset-item" onclick="selectAsset('GOLD')">
+                            <div class="asset-info">
+                                <div class="asset-icon">🥇</div>
+                                <div><div class="asset-name">Gold</div><div class="asset-pair">XAU/USD</div></div>
                             </div>
+                            <div class="asset-price"><div class="price">$2,345</div><div class="change up">+0.45%</div></div>
+                        </div>
+                        <div class="asset-item" onclick="selectAsset('EUR')">
+                            <div class="asset-info">
+                                <div class="asset-icon">€</div>
+                                <div><div class="asset-name">EUR/USD</div><div class="asset-pair">Forex</div></div>
+                            </div>
+                            <div class="asset-price"><div class="price">1.0892</div><div class="change up">+0.12%</div></div>
+                        </div>
+                        <div class="asset-item" onclick="selectAsset('OIL')">
+                            <div class="asset-info">
+                                <div class="asset-icon">🛢️</div>
+                                <div><div class="asset-name">Crude Oil</div><div class="asset-pair">WTI/USD</div></div>
+                            </div>
+                            <div class="asset-price"><div class="price">$78.45</div><div class="change down">-0.89%</div></div>
+                        </div>
+                        <div class="asset-item" onclick="selectAsset('AAPL')">
+                            <div class="asset-info">
+                                <div class="asset-icon">🍎</div>
+                                <div><div class="asset-name">Apple</div><div class="asset-pair">AAPL/USD</div></div>
+                            </div>
+                            <div class="asset-price"><div class="price">$178</div><div class="change up">+0.89%</div></div>
                         </div>
                     </div>
                 </div>
-
-                <div class="card p-4 mt-4">
-                    <h3 class="text-lg font-bold mb-3"><i class="fas fa-history mr-2"></i>Recent Orders</h3>
-                    <div class="space-y-2 text-sm">
-                        <div class="flex justify-between">
-                            <span>EUR/USD</span>
-                            <span class="text-green-400">Buy Filled</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>GBP/USD</span>
-                            <span class="text-green-400">Sell Filled</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>USD/JPY</span>
-                            <span class="text-yellow-400">Pending</span>
-                        </div>
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-header">
+                        <span class="card-title">Open Positions</span>
                     </div>
+                    <table class="positions-table">
+                        <thead>
+                            <tr><th>Asset</th><th>Type</th><th>Amount</th><th>P/L</th></tr>
+                        </thead>
+                        <tbody id="positionsBody">
+                            <tr>
+                                <td colspan="4" style="text-align: center; color: var(--text-secondary); padding: 20px;">No open positions</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-
+    
     <script>
-        // Initialize Chart
-        const ctx = document.getElementById('chart').getContext('2d');
-        const gradient = ctx.createLinearGradient(0, 0, 0, 250);
-        gradient.addColorStop(0, 'rgba(16, 185, 129, 0.3)');
-        gradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
-
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['1D', '2D', '3D', '4D', '5D', '6D', '7D'],
-                datasets: [{
-                    label: 'EUR/USD',
-                    data: [1.0850, 1.0862, 1.0870, 1.0865, 1.0880, 1.0885, 1.0892],
-                    borderColor: '#10b981',
-                    backgroundColor: gradient,
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { grid: { color: '#333' }, 
-                    y: { grid: { color: '#333' } }
-                }
-            }
-        });
-
         function showTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('tab-active'));
-            event.target.classList.add('tab-active');
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.tab-btn').classList.add('active');
+            document.querySelectorAll('.trading-panel > .card').forEach(card => card.style.display = 'none');
+            if (tab === 'copytrading') document.getElementById('panel-copytrading').style.display = 'block';
+            else document.getElementById('panel-cfd').style.display = 'block';
         }
+        function selectAsset(symbol) {
+            document.querySelectorAll('.asset-item').forEach(item => item.style.background = 'rgba(255,255,255,0.02)');
+            event.target.closest('.asset-item').style.background = 'rgba(240,185,11,0.2)';
+        }
+        document.getElementById('leverageSlider').addEventListener('input', function() {
+            document.getElementById('leverageValue').textContent = this.value + 'x';
+            updateMargin();
+        });
+        document.getElementById('amountInput').addEventListener('input', updateMargin);
+        function updateMargin() {
+            const amount = parseFloat(document.getElementById('amountInput').value) || 0;
+            const leverage = parseInt(document.getElementById('leverageSlider').value);
+            document.getElementById('marginRequired').textContent = (amount / leverage).toFixed(2) + ' USDT';
+        }
+        function openLong() {
+            const amount = document.getElementById('amountInput').value;
+            const leverage = document.getElementById('leverageSlider').value;
+            if (amount > 0) alert('Long position opened!\nAmount: ' + amount + ' USDT\nLeverage: ' + leverage + 'x\n\nTigerEx CFD API: backend/cfd-trading-service');
+        }
+        function openShort() {
+            const amount = document.getElementById('amountInput').value;
+            const leverage = document.getElementById('leverageSlider').value;
+            if (amount > 0) alert('Short position opened!\nAmount: ' + amount + ' USDT\nLeverage: ' + leverage + 'x\n\nTigerEx CFD API: backend/cfd-trading-service');
+        }
+        function copyTrader(name) {
+            alert('Copying ' + name + '!\n\nTigerEx Copy Trading API: backend/copy-trading-service');
+        }
+        updateMargin();
     </script>
-    <script src="assets/js/theme.js"></script>
 </body>
 </html>

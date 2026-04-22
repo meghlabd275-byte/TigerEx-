@@ -1,0 +1,365 @@
+<!--
+ * TigerEx Web Page
+ * @file tradfi-preview.html
+ * @description TigerEx trading platform page
+ * @author TigerEx Development Team
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx TradFi System - Live Preview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: #0a0a0f; color: #fff; }
+        .gradient-bg { background: linear-gradient(135deg, #1e3a8a 0%, #4f46e5 100%); }
+        .card { background: rgba(30, 30, 40, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; }
+        .buy-btn { background: linear-gradient(135deg, #10b981, #059669); }
+        .sell-btn { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .price-up { color: #10b981; }
+        .price-down { color: #ef4444; }
+        .tab-active { background: linear-gradient(135deg, #1e40af, #3730a3); border-color: #3b82f6; }
+    .theme-toggle { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; padding: 8px; } .theme-toggle:hover { background: var(--bg-card-hover); } body { transition: background-color 0.3s, color 0.3s; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg p-4 sticky top-0 z-50">
+        <div class="flex justify-between items-center max-w-7xl mx-auto">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-chart-line text-2xl"></i>
+                <h1 class="text-xl font-bold">TigerEx TradFi System</h1>
+            </div>
+            <div class="flex gap-4">
+                <span class="px-3 py-1 bg-green-500 rounded-full text-sm">● Live</span>
+                <span class="text-sm">Admin: superadmin@tigerex.com</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto p-4">
+        <!-- Trading Tabs -->
+        <div class="flex gap-2 mb-4 flex-wrap">
+            <button onclick="showTab('cfd')" class="tab-btn tab-active px-4 py-2 rounded-lg"><i class="fas fa-file-contract mr-2"></i>CFD</button>
+            <button onclick="showTab('forex')" class="tab-btn px-4 py-2 rounded-lg"><i class="fas fa-dollar-sign mr-2"></i>Forex</button>
+            <button onclick="showTab('etf')" class="tab-btn px-4 py-2 rounded-lg"><i class="fas fa-chart-pie mr-2"></i>ETF</button>
+            <button onclick="showTab('stocks')" class="tab-btn px-4 py-2 rounded-lg"><i class="fas fa-building mr-2"></i>Stock Tokens</button>
+            <button onclick="showTab('derivatives')" class="tab-btn px-4 py-2 rounded-lg"><i class="fas fa-gem mr-2"></i>Derivatives</button>
+            <button onclick="showTab('options')" class="tab-btn px-4 py-2 rounded-lg"><i class="fas fa-check-square mr-2"></i>Options</button>
+            <button onclick="showTab('futures')" class="tab-btn px-4 py-2 rounded-lg"><i class="fas fa-forward mr-2"></i>Futures</button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+            <!-- Markets Panel -->
+            <div class="lg:col-span-1">
+                <div class="card p-4">
+                    <h3 class="text-lg font-bold mb-3"><i class="fas fa-list mr-2"></i>Markets</h3>
+                    <div class="space-y-2" id="marketsList">
+                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
+                            <span>EUR/USD</span>
+                            <span class="price-up">1.0892 +0.12%</span>
+                        </div>
+                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
+                            <span>GBP/USD</span>
+                            <span class="price-down">1.2645 -0.08%</span>
+                        </div>
+                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
+                            <span>USD/JPY</span>
+                            <span class="price-up">154.23 +0.25%</span>
+                        </div>
+                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
+                            <span>AUD/USD</span>
+                            <span class="price-up">0.6543 +0.15%</span>
+                        </div>
+                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
+                            <span>BTC/USD</span>
+                            <span class="price-up">67,234 +2.34%</span>
+                        </div>
+                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
+                            <span>ETH/USD</span>
+                            <span class="price-down">3,456 -1.23%</span>
+                        </div>
+                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
+                            <span>SPY</span>
+                            <span class="price-up">512.45 +0.45%</span>
+                        </div>
+                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
+                            <span>QQQ</span>
+                            <span class="price-up">438.67 +0.78%</span>
+                        </div>
+                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
+                            <span>GLD</span>
+                            <span class="price-down">189.23 -0.12%</span>
+                        </div>
+                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
+                            <span>Gold</span>
+                            <span class="price-up">2,345 +0.56%</span>
+                        </div>
+                        <div class="flex justify-between p-2 rounded hover:bg-white/10 cursor-pointer">
+                            <span>Silver</span>
+                            <span class="price-up">28.45 +1.23%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Control -->
+                <div class="card p-4 mt-4">
+                    <h3 class="text-lg font-bold mb-3"><i class="fas fa-cog mr-2"></i>Admin Control</h3>
+                    <div class="space-y-2">
+                        <button class="w-full text-left p-2 rounded hover:bg-white/10"><i class="fas fa-plus mr-2"></i>Create Trading Pair</button>
+                        <button class="w-full text-left p-2 rounded hover:bg-white/10"><i class="fas fa-edit mr-2"></i>Update Pair</button>
+                        <button class="w-full text-left p-2 rounded hover:bg-white/10"><i class="fas fa-pause mr-2"></i>Halt Trading</button>
+                        <button class="w-full text-left p-2 rounded hover:bg-white/10"><i class="fas fa-stop mr-2"></i>Stop/Delist</button>
+                        <button class="w-full text-left p-2 rounded hover:bg-white/10"><i class="fas fa-water mr-2"></i>Provide Liquidity</button>
+                        <button class="w-full text-left p-2 rounded hover:bg-white/10"><i class="fas fa-pool mr-2"></i>Create Liquidity Pool</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Trading Area -->
+            <div class="lg:col-span-2">
+                <div class="card p-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold">EUR/USD</h2>
+                        <div class="text-right">
+                            <div class="text-3xl font-bold price-up">1.0892</div>
+                            <div class="price-up">+0.12% (24h)</div>
+                        </div>
+                    </div>
+
+                    <!-- Chart -->
+                    <canvas id="chart" height="250" class="w-full mb-4"></canvas>
+
+                    <!-- Time Buttons -->
+                    <div class="flex gap-1 mb-4">
+                        <button class="px-2 py-1 bg-gray-700 rounded text-xs">1m</button>
+                        <button class="px-2 py-1 bg-gray-700 rounded text-xs">5m</button>
+                        <button class="px-2 py-1 bg-gray-700 rounded text-xs">15m</button>
+                        <button class="px-2 py-1 bg-gray-700 rounded text-xs">1h</button>
+                        <button class="px-2 py-1 bg-gray-700 rounded text-xs">4h</button>
+                        <button class="px-2 py-1 bg-blue-600 rounded text-xs">1D</button>
+                        <button class="px-2 py-1 bg-gray-700 rounded text-xs">1W</button>
+                    </div>
+
+                    <!-- Order Book -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="text-sm text-gray-400 mb-2">Sell Orders</h4>
+                            <div class="space-y-1 text-sm font-mono">
+                                <div class="flex justify-between"><span class="text-red-400">1.0893</span><span>0.50</span></div>
+                                <div class="flex justify-between"><span class="text-red-400">1.0894</span><span>0.75</span></div>
+                                <div class="flex justify-between"><span class="text-red-400">1.0895</span><span>1.20</span></div>
+                                <div class="flex justify-between"><span class="text-red-400">1.0896</span><span>0.30</span></div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-sm text-gray-400 mb-2">Buy Orders</h4>
+                            <div class="space-y-1 text-sm font-mono">
+                                <div class="flex justify-between"><span class="text-green-400">1.0891</span><span>0.45</span></div>
+                                <div class="flex justify-between"><span class="text-green-400">1.0890</span><span>1.10</span></div>
+                                <div class="flex justify-between"><span class="text-green-400">1.0889</span><span>0.80</span></div>
+                                <div class="flex justify-between"><span class="text-green-400">1.0888</span><span>0.60</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Form -->
+                <div class="card p-4 mt-4">
+                    <div class="flex gap-2 mb-4">
+                        <button class="buy-btn px-6 py-2 rounded font-bold">Buy</button>
+                        <button class="sell-btn px-6 py-2 rounded font-bold">Sell</button>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 mb-4">
+                        <button class="bg-gray-700 px-3 py-2 rounded text-sm">Market</button>
+                        <button class="bg-gray-700 px-3 py-2 rounded text-sm">Limit</button>
+                        <button class="bg-gray-700 px-3 py-2 rounded text-sm">Stop</button>
+                        <button class="bg-gray-700 px-3 py-2 rounded text-sm">OCO</button>
+                        <button class="bg-gray-700 px-3 py-2 rounded text-sm">OTO</button>
+                        <button class="bg-gray-700 px-3 py-2 rounded text-sm">Stop Loss</button>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="text-sm text-gray-400">Price</label>
+                            <input type="text" value="1.0892" class="w-full bg-gray-800 border border-gray-600 rounded p-2">
+                        </div>
+                        <div>
+                            <label class="text-sm text-gray-400">Quantity</label>
+                            <input type="text" placeholder="0.00" class="w-full bg-gray-800 border border-gray-600 rounded p-2">
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2 mb-4">
+                        <button class="bg-gray-700 px-3 py-1 rounded text-sm">25%</button>
+                        <button class="bg-gray-700 px-3 py-1 rounded text-sm">50%</button>
+                        <button class="bg-gray-700 px-3 py-1 rounded text-sm">75%</button>
+                        <button class="bg-gray-700 px-3 py-1 rounded text-sm">100%</button>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="text-sm text-gray-400">Leverage</label>
+                        <div class="flex gap-1 flex-wrap">
+                            <button class="bg-blue-600 px-2 py-1 rounded text-xs">1x</button>
+                            <button class="bg-gray-700 px-2 py-1 rounded text-xs">2x</button>
+                            <button class="bg-gray-700 px-2 py-1 rounded text-xs">5x</button>
+                            <button class="bg-gray-700 px-2 py-1 rounded text-xs">10x</button>
+                            <button class="bg-gray-700 px-2 py-1 rounded text-xs">20x</button>
+                            <button class="bg-gray-700 px-2 py-1 rounded text-xs">50x</button>
+                            <button class="bg-gray-700 px-2 py-1 rounded text-xs">100x</button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between p-3 bg-gray-800 rounded mb-4">
+                        <span>Total:</span>
+                        <span class="text-xl font-bold">$0.00</span>
+                    </div>
+
+                    <button class="buy-btn w-full py-3 rounded font-bold text-lg">Place Order</button>
+                </div>
+
+                <!-- Advanced Options -->
+                <div class="card p-4 mt-4">
+                    <details class="cursor-pointer">
+                        <summary class="text-lg font-bold">Advanced Options <i class="fas fa-chevron-down"></i></summary>
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <label class="text-sm text-gray-400">Stop Loss</label>
+                                <input type="text" placeholder="0.00" class="w-full bg-gray-800 border border-gray-600 rounded p-2">
+                            </div>
+                            <div>
+                                <label class="text-sm text-gray-400">Take Profit</label>
+                                <input type="text" placeholder="0.00" class="w-full bg-gray-800 border border-gray-600 rounded p-2">
+                            </div>
+                            <div>
+                                <label class="text-sm text-gray-400">Trailing Stop</label>
+                                <input type="text" placeholder="0.00" class="w-full bg-gray-800 border border-gray-600 rounded p-2">
+                            </div>
+                            <div>
+                                <label class="text-sm text-gray-400">Time In Force</label>
+                                <select class="w-full bg-gray-800 border border-gray-600 rounded p-2">
+                                    <option>GTC (Good Till Cancel)</option>
+                                    <option>IOC (Immediate or Cancel)</option>
+                                    <option>FOK (Fill or Kill)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Positions Panel -->
+            <div class="lg:col-span-1">
+                <div class="card p-4">
+                    <h3 class="text-lg font-bold mb-3"><i class="fas fa-wallet mr-2"></i>Account</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="text-gray-400 text-sm">Balance</div>
+                            <div class="text-xl font-bold">$100,000.00</div>
+                        </div>
+                        <div>
+                            <div class="text-gray-400 text-sm">Unrealized P&L</div>
+                            <div class="text-xl font-bold price-up">+$2,450.00</div>
+                        </div>
+                        <div>
+                            <div class="text-gray-400 text-sm">Margin Used</div>
+                            <div class="text-xl">$5,230.00</div>
+                        </div>
+                        <div>
+                            <div class="text-gray-400 text-sm">Available</div>
+                            <div class="text-xl">$94,770.00</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-4 mt-4">
+                    <h3 class="text-lg font-bold mb-3"><i class="fas fa-list-alt mr-2"></i>Open Positions</h3>
+                    <div class="space-y-2">
+                        <div class="p-2 bg-green-900/30 rounded border-l-4 border-green-500">
+                            <div class="flex justify-between text-sm">
+                                <span>EUR/USD</span>
+                                <span class="text-green-400">Long</span>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-400">
+                                <span>Size: 0.50</span>
+                                <span>P&L: +$125.00</span>
+                            </div>
+                        </div>
+                        <div class="p-2 bg-red-900/30 rounded border-l-4 border-red-500">
+                            <div class="flex justify-between text-sm">
+                                <span>GBP/USD</span>
+                                <span class="text-red-400">Short</span>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-400">
+                                <span>Size: 0.30</span>
+                                <span class="text-red-400">-$45.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-4 mt-4">
+                    <h3 class="text-lg font-bold mb-3"><i class="fas fa-history mr-2"></i>Recent Orders</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span>EUR/USD</span>
+                            <span class="text-green-400">Buy Filled</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>GBP/USD</span>
+                            <span class="text-green-400">Sell Filled</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>USD/JPY</span>
+                            <span class="text-yellow-400">Pending</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Chart
+        const ctx = document.getElementById('chart').getContext('2d');
+        const gradient = ctx.createLinearGradient(0, 0, 0, 250);
+        gradient.addColorStop(0, 'rgba(16, 185, 129, 0.3)');
+        gradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['1D', '2D', '3D', '4D', '5D', '6D', '7D'],
+                datasets: [{
+                    label: 'EUR/USD',
+                    data: [1.0850, 1.0862, 1.0870, 1.0865, 1.0880, 1.0885, 1.0892],
+                    borderColor: '#10b981',
+                    backgroundColor: gradient,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { color: '#333' }, 
+                    y: { grid: { color: '#333' } }
+                }
+            }
+        });
+
+        function showTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('tab-active'));
+            event.target.classList.add('tab-active');
+        }
+    </script>
+    <script src="assets/js/theme.js"></script>
+</body>
+</html>
