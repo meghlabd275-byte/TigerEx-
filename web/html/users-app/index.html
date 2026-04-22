@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx - Users Trading Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-900 text-white">
+    <div x-data="tigerExApp()" x-init="init()" class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-gray-800 border-b border-gray-700 sticky top-0 z-50">
+            <div class="container mx-auto px-4">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center space-x-8">
+                        <a href="/" class="text-2xl font-bold text-orange-500">TigerEx</a>
+                        <nav class="hidden md:flex space-x-4">
+                            <a href="/trade" class="text-gray-300 hover:text-white transition">Trade</a>
+                            <a href="/wallet" class="text-gray-300 hover:text-white transition">Wallet</a>
+                            <a href="/earn" class="text-gray-300 hover:text-white transition">Earn</a>
+                            <a href="/p2p" class="text-gray-300 hover:text-white transition">P2P</a>
+                        </nav>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <template x-if="!isLoggedIn">
+                            <div class="flex space-x-2">
+                                <a href="/login" class="px-4 py-2 text-orange-500 hover:text-orange-400">Login</a>
+                                <a href="/register" class="px-4 py-2 bg-orange-500 rounded-lg hover:bg-orange-600">Register</a>
+                            </div>
+                        </template>
+                        <template x-if="isLoggedIn">
+                            <div class="flex items-center space-x-4">
+                                <button @click="showDepositModal = true" class="px-4 py-2 bg-green-500 rounded-lg hover:bg-green-600">Deposit</button>
+                                <div class="relative" x-data="{ open: false }">
+                                    <button @click="open = !open" class="flex items-center space-x-2">
+                                        <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center" x-text="user?.email?.charAt(0).toUpperCase()"></div>
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </button>
+                                    <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg border border-gray-700">
+                                        <a href="/profile" class="block px-4 py-2 hover:bg-gray-700">Profile</a>
+                                        <a href="/security" class="block px-4 py-2 hover:bg-gray-700">Security</a>
+                                        <a href="/api" class="block px-4 py-2 hover:bg-gray-700">API Keys</a>
+                                        <button @click="logout()" class="w-full text-left px-4 py-2 hover:bg-gray-700 text-red-400">Logout</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-6">
+            <!-- Market Ticker -->
+            <div class="mb-6 overflow-x-auto">
+                <div class="flex space-x-6 min-w-max">
+                    <template x-for="pair in markets" :key="pair.symbol">
+                        <div class="flex items-center space-x-2 px-3 py-1 rounded bg-gray-800 hover:bg-gray-700 cursor-pointer" @click="selectPair(pair.symbol)">
+                            <span class="font-medium" x-text="pair.symbol"></span>
+                            <span x-text="pair.price" :class="pair.change >= 0 ? 'text-green-400' : 'text-red-400'"></span>
+                            <span x-text="pair.change + '%'" :class="pair.change >= 0 ? 'text-green-400' : 'text-red-400'" class="text-sm"></span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <!-- Order Book & Trading Panel -->
+                <div class="lg:col-span-1 space-y-6">
+                    <!-- Buy Panel -->
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h3 class="text-lg font-semibold mb-4 text-green-400">Buy</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Price</label>
+                                <input type="text" x-model="buyForm.price" @input="calculateBuyTotal()" class="w-full bg-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="0.00">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Amount</label>
+                                <input type="text" x-model="buyForm.amount" @input="calculateBuyTotal()" class="w-full bg-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="0.00">
+                            </div>
+                            <div class="flex space-x-2">
+                                <button @click="setAmount('25')" class="flex-1 py-1 bg-gray-700 rounded hover:bg-gray-600 text-sm">25%</button>
+                                <button @click="setAmount('50')" class="flex-1 py-1 bg-gray-700 rounded hover:bg-gray-600 text-sm">50%</button>
+                                <button @click="setAmount('75')" class="flex-1 py-1 bg-gray-700 rounded hover:bg-gray-600 text-sm">75%</button>
+                                <button @click="setAmount('100')" class="flex-1 py-1 bg-gray-700 rounded hover:bg-gray-600 text-sm">100%</button>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Total</label>
+                                <input type="text" x-model="buyForm.total" readonly class="w-full bg-gray-700 rounded px-3 py-2 cursor-not-allowed">
+                            </div>
+                            <button @click="placeBuyOrder()" class="w-full py-3 bg-green-500 rounded-lg hover:bg-green-600 font-semibold transition">Buy</button>
+                        </div>
+                    </div>
+
+                    <!-- Sell Panel -->
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h3 class="text-lg font-semibold mb-4 text-red-400">Sell</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Price</label>
+                                <input type="text" x-model="sellForm.price" @input="calculateSellTotal()" class="w-full bg-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="0.00">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Amount</label>
+                                <input type="text" x-model="sellForm.amount" @input="calculateSellTotal()" class="w-full bg-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="0.00">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Total</label>
+                                <input type="text" x-model="sellForm.total" readonly class="w-full bg-gray-700 rounded px-3 py-2 cursor-not-allowed">
+                            </div>
+                            <button @click="placeSellOrder()" class="w-full py-3 bg-red-500 rounded-lg hover:bg-red-600 font-semibold transition">Sell</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Chart -->
+                <div class="lg:col-span-2">
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-semibold" x-text="selectedPair"></h3>
+                            <div class="flex space-x-2">
+                                <button @click="setInterval('1m')" :class="interval === '1m' ? 'bg-orange-500' : 'bg-gray-700'" class="px-3 py-1 rounded text-sm">1m</button>
+                                <button @click="setInterval('5m')" :class="interval === '5m' ? 'bg-orange-500' : 'bg-gray-700'" class="px-3 py-1 rounded text-sm">5m</button>
+                                <button @click="setInterval('15m')" :class="interval === '15m' ? 'bg-orange-500' : 'bg-gray-700'" class="px-3 py-1 rounded text-sm">15m</button>
+                                <button @click="setInterval('1h')" :class="interval === '1h' ? 'bg-orange-500' : 'bg-gray-700'" class="px-3 py-1 rounded text-sm">1h</button>
+                                <button @click="setInterval('1d')" :class="interval === '1d' ? 'bg-orange-500' : 'bg-gray-700'" class="px-3 py-1 rounded text-sm">1D</button>
+                            </div>
+                        </div>
+                        <div class="h-80 bg-gray-700 rounded" id="priceChart"></div>
+                    </div>
+
+                    <!-- Recent Trades -->
+                    <div class="bg-gray-800 rounded-lg p-4 mt-6">
+                        <h3 class="text-lg font-semibold mb-4">Recent Trades</h3>
+                        <div class="space-y-2 max-h-60 overflow-y-auto">
+                            <template x-for="trade in recentTrades" :key="trade.id">
+                                <div class="flex justify-between text-sm">
+                                    <span :class="trade.side === 'buy' ? 'text-green-400' : 'text-red-400'" x-text="trade.price"></span>
+                                    <span x-text="trade.amount"></span>
+                                    <span class="text-gray-400" x-text="trade.time"></span>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Book & Trades -->
+                <div class="lg:col-span-1 space-y-6">
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h3 class="text-lg font-semibold mb-4">Order Book</h3>
+                        <div class="grid grid-cols-3 gap-2 text-sm mb-2">
+                            <span class="text-gray-400">Price</span>
+                            <span class="text-gray-400 text-right">Amount</span>
+                            <span class="text-gray-400 text-right">Total</span>
+                        </div>
+                        <div class="max-h-48 overflow-y-auto space-y-1">
+                            <template x-for="order in orderBook.asks" :key="order.price">
+                                <div class="grid grid-cols-3 gap-2 text-sm relative">
+                                    <div class="absolute inset-y-0 right-0 bg-red-500/20" :style="'width:' + order.totalPercent + '%'"></div>
+                                    <span class="text-red-400 relative" x-text="order.price"></span>
+                                    <span class="text-right relative" x-text="order.amount"></span>
+                                    <span class="text-right relative" x-text="order.total"></span>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="text-center py-2 border-y border-gray-700 my-2">
+                            <span class="text-xl font-bold" x-text="currentPrice"></span>
+                        </div>
+                        <div class="max-h-48 overflow-y-auto space-y-1">
+                            <template x-for="order in orderBook.bids" :key="order.price">
+                                <div class="grid grid-cols-3 gap-2 text-sm relative">
+                                    <div class="absolute inset-y-0 left-0 bg-green-500/20" :style="'width:' + order.totalPercent + '%'"></div>
+                                    <span class="text-green-400 relative" x-text="order.price"></span>
+                                    <span class="text-right relative" x-text="order.amount"></span>
+                                    <span class="text-right relative" x-text="order.total"></span>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Your Orders -->
+                    <div class="bg-gray-800 rounded-lg p-4">
+                        <h3 class="text-lg font-semibold mb-4">Your Open Orders</h3>
+                        <div class="space-y-2 max-h-48 overflow-y-auto">
+                            <template x-if="openOrders.length === 0">
+                                <p class="text-gray-400 text-center py-4">No open orders</p>
+                            </template>
+                            <template x-for="order in openOrders" :key="order.id">
+                                <div class="flex justify-between items-center p-2 bg-gray-700 rounded">
+                                    <div>
+                                        <span :class="order.side === 'buy' ? 'text-green-400' : 'text-red-400'" x-text="order.side.toUpperCase()"></span>
+                                        <span x-text="order.amount"></span>
+                                        <span x-text="order.pair"></span>
+                                    </div>
+                                    <button @click="cancelOrder(order.id)" class="text-red-400 hover:text-red-300">Cancel</button>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Deposit Modal -->
+        <div x-show="showDepositModal" x-cloak class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click.self="showDepositModal = false">
+            <div class="bg-gray-800 rounded-lg p-6 w-full max-w-md">
+                <h3 class="text-xl font-semibold mb-4">Deposit Crypto</h3>
+                <div class="mb-4">
+                    <label class="block text-sm text-gray-400 mb-1">Select Asset</label>
+                    <select x-model="depositAsset" class="w-full bg-gray-700 rounded px-3 py-2">
+                        <template x-for="asset in assets" :key="asset">
+                            <option :value="asset" x-text="asset"></option>
+                        </template>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm text-gray-400 mb-1">Deposit Address</label>
+                    <div class="flex space-x-2">
+                        <input type="text" :value="depositAddress" readonly class="flex-1 bg-gray-700 rounded px-3 py-2 font-mono text-sm">
+                        <button @click="copyAddress()" class="px-4 py-2 bg-orange-500 rounded hover:bg-orange-600">Copy</button>
+                    </div>
+                </div>
+                <div class="flex justify-end">
+                    <button @click="showDepositModal = false" class="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function tigerExApp() {
+            return {
+                isLoggedIn: false,
+                user: null,
+                markets: [],
+                selectedPair: 'BTC/USDT',
+                currentPrice: '0.00',
+                interval: '1h',
+                buyForm: { price: '', amount: '', total: '' },
+                sellForm: { price: '', amount: '', total: '' },
+                orderBook: { bids: [], asks: [] },
+                recentTrades: [],
+                openOrders: [],
+                showDepositModal: false,
+                depositAsset: 'BTC',
+                depositAddress: '',
+                assets: ['BTC', 'ETH', 'USDT', 'BNB'],
+
+                async init() {
+                    await this.loadMarkets();
+                    await this.checkAuth();
+                    await this.loadOrderBook();
+                    this.initChart();
+                },
+
+                async checkAuth() {
+                    const token = localStorage.getItem('accessToken');
+                    if (token) {
+                        this.isLoggedIn = true;
+                        // Load user data
+                    }
+                },
+
+                async loadMarkets() {
+                    this.markets = [
+                        { symbol: 'BTC/USDT', price: '43,250.00', change: 2.5 },
+                        { symbol: 'ETH/USDT', price: '2,350.00', change: -1.2 },
+                        { symbol: 'BNB/USDT', price: '310.50', change: 0.8 },
+                        { symbol: 'SOL/USDT', price: '98.75', change: 5.2 },
+                    ];
+                    if (this.markets.length > 0) {
+                        this.selectedPair = this.markets[0].symbol;
+                        this.currentPrice = this.markets[0].price;
+                    }
+                },
+
+                async loadOrderBook() {
+                    this.orderBook = {
+                        bids: [
+                            { price: '43,245.00', amount: '0.5234', total: '22,650.00', totalPercent: 80 },
+                            { price: '43,240.00', amount: '0.2345', total: '10,145.00', totalPercent: 60 },
+                            { price: '43,235.00', amount: '0.1567', total: '6,780.00', totalPercent: 40 },
+                        ],
+                        asks: [
+                            { price: '43,255.00', amount: '0.3456', total: '14,950.00', totalPercent: 70 },
+                            { price: '43,260.00', amount: '0.5678', total: '24,550.00', totalPercent: 90 },
+                            { price: '43,265.00', amount: '0.1234', total: '5,340.00', totalPercent: 50 },
+                        ]
+                    };
+                },
+
+                selectPair(symbol) {
+                    this.selectedPair = symbol;
+                    const market = this.markets.find(m => m.symbol === symbol);
+                    if (market) {
+                        this.currentPrice = market.price;
+                    }
+                },
+
+                setInterval(interval) {
+                    this.interval = interval;
+                    // Reload chart data
+                },
+
+                calculateBuyTotal() {
+                    const price = parseFloat(this.buyForm.price) || 0;
+                    const amount = parseFloat(this.buyForm.amount) || 0;
+                    this.buyForm.total = (price * amount).toFixed(2);
+                },
+
+                calculateSellTotal() {
+                    const price = parseFloat(this.sellForm.price) || 0;
+                    const amount = parseFloat(this.sellForm.amount) || 0;
+                    this.sellForm.total = (price * amount).toFixed(2);
+                },
+
+                setAmount(percent) {
+                    // Calculate based on available balance
+                    this.buyForm.amount = (percent / 100 * 1.5).toString();
+                    this.calculateBuyTotal();
+                },
+
+                async placeBuyOrder() {
+                    // Place buy order via API
+                    console.log('Buy order:', this.buyForm);
+                },
+
+                async placeSellOrder() {
+                    // Place sell order via API
+                    console.log('Sell order:', this.sellForm);
+                },
+
+                async cancelOrder(orderId) {
+                    // Cancel order via API
+                    console.log('Cancel order:', orderId);
+                },
+
+                copyAddress() {
+                    navigator.clipboard.writeText(this.depositAddress);
+                    alert('Address copied!');
+                },
+
+                logout() {
+                    localStorage.removeItem('accessToken');
+                    this.isLoggedIn = false;
+                    this.user = null;
+                },
+
+                initChart() {
+                    const ctx = document.getElementById('priceChart');
+                    if (ctx) {
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: ['1h', '2h', '3h', '4h', '5h', '6h'],
+                                datasets: [{
+                                    label: 'Price',
+                                    data: [43200, 43150, 43250, 43200, 43300, 43250],
+                                    borderColor: '#f97316',
+                                    backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                                    fill: true,
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: { legend: { display: false } },
+                                scales: { grid: { color: '#374151' } }
+                            }
+                        });
+                    }
+                }
+            };
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+</body>
+</html>
