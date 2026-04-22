@@ -1,6 +1,11 @@
 {
-  "buildCommand": "npm run build",
+  "buildCommand": "cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/out",
   "installCommand": "npm install",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "routes": {
+    "/api/**": {
+      "origin": "https://tigerex-api.onrender.com"
+    }
+  }
 }
