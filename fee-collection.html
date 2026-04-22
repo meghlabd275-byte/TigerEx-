@@ -7,6 +7,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="assets/css/theme.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TigerEx - Fee Collection System</title>
@@ -19,6 +20,7 @@
         .nav-tab { padding: 10px 16px; border-radius: 8px; transition: 0.2s; }
         .nav-tab.active { background: #4b5cd7; }
         .fee-card { background: #252a33; padding: 12px; border-radius: 8px; text-align: center; }
+    .theme-toggle { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; padding: 8px; } .theme-toggle:hover { background: var(--bg-card-hover); } body { transition: background-color 0.3s, color 0.3s; }
     </style>
 </head>
 <body>
@@ -538,5 +540,6 @@
             document.getElementById('tab-' + tab).classList.add('active');
         }
     </script>
+    <script src="assets/js/theme.js"></script>
 </body>
 </html>

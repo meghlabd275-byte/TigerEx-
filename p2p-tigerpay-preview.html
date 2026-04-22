@@ -7,6 +7,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="assets/css/theme.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TigerEx - P2P, TigerPay & Transfer Services</title>
@@ -22,6 +23,7 @@
         .asset-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-bottom: 1px solid #2f363d; }
         .transfer-method { padding: 12px; border-radius: 8px; text-align: center; background: #252a33; transition: 0.2s; }
         .transfer-method:hover, .transfer-method.active { background: #4b5cd7; }
+    .theme-toggle { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; padding: 8px; } .theme-toggle:hover { background: var(--bg-card-hover); } body { transition: background-color 0.3s, color 0.3s; }
     </style>
 </head>
 <body>
@@ -628,5 +630,6 @@
             el.classList.add('active');
         }
     </script>
+    <script src="assets/js/theme.js"></script>
 </body>
 </html>

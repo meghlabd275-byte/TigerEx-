@@ -7,6 +7,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="assets/css/theme.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Transaction History | TigerEx</title>
@@ -260,7 +261,8 @@
       .txn-header { display: none; }
       .txn-row { grid-template-columns: 1fr; gap: 8px; }
     }
-  </style>
+  .theme-toggle { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; padding: 8px; } .theme-toggle:hover { background: var(--bg-card-hover); } body { transition: background-color 0.3s, color 0.3s; }
+    </style>
 </head>
 <body>
   <header class="header">
@@ -393,5 +395,6 @@
       });
     });
   </script>
+    <script src="assets/js/theme.js"></script>
 </body>
 </html>

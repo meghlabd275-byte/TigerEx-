@@ -1,0 +1,61 @@
+/**
+ * TigerEx Theme Variables
+ * Include this CSS in all pages for consistent theming
+ */
+
+/* Dark Mode (Default) */
+:root,
+body {
+    --bg-dark: #0B0E11;
+    --bg-dark-secondary: #1C2128;
+    --bg-card: #1E2329;
+    --bg-card-hover: #252A32;
+    --text-primary: #EAECEF;
+    --text-secondary: #848E9C;
+    --border: #2B3139;
+    --primary: #F0B90B;
+    --primary-hover: #FFD84D;
+    --accent-green: #00C087;
+    --accent-red: #F6465D;
+    --gradient-primary: linear-gradient(135deg, #F0B90B 0%, #FFD84D 100%);
+}
+
+/* Light Mode */
+body.light-mode,
+body.light-mode {
+    --bg-dark: #F5F5F5;
+    --bg-dark-secondary: #FFFFFF;
+    --bg-card: #FFFFFF;
+    --bg-card-hover: #F0F0F0;
+    --text-primary: #1A1A1A;
+    --text-secondary: #666666;
+    --border: #E0E0E0;
+    --primary: #F0B90B;
+    --primary-hover: #E5A809;
+    --accent-green: #00C087;
+    --accent-red: #F6465D;
+    --gradient-primary: linear-gradient(135deg, #F0B90B 0%, #FFD84D 100%);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.theme-toggle:hover {
+    background: var(--bg-card-hover);
+}
+
+/* Theme transition for smooth switching */
+body {
+    transition: background-color 0.3s, color 0.3s;
+}
