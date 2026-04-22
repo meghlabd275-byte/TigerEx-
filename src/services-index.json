@@ -1,0 +1,176 @@
+{
+  "name": "TigerEx",
+  "version": "1.0.0",
+  "description": "Complete TigerEx Exchange Platform - Backend Services Index",
+  "services": {
+    "trading": {
+      "count": 45,
+      "items": [
+        "exchange-service",
+        "trading-service", 
+        "futures-service",
+        "margin-service",
+        "options-service",
+        "spot-service",
+        "advanced-trading-service",
+        "algorithmic-trading",
+        "copy-trading-service",
+        "p2p-trading-service",
+        "cfd-trading-service",
+        "block-trading-service",
+        "derivative-trading",
+        "order-service",
+        "market-maker-service",
+        "auto-invest-service"
+      ]
+    },
+    "wallet": {
+      "count": 38,
+      "items": [
+        "wallet-service",
+        "wallet-system",
+        "wallet-api-service",
+        "address-generation-service",
+        "account-management-service",
+        "multi-sig-wallet",
+        "custodial-wallet",
+        "non-custodial-wallet",
+        "hot-wallet",
+        "cold-wallet",
+        "wallet-connect-service"
+      ]
+    },
+    "blockchain": {
+      "count": 42,
+      "items": [
+        "blockchain-service",
+        "block-explorer-service",
+        "blockchain-integration-service",
+        "evm-blockchain-service",
+        "non-evm-blockchain-service",
+        "layer2-service",
+        "sidechain-service",
+        "bridge-service",
+        "token-service"
+      ]
+    },
+    "nft": {
+      "count": 15,
+      "items": [
+        "nft-marketplace",
+        "nft-service",
+        "nft-minting-service",
+        "nft-collection-service"
+      ]
+    },
+    "earn": {
+      "count": 22,
+      "items": [
+        "earn-service",
+        "staking-service",
+        "launchpool-service",
+        "cloud-mining-service",
+        "liquidity-mining-service",
+        "defi-service",
+        "savings-service"
+      ]
+    },
+    "admin": {
+      "count": 25,
+      "items": [
+        "admin-service",
+        "admin-panel",
+        "admin-control-system",
+        "analytics-service",
+        "analytics-dashboard-service"
+      ]
+    },
+    "api": {
+      "count": 18,
+      "items": [
+        "api-gateway",
+        "api-service",
+        "api-management-service",
+        "rest-api",
+        "websocket-service"
+      ]
+    },
+    "auth": {
+      "count": 12,
+      "items": [
+        "auth-service",
+        "kyc-service",
+        "verification-service",
+        "security-service"
+      ]
+    },
+    "business": {
+      "count": 28,
+      "items": [
+        "affiliate-system",
+        "referral-service",
+        "partner-service",
+        "institutional-service",
+        "merchant-service",
+        "payment-service",
+        "payment-gateway-service"
+      ]
+    },
+    "ai": {
+      "count": 15,
+      "items": [
+        "ai-trading-assistant",
+        "ai-trading-bot-service",
+        "ai-trading-insights-service",
+        "ai-maintenance-system"
+      ]
+    }
+  },
+  "totalServices": 332,
+  "frontend": {
+    "web": {
+      "framework": "Next.js + React",
+      "files": 25,
+      "components": 45,
+      "pages": 30
+    },
+    "mobile": {
+      "framework": "React Native",
+      "files": 4,
+      "platforms": ["Android", "iOS"]
+    },
+    "desktop": {
+      "framework": "Electron",
+      "files": 6,
+      "platforms": ["Windows", "Mac", "Linux"]
+    }
+  },
+  "roles": {
+    "admin": {
+      "access": ["all"],
+      "permissions": ["read", "write", "delete", "manage"]
+    },
+    "user": {
+      "access": ["trade", "earn", "wallet", "nft"],
+      "permissions": ["read", "write"]
+    },
+    "trader": {
+      "access": ["spot", "margin", "futures", "options"],
+      "permissions": ["read", "write"]
+    },
+    "partner": {
+      "access": ["affiliate", "referral"],
+      "permissions": ["read"]
+    },
+    "institutional": {
+      "access": ["custody", "api", "whitelabel"],
+      "permissions": ["read", "write", "manage"]
+    }
+  },
+  "platforms": {
+    "web": "index.html, dashboard.html, trading.html",
+    "android": "mobile/android/, Kotlin",
+    "ios": "mobile/ios/, Swift", 
+    "desktop": "desktop/, Electron"
+  }
+}
