@@ -3,7 +3,6 @@
   "@file": "SERVICE_INDEX.json",
   "@description": "TigerEx configuration",
   "@author": "TigerEx Development Team",
-{
   "total_services": 255,
   "services_with_main": 237,
   "services_with_docker": 207,
