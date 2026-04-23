@@ -1,6 +1,6 @@
 <!--
 @file login.html
-@description TigerEx Login Page - Complete Multi-Step Auth
+@description TigerEx Login Page with Trusted Browser & Verification Flow
 @author TigerEx Development Team
 -->
 <!DOCTYPE html>
@@ -42,111 +42,31 @@
       --border: #E0E0E0;
     }
     
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 24px;
-      background: var(--bg-card);
-      border-bottom: 1px solid var(--border);
-    }
-    
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-      color: var(--text-primary);
-      font-size: 24px;
-      font-weight: 700;
-    }
-    
-    .logo-icon {
-      width: 36px;
-      height: 36px;
-      background: var(--primary);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-    }
-    
+    .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: var(--bg-card); border-bottom: 1px solid var(--border); }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text-primary); font-size: 24px; font-weight: 700; }
+    .logo-icon { width: 36px; height: 36px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
     .header-right { display: flex; align-items: center; gap: 16px; }
     .lang-btn, .theme-btn { background: none; border: 1px solid var(--border); color: var(--text-primary); padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 14px; }
     .theme-btn { padding: 8px; }
     
     .main { display: flex; justify-content: center; align-items: center; padding: 40px 20px; min-height: calc(100vh - 150px); }
-    
-    .login-card {
-      background: var(--bg-card);
-      border-radius: 12px;
-      padding: 32px;
-      width: 100%;
-      max-width: 420px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.2);
-    }
-    
+    .login-card { background: var(--bg-card); border-radius: 12px; padding: 32px; width: 100%; max-width: 420px; box-shadow: 0 4px 24px rgba(0,0,0,0.2); }
     h1 { font-size: 28px; font-weight: 700; margin-bottom: 24px; }
     .subtitle { color: var(--text-secondary); margin-bottom: 24px; font-size: 14px; }
     
     .form-group { margin-bottom: 16px; }
     .form-label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 500; }
     .input-wrapper { position: relative; }
-    
-    .form-input {
-      width: 100%;
-      padding: 12px 16px;
-      background: var(--bg-dark);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text-primary);
-      font-size: 14px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    
+    .form-input { width: 100%; padding: 12px 16px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 14px; outline: none; transition: border-color 0.2s; }
     .form-input:focus { border-color: var(--primary); }
     .form-input::placeholder { color: var(--text-secondary); }
     
     .password-wrapper { position: relative; }
     .password-wrapper .form-input { padding-right: 48px; }
+    .password-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 18px; }
+    .country-select { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 20px; }
     
-    .password-toggle {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      cursor: pointer;
-      font-size: 18px;
-    }
-    
-    .country-select {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 20px;
-    }
-    
-    .submit-btn {
-      width: 100%;
-      padding: 14px;
-      background: var(--primary);
-      color: #000;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: opacity 0.2s;
-      margin-top: 8px;
-    }
-    
+    .submit-btn { width: 100%; padding: 14px; background: var(--primary); color: #000; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; margin-top: 8px; }
     .submit-btn:hover { opacity: 0.9; }
     .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     
@@ -155,24 +75,7 @@
     .divider span { padding: 0 16px; color: var(--text-secondary); font-size: 13px; }
     
     .social-btns { display: flex; flex-direction: column; gap: 12px; }
-    
-    .social-btn {
-      width: 100%;
-      padding: 12px;
-      background: var(--bg-dark);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      color: var(--text-primary);
-      font-size: 14px;
-      font-weight: 500;
-      transition: background 0.2s;
-    }
-    
+    .social-btn { width: 100%; padding: 12px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--text-primary); font-size: 14px; font-weight: 500; transition: background 0.2s; }
     .social-btn:hover { background: var(--hover-bg, #2B3139); }
     .social-btn svg { width: 20px; height: 20px; }
     
@@ -208,6 +111,9 @@
     .remember-row label { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 14px; cursor: pointer; }
     .remember-row input { accent-color: var(--primary); }
     .remember-row a { color: var(--primary); text-decoration: none; font-size: 14px; }
+    
+    .trusted-badge { display: flex; align-items: center; gap: 8px; padding: 12px; background: rgba(0, 192, 135, 0.1); border-radius: 8px; margin-bottom: 16px; color: var(--green); font-size: 14px; }
+    .trusted-badge svg { width: 20px; height: 20px; fill: currentColor; }
     
     .success-checkmark { width: 80px; height: 80px; margin: 0 auto 24px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; animation: scaleIn 0.3s ease; }
     @keyframes scaleIn { from { transform: scale(0); } to { transform: scale(1); } }
@@ -248,7 +154,7 @@
         </form>
       </div>
       
-      <!-- Step 2: Password -->
+      <!-- Step 2: Password (Trusted Browser - Skip Verification) -->
       <div id="stepPassword" style="display: none;">
         <button class="back-btn" onclick="goBack('email')">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
@@ -256,6 +162,11 @@
         </button>
         <h1>Enter Password</h1>
         <p class="subtitle" id="passwordEmailDisplay">user@example.com</p>
+        
+        <div class="trusted-badge" id="trustedBadge" style="display: none;">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          <span>Trusted browser (30 days) - Skip verification</span>
+        </div>
         
         <div class="error-box" id="wrongPasswordError">Incorrect password. Please try again.</div>
         
@@ -267,14 +178,14 @@
             </div>
           </div>
           <div class="remember-row">
-            <label><input type="checkbox" id="rememberMe"> Stay logged in</label>
+            <label><input type="checkbox" id="rememberMe"> Stay logged in for 30 days</label>
             <a href="#">Forgot password?</a>
           </div>
-          <button type="submit" class="submit-btn">Log In</button>
+          <button type="submit" class="submit-btn" id="loginBtn">Log In</button>
         </form>
       </div>
       
-      <!-- Step 3: Email & Phone Verification -->
+      <!-- Step 3: Verification (Email + Phone) -->
       <div id="stepVerify" style="display: none;">
         <button class="back-btn" onclick="goBack('password')">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
@@ -419,7 +330,9 @@
     var loginEmail = '';
     var userData = null;
     var has2FA = false;
+    var isTrustedBrowser = false;
     var otpCodes = { 'email': '', 'phone': '', '2fa': '' };
+    var TRUSTED_DAYS = 30;
     
     // Password Toggle
     function togglePassword(inputId) {
@@ -430,6 +343,33 @@
     // Social Login
     function socialLogin(provider) { alert(provider + ' login coming soon!'); }
     function passkeyLogin() { alert('Passkey login coming soon!'); }
+    
+    // Check Trusted Browser
+    function checkTrustedBrowser(email) {
+      var trustedBrowsers = JSON.parse(localStorage.getItem('tigerex_trusted_browsers') || '{}');
+      var record = trustedBrowsers[email];
+      
+      if (record) {
+        var lastLogin = new Date(record.lastLogin);
+        var now = new Date();
+        var diffDays = Math.floor((now - lastLogin) / (1000 * 60 * 60 * 24));
+        
+        if (diffDays <= TRUSTED_DAYS) {
+          return true;
+        }
+      }
+      return false;
+    }
+    
+    // Save Trusted Browser
+    function saveTrustedBrowser(email, trusted) {
+      var trustedBrowsers = JSON.parse(localStorage.getItem('tigerex_trusted_browsers') || '{}');
+      trustedBrowsers[email] = {
+        lastLogin: new Date().toISOString(),
+        trusted: trusted
+      };
+      localStorage.setItem('tigerex_trusted_browsers', JSON.stringify(trustedBrowsers));
+    }
     
     // Step 1: Check if email is registered
     function handleEmailSubmit(e) {
@@ -444,12 +384,11 @@
       document.getElementById('emailError').classList.remove('show');
       document.getElementById('notRegisteredError').classList.remove('show');
       
-      // Check if user exists in localStorage
+      // Check if user exists
       var users = JSON.parse(localStorage.getItem('tigerex_users') || '[]');
       var foundUser = users.find(function(u) { return u.email === email || u.optionalEmail === email || u.optionalPhone === email; });
       
       if (!foundUser) {
-        // User not found - show error and redirect
         document.getElementById('notRegisteredError').classList.add('show');
         setTimeout(function() { window.location.href = 'register.html'; }, 3000);
         return;
@@ -460,34 +399,58 @@
       userData = foundUser;
       has2FA = foundUser.twoFactorEnabled || false;
       
+      // Check trusted browser
+      isTrustedBrowser = checkTrustedBrowser(email);
+      
       document.getElementById('stepEmail').style.display = 'none';
       document.getElementById('stepPassword').style.display = 'block';
       document.getElementById('passwordEmailDisplay').textContent = email;
       document.getElementById('loginDivider').style.display = 'none';
       document.getElementById('socialBtns').style.display = 'none';
       document.getElementById('helpLinks').style.display = 'none';
+      
+      // Show trusted badge if applicable
+      if (isTrustedBrowser) {
+        document.getElementById('trustedBadge').style.display = 'flex';
+        document.getElementById('loginBtn').textContent = 'Log In (Trusted)';
+      }
     }
     
     // Step 2: Password Submit
     function handlePasswordSubmit(e) {
       e.preventDefault();
       var password = document.getElementById('passwordInput').value;
+      var rememberMe = document.getElementById('rememberMe').checked;
       
       document.getElementById('wrongPasswordError').classList.remove('show');
       
-      // Check password (demo: accept any password for registered users)
+      // Verify password
       if (!userData || userData.password !== password) {
         document.getElementById('wrongPasswordError').classList.add('show');
         return;
       }
       
-      // Password correct - show verification step
-      document.getElementById('stepPassword').style.display = 'none';
-      document.getElementById('stepVerify').style.display = 'block';
-      document.getElementById('verifyEmailDisplay').textContent = loginEmail;
+      // Check if need verification or trusted browser
+      if (isTrustedBrowser && !has2FA) {
+        // Trusted browser without 2FA - directly login
+        completeLogin(rememberMe);
+      } else if (isTrustedBrowser && has2FA) {
+        // Trusted browser with 2FA - need 2FA only
+        document.getElementById('stepPassword').style.display = 'none';
+        document.getElementById('step2FA').style.display = 'block';
+        setTimeout(function() { document.querySelector('#step2FA .otp-input').focus(); }, 100);
+      } else if (!isTrustedBrowser) {
+        // Need full verification
+        document.getElementById('stepPassword').style.display = 'none';
+        document.getElementById('stepVerify').style.display = 'block';
+        document.getElementById('verifyEmailDisplay').textContent = loginEmail;
+        setTimeout(function() { document.querySelector('#stepVerify .otp-input').focus(); }, 100);
+      }
       
-      // Focus first email OTP input
-      setTimeout(function() { document.querySelector('#stepVerify .otp-input').focus(); }, 100);
+      // Save trusted browser if checked
+      if (rememberMe) {
+        saveTrustedBrowser(loginEmail, true);
+      }
     }
     
     // Back Navigation
@@ -503,7 +466,11 @@
         document.getElementById('stepPassword').style.display = 'block';
       } else if (step === 'verify') {
         document.getElementById('step2FA').style.display = 'none';
-        document.getElementById('stepVerify').style.display = 'block';
+        if (isTrustedBrowser) {
+          document.getElementById('stepPassword').style.display = 'block';
+        } else {
+          document.getElementById('stepVerify').style.display = 'block';
+        }
       }
     }
     
@@ -514,40 +481,39 @@
       if (value.length === 1) {
         otpCodes[type] += value;
         var index = parseInt(input.dataset.index);
-        var inputs = document.querySelectorAll('#step' + (type === '2fa' ? '2FA' : 'Verify') + ' .otp-input');
+        var stepId = type === '2fa' ? '2FA' : 'Verify';
+        var inputs = document.querySelectorAll('#step' + stepId + ' .otp-input');
         if (index < inputs.length - 1) inputs[index + 1].focus();
       }
     }
     
     function handleOTPKeydown(e, input, index, type) {
       if (e.key === 'Backspace' && !input.value) {
-        var inputs = document.querySelectorAll('#step' + (type === '2fa' ? '2FA' : 'Verify') + ' .otp-input');
+        var stepId = type === '2fa' ? '2FA' : 'Verify';
+        var inputs = document.querySelectorAll('#step' + stepId + ' .otp-input');
         if (index > 0) inputs[index - 1].focus();
       }
     }
     
     function resendCode(type) { alert('Code resent to your ' + type + '!'); }
     
-    // Step 3: Submit Verification (Email + Phone codes)
+    // Step 3: Submit Verification
     function submitVerification() {
       var emailCode = otpCodes['email'];
       var phoneCode = otpCodes['phone'];
       
       document.getElementById('wrongCodesError').classList.remove('show');
       
-      // Demo: accept any 6-digit code for each
       if (emailCode.length !== 6) { alert('Please enter your email code'); return; }
       if (phoneCode.length !== 6) { alert('Please enter your phone code'); return; }
       
-      // Codes correct - check if 2FA is enabled
+      // If 2FA enabled, show 2FA step
       if (has2FA) {
-        // Show 2FA step
         document.getElementById('stepVerify').style.display = 'none';
         document.getElementById('step2FA').style.display = 'block';
         setTimeout(function() { document.querySelector('#step2FA .otp-input').focus(); }, 100);
       } else {
-        // No 2FA - login success
-        completeLogin();
+        completeLogin(document.getElementById('rememberMe').checked);
       }
     }
     
@@ -557,26 +523,40 @@
       
       document.getElementById('wrong2FAError').classList.remove('show');
       
-      // Demo: accept any 6-digit code for 2FA
       if (code2FA.length !== 6) { alert('Please enter your 2FA code'); return; }
       
-      // 2FA correct - login success
-      completeLogin();
+      completeLogin(document.getElementById('rememberMe').checked);
     }
     
     // Complete Login
-    function completeLogin() {
+    function completeLogin(trusted) {
+      // Save trusted browser
+      if (trusted) {
+        saveTrustedBrowser(loginEmail, true);
+      }
+      
       // Save token
       localStorage.setItem('tigerex_token', 'demo_token_' + Date.now());
       localStorage.setItem('tigerex_user_email', loginEmail);
       localStorage.setItem('tigerex_user_data', JSON.stringify(userData));
       
-      // Show success
-      document.getElementById('step2FA').style.display = 'none';
+      // Update last login
+      var users = JSON.parse(localStorage.getItem('tigerex_users') || '[]');
+      var idx = users.findIndex(function(u) { return u.email === loginEmail; });
+      if (idx >= 0) {
+        users[idx].lastLogin = new Date().toISOString();
+        localStorage.setItem('tigerex_users', JSON.stringify(users));
+      }
+      
+      // Hide other steps
+      document.getElementById('stepPassword').style.display = 'none';
       document.getElementById('stepVerify').style.display = 'none';
+      document.getElementById('step2FA').style.display = 'none';
+      
+      // Show success
       document.getElementById('stepSuccess').style.display = 'block';
       
-      // Redirect after delay
+      // Redirect
       setTimeout(function() { window.location.href = 'dashboard.html'; }, 2000);
     }
   </script>
