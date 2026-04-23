@@ -1,158 +1,2189 @@
+<!--
+@file index.html
+@description TigerEx platform page
+@author TigerEx Development Team
+-->
+<!DOCTYPE html>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="assets/css/theme.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TigerEx - Your Trusted Crypto Trading Platform</title>
-    <meta name="description" content="TigerEx - Professional crypto trading platform with Spot, Futures, Margin, P2P, and TradFi trading">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self';">
+    <title>TigerEx - Premier Cryptocurrency Exchange | Trade Bitcoin, Ethereum & More</title>
+    <meta name="description" content="TigerEx - The world's most trusted cryptocurrency exchange. Buy, sell, and trade Bitcoin, Ethereum, and 500+ cryptocurrencies with lowest fees.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <style>
-        /* TigerEx Landing Page - Enterprise Grade */
-        :root { --primary: #F6821F; --primary-dark: #D36F10; --accent: #00D4AA; --danger: #E53935; --success: #43A047; }
+        :root {
+            --primary: #F0B90B;
+            --primary-dark: #E5A809;
+            --bg-dark: #0B0E14;
+            --bg-dark-secondary: #151A21;
+            --bg-card: #1C2128;
+            --bg-card-hover: #252D38;
+            --text-primary: #EAECE4;
+            --text-secondary: #8B929E;
+            --accent-green: #00C087;
+            --accent-red: #F6465D;
+            --border: #2A303C;
+            --gradient-primary: linear-gradient(135deg, #F0B90B 0%, #FF6B35 100%);
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+        .container { max-width: 1440px; margin: 0 auto; padding: 0 24px; }
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600;
+            transition: all 0.25s ease; cursor: pointer;
+        }
+        .btn-primary { background: var(--primary); color: #000; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .btn-secondary { background: transparent; color: var(--text-primary); border: 1px solid var(--border); }
+        .btn-secondary:hover { background: var(--bg-card); }
+        .btn-lg { padding: 16px 32px; font-size: 16px; border-radius: 12px; }
+        .section-title { font-size: 40px; font-weight: 700; line-height: 1.2; }
+
+        .header {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: var(--bg-dark);
+            border-bottom: 1px solid var(--border);
+            height: 64px;
+        }
+        .header-inner {
+            display: flex; align-items: center; justify-content: space-between; height: 64px;
+            max-width: 1400px; margin: 0 auto; padding: 0 24px;
+        }
         
-        [data-theme="dark"] { --bg-primary: #050A12; --bg-secondary: #0D1B2A; --bg-tertiary: #141E2B; --text-primary: #E8EEF4; --text-secondary: rgba(255,255,255,0.7); }
-        [data-theme="light"] { --bg-primary: #F5F7FA; --bg-secondary: #FFFFFF; --bg-tertiary: #F0F2F5; --text-primary: #1A1A2E; --text-secondary: #666666; }
+        /* Logo - Binance style */
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        .header-logo img {
+            height: 32px;
+            width: auto;
+        }
+        .header-logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
         
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* Navigation - Binance style */
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 100%;
+        }
+        .header-nav-item {
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+        .header-nav-item:hover {
+            background: var(--bg-card);
+        }
         
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+        /* Desktop Submenu */
+        .desktop-submenu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 8px;
+            min-width: 180px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
         
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 40px; background: var(--bg-secondary); border-bottom: 1px solid rgba(255,255,255,0.08); position: fixed; width: 100%; z-index: 1000; }
-        .logo { display: flex; align-items: center; gap: 10px; font-size: 1.6rem; font-weight: 800; color: var(--primary); text-decoration: none; }
-        .logo-icon { width: 40px; height: 40px; background: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--bg-primary); font-size: 1.4rem; }
-        .header-right { display: flex; align-items: center; gap: 16px; }
-        .nav-links { display: flex; gap: 24px; }
-        .nav-link { color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; }
-        .nav-link:hover { color: var(--primary); }
+        .desktop-submenu.active {
+            display: block;
+        }
         
-        .btn { padding: 12px 24px; border-radius: 10px; font-weight: 600; font-size: 0.95rem; cursor: pointer; border: none; text-decoration: none; }
-        .btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
-        .btn-outline:hover { background: var(--primary); color: var(--bg-primary); }
-        .btn-primary { background: var(--primary); color: var(--bg-primary); }
-        .btn-primary:hover { background: var(--primary-dark); }
+        .desktop-submenu-item {
+            display: block;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
         
-        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 120px 40px 80px; text-align: center; background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%); }
-        .hero-content { max-width: 800px; }
-        .hero-title { font-size: 3.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 20px; }
-        .hero-title span { color: var(--primary); }
-        .hero-subtitle { font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 40px; line-height: 1.6; }
-        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-        .btn-large { padding: 16px 40px; font-size: 1.1rem; }
+        .desktop-submenu-item:hover {
+            background: var(--bg-card-hover);
+            color: var(--primary);
+        }
         
-        .stats { display: flex; justify-content: center; gap: 60px; margin-top: 60px; flex-wrap: wrap; }
-        .stat-item { text-align: center; }
-        .stat-value { font-size: 2rem; font-weight: 700; color: var(--primary); }
-        .stat-label { font-size: 0.9rem; color: var(--text-secondary); }
+        /* Header Right - Binance style */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-right-link {
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .header-right-link:hover {
+            background: var(--bg-card);
+        }
+        .header-right-link.btn-primary {
+            background: var(--primary);
+            color: #000;
+        }
+        .header-right-link.btn-primary:hover {
+            background: var(--primary-dark);
+        }
         
-        .features { padding: 80px 40px; background: var(--bg-secondary); }
-        .section-title { text-align: center; font-size: 2rem; font-weight: 700; margin-bottom: 40px; }
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 1200px; margin: 0 auto; }
-        .feature-card { background: var(--bg-tertiary); border-radius: 16px; padding: 32px; text-align: center; }
-        .feature-card:hover { transform: translateY(-4px); }
-        .feature-icon { font-size: 3rem; margin-bottom: 16px; }
-        .feature-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 12px; }
-        .feature-desc { color: var(--text-secondary); font-size: 0.95rem; }
-        
-        .footer { padding: 40px; background: var(--bg-secondary); border-top: 1px solid rgba(255,255,255,0.08); text-align: center; }
-        .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 20px; flex-wrap: wrap; }
-        .footer-link { color: var(--text-secondary); text-decoration: none; }
-        .footer-link:hover { color: var(--primary); }
-        .copyright { color: var(--text-secondary); font-size: 0.9rem; }
-        .theme-toggle { padding: 8px 16px; border: 1px solid var(--primary); background: transparent; color: var(--primary); border-radius: 8px; cursor: pointer; }
-        
-        @media (max-width: 768px) { .header { padding: 12px 20px; } .nav-links { display: none; } .hero-title { font-size: 2rem; } }
-    </style>
-</head>
-<body data-theme="dark">
-    <header class="header">
-        <a href="index.html" class="logo"><div class="logo-icon">🐯</div>TigerEx</a>
-        <nav class="nav-links">
-            <a href="#features" class="nav-link">Features</a>
-            <a href="#trading" class="nav-link">Trading</a>
-            <a href="#fees" class="nav-link">Fees</a>
-            <a href="#support" class="nav-link">Support</a>
-        </nav>
-        <div class="header-right">
-            <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
-            <a href="web/html/users-app/login.html" class="btn btn-outline">Login</a>
-            <a href="web/html/users-app/register.html" class="btn btn-primary">Get Started</a>
-        </div>
-    </header>
-    
-    <section class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">Trade Crypto with <span>Confidence</span><br>on TigerEx</h1>
-            <p class="hero-subtitle">Your trusted platform for Spot, Futures, Margin, P2P, and TradFi trading.<br>5M+ users worldwide. 500+ tokens. 24/7 support.</p>
-            
-            <div class="hero-buttons">
-                <a href="web/html/users-app/register.html" class="btn btn-primary btn-large">🚀 Get Started</a>
-                <a href="javascript:startTrading()" class="btn btn-outline btn-large">📈 Start Trading</a>
-            </div>
-            
-            <div class="stats">
-                <div class="stat-item"><div class="stat-value">5M+</div><div class="stat-label">Users</div></div>
-                <div class="stat-item"><div class="stat-value">500+</div><div class="stat-label">Tokens</div></div>
-                <div class="stat-item"><div class="stat-value">$2B+</div><div class="stat-label">Daily Volume</div></div>
-                <div class="stat-item"><div class="stat-value">99.9%</div><div class="stat-label">Uptime</div></div>
-            </div>
-        </div>
-    </section>
-    
-    <section class="features" id="features">
-        <h2 class="section-title">Why Choose TigerEx?</h2>
-        <div class="features-grid">
-            <div class="feature-card"><div class="feature-icon">📈</div><h3 class="feature-title">Futures Trading</h3><p class="feature-desc">Up to 125x leverage with USDT-M and Coin-M futures</p></div>
-            <div class="feature-card"><div class="feature-icon">💎</div><h3 class="feature-title">Spot Trading</h3><p class="feature-desc">500+ trading pairs with instant execution</p></div>
-            <div class="feature-card"><div class="feature-icon">⚡</div><h3 class="feature-title">Margin Trading</h3><p class="feature-desc">Up to 10x leverage with cross/isolated</p></div>
-            <div class="feature-card"><div class="feature-icon">🤝</div><h3 class="feature-title">P2P Trading</h3><p class="feature-desc">0 fees with 500+ payment methods</p></div>
-            <div class="feature-card"><div class="feature-icon">📊</div><h3 class="feature-title">TradFi</h3><p class="feature-desc">CFD, Stocks, and ETFs trading</p></div>
-            <div class="feature-card"><div class="feature-icon">🔒</div><h3 class="feature-title">Secure</h3><p class="feature-desc">SAFU fund, 2FA, and cold storage</p></div>
-        </div>
-    </section>
-    
-    <footer class="footer">
-        <div class="footer-links">
-            <a href="#" class="footer-link">About</a>
-            <a href="#" class="footer-link">Terms</a>
-            <a href="#" class="footer-link">Privacy</a>
-            <a href="#" class="footer-link">Fees</a>
-            <a href="#" class="footer-link">Help Center</a>
-            <a href="#" class="footer-link">API</a>
-        </div>
-        <p class="copyright">© 2026 TigerEx. All rights reserved.</p>
-    </footer>
-    
-    <script>
-        // Check if user is logged in
-        function isLoggedIn() { return localStorage.getItem('tigerex_token') || sessionStorage.getItem('tigerex_token'); }
-        
-        // Get Started - redirects to register
-        function getStarted() { window.location.href = 'web/html/users-app/register.html'; }
-        
-        // Start Trading - redirects to login if not logged in, trading page if logged in
-        function startTrading() {
-            if (isLoggedIn()) {
-                window.location.href = 'trading-dashboard/pages/trade/index.html?symbol=BTCUSDT&mode=spot';
-            } else {
-                window.location.href = 'web/html/users-app/login.html?redirect=trading';
+        /* Mobile Menu Button - Always visible like Binance */
+        .header-menu-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+        .header-menu-btn:hover {
+            background: var(--bg-card);
+        }
+        .header-menu-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--text-primary);
+        }
+
+        /* Responsive - Desktop */
+        @media (min-width: 1025px) {
+            .header-menu-btn {
+                display: none !important;
+            }
+            .mobile-overlay {
+                display: none !important;
+            }
+        }
+
+        /* Responsive - Mobile/Tablet */
+        @media (max-width: 1024px) {
+            .header-nav {
+                display: none !important;
+            }
+            .header-right-link:not(.header-menu-btn):not(.theme-toggle) {
+                display: none !important;
+            }
+            .header-menu-btn {
+                display: flex !important;
+            }
+            .theme-toggle {
+                display: flex !important;
             }
         }
         
-        // Theme Toggle
-        function toggleTheme() {
-            const body = document.body;
-            const theme = body.getAttribute('data-theme') || 'dark';
-            const newTheme = theme === 'dark' ? 'light' : 'dark';
-            body.setAttribute('data-theme', newTheme);
-            document.querySelector('.theme-toggle').textContent = newTheme === 'dark' ? '🌙 Dark' : '☀️ Light';
-            localStorage.setItem('tigerex-theme', newTheme);
+        /* Theme toggle always visible on all screens */
+        @media (min-width: 1025px) {
+            .theme-toggle {
+                display: flex !important;
+            }
+        }
+
+        /* Desktop Nav - Hidden on mobile */
+        .nav { display: flex; align-items: center; gap: 32px; }
+        .nav-link {
+            position: relative; padding: 8px 0; font-size: 14px; font-weight: 500;
+            color: var(--text-secondary); transition: color 0.2s;
+        }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 0; height: 2px; background: var(--primary); transition: width 0.3s;
+        }
+        .nav-link:hover { color: var(--text-primary); }
+        .nav-link:hover::after { width: 100%; }
+        
+        .mobile-menu-btn { 
+            display: none; 
+            width: 40px; height: 40px; 
+            align-items: center; justify-content: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        .mobile-menu-btn svg { stroke: var(--text-primary); width: 24px; height: 24px; }
+
+        /* Mobile Menu Overlay */
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 64px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-dark);
+            z-index: 999;
+            overflow-y: auto;
+        }
+        .mobile-overlay.active { 
+            display: block; 
         }
         
-        document.addEventListener('DOMContentLoaded', () => {
-            const theme = localStorage.getItem('tigerex-theme') || 'dark';
-            document.body.setAttribute('data-theme', theme);
-            document.querySelector('.theme-toggle').textContent = theme === 'dark' ? '🌙 Dark' : '☀️ Light';
+        /* Full Mobile Menu - Binance Style */
+        .mobile-menu-full {
+            background: var(--bg-card);
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .mobile-menu-header {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .mobile-menu-link {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+        
+        .mobile-menu-link:hover {
+            background: var(--bg-card-hover);
+        }
+        
+        .mobile-menu-link-primary {
+            background: var(--primary);
+            color: #000 !important;
+            border-color: var(--primary);
+        }
+        
+        .mobile-menu-section {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .mobile-menu-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        
+        .mobile-menu-item-link {
+            display: block;
+            padding: 12px 0;
+            font-size: 14px;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border);
+            transition: 0.2s;
+        }
+        
+        .mobile-menu-item-link:last-child {
+            border-bottom: none;
+        }
+        
+        .mobile-menu-item-link:hover {
+            color: var(--primary);
+        }
+        
+        .mobile-menu-footer {
+            padding: 16px;
+            background: var(--bg-secondary);
+        }
+        
+        .mobile-menu-footer-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        /* Mobile Menu Submenu */
+        .mobile-menu-item-dropdown {
+            position: relative;
+        }
+        
+        .mobile-menu-submenu {
+            display: none;
+            padding-left: 16px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+        
+        .mobile-menu-submenu.active {
+            display: block;
+        }
+        
+        .mobile-menu-subitem {
+            display: block;
+            padding: 10px 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border);
+            transition: 0.2s;
+        }
+        
+        .mobile-menu-subitem:last-child {
+            border-bottom: none;
+        }
+        
+        .mobile-menu-subitem:hover {
+            color: var(--primary);
+            background: var(--bg-card-hover);
+        }
+        
+        .mobile-menu {
+            background: var(--bg-card);
+            padding: 16px;
+        }
+        
+        .mobile-menu-category {
+            margin-bottom: 16px;
+        }
+        
+        .mobile-menu-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 0;
+        }
+        
+        .mobile-menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        
+        .mobile-menu-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .mobile-menu-item-left img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+        
+        .mobile-menu-item-name {
+            font-weight: 600;
+        }
+        
+        .mobile-menu-item-symbol {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .mobile-menu-item-arrow {
+            color: var(--text-secondary);
+        }
+        
+        .mobile-menu-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        /* Mega Menu for Desktop */
+        .megamenu {
+            display: none;
+            position: fixed;
+            top: 72px;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 40px 0;
+            z-index: 1001;
+        }
+        .megamenu.active { display: block; }
+        .megamenu-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        .megamenu-column h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+        .megamenu-column a {
+            display: block;
+            padding: 8px 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+            transition: 0.2s;
+        }
+        .megamenu-column a:hover { color: var(--text-primary); }
+
+        /* Dropdown Menu */
+        .nav-dropdown {
+            position: relative;
+        }
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            min-width: 200px;
+            z-index: 1001;
+        }
+        .nav-dropdown:hover .nav-dropdown-menu {
+            display: block;
+        }
+        .nav-dropdown-menu a {
+            display: block;
+            padding: 12px 16px;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+        .nav-dropdown-menu a:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 1024px) {
+            .nav { display: none; }
+            .mobile-menu-btn { display: flex; }
+            .header-actions .btn-secondary,
+            .header-actions .btn-primary { display: none; }
+            .megamenu { display: none !important; }
+        }
+
+        @media (max-width: 768px) {
+            .nav, .header-actions .btn-secondary { display: none; }
+            .mobile-menu-btn { display: flex; }
+            .hero-title { font-size: 36px; }
+            .hero-stats { flex-direction: column; gap: 24px; text-align: center; }
+            .features-grid { grid-template-columns: 1fr; }
+            .security-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+            .footer-brand { grid-column: span 2; }
+        }
+
+        /* Theme Toggle - Always visible */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 18px;
+        }
+        .theme-toggle:hover {
+            background: var(--bg-card);
+        }
+        
+        /* Light Mode */
+        body.light-mode {
+            --bg-dark: #F5F5F5;
+            --bg-dark-secondary: #EAEAEA;
+            --bg-card: #FFFFFF;
+            --bg-card-hover: #F0F0F0;
+            --text-primary: #1A1A1A;
+            --text-secondary: #666666;
+            --border: #E0E0E0;
+        }
+        body.light-mode .header {
+            background: #FFFFFF;
+        }
+        body.light-mode .mobile-overlay {
+            background: rgba(255, 255, 255, 0.98);
+        }
+        body.light-mode .mobile-menu-full {
+            background: #FFFFFF;
+        }
+        body.light-mode .header-menu-btn svg {
+            fill: #1A1A1A;
+        }
+
+        /* Language & Currency Selectors */
+.lang-selector, .currency-selector {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    background: var(--bg-card);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+}
+.lang-selector img, .currency-selector img {
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    margin-right: 4px;
+}
+
+/* Top Bar */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 12px;
+    background: var(--bg-dark);
+    border-bottom: 1px solid var(--border);
+}
+.top-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+.top-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.top-bar-link {
+    color: var(--text-secondary);
+    transition: 0.2s;
+}
+.top-bar-link:hover { color: var(--primary); }
+.top-bar-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+}
+.top-bar-item i { color: var(--accent-green); }
+
+/* Trust Badges Section */
+.trust-badges {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    padding: 48px 0;
+    flex-wrap: wrap;
+}
+.trust-badge {
+    text-align: center;
+}
+.trust-badge img {
+    height: 40px;
+    opacity: 0.8;
+    margin-bottom: 12px;
+}
+.trust-badge-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+/* SAFU Section */
+.safu-section {
+    background: linear-gradient(180deg, var(--bg-dark-secondary) 0%, var(--bg-dark) 100%);
+    padding: 80px 0;
+    text-align: center;
+}
+.safu-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+.safu-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    background: var(--primary);
+    color: #000;
+    font-weight: 700;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+.safu-title {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+.safu-text {
+    font-size: 18px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+.safu-stats {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    margin-bottom: 32px;
+}
+.safu-stat {
+    text-align: center;
+}
+.safu-stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--primary);
+}
+.safu-stat-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+}
+.safu-wallet {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+}
+.safu-wallet-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+.safu-wallet-address {
+    font-family: monospace;
+    font-size: 14px;
+    color: var(--primary);
+}
+
+/* Download Section */
+.download-section {
+    background: var(--bg-dark-secondary);
+    padding: 80px 0;
+}
+.download-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+}
+.download-text h2 {
+    font-size: 44px;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+.download-text p {
+    color: var(--text-secondary);
+    font-size: 18px;
+    margin-bottom: 32px;
+}
+.download-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 24px;
+    width: fit-content;
+}
+.download-tab {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.download-tab.active {
+    background: var(--primary);
+    color: #000;
+}
+.download-buttons {
+    display: flex;
+    gap: 16px;
+}
+.download-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: 0.3s;
+}
+.download-btn:hover {
+    background: var(--bg-card-hover);
+    transform: translateY(-2px);
+}
+.download-btn-icon {
+    font-size: 24px;
+}
+.download-btn-text span {
+    display: block;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+.download-btn-text strong {
+    font-size: 16px;
+}
+.download-qr {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.download-qr img {
+    width: 180px;
+    height: 180px;
+}
+
+/* FAQ Section */
+.faq-section {
+    padding: 80px 0;
+}
+.faq-header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+.faq-header h2 {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+.faq-list {
+    max-width: 800px;
+    margin: 0 auto;
+}
+.faq-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+.faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    cursor: pointer;
+    font-weight: 600;
+}
+.faq-answer {
+    padding: 0 24px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-height: 0;
+    overflow: hidden;
+    transition: 0.3s;
+}
+.faq-item.active .faq-answer {
+    padding: 0 24px 20px;
+    max-height: 200px;
+}
+
+/* More Menu - Mega Menu Expanded */
+.more-menu {
+    position: fixed;
+    top: 72px;
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 0;
+    z-index: 1001;
+    display: none;
+}
+.more-menu.active {
+    display: block;
+}
+.more-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 48px;
+}
+.more-menu-column h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 16px;
+}
+.more-menu-column a {
+    display: block;
+    padding: 8px 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+    transition: 0.2s;
+}
+.more-menu-column a:hover {
+    color: var(--text-primary);
+}
+
+/* Country Notice Banner */
+.notice-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(90deg, #F0B90B 0%, #FF6B35 100%);
+    padding: 12px;
+    text-align: center;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+}
+.notice-banner-text {
+    font-weight: 600;
+    color: #000;
+}
+.notice-banner-buttons {
+    display: flex;
+    gap: 12px;
+}
+.notice-banner-btn {
+    padding: 8px 16px;
+    background: #000;
+    color: #fff;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.notice-banner-btn.secondary {
+    background: transparent;
+    color: #000;
+}
+
+/* CTA Section Premium */
+.cta-premium {
+    background: linear-gradient(135deg, #F0B90B 0%, #FF6B35 100%);
+    padding: 48px;
+    border-radius: 24px;
+    text-align: center;
+    margin: 48px 0;
+}
+.cta-premium h2 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 16px;
+}
+.cta-premium p {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 24px;
+}
+.cta-premium .btn {
+    background: #000;
+    color: #fff;
+}
+
+.hero {
+            padding: 100px 0 80px; position: relative; overflow: hidden;
+            background: var(--bg-dark);
+            text-align: center;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: -50%; right: -20%;
+            width: 800px; height: 800px;
+            background: radial-gradient(circle, rgba(240, 185, 11, 0.15) 0%, transparent 60%);
+            pointer-event: none;
+        }
+        .hero-content { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .hero-text { position: relative; z-index: 1; }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 16px; background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 100px; font-size: 13px; color: var(--text-secondary); margin-bottom: 24px;
+        }
+        .hero-badge-dot {
+            width: 8px; height: 8px; background: var(--accent-green);
+            border-radius: 50%; animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .hero-title { font-size: 56px; font-weight: 800; line-height: 1.1; margin-bottom: 24px; }
+        .hero-title span {
+            background: var(--gradient-primary); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .hero-subtitle { font-size: 18px; color: var(--text-secondary); margin-bottom: 40px; line-height: 1.7; }
+        .hero-stats { display: flex; gap: 48px; margin-bottom: 48px; }
+        .stat-block { text-align: left; }
+        .stat-value { font-size: 36px; font-weight: 700; }
+        .stat-label { font-size: 14px; color: var(--text-secondary); }
+        .hero-buttons { display: flex; gap: 16px; }
+
+        .hero-visual { position: relative; }
+        .crypto-card-main {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 24px; padding: 32px;
+        }
+        .crypto-info { display: flex; align-items: center; gap: 16px; }
+        .crypto-icon-large {
+            width: 56px; height: 56px; background: linear-gradient(135deg, #F7931A, #F9A825);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700;
+        }
+        .crypto-info h3 { font-size: 20px; font-weight: 600; }
+        .crypto-info span { font-size: 14px; color: var(--text-secondary); }
+        .crypto-price-main { font-size: 42px; font-weight: 700; margin-bottom: 8px; }
+        .price-change {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 6px 12px; border-radius: 6px; font-size: 14px; font-weight: 600;
+        }
+        .price-change.negative { background: rgba(246, 70, 93, 0.15); color: var(--accent-red); }
+        .mini-chart { display: flex; align-items: flex-end; gap: 4px; height: 100px; margin-top: 32px; }
+        .chart-bar {
+            flex: 1; background: linear-gradient(180deg, var(--primary) 0%, transparent 100%);
+            border-radius: 4px 4px 0 0; opacity: 0.3; transition: opacity 0.3s;
+        }
+        .crypto-card-main:hover .chart-bar { opacity: 0.7; }
+
+        .features { padding: 100px 0; background: var(--bg-dark-secondary); }
+        .features-header { text-align: center; max-width: 700px; margin: 0 auto 64px; }
+        .features-header h2 { font-size: 40px; font-weight: 700; margin-bottom: 16px; }
+        .features-header p { color: var(--text-secondary); font-size: 18px; }
+        .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .feature-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 16px; padding: 32px; transition: all 0.3s;
+        }
+        .feature-card:hover { transform: translateY(-8px); border-color: var(--primary); }
+        .feature-icon {
+            width: 56px; height: 56px; background: var(--gradient-primary);
+            border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 20px;
+        }
+        .feature-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 12px; }
+        .feature-card p { color: var(--text-secondary); font-size: 14px; line-height: 1.6; }
+
+        .markets { padding: 100px 0; }
+        .markets-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 48px; }
+        .markets-header h2 { font-size: 36px; font-weight: 700; }
+        .markets-table { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+        .table-header {
+            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; padding: 16px 24px;
+            background: var(--bg-dark-secondary); font-size: 13px; font-weight: 600;
+            color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .table-row {
+            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; padding: 20px 24px;
+            align-items: center; border-bottom: 1px solid var(--border); transition: background 0.2s; cursor: pointer;
+        }
+        .table-row:hover { background: var(--bg-card-hover); }
+        .table-row:last-child { border-bottom: none; }
+        .coin-info { display: flex; align-items: center; gap: 14px; }
+        .coin-icon {
+            width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px;
+        }
+        .coin-name { font-weight: 600; }
+        .coin-symbol { font-size: 13px; color: var(--text-secondary); }
+        .coin-price { font-weight: 600; font-size: 16px; }
+        .coin-change {
+            font-weight: 600; padding: 6px 12px; border-radius: 6px; font-size: 14px;
+            display: inline-flex; align-items: center; gap: 4px;
+        }
+        .coin-change.positive { background: rgba(0, 192, 135, 0.15); color: var(--accent-green); }
+        .coin-change.negative { background: rgba(246, 70, 93, 0.15); color: var(--accent-red); }
+        .coin-volume { color: var(--text-secondary); font-size: 14px; }
+
+        .app-section { padding: 100px 0; background: var(--bg-dark-secondary); }
+        .app-content { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .app-text h2 { font-size: 44px; font-weight: 700; line-height: 1.2; margin-bottom: 24px; }
+        .app-text p { font-size: 18px; color: var(--text-secondary); margin-bottom: 40px; }
+        .app-buttons { display: flex; gap: 16px; }
+        .app-store-btn {
+            display: flex; align-items: center; gap: 12px; padding: 14px 24px;
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; transition: all 0.3s;
+        }
+        .app-store-btn:hover { background: var(--bg-card-hover); transform: translateY(-2px); }
+        .app-store-icon { font-size: 28px; }
+        .app-store-text { text-align: left; }
+        .app-store-text span { display: block; font-size: 12px; color: var(--text-secondary); }
+        .app-store-text strong { font-size: 16px; }
+        .app-visual { display: flex; justify-content: center; gap: 24px; }
+        .phone-mockup {
+            width: 280px; height: 560px; background: var(--bg-card); border: 3px solid var(--border);
+            border-radius: 40px; padding: 12px; position: relative;
+        }
+        .phone-screen { width: 100%; height: 100%; background: var(--bg-dark); border-radius: 32px; overflow: hidden; padding: 20px; }
+        .phone-notch {
+            position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+            width: 100px; height: 28px; background: var(--bg-dark); border-radius: 20px;
+        }
+
+        .security-section { padding: 100px 0; }
+        .security-header { text-align: center; margin-bottom: 64px; }
+        .security-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+        .security-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 20px; padding: 40px; text-align: center; transition: all 0.3s;
+        }
+        .security-card:hover { border-color: var(--primary); }
+        .security-icon {
+            width: 80px; height: 80px; background: var(--gradient-primary);
+            border-radius: 24px; display: flex; align-items: center; justify-content: center;
+            font-size: 40px; margin: 0 auto 24px;
+        }
+        .security-card h3 { font-size: 20px; font-weight: 600; margin-bottom: 16px; }
+        .security-card p { color: var(--text-secondary); line-height: 1.7; }
+
+        .cta-section {
+            padding: 120px 0; background: linear-gradient(180deg, #0B0E14 0%, #1C2128 100%);
+            text-align: center; position: relative; overflow: hidden;
+        }
+        .cta-section::before {
+            content: ''; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(240, 185, 11, 0.2) 0%, transparent 60%);
+        }
+        .cta-content { position: relative; z-index: 1; }
+        .cta-content h2 { font-size: 52px; font-weight: 800; margin-bottom: 24px; }
+        .cta-content p { font-size: 20px; color: var(--text-secondary); margin-bottom: 40px; }
+        .cta-buttons { display: flex; justify-content: center; gap: 16px; }
+
+        .footer { padding: 80px 0 40px; background: var(--bg-dark-secondary); border-top: 1px solid var(--border); }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 64px; }
+        .footer-brand { max-width: 320px; }
+        .footer-brand .logo { margin-bottom: 20px; }
+        .footer-brand p { color: var(--text-secondary); font-size: 14px; line-height: 1.7; }
+        .footer-column h4 { font-size: 14px; font-weight: 600; margin-bottom: 20px; }
+        .footer-column ul li { margin-bottom: 12px; }
+        .footer-column a { color: var(--text-secondary); font-size: 14px; transition: color 0.2s; }
+        .footer-column a:hover { color: var(--primary); }
+        .footer-bottom {
+            display: flex; align-items: center; justify-content: space-between;
+            padding-top: 32px; border-top: 1px solid var(--border);
+        }
+        .footer-bottom p { color: var(--text-secondary); font-size: 13px; }
+        .footer-social { display: flex; gap: 16px; }
+        .footer-social a {
+            width: 40px; height: 40px; background: var(--bg-card); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: all 0.2s;
+        }
+        .footer-social a:hover { background: var(--primary); color: #000; }
+
+        @media (max-width: 1200px) {
+            .hero-title { font-size: 52px; }
+            .hero-subtitle { font-size: 18px; }
+        }
+        
+        @media (max-width: 1024px) {
+            .hero-content { grid-template-columns: 1fr; gap: 60px; text-align: center; }
+            .hero-text { order: 1; } .hero-visual { order: 2; }
+            .hero-stats { justify-content: center; } .hero-buttons { justify-content: center; }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .app-content { grid-template-columns: 1fr; text-align: center; }
+            .app-buttons { justify-content: center; } .app-visual { display: none; }
+            .footer-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        
+        @media (max-width: 768px) {
+            .nav, .header-actions .btn-secondary { display: none; }
+            .mobile-menu-btn { display: flex; }
+            .hero-title { font-size: 36px; }
+            .hero-stats { flex-direction: column; gap: 24px; text-align: center; }
+            .features-grid { grid-template-columns: 1fr; }
+            .security-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+            .footer-brand { grid-column: span 2; }
+            .cta-content h2 { font-size: 36px; }
+            .cta-buttons { flex-direction: column; }
+            .hero-buttons { flex-direction: column; align-items: center; gap: 12px; }
+            .hero-buttons a { width: 100%; max-width: 300px; text-align: center; }
+        }
+        
+        @media (max-width: 480px) {
+            .container { padding: 0 16px; }
+            .hero { padding: 80px 0 60px; }
+            .hero-title { font-size: 28px; }
+            .hero-subtitle { font-size: 15px; }
+            .hero-stats { gap: 16px; }
+            .stat-value { font-size: 28px; }
+            .btn-lg { padding: 14px 24px; font-size: 15px; }
+            .features-section, .security-section, .cta-section { padding: 60px 0; }
+            .section-title { font-size: 28px; }
+            .app-section { padding: 60px 0; }
+            .app-text h2 { font-size: 28px; }
+            .app-buttons { flex-direction: column; }
+            .footer { padding: 60px 0 30px; }
+            .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+            .footer-brand { grid-column: span 1; }
+            .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+            .cta-content h2 { font-size: 28px; }
+            .cta-content p { font-size: 16px; }
+            .security-card { padding: 24px; }
+            .security-icon { width: 60px; height: 60px; font-size: 28px; }
+            .header { padding: 12px 16px; }
+            .header-logo-text { font-size: 22px; }
+            .header-right { gap: 8px; }
+            .header-right-link { padding: 8px 12px; font-size: 13px; }
+            .header-menu-btn { width: 36px; height: 36px; }
+            .theme-toggle { width: 36px; height: 36px; }
+        }
+        
+        @media (max-width: 375px) {
+            .hero-title { font-size: 24px; }
+            .hero-badge { font-size: 12px; padding: 6px 12px; }
+            .stat-label { font-size: 13px; }
+            .btn-lg { padding: 12px 20px; font-size: 14px; }
+            .header-logo-text { font-size: 20px; }
+            .header-right-link { padding: 6px 10px; font-size: 12px; }
+            .header-menu-btn { width: 32px; height: 32px; }
+        }
+        
+        /* Mobile Menu Responsive Styles */
+        @media (max-width: 1024px) {
+            .mobile-menu-full {
+                width: 85%;
+                max-width: 400px;
+                max-height: 100vh;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-full {
+                width: 100%;
+                max-width: 100%;
+                border-radius: 0;
+                max-height: 100vh;
+            }
+            .mobile-menu-header {
+                padding: 16px;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            .mobile-menu-section {
+                padding: 16px 12px;
+            }
+            .mobile-menu-section-title {
+                font-size: 13px;
+                padding: 10px 12px;
+            }
+            .mobile-menu-item-link {
+                padding: 14px 12px;
+                font-size: 15px;
+            }
+            .mobile-menu-submenu {
+                padding-left: 16px;
+            }
+            .mobile-menu-subitem {
+                padding: 12px;
+                font-size: 14px;
+            }
+            .mobile-menu-footer {
+                padding: 16px;
+            }
+            .mobile-menu-footer-row {
+                font-size: 13px;
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .mobile-menu-full {
+                width: 100%;
+                border-radius: 0;
+            }
+            .mobile-menu-header {
+                padding: 12px;
+            }
+            .mobile-menu-link {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+            .mobile-menu-section-title {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+            .mobile-menu-item-link {
+                padding: 12px 10px;
+                font-size: 14px;
+            }
+            .mobile-menu-subitem {
+                padding: 10px 10px 10px 16px;
+                font-size: 13px;
+            }
+        }
+        
+        /* Touch Device Optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .header-nav-item:hover {
+                background: transparent;
+            }
+            .header-nav-item:active {
+                background: var(--bg-card);
+            }
+            .mobile-menu-item-link:hover {
+                background: transparent;
+            }
+            .mobile-menu-item-link:active {
+                background: var(--bg-card-hover);
+            }
+            .desktop-submenu-item:hover {
+                background: transparent;
+            }
+            .desktop-submenu-item:active {
+                background: var(--bg-card-hover);
+            }
+            .btn:hover {
+                transform: none;
+            }
+            .btn:active {
+                transform: scale(0.98);
+            }
+        }
+        
+        /* Landscape Mode */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .hero { padding: 60px 0 40px; }
+            .hero-title { font-size: 32px; }
+            .hero-visual { display: none; }
+            .hero-content { grid-template-columns: 1fr; gap: 32px; }
+        }
+        
+        /* Safe Area for iPhone X+ */
+        @supports (padding: env(safe-area-inset-top)) {
+            .mobile-menu-full {
+                padding-top: env(safe-area-inset-top);
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+            .mobile-menu-footer {
+                padding-left: env(safe-area-inset-left);
+                padding-right: env(safe-area-inset-right);
+            }
+        }
+        
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header - Binance Style -->
+    <header class="header">
+        <div class="header-inner">
+            <!-- Logo -->
+            <a href="#" class="header-logo">
+                <img src="assets/logo/tiger-logo.jpg" alt="TigerEx">
+                <span class="header-logo-text">TigerEx</span>
+            </a>
+            
+            <!-- Navigation Menu -->
+            <nav class="header-nav">
+                <a href="#" class="header-nav-item">Buy Crypto</a>
+                <a href="#markets" class="header-nav-item">Markets 📊</a>
+                <a href="#" class="header-nav-item">Exchange</a>
+                <a href="#" class="header-nav-item">Trade</a>
+                <a href="#" class="header-nav-item">Futures</a>
+                <a href="#" class="header-nav-item">Earn</a>
+                <div class="header-nav-dropdown" style="position:relative;">
+                    <a href="#" class="header-nav-item" onclick="toggleDesktopSubmenu('more-submenu', event)">More ▾</a>
+                    <div class="desktop-submenu" id="more-submenu">
+                        <a href="#" class="desktop-submenu-item">🐯 Square</a>
+                        <a href="#" class="desktop-submenu-item">Tiger NFT</a>
+                        <a href="#" class="desktop-submenu-item">Gift Card</a>
+                        <a href="#" class="desktop-submenu-item">Tiger Academy</a>
+                        <a href="#" class="desktop-submenu-item">Crypto Loans</a>
+                        <a href="#" class="desktop-submenu-item">TABT</a>
+                        <a href="#" class="desktop-submenu-item">TradFi</a>
+                        <a href="#" class="desktop-submenu-item">Research</a>
+                        <a href="#" class="desktop-submenu-item">Charity</a>
+                        <a href="api.html" class="desktop-submenu-item">🐯 API</a>
+                        <a href="#" class="desktop-submenu-item">🐯 White Label CEX</a>
+                        <a href="#" class="desktop-submenu-item">🐯 White Label DEX</a>
+                        <a href="#" class="desktop-submenu-item">🐯 CEX+DEX Platform</a>
+                        <a href="#" class="desktop-submenu-item">🐯 Custodial Wallet</a>
+                        <a href="#" class="desktop-submenu-item">🐯 Non-Custodial Wallet</a>
+                        <a href="#" class="desktop-submenu-item">🐯 Block Explorer</a>
+                        <a href="#" class="desktop-submenu-item">🐯 Blockchain Dev</a>
+                        <a href="#" class="desktop-submenu-item">🐯 Market Maker</a>
+                        <a href="#" class="desktop-submenu-item">🐯 Token Creator</a>
+                        <a href="#" class="desktop-submenu-item">🐯 Listing App</a>
+                        <a href="#" class="desktop-submenu-item">🐯 Staking Services</a>
+                        <a href="#" class="desktop-submenu-item">💰 Cloud Mining</a>
+                        <a href="#" class="desktop-submenu-item">💰 Liquidity Mining</a>
+                        <a href="#" class="desktop-submenu-item">🤝 Merchant App (P2P)</a>
+                        <a href="#" class="desktop-submenu-item">🤝 Partner App</a>
+                    </div>
+                </div>
+            </nav>
+            
+            <!-- Right Side -->
+            <div class="header-right">
+                <!-- Theme Toggle -->
+                <div class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme" style="padding: 8px;">
+                    <span style="font-size: 16px;">🌙</span>
+                </div>
+                
+                <a href="login.html" class="header-right-link">Log In</a>
+                <a href="register.html" class="header-right-link btn-primary">Sign Up</a>
+                
+                <!-- Mobile Menu Button (☰) - Always visible -->
+                <button id="mobileMenuBtn" class="header-menu-btn" onclick="toggleMobileMenu()" title="Menu" style="display:flex;">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay - TigerEx Style Full Menu -->
+    <div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileMenu()">
+        <div class="mobile-menu-full" onclick="event.stopPropagation()">
+            
+            <!-- Menu Header -->
+            <div class="mobile-menu-header">
+                <a href="login.html" class="mobile-menu-link">Log In</a>
+                <a href="register.html" class="mobile-menu-link mobile-menu-link-primary">Sign Up</a>
+            </div>
+            
+            <!-- Products Section -->
+            <div class="mobile-menu-section">
+                <div class="mobile-menu-section-title">Products 🐯</div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="markets.html" class="mobile-menu-item-link">Markets 📊</a>
+                    <div class="mobile-menu-submenu">
+                        <a href="#" class="mobile-menu-subitem">🔥 All Markets</a>
+                        <a href="#" class="mobile-menu-subitem">Bitcoin (BTC)</a>
+                        <a href="#" class="mobile-menu-subitem">Ethereum (ETH)</a>
+                        <a href="#" class="mobile-menu-subitem">TIGER (TigerEx)</a>
+                        <a href="#" class="mobile-menu-subitem">USDT</a>
+                        <a href="#" class="mobile-menu-subitem">BNB</a>
+                        <a href="#" class="mobile-menu-subitem">Solana (SOL)</a>
+                        <a href="#" class="mobile-menu-subitem">Ripple (XRP)</a>
+                        <a href="#" class="mobile-menu-subitem">Cardano (ADA)</a>
+                        <a href="#" class="mobile-menu-subitem">Dogecoin (DOGE)</a>
+                        <a href="#" class="mobile-menu-subitem">Polkadot (DOT)</a>
+                        <a href="#" class="mobile-menu-subitem">Avalanche (AVAX)</a>
+                        <a href="#" class="mobile-menu-subitem">Chainlink (LINK)</a>
+                        <a href="#" class="mobile-menu-subitem">Polygon (MATIC)</a>
+                        <a href="#" class="mobile-menu-subitem">Litecoin (LTC)</a>
+                        <a href="#" class="mobile-menu-subitem">View All 500+ Coins</a>
+                    </div>
+                </div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="exchange.html" class="mobile-menu-item-link">Exchange</a>
+                </div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="buy-crypto.html" class="mobile-menu-item-link">Buy Crypto</a>
+                </div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="tigerpay.html" class="mobile-menu-item-link">Pay ▸</a>
+                    <div class="mobile-menu-submenu">
+                        <a href="#" class="mobile-menu-subitem">TigerPay</a>
+                        <a href="#" class="mobile-menu-subitem">Crypto Payments</a>
+                    </div>
+                </div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="nft.html" class="mobile-menu-item-link">NFT ▸</a>
+                    <div class="mobile-menu-submenu">
+                        <a href="#" class="mobile-menu-subitem">Tiger NFT</a>
+                        <a href="#" class="mobile-menu-subitem">Marketplace</a>
+                        <a href="#" class="mobile-menu-subitem">Collections</a>
+                        <a href="#" class="mobile-menu-subitem">Mystery Box</a>
+                    </div>
+                </div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="earn.html" class="mobile-menu-item-link">Earn ▸</a>
+                    <div class="mobile-menu-submenu">
+                        <a href="#" class="mobile-menu-subitem">Simple Earn</a>
+                        <a href="#" class="mobile-menu-subitem">Staking</a>
+                        <a href="#" class="mobile-menu-subitem">Launchpool</a>
+                        <a href="#" class="mobile-menu-subitem">Dual Mining</a>
+                        <a href="#" class="mobile-menu-subitem">Auto-Invest</a>
+                        <a href="#" class="mobile-menu-subitem">ETH Staking</a>
+                        <a href="#" class="mobile-menu-subitem">Cloud Mining 💰</a>
+                        <a href="#" class="mobile-menu-subitem">Liquidity Mining 💰</a>
+                    </div>
+                </div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="trade.html" class="mobile-menu-item-link">Trade ▸</a>
+                    <div class="mobile-menu-submenu">
+                        <a href="#" class="mobile-menu-subitem">Classic</a>
+                        <a href="#" class="mobile-menu-subitem">Advanced</a>
+                        <a href="#" class="mobile-menu-subitem">Margin</a>
+                        <a href="#" class="mobile-menu-subitem">Futures</a>
+                        <a href="#" class="mobile-menu-subitem">Strategy</a>
+                        <a href="#" class="mobile-menu-subitem">Options</a>
+                        <a href="#" class="mobile-menu-subitem">Copy Trading</a>
+                        <a href="#" class="mobile-menu-subitem">P2P Trading</a>
+                    </div>
+                </div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="futures.html" class="mobile-menu-item-link">Futures ▸</a>
+                    <div class="mobile-menu-submenu">
+                        <a href="#" class="mobile-menu-subitem">Tiger Futures</a>
+                        <a href="#" class="mobile-menu-subitem">USDT-M Futures</a>
+                        <a href="#" class="mobile-menu-subitem">COIN-M Futures</a>
+                        <a href="#" class="mobile-menu-subitem">Delivery Futures</a>
+                        <a href="#" class="mobile-menu-subitem">Futures V2</a>
+                    </div>
+                </div>
+                <a href="#" class="mobile-menu-item-link">Academy</a>
+                <a href="#" class="mobile-menu-item-link">Gift Card</a>
+                <a href="#" class="mobile-menu-item-link">Launchpool</a>
+                <a href="#" class="mobile-menu-item-link">TABT</a>
+                <a href="#" class="mobile-menu-item-link">TradFi</a>
+                <a href="#" class="mobile-menu-item-link">Research</a>
+                <a href="#" class="mobile-menu-item-link">Charity</a>
+                <a href="#" class="mobile-menu-item-link">TIGER</a>
+            </div>
+            
+            <!-- Business Section -->
+            <div class="mobile-menu-section">
+                <div class="mobile-menu-section-title">Business 💼</div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu(this, 'api')">API ▸</a>
+                    <div class="mobile-menu-submenu">
+                        <a href="api.html" class="mobile-menu-subitem">REST API</a>
+                        <a href="#" class="mobile-menu-subitem">WebSocket API</a>
+                        <a href="#" class="mobile-menu-subitem">API Keys</a>
+                        <a href="#" class="mobile-menu-subitem">API Documentation</a>
+                    </div>
+                </div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu(this, 'affiliate')">Affiliate ▸</a>
+                    <div class="mobile-menu-submenu">
+                        <a href="affiliate-partner-management.html" class="mobile-menu-subitem">Partner Program</a>
+                        <a href="#" class="mobile-menu-subitem">Commission</a>
+                        <a href="#" class="mobile-menu-subitem">Referral</a>
+                        <a href="#" class="mobile-menu-subitem">Links</a>
+                    </div>
+                </div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu(this, 'institutional')">Institutional ▸</a>
+                    <div class="mobile-menu-submenu">
+                        <a href="institutional-client-management.html" class="mobile-menu-subitem">Tiger Prime</a>
+                        <a href="#" class="mobile-menu-subitem">Custody</a>
+                        <a href="#" class="mobile-menu-subitem">Asset Management</a>
+                        <a href="#" class="mobile-menu-subitem">Hedge Fund</a>
+                    </div>
+                </div>
+                <a href="#" class="mobile-menu-item-link">Market Maker</a>
+                <a href="#" class="mobile-menu-item-link">Wallet API</a>
+                <a href="#" class="mobile-menu-item-link">Payment Gateway</a>
+            </div>
+            
+            <!-- Learn Section -->
+            <div class="mobile-menu-section">
+                <div class="mobile-menu-section-title">Learn 📚</div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu(this, 'academy')">Academy ▸</a>
+                    <div class="mobile-menu-submenu">
+                        <a href="#" class="mobile-menu-subitem">Beginner Guide</a>
+                        <a href="#" class="mobile-menu-subitem">Crypto Basics</a>
+                        <a href="#" class="mobile-menu-subitem">Trading Guide</a>
+                        <a href="#" class="mobile-menu-subitem">Glossary</a>
+                    </div>
+                </div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu(this, 'prices')">Prices ▸</a>
+                    <div class="mobile-menu-submenu">
+                        <a href="#" class="mobile-menu-subitem">Bitcoin Price</a>
+                        <a href="#" class="mobile-menu-subitem">Ethereum Price</a>
+                        <a href="#" class="mobile-menu-subitem">BNB Price</a>
+                        <a href="#" class="mobile-menu-subitem">Live Prices</a>
+                    </div>
+                </div>
+                <a href="#" class="mobile-menu-item-link">Blog</a>
+                <a href="#" class="mobile-menu-item-link">News</a>
+                <a href="#" class="mobile-menu-item-link">Tutorials</a>
+                <a href="#" class="mobile-menu-item-link">Videos</a>
+            </div>
+            
+            <!-- Support Section -->
+            <div class="mobile-menu-section">
+                <div class="mobile-menu-section-title">Support 🎧</div>
+                <a href="#" class="mobile-menu-item-link">24/7 Chat Support</a>
+                <a href="#" class="mobile-menu-item-link">Support Center</a>
+                <a href="#" class="mobile-menu-item-link">Product Feedback</a>
+                <a href="#" class="mobile-menu-item-link">Fees</a>
+                <a href="#" class="mobile-menu-item-link">Trading Parameters</a>
+                <a href="#" class="mobile-menu-item-link">How to Raise a Complaint</a>
+            </div>
+            
+            <!-- About Us Section -->
+            <div class="mobile-menu-section">
+                <div class="mobile-menu-section-title">About Us 👥</div>
+                <a href="#" class="mobile-menu-item-link">About TigerEx</a>
+                <a href="#" class="mobile-menu-item-link">Careers</a>
+                <a href="#" class="mobile-menu-item-link">Announcements</a>
+                <a href="#" class="mobile-menu-item-link">News</a>
+                <a href="#" class="mobile-menu-item-link">Press</a>
+                <a href="#" class="mobile-menu-item-link">Legal</a>
+                <a href="#" class="mobile-menu-item-link">Terms</a>
+                <a href="#" class="mobile-menu-item-link">Privacy</a>
+                <a href="#" class="mobile-menu-item-link">Building Trust</a>
+                <a href="#" class="mobile-menu-item-link">Community</a>
+                <a href="#" class="mobile-menu-item-link">Risk Warning</a>
+                <a href="#" class="mobile-menu-item-link">Notices</a>
+                <a href="#" class="mobile-menu-item-link">Downloads</a>
+                <a href="#" class="mobile-menu-item-link">Desktop App</a>
+            </div>
+            
+            <!-- Services Section -->
+            <div class="mobile-menu-section">
+                <div class="mobile-menu-section-title">Services ⚙️</div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu(this, 'cex')">CEX Development ▸</a>
+                    <div class="mobile-menu-submenu">
+                        <a href="#" class="mobile-menu-subitem">White Label CEX</a>
+                        <a href="#" class="mobile-menu-subitem">Custom CEX Development</a>
+                        <a href="#" class="mobile-menu-subitem">CEX Migration</a>
+                        <a href="#" class="mobile-menu-subitem">CEX Integration</a>
+                    </div>
+                </div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu(this, 'dex')">DEX Development ▸</a>
+                    <div class="mobile-menu-submenu">
+                        <a href="#" class="mobile-menu-subitem">White Label DEX</a>
+                        <a href="#" class="mobile-menu-subitem">Custom DEX Development</a>
+                        <a href="#" class="mobile-menu-subitem">DEX Aggregation</a>
+                        <a href="#" class="mobile-menu-subitem">DEX Integration</a>
+                    </div>
+                </div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu(this, 'hybrid')">CEX+DEX Platform ▸</a>
+                    <div class="mobile-menu-submenu">
+                        <a href="#" class="mobile-menu-subitem">Hybrid Exchange</a>
+                        <a href="#" class="mobile-menu-subitem">Unified Trading</a>
+                        <a href="#" class="mobile-menu-subitem">Cross-Chain Bridge</a>
+                    </div>
+                </div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu(this, 'wallet')">Wallet Development ▸</a>
+                    <div class="mobile-menu-submenu">
+                        <a href="#" class="mobile-menu-subitem">Custodial Wallet</a>
+                        <a href="#" class="mobile-menu-subitem">Non-Custodial Wallet</a>
+                        <a href="#" class="mobile-menu-subitem">Multi-Sig Wallet</a>
+                        <a href="#" class="mobile-menu-subitem">Hardware Wallet Integration</a>
+                    </div>
+                </div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu(this, 'explorer')">Block Explorer ▸</a>
+                    <div class="mobile-menu-submenu">
+                        <a href="#" class="mobile-menu-subitem">EVM Explorer</a>
+                        <a href="#" class="mobile-menu-subitem">Non-EVM Explorer</a>
+                        <a href="#" class="mobile-menu-subitem">Custom Explorer</a>
+                        <a href="#" class="mobile-menu-subitem">API Explorer</a>
+                    </div>
+                </div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="#" class="mobile-menu-item-link" onclick="toggleSubmenu(this, 'blockchain')">Blockchain Development ▸</a>
+                    <div class="mobile-menu-submenu">
+                        <a href="#" class="mobile-menu-subitem">EVM Blockchain</a>
+                        <a href="#" class="mobile-menu-subitem">Non-EVM Blockchain</a>
+                        <a href="#" class="mobile-menu-subitem">Layer 2 Solutions</a>
+                        <a href="#" class="mobile-menu-subitem">Sidechain Development</a>
+                    </div>
+                </div>
+                <a href="#" class="mobile-menu-item-link">Market Maker</a>
+                <a href="#" class="mobile-menu-item-link">Token Creator</a>
+                <a href="#" class="mobile-menu-item-link">IEO Platform</a>
+                <a href="#" class="mobile-menu-item-link">Listing Application</a>
+                <a href="#" class="mobile-menu-item-link">Cloud Mining</a>
+                <a href="#" class="mobile-menu-item-link">Liquidity Mining</a>
+                <a href="#" class="mobile-menu-item-link">Merchant Application (P2P)</a>
+                <a href="#" class="mobile-menu-item-link">Partner Application</a>
+                <a href="#" class="mobile-menu-item-link">Staking Services</a>
+                <a href="#" class="mobile-menu-item-link">NFT Marketplace</a>
+            </div>
+            
+            <!-- Language & Currency -->
+            <div class="mobile-menu-footer">
+                <div class="mobile-menu-footer-row">
+                    <span>🌐 English</span>
+                    <span>$ USD</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <span class="hero-badge-dot"></span>
+                    #1 Crypto Exchange in the World
+                </div>
+                <h1 class="hero-title">Trade Crypto with<br><span>Confidence</span></h1>
+                <p class="hero-subtitle">Join 50 million users worldwide on the most trusted cryptocurrency exchange. Buy, sell, and trade Bitcoin, Ethereum, and hundreds of altcoins with the lowest fees.</p>
+                <div class="hero-stats">
+                    <div class="stat-block">
+                        <div class="stat-value">$300B+</div>
+                        <div class="stat-label">Quarterly Trading Volume</div>
+                    </div>
+                    <div class="stat-block">
+                        <div class="stat-value">140M+</div>
+                        <div class="stat-label">Users Worldwide</div>
+                    </div>
+                    <div class="stat-block">
+                        <div class="stat-value">500+</div>
+                        <div class="stat-label">Cryptocurrencies</div>
+                    </div>
+                </div>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary btn-lg">Get Started</a>
+                    <a href="#" class="btn btn-secondary btn-lg">Start Trading</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="crypto-card-main">
+                    <div class="crypto-info">
+                        <div class="crypto-icon-large">₿</div>
+                        <div>
+                            <h3>Bitcoin</h3>
+                            <span>BTC/USDT</span>
+                        </div>
+                    </div>
+                    <div class="crypto-price-main">$78,543.21</div>
+                    <span class="price-change negative">▼ 2.34%</span>
+                    <div class="mini-chart">
+                        <div class="chart-bar" style="height: 60%"></div>
+                        <div class="chart-bar" style="height: 75%"></div>
+                        <div class="chart-bar" style="height: 45%"></div>
+                        <div class="chart-bar" style="height: 80%"></div>
+                        <div class="chart-bar" style="height: 65%"></div>
+                        <div class="chart-bar" style="height: 90%"></div>
+                        <div class="chart-bar" style="height: 55%"></div>
+                        <div class="chart-bar" style="height: 70%"></div>
+                        <div class="chart-bar" style="height: 85%"></div>
+                        <div class="chart-bar" style="height: 60%"></div>
+                        <div class="chart-bar" style="height: 95%"></div>
+                        <div class="chart-bar" style="height: 70%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="container">
+            <div class="features-header">
+                <h2 class="section-title">Everything You Need to Trade</h2>
+                <p>Powerful tools for every type of trader - from beginners to professionals</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Spot Trading</h3>
+                    <p>Buy and sell 500+ cryptocurrencies at the best rates with instant execution.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Futures Trading</h3>
+                    <p>Trade with up to 125x leverage on Bitcoin and altcoin futures.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Options</h3>
+                    <p>Trade flexible options contracts with multiple expiration dates.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>Auto Trading</h3>
+                    <p>Set up recurring buys or use AI-powered trading bots.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Security First</h3>
+                    <p>Industry-leading security with SAFU protection fund and cold storage.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Global Access</h3>
+                    <p>Available in 180+ countries with 40+ payment methods.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile Apps</h3>
+                    <p>Trade anywhere with our award-winning iOS and Android apps.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💎</div>
+                    <h3>NFT Marketplace</h3>
+                    <p>Discover, trade, and collect unique digital assets.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Markets -->
+    <section class="markets" id="markets">
+        <div class="container">
+            <div class="markets-header">
+                <h2>Popular Markets</h2>
+                <a href="#" class="btn btn-secondary">View All Markets</a>
+            </div>
+            <div class="markets-table">
+                <div class="table-header">
+                    <span>Name</span><span>Price</span><span>24h Change</span><span>Volume (24h)</span><span>Action</span>
+                </div>
+                <div class="table-row">
+                    <div class="coin-info">
+                        <div class="coin-icon" style="background: linear-gradient(135deg, #F7931A, #F9A825)">₿</div>
+                        <div><div class="coin-name">Bitcoin</div><div class="coin-symbol">BTC/USDT</div></div>
+                    </div>
+                    <div class="coin-price">$78,543.21</div>
+                    <span class="coin-change negative">▼ 2.34%</span>
+                    <div class="coin-volume">$45.2B</div>
+                    <button class="btn btn-primary">Buy</button>
+                </div>
+                <div class="table-row">
+                    <div class="coin-info">
+                        <div class="coin-icon" style="background: linear-gradient(135deg, #627EEA, #8B9FFF)">Ξ</div>
+                        <div><div class="coin-name">Ethereum</div><div class="coin-symbol">ETH/USDT</div></div>
+                    </div>
+                    <div class="coin-price">$2,456.78</div>
+                    <span class="coin-change negative">▼ 1.87%</span>
+                    <div class="coin-volume">$18.4B</div>
+                    <button class="btn btn-primary">Buy</button>
+                </div>
+                <div class="table-row">
+                    <div class="coin-info">
+                        <div class="coin-icon" style="background: linear-gradient(135deg, #F0B90B, #F5D033)">B</div>
+                        <div><div class="coin-name">BNB</div><div class="coin-symbol">BNB/USDT</div></div>
+                    </div>
+                    <div class="coin-price">$634.52</div>
+                    <span class="coin-change positive">▲ 0.45%</span>
+                    <div class="coin-volume">$2.1B</div>
+                    <button class="btn btn-primary">Buy</button>
+                </div>
+                <div class="table-row">
+                    <div class="coin-info">
+                        <div class="coin-icon" style="background: linear-gradient(135deg, #23292F, #5A6475)">X</div>
+                        <div><div class="coin-name">XRP</div><div class="coin-symbol">XRP/USDT</div></div>
+                    </div>
+                    <div class="coin-price">$1.4234</div>
+                    <span class="coin-change positive">▲ 3.21%</span>
+                    <div class="coin-volume">$8.7B</div>
+                    <button class="btn btn-primary">Buy</button>
+                </div>
+                <div class="table-row">
+                    <div class="coin-info">
+                        <div class="coin-icon" style="background: linear-gradient(135deg, #00D4A1, #2AE2B1)">S</div>
+                        <div><div class="coin-name">Solana</div><div class="coin-symbol">SOL/USDT</div></div>
+                    </div>
+                    <div class="coin-price">$145.67</div>
+                    <span class="coin-change positive">▲ 5.67%</span>
+                    <div class="coin-volume">$3.2B</div>
+                    <button class="btn btn-primary">Buy</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download App - Binance Style -->
+    <section class="download-section">
+        <div class="container download-content">
+            <div class="download-text">
+                <h2>Trade on the go. Anywhere, anytime.</h2>
+                <p>Download our mobile apps and trade on the go. Available on iOS and Android with full trading features.</p>
+                <div class="download-tabs">
+                    <div class="download-tab active" onclick="switchDownloadTab('mobile')">Mobile</div>
+                    <div class="download-tab" onclick="switchDownloadTab('desktop')">Desktop</div>
+                    <div class="download-tab" onclick="switchDownloadTab('lite')">Lite</div>
+                </div>
+                <div class="download-buttons">
+                    <a href="#" class="download-btn">
+                        <div class="download-btn-icon">🍎</div>
+                        <div class="download-btn-text">
+                            <span>Download on the</span>
+                            <strong>App Store</strong>
+                        </div>
+                    </a>
+                    <a href="#" class="download-btn">
+                        <div class="download-btn-icon">🤖</div>
+                        <div class="download-btn-text">
+                            <span>Get it on</span>
+                            <strong>Google Play</strong>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="download-qr">
+                <div style="width:180px;height:180px;background:linear-gradient(135deg,#F0B90B,#FF6B35);border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                    <img src="assets/logo/tiger-logo.jpg" alt="TigerEx QR" style="width:120px;height:120px;border-radius:8px;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Badges -->
+    <section class="trust-badges container">
+        <div class="trust-badge">
+            <div style="font-size: 32px; font-weight: 700; color: var(--primary);">#1</div>
+            <div class="trust-badge-text">Forbes Most Trusted<br>Crypto Exchange 2025</div>
+        </div>
+        <div class="trust-badge">
+            <div style="font-size: 32px; font-weight: 700; color: var(--primary);">#1</div>
+            <div class="trust-badge-text">Fortune Fintech<br>Innovators 2024</div>
+        </div>
+        <div class="trust-badge">
+            <div style="font-size: 32px; font-weight: 700; color: var(--primary);">#1</div>
+            <div class="trust-badge-text">CNBC Top Fintech<br>Companies 2025</div>
+        </div>
+    </section>
+
+    <!-- SAFU Section -->
+    <section class="safu-section">
+        <div class="container safu-content">
+            <div class="safu-badge">FUNDS ARE SAFU</div>
+            <h2 class="safu-title">Your Security is Our Priority</h2>
+            <p class="safu-text">The Security of User Assets Fund (SAFU) was established in 2018 to protect your funds in rare emergencies.</p>
+            <div class="safu-stats">
+                <div class="safu-stat">
+                    <div class="safu-stat-value">15,000 BTC</div>
+                    <div class="safu-stat-label">SAFU Reserve</div>
+                </div>
+                <div class="safu-stat">
+                    <div class="safu-stat-value">7,488,223</div>
+                    <div class="safu-stat-label">Users Helped</div>
+                </div>
+                <div class="safu-stat">
+                    <div class="safu-stat-value">$229M+</div>
+                    <div class="safu-stat-label">Funds Recovered</div>
+                </div>
+            </div>
+            <div class="safu-wallet">
+                <span class="safu-wallet-label">SAFU Wallet:</span>
+                <span class="safu-wallet-address">1BAuq7Vho2CEkVkUxbfU26LhwQjbCmWQkD</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section container">
+        <div class="faq-header">
+            <h2>Frequently Asked Questions</h2>
+        </div>
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Why is TigerEx the best exchange for crypto traders?</span>
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    TigerEx is the best cryptocurrency exchange for traders because it offers deep liquidity, low fees, and a complete range of products including Spot, Futures, Earn, and P2P markets.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What products does TigerEx provide?</span>
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    TigerEx is the world's leading cryptocurrency exchange, catering to over 270 million registered users in over 180 countries. Trade Spot, Margin, Futures, P2P, Earn, and more.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How to buy Bitcoin and other cryptocurrencies on TigerEx</span>
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    There are several ways to buy cryptocurrencies on TigerEx. Use credit/debit card, cash balance, or Apple Pay/Google Pay to purchase crypto.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How to track cryptocurrency prices</span>
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Track the latest cryptocurrency prices, trading volumes, trending altcoins, and market cap in the TigerEx Cryptocurrency Directory.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How to earn from crypto on TigerEx</span>
+                    <span>+</span>
+                </div>
+                <div class="faq-answer">
+                    Earn rewards on 180+ cryptocurrencies using TigerEx Earn products with flexible and locked staking options.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Premium -->
+    <div class="container">
+        <div class="cta-premium">
+            <h2>Secure, Low-Fee Trading on TigerEx</h2>
+            <p>Join 50 million users on the world's most trusted cryptocurrency exchange.</p>
+            <a href="register.html" class="btn btn-lg">Sign Up Now</a>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="security-header">
+                <h2 class="section-title">Your Security is Our Priority</h2>
+                <p style="color: var(--text-secondary); margin-top: 16px; font-size: 18px;">We use industry-leading security measures to protect your assets</p>
+            </div>
+            <div class="security-grid">
+                <div class="security-card">
+                    <div class="security-icon">🛡️</div>
+                    <h3>SAFU Protection</h3>
+                    <p>Our Secure Asset Fund for Users protects your assets in case of unforeseen circumstances. We hold 15,000 BTC in reserve.</p>
+                </div>
+                <div class="security-card">
+                    <div class="security-icon">🔐</div>
+                    <h3>2FA Authentication</h3>
+                    <p>Secure your account with two-factor authentication via SMS, Google Authenticator, or hardware keys.</p>
+                </div>
+                <div class="security-card">
+                    <div class="security-icon">❄️</div>
+                    <h3>Cold Storage</h3>
+                    <p>98% of user funds are stored in offline cold wallets, protected by multi-signature encryption.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container cta-content">
+            <h2>Start Your Crypto Journey Today</h2>
+            <p>Join 50 million users and trade with confidence on the world's most trusted exchange.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary btn-lg">Create Free Account</a>
+                <a href="#" class="btn btn-secondary btn-lg">Contact Sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo"><img src="assets/logo/tiger-logo.jpg" alt="TigerEx Logo" style="width:48px;height:48px;border-radius:8px;">TigerEx</a>
+                    <p>TigerEx is the world's most trusted cryptocurrency exchange, serving over 140 million users globally.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>About</h4>
+                    <ul><li><a href="#">About Us</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li><li><a href="#">Blog</a></li></ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <ul><li><a href="#">Help Center</a></li><li><a href="#">API Support</a></li><li><a href="#">Fees</a></li><li><a href="#">Verification</a></li></ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Products</h4>
+                    <ul><li><a href="#">Spot Trading</a></li><li><a href="#">Futures</a></li><li><a href="#">Earn</a></li><li><a href="#">NFT</a></li></ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <ul><li><a href="#">Terms of Use</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Risk Disclaimer</a></li><li><a href="#">Anti-Money Laundering</a></li></ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 TigerEx. All rights reserved.</p>
+                <div class="footer-social">
+                    <a href="#">𝕏</a>
+                    <a href="#">in</a>
+                    <a href="#">📘</a>
+                    <a href="#">📸</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Functions
+        function toggleMobileMenu() {
+            const overlay = document.getElementById('mobileOverlay');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeMobileMenu() {
+            const overlay = document.getElementById('mobileOverlay');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Submenu Toggle
+        function toggleSubmenu(element, menuId) {
+            const submenu = element.nextElementSibling;
+            if (submenu && submenu.classList.contains('mobile-menu-submenu')) {
+                submenu.classList.toggle('active');
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        }
+
+        // Desktop Submenu Toggle
+        function toggleDesktopSubmenu(menuId, event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            const submenu = document.getElementById(menuId);
+            if (submenu) {
+                submenu.classList.toggle('active');
+            }
+        }
+
+        // Close submenus when clicking outside
+        document.addEventListener('click', (e) => {
+            const desktopSubmenus = document.querySelectorAll('.desktop-submenu');
+            desktopSubmenus.forEach(submenu => {
+                if (!submenu.contains(e.target) && !e.target.classList.contains('header-nav-item')) {
+                    submenu.classList.remove('active');
+                }
+            });
         });
+
+        // Theme Toggle
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('tigerex_theme', isLight ? 'light' : 'dark');
+            
+            // Update moon icon to sun and vice versa
+            const themeIcon = document.querySelector('.theme-toggle span');
+            themeIcon.textContent = isLight ? '☀️' : '🌙';
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('tigerex_theme');
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-mode');
+            const themeIcon = document.querySelector('.theme-toggle span');
+            if (themeIcon) themeIcon.textContent = '☀️';
+        }
+
+        // Handle responsive menu button visibility
+        function handleResponsive() {
+            const menuBtn = document.getElementById('mobileMenuBtn');
+            const themeToggle = document.querySelector('.theme-toggle');
+            const nav = document.querySelector('.header-nav');
+            const loginLink = document.querySelector('.header-right-link:not(.btn-primary):not(.theme-toggle)');
+            const signupLink = document.querySelector('.header-right-link.btn-primary');
+            
+            const isMobile = window.innerWidth <= 1024;
+            
+            if (menuBtn) {
+                menuBtn.style.display = isMobile ? 'flex' : 'none';
+            }
+            
+            if (themeToggle) {
+                themeToggle.style.display = 'flex';
+            }
+            
+            if (nav) {
+                nav.style.display = isMobile ? 'none' : 'flex';
+            }
+            
+            if (loginLink) {
+                loginLink.style.display = isMobile ? 'none' : 'inline-flex';
+            }
+            
+            if (signupLink) {
+                signupLink.style.display = isMobile ? 'none' : 'inline-flex';
+            }
+            
+            // Close mobile menu on resize to desktop
+            if (!isMobile) {
+                closeMobileMenu();
+            }
+        }
+
+        // Run on load and resize
+        window.addEventListener('load', handleResponsive);
+        window.addEventListener('resize', handleResponsive);
+
+        // Close menus when clicking outside
+        document.addEventListener('click', (e) => {
+            const overlay = document.getElementById('mobileOverlay');
+            const menuBtn = document.getElementById('mobileMenuBtn');
+            
+            if (overlay && overlay.classList.contains('active')) {
+                if (!overlay.contains(e.target) && !menuBtn.contains(e.target)) {
+                    closeMobileMenu();
+                }
+            }
+        });
+
+        console.log('🐯 TigerEx Loaded - Theme:', localStorage.getItem('tigerex_theme') || 'dark');
     </script>
+    <script src="assets/js/theme.js"></script>
 </body>
 </html>
