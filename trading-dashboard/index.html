@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx Trading Dashboard</title>
+    <meta name="description" content="Universal Trading Dashboard for Bitget, Binance, and TradFi platforms">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://*.bitget.com https://*.binance.com; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+    <style>
+        /* Core CSS - Optimized for Speed */
+        :root {
+            --primary: #F6821F;
+            --dark: #0D1B2A;
+            --darker: #050A12;
+            --light: #E8EEF4;
+            --accent: #00D4AA;
+            --danger: #E53935;
+            --success: #43A047;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        /* Layout */
+        .app-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: var(--dark);
+            padding: 20px;
+            border-right: 1px solid rgba(255,255,255,0.06);
+            position: fixed;
+            width: 280px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            margin-bottom: 20px;
+        }
+        
+        .nav-section { margin-bottom: 24px; }
+        
+        .nav-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 12px;
+            padding: 0 12px;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            margin-bottom: 4px;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: rgba(246, 130, 31, 0.15);
+            color: var(--primary);
+        }
+        
+        .nav-item .icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-badge {
+            margin-left: auto;
+            background: var(--primary);
+            color: var(--dark);
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 24px;
+            background: var(--darker);
+        }
+        
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.3s; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-header .icon {
+            width: 32px;
+            height: 32px;
+            color: var(--primary);
+        }
+        
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        
+        .card {
+            background: var(--dark);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: all 0.3s;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 8px 32px rgba(246, 130, 31, 0.15);
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--light);
+            margin-bottom: 8px;
+        }
+        
+        .card-desc {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
+        }
+        
+        .card-url {
+            font-size: 0.75rem;
+            color: var(--primary);
+            margin-top: 12px;
+            word-break: break-all;
+        }
+        
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(246, 130, 31, 0.15);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        
+        /* Status Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .badge-live { background: rgba(67, 160, 71, 0.2); color: var(--success); }
+        .badge-popular { background: rgba(246, 130, 31, 0.2); color: var(--primary); }
+        
+        /* Category Groups */
+        .category-group {
+            margin-bottom: 32px;
+        }
+        
+        .category-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--light);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        
+        /* Quick Stats */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-card {
+            background: var(--dark);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.06);
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+            margin-top: 4px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .app-container { grid-template-columns: 1fr; }
+            .sidebar { position: fixed; left: -280px; z-index: 100; transition: left 0.3s; }
+            .sidebar.open { left: 0; }
+            .main-content { margin-left: 0; }
+            .quick-stats { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="logo">🐯 TigerEx</div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Main</div>
+                <a href="#" class="nav-item active" data-section="home">
+                    <span class="icon">🏠</span>
+                    Home
+                </a>
+                <a href="#" class="nav-item" data-section="markets">
+                    <span class="icon">📊</span>
+                    Markets
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Trade</div>
+                <a href="#" class="nav-item" data-section="futures">
+                    <span class="icon">📈</span>
+                    Futures
+                </a>
+                <a href="#" class="nav-item" data-section="spot">
+                    <span class="icon">💎</span>
+                    Spot
+                </a>
+                <a href="#" class="nav-item" data-section="margin">
+                    <span class="icon">⚡</span>
+                    Margin
+                </a>
+                <a href="#" class="nav-item" data-section="p2p">
+                    <span class="icon">🤝</span>
+                    P2P
+                </a>
+                <a href="#" class="nav-item" data-section="onchain">
+                    <span class="icon">⛓️</span>
+                    On-Chain
+                </a>
+                <a href="#" class="nav-item" data-section="alpha">
+                    <span class="icon">🚀</span>
+                    Alpha
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Trading Features</div>
+                <a href="#" class="nav-item" data-section="eft">
+                    <span class="icon">📄</span>
+                    EFT Trading
+                    <span class="nav-badge">New</span>
+                </a>
+                <a href="#" class="nav-item" data-section="copy">
+                    <span class="icon">👥</span>
+                    Copy Trading
+                </a>
+                <a href="#" class="nav-item" data-section="tradex">
+                    <span class="icon">🔄</span>
+                    TradeX
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">TradFi</div>
+                <a href="#" class="nav-item" data-section="cfd">
+                    <span class="icon">📊</span>
+                    CFD
+                </a>
+                <a href="#" class="nav-item" data-section="stocks">
+                    <span class="icon">🏢</span>
+                    Stocks
+                </a>
+                <a href="#" class="nav-item" data-section="stockpreps">
+                    <span class="icon">🧪</span>
+                    Stock Preps
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Assets</div>
+                <a href="#" class="nav-item" data-section="assets">
+                    <span class="icon">💰</span>
+                    Wallets
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Home Section -->
+            <section class="section active" id="section-home">
+                <div class="section-header">
+                    <span class="icon">🏠</span>
+                    Home
+                </div>
+                <div class="quick-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">8+</div>
+                        <div class="stat-label">Trading Platforms</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">50+</div>
+                        <div class="stat-label">Markets</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label">Support</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">0.1s</div>
+                        <div class="stat-label">Latency</div>
+                    </div>
+                </div>
+                <div class="cards-grid">
+                    <a href="https://www.bitget.com/" class="card" target="_blank" rel="noopener">
+                        <div class="card-icon">🐯</div>
+                        <div class="card-title">Bitget Exchange</div>
+                        <div class="card-desc">Leading crypto exchange with copy trading</div>
+                        <div class="card-url">bitget.com</div>
+                    </a>
+                </div>
+            </section>
+            
+            <!-- Markets Section -->
+            <section class="section" id="section-markets">
+                <div class="section-header">
+                    <span class="icon">📊</span>
+                    Markets Overview
+                </div>
+                <div class="cards-grid">
+                    <a href="https://www.binance.com/en/markets/overview" class="card" target="_blank" rel="noopener">
+                        <div class="card-icon">📊</div>
+                        <div class="card-title">Binance Markets</div>
+                        <div class="card-desc">Comprehensive market overview and trading pairs</div>
+                        <div class="card-url">binance.com/en/markets</div>
+                    </a>
+                </div>
+            </section>
+            
+            <!-- Futures Section -->
+            <section class="section" id="section-futures">
+                <div class="section-header">
+                    <span class="icon">📈</span>
+                    Futures Trading
+                </div>
+                <div class="cards-grid">
+                    <a href="https://www.bitget.com/futures/usdt/BTCUSDT" class="card" target="_blank" rel="noopener">
+                        <div class="card-icon">₿</div>
+                        <div class="card-title">Bitget USDT-M Futures</div>
+                        <div class="card-desc">BTC/USDT perpetual futures</div>
+                        <div class="card-url">bitget.com/futures/usdt/BTCUSDT</div>
+                    </a>
+                </div>
+            </section>
+            
+            <!-- Spot Section -->
+            <section class="section" id="section-spot">
+                <div class="section-header">
+                    <span class="icon">💎</span>
+                    Spot Trading
+                </div>
+                <div class="cards-grid">
+                    <a href="https://www.bitget.com/spot/BTCUSDT" class="card" target="_blank" rel="noopener">
+                        <div class="card-icon">₿</div>
+                        <div class="card-title">Bitget Spot Trading</div>
+                        <div class="card-desc">Instant BTC/USDT trading</div>
+                        <div class="card-url">bitget.com/spot/BTCUSDT</div>
+                    </a>
+                </div>
+            </section>
+            
+            <!-- Margin Section -->
+            <section class="section" id="section-margin">
+                <div class="section-header">
+                    <span class="icon">⚡</span>
+                    Margin Trading
+                </div>
+                <div class="cards-grid">
+                    <a href="https://www.bitget.com/spot/BTCUSDT?type=cross" class="card" target="_blank" rel="noopener">
+                        <div class="card-icon">⚡</div>
+                        <div class="card-title">Cross Margin Trading</div>
+                        <div class="card-desc">Leveraged spot trading with cross collateral</div>
+                        <div class="card-url">bitget.com/spot/BTCUSDT?type=cross</div>
+                    </a>
+                </div>
+            </section>
+            
+            <!-- P2P Section -->
+            <section class="section" id="section-p2p">
+                <div class="section-header">
+                    <span class="icon">🤝</span>
+                    P2P Trading
+                </div>
+                <div class="cards-grid">
+                    <a href="https://p2p.binance.com/en" class="card" target="_blank" rel="noopener">
+                        <div class="card-icon">🤝</div>
+                        <div class="card-title">Binance P2P</div>
+                        <div class="card-desc">Peer-to-peer crypto trading</div>
+                        <div class="card-url">p2p.binance.com</div>
+                    </a>
+                </div>
+            </section>
+            
+            <!-- On-Chain Section -->
+            <section class="section" id="section-onchain">
+                <div class="section-header">
+                    <span class="icon">⛓️</span>
+                    On-Chain Trading
+                </div>
+                <div class="cards-grid">
+                    <a href="https://www.bitget.com/on-chain/sol/2pFFgMtw7GkE6Kr6Xpg81mqDvEihhoafg64HdheKpump" class="card" target="_blank" rel="noopener">
+                        <div class="card-icon">🧾</div>
+                        <div class="card-title">Bitget On-Chain (Solana)</div>
+                        <div class="card-desc">Swap and trade Solana tokens directly</div>
+                        <div class="card-url">bitget.com/on-chain/sol/...</div>
+                    </a>
+                </div>
+            </section>
+            
+            <!-- Alpha Section -->
+            <section class="section" id="section-alpha">
+                <div class="section-header">
+                    <span class="icon">🚀</span>
+                    Alpha Trading
+                </div>
+                <div class="cards-grid">
+                    <a href="https://www.binance.com/en/alpha/bsc/0xd20fb09a49a8e75fef536a2dbc68222900287bac" class="card" target="_blank" rel="noopener">
+                        <div class="card-icon">🚀</div>
+                        <div class="card-title">Binance Alpha (BSC)</div>
+                        <div class="card-desc">Early access to new BSC tokens</div>
+                        <div class="card-url">binance.com/en/alpha</div>
+                    </a>
+                </div>
+            </section>
+            
+            <!-- EFT Section -->
+            <section class="section" id="section-eft">
+                <div class="section-header">
+                    <span class="icon">📄</span>
+                    ETF Trading
+                </div>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-icon">📄</div>
+                        <div class="card-title">EFT Trading</div>
+                        <div class="card-desc">Exchange-Traded Funds trading coming soon</div>
+                        <div class="card-url">Coming Soon</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Copy Trading Section -->
+            <section class="section" id="section-copy">
+                <div class="section-header">
+                    <span class="icon">👥</span>
+                    Copy Trading
+                </div>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-icon">👥</div>
+                        <div class="card-title">Copy Trading</div>
+                        <div class="card-desc">Follow top traders automatically</div>
+                        <div class="card-url">Available on Bitget</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- TradeX Section -->
+            <section class="section" id="section-tradex">
+                <div class="section-header">
+                    <span class="icon">🔄</span>
+                    TradeX
+                </div>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-icon">🔄</div>
+                        <div class="card-title">TradeX Platform</div>
+                        <div class="card-desc">Advanced trading platform</div>
+                        <div class="card-url">Coming Soon</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- CFD Section -->
+            <section class="section" id="section-cfd">
+                <div class="section-header">
+                    <span class="icon">📊</span>
+                    CFD Trading
+                </div>
+                <div class="cards-grid">
+                    <a href="https://www.bitgettradfi.com/tradfi/XAUUSD" class="card" target="_blank" rel="noopener">
+                        <div class="card-icon">🥇</div>
+                        <div class="card-title">Bitget TradFi CFD</div>
+                        <div class="card-desc">Trade gold, forex, and commodities</div>
+                        <div class="card-url">bitgettradfi.com/tradfi/XAUUSD</div>
+                    </a>
+                </div>
+            </section>
+            
+            <!-- Stocks Section -->
+            <section class="section" id="section-stocks">
+                <div class="section-header">
+                    <span class="icon">🏢</span>
+                    Stocks
+                </div>
+                <div class="cards-grid">
+                    <a href="https://www.bitget.com/on-chain/bnb/0xa9ee28c80f960b889dfbd1902055218cba016f75" class="card" target="_blank" rel="noopener">
+                        <div class="card-icon">🏢</div>
+                        <div class="card-title">BNB Stock Tokens</div>
+                        <div class="card-desc">Tokenized BNB stock trading</div>
+                        <div class="card-url">bitget.com/on-chain/bnb</div>
+                    </a>
+                </div>
+            </section>
+            
+            <!-- Stock Preps Section -->
+            <section class="section" id="section-stockpreps">
+                <div class="section-header">
+                    <span class="icon">🧪</span>
+                    Stock Preps
+                </div>
+                <div class="cards-grid">
+                    <a href="https://www.bitget.com/futures/usdt/NVDAUSDT" class="card" target="_blank" rel="noopener">
+                        <div class="card-icon">🧪</div>
+                        <div class="card-title">NVDA/USDT Futures</div>
+                        <div class="card-desc">NVIDIA stock futures trading</div>
+                        <div class="card-url">bitget.com/futures/usdt/NVDAUSDT</div>
+                    </a>
+                </div>
+            </section>
+            
+            <!-- Assets Section -->
+            <section class="section" id="section-assets">
+                <div class="section-header">
+                    <span class="icon">💰</span>
+                    Assets & Wallets
+                </div>
+                <div class="category-group">
+                    <div class="category-title">Wallets</div>
+                    <div class="cards-grid">
+                        <a href="https://www.bitget.com/asset" class="card" target="_blank" rel="noopener">
+                            <div class="card-icon">💰</div>
+                            <div class="card-title">Assets Overview</div>
+                            <div class="card-desc">View all wallets and balances</div>
+                            <div class="card-url">bitget.com/asset</div>
+                        </a>
+                    </div>
+                </div>
+                <div class="category-group">
+                    <div class="category-title">Features</div>
+                    <div class="cards-grid">
+                        <a href="https://www.bitget.com/asset" class="card" target="_blank" rel="noopener">
+                            <div class="card-icon">📥</div>
+                            <div class="card-title">Deposit</div>
+                            <div class="card-desc">Fund your account</div>
+                        </a>
+                        <a href="https://www.bitget.com/asset" class="card" target="_blank" rel="noopener">
+                            <div class="card-icon">📤</div>
+                            <div class="card-title">Withdrawal</div>
+                            <div class="card-desc">Withdraw funds</div>
+                        </a>
+                        <a href="https://www.bitget.com/asset" class="card" target="_blank" rel="noopener">
+                            <div class="card-icon">💵</div>
+                            <div class="card-title">Spot Wallet</div>
+                            <div class="card-desc">Main trading balance</div>
+                        </a>
+                        <a href="https://www.bitget.com/asset" class="card" target="_blank" rel="noopener">
+                            <div class="card-icon">📈</div>
+                            <div class="card-title">Futures Wallet</div>
+                            <div class="card-desc">Futures trading balance</div>
+                        </a>
+                        <a href="https://www.bitget.com/asset" class="card" target="_blank" rel="noopener">
+                            <div class="card-icon">🤝</div>
+                            <div class="card-title">P2P Wallet</div>
+                            <div class="card-desc">P2P trading balance</div>
+                        </a>
+                        <a href="https://www.bitget.com/asset" class="card" target="_blank" rel="noopener">
+                            <div class="card-icon">🐯</div>
+                            <div class="card-title">TigerPay</div>
+                            <div class="card-desc">Payment solution</div>
+                        </a>
+                        <a href="https://www.bitget.com/asset" class="card" target="_blank" rel="noopener">
+                            <div class="card-icon">📊</div>
+                            <div class="card-title">TradFi Wallet</div>
+                            <div class="card-desc">CFD and stocks balance</div>
+                        </a>
+                        <a href="https://www.bitget.com/asset" class="card" target="_blank" rel="noopener">
+                            <div class="card-icon">💳</div>
+                            <div class="card-title">Crypto Card</div>
+                            <div class="card-desc">Crypto debit card</div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <script>
+        // Navigation Logic - Optimized for Speed
+        document.addEventListener('DOMContentLoaded', () => {
+            const navItems = document.querySelectorAll('.nav-item');
+            const sections = document.querySelectorAll('.section');
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const sectionId = item.dataset.section;
+                    
+                    // Update active state
+                    navItems.forEach(n => n.classList.remove('active'));
+                    item.classList.add('active');
+                    
+                    // Show corresponding section
+                    sections.forEach(s => s.classList.remove('active'));
+                    const targetSection = document.getElementById('section-' + sectionId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                    }
+                    
+                    // Close mobile sidebar
+                    document.getElementById('sidebar').classList.remove('open');
+                });
+            });
+            
+            // Mobile menu toggle
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.getElementById('sidebar').classList.remove('open');
+                }
+            });
+        });
+        
+        // Security: Prevent external link exploitation
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a[href^="http"]');
+            if (link && link.target === '_blank') {
+                link.rel = 'noopener noreferrer';
+            }
+        });
+    </script>
+</body>
+</html>

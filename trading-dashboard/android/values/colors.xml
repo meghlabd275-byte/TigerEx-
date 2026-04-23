@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark/Light Theme Colors for Android -->
+    <color name="primary">#F6821F</color>
+    <color name="primary_dark">#D36F10</color>
+    <color name="accent">#00D4AA</color>
+    
+    <!-- Dark Theme -->
+    <color name="dark_background">#050A12</color>
+    <color name="dark_surface">#0D1B2A</color>
+    <color name="dark_card">#0D1B2A</color>
+    <color name="dark_text_primary">#E8EEF4</color>
+    <color name="dark_text_secondary">rgba(255,255,255,0.7)</color>
+    
+    <!-- Light Theme -->
+    <color name="light_background">#F5F7FA</color>
+    <color name="light_surface">#FFFFFF</color>
+    <color name="light_card">#FFFFFF</color>
+    <color name="light_text_primary">#1A1A2E</color>
+    <color name="light_text_secondary">#666666</color>
+    
+    <!-- Status -->
+    <color name="success">#43A047</color>
+    <color name="danger">#E53935</color>
+    <color name="warning">#FF9800</color>
+</resources>
