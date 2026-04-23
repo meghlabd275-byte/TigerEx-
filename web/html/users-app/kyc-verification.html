@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYC Verification - TigerEx</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root { --primary: #F0B90B; }
+        body { background: #0B0B0F; color: white; }
+        .step-active { border-color: var(--primary); background: rgba(240, 185, 11, 0.1); }
+        .step-completed { background: #0ECB81; }
+        .step-pending { border-color: #3A3A3A; }
+        video { border-radius: 12px; }
+        .challenge-box { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+    </style>
+</head>
+<body class="min-h-screen p-6">
+    <div class="max-w-2xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-2xl font-bold" style="color: var(--primary)">KYC Verification</h1>
+            <p class="text-gray-400 mt-2">Complete verification to unlock all features</p>
+        </div>
+        
+        <!-- Progress Steps -->
+        <div class="flex justify-between mb-8">
+            <div id="step1" class="step step-active flex flex-col items-center">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 border-yellow-500 bg-yellow-500 text-black">1</div>
+                <span class="text-xs mt-2">Document</span>
+            </div>
+            <div id="step2" class="step step-pending flex flex-col items-center">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 border-gray-600">2</div>
+                <span class="text-xs mt-2 text-gray-500">Liveness</span>
+            </div>
+            <div id="step3" class="step step-pending flex flex-col items-center">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 border-gray-600">3</div>
+                <span class="text-xs mt-2 text-gray-500">Address</span>
+            </div>
+            <div id="step4" class="step step-pending flex flex-col items-center">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold border-2 border-gray-600">4</div>
+                <span class="text-xs mt-2 text-gray-500">Complete</span>
+            </div>
+        </div>
+        
+        <!-- Step 1: Document Upload -->
+        <div id="step1Content" class="bg-[#1E1E1E] rounded-2xl p-6">
+            <h2 class="text-xl font-bold mb-4">Upload ID Document</h2>
+            
+            <!-- Document Type -->
+            <div class="mb-4">
+                <label class="block text-sm text-gray-400 mb-2">Document Type</label>
+                <select id="docType" class="w-full bg-[#2A2A2A] border border-gray-700 rounded-lg p-3 text-white">
+                    <option value="passport">Passport</option>
+                    <option value="national_id">National ID</option>
+                    <option value="drivers_license">Driver's License</option>
+                    <option value="voter_card">Voter Card</option>
+                </select>
+            </div>
+            
+            <!-- Document Upload -->
+            <div class="mb-4">
+                <label class="block text-sm text-gray-400 mb-2">Upload Document (Front)</label>
+                <div id="docUpload" class="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center cursor-pointer hover:border-yellow-500 transition">
+                    <input type="file" id="docFile" accept="image/*" class="hidden">
+                    <div id="docPreview">
+                        <p class="text-4xl mb-2">📄</p>
+                        <p class="text-gray-400">Click to upload or drag and drop</p>
+                        <p class="text-gray-500 text-xs mt-1">PNG, JPG up to 10MB</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button onclick="nextStep(2)" class="w-full py-3 bg-yellow-500 text-black font-bold rounded-lg">
+                Continue to Liveness Check
+            </button>
+        </div>
+        
+        <!-- Step 2: Liveness Check -->
+        <div id="step2Content" class="hidden bg-[#1E1E1E] rounded-2xl p-6">
+            <h2 class="text-xl font-bold mb-4">Face Liveness Verification</h2>
+            
+            <p class="text-gray-400 mb-4">Please complete the challenge below to verify you're a real person.</p>
+            
+            <!-- Challenge Display -->
+            <div id="challengeBox" class="challenge-box bg-[#2A2A2A] rounded-xl p-6 text-center mb-4">
+                <p class="text-3xl mb-2" id="challengeIcon">👁️</p>
+                <p class="text-xl font-bold" id="challengeText">Please blink</p>
+            </div>
+            
+            <!-- Camera Preview -->
+            <div class="relative mb-4">
+                <video id="video" autoplay playsinline class="w-full bg-black rounded-lg"></video>
+                <canvas id="canvas" class="hidden"></canvas>
+                <div id="faceOverlay" class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div class="w-48 h-48 border-4 border-green-500 rounded-full opacity-50"></div>
+                </div>
+            </div>
+            
+            <!-- Start Button -->
+            <button id="startLiveness" onclick="startLiveness()" class="w-full py-3 bg-yellow-500 text-black font-bold rounded-lg mb-3">
+                Start Verification
+            </button>
+            
+            <!-- Capture Button -->
+            <button id="captureBtn" onclick="captureFace()" class="w-full py-3 bg-green-500 text-white font-bold rounded-lg mb-3 hidden">
+                Capture
+            </button>
+            
+            <button onclick="nextStep(1)" class="w-full py-3 bg-gray-700 text-white rounded-lg">
+                Back
+            </button>
+        </div>
+        
+        <!-- Step 3: Address Proof -->
+        <div id="step3Content" class="hidden bg-[#1E1E1E] rounded-2xl p-6">
+            <h2 class="text-xl font-bold mb-4">Upload Address Proof (Optional - Advanced KYC)</h2>
+            
+            <p class="text-gray-400 mb-4">Upload a document proving your address for advanced verification.</p>
+            
+            <!-- Address Document Type -->
+            <div class="mb-4">
+                <label class="block text-sm text-gray-400 mb-2">Document Type</label>
+                <select id="addressDocType" class="w-full bg-[#2A2A2A] border border-gray-700 rounded-lg p-3 text-white">
+                    <option value="bank_statement">Bank Statement</option>
+                    <option value="utility_bill">Utility Bill</option>
+                    <option value="rental_agreement">Rental Agreement</option>
+                    <option value="tax_document">Tax Document</option>
+                </select>
+            </div>
+            
+            <!-- Address Proof Upload -->
+            <div class="mb-4">
+                <label class="block text-sm text-gray-400 mb-2">Upload Document</label>
+                <div id="addressUpload" class="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center cursor-pointer">
+                    <input type="file" id="addressFile" accept="image/*" class="hidden">
+                    <div id="addressPreview">
+                        <p class="text-4xl mb-2">📃</p>
+                        <p class="text-gray-400">Click to upload address proof</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button onclick="completeKYC()" class="w-full py-3 bg-yellow-500 text-black font-bold rounded-lg">
+                Complete Verification
+            </button>
+            
+            <button onclick="nextStep(2)" class="w-full py-3 bg-gray-700 text-white rounded-lg mt-3">
+                Skip for Now
+            </button>
+        </div>
+        
+        <!-- Step 4: Complete -->
+        <div id="step4Content" class="hidden bg-[#1E1E1E] rounded-2xl p-6 text-center">
+            <div class="text-6xl mb-4">✅</div>
+            <h2 class="text-2xl font-bold text-green-500 mb-2">Verification Complete!</h2>
+            <p class="text-gray-400 mb-6">Your KYC verification has been submitted successfully.</p>
+            <p class="text-gray-500 text-sm mb-6">We'll review your documents within 24-48 hours.</p>
+            <a href="/" class="block w-full py-3 bg-yellow-500 text-black font-bold rounded-lg">
+                Go to Dashboard
+            </a>
+        </div>
+        
+        <!-- Error Display -->
+        <div id="errorMsg" class="hidden mt-4 p-4 bg-red-500/20 border border-red-500 rounded-lg text-red-400"></div>
+    </div>
+    
+    <script src="/src/services/kyc.js"></script>
+    <script>
+        let currentStep = 1;
+        let videoStream = null;
+        let kycService = null;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            kycService = new KYCService();
+        });
+        
+        // Step Navigation
+        function nextStep(step) {
+            document.querySelectorAll('.step').forEach((el, i) => {
+                el.classList.remove('step-active', 'step-pending', 'step-completed');
+                if (i + 1 < step) el.classList.add('step-completed');
+                else if (i + 1 === step) el.classList.add('step-active');
+                else el.classList.add('step-pending');
+            });
+            
+            [1,2,3,4].forEach(i => {
+                document.getElementById('step' + i + 'Content').classList.add('hidden');
+            });
+            document.getElementById('step' + step + 'Content').classList.remove('hidden');
+            
+            currentStep = step;
+            
+            if (step === 2) startLiveness();
+        }
+        
+        // Document Upload
+        document.getElementById('docUpload').addEventListener('click', () => {
+            document.getElementById('docFile').click();
+        });
+        
+        document.getElementById('docFile').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                KYCService.validateImage(file, 10);
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('docPreview').innerHTML = `<img src="${e.target.result}" class="max-h-40 mx-auto rounded-lg">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Liveness Check
+        async function startLiveness() {
+            document.getElementById('startLiveness').classList.add('hidden');
+            document.getElementById('captureBtn').classList.remove('hidden');
+            
+            try {
+                videoStream = await KYCService.getCamera();
+                const video = document.getElementById('video');
+                video.srcObject = videoStream;
+                
+                // Start challenge
+                const challenges = [
+                    { icon: '👁️', text: 'Please blink slowly' },
+                    { icon: '😊', text: 'Please smile' },
+                    { icon: '👈', text: 'Turn face to the left' },
+                    { icon: '👉', text: 'Turn face to the right' }
+                ];
+                const challenge = challenges[Math.floor(Math.random() * challenges.length)];
+                document.getElementById('challengeIcon').textContent = challenge.icon;
+                document.getElementById('challengeText').textContent = challenge.text;
+                
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+        
+        async function captureFace() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            const faceImage = KYCService.captureFrame(video, canvas);
+            
+            try {
+                // In production, this would call actual liveness API
+                // Simulated response
+                await new Promise(r => setTimeout(r, 1500));
+                
+                // Success - move to next step
+                nextStep(3);
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+        
+        // Address Proof Upload
+        document.getElementById('addressUpload').addEventListener('click', () => {
+            document.getElementById('addressFile').click();
+        });
+        
+        document.getElementById('addressFile').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('addressPreview').innerHTML = `<img src="${e.target.result}" class="max-h-40 mx-auto rounded-lg">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Complete KYC
+        function completeKYC() {
+            nextStep(4);
+        }
+        
+        // Error Display
+        function showError(msg) {
+            const el = document.getElementById('errorMsg');
+            el.textContent = msg;
+            el.classList.remove('hidden');
+            setTimeout(() => el.classList.add('hidden'), 5000);
+        }
+        
+        // Cleanup on exit
+        window.addEventListener('beforeunload', () => {
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+            }
+        });
+    </script>
+</body>
+</html>
