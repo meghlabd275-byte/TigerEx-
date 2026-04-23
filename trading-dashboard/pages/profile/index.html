@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - TigerEx</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+    <style>
+        /* TigerEx Profile Page */
+        :root { --primary: #F6821F; --success: #43A047; --danger: #E53935; }
+        [data-theme="dark"] { --bg-primary: #050A12; --bg-secondary: #0D1B2A; --bg-tertiary: #141E2B; --bg-card: #0D1B2A; --text-primary: #E8EEF4; --text-secondary: rgba(255,255,255,0.7); --text-muted: rgba(255,255,255,0.5); --border: rgba(255,255,255,0.08); }
+        [data-theme="light"] { --bg-primary: #F5F7FA; --bg-secondary: #FFFFFF; --bg-tertiary: #F0F2F5; --bg-card: #FFFFFF; --text-primary: #1A1A2E; --text-secondary: #666666; --text-muted: #999999; --border: #E0E0E0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+        
+        .header { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; background: var(--bg-secondary); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+        .header-left { display: flex; align-items: center; gap: 16px; }
+        .back-btn { width: 40px; height: 40px; border: none; background: var(--bg-tertiary); color: var(--text-primary); border-radius: 10px; cursor: pointer; font-size: 1.2rem; }
+        .back-btn:hover { background: var(--primary); color: var(--bg-primary); }
+        .logo { display: flex; align-items: center; gap: 8px; font-size: 1.4rem; font-weight: 800; color: var(--primary); text-decoration: none; }
+        .logo-icon { width: 32px; height: 32px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--bg-primary); }
+        .page-title { font-size: 1.2rem; font-weight: 600; }
+        .theme-toggle { padding: 8px 14px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
+        
+        .container { max-width: 800px; margin: 0 auto; padding: 24px; }
+        
+        .profile-header { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; display: flex; align-items: center; gap: 20px; margin-bottom: 24px; }
+        .profile-avatar-large { width: 80px; height: 80px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--bg-primary); font-size: 2rem; font-weight: 700; }
+        .profile-info { flex: 1; }
+        .profile-name { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+        .profile-email { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px; }
+        .profile-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: rgba(246,130,31,0.15); color: var(--primary); border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+        .edit-btn { padding: 10px 20px; border: 1px solid var(--border); background: var(--bg-tertiary); color: var(--text-primary); border-radius: 10px; cursor: pointer; font-size: 0.9rem; }
+        .edit-btn:hover { border-color: var(--primary); color: var(--primary); }
+        
+        .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 24px; }
+        .stat-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
+        .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+        .stat-label { font-size: 0.85rem; color: var(--text-muted); }
+        
+        .menu-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+        .menu-section .menu-title { padding: 16px 20px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+        .menu-item { display: flex; align-items: center; gap: 14px; padding: 16px 20px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.2s; }
+        .menu-item:last-child { border-bottom: none; }
+        .menu-item:hover { background: var(--bg-tertiary); }
+        .menu-icon { width: 40px; height: 40px; background: var(--bg-tertiary); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .menu-info { flex: 1; }
+        .menu-label { font-weight: 600; margin-bottom: 2px; }
+        .menu-desc { font-size: 0.8rem; color: var(--text-muted); }
+        .menu-arrow { color: var(--text-muted); font-size: 1.2rem; }
+        .menu-badge { padding: 4px 10px; background: var(--success); color: white; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+        
+        .security-item { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+        .security-item:last-child { border-bottom: none; }
+        .security-info { display: flex; align-items: center; gap: 14px; }
+        .security-icon { width: 40px; height: 40px; background: rgba(67,160,71,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .security-icon.warning { background: rgba(229,57,53,0.15); }
+        .security-text { display: flex; flex-direction: column; }
+        .security-label { font-weight: 600; margin-bottom: 2px; }
+        .security-status { font-size: 0.8rem; color: var(--success); }
+        .security-status.pending { color: var(--danger); }
+        .security-toggle { width: 48px; height: 28px; background: var(--bg-tertiary); border: none; border-radius: 14px; position: relative; cursor: pointer; transition: background 0.2s; }
+        .security-toggle.active { background: var(--success); }
+        .security-toggle::after { content: ''; position: absolute; width: 22px; height: 22px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: left 0.2s; }
+        .security-toggle.active::after { left: 23px; }
+        
+        .logout-btn { width: 100%; padding: 16px; border: none; background: rgba(229,57,53,0.1); color: var(--danger); border-radius: 12px; cursor: pointer; font-size: 1rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .logout-btn:hover { background: var(--danger); color: white; }
+        
+        .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg-secondary); border-top: 1px solid var(--border); padding: 8px 0; z-index: 100; }
+        .mobile-nav-items { display: flex; justify-content: space-around; }
+        .mobile-nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px; color: var(--text-muted); font-size: 0.7rem; cursor: pointer; }
+        .mobile-nav-item.active { color: var(--primary); }
+        .mobile-nav-item .icon { font-size: 1.3rem; }
+        
+        @media (max-width: 768px) {
+            .container { padding: 16px; padding-bottom: 80px; }
+            .mobile-nav { display: block; }
+            .profile-header { flex-direction: column; text-align: center; }
+            .stats-row { grid-template-columns: 1fr; }
+            .profile-header .edit-btn { width: 100%; }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <header class="header">
+        <div class="header-left">
+            <button class="back-btn" onclick="goBack()">←</button>
+            <a href="#" class="logo"><div class="logo-icon">🐯</div>TigerEx</a>
+        </div>
+        <div class="page-title">Profile</div>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
+    </header>
+    
+    <div class="container">
+        <div class="profile-header">
+            <div class="profile-avatar-large">JD</div>
+            <div class="profile-info">
+                <div class="profile-name">John Doe</div>
+                <div class="profile-email">john.doe@email.com</div>
+                <div class="profile-badge">⭐ VIP Level 3</div>
+            </div>
+            <button class="edit-btn" onclick="editProfile()">✏️ Edit</button>
+        </div>
+        
+        <div class="stats-row">
+            <div class="stat-box"><div class="stat-value">$45,678</div><div class="stat-label">Total Assets</div></div>
+            <div class="stat-box"><div class="stat-value">15</div><div class="stat-label">Total Trades</div></div>
+            <div class="stat-box"><div class="stat-value">$2,345</div><div class="stat-label">Total Fees</div></div>
+        </div>
+        
+        <div class="menu-section">
+            <div class="menu-title">Account</div>
+            <div class="menu-item" onclick="openPage('kyc')"><div class="menu-icon">🆔</div><div class="menu-info"><div class="menu-label">KYC Verification</div><div class="menu-desc">Verified (Level 2)</div></div><span class="menu-badge">Verified</span></div>
+            <div class="menu-item" onclick="openPage('api')"><div class="menu-icon">🔑</div><div class="menu-info"><div class="menu-label">API Keys</div><div class="menu-desc">Manage API keys</div></div><span class="menu-arrow">→</span></div>
+            <div class="menu-item" onclick="openPage('devices')"><div class="menu-icon">📱</div><div class="menu-info"><div class="menu-label">Devices</div><div class="menu-desc">Trusted devices</div></div><span class="menu-arrow">→</span></div>
+            <div class="menu-item" onclick="openPage('login')"><div class="menu-icon">🔐</div><div class="menu-info"><div class="menu-label">Login History</div><div class="menu-desc">View activity</div></div><span class="menu-arrow">→</span></div>
+        </div>
+        
+        <div class="menu-section">
+            <div class="menu-title">Security</div>
+            <div class="security-item"><div class="security-info"><div class="security-icon">📧</div><div class="security-text"><div class="security-label">Email</div><div class="security-status">john.doe@email.com ✓</div></div></div><button class="edit-btn" style="padding:6px 12px;font-size:0.8rem">Change</button></div>
+            <div class="security-item"><div class="security-info"><div class="security-icon">📱</div><div class="security-text"><div class="security-label">Phone</div><div class="security-status">+1 *** *** 4567 ✓</div></div></div><button class="edit-btn" style="padding:6px 12px;font-size:0.8rem">Change</button></div>
+            <div class="security-item"><div class="security-info"><div class="security-icon">🔐</div><div class="security-text"><div class="security-label">Password</div><div class="security-status">Changed 30 days ago</div></div></div><button class="edit-btn" style="padding:6px 12px;font-size:0.8rem">Update</button></div>
+            <div class="security-item"><div class="security-info"><div class="security-icon warning">🔔</div><div class="security-text"><div class="security-label">2FA</div><div class="security-status pending">Not enabled</div></div></div><button class="edit-btn" style="padding:6px 12px;font-size:0.8rem">Enable</button></div>
+            <div class="security-item"><div class="security-info"><div class="security-icon">👆</div><div class="security-text"><div class="security-label">Biometrics</div><div class="security-status">Face ID enabled</div></div></div><button class="security-toggle active"></button></div>
+            <div class="security-item"><div class="security-info"><div class="security-icon">🎭</div><div class="security-text"><div class="security-label">Anti-phishing</div><div class="security-status">Not set</div></div></div><button class="edit-btn" style="padding:6px 12px;font-size:0.8rem">Set</button></div>
+        </div>
+        
+        <div class="menu-section">
+            <div class="menu-title">Preferences</div>
+            <div class="menu-item" onclick="openPage('language')"><div class="menu-icon">🌐</div><div class="menu-info"><div class="menu-label">Language</div><div class="menu-desc">English</div></div><span class="menu-arrow">→</span></div>
+            <div class="menu-item" onclick="openPage('currency')"><div class="menu-icon">💵</div><div class="menu-info"><div class="menu-label">Fiat Currency</div><div class="menu-desc">USD</div></div><span class="menu-arrow">→</span></div>
+            <div class="menu-item"><div class="menu-icon">🔔</div><div class="menu-info"><div class="menu-label">Push Notifications</div><div class="menu-desc">Price alerts</div></div><button class="security-toggle active"></button></div>
+            <div class="menu-item"><div class="menu-icon">📧</div><div class="menu-info"><div class="menu-label">Email Notifications</div><div class="menu-desc">News, updates</div></div><button class="security-toggle"></button></div>
+        </div>
+        
+        <div class="menu-section">
+            <div class="menu-title">Support</div>
+            <div class="menu-item" onclick="openPage('help')"><div class="menu-icon">❓</div><div class="menu-info"><div class="menu-label">Help Center</div><div class="menu-desc">FAQs</div></div><span class="menu-arrow">→</span></div>
+            <div class="menu-item" onclick="openPage('chat')"><div class="menu-icon">💬</div><div class="menu-info"><div class="menu-label">Live Chat</div><div class="menu-desc">Chat with support</div></div><span class="menu-arrow">→</span></div>
+            <div class="menu-item" onclick="openPage('ticket')"><div class="menu-icon">🎫</div><div class="menu-info"><div class="menu-label">Submit Ticket</div></div><span class="menu-arrow">→</span></div>
+        </div>
+        
+        <div class="menu-section">
+            <div class="menu-title">About</div>
+            <div class="menu-item"><div class="menu-info"><div class="menu-label">Terms</div></div><span class="menu-arrow">→</span></div>
+            <div class="menu-item"><div class="menu-info"><div class="menu-label">Privacy</div></div><span class="menu-arrow">→</span></div>
+            <div class="menu-item"><div class="menu-info"><div class="menu-label">Version</div><div class="menu-desc">v1.0.0</div></div></div>
+        </div>
+        
+        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+    </div>
+    
+    <nav class="mobile-nav">
+        <div class="mobile-nav-items">
+            <div class="mobile-nav-item" onclick="navigateTo('home')"><span class="icon">🏠</span>Home</div>
+            <div class="mobile-nav-item" onclick="navigateTo('trade')"><span class="icon">📈</span>Trade</div>
+            <div class="mobile-nav-item" onclick="navigateTo('assets')"><span class="icon">💰</span>Assets</div>
+            <div class="mobile-nav-item active"><span class="icon">👤</span>Profile</div>
+        </div>
+    </nav>
+    
+    <script>
+        function toggleTheme() {
+            const t = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', t);
+            document.querySelector('.theme-toggle').textContent = t === 'dark' ? '🌙 Dark' : '☀️ Light';
+            localStorage.setItem('theme', t);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const t = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', t);
+            document.querySelector('.theme-toggle').textContent = t === 'dark' ? '🌙 Dark' : '☀️ Light';
+        });
+        function goBack() { window.location.href = '../homepage/index.html'; }
+        function editProfile() { alert('Edit profile'); }
+        function openPage(p) { alert('Opening ' + p); }
+        function logout() { if(confirm('Logout?')) alert('Logged out'); window.location.href='../../index.html'; }
+        function navigateTo(p) { if(p==='home') window.location.href='../homepage/index.html'; if(p==='trade') window.location.href='../trade/index.html'; if(p==='assets') window.location.href='../assets/index.html'; }
+    </script>
+</body>
+</html>
