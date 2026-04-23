@@ -1,6 +1,6 @@
 <!--
 @file register.html
-@description TigerEx Register Page - Binance Clone Design
+@description TigerEx Register Page - Complete Multi-Step Registration
 @author TigerEx Development Team
 -->
 <!DOCTYPE html>
@@ -22,6 +22,7 @@
       --text-secondary: #848E9C;
       --border: #2B3139;
       --green: #00C087;
+      --red: #F6465D;
     }
     
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,7 +42,6 @@
       --border: #E0E0E0;
     }
     
-    /* Top Banner */
     .top-banner {
       background: linear-gradient(90deg, #F0B90B 0%, #FFD84D 100%);
       color: #000;
@@ -51,7 +51,6 @@
       font-size: 14px;
     }
     
-    /* Header */
     .header {
       display: flex;
       justify-content: space-between;
@@ -82,13 +81,9 @@
       font-size: 20px;
     }
     
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+    .header-right { display: flex; align-items: center; gap: 16px; }
     
-    .lang-btn {
+    .lang-btn, .theme-btn {
       background: none;
       border: 1px solid var(--border);
       color: var(--text-primary);
@@ -98,21 +93,11 @@
       font-size: 14px;
     }
     
-    .theme-btn {
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--text-primary);
-      padding: 8px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 16px;
-    }
+    .theme-btn { padding: 8px; }
     
-    /* Main Content */
     .main {
       display: flex;
       justify-content: center;
-      align-items: center;
       padding: 40px 20px;
       min-height: calc(100vh - 200px);
     }
@@ -122,57 +107,14 @@
       border-radius: 12px;
       padding: 32px;
       width: 100%;
-      max-width: 420px;
+      max-width: 480px;
       box-shadow: 0 4px 24px rgba(0,0,0,0.2);
     }
     
-    .rewards-badge {
-      background: linear-gradient(135deg, var(--primary) 0%, #FFD84D 100%);
-      color: #000;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 14px;
-      font-weight: 600;
-      display: inline-block;
-      margin-bottom: 16px;
-    }
+    h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { color: var(--text-secondary); margin-bottom: 24px; font-size: 14px; }
     
-    .rewards-badge span {
-      font-size: 16px;
-    }
-    
-    h1 {
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    
-    .subtitle {
-      color: var(--text-secondary);
-      margin-bottom: 24px;
-      font-size: 14px;
-    }
-    
-    .stats {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
-    
-    .stat-item {
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
-    
-    .stat-item strong {
-      color: var(--text-primary);
-    }
-    
-    /* Form */
-    .form-group {
-      margin-bottom: 16px;
-    }
+    .form-group { margin-bottom: 16px; }
     
     .form-label {
       display: block;
@@ -181,9 +123,7 @@
       font-weight: 500;
     }
     
-    .input-wrapper {
-      position: relative;
-    }
+    .input-wrapper { position: relative; }
     
     .form-input {
       width: 100%;
@@ -197,12 +137,22 @@
       transition: border-color 0.2s;
     }
     
-    .form-input:focus {
-      border-color: var(--primary);
-    }
+    .form-input:focus { border-color: var(--primary); }
+    .form-input::placeholder { color: var(--text-secondary); }
     
-    .form-input::placeholder {
+    .password-wrapper { position: relative; }
+    .password-wrapper .form-input { padding-right: 48px; }
+    
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
       color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 18px;
     }
     
     .country-select {
@@ -214,6 +164,33 @@
       font-size: 20px;
     }
     
+    .password-strength { margin-top: 8px; }
+    .strength-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .strength-fill { height: 100%; width: 0; transition: width 0.3s, background 0.3s; }
+    .strength-fill.weak { width: 33%; background: var(--red); }
+    .strength-fill.medium { width: 66%; background: #FFA500; }
+    .strength-fill.strong { width: 100%; background: var(--green); }
+    .strength-text { font-size: 12px; color: var(--text-secondary); }
+    
+    .password-suggestions {
+      margin-top: 8px;
+      padding: 12px;
+      background: var(--bg-dark);
+      border-radius: 8px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    
+    .password-suggestions ul { margin: 8px 0 0 16px; }
+    .password-suggestions li { margin-bottom: 4px; }
+    .suggestion-item { display: flex; align-items: center; gap: 6px; }
+    .suggestion-item.valid { color: var(--green); }
+    .suggestion-item.invalid { color: var(--red); }
+    
+    .match-indicator { font-size: 12px; margin-top: 4px; }
+    .match-indicator.match { color: var(--green); }
+    .match-indicator.mismatch { color: var(--red); }
+    
     .checkbox-group {
       display: flex;
       align-items: flex-start;
@@ -221,21 +198,9 @@
       margin: 20px 0;
     }
     
-    .checkbox-group input {
-      margin-top: 3px;
-      accent-color: var(--primary);
-    }
-    
-    .checkbox-group label {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.4;
-    }
-    
-    .checkbox-group a {
-      color: var(--primary);
-      text-decoration: none;
-    }
+    .checkbox-group input { margin-top: 3px; accent-color: var(--primary); width: 16px; height: 16px; }
+    .checkbox-group label { font-size: 13px; color: var(--text-secondary); line-height: 1.4; }
+    .checkbox-group a { color: var(--primary); text-decoration: none; }
     
     .submit-btn {
       width: 100%;
@@ -250,73 +215,82 @@
       transition: opacity 0.2s;
     }
     
-    .submit-btn:hover {
-      opacity: 0.9;
-    }
+    .submit-btn:hover { opacity: 0.9; }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     
-    /* Divider */
-    .divider {
+    .back-btn {
       display: flex;
       align-items: center;
-      margin: 24px 0;
-    }
-    
-    .divider::before, .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-    
-    .divider span {
-      padding: 0 16px;
+      gap: 8px;
+      background: none;
+      border: none;
       color: var(--text-secondary);
-      font-size: 13px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-bottom: 16px;
     }
     
-    /* Social Buttons */
-    .social-btns {
-      display: flex;
-      gap: 12px;
-    }
+    .back-btn:hover { color: var(--text-primary); }
     
-    .social-btn {
-      flex: 1;
-      padding: 12px;
+    .otp-inputs { display: flex; gap: 8px; justify-content: center; margin: 20px 0; }
+    
+    .otp-input {
+      width: 48px;
+      height: 56px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 600;
       background: var(--bg-dark);
       border: 1px solid var(--border);
       border-radius: 8px;
+      color: var(--text-primary);
+      outline: none;
+    }
+    
+    .otp-input:focus { border-color: var(--primary); }
+    
+    .verify-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+    
+    .verify-tab {
+      flex: 1;
+      padding: 10px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-secondary);
       cursor: pointer;
+      font-size: 13px;
+      text-align: center;
+    }
+    
+    .verify-tab.active { border-color: var(--primary); color: var(--primary); }
+    .verify-tab:hover { border-color: var(--primary); }
+    
+    .optional-verify {
+      margin-top: 20px;
+      padding: 16px;
+      background: var(--bg-dark);
+      border-radius: 8px;
+      border: 1px dashed var(--border);
+    }
+    
+    .optional-verify-title { font-size: 14px; font-weight: 500; margin-bottom: 12px; color: var(--text-secondary); }
+    
+    .success-checkmark {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 24px;
+      border-radius: 50%;
+      background: var(--green);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s;
+      animation: scaleIn 0.3s ease;
     }
     
-    .social-btn:hover {
-      background: var(--hover-bg, #2B3139);
-    }
+    @keyframes scaleIn { from { transform: scale(0); } to { transform: scale(1); } }
+    .success-checkmark svg { width: 40px; height: 40px; fill: white; }
     
-    .social-btn svg {
-      width: 20px;
-      height: 20px;
-    }
-    
-    /* Entity Link */
-    .entity-link {
-      text-align: center;
-      margin-top: 24px;
-      font-size: 14px;
-      color: var(--text-secondary);
-    }
-    
-    .entity-link a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 500;
-    }
-    
-    /* Footer */
     .footer {
       background: var(--bg-card);
       border-top: 1px solid var(--border);
@@ -324,100 +298,32 @@
       text-align: center;
     }
     
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      margin-bottom: 12px;
-    }
+    .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 12px; }
+    .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 13px; }
+    .footer-copy { color: var(--text-secondary); font-size: 12px; }
     
-    .footer-links a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 13px;
-    }
-    
-    .footer-links a:hover {
-      color: var(--text-primary);
-    }
-    
-    .footer-copy {
-      color: var(--text-secondary);
-      font-size: 12px;
-    }
-    
-    /* Country Modal */
     .country-modal {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(0,0,0,0.7);
       z-index: 1000;
       align-items: center;
       justify-content: center;
     }
     
-    .country-modal.active {
-      display: flex;
-    }
+    .country-modal.active { display: flex; }
+    .country-list { background: var(--bg-card); border-radius: 12px; width: 90%; max-width: 400px; max-height: 80vh; overflow-y: auto; padding: 20px; }
+    .country-list h3 { margin-bottom: 16px; }
+    .country-item { padding: 12px; cursor: pointer; border-radius: 6px; display: flex; align-items: center; gap: 10px; }
+    .country-item:hover { background: var(--bg-dark); }
     
-    .country-list {
-      background: var(--bg-card);
-      border-radius: 12px;
-      width: 90%;
-      max-width: 400px;
-      max-height: 80vh;
-      overflow-y: auto;
-      padding: 20px;
-    }
+    .error-msg { color: var(--red); font-size: 13px; margin-top: 8px; display: none; }
+    .error-msg.show { display: block; }
     
-    .country-list h3 {
-      margin-bottom: 16px;
-      font-size: 18px;
-    }
-    
-    .country-item {
-      padding: 12px;
-      cursor: pointer;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    .country-item:hover {
-      background: var(--bg-dark);
-    }
-    
-    /* Error */
-    .error-msg {
-      color: #F6465D;
-      font-size: 13px;
-      margin-top: 8px;
-      display: none;
-    }
-    
-    .error-msg.show {
-      display: block;
-    }
-    
-    /* Responsive */
     @media (max-width: 480px) {
-      .register-card {
-        padding: 24px 16px;
-      }
-      
-      h1 {
-        font-size: 24px;
-      }
-      
-      .stats {
-        flex-direction: column;
-        gap: 8px;
-      }
+      .register-card { padding: 24px 16px; }
+      h1 { font-size: 24px; }
     }
   </style>
 </head>
@@ -446,62 +352,177 @@
   <!-- Main Content -->
   <main class="main">
     <div class="register-card">
-      <div class="rewards-badge">
-        <span>🎁</span> Up to <span style="font-size:18px">100 USDT</span> Sign Up Rewards
-      </div>
-      
-      <h1>Create Your Account</h1>
-      <p class="subtitle">Join the world's leading crypto exchange</p>
-      
-      <div class="stats">
-        <div class="stat-item"><strong>50M+</strong> Users</div>
-        <div class="stat-item"><strong>No.1</strong> In Trading Volume</div>
-        <div class="stat-item"><strong>SAFU</strong> Fund</div>
-      </div>
-      
-      <form id="registerForm" onsubmit="handleRegister(event)">
-        <div class="form-group">
-          <label class="form-label">Email / Phone number</label>
-          <div class="input-wrapper">
-            <input type="text" id="emailInput" class="form-input" placeholder="Email or phone number" required>
-            <span class="country-select" onclick="showCountries()">🇺🇸</span>
+      <!-- Step 1: Email/Phone -->
+      <div id="stepEmail">
+        <h1>Create Your Account</h1>
+        <p class="subtitle">Join the world's leading crypto exchange</p>
+        
+        <form id="emailForm" onsubmit="handleEmailSubmit(event)">
+          <div class="form-group">
+            <label class="form-label">Email / Phone number</label>
+            <div class="input-wrapper">
+              <input type="text" id="emailInput" class="form-input" placeholder="Email or phone number" required>
+              <span class="country-select" onclick="showCountries()">🇺🇸</span>
+            </div>
+            <div class="error-msg" id="emailError">Please enter a valid email or phone number</div>
           </div>
-          <div class="error-msg" id="emailError">Please enter a valid email or phone number</div>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">Password</label>
-          <input type="password" id="passwordInput" class="form-input" placeholder="At least 8 characters" required minlength="8">
-          <div class="error-msg" id="passwordError">Password must be at least 8 characters</div>
-        </div>
-        
-        <div class="checkbox-group">
-          <input type="checkbox" id="termsCheck" required>
-          <label for="termsCheck">I agree to TigerEx's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
-        </div>
-        
-        <button type="submit" class="submit-btn">Create Account</button>
-      </form>
-      
-      <div class="divider">
-        <span>or</span>
+          <button type="submit" class="submit-btn">Continue</button>
+        </form>
       </div>
       
-      <div class="social-btns">
-        <button class="social-btn" onclick="socialLogin('google')" title="Continue with Google">
-          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      <!-- Step 2: Password -->
+      <div id="stepPassword" style="display: none;">
+        <button class="back-btn" onclick="goBack('email')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+          Back
         </button>
-        <button class="social-btn" onclick="socialLogin('apple')" title="Continue with Apple">
-          <svg viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-        </button>
-        <button class="social-btn" onclick="socialLogin('telegram')" title="Continue with Telegram">
-          <svg viewBox="0 0 24 24" fill="#0088CC"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.466.466 0 0 1 .103 1.525c-.116.306-.11 1.548.087 2.195-.39.955-.934 1.712-1.793 2.559-.498.493-1.085 1.035-1.766 1.452-.086.072-.21.053-.265-.043a1.01 1.01 0 0 1-.194-.276c.064-.116.21-.197.325-.143.09.04.181.08.27.12.05.02.137.028.16.052.054.06.012.158-.053.257-.054.083-.11.163-.163.246-.032.05-.073.098-.127.13-.04.024-.102.008-.129-.054-.015-.036-.03-.075-.044-.112a.42.42 0 0 1-.027-.185c.01-.094.048-.164.128-.207a.46.46 0 0 1 .26-.052c.11.004.22.04.293.118.035.04.07.08.1.122.032.04.045.094.012.149-.016.03-.044.056-.094.062-.11.014-.223-.008-.324-.052z"/></svg>
-        </button>
+        <h1>Create Password</h1>
+        <p class="subtitle">Create a strong password to protect your account</p>
+        
+        <form id="passwordForm" onsubmit="handlePasswordSubmit(event)">
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div class="password-wrapper">
+              <input type="password" id="passwordInput" class="form-input" placeholder="At least 8 characters" required minlength="8" oninput="checkPasswordStrength()">
+              <button type="button" class="password-toggle" onclick="togglePassword('passwordInput')">👁️</button>
+            </div>
+            <div class="password-strength">
+              <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+              <span class="strength-text" id="strengthText"></span>
+            </div>
+            <div class="password-suggestions" id="passwordSuggestions">
+              <strong>Password Suggestions:</strong>
+              <ul>
+                <li class="suggestion-item" id="suggestLength">○ At least 8 characters</li>
+                <li class="suggestion-item" id="suggestUpper">○ Include uppercase letter (A-Z)</li>
+                <li class="suggestion-item" id="suggestLower">○ Include lowercase letter (a-z)</li>
+                <li class="suggestion-item" id="suggestNumber">○ Include number (0-9)</li>
+                <li class="suggestion-item" id="suggestSpecial">○ Include special character (!@#$%)</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Re-enter Password</label>
+            <div class="password-wrapper">
+              <input type="password" id="confirmPasswordInput" class="form-input" placeholder="Re-enter password" required oninput="checkPasswordMatch()">
+              <button type="button" class="password-toggle" onclick="togglePassword('confirmPasswordInput')">👁️</button>
+            </div>
+            <div class="match-indicator" id="matchIndicator"></div>
+          </div>
+          
+          <div class="checkbox-group">
+            <input type="checkbox" id="termsCheck" required onchange="checkFormReady()">
+            <label for="termsCheck">I agree to TigerEx's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+          </div>
+          
+          <button type="submit" class="submit-btn" id="passwordSubmitBtn" disabled>Continue</button>
+        </form>
       </div>
       
-      <div class="entity-link">
-        <a href="#">Sign up as an entity</a> or <a href="login.html">Log in</a>
+      <!-- Step 3: Verification -->
+      <div id="stepVerify" style="display: none;">
+        <button class="back-btn" onclick="goBack('password')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+          Back
+        </button>
+        <h1>Verify Your Account</h1>
+        <p class="subtitle" id="verifyDisplay">Enter the code sent to your email/phone</p>
+        
+        <div class="verify-tabs">
+          <div class="verify-tab active" onclick="switchVerifyTab('email', event)">Email Code</div>
+          <div class="verify-tab" onclick="switchVerifyTab('phone', event)">Phone Code</div>
+        </div>
+        
+        <div id="verifyEmail">
+          <div class="otp-inputs">
+            <input type="text" class="otp-input" maxlength="1" data-index="0" oninput="handleOTPInput(this, 'email')" onkeydown="handleOTPKeydown(event, this, 0, 'email')">
+            <input type="text" class="otp-input" maxlength="1" data-index="1" oninput="handleOTPInput(this, 'email')" onkeydown="handleOTPKeydown(event, this, 1, 'email')">
+            <input type="text" class="otp-input" maxlength="1" data-index="2" oninput="handleOTPInput(this, 'email')" onkeydown="handleOTPKeydown(event, this, 2, 'email')">
+            <input type="text" class="otp-input" maxlength="1" data-index="3" oninput="handleOTPInput(this, 'email')" onkeydown="handleOTPKeydown(event, this, 3, 'email')">
+            <input type="text" class="otp-input" maxlength="1" data-index="4" oninput="handleOTPInput(this, 'email')" onkeydown="handleOTPKeydown(event, this, 4, 'email')">
+            <input type="text" class="otp-input" maxlength="1" data-index="5" oninput="handleOTPInput(this, 'email')" onkeydown="handleOTPKeydown(event, this, 5, 'email')">
+          </div>
+          <p style="text-align: center; font-size: 13px; color: var(--text-secondary);">Didn't receive code? <a href="#" style="color: var(--primary);" onclick="resendCode('email')">Resend</a></p>
+        </div>
+        
+        <div id="verifyPhone" style="display: none;">
+          <div class="otp-inputs">
+            <input type="text" class="otp-input" maxlength="1" data-index="0" oninput="handleOTPInput(this, 'phone')" onkeydown="handleOTPKeydown(event, this, 0, 'phone')">
+            <input type="text" class="otp-input" maxlength="1" data-index="1" oninput="handleOTPInput(this, 'phone')" onkeydown="handleOTPKeydown(event, this, 1, 'phone')">
+            <input type="text" class="otp-input" maxlength="1" data-index="2" oninput="handleOTPInput(this, 'phone')" onkeydown="handleOTPKeydown(event, this, 2, 'phone')">
+            <input type="text" class="otp-input" maxlength="1" data-index="3" oninput="handleOTPInput(this, 'phone')" onkeydown="handleOTPKeydown(event, this, 3, 'phone')">
+            <input type="text" class="otp-input" maxlength="1" data-index="4" oninput="handleOTPInput(this, 'phone')" onkeydown="handleOTPKeydown(event, this, 4, 'phone')">
+            <input type="text" class="otp-input" maxlength="1" data-index="5" oninput="handleOTPInput(this, 'phone')" onkeydown="handleOTPKeydown(event, this, 5, 'phone')">
+          </div>
+          <p style="text-align: center; font-size: 13px; color: var(--text-secondary);">Didn't receive code? <a href="#" style="color: var(--primary);" onclick="resendCode('phone')">Resend</a></p>
+        </div>
+        
+        <button class="submit-btn" style="margin-top: 24px;" onclick="submitVerification()">Continue</button>
       </div>
+      
+      <!-- Step 4: Personal Info -->
+      <div id="stepPersonal" style="display: none;">
+        <button class="back-btn" onclick="goBack('verify')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+          Back
+        </button>
+        <h1>Personal Information</h1>
+        <p class="subtitle">Tell us a bit about yourself</p>
+        
+        <form id="personalForm" onsubmit="handlePersonalSubmit(event)">
+          <div class="form-group">
+            <label class="form-label">First Name *</label>
+            <input type="text" id="firstNameInput" class="form-input" placeholder="First name" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Last Name *</label>
+            <input type="text" id="lastNameInput" class="form-input" placeholder="Last name" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Title (Optional)</label>
+            <select id="titleInput" class="form-input">
+              <option value="">Select title</option>
+              <option value="mr">Mr.</option>
+              <option value="mrs">Mrs.</option>
+              <option value="ms">Ms.</option>
+              <option value="dr">Dr.</option>
+            </select>
+          </div>
+          
+          <div class="optional-verify" id="optionalVerify">
+            <div class="optional-verify-title" id="optionalVerifyTitle">Add Extra Security (Optional)</div>
+            
+            <div class="form-group" id="optionalEmailGroup" style="display: none;">
+              <label class="form-label">Email Address</label>
+              <input type="email" id="optionalEmailInput" class="form-input" placeholder="Add email for verification">
+            </div>
+            
+            <div class="form-group" id="optionalPhoneGroup" style="display: none;">
+              <label class="form-label">Phone Number</label>
+              <input type="tel" id="optionalPhoneInput" class="form-input" placeholder="Add phone for verification">
+            </div>
+          </div>
+          
+          <button type="submit" class="submit-btn">Create Account</button>
+        </form>
+      </div>
+      
+      <!-- Step 5: Success -->
+      <div id="stepSuccess" style="display: none;">
+        <div class="success-checkmark">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        </div>
+        <h1 style="text-align: center;">Account Created!</h1>
+        <p class="subtitle" style="text-align: center;">Welcome to TigerEx! Your account has been created successfully.</p>
+        <p style="text-align: center; color: var(--text-secondary); margin-top: 16px;">Redirecting to dashboard...</p>
+      </div>
+      
+      <p class="subtitle" style="text-align: center; margin-top: 24px;" id="loginLink">
+        Already have an account? <a href="login.html" style="color: var(--primary);">Log in</a>
+      </p>
     </div>
   </main>
   
@@ -511,7 +532,6 @@
       <a href="#">Privacy</a>
       <a href="#">Terms</a>
       <a href="#">Cookies</a>
-      <a href="#">API</a>
     </div>
     <div class="footer-copy">© 2024 TigerEx - All rights reserved</div>
   </footer>
@@ -520,115 +540,243 @@
   <div class="country-modal" id="countryModal" onclick="closeCountries(event)">
     <div class="country-list" onclick="event.stopPropagation()">
       <h3>Select Country/Territory</h3>
-      <div class="country-item" onclick="selectCountry('🇺🇸', 'United States', 'en')">
-        <span>🇺🇸</span> <span>United States</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇬🇧', 'United Kingdom', 'en')">
-        <span>🇬🇧</span> <span>United Kingdom</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇩🇪', 'Germany', 'de')">
-        <span>🇩🇪</span> <span>Germany</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇫🇷', 'France', 'fr')">
-        <span>🇫🇷</span> <span>France</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇪🇸', 'Spain', 'es')">
-        <span>🇪🇸</span> <span>Spain</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇮🇳', 'India', 'hi')">
-        <span>🇮🇳</span> <span>India</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇯🇵', 'Japan', 'ja')">
-        <span>🇯🇵</span> <span>Japan</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇰🇷', 'South Korea', 'ko')">
-        <span>🇰🇷</span> <span>South Korea</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇨🇳', 'China', 'zh')">
-        <span>🇨🇳</span> <span>China</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇧🇩', 'Bangladesh', 'bn')">
-        <span>🇧🇩</span> <span>Bangladesh</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇧🇷', 'Brazil', 'pt')">
-        <span>🇧🇷</span> <span>Brazil</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇷🇺', 'Russia', 'ru')">
-        <span>🇷🇺</span> <span>Russia</span>
-      </div>
+      <div class="country-item" onclick="selectCountry('🇺🇸', 'United States')"><span>🇺🇸</span> <span>United States</span></div>
+      <div class="country-item" onclick="selectCountry('🇬🇧', 'United Kingdom')"><span>🇬🇧</span> <span>United Kingdom</span></div>
+      <div class="country-item" onclick="selectCountry('🇩🇪', 'Germany')"><span>🇩🇪</span> <span>Germany</span></div>
+      <div class="country-item" onclick="selectCountry('🇫🇷', 'France')"><span>🇫🇷</span> <span>France</span></div>
+      <div class="country-item" onclick="selectCountry('🇮🇳', 'India')"><span>🇮🇳</span> <span>India</span></div>
+      <div class="country-item" onclick="selectCountry('🇯🇵', 'Japan')"><span>🇯🇵</span> <span>Japan</span></div>
+      <div class="country-item" onclick="selectCountry('🇧🇩', 'Bangladesh')"><span>🇧🇩</span> <span>Bangladesh</span></div>
     </div>
   </div>
 
   <script>
     // Theme Toggle
     function toggleTheme() {
-      const isLight = document.body.classList.toggle('light-mode');
+      var isLight = document.body.classList.toggle('light-mode');
       localStorage.setItem('tigerex_theme', isLight ? 'light' : 'dark');
       document.getElementById('themeIcon').textContent = isLight ? '☀️' : '🌙';
     }
     
-    // Load saved theme
-    const savedTheme = localStorage.getItem('tigerex_theme');
-    if (savedTheme === 'light') {
+    if (localStorage.getItem('tigerex_theme') === 'light') {
       document.body.classList.add('light-mode');
       document.getElementById('themeIcon').textContent = '☀️';
     }
     
     // Country Modal
-    function showCountries() {
-      document.getElementById('countryModal').classList.add('active');
-    }
-    
-    function closeCountries(e) {
-      if (e.target.id === 'countryModal') {
-        document.getElementById('countryModal').classList.remove('active');
-      }
-    }
-    
-    function selectCountry(flag, country, lang) {
+    function showCountries() { document.getElementById('countryModal').classList.add('active'); }
+    function closeCountries(e) { if (e.target.id === 'countryModal') document.getElementById('countryModal').classList.remove('active'); }
+    function selectCountry(flag, country) {
       document.getElementById('selectedFlag').textContent = flag;
       document.getElementById('selectedLang').textContent = country;
       document.querySelector('.country-select').textContent = flag;
       document.getElementById('countryModal').classList.remove('active');
     }
     
-    // Social Login
-    function socialLogin(provider) {
-      alert(provider + ' login coming soon!');
+    // Registration State
+    var regEmail = '';
+    var regPassword = '';
+    var regMethod = '';
+    var otpCodes = { 'email': '', 'phone': '' };
+    var currentVerifyTab = 'email';
+    
+    // Password Toggle
+    function togglePassword(inputId) {
+      var input = document.getElementById(inputId);
+      input.type = input.type === 'password' ? 'text' : 'password';
     }
     
-    // Form Handling
-    function handleRegister(e) {
+    // Password Strength
+    function checkPasswordStrength() {
+      var password = document.getElementById('passwordInput').value;
+      var hasLength = password.length >= 8;
+      var hasUpper = /[A-Z]/.test(password);
+      var hasLower = /[a-z]/.test(password);
+      var hasNumber = /[0-9]/.test(password);
+      var hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+      
+      document.getElementById('suggestLength').className = 'suggestion-item ' + (hasLength ? 'valid' : 'invalid');
+      document.getElementById('suggestUpper').className = 'suggestion-item ' + (hasUpper ? 'valid' : 'invalid');
+      document.getElementById('suggestLower').className = 'suggestion-item ' + (hasLower ? 'valid' : 'invalid');
+      document.getElementById('suggestNumber').className = 'suggestion-item ' + (hasNumber ? 'valid' : 'invalid');
+      document.getElementById('suggestSpecial').className = 'suggestion-item ' + (hasSpecial ? 'valid' : 'invalid');
+      
+      var score = [hasLength, hasUpper, hasLower, hasNumber, hasSpecial].filter(Boolean).length;
+      var fill = document.getElementById('strengthFill');
+      var text = document.getElementById('strengthText');
+      
+      fill.className = 'strength-fill';
+      if (score >= 5) { fill.classList.add('strong'); text.textContent = 'Strong password'; text.style.color = 'var(--green)'; }
+      else if (score >= 3) { fill.classList.add('medium'); text.textContent = 'Medium strength'; text.style.color = '#FFA500'; }
+      else if (score >= 1) { fill.classList.add('weak'); text.textContent = 'Weak password'; text.style.color = 'var(--red)'; }
+      else { text.textContent = ''; }
+      
+      checkPasswordMatch();
+    }
+    
+    // Password Match
+    function checkPasswordMatch() {
+      var password = document.getElementById('passwordInput').value;
+      var confirm = document.getElementById('confirmPasswordInput').value;
+      var indicator = document.getElementById('matchIndicator');
+      
+      if (confirm.length > 0) {
+        if (password === confirm) {
+          indicator.textContent = '✓ Passwords match';
+          indicator.className = 'match-indicator match';
+        } else {
+          indicator.textContent = '✗ Passwords do not match';
+          indicator.className = 'match-indicator mismatch';
+        }
+      } else { indicator.textContent = ''; }
+      
+      checkFormReady();
+    }
+    
+    // Check Form Ready
+    function checkFormReady() {
+      var password = document.getElementById('passwordInput').value;
+      var confirm = document.getElementById('confirmPasswordInput').value;
+      var terms = document.getElementById('termsCheck').checked;
+      var btn = document.getElementById('passwordSubmitBtn');
+      
+      var hasLength = password.length >= 8;
+      var hasUpper = /[A-Z]/.test(password);
+      var hasLower = /[a-z]/.test(password);
+      var hasNumber = /[0-9]/.test(password);
+      var strong = hasLength && hasUpper && hasLower && hasNumber;
+      var matched = password === confirm && confirm.length > 0;
+      
+      btn.disabled = !(strong && matched && terms);
+    }
+    
+    // Step 1: Email Submit
+    function handleEmailSubmit(e) {
       e.preventDefault();
-      const email = document.getElementById('emailInput').value;
-      const password = document.getElementById('passwordInput').value;
-      const terms = document.getElementById('termsCheck').checked;
+      var email = document.getElementById('emailInput').value;
       
-      let valid = true;
-      
-      if (!email || !email.includes('@')) {
+      if (!email || (!email.includes('@') && !/^\+?[\d\s-]+$/.test(email))) {
         document.getElementById('emailError').classList.add('show');
-        valid = false;
-      } else {
-        document.getElementById('emailError').classList.remove('show');
-      }
-      
-      if (password.length < 8) {
-        document.getElementById('passwordError').classList.add('show');
-        valid = false;
-      } else {
-        document.getElementById('passwordError').classList.remove('show');
-      }
-      
-      if (!terms) {
-        alert('Please agree to the Terms of Service');
         return;
       }
       
-      if (valid) {
-        localStorage.setItem('tigerex_token', 'demo_token_' + Date.now());
-        window.location.href = 'dashboard.html';
+      document.getElementById('emailError').classList.remove('show');
+      regEmail = email;
+      regMethod = email.includes('@') ? 'email' : 'phone';
+      
+      document.getElementById('stepEmail').style.display = 'none';
+      document.getElementById('stepPassword').style.display = 'block';
+    }
+    
+    // Step 2: Password Submit
+    function handlePasswordSubmit(e) {
+      e.preventDefault();
+      regPassword = document.getElementById('passwordInput').value;
+      
+      document.getElementById('stepPassword').style.display = 'none';
+      document.getElementById('stepVerify').style.display = 'block';
+      
+      if (regMethod === 'email') {
+        document.getElementById('verifyDisplay').textContent = 'Enter the code sent to your email';
+        switchVerifyTab('email', event);
+      } else {
+        document.getElementById('verifyDisplay').textContent = 'Enter the code sent to your phone';
+        switchVerifyTab('phone', event);
       }
+      
+      setTimeout(function() { document.querySelector('#verify' + currentVerifyTab + ' .otp-input').focus(); }, 100);
+    }
+    
+    // Back Navigation
+    function goBack(step) {
+      if (step === 'email') { document.getElementById('stepPassword').style.display = 'none'; document.getElementById('stepEmail').style.display = 'block'; }
+      else if (step === 'password') { document.getElementById('stepVerify').style.display = 'none'; document.getElementById('stepPassword').style.display = 'block'; }
+      else if (step === 'verify') { document.getElementById('stepPersonal').style.display = 'none'; document.getElementById('stepVerify').style.display = 'block'; }
+    }
+    
+    // Switch Verification Tab
+    function switchVerifyTab(tab, e) {
+      currentVerifyTab = tab;
+      document.querySelectorAll('.verify-tab').forEach(function(t) { t.classList.remove('active'); });
+      e.target.classList.add('active');
+      document.getElementById('verifyEmail').style.display = tab === 'email' ? 'block' : 'none';
+      document.getElementById('verifyPhone').style.display = tab === 'phone' ? 'block' : 'none';
+      otpCodes[tab] = '';
+      document.querySelectorAll('#verify' + tab + ' .otp-input').forEach(function(input) { input.value = ''; });
+      setTimeout(function() { document.querySelector('#verify' + tab + ' .otp-input').focus(); }, 100);
+    }
+    
+    // OTP Handling
+    function handleOTPInput(input, type) {
+      var value = input.value;
+      if (!/^\d*$/.test(value)) { input.value = ''; return; }
+      if (value.length === 1) {
+        otpCodes[type] += value;
+        var index = parseInt(input.dataset.index);
+        var inputs = document.querySelectorAll('#verify' + type + ' .otp-input');
+        if (index < inputs.length - 1) inputs[index + 1].focus();
+      }
+    }
+    
+    function handleOTPKeydown(e, input, index, type) {
+      if (e.key === 'Backspace' && !input.value) {
+        var inputs = document.querySelectorAll('#verify' + type + ' .otp-input');
+        if (index > 0) inputs[index - 1].focus();
+      }
+    }
+    
+    function resendCode(type) { alert('Code resent to your ' + type + '!'); }
+    
+    // Submit Verification
+    function submitVerification() {
+      var code = otpCodes[currentVerifyTab];
+      if (code.length !== 6) { alert('Please enter a 6-digit code'); return; }
+      
+      document.getElementById('stepVerify').style.display = 'none';
+      document.getElementById('stepPersonal').style.display = 'block';
+      
+      if (regMethod === 'email') {
+        document.getElementById('optionalVerifyTitle').textContent = 'Add Phone Verification (Optional)';
+        document.getElementById('optionalPhoneGroup').style.display = 'block';
+      } else {
+        document.getElementById('optionalVerifyTitle').textContent = 'Add Email Verification (Optional)';
+        document.getElementById('optionalEmailGroup').style.display = 'block';
+      }
+    }
+    
+    // Personal Info Submit
+    function handlePersonalSubmit(e) {
+      e.preventDefault();
+      
+      var userData = {
+        email: regEmail,
+        password: regPassword,
+        method: regMethod,
+        firstName: document.getElementById('firstNameInput').value,
+        lastName: document.getElementById('lastNameInput').value,
+        title: document.getElementById('titleInput').value,
+        optionalEmail: document.getElementById('optionalEmailInput').value,
+        optionalPhone: document.getElementById('optionalPhoneInput').value,
+        createdAt: new Date().toISOString()
+      };
+      
+      // Save to localStorage (simulating database)
+      var users = JSON.parse(localStorage.getItem('tigerex_users') || '[]');
+      users.push(userData);
+      localStorage.setItem('tigerex_users', JSON.stringify(users));
+      
+      // Set current user
+      localStorage.setItem('tigerex_token', 'demo_token_' + Date.now());
+      localStorage.setItem('tigerex_user_email', userData.email);
+      localStorage.setItem('tigerex_user_data', JSON.stringify(userData));
+      
+      // Show success
+      document.getElementById('stepPersonal').style.display = 'none';
+      document.getElementById('stepSuccess').style.display = 'block';
+      document.getElementById('loginLink').style.display = 'none';
+      
+      // Redirect after delay
+      setTimeout(function() { window.location.href = 'dashboard.html'; }, 3000);
     }
   </script>
 </body>
