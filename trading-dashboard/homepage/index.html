@@ -567,8 +567,9 @@
                 TigerEx
             </a>
             
-            <!-- Coin/Token Search -->
+            <!-- Search Bars -->
             <div class="search-container">
+                <!-- Coin/Token Search -->
                 <div class="search-bar">
                     <span class="icon">🔍</span>
                     <input type="text" placeholder="Search coins, tokens..." id="coinSearch">
@@ -616,7 +617,7 @@
                     </div>
                 </div>
                 
-                <!-- Support Search -->
+                <!-- Customer Support Search -->
                 <div class="search-bar">
                     <span class="icon">💬</span>
                     <input type="text" placeholder="Customer support..." id="supportSearch">
@@ -648,14 +649,19 @@
         </div>
         
         <div class="header-right">
+            <!-- QR Scanner -->
+            <button class="header-btn" onclick="openQRScanner()" title="Scan QR Code">
+                📷
+            </button>
+            
             <!-- Notifications -->
-            <button class="header-btn" onclick="showNotifications()">
+            <button class="header-btn" onclick="showNotifications()" title="Notifications">
                 🔔
                 <span class="notification-badge"></span>
             </button>
             
             <!-- Customer Support -->
-            <button class="header-btn" onclick="openSupportChat()">
+            <button class="header-btn" onclick="openSupportChat()" title="Customer Support">
                 💬
             </button>
             
@@ -919,7 +925,12 @@
             window.location.href = 'pages/trade/index.html?symbol=' + symbol;
         }
         
-        // Notifications
+        // QR Scanner
+        function openQRScanner() {
+            alert('📷 QR Code Scanner\n\nScan QR codes to:\n• Add friends\n• Deposit crypto\n• Verify payment\n\nCamera access required.\n\nUse your camera to scan QR codes from other TigerEx users or payment requests.');
+        }
+        
+        // Show Notifications
         function showNotifications() {
             alert('Notifications:\n• BTC reached $67,000!\n• New order filled: BUY 0.5 ETH\n• Wallet verification complete');
         }
