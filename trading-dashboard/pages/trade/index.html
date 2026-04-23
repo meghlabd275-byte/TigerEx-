@@ -858,6 +858,7 @@
             const newTheme = current === 'dark' ? 'light' : 'dark';
             body.setAttribute('data-theme', newTheme);
             document.querySelector('.theme-toggle').textContent = newTheme === 'dark' ? '🌙 Dark' : '☀️ Light';
+            localStorage.setItem('tigerex-theme', newTheme);
             localStorage.setItem('theme', newTheme);
         }
         

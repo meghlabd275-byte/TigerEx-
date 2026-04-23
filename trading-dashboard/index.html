@@ -680,6 +680,7 @@
             document.querySelectorAll('.theme-toggle').forEach(btn => {
                 btn.textContent = newTheme === 'dark' ? '🌙 Dark' : '☀️ Light';
             });
+            localStorage.setItem('tigerex-theme', newTheme);
             localStorage.setItem('theme', newTheme);
         }
         

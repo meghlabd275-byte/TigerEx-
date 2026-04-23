@@ -90,7 +90,6 @@
             const newTheme = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             document.body.setAttribute('data-theme', newTheme);
             document.querySelector('.theme-toggle').textContent = newTheme === 'dark' ? '🌙 Dark' : '☀️ Light';
-            localStorage.setItem('tigerex-theme', newTheme);
             localStorage.setItem('theme', newTheme);
         }
         const savedTheme = localStorage.getItem('theme') || 'dark';

@@ -885,47 +885,24 @@
     </nav>
     
     <script>
-        // Theme Toggle - Works everywhere
+        // Theme Toggle
         function toggleTheme() {
             const body = document.body;
             const current = body.getAttribute('data-theme') || 'dark';
             const newTheme = current === 'dark' ? 'light' : 'dark';
             body.setAttribute('data-theme', newTheme);
-            
-            // Update all theme toggles
             document.querySelectorAll('.theme-toggle').forEach(btn => {
                 btn.textContent = newTheme === 'dark' ? '🌙 Dark' : '☀️ Light';
             });
-            
-            // Save to localStorage - works everywhere
-            localStorage.setItem('tigerex-theme', newTheme);
             localStorage.setItem('theme', newTheme);
-            
-            // Dispatch event for other components
-            window.dispatchEvent(new Event('themechange'));
         }
         
-        // Initialize theme - works everywhere on load
+        // Initialize theme
         document.addEventListener('DOMContentLoaded', () => {
-            // Check localStorage first
-            let savedTheme = localStorage.getItem('tigerex-theme') || localStorage.getItem('theme');
-            
-            // Fallback to system preference
-            if (!savedTheme) {
-                savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            }
-            
+            const savedTheme = localStorage.getItem('theme') || 'dark';
             document.body.setAttribute('data-theme', savedTheme);
-            
             document.querySelectorAll('.theme-toggle').forEach(btn => {
                 btn.textContent = savedTheme === 'dark' ? '🌙 Dark' : '☀️ Light';
-            });
-            
-            // Listen for system theme changes
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-                if (!localStorage.getItem('tigerex-theme')) {
-                    document.body.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-                }
             });
         });
         
