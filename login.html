@@ -104,21 +104,31 @@
         <div class="error-box" id="notRegisteredError">This email is not registered. <a href="register.html" style="color: var(--primary);">Create an account</a></div>
         
         <form id="emailForm" onsubmit="handleEmailSubmit(event)">
-          <div class="form-group">
-            <label class="form-label">Email</label>
-            <input type="email" id="emailInput" class="form-input" placeholder="Enter your email" required>
+          <!-- Tab Toggle -->
+          <div class="tab-toggle">
+            <button type="button" class="active" id="emailTabBtn" onclick="switchLoginTab('email')">Email</button>
+            <button type="button" id="phoneTabBtn" onclick="switchLoginTab('phone')">Phone</button>
           </div>
           
-          <p style="text-align: center; color: var(--text-secondary); margin: 16px 0; font-size: 14px;">Or use phone number</p>
-          
-          <div class="form-group">
-            <label class="form-label">Phone (Optional)</label>
-            <div class="phone-wrapper">
-              <button type="button" class="country-select" id="countryBtn" onclick="showCountries()">🇺🇸</button>
-              <input type="tel" id="phoneInput" class="form-input" placeholder="Phone number">
+          <!-- Email Field -->
+          <div class="tab-field active" id="emailField">
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="email" id="emailInput" class="form-input" placeholder="Enter your email">
             </div>
           </div>
           
+          <!-- Phone Field -->
+          <div class="tab-field" id="phoneField">
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <div class="phone-wrapper">
+                <button type="button" class="country-select" id="countryBtn" onclick="showCountries()">🇺🇸</button>
+                <input type="tel" id="phoneInput" class="form-input" placeholder="Phone number">
+              </div>
+            </div>
+          </div>
+
           <button type="submit" class="submit-btn">Continue</button>
         </form>
       </div>
