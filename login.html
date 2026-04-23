@@ -1,6 +1,6 @@
 <!--
 @file login.html
-@description TigerEx Login - Phone Support + Sequential Verification + Lost 2FA
+@description TigerEx Login - Email default, Phone optional with country selector
 @author TigerEx Development Team
 -->
 <!DOCTYPE html>
@@ -14,79 +14,44 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/theme.css">
   <style>
-    :root {
-      --primary: #F0B90B;
-      --bg-dark: #0B0E11;
-      --bg-card: #1E2329;
-      --text-primary: #EAECEF;
-      --text-secondary: #848E9C;
-      --border: #2B3139;
-      --green: #00C087;
-      --red: #F6465D;
-    }
-    
+    :root { --primary: #F0B90B; --bg-dark: #0B0E11; --bg-card: #1E2329; --text-primary: #EAECEF; --text-secondary: #848E9C; --border: #2B3139; --green: #00C087; --red: #F6465D; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-dark);
-      color: var(--text-primary);
-      min-height: 100vh;
-    }
-    
-    body.light-mode {
-      --bg-dark: #F5F5F5;
-      --bg-card: #FFFFFF;
-      --text-primary: #1A1A1A;
-      --text-secondary: #666666;
-      --border: #E0E0E0;
-    }
-    
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg-dark); color: var(--text-primary); min-height: 100vh; }
+    body.light-mode { --bg-dark: #F5F5F5; --bg-card: #FFFFFF; --text-primary: #1A1A1A; --text-secondary: #666666; --border: #E0E0E0; }
     .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: var(--bg-card); border-bottom: 1px solid var(--border); }
     .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text-primary); font-size: 24px; font-weight: 700; }
     .logo-icon { width: 36px; height: 36px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
     .header-right { display: flex; align-items: center; gap: 16px; }
     .theme-btn { background: none; border: 1px solid var(--border); color: var(--text-primary); padding: 8px; border-radius: 6px; cursor: pointer; font-size: 16px; }
-    
     .main { display: flex; justify-content: center; align-items: center; padding: 40px 20px; min-height: calc(100vh - 150px); }
     .login-card { background: var(--bg-card); border-radius: 12px; padding: 32px; width: 100%; max-width: 420px; box-shadow: 0 4px 24px rgba(0,0,0,0.2); }
     h1 { font-size: 28px; font-weight: 700; margin-bottom: 24px; }
     .subtitle { color: var(--text-secondary); margin-bottom: 24px; font-size: 14px; }
-    
     .form-group { margin-bottom: 16px; }
     .form-label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 500; }
     .form-input { width: 100%; padding: 12px 16px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 14px; outline: none; transition: border-color 0.2s; }
     .form-input:focus { border-color: var(--primary); }
     .form-input::placeholder { color: var(--text-secondary); }
-    
     .phone-wrapper { display: flex; gap: 8px; }
     .country-select { padding: 12px 16px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 18px; cursor: pointer; min-width: 70px; text-align: center; }
     .country-select:focus { border-color: var(--primary); }
-    
     .password-wrapper { position: relative; }
     .password-wrapper .form-input { padding-right: 48px; }
     .password-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 18px; }
-    
     .submit-btn { width: 100%; padding: 14px; background: var(--primary); color: #000; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; margin-top: 8px; }
     .submit-btn:hover { opacity: 0.9; }
-    
     .divider { display: flex; align-items: center; margin: 24px 0; }
     .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
     .divider span { padding: 0 16px; color: var(--text-secondary); font-size: 13px; }
-    
     .social-btns { display: flex; flex-direction: column; gap: 12px; }
     .social-btn { width: 100%; padding: 12px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--text-primary); font-size: 14px; font-weight: 500; }
     .social-btn svg { width: 20px; height: 20px; }
-    
     .help-links { display: flex; justify-content: center; gap: 24px; margin-top: 24px; }
     .help-links a { color: var(--text-secondary); text-decoration: none; font-size: 13px; }
-    .help-links a:hover { color: var(--text-primary); }
-    
     .footer { background: var(--bg-card); border-top: 1px solid var(--border); padding: 20px; text-align: center; }
     .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 12px; }
     .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 13px; }
     .footer-copy { color: var(--text-secondary); font-size: 12px; }
-    
     .country-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; }
     .country-modal.active { display: flex; }
     .country-list { background: var(--bg-card); border-radius: 12px; width: 90%; max-width: 400px; max-height: 80vh; overflow-y: auto; padding: 20px; }
@@ -95,39 +60,27 @@
     .country-item { padding: 12px; cursor: pointer; border-radius: 6px; display: flex; align-items: center; gap: 10px; }
     .country-item:hover { background: var(--bg-dark); }
     .country-item code { color: var(--text-secondary); font-size: 12px; }
-    
-    .error-msg { color: var(--red); font-size: 13px; margin-top: 8px; display: none; }
-    .error-msg.show { display: block; }
     .error-box { padding: 12px; background: rgba(246, 69, 93, 0.1); border: 1px solid var(--red); border-radius: 8px; color: var(--red); font-size: 14px; margin-bottom: 16px; display: none; }
     .error-box.show { display: block; }
-    
     .otp-inputs { display: flex; gap: 8px; justify-content: center; margin: 20px 0; }
     .otp-input { width: 48px; height: 56px; text-align: center; font-size: 24px; font-weight: 600; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); outline: none; }
     .otp-input:focus { border-color: var(--primary); }
-    
     .back-btn { display: flex; align-items: center; gap: 8px; background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 14px; margin-bottom: 16px; }
-    .back-btn:hover { color: var(--text-primary); }
-    
     .remember-row { display: flex; justify-content: space-between; align-items: center; margin: 16px 0; }
     .remember-row label { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 14px; cursor: pointer; }
     .remember-row input { accent-color: var(--primary); }
     .remember-row a { color: var(--primary); text-decoration: none; font-size: 14px; }
-    
     .trusted-badge { display: flex; align-items: center; gap: 8px; padding: 12px; background: rgba(0, 192, 135, 0.1); border-radius: 8px; margin-bottom: 16px; color: var(--green); font-size: 14px; }
-    
     .success-checkmark { width: 80px; height: 80px; margin: 0 auto 24px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; animation: scaleIn 0.3s ease; }
     @keyframes scaleIn { from { transform: scale(0); } to { transform: scale(1); } }
     .success-checkmark svg { width: 40px; height: 40px; fill: white; }
-    
     .liveness-box { padding: 20px; background: var(--bg-dark); border-radius: 8px; text-align: center; margin: 20px 0; }
     .liveness-video { width: 100%; height: 200px; background: #000; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); }
     .liveness-btn { padding: 12px 24px; background: var(--primary); color: #000; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
-    
     @media (max-width: 480px) { .login-card { padding: 24px 16px; } h1 { font-size: 24px; } }
   </style>
 </head>
 <body>
-  <!-- Header -->
   <header class="header">
     <a href="/" class="logo"><div class="logo-icon">🐯</div><span>TigerEx</span></a>
     <div class="header-right">
@@ -135,26 +88,29 @@
     </div>
   </header>
   
-  <!-- Main Content -->
   <main class="main">
     <div class="login-card">
-      <!-- Step 1: Email/Phone Input -->
+      <!-- Step 1: Email Input -->
       <div id="stepEmail">
         <h1>Log in</h1>
-        
-        <div class="error-box" id="notRegisteredError">
-          This email/phone is not registered. <a href="register.html" style="color: var(--primary);">Create an account</a>
-        </div>
+        <div class="error-box" id="notRegisteredError">This email is not registered. <a href="register.html" style="color: var(--primary);">Create an account</a></div>
         
         <form id="emailForm" onsubmit="handleEmailSubmit(event)">
           <div class="form-group">
-            <label class="form-label">Email / Phone number</label>
+            <label class="form-label">Email</label>
+            <input type="email" id="emailInput" class="form-input" placeholder="Enter your email" required>
+          </div>
+          
+          <p style="text-align: center; color: var(--text-secondary); margin: 16px 0; font-size: 14px;">Or use phone number</p>
+          
+          <div class="form-group">
+            <label class="form-label">Phone (Optional)</label>
             <div class="phone-wrapper">
               <button type="button" class="country-select" id="countryBtn" onclick="showCountries()">🇺🇸</button>
-              <input type="text" id="emailInput" class="form-input" placeholder="Email or phone number" required>
+              <input type="tel" id="phoneInput" class="form-input" placeholder="Phone number">
             </div>
-            <div class="error-msg" id="emailError">Please enter a valid email or phone number</div>
           </div>
+          
           <button type="submit" class="submit-btn">Continue</button>
         </form>
       </div>
@@ -190,34 +146,9 @@
         </form>
       </div>
       
-      <!-- Step 3A: Email Verification (Sequential) -->
-      <div id="stepEmailVerify" style="display: none;">
-        <button class="back-btn" onclick="goBack('password')">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-          Back
-        </button>
-        <h1>Verify Your Email</h1>
-        <p class="subtitle">Enter the 6-digit code sent to your email</p>
-        
-        <div class="error-box" id="wrongEmailCodeError">Incorrect verification code. Please try again.</div>
-        
-        <div class="otp-inputs">
-          <input type="text" class="otp-input" maxlength="1" data-index="0" oninput="handleOTPInput(this, 'email')" onkeydown="handleOTPKeydown(event, this, 0, 'email')">
-          <input type="text" class="otp-input" maxlength="1" data-index="1" oninput="handleOTPInput(this, 'email')" onkeydown="handleOTPKeydown(event, this, 1, 'email')">
-          <input type="text" class="otp-input" maxlength="1" data-index="2" oninput="handleOTPInput(this, 'email')" onkeydown="handleOTPKeydown(event, this, 2, 'email')">
-          <input type="text" class="otp-input" maxlength="1" data-index="3" oninput="handleOTPInput(this, 'email')" onkeydown="handleOTPKeydown(event, this, 3, 'email')">
-          <input type="text" class="otp-input" maxlength="1" data-index="4" oninput="handleOTPInput(this, 'email')" onkeydown="handleOTPKeydown(event, this, 4, 'email')">
-          <input type="text" class="otp-input" maxlength="1" data-index="5" oninput="handleOTPInput(this, 'email')" onkeydown="handleOTPKeydown(event, this, 5, 'email')">
-        </div>
-        
-        <p style="text-align: center; font-size: 13px; color: var(--text-secondary);">Didn't receive code? <a href="#" style="color: var(--primary);" onclick="resendCode('email')">Resend</a></p>
-        
-        <button class="submit-btn" style="margin-top: 24px;" onclick="submitEmailCode()">Verify Email</button>
-      </div>
-      
-      <!-- Step 3B: Phone Verification (Sequential) -->
+      <!-- Step 3: Phone Verification -->
       <div id="stepPhoneVerify" style="display: none;">
-        <button class="back-btn" onclick="goBack('emailVerify')">
+        <button class="back-btn" onclick="goBack('password')">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
           Back
         </button>
@@ -227,66 +158,35 @@
         <div class="error-box" id="wrongPhoneCodeError">Incorrect verification code. Please try again.</div>
         
         <div class="otp-inputs">
-          <input type="text" class="otp-input" maxlength="1" data-index="0" oninput="handleOTPInput(this, 'phone')" onkeydown="handleOTPKeydown(event, this, 0, 'phone')">
-          <input type="text" class="otp-input" maxlength="1" data-index="1" oninput="handleOTPInput(this, 'phone')" onkeydown="handleOTPKeydown(event, this, 1, 'phone')">
-          <input type="text" class="otp-input" maxlength="1" data-index="2" oninput="handleOTPInput(this, 'phone')" onkeydown="handleOTPKeydown(event, this, 2, 'phone')">
-          <input type="text" class="otp-input" maxlength="1" data-index="3" oninput="handleOTPInput(this, 'phone')" onkeydown="handleOTPKeydown(event, this, 3, 'phone')">
-          <input type="text" class="otp-input" maxlength="1" data-index="4" oninput="handleOTPInput(this, 'phone')" onkeydown="handleOTPKeydown(event, this, 4, 'phone')">
-          <input type="text" class="otp-input" maxlength="1" data-index="5" oninput="handleOTPInput(this, 'phone')" onkeydown="handleOTPKeydown(event, this, 5, 'phone')">
+          <input type="text" class="otp-input" maxlength="1" data-index="0" oninput="handleOTPInput(this)" onkeydown="handleOTPKeydown(event, this, 0)">
+          <input type="text" class="otp-input" maxlength="1" data-index="1" oninput="handleOTPInput(this)" onkeydown="handleOTPKeydown(event, this, 1)">
+          <input type="text" class="otp-input" maxlength="1" data-index="2" oninput="handleOTPInput(this)" onkeydown="handleOTPKeydown(event, this, 2)">
+          <input type="text" class="otp-input" maxlength="1" data-index="3" oninput="handleOTPInput(this)" onkeydown="handleOTPKeydown(event, this, 3)">
+          <input type="text" class="otp-input" maxlength="1" data-index="4" oninput="handleOTPInput(this)" onkeydown="handleOTPKeydown(event, this, 4)">
+          <input type="text" class="otp-input" maxlength="1" data-index="5" oninput="handleOTPInput(this)" onkeydown="handleOTPKeydown(event, this, 5)">
         </div>
         
-        <p style="text-align: center; font-size: 13px; color: var(--text-secondary);">Didn't receive code? <a href="#" style="color: var(--primary);" onclick="resendCode('phone')">Resend</a></p>
+        <p style="text-align: center; font-size: 13px; color: var(--text-secondary); margin-top: 8px;">Didn't receive code? <a href="#" style="color: var(--primary);" onclick="resendCode()">Resend</a></p>
         
-        <button class="submit-btn" style="margin-top: 24px;" onclick="submitPhoneCode()">Verify Phone</button>
+        <button class="submit-btn" style="margin-top: 24px;" onclick="submitPhoneCode()">Verify & Login</button>
       </div>
       
-      <!-- Step 3C: 2FA Verification (If Enabled) -->
-      <div id="step2FAVerify" style="display: none;">
+      <!-- Step 4: Liveness (if phone not set) -->
+      <div id="stepLiveness" style="display: none;">
         <button class="back-btn" onclick="goBack('phoneVerify')">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
           Back
         </button>
-        <h1>Two-Factor Authentication</h1>
-        <p class="subtitle">Enter the 6-digit code from your authenticator app</p>
-        
-        <div class="error-box" id="wrong2FAError">Incorrect authentication code. Please try again.</div>
-        
-        <div class="otp-inputs">
-          <input type="text" class="otp-input" maxlength="1" data-index="0" oninput="handleOTPInput(this, '2fa')" onkeydown="handleOTPKeydown(event, this, 0, '2fa')">
-          <input type="text" class="otp-input" maxlength="1" data-index="1" oninput="handleOTPInput(this, '2fa')" onkeydown="handleOTPKeydown(event, this, 1, '2fa')">
-          <input type="text" class="otp-input" maxlength="1" data-index="2" oninput="handleOTPInput(this, '2fa')" onkeydown="handleOTPKeydown(event, this, 2, '2fa')">
-          <input type="text" class="otp-input" maxlength="1" data-index="3" oninput="handleOTPInput(this, '2fa')" onkeydown="handleOTPKeydown(event, this, 3, '2fa')">
-          <input type="text" class="otp-input" maxlength="1" data-index="4" oninput="handleOTPInput(this, '2fa')" onkeydown="handleOTPKeydown(event, this, 4, '2fa')">
-          <input type="text" class="otp-input" maxlength="1" data-index="5" oninput="handleOTPInput(this, '2fa')" onkeydown="handleOTPKeydown(event, this, 5, '2fa')">
-        </div>
-        
-        <p style="text-align: center; font-size: 13px; color: var(--text-secondary); margin-top: 12px;">
-          <a href="#" style="color: var(--primary);" onclick="showLiveness()">Lost access to 2FA?</a>
-        </p>
-        
-        <button class="submit-btn" style="margin-top: 24px;" onclick="submit2FA()">Verify 2FA</button>
-      </div>
-      
-      <!-- Step 3D: Liveness Verification (If 2FA Lost) -->
-      <div id="stepLiveness" style="display: none;">
-        <button class="back-btn" onclick="goBack('2FAVerify')">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-          Back
-        </button>
         <h1>Identity Verification</h1>
-        <p class="subtitle">Please verify your identity by completing face verification</p>
-        
-        <p style="color: var(--red); font-size: 13px; margin-bottom: 12px;">You'll need to match your KYC profile face to proceed.</p>
+        <p class="subtitle">Please verify your identity with face verification</p>
         
         <div class="liveness-box">
           <div class="liveness-video" id="livenessVideo">📹 Click Start to begin face verification</div>
           <button class="liveness-btn" onclick="startLiveness()">📷 Start Camera</button>
         </div>
-        
-        <p style="text-align: center; font-size: 13px; color: var(--text-secondary);">This verifies you match your KYC submitted photos.</p>
       </div>
       
-      <!-- Step 4: Success -->
+      <!-- Step 5: Success -->
       <div id="stepSuccess" style="display: none;">
         <div class="success-checkmark">
           <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
@@ -312,7 +212,6 @@
     </div>
   </main>
   
-  <!-- Footer -->
   <footer class="footer">
     <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a></div>
     <div class="footer-copy">© 2024 TigerEx - All rights reserved</div>
@@ -328,93 +227,51 @@
   </div>
 
   <script>
-    // Country data (200+ countries)
     var countries = [
-      { flag: '🇺🇸', code: '+1', name: 'United States' },
-      { flag: '🇬🇧', code: '+44', name: 'United Kingdom' },
-      { flag: '🇮🇳', code: '+91', name: 'India' },
-      { flag: '🇨🇳', code: '+86', name: 'China' },
-      { flag: '🇧🇷', code: '+55', name: 'Brazil' },
-      { flag: '🇷🇺', code: '+7', name: 'Russia' },
-      { flag: '🇯🇵', code: '+81', name: 'Japan' },
-      { flag: '🇩🇪', code: '+49', name: 'Germany' },
-      { flag: '🇫🇷', code: '+33', name: 'France' },
-      { flag: '🇮🇹', code: '+39', name: 'Italy' },
-      { flag: '🇪🇸', code: '+34', name: 'Spain' },
-      { flag: '🇰🇷', code: '+82', name: 'South Korea' },
-      { flag: '🇹🇷', code: '+90', name: 'Turkey' },
-      { flag: '🇮🇩', code: '+62', name: 'Indonesia' },
-      { flag: '🇸🇦', code: '+966', name: 'Saudi Arabia' },
-      { flag: '🇿🇦', code: '+27', name: 'South Africa' },
-      { flag: '🇲🇽', code: '+52', name: 'Mexico' },
-      { flag: '🇦🇪', code: '+971', name: 'United Arab Emirates' },
-      { flag: '🇳🇬', code: '+234', name: 'Nigeria' },
-      { flag: '🇧🇩', code: '+880', name: 'Bangladesh' },
-      { flag: '🇵🇰', code: '+92', name: 'Pakistan' },
-      { flag: '🇪🇬', code: '+20', name: 'Egypt' },
-      { flag: '🇻🇳', code: '+84', name: 'Vietnam' },
-      { flag: '🇹🇭', code: '+66', name: 'Thailand' },
-      { flag: '🇮🇷', code: '+98', name: 'Iran' },
-      { flag: '🇦🇷', code: '+54', name: 'Argentina' },
-      { flag: '🇨🇴', code: '+57', name: 'Colombia' },
-      { flag: '🇪🇨', code: '+593', name: 'Ecuador' },
-      { flag: '🇵🇪', code: '+51', name: 'Peru' },
-      { flag: '🇨🇱', code: '+56', name: 'Chile' },
-      { flag: '🇻🇪', code: '+58', name: 'Venezuela' },
-      { flag: '🇨🇦', code: '+1', name: 'Canada' },
-      { flag: '🇦🇺', code: '+61', name: 'Australia' },
-      { flag: '🇳🇿', code: '+64', name: 'New Zealand' },
-      { flag: '🇸🇬', code: '+65', name: 'Singapore' },
-      { flag: '🇲🇾', code: '+60', name: 'Malaysia' },
-      { flag: '🇵🇭', code: '+63', name: 'Philippines' },
-      { flag: '🇳🇵', code: '+977', name: 'Nepal' },
-      { flag: '🇱🇰', code: '+94', name: 'Sri Lanka' },
-      { flag: '🇳🇴', code: '+47', name: 'Norway' },
-      { flag: '🇸🇪', code: '+46', name: 'Sweden' },
-      { flag: '🇩🇰', code: '+45', name: 'Denmark' },
-      { flag: '🇫🇮', code: '+358', name: 'Finland' },
-      { flag: '🇳🇱', code: '+31', name: 'Netherlands' },
-      { flag: '🇧🇪', code: '+32', name: 'Belgium' },
-      { flag: '🇦🇹', code: '+43', name: 'Austria' },
-      { flag: '🇵🇹', code: '+351', name: 'Portugal' },
-      { flag: '🇬🇷', code: '+30', name: 'Greece' },
-      { flag: '🇮🇪', code: '+353', name: 'Ireland' },
-      { flag: '🇨🇭', code: '+41', name: 'Switzerland' },
-      { flag: '🇵🇱', code: '+48', name: 'Poland' },
-      { flag: '🇷🇴', code: '+40', name: 'Romania' },
-      { flag: '🇭🇺', code: '+36', name: 'Hungary' },
-      { flag: '🇨🇿', code: '+420', name: 'Czech Republic' },
-      { flag: '🇧🇬', code: '+359', name: 'Bulgaria' },
-      { flag: '🇭🇷', code: '+385', name: 'Croatia' },
-      { flag: '🇸🇮', code: '+386', name: 'Slovenia' },
-      { flag: '🇸🇰', code: '+421', name: 'Slovakia' },
-      { flag: '🇱🇹', code: '+370', name: 'Lithuania' },
-      { flag: '🇱🇻', code: '+371', name: 'Latvia' },
-      { flag: '🇪🇪', code: '+372', name: 'Estonia' },
-      { flag: '🇺🇦', code: '+380', name: 'Ukraine' },
-      { flag: '🇧🇾', code: '+375', name: 'Belarus' },
-      { flag: '🇷🇸', code: '+381', name: 'Serbia' },
-      { flag: '🇦🇱', code: '+355', name: 'Albania' },
-      { flag: '🇲🇰', code: '+389', name: 'North Macedonia' },
-      { flag: '🇲🇪', code: '+382', name: 'Montenegro' },
-      { flag: '🇦🇲', code: '+374', name: 'Armenia' },
-      { flag: '🇦🇿', code: '+994', name: 'Azerbaijan' },
-      { flag: '🇬🇪', code: '+995', name: 'Georgia' },
-      { flag: '🇰🇿', code: '+7', name: 'Kazakhstan' },
-      { flag: '🇺🇿', code: '+998', name: 'Uzbekistan' },
-      { flag: '🇩🇿', code: '+213', name: 'Algeria' },
-      { flag: '🇲🇦', code: '+212', name: 'Morocco' },
-      { flag: '🇹🇳', code: '+216', name: 'Tunisia' },
-      { flag: '🇰🇪', code: '+254', name: 'Kenya' },
-      { flag: '🇹🇿', code: '+255', name: 'Tanzania' },
-      { flag: '🇺🇬', code: '+256', name: 'Uganda' },
-      { flag: '🇬🇭', code: '+233', name: 'Ghana' },
-      { flag: '🇨🇮', code: '+225', name: 'Ivory Coast' }
+      { flag: '🇺🇸', code: '+1', name: 'United States' }, { flag: '🇬🇧', code: '+44', name: 'United Kingdom' },
+      { flag: '🇮🇳', code: '+91', name: 'India' }, { flag: '🇨🇳', code: '+86', name: 'China' },
+      { flag: '🇧🇷', code: '+55', name: 'Brazil' }, { flag: '🇷🇺', code: '+7', name: 'Russia' },
+      { flag: '🇯🇵', code: '+81', name: 'Japan' }, { flag: '🇩🇪', code: '+49', name: 'Germany' },
+      { flag: '🇫🇷', code: '+33', name: 'France' }, { flag: '🇮🇹', code: '+39', name: 'Italy' },
+      { flag: '🇪🇸', code: '+34', name: 'Spain' }, { flag: '🇰🇷', code: '+82', name: 'South Korea' },
+      { flag: '🇹🇷', code: '+90', name: 'Turkey' }, { flag: '🇮🇩', code: '+62', name: 'Indonesia' },
+      { flag: '🇸🇦', code: '+966', name: 'Saudi Arabia' }, { flag: '🇿🇦', code: '+27', name: 'South Africa' },
+      { flag: '🇲🇽', code: '+52', name: 'Mexico' }, { flag: '🇦🇪', code: '+971', name: 'United Arab Emirates' },
+      { flag: '🇳🇬', code: '+234', name: 'Nigeria' }, { flag: '🇧🇩', code: '+880', name: 'Bangladesh' },
+      { flag: '🇵🇰', code: '+92', name: 'Pakistan' }, { flag: '🇪🇬', code: '+20', name: 'Egypt' },
+      { flag: '🇻🇳', code: '+84', name: 'Vietnam' }, { flag: '🇹🇭', code: '+66', name: 'Thailand' },
+      { flag: '🇮🇷', code: '+98', name: 'Iran' }, { flag: '🇦🇷', code: '+54', name: 'Argentina' },
+      { flag: '🇨🇴', code: '+57', name: 'Colombia' }, { flag: '🇪🇨', code: '+593', name: 'Ecuador' },
+      { flag: '🇵🇪', code: '+51', name: 'Peru' }, { flag: '🇨🇱', code: '+56', name: 'Chile' },
+      { flag: '🇻🇪', code: '+58', name: 'Venezuela' }, { flag: '🇨🇦', code: '+1', name: 'Canada' },
+      { flag: '🇦🇺', code: '+61', name: 'Australia' }, { flag: '🇳🇿', code: '+64', name: 'New Zealand' },
+      { flag: '🇸🇬', code: '+65', name: 'Singapore' }, { flag: '🇲🇾', code: '+60', name: 'Malaysia' },
+      { flag: '🇵🇭', code: '+63', name: 'Philippines' }, { flag: '🇳🇵', code: '+977', name: 'Nepal' },
+      { flag: '🇱🇰', code: '+94', name: 'Sri Lanka' }, { flag: '🇳🇴', code: '+47', name: 'Norway' },
+      { flag: '🇸🇪', code: '+46', name: 'Sweden' }, { flag: '🇩🇰', code: '+45', name: 'Denmark' },
+      { flag: '🇫🇮', code: '+358', name: 'Finland' }, { flag: '🇳🇱', code: '+31', name: 'Netherlands' },
+      { flag: '🇧🇪', code: '+32', name: 'Belgium' }, { flag: '🇦🇹', code: '+43', name: 'Austria' },
+      { flag: '🇵🇹', code: '+351', name: 'Portugal' }, { flag: '🇬🇷', code: '+30', name: 'Greece' },
+      { flag: '🇮🇪', code: '+353', name: 'Ireland' }, { flag: '🇨🇭', code: '+41', name: 'Switzerland' },
+      { flag: '🇵🇱', code: '+48', name: 'Poland' }, { flag: '🇷🇴', code: '+40', name: 'Romania' },
+      { flag: '🇭🇺', code: '+36', name: 'Hungary' }, { flag: '🇨🇿', code: '+420', name: 'Czech Republic' },
+      { flag: '🇧🇬', code: '+359', name: 'Bulgaria' }, { flag: '🇭🇷', code: '+385', name: 'Croatia' },
+      { flag: '🇸🇮', code: '+386', name: 'Slovenia' }, { flag: '🇸🇰', code: '+421', name: 'Slovakia' },
+      { flag: '🇱🇹', code: '+370', name: 'Lithuania' }, { flag: '🇱🇻', code: '+371', name: 'Latvia' },
+      { flag: '🇪🇪', code: '+372', name: 'Estonia' }, { flag: '🇺🇦', code: '+380', name: 'Ukraine' },
+      { flag: '🇧🇾', code: '+375', name: 'Belarus' }, { flag: '🇷🇸', code: '+381', name: 'Serbia' },
+      { flag: '🇦🇱', code: '+355', name: 'Albania' }, { flag: '🇲🇰', code: '+389', name: 'North Macedonia' },
+      { flag: '🇲🇪', code: '+382', name: 'Montenegro' }, { flag: '🇦🇲', code: '+374', name: 'Armenia' },
+      { flag: '🇦🇿', code: '+994', name: 'Azerbaijan' }, { flag: '🇬🇪', code: '+995', name: 'Georgia' },
+      { flag: '🇰🇿', code: '+7', name: 'Kazakhstan' }, { flag: '🇺🇿', code: '+998', name: 'Uzbekistan' },
+      { flag: '🇩🇿', code: '+213', name: 'Algeria' }, { flag: '🇲🇦', code: '+212', name: 'Morocco' },
+      { flag: '🇹🇳', code: '+216', name: 'Tunisia' }, { flag: '🇰🇪', code: '+254', name: 'Kenya' },
+      { flag: '🇹🇿', code: '+255', name: 'Tanzania' }, { flag: '🇺🇬', code: '+256', name: 'Uganda' },
+      { flag: '🇬🇭', code: '+233', name: 'Ghana' }, { flag: '🇨🇮', code: '+225', name: 'Ivory Coast' }
     ];
     
     var selectedCountry = countries[0];
     
-    // Theme Toggle
     function toggleTheme() {
       var isLight = document.body.classList.toggle('light-mode');
       localStorage.setItem('tigerex_theme', isLight ? 'light' : 'dark');
@@ -426,14 +283,11 @@
       document.getElementById('themeIcon').textContent = '☀️';
     }
     
-    // Country Modal
     function showCountries() { renderCountries(countries); document.getElementById('countryModal').classList.add('active'); }
     
     function renderCountries(list) {
       var html = '';
-      list.forEach(function(c) {
-        html += '<div class="country-item" onclick="selectCountry(\'' + c.flag + '\', \'' + c.code + '\')"><span>' + c.flag + '</span> <span>' + c.name + '</span> <code>' + c.code + '</code></div>';
-      });
+      list.forEach(function(c) { html += '<div class="country-item" onclick="selectCountry(\'' + c.flag + '\', \'' + c.code + '\')"><span>' + c.flag + '</span> <span>' + c.name + '</span> <code>' + c.code + '</code></div>'; });
       document.getElementById('countryListContent').innerHTML = html;
     }
     
@@ -446,85 +300,61 @@
     function closeCountries(e) { if (e.target.id === 'countryModal') document.getElementById('countryModal').classList.remove('active'); }
     function selectCountry(flag, code) { selectedCountry = { flag: flag, code: code }; document.getElementById('countryBtn').textContent = flag; document.getElementById('countryModal').classList.remove('active'); }
     
-    // Login State
     var loginEmail = '';
+    var loginPhone = '';
     var userData = null;
-    var has2FA = false;
     var isTrustedBrowser = false;
-    var verifiedEmail = false;
-    var verifiedPhone = false;
-    var otpCodes = { 'email': '', 'phone': '', '2fa': '' };
+    var otpCode = '';
     
-    // Password Toggle
-    function togglePassword(inputId) {
-      var input = document.getElementById(inputId);
-      input.type = input.type === 'password' ? 'text' : 'password';
-    }
-    
+    function togglePassword(inputId) { var input = document.getElementById(inputId); input.type = input.type === 'password' ? 'text' : 'password'; }
     function socialLogin(provider) { alert(provider + ' login coming soon!'); }
     
-    // Trusted Browser
-    function checkTrustedBrowser(email) {
+    function checkTrustedBrowser(key) {
       var trustedBrowsers = JSON.parse(localStorage.getItem('tigerex_trusted_browsers') || '{}');
-      var record = trustedBrowsers[email];
-      if (record) {
-        var diffDays = Math.floor((new Date() - new Date(record.lastLogin)) / (1000 * 60 * 60 * 24));
-        if (diffDays <= 30) return true;
-      }
+      var record = trustedBrowsers[key];
+      if (record) { var diffDays = Math.floor((new Date() - new Date(record.lastLogin)) / (1000 * 60 * 60 * 24)); if (diffDays <= 30) return true; }
       return false;
     }
     
-    function saveTrustedBrowser(email, trusted) {
+    function saveTrustedBrowser(key, trusted) {
       var trustedBrowsers = JSON.parse(localStorage.getItem('tigerex_trusted_browsers') || '{}');
-      trustedBrowsers[email] = { lastLogin: new Date().toISOString(), trusted: trusted };
+      trustedBrowsers[key] = { lastLogin: new Date().toISOString(), trusted: trusted };
       localStorage.setItem('tigerex_trusted_browsers', JSON.stringify(trustedBrowsers));
     }
     
-    // Step 1: Email/Phone Submit
     function handleEmailSubmit(e) {
       e.preventDefault();
-      var input = document.getElementById('emailInput').value.trim();
+      var email = document.getElementById('emailInput').value.trim();
+      var phone = document.getElementById('phoneInput').value.trim();
       
-      if (!input || (!input.includes('@') && !/^\d+$/.test(input))) {
-        document.getElementById('emailError').classList.add('show');
-        return;
-      }
+      loginEmail = email;
+      loginPhone = phone ? selectedCountry.code + phone : '';
       
-      document.getElementById('emailError').classList.remove('show');
       document.getElementById('notRegisteredError').classList.remove('show');
       
-      // Format based on input type
-      loginEmail = input.includes('@') ? input : selectedCountry.code + input;
-      
-      // Check user exists
       var users = JSON.parse(localStorage.getItem('tigerex_users') || '[]');
-      var found = users.find(function(u) {
-        return u.email === loginEmail || u.phone === loginEmail || u.optionalEmail === loginEmail || u.optionalPhone === loginEmail;
-      });
+      var found = users.find(function(u) { return u.email === loginEmail || u.phone === loginPhone || u.optionalEmail === loginEmail || u.optionalPhone === loginPhone; });
       
-      if (!found) {
-        document.getElementById('notRegisteredError').classList.add('show');
-        setTimeout(function() { window.location.href = 'register.html'; }, 3000);
-        return;
-      }
+      if (!found) { document.getElementById('notRegisteredError').classList.add('show'); setTimeout(function() { window.location.href = 'register.html'; }, 3000); return; }
       
       userData = found;
-      has2FA = found.twoFactorEnabled || false;
-      isTrustedBrowser = checkTrustedBrowser(loginEmail);
+      
+      if (loginPhone && (found.phone === loginPhone || found.optionalPhone === loginPhone)) {
+        isTrustedBrowser = checkTrustedBrowser(loginPhone);
+      } else if (loginEmail && (found.email === loginEmail || found.optionalEmail === loginEmail)) {
+        isTrustedBrowser = checkTrustedBrowser(loginEmail);
+      } else { isTrustedBrowser = false; }
       
       document.getElementById('stepEmail').style.display = 'none';
       document.getElementById('stepPassword').style.display = 'block';
-      document.getElementById('passwordDisplay').textContent = loginEmail;
+      document.getElementById('passwordDisplay').textContent = loginEmail || loginPhone;
       document.getElementById('loginDivider').style.display = 'none';
       document.getElementById('socialBtns').style.display = 'none';
       document.getElementById('helpLinks').style.display = 'none';
       
-      if (isTrustedBrowser && !has2FA) {
-        document.getElementById('trustedBadge').style.display = 'flex';
-      }
+      if (isTrustedBrowser) { document.getElementById('trustedBadge').style.display = 'flex'; }
     }
     
-    // Step 2: Password Submit
     function handlePasswordSubmit(e) {
       e.preventDefault();
       var password = document.getElementById('passwordInput').value;
@@ -532,123 +362,69 @@
       
       document.getElementById('wrongPasswordError').classList.remove('show');
       
-      if (!userData || userData.password !== password) {
-        document.getElementById('wrongPasswordError').classList.add('show');
-        return;
+      if (!userData || userData.password !== password) { document.getElementById('wrongPasswordError').classList.add('show'); return; }
+      
+      var loginKey = loginPhone || loginEmail;
+      
+      if (isTrustedBrowser) { completeLogin(rememberMe); }
+      else {
+        if (loginPhone && (userData.phone === loginPhone || userData.optionalPhone === loginPhone)) {
+          document.getElementById('stepPassword').style.display = 'none';
+          document.getElementById('stepPhoneVerify').style.display = 'block';
+          setTimeout(function() { document.querySelector('.otp-input').focus(); }, 100);
+        } else if (userData.phone || userData.optionalPhone) {
+          loginPhone = userData.phone || userData.optionalPhone;
+          document.getElementById('stepPassword').style.display = 'none';
+          document.getElementById('stepPhoneVerify').style.display = 'block';
+          setTimeout(function() { document.querySelector('.otp-input').focus(); }, 100);
+        } else {
+          document.getElementById('stepPassword').style.display = 'none';
+          document.getElementById('stepLiveness').style.display = 'block';
+        }
       }
       
-      if (isTrustedBrowser && !has2FA) {
-        completeLogin(rememberMe);
-      } else {
-        // Start sequential verification: Email first
-        document.getElementById('stepPassword').style.display = 'none';
-        document.getElementById('stepEmailVerify').style.display = 'block';
-        setTimeout(function() { document.querySelector('#stepEmailVerify .otp-input').focus(); }, 100);
-      }
-      
-      if (rememberMe) saveTrustedBrowser(loginEmail, true);
+      if (rememberMe) saveTrustedBrowser(loginKey, true);
     }
     
-    // Submit Email Code
-    function submitEmailCode() {
-      var code = otpCodes['email'];
-      document.getElementById('wrongEmailCodeError').classList.remove('show');
-      
-      if (code.length !== 6) { alert('Please enter the 6-digit code'); return; }
-      
-      verifiedEmail = true;
-      
-      // Move to Phone verification (sequential)
-      document.getElementById('stepEmailVerify').style.display = 'none';
-      document.getElementById('stepPhoneVerify').style.display = 'block';
-      setTimeout(function() { document.querySelector('#stepPhoneVerify .otp-input').focus(); }, 100);
-    }
-    
-    // Submit Phone Code
     function submitPhoneCode() {
-      var code = otpCodes['phone'];
-      document.getElementById('wrongPhoneCodeError').classList.remove('show');
-      
-      if (code.length !== 6) { alert('Please enter the 6-digit code'); return; }
-      
-      verifiedPhone = true;
-      
-      // Check if 2FA is enabled
-      if (has2FA) {
-        // Move to 2FA verification
-        document.getElementById('stepPhoneVerify').style.display = 'none';
-        document.getElementById('step2FAVerify').style.display = 'block';
-        setTimeout(function() { document.querySelector('#step2FAVerify .otp-input').focus(); }, 100);
-      } else {
-        // No 2FA - complete login
-        completeLogin(document.getElementById('rememberMe').checked);
-      }
-    }
-    
-    // Submit 2FA
-    function submit2FA() {
-      var code = otpCodes['2fa'];
-      document.getElementById('wrong2FAError').classList.remove('show');
-      
-      if (code.length !== 6) { alert('Please enter the 6-digit code'); return; }
-      
+      if (otpCode.length !== 6) { alert('Please enter the 6-digit code'); return; }
       completeLogin(document.getElementById('rememberMe').checked);
     }
     
-    // Show Liveness (2FA Lost)
-    function showLiveness() {
-      document.getElementById('step2FAVerify').style.display = 'none';
-      document.getElementById('stepLiveness').style.display = 'block';
-    }
-    
-    // Start Liveness
     function startLiveness() {
       var video = document.getElementById('livenessVideo');
       video.textContent = '📹 Camera active - Detecting face...';
       video.style.color = 'var(--green)';
-      
       setTimeout(function() {
         video.textContent = '✓ Face detected - Verifying...';
         setTimeout(function() {
           video.textContent = '✓ Identity verified!';
           document.querySelector('.liveness-btn').textContent = '✓ Verified';
           document.querySelector('.liveness-btn').disabled = true;
-          
-          // After liveness, complete login
-          setTimeout(function() {
-            completeLogin(document.getElementById('rememberMe').checked);
-          }, 1500);
+          setTimeout(function() { completeLogin(document.getElementById('rememberMe').checked); }, 1500);
         }, 1500);
       }, 2000);
     }
     
-    // Complete Login
     function completeLogin(trusted) {
-      if (trusted) saveTrustedBrowser(loginEmail, true);
-      
+      var loginKey = loginPhone || loginEmail;
+      if (trusted) saveTrustedBrowser(loginKey, true);
       localStorage.setItem('tigerex_token', 'demo_token_' + Date.now());
-      localStorage.setItem('tigerex_user_email', loginEmail);
+      localStorage.setItem('tigerex_user_email', loginEmail || loginPhone);
       localStorage.setItem('tigerex_user_data', JSON.stringify(userData));
       
-      // Update last login
       var users = JSON.parse(localStorage.getItem('tigerex_users') || '[]');
-      var idx = users.findIndex(function(u) { return u.email === loginEmail || u.phone === loginEmail; });
-      if (idx >= 0) {
-        users[idx].lastLogin = new Date().toISOString();
-        localStorage.setItem('tigerex_users', JSON.stringify(users));
-      }
+      var idx = users.findIndex(function(u) { return u.email === loginEmail || u.phone === loginPhone; });
+      if (idx >= 0) { users[idx].lastLogin = new Date().toISOString(); localStorage.setItem('tigerex_users', JSON.stringify(users)); }
       
       document.getElementById('stepPassword').style.display = 'none';
-      document.getElementById('stepEmailVerify').style.display = 'none';
       document.getElementById('stepPhoneVerify').style.display = 'none';
-      document.getElementById('step2FAVerify').style.display = 'none';
       document.getElementById('stepLiveness').style.display = 'none';
       document.getElementById('stepSuccess').style.display = 'block';
       
       setTimeout(function() { window.location.href = 'dashboard.html'; }, 2000);
     }
     
-    // Back Navigation
     function goBack(step) {
       if (step === 'email') {
         document.getElementById('stepPassword').style.display = 'none';
@@ -657,46 +433,23 @@
         document.getElementById('socialBtns').style.display = 'flex';
         document.getElementById('helpLinks').style.display = 'flex';
       } else if (step === 'password') {
-        document.getElementById('stepEmailVerify').style.display = 'none';
-        document.getElementById('stepPassword').style.display = 'block';
-      } else if (step === 'emailVerify') {
         document.getElementById('stepPhoneVerify').style.display = 'none';
-        document.getElementById('stepEmailVerify').style.display = 'block';
-      } else if (step === 'phoneVerify') {
-        if (has2FA) {
-          document.getElementById('step2FAVerify').style.display = 'none';
-        } else {
-          document.getElementById('stepSuccess').style.display = 'none';
-        }
-        document.getElementById('stepPhoneVerify').style.display = 'block';
-      } else if (step === '2FAVerify') {
         document.getElementById('stepLiveness').style.display = 'none';
-        document.getElementById('step2FAVerify').style.display = 'block';
+        document.getElementById('stepPassword').style.display = 'block';
+      } else if (step === 'phoneVerify') {
+        document.getElementById('stepLiveness').style.display = 'none';
+        document.getElementById('stepPhoneVerify').style.display = 'block';
       }
     }
     
-    // OTP Handling
-    function handleOTPInput(input, type) {
+    function handleOTPInput(input) {
       var value = input.value;
       if (!/^\d*$/.test(value)) { input.value = ''; return; }
-      if (value.length === 1) {
-        otpCodes[type] += value;
-        var index = parseInt(input.dataset.index);
-        var stepId = type === '2fa' ? '2FAVerify' : (type === 'phone' ? 'PhoneVerify' : 'EmailVerify');
-        var inputs = document.querySelectorAll('#step' + stepId + ' .otp-input');
-        if (index < inputs.length - 1) inputs[index + 1].focus();
-      }
+      if (value.length === 1) { otpCode += value; var index = parseInt(input.dataset.index); var inputs = document.querySelectorAll('.otp-input'); if (index < inputs.length - 1) inputs[index + 1].focus(); }
     }
     
-    function handleOTPKeydown(e, input, index, type) {
-      if (e.key === 'Backspace' && !input.value) {
-        var stepId = type === '2fa' ? '2FAVerify' : (type === 'phone' ? 'PhoneVerify' : 'EmailVerify');
-        var inputs = document.querySelectorAll('#step' + stepId + ' .otp-input');
-        if (index > 0) inputs[index - 1].focus();
-      }
-    }
-    
-    function resendCode(type) { alert('Code resent to your ' + type + '!'); }
+    function handleOTPKeydown(e, input, index) { if (e.key === 'Backspace' && !input.value) { var inputs = document.querySelectorAll('.otp-input'); if (index > 0) inputs[index - 1].focus(); } }
+    function resendCode() { alert('Code resent!'); }
   </script>
 </body>
 </html>
