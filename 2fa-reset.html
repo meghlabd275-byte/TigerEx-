@@ -1,707 +1,286 @@
+<!--
+@file 2fa-reset.html
+@description TigerEx 2FA Reset - Identity Verification Flow
+@author TigerEx Development Team
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reset Two-Factor Authentication - TigerExchange</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
-            padding: 40px;
-            max-width: 480px;
-            width: 100%;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .logo {
-            font-size: 28px;
-            font-weight: 700;
-            color: #ff6b35;
-            margin-bottom: 10px;
-        }
-
-        h1 {
-            font-size: 24px;
-            color: #1a1a2e;
-            margin-bottom: 8px;
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 14px;
-        }
-
-        /* Progress Steps */
-        .progress-steps {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .progress-steps::before {
-            content: '';
-            position: absolute;
-            top: 15px;
-            left: 10%;
-            right: 10%;
-            height: 3px;
-            background: #e0e0e0;
-            z-index: 0;
-        }
-
-        .progress-line {
-            position: absolute;
-            top: 15px;
-            left: 10%;
-            height: 3px;
-            background: #ff6b35;
-            z-index: 1;
-            transition: width 0.3s ease;
-            width: 0%;
-        }
-
-        .step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 2;
-            position: relative;
-        }
-
-        .step-circle {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #e0e0e0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: #999;
-            margin-bottom: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .step.active .step-circle {
-            background: #ff6b35;
-            color: white;
-        }
-
-        .step.completed .step-circle {
-            background: #4caf50;
-            color: white;
-        }
-
-        .step-label {
-            font-size: 11px;
-            color: #999;
-            text-align: center;
-            max-width: 60px;
-        }
-
-        .step.active .step-label,
-        .step.completed .step-label {
-            color: #1a1a2e;
-            font-weight: 500;
-        }
-
-        /* Form Sections */
-        .step-section {
-            display: none;
-        }
-
-        .step-section.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .info-box {
-            background: #f8f9fa;
-            border-left: 4px solid #ff6b35;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .info-box p {
-            color: #666;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #1a1a2e;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        input[type="password"] {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #ff6b35;
-            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
-        }
-
-        .code-input {
-            display: flex;
-            gap: 10px;
-        }
-
-        .code-input input {
-            text-align: center;
-            font-size: 20px;
-            letter-spacing: 5px;
-            flex: 1;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background: #ff6b35;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #e55a2b;
-            transform: translateY(-2px);
-        }
-
-        .btn-primary:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-secondary {
-            background: #f0f0f0;
-            color: #666;
-            margin-top: 10px;
-        }
-
-        .btn-secondary:hover {
-            background: #e0e0e0;
-        }
-
-        .error-message {
-            background: #fee;
-            border: 1px solid #fcc;
-            color: #c00;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            display: none;
-        }
-
-        .error-message.show {
-            display: block;
-        }
-
-        .success-message {
-            background: #efe;
-            border: 1px solid #cfc;
-            color: #060;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            display: none;
-        }
-
-        .success-message.show {
-            display: block;
-        }
-
-        /* Liveness/Camera Section */
-        .camera-container {
-            background: #1a1a2e;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .camera-preview {
-            width: 100%;
-            height: 200px;
-            background: #000;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            font-size: 14px;
-        }
-
-        .camera-instructions {
-            color: #999;
-            font-size: 13px;
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .camera-instructions ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .camera-instructions li {
-            margin: 5px 0;
-        }
-
-        /* Success Screen */
-        .success-screen {
-            text-align: center;
-        }
-
-        .success-icon {
-            width: 80px;
-            height: 80px;
-            background: #4caf50;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-        }
-
-        .success-icon svg {
-            width: 40px;
-            height: 40px;
-            fill: white;
-        }
-
-        .warning-box {
-            background: #fff3e0;
-            border: 1px solid #ffcc80;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 20px 0;
-        }
-
-        .warning-box p {
-            color: #e65100;
-            font-size: 14px;
-        }
-
-        .resend-link {
-            color: #ff6b35;
-            text-decoration: none;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .resend-link:hover {
-            text-decoration: underline;
-        }
-
-        .attempts-info {
-            font-size: 12px;
-            color: #999;
-            margin-top: 8px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset 2FA | TigerEx</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary: #F0B90B; --bg-dark: #0B0E11; --bg-card: #1E2329; --text-primary: #EAECEF; --text-secondary: #848E9C; --border: #2B3139; --green: #00C087; --red: #F6465D; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg-dark); color: var(--text-primary); min-height: 100vh; }
+    body.light-mode { --bg-dark: #F5F5F5; --bg-card: #FFFFFF; --text-primary: #1A1A1A; --text-secondary: #666666; --border: #E0E0E0; }
+    .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: var(--bg-card); border-bottom: 1px solid var(--border); }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text-primary); font-size: 24px; font-weight: 700; }
+    .logo-icon { width: 36px; height: 36px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .logo-text { display: flex; flex-direction: column; }
+    .logo-text span:first-child { color: var(--primary); }
+    .logo-text span:last-child { font-size: 10px; color: var(--text-secondary); letter-spacing: 2px; text-transform: uppercase; }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .theme-btn { background: none; border: 1px solid var(--border); color: var(--text-primary); padding: 8px; border-radius: 6px; cursor: pointer; font-size: 16px; }
+    .main { display: flex; justify-content: center; align-items: center; padding: 40px 20px; min-height: calc(100vh - 150px); }
+    .reset-card { background: var(--bg-card); border-radius: 12px; padding: 32px; width: 100%; max-width: 480px; box-shadow: 0 4px 24px rgba(0,0,0,0.2); }
+    h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { color: var(--text-secondary); margin-bottom: 24px; font-size: 14px; }
+    .progress-steps { display: flex; justify-content: space-between; margin-bottom: 24px; position: relative; }
+    .progress-steps::before { content: ''; position: absolute; top: 16px; left: 10%; right: 10%; height: 2px; background: var(--border); z-index: 0; }
+    .progress-line { position: absolute; top: 16px; left: 10%; height: 2px; background: var(--primary); z-index: 1; transition: width 0.3s ease; }
+    .step { display: flex; flex-direction: column; align-items: center; z-index: 2; position: relative; }
+    .step-circle { width: 32px; height: 32px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; }
+    .step.active { background: var(--primary); color: #000; }
+    .step.completed { background: var(--green); color: #fff; }
+    .step-label { font-size: 11px; color: var(--text-secondary); }
+    .step.active .step-label { color: var(--primary); }
+    .step.completed .step-label { color: var(--green); }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 500; }
+    .form-input { width: 100%; padding: 12px 16px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 14px; outline: none; transition: border-color 0.2s; }
+    .form-input:focus { border-color: var(--primary); }
+    .form-select { width: 100%; padding: 12px 16px; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 14px; cursor: pointer; }
+    .form-select:focus { border-color: var(--primary); }
+    .form-file { width: 100%; padding: 24px; background: var(--bg-dark); border: 2px dashed var(--border); border-radius: 8px; text-align: center; cursor: pointer; }
+    .form-file:hover { border-color: var(--primary); }
+    .form-file input { display: none; }
+    .file-preview { margin-top: 12px; }
+    .file-preview img { max-width: 100%; max-height: 150px; border-radius: 8px; }
+    .submit-btn { width: 100%; padding: 14px; background: var(--primary); color: #000; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; margin-top: 16px; }
+    .submit-btn:hover { opacity: 0.9; }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .back-btn { display: flex; align-items: center; gap: 8px; background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 14px; margin-bottom: 16px; }
+    .back-btn:hover { color: var(--text-primary); }
+    .otp-inputs { display: flex; gap: 8px; justify-content: center; margin: 20px 0; }
+    .otp-input { width: 48px; height: 56px; text-align: center; font-size: 24px; font-weight: 600; background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); outline: none; }
+    .otp-input:focus { border-color: var(--primary); }
+    .success-checkmark { width: 80px; height: 80px; margin: 0 auto 24px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; animation: scaleIn 0.3s ease; }
+    @keyframes scaleIn { from { transform: scale(0); } to { transform: scale(1); } }
+    .success-checkmark svg { width: 40px; height: 40px; fill: white; }
+    .success-message { text-align: center; }
+    .success-message h2 { margin-bottom: 8px; }
+    .success-message p { color: var(--text-secondary); }
+    .info-box { padding: 16px; background: rgba(240, 185, 11, 0.1); border: 1px solid var(--primary); border-radius: 8px; margin-bottom: 20px; }
+    .info-box h3 { color: var(--primary); margin-bottom: 8px; font-size: 14px; }
+    .info-box p { color: var(--text-secondary); font-size: 13px; line-height: 1.5; }
+    .footer { background: var(--bg-card); border-top: 1px solid var(--border); padding: 20px; text-align: center; }
+    .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 12px; }
+    .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 13px; }
+    .footer-copy { color: var(--text-secondary); font-size: 12px; }
+    @media (max-width: 480px) { .reset-card { padding: 24px 16px; } h1 { font-size: 20px; } .step-label { display: none; } }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">🐯 TigerExchange</div>
-            <h1>Reset Two-Factor Authentication</h1>
-            <p class="subtitle">Complete all verification steps to reset your 2FA</p>
-        </div>
-
-        <!-- Progress Steps -->
-        <div class="progress-steps">
-            <div class="progress-line" id="progressLine"></div>
-            <div class="step active" id="stepEmail">
-                <div class="step-circle">1</div>
-                <span class="step-label">Email</span>
-            </div>
-            <div class="step" id="stepPhone">
-                <div class="step-circle">2</div>
-                <span class="step-label">Phone</span>
-            </div>
-            <div class="step" id="stepLiveness">
-                <div class="step-circle">3</div>
-                <span class="step-label">Liveness</span>
-            </div>
-        </div>
-
-        <!-- Error/Success Messages -->
-        <div class="error-message" id="errorMessage"></div>
-        <div class="success-message" id="successMessage"></div>
-
-        <!-- Step 1: Initiate Session -->
-        <div class="step-section active" id="sectionInitiate">
-            <div class="info-box">
-                <p>To reset your Two-Factor Authentication, you'll need to complete three verification steps:</p>
-                <p style="margin-top: 10px;">1. Verify your email address<br>2. Verify your phone number<br>3. Complete a liveness check</p>
-            </div>
-            
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" placeholder="Enter your registered email">
-            </div>
-            
-            <div class="form-group">
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" placeholder="Enter your registered phone number">
-            </div>
-            
-            <button class="btn btn-primary" onclick="initiateReset()">Start Verification</button>
-        </div>
-
-        <!-- Step 2: Email Verification -->
-        <div class="step-section" id="sectionEmail">
-            <div class="info-box">
-                <p>We've sent a verification code to your email address. The code will expire in <strong id="emailExpires">15</strong> minutes.</p>
-            </div>
-            
-            <div class="form-group">
-                <label for="emailCode">Enter Email Verification Code</label>
-                <input type="text" id="emailCode" maxlength="6" placeholder="Enter 6-digit code" autocomplete="off">
-                <p class="attempts-info" id="emailAttempts"></p>
-            </div>
-            
-            <button class="btn btn-primary" onclick="verifyEmail()">Verify Email</button>
-            <button class="btn btn-secondary" onclick="resendEmailCode()">Resend Code</button>
-        </div>
-
-        <!-- Step 3: Phone Verification -->
-        <div class="step-section" id="sectionPhone">
-            <div class="info-box">
-                <p>Email verified! Now please verify your phone number. We've sent a code to <strong id="maskedPhone"></strong>.</p>
-            </div>
-            
-            <div class="form-group">
-                <label for="phoneCode">Enter Phone Verification Code</label>
-                <input type="text" id="phoneCode" maxlength="6" placeholder="Enter 6-digit code" autocomplete="off">
-                <p class="attempts-info" id="phoneAttempts"></p>
-            </div>
-            
-            <button class="btn btn-primary" onclick="verifyPhone()">Verify Phone</button>
-        </div>
-
-        <!-- Step 4: Liveness Verification -->
-        <div class="step-section" id="sectionLiveness">
-            <div class="info-box">
-                <p>Phone verified! Now complete the final step - a quick liveness verification to confirm it's really you.</p>
-            </div>
-            
-            <div class="camera-container">
-                <div class="camera-preview" id="cameraPreview">
-                    Camera preview will appear here
-                </div>
-                <div class="camera-instructions">
-                    <ul>
-                        <li>📷 Ensure good lighting</li>
-                        <li>👤 Look directly at the camera</li>
-                        <li>⌛ Stay still for 3 seconds</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <button class="btn btn-primary" id="captureBtn" onclick="captureAndVerify()">Start Liveness Check</button>
-        </div>
-
-        <!-- Step 5: Complete -->
-        <div class="step-section" id="sectionComplete">
-            <div class="success-screen">
-                <div class="success-icon">
-                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
-                </div>
-                <h2>2FA Reset Complete!</h2>
-                
-                <div class="warning-box">
-                    <p><strong>⚠️ Important:</strong> Two-Factor Authentication has been disabled on your account. You must set up 2FA again on your next login for security.</p>
-                </div>
-                
-                <button class="btn btn-primary" onclick="goToLogin()">Go to Login</button>
-            </div>
-        </div>
+  <header class="header">
+    <a href="index.html" class="logo">
+      <div class="logo-icon">🐯</div>
+      <div class="logo-text"><span>TigerEx</span><span>Secure Trading</span></div>
+    </a>
+    <div class="header-right">
+      <button class="theme-btn" onclick="toggleTheme()" id="themeIcon">🌙</button>
     </div>
+  </header>
 
-    <script>
-        // State management
-        let sessionId = null;
-        let currentStep = 'initiate';
-        let emailExpiresTimer = null;
+  <main class="main">
+    <div class="reset-card">
+      <!-- Step 1: Select Method -->
+      <div id="stepMethod">
+        <div class="progress-steps">
+          <div class="step active"><div class="step-circle">1</div><span class="step-label">Method</span></div>
+          <div class="step"><div class="step-circle">2</div><span class="step-label">Verify</span></div>
+          <div class="step"><div class="step-circle">3</div><span class="step-label">Confirm</span></div>
+        </div>
+        <h1>Reset Two-Factor Authentication</h1>
+        <p class="subtitle">Choose a method to verify your identity</p>
+        <div class="info-box">
+          <h3>⚠️ Important</h3>
+          <p>Resetting 2FA will disable this security feature.</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Reset Method</label>
+          <select class="form-select" id="methodSelect" onchange="selectMethod()">
+            <option value="">Select a method</option>
+            <option value="email">📧 Email Verification</option>
+            <option value="phone">📱 SMS Verification</option>
+            <option value="id">🪪 Upload ID Document</option>
+            <option value="support">📞 Contact Support</option>
+          </select>
+        </div>
+        <button class="submit-btn" onclick="goToVerification()" id="methodBtn" disabled>Continue</button>
+      </div>
+      
+      <!-- Step 2: Verification -->
+      <div id="stepVerify" style="display: none;">
+        <button class="back-btn" onclick="goBack('method')">← Back</button>
+        <div class="progress-steps">
+          <div class="step completed"><div class="step-circle">✓</div><span class="step-label">Method</span></div>
+          <div class="step active"><div class="step-circle">2</div><span class="step-label">Verify</span></div>
+          <div class="step"><div class="step-circle">3</div><span class="step-label">Confirm</span></div>
+        </div>
+        
+        <div id="verifyEmail">
+          <h1>Email Verification</h1>
+          <p class="subtitle">Enter the code sent to your email</p>
+          <div class="otp-inputs">
+            <input type="text" class="otp-input" maxlength="1" data-index="0" oninput="handleOTPInput(this)">
+            <input type="text" class="otp-input" maxlength="1" data-index="1" oninput="handleOTPInput(this)">
+            <input type="text" class="otp-input" maxlength="1" data-index="2" oninput="handleOTPInput(this)">
+            <input type="text" class="otp-input" maxlength="1" data-index="3" oninput="handleOTPInput(this)">
+            <input type="text" class="otp-input" maxlength="1" data-index="4" oninput="handleOTPInput(this)">
+            <input type="text" class="otp-input" maxlength="1" data-index="5" oninput="handleOTPInput(this)">
+          </div>
+          <p style="text-align: center; color: var(--text-secondary); font-size: 13px; margin-top: 12px;">Didn't receive code? <a href="#" style="color: var(--primary);" onclick="resendCode()">Resend</a></p>
+          <button class="submit-btn" onclick="submitVerification()">Verify</button>
+        </div>
+        
+        <div id="verifyPhone" style="display: none;">
+          <h1>SMS Verification</h1>
+          <p class="subtitle">Enter the code sent to your phone</p>
+          <div class="otp-inputs">
+            <input type="text" class="otp-input" maxlength="1" data-index="0" oninput="handleOTPInput(this)">
+            <input type="text" class="otp-input" maxlength="1" data-index="1" oninput="handleOTPInput(this)">
+            <input type="text" class="otp-input" maxlength="1" data-index="2" oninput="handleOTPInput(this)">
+            <input type="text" class="otp-input" maxlength="1" data-index="3" oninput="handleOTPInput(this)">
+            <input type="text" class="otp-input" maxlength="1" data-index="4" oninput="handleOTPInput(this)">
+            <input type="text" class="otp-input" maxlength="1" data-index="5" oninput="handleOTPInput(this)">
+          </div>
+          <button class="submit-btn" onclick="submitVerification()">Verify</button>
+        </div>
+        
+        <div id="verifyID" style="display: none;">
+          <h1>Upload ID Document</h1>
+          <p class="subtitle">Upload a photo of your ID</p>
+          <label class="form-file">
+            <input type="file" accept="image/*" onchange="previewFile(this)">
+            <div id="fileUploadText">📁 Click to upload ID</div>
+          </label>
+          <button class="submit-btn" onclick="submitIDVerification()">Upload & Verify</button>
+        </div>
+        
+        <div id="verifySupport" style="display: none;">
+          <h1>Contact Support</h1>
+          <p class="subtitle">Our team will help you</p>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" id="supportEmail" placeholder="Your registered email">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea class="form-input" id="supportDesc" rows="3" placeholder="Describe your issue..."></textarea>
+          </div>
+          <button class="submit-btn" onclick="submitSupportRequest()">Submit Request</button>
+        </div>
+      </div>
+      
+      <!-- Step 3: Success -->
+      <div id="stepSuccess" style="display: none;">
+        <div class="success-message">
+          <div class="success-checkmark"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+          <h2>2FA Reset Successful!</h2>
+          <p>Two-factor authentication has been disabled.</p>
+          <button class="submit-btn" onclick="window.location.href='login.html'" style="margin-top: 24px;">Go to Login</button>
+        </div>
+      </div>
+    </div>
+  </main>
 
-        // API Configuration
-        const API_BASE = '/api/2fa/reset';
+  <footer class="footer">
+    <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Support</a></div>
+    <p class="footer-copy">© 2024 TigerEx. All rights reserved.</p>
+  </footer>
 
-        // Step configurations
-        const steps = {
-            initiate: { section: 'sectionInitiate', progress: 0 },
-            email: { section: 'sectionEmail', progress: 33 },
-            phone: { section: 'sectionPhone', progress: 66 },
-            liveness: { section: 'sectionLiveness', progress: 100 },
-            complete: { section: 'sectionComplete', progress: 100 }
-        };
-
-        function showStep(stepName) {
-            // Hide all sections
-            document.querySelectorAll('.step-section').forEach(section => {
-                section.classList.remove('active');
-            });
-
-            // Update step indicators
-            document.querySelectorAll('.step').forEach(step => {
-                step.classList.remove('active', 'completed');
-            });
-
-            // Show current section
-            const step = steps[stepName];
-            if (step) {
-                document.getElementById(step.section).classList.add('active');
-            }
-
-            // Update progress
-            const progressLine = document.getElementById('progressLine');
-            progressLine.style.width = `${step?.progress || 0}%`;
-
-            // Mark completed steps
-            if (stepName === 'phone' || stepName === 'liveness' || stepName === 'complete') {
-                document.getElementById('stepEmail').classList.add('completed');
-                document.getElementById('stepEmail').querySelector('.step-circle').innerHTML = '✓';
-            }
-            if (stepName === 'liveness' || stepName === 'complete') {
-                document.getElementById('stepPhone').classList.add('completed');
-                document.getElementById('stepPhone').querySelector('.step-circle').innerHTML = '✓';
-            }
-            if (stepName === 'complete') {
-                document.getElementById('stepLiveness').classList.add('completed');
-                document.getElementById('stepLiveness').querySelector('.step-circle').innerHTML = '✓';
-            }
-
-            // Activate current step
-            if (stepName === 'email') document.getElementById('stepEmail').classList.add('active');
-            if (stepName === 'phone') document.getElementById('stepPhone').classList.add('active');
-            if (stepName === 'liveness') document.getElementById('stepLiveness').classList.add('active');
-
-            currentStep = stepName;
-        }
-
-        function showError(message) {
-            const errorEl = document.getElementById('errorMessage');
-            errorEl.textContent = message;
-            errorEl.classList.add('show');
-            setTimeout(() => errorEl.classList.remove('show'), 5000);
-        }
-
-        function showSuccess(message) {
-            const successEl = document.getElementById('successMessage');
-            successEl.textContent = message;
-            successEl.classList.add('show');
-            setTimeout(() => successEl.classList.remove('show'), 5000);
-        }
-
-        async function initiateReset() {
-            const email = document.getElementById('email').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-
-            if (!email || !phone) {
-                showError('Please enter both email and phone number');
-                return;
-            }
-
-            try {
-                // In production, this would be an actual API call
-                // For demo, simulate the flow
-                const response = await mockApiCall('/initiate', { email, phone });
-                
-                sessionId = response.session_id;
-                showSuccess('Verification started. Please check your email.');
-                showStep('email');
-                
-                // Start expiry timer
-                startEmailExpiryTimer(15 * 60);
-                
-                // Simulate sending email code
-                console.log('Email code would be sent to:', email);
-                
-            } catch (error) {
-                showError(error.message || 'Failed to initiate verification');
-            }
-        }
-
-        async function verifyEmail() {
-            const code = document.getElementById('emailCode').value.trim();
-
-            if (!code || code.length !== 6) {
-                showError('Please enter a valid 6-digit code');
-                return;
-            }
-
-            try {
-                // For demo, accept any 6-digit code
-                if (code.length === 6) {
-                    showSuccess('Email verified successfully!');
-                    showStep('phone');
-                    document.getElementById('maskedPhone').textContent = maskPhone(document.getElementById('phone').value);
-                } else {
-                    throw new Error('Invalid verification code');
-                }
-            } catch (error) {
-                showError(error.message || 'Verification failed');
-            }
-        }
-
-        async function resendEmailCode() {
-            try {
-                showSuccess('New verification code sent to your email');
-            } catch (error) {
-                showError('Failed to resend code. Please try again.');
-            }
-        }
-
-        async function verifyPhone() {
-            const code = document.getElementById('phoneCode').value.trim();
-
-            if (!code || code.length !== 6) {
-                showError('Please enter a valid 6-digit code');
-                return;
-            }
-
-            try {
-                // For demo, accept any 6-digit code
-                if (code.length === 6) {
-                    showSuccess('Phone verified successfully!');
-                    showStep('liveness');
-                } else {
-                    throw new Error('Invalid verification code');
-                }
-            } catch (error) {
-                showError(error.message || 'Verification failed');
-            }
-        }
-
-        async function captureAndVerify() {
-            const captureBtn = document.getElementById('captureBtn');
-            captureBtn.disabled = true;
-            captureBtn.textContent = 'Verifying...';
-
-            try {
-                // In production, this would capture from camera and verify
-                // For demo, simulate liveness check
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                showSuccess('Liveness verified successfully!');
-                showStep('complete');
-                
-                // In production, call complete_2fa_reset endpoint
-                console.log('2FA reset would be completed now');
-                
-            } catch (error) {
-                showError(error.message || 'Liveness verification failed');
-            } finally {
-                captureBtn.disabled = false;
-                captureBtn.textContent = 'Start Liveness Check';
-            }
-        }
-
-        function startEmailExpiryTimer(seconds) {
-            if (emailExpiresTimer) clearInterval(emailExpiresTimer);
-            
-            let remaining = seconds;
-            const display = document.getElementById('emailExpires');
-            
-            emailExpiresTimer = setInterval(() => {
-                remaining--;
-                if (display) display.textContent = Math.floor(remaining / 60);
-                if (remaining <= 0) {
-                    clearInterval(emailExpiresTimer);
-                    showError('Verification code expired. Please restart the process.');
-                }
-            }, 1000);
-        }
-
-        function maskPhone(phone) {
-            if (!phone || phone.length < 4) return '****';
-            return '*'.repeat(phone.length - 4) + phone.slice(-4);
-        }
-
-        function goToLogin() {
-            window.location.href = '/login.html';
-        }
-
-        // Mock API for demonstration
-        async function mockApiCall(endpoint, data) {
-            await new Promise(resolve => setTimeout(resolve, 500));
-            
-            if (endpoint === '/initiate') {
-                return {
-                    success: true,
-                    session_id: 'demo_session_' + Date.now(),
-                    message: 'Verification initiated'
-                };
-            }
-            
-            return { success: true };
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            showStep('initiate');
-        });
-    </script>
+  <script>
+    var selectedMethod = '';
+    var otpCode = '';
+    
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+      localStorage.setItem('tigerex_theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+      document.getElementById('themeIcon').textContent = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
+    }
+    
+    if (localStorage.getItem('tigerex_theme') === 'light') {
+      document.body.classList.add('light-mode');
+      document.getElementById('themeIcon').textContent = '☀️';
+    }
+    
+    function selectMethod() {
+      selectedMethod = document.getElementById('methodSelect').value;
+      document.getElementById('methodBtn').disabled = !selectedMethod;
+    }
+    
+    function goToVerification() {
+      if (!selectedMethod) return;
+      document.getElementById('stepMethod').style.display = 'none';
+      document.getElementById('stepVerify').style.display = 'block';
+      document.getElementById('verifyEmail').style.display = 'none';
+      document.getElementById('verifyPhone').style.display = 'none';
+      document.getElementById('verifyID').style.display = 'none';
+      document.getElementById('verifySupport').style.display = 'none';
+      
+      if (selectedMethod === 'email') {
+        document.getElementById('verifyEmail').style.display = 'block';
+        setTimeout(function() { document.querySelectorAll('#verifyEmail .otp-input').forEach(function(i,idx){i.value='123456'[idx]||''}); }, 500);
+      } else if (selectedMethod === 'phone') {
+        document.getElementById('verifyPhone').style.display = 'block';
+        setTimeout(function() { document.querySelectorAll('#verifyPhone .otp-input').forEach(function(i,idx){i.value='123456'[idx]||''}); }, 500);
+      } else if (selectedMethod === 'id') {
+        document.getElementById('verifyID').style.display = 'block';
+      } else if (selectedMethod === 'support') {
+        document.getElementById('verifySupport').style.display = 'block';
+      }
+    }
+    
+    function goBack(step) {
+      document.getElementById('stepVerify').style.display = 'none';
+      document.getElementById('stepMethod').style.display = 'block';
+    }
+    
+    function handleOTPInput(input) {
+      if (!/^\d*$/.test(input.value)) { input.value = ''; return; }
+      if (input.value.length === 1) {
+        var inputs = document.querySelectorAll('.otp-input');
+        var idx = parseInt(input.dataset.index);
+        if (idx < inputs.length - 1) inputs[idx + 1].focus();
+      }
+      var all = '';
+      document.querySelectorAll('.otp-input').forEach(function(i){all += i.value;});
+      otpCode = all;
+    }
+    
+    function resendCode() { alert('Code resent!'); }
+    
+    function submitVerification() {
+      if (otpCode.length !== 6) { alert('Enter 6-digit code'); return; }
+      showSuccess();
+    }
+    
+    function previewFile(input) {
+      var file = input.files[0];
+      if (file) document.getElementById('fileUploadText').textContent = '✓ ' + file.name;
+    }
+    
+    function submitIDVerification() {
+      var f = document.querySelector('#verifyID input[type="file"]');
+      if (!f.files[0]) { alert('Upload ID'); return; }
+      showSuccess();
+    }
+    
+    function submitSupportRequest() {
+      var e = document.getElementById('supportEmail').value;
+      var d = document.getElementById('supportDesc').value;
+      if (!e || !d) { alert('Fill all fields'); return; }
+      showSuccess();
+    }
+    
+    function showSuccess() {
+      document.getElementById('stepVerify').style.display = 'none';
+      document.getElementById('stepSuccess').style.display = 'block';
+    }
+  </script>
 </body>
 </html>
