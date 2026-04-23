@@ -201,6 +201,17 @@ const SERVICES = {
         auditLogs: '/api/v1/admin/audit-logs',
         createUser: '/api/v1/admin/user/create',
     },
+    
+    // KYC - NEW
+    kyc: {
+        uploadDocument: '/api/v1/kyc/upload-document',
+        livenessStart: '/api/v1/kyc/liveness/start',
+        livenessCheck: '/api/v1/kyc/liveness/check',
+        livenessVerify: '/api/v1/kyc/liveness/verify',
+        addressProof: '/api/v1/kyc/address-proof',
+        status: '/api/v1/kyc/status',
+        uniqueFaceCheck: '/api/v1/kyc/face/check-unique',
+    },
 };
 
 // API Client
@@ -331,6 +342,20 @@ class TigerExClient {
         withdrawals: () => this.get('admin', 'withdrawals'),
         withdrawApprove: (id) => this.post('admin', 'withdrawalApprove', { transactionId: id }),
         withdrawReject: (id, reason) => this.post('admin', 'withdrawalReject', { transactionId: id, reason }),
+    };
+    
+    // KYC
+    kyc = {
+        uploadDocument: (userId, email, docType, imageData) => 
+            this.post('kyc', 'uploadDocument', { user_id: userId, email, document_type: docType, image_data: imageData }),
+        livenessStart: (userId) => this.post('kyc', 'livenessStart', { user_id: userId }),
+        livenessCheck: (userId, challenge, faceImage) => 
+            this.post('kyc', 'livenessCheck', { user_id: userId, challenge, face_image: faceImage }),
+        livenessVerify: (userId) => this.post('kyc', 'livenessVerify', { user_id: userId }),
+        addressProof: (userId, docType, imageData) => 
+            this.post('kyc', 'addressProof', { user_id: userId, document_type: docType, image_data: imageData }),
+        status: (userId) => this.get('kyc', `status?user_id=${userId}`),
+        checkUniqueFace: (faceImage) => this.post('kyc', 'uniqueFaceCheck', { face_image: faceImage }),
     };
     
     // WebSocket

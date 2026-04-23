@@ -17,6 +17,7 @@
 7. [Desktop Apps](#desktop-apps)
 8. [Backend Services](#backend-services)
 9. [Database Setup](#database-setup)
+10. [KYC Service](#kyc-service)
 
 ---
 
@@ -505,6 +506,53 @@ npm install
 docker ps
 curl http://localhost:8000/health
 ```
+
+---
+
+## 🔐 KYC Service
+
+### KYC Verification Features
+- Document Upload (Passport, National ID, Driver's License)
+- Liveness Face Verification (One Face = One Account)
+- Address Proof (Advanced KYC)
+
+### KYC Backend
+```bash
+cd backend/kyc-service
+python complete_kyc.py
+# Runs on port 8008
+```
+
+### KYC API Endpoints
+```bash
+# Upload document
+curl -X POST http://localhost:8008/api/v1/kyc/upload-document
+
+# Start liveness
+curl -X POST http://localhost:8008/api/v1/kyc/liveness/start
+
+# Check liveness
+curl -X POST http://localhost:8008/api/v1/kyc/liveness/check
+
+# Verify liveness
+curl -X POST http://localhost:8008/api/v1/kyc/liveness/verify
+
+# Unique face check
+curl -X POST http://localhost:8008/api/v1/kyc/face/check-unique
+
+# Address proof
+curl -X POST http://localhost:8008/api/v1/kyc/address-proof
+
+# Get status
+curl http://localhost:8008/api/v1/kyc/status?user_id=xxx
+```
+
+### KYC Database Tables
+- `kyc_applications` - User KYC records
+- `face_embeddings` - Face data for uniqueness
+- `kyc_documents` - ID documents
+- `address_proofs` - Address documents
+- `kyc_logs` - Audit trail
 
 ---
 
