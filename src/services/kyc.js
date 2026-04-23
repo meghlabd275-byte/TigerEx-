@@ -1,6 +1,7 @@
 /**
  * TigerEx KYC Verification Service
  * Includes: Document Upload, Liveness Face Verification, Address Proof
+ * Unique Face Recognition - One Face = One Account
  * Compatible with: Android, iOS, Web, Desktop
  */
 
@@ -39,7 +40,8 @@ const KYC_CONFIG = {
         livenessVerify: '/api/v1/kyc/liveness/verify',
         submitAddressProof: '/api/v1/kyc/address-proof',
         status: '/api/v1/kyc/status',
-        retry: '/api/v1/kyc/retry',
+        // Unique Face Check API
+        uniqueFaceCheck: '/api/v1/kyc/face/check-unique',
     }
 };
 
@@ -162,6 +164,12 @@ class KYCService {
     // Get KYC status
     async getStatus() {
         return this.request(KYC_CONFIG.endpoints.status);
+    }
+    
+    // Check if face is unique (not used by another account)
+    async checkUniqueFace(imageBase64) {
+        const data = { face_image: imageBase64 };
+        return this.request(KYC_CONFIG.endpoints.uniqueFaceCheck, 'POST', data);
     }
     
     // Retry failed step
