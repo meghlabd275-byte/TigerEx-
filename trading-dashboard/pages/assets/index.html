@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assets - TigerEx Trading Dashboard</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+    <style>
+        :root { --primary: #F6821F; --success: #43A047; --danger: #E53935; }
+        [data-theme="dark"] { --bg-primary: #050A12; --bg-secondary: #0D1B2A; --bg-tertiary: #141E2B; --bg-card: #0D1B2A; --text-primary: #E8EEF4; --text-secondary: rgba(255,255,255,0.7); --text-muted: rgba(255,255,255,0.5); --border: rgba(255,255,255,0.08); }
+        [data-theme="light"] { --bg-primary: #F5F7FA; --bg-secondary: #FFFFFF; --bg-tertiary: #F0F2F5; --bg-card: #FFFFFF; --text-primary: #1A1A2E; --text-secondary: #666666; --text-muted: #999999; --border: #E0E0E0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+        .header { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: var(--bg-secondary); border-bottom: 1px solid var(--border); }
+        .logo { font-size: 1.4rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+        .logo-icon { width: 32px; height: 32px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--bg-primary); }
+        .total-balance { text-align: right; }
+        .total-label { font-size: 0.8rem; color: var(--text-muted); }
+        .total-value { font-size: 1.4rem; font-weight: 700; color: var(--success); }
+        .theme-toggle { padding: 8px 16px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); border-radius: 8px; cursor: pointer; }
+        .container { padding: 20px; padding-bottom: 80px; }
+        .section-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 16px; }
+        .wallet-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px; }
+        .wallet-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s; }
+        .wallet-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+        .wallet-icon { font-size: 1.5rem; margin-bottom: 12px; }
+        .wallet-name { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+        .wallet-balance { font-size: 1.2rem; font-weight: 700; }
+        .wallet-balance.positive { color: var(--success); }
+        .transaction-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+        .transaction-tab { padding: 10px 20px; border: none; background: var(--bg-tertiary); color: var(--text-secondary); border-radius: 8px; cursor: pointer; }
+        .transaction-tab.active { background: var(--primary); color: var(--bg-primary); }
+        .transaction-list { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+        .transaction-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; padding: 14px 20px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        .transaction-row:last-child { border-bottom: none; }
+        .transaction-row .type { font-weight: 600; }
+        .transaction-row .type.deposit { color: var(--success); }
+        .transaction-row .type.withdraw { color: var(--danger); }
+        .transaction-row .amount { font-weight: 600; }
+        .transaction-row .amount.positive { color: var(--success); }
+        .transaction-row .amount.negative { color: var(--danger); }
+        .transaction-row .status { color: var(--text-muted); }
+        .nav-tabs { position: fixed; bottom: 0; left: 0; right: 0; display: flex; background: var(--bg-secondary); border-top: 1px solid var(--border); z-index: 100; }
+        .nav-tab { flex: 1; padding: 12px; border: none; background: transparent; color: var(--text-secondary); cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 0.75rem; }
+        .nav-tab.active { color: var(--primary); }
+        .nav-tab .icon { font-size: 1.2rem; }
+    </style>
+</head>
+<body data-theme="dark">
+    <header class="header">
+        <div class="logo"><div class="logo-icon">🐯</div>TigerEx</div>
+        <div class="total-balance"><div class="total-label">Total Balance</div><div class="total-value">$45,678.90</div></div>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
+    </header>
+    <div class="container">
+        <div class="section-title">💰 Wallets</div>
+        <div class="wallet-cards">
+            <div class="wallet-card"><div class="wallet-icon">💵</div><div class="wallet-name">Spot Wallet</div><div class="wallet-balance positive">$12,345.67</div></div>
+            <div class="wallet-card"><div class="wallet-icon">📈</div><div class="wallet-name">Futures Wallet</div><div class="wallet-balance positive">$8,234.50</div></div>
+            <div class="wallet-card"><div class="wallet-icon">🤝</div><div class="wallet-name">P2P Wallet</div><div class="wallet-balance positive">$2,500.00</div></div>
+            <div class="wallet-card"><div class="wallet-icon">🐯</div><div class="wallet-name">TigerPay</div><div class="wallet-balance positive">$5,000.00</div></div>
+            <div class="wallet-card"><div class="wallet-icon">📊</div><div class="wallet-name">TradFi Wallet</div><div class="wallet-balance positive">$15,678.43</div></div>
+            <div class="wallet-card"><div class="wallet-icon">💳</div><div class="wallet-name">Crypto Card</div><div class="wallet-balance">$1,920.30</div></div>
+            <div class="wallet-card"><div class="wallet-icon">📥</div><div class="wallet-name">Deposit</div><div class="wallet-balance">→</div></div>
+            <div class="wallet-card"><div class="wallet-icon">📤</div><div class="wallet-name">Withdrawal</div><div class="wallet-balance">→</div></div>
+        </div>
+        <div class="section-title">📋 Transactions</div>
+        <div class="transaction-tabs">
+            <button class="transaction-tab active">All</button>
+            <button class="transaction-tab">Deposit</button>
+            <button class="transaction-tab">Withdrawal</button>
+            <button class="transaction-tab">Transfer</button>
+        </div>
+        <div class="transaction-list">
+            <div class="transaction-row"><span class="type deposit">Deposit</span><span class="amount positive">+5,000 USDT</span><span>TRC20</span><span class="status">Completed</span></div>
+            <div class="transaction-row"><span class="type withdraw">Withdraw</span><span class="amount negative">-1,200 USDT</span><span>TRC20</span><span class="status">Completed</span></div>
+            <div class="transaction-row"><span class="type deposit">Deposit</span><span class="amount positive">+0.5 BTC</span><span>BTC</span><span class="status">Completed</span></div>
+            <div class="transaction-row"><span class="type deposit">Deposit</span><span class="amount positive">+10 ETH</span><span>ERC20</span><span class="status">Completed</span></div>
+        </div>
+    </div>
+    <nav class="nav-tabs">
+        <button class="nav-tab" onclick="navigateTo('home')"><span class="icon">🏠</span>Home</button>
+        <button class="nav-tab" onclick="navigateTo('markets')"><span class="icon">📊</span>Markets</button>
+        <button class="nav-tab" onclick="navigateTo('trade')"><span class="icon">📈</span>Trade</button>
+        <button class="nav-tab" onclick="navigateTo('tradfi')"><span class="icon">📊</span>TradFi</button>
+        <button class="nav-tab active" onclick="navigateTo('assets')"><span class="icon">💰</span>Assets</button>
+    </nav>
+    <script>
+        function toggleTheme() {
+            const newTheme = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', newTheme);
+            document.querySelector('.theme-toggle').textContent = newTheme === 'dark' ? '🌙 Dark' : '☀️ Light';
+            localStorage.setItem('theme', newTheme);
+        }
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.setAttribute('data-theme', savedTheme);
+        document.querySelector('.theme-toggle').textContent = savedTheme === 'dark' ? '🌙 Dark' : '☀️ Light';
+        function navigateTo(page) { window.location.href = `../${page}/index.html`; }
+    </script>
+</body>
+</html>

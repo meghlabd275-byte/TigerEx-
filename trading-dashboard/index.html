@@ -651,8 +651,45 @@
     </div>
     
     <script>
-        // Navigation Logic - Optimized for Speed
+        // Page URLs - Link to internal trading pages with TigerEx branding
+        const pageUrls = {
+            home: 'https://www.bitget.com/',
+            markets: 'https://www.binance.com/en/markets/overview',
+            // Trade pages
+            futures: 'pages/trade/index.html?type=futures',
+            spot: 'pages/trade/index.html?type=spot',
+            margin: 'pages/trade/index.html?type=margin',
+            p2p: 'https://p2p.binance.com/en',
+            onchain: 'https://www.bitget.com/on-chain/sol/2pFFgMtw7GkE6Kr6Xpg81mqDvEihhoafg64HdheKpump',
+            alpha: 'https://www.binance.com/en/alpha/bsc/0xd20fb09a49a8e75fef536a2dbc68222900287bac',
+            // TradFi pages
+            cfd: 'pages/tradfi/index.html?type=cfd',
+            stocks: 'https://www.bitget.com/on-chain/bnb/0xa9ee28c80f960b889dfbd1902055218cba016f75',
+            stockpreps: 'https://www.bitget.com/futures/usdt/NVDAUSDT',
+            // Assets
+            assets: 'pages/assets/index.html'
+        };
+        
+        // Theme toggle
+        function toggleTheme() {
+            const body = document.body;
+            const current = body.getAttribute('data-theme') || 'dark';
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            document.querySelectorAll('.theme-toggle').forEach(btn => {
+                btn.textContent = newTheme === 'dark' ? '🌙 Dark' : '☀️ Light';
+            });
+            localStorage.setItem('theme', newTheme);
+        }
+        
+        // Initialize theme from localStorage or default to dark
         document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', savedTheme);
+            document.querySelectorAll('.theme-toggle').forEach(btn => {
+                btn.textContent = savedTheme === 'dark' ? '🌙 Dark' : '☀️ Light';
+            });
+            
             const navItems = document.querySelectorAll('.nav-item');
             const sections = document.querySelectorAll('.section');
             
@@ -661,23 +698,27 @@
                     e.preventDefault();
                     const sectionId = item.dataset.section;
                     
-                    // Update active state
+                    // Check if this is a page link
+                    if (pageUrls[sectionId]) {
+                        // Open internal trading page or external URL
+                        window.location.href = pageUrls[sectionId];
+                        return;
+                    }
+                    
+                    // Update active state for placeholder sections
                     navItems.forEach(n => n.classList.remove('active'));
                     item.classList.add('active');
                     
-                    // Show corresponding section
                     sections.forEach(s => s.classList.remove('active'));
                     const targetSection = document.getElementById('section-' + sectionId);
                     if (targetSection) {
                         targetSection.classList.add('active');
                     }
                     
-                    // Close mobile sidebar
                     document.getElementById('sidebar').classList.remove('open');
                 });
             });
             
-            // Mobile menu toggle
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     document.getElementById('sidebar').classList.remove('open');
@@ -685,7 +726,7 @@
             });
         });
         
-        // Security: Prevent external link exploitation
+        // Security
         document.addEventListener('click', (e) => {
             const link = e.target.closest('a[href^="http"]');
             if (link && link.target === '_blank') {
