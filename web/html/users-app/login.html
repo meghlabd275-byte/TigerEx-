@@ -33,6 +33,10 @@
         .title-lg { font-size: 1.5rem; }
         @media (min-width: 640px) { .title-lg { font-size: 2rem; } }
         .touch-target { min-height: 48px; min-width: 48px; }
+        .tab-active { background: var(--primary); color: black; }
+        .phone-dropdown { position: relative; }
+        .phone-dropdown select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; background-size: 20px; }
+        
     /* Light theme */
         body.light {
             --bg-dark: #F5F5F5;
@@ -70,11 +74,153 @@
         <!-- Login Card -->
         <div class="bg-[#1E1E1E] rounded-2xl shadow-xl">
             <form id="loginForm" class="p-4 sm:p-6 space-y-4">
-                <div>
+                <!-- Login Method Toggle -->
+                <div class="flex rounded-lg bg-[#2A2A2A] p-1 mb-4">
+                    <button type="button" id="emailTab" class="flex-1 py-2 px-3 rounded-md font-medium transition-all tab-active" onclick="switchLoginMethod('email')">
+                        Email
+                    </button>
+                    <button type="button" id="phoneTab" class="flex-1 py-2 px-3 rounded-md font-medium transition-all text-gray-400" onclick="switchLoginMethod('phone')">
+                        Phone
+                    </button>
+                </div>
+                
+                <!-- Email Input -->
+                <div id="emailField">
                     <label class="block text-sm text-gray-400 mb-2">Email</label>
                     <input type="email" id="email" placeholder="Enter your email" 
-                           class="input-dark w-full px-4 py-3 rounded-lg touch-target text-base" required>
+                           class="input-dark w-full px-4 py-3 rounded-lg touch-target text-base">
                 </div>
+                
+                <!-- Phone Input with Country Code -->
+                <div id="phoneField" class="hidden">
+                    <label class="block text-sm text-gray-400 mb-2">Phone Number</label>
+                    <div class="flex gap-2">
+                        <select id="countryCode" class="input-dark w-24 px-2 py-3 rounded-lg touch-target text-base">
+                            <option value="+1">+1</option>
+                            <option value="+44">+44</option>
+                            <option value="+91">+91</option>
+                            <option value="+86">+86</option>
+                            <option value="+81">+81</option>
+                            <option value="+82">+82</option>
+                            <option value="+49">+49</option>
+                            <option value="+33">+33</option>
+                            <option value="+39">+39</option>
+                            <option value="+7">+7</option>
+                            <option value="+971">+971</option>
+                            <option value="+966">+966</option>
+                            <option value="+20">+20</option>
+                            <option value="+62">+62</option>
+                            <option value="+60">+60</option>
+                            <option value="+65">+65</option>
+                            <option value="+66">+66</option>
+                            <option value="+90">+90</option>
+                            <option value="+92">+92</option>
+                            <option value="+880">+880</option>
+                            <option value="+964">+964</option>
+                            <option value="+98">+98</option>
+                            <option value="+962">+962</option>
+                            <option value="+965">+965</option>
+                            <option value="+968">+968</option>
+                            <option value="+973">+973</option>
+                            <option value="+974">+974</option>
+                            <option value="+970">+970</option>
+                            <option value="+216">+216</option>
+                            <option value="+212">+212</option>
+                            <option value="+213">+213</option>
+                            <option value="+249">+249</option>
+                            <option value="+221">+221</option>
+                            <option value="+252">+252</option>
+                            <option value="+254">+254</option>
+                            <option value="+256">+256</option>
+                            <option value="+250">+250</option>
+                            <option value="+257">+257</option>
+                            <option value="+251">+251</option>
+                            <option value="+253">+253</option>
+                            <option value="+225">+225</option>
+                            <option value="+229">+229</option>
+                            <option value="+237">+237</option>
+                            <option value="+241">+241</option>
+                            <option value="+242">+242</option>
+                            <option value="+243">+243</option>
+                            <option value="+244">+244</option>
+                            <option value="+245">+245</option>
+                            <option value="+246">+246</option>
+                            <option value="+248">+248</option>
+                            <option value="+267">+267</option>
+                            <option value="+263">+263</option>
+                            <option value="+264">+264</option>
+                            <option value="+265">+265</option>
+                            <option value="+266">+266</option>
+                            <option value="+268">+268</option>
+                            <option value="+269">+269</option>
+                            <option value="+297">+297</option>
+                            <option value="+298">+298</option>
+                            <option value="+299">+299</option>
+                            <option value="+350">+350</option>
+                            <option value="+351">+351</option>
+                            <option value="+352">+352</option>
+                            <option value="+353">+353</option>
+                            <option value="+354">+354</option>
+                            <option value="+355">+355</option>
+                            <option value="+356">+356</option>
+                            <option value="+357">+357</option>
+                            <option value="+358">+358</option>
+                            <option value="+359">+359</option>
+                            <option value="+370">+370</option>
+                            <option value="+371">+371</option>
+                            <option value="+372">+372</option>
+                            <option value="+373">+373</option>
+                            <option value="+374">+374</option>
+                            <option value="+375">+375</option>
+                            <option value="+376">+376</option>
+                            <option value="+377">+377</option>
+                            <option value="+378">+378</option>
+                            <option value="+380">+380</option>
+                            <option value="+381">+381</option>
+                            <option value="+382">+382</option>
+                            <option value="+385">+385</option>
+                            <option value="+386">+386</option>
+                            <option value="+387">+387</option>
+                            <option value="+389">+389</option>
+                            <option value="+420">+420</option>
+                            <option value="+421">+421</option>
+                            <option value="+423">+423</option>
+                            <option value="+594">+594</option>
+                            <option value="+595">+595</option>
+                            <option value="+509">+509</option>
+                            <option value="+590">+590</option>
+                            <option value="+594">+594</option>
+                            <option value="+682">+682</option>
+                            <option value="+685">+685</option>
+                            <option value="+687">+687</option>
+                            <option value="+689">+689</option>
+                            <option value="+691">+691</option>
+                            <option value="+692">+692</option>
+                            <option value="+850">+850</option>
+                            <option value="+852">+852</option>
+                            <option value="+853">+853</option>
+                            <option value="+855">+855</option>
+                            <option value="+856">+856</option>
+                            <option value="+872">+872</option>
+                            <option value="+880">+880</option>
+                            <option value="+886">+886</option>
+                            <option value="+964">+964</option>
+                            <option value="+973">+973</option>
+                            <option value="+975">+975</option>
+                            <option value="+976">+976</option>
+                            <option value="+977">+977</option>
+                            <option value="+992">+992</option>
+                            <option value="+993">+993</option>
+                            <option value="+994">+994</option>
+                            <option value="+995">+995</option>
+                            <option value="+996">+996</option>
+                            <option value="+998">+998</option>
+                        </select>
+                        <input type="tel" id="phone" placeholder="Phone number" 
+                               class="input-dark flex-1 px-4 py-3 rounded-lg touch-target text-base">
+                    </div>
+                </div>
+                
                 <div>
                     <label class="block text-sm text-gray-400 mb-2">Password</label>
                     <input type="password" id="password" placeholder="Enter your password" 
@@ -145,11 +291,151 @@
     <script>
         // Theme Toggle
         function toggleTheme() {
+
+        // Switch Login Method (Email/Phone)
+        function switchLoginMethod(method) {
+            const emailTab = document.getElementById('emailTab');
+            const phoneTab = document.getElementById('phoneTab');
+            const emailField = document.getElementById('emailField');
+            const phoneField = document.getElementById('phoneField');
+            
+            if (method === 'email') {
+                emailTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all tab-active';
+                phoneTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all text-gray-400';
+                emailField.classList.remove('hidden');
+                phoneField.classList.add('hidden');
+            } else {
+                phoneTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all tab-active';
+                emailTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all text-gray-400';
+                phoneField.classList.remove('hidden');
+                emailField.classList.add('hidden');
+            }
+        }
             document.body.classList.toggle('light');
+
+        // Switch Login Method (Email/Phone)
+        function switchLoginMethod(method) {
+            const emailTab = document.getElementById('emailTab');
+            const phoneTab = document.getElementById('phoneTab');
+            const emailField = document.getElementById('emailField');
+            const phoneField = document.getElementById('phoneField');
+            
+            if (method === 'email') {
+                emailTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all tab-active';
+                phoneTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all text-gray-400';
+                emailField.classList.remove('hidden');
+                phoneField.classList.add('hidden');
+            } else {
+                phoneTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all tab-active';
+                emailTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all text-gray-400';
+                phoneField.classList.remove('hidden');
+                emailField.classList.add('hidden');
+            }
+        }
             const isLight = document.body.classList.contains('light');
+
+        // Switch Login Method (Email/Phone)
+        function switchLoginMethod(method) {
+            const emailTab = document.getElementById('emailTab');
+            const phoneTab = document.getElementById('phoneTab');
+            const emailField = document.getElementById('emailField');
+            const phoneField = document.getElementById('phoneField');
+            
+            if (method === 'email') {
+                emailTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all tab-active';
+                phoneTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all text-gray-400';
+                emailField.classList.remove('hidden');
+                phoneField.classList.add('hidden');
+            } else {
+                phoneTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all tab-active';
+                emailTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all text-gray-400';
+                phoneField.classList.remove('hidden');
+                emailField.classList.add('hidden');
+            }
+        }
             localStorage.setItem('theme', isLight ? 'light' : 'dark');
+
+        // Switch Login Method (Email/Phone)
+        function switchLoginMethod(method) {
+            const emailTab = document.getElementById('emailTab');
+            const phoneTab = document.getElementById('phoneTab');
+            const emailField = document.getElementById('emailField');
+            const phoneField = document.getElementById('phoneField');
+            
+            if (method === 'email') {
+                emailTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all tab-active';
+                phoneTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all text-gray-400';
+                emailField.classList.remove('hidden');
+                phoneField.classList.add('hidden');
+            } else {
+                phoneTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all tab-active';
+                emailTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all text-gray-400';
+                phoneField.classList.remove('hidden');
+                emailField.classList.add('hidden');
+            }
+        }
             document.getElementById('themeIconDark').classList.toggle('hidden', !isLight);
+
+        // Switch Login Method (Email/Phone)
+        function switchLoginMethod(method) {
+            const emailTab = document.getElementById('emailTab');
+            const phoneTab = document.getElementById('phoneTab');
+            const emailField = document.getElementById('emailField');
+            const phoneField = document.getElementById('phoneField');
+            
+            if (method === 'email') {
+                emailTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all tab-active';
+                phoneTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all text-gray-400';
+                emailField.classList.remove('hidden');
+                phoneField.classList.add('hidden');
+            } else {
+                phoneTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all tab-active';
+                emailTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all text-gray-400';
+                phoneField.classList.remove('hidden');
+                emailField.classList.add('hidden');
+            }
+        }
             document.getElementById('themeIconLight').classList.toggle('hidden', isLight);
+
+        // Switch Login Method (Email/Phone)
+        function switchLoginMethod(method) {
+            const emailTab = document.getElementById('emailTab');
+            const phoneTab = document.getElementById('phoneTab');
+            const emailField = document.getElementById('emailField');
+            const phoneField = document.getElementById('phoneField');
+            
+            if (method === 'email') {
+                emailTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all tab-active';
+                phoneTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all text-gray-400';
+                emailField.classList.remove('hidden');
+                phoneField.classList.add('hidden');
+            } else {
+                phoneTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all tab-active';
+                emailTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all text-gray-400';
+                phoneField.classList.remove('hidden');
+                emailField.classList.add('hidden');
+            }
+        }
+        }
+
+        // Switch Login Method (Email/Phone)
+        function switchLoginMethod(method) {
+            const emailTab = document.getElementById('emailTab');
+            const phoneTab = document.getElementById('phoneTab');
+            const emailField = document.getElementById('emailField');
+            const phoneField = document.getElementById('phoneField');
+            
+            if (method === 'email') {
+                emailTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all tab-active';
+                phoneTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all text-gray-400';
+                emailField.classList.remove('hidden');
+                phoneField.classList.add('hidden');
+            } else {
+                phoneTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all tab-active';
+                emailTab.className = 'flex-1 py-2 px-3 rounded-md font-medium transition-all text-gray-400';
+                phoneField.classList.remove('hidden');
+                emailField.classList.add('hidden');
+            }
         }
         
         // Load saved theme
@@ -170,7 +456,7 @@
                 const response = await API.auth.login(email, password);
                 if (response.token) {
                     localStorage.setItem('tigerex_token', response.token);
-                    window.location.href = '/';
+                    window.location.href = redirect || '../../../trading-dashboard/pages/trade/index.html?symbol=BTCUSDTwindow.location.href = '/';mode=spot';
                 }
             } catch (error) {
                 alert('Login failed: ' + error.message);
