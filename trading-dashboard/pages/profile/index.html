@@ -162,22 +162,97 @@
     </nav>
     
     <script>
+        // Theme Toggle
         function toggleTheme() {
-            const t = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            document.body.setAttribute('data-theme', t);
-            document.querySelector('.theme-toggle').textContent = t === 'dark' ? '🌙 Dark' : '☀️ Light';
-            localStorage.setItem('theme', t);
+            const body = document.body;
+            const current = body.getAttribute('data-theme') || 'dark';
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            document.querySelectorAll('.theme-toggle').forEach(btn => {
+                btn.textContent = newTheme === 'dark' ? '🌙 Dark' : '☀️ Light';
+            });
+            localStorage.setItem('theme', newTheme);
         }
+        
+        // Initialize theme
         document.addEventListener('DOMContentLoaded', () => {
-            const t = localStorage.getItem('theme') || 'dark';
-            document.body.setAttribute('data-theme', t);
-            document.querySelector('.theme-toggle').textContent = t === 'dark' ? '🌙 Dark' : '☀️ Light';
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', savedTheme);
+            document.querySelectorAll('.theme-toggle').forEach(btn => {
+                btn.textContent = savedTheme === 'dark' ? '🌙 Dark' : '☀️ Light';
+            });
         });
-        function goBack() { window.location.href = '../homepage/index.html'; }
-        function editProfile() { alert('Edit profile'); }
-        function openPage(p) { alert('Opening ' + p); }
-        function logout() { if(confirm('Logout?')) alert('Logged out'); window.location.href='../../index.html'; }
-        function navigateTo(p) { if(p==='home') window.location.href='../homepage/index.html'; if(p==='trade') window.location.href='../trade/index.html'; if(p==='assets') window.location.href='../assets/index.html'; }
+        
+        // Navigation functions
+        function goBack() {
+            window.location.href = '../homepage/index.html';
+        }
+        
+        function navigateTo(page) {
+            if (page === 'home') {
+                window.location.href = '../homepage/index.html';
+            } else if (page === 'trade') {
+                window.location.href = '../trade/index.html';
+            } else if (page === 'assets') {
+                window.location.href = '../assets/index.html';
+            } else if (page === 'profile') {
+                // Already on profile
+            }
+        }
+        
+        // Edit Profile
+        function editProfile() {
+            alert('Edit Profile - Coming Soon!\n\nYou will be able to edit:\n• Display name\n• Avatar\n• Email\n• Phone number');
+        }
+        
+        // Open Page Functions
+        function openPage(page) {
+            const pages = {
+                'kyc': 'KYC Verification - Verified Level 2\n\nYour identity has been verified.',
+                'api': 'API Keys Management\n\nCreate and manage API keys for trading.',
+                'devices': 'Trusted Devices\n\nManage devices that can access your account.',
+                'login': 'Login History\n\nView your recent login activity.',
+                'language': 'Language Settings\n\nCurrent: English',
+                'currency': 'Fiat Currency\n\nCurrent: USD',
+                'help': 'Help Center\n\nFAQs and tutorials available.',
+                'chat': 'Live Chat\n\nConnecting to support...',
+                'ticket': 'Submit Ticket\n\nDescribe your issue and we\'ll help.',
+                'feedback': 'Feedback\n\nSend us your suggestions.',
+                'terms': 'Terms of Service',
+                'privacy': 'Privacy Policy',
+                'fees': 'Trading Fees'
+            };
+            
+            if (pages[page]) {
+                alert(pages[page]);
+            } else {
+                alert('Opening ' + page + '...');
+            }
+        }
+        
+        // Security Toggle
+        function toggleSecurity(element) {
+            element.classList.toggle('active');
+        }
+        
+        // Logout
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                alert('You have been logged out successfully!');
+                // Redirect to login page
+                window.location.href = '../../../index.html';
+            }
+        }
+        
+        // Show Notifications (if header has notification bell)
+        function showNotifications() {
+            alert('Notifications:\n• BTC reached $67,000!\n• New order filled\n• Wallet verification complete');
+        }
+        
+        // Customer Support
+        function openSupportChat() {
+            alert('Opening customer support chat...\n\nA support agent will be with you shortly.');
+        }
     </script>
 </body>
 </html>
