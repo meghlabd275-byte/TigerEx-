@@ -493,6 +493,19 @@
         </div>
         
         <div class="header-right">
+            <!-- QR Scanner -->
+            <button class="header-btn" onclick="alert('📷 QR Code Scanner\n\nScan QR codes to:\n• Add friends\n• Deposit crypto\n• Verify payment')" title="QR Scanner">📷</button>
+            
+            <!-- Notifications -->
+            <button class="header-btn" onclick="alert('🔔 Notifications:\n• BTC reached $67,000!\n• New order filled\n• Wallet verified')" title="Notifications">🔔<span class="notification-badge"></span></button>
+            
+            <!-- Customer Support -->
+            <button class="header-btn" onclick="alert('💬 Customer Support\n\nChat with our 24/7 support team!')" title="Support">💬</button>
+            
+            <!-- Profile -->
+            <button class="header-btn" onclick="window.location.href='../profile/index.html'" title="Profile">👤</button>
+            
+            <!-- Theme Toggle -->
             <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
         </div>
     </header>
@@ -643,6 +656,7 @@
             const newTheme = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             body.setAttribute('data-theme', newTheme);
             document.querySelector('.theme-toggle').textContent = newTheme === 'dark' ? '🌙 Dark' : '☀️ Light';
+            localStorage.setItem('tigerex-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             drawChart();
         }
