@@ -3,7 +3,6 @@ import SwiftUI
 @main
 struct TigerExUsersApp: App {
     @StateObject private var appState = AppState()
-    @Environment(\.colorScheme) var colorScheme
     
     var body: some Scene {
         WindowGroup {
@@ -21,6 +20,10 @@ final class AppState: ObservableObject {
     @Published var isDarkMode = true  // Dark by default
     @Published var currentUser: User?
     @Published var selectedTab = 0
+    
+    func toggleTheme() {
+        isDarkMode.toggle()
+    }
 }
 
 // MARK: - Main Content View
@@ -28,24 +31,36 @@ struct ContentView: View {
     @EnvironmentObject var appState: AppState
     
     var body: some View {
-        TabView(selection: $appState.selectedTab) {
-            HomeView()
-                .tabItem { Label("Home", systemImage: "house.fill") }
-                .tag(0)
-            MarketsView()
-                .tabItem { Label("Markets", systemImage: "chart.line.uptrend.xyaxis") }
-                .tag(1)
-            TradeContainerView()
-                .tabItem { Label("Trade", systemImage: "arrow.left.arrow.right") }
-                .tag(2)
-            TradFiView()
-                .tabItem { Label("TradFi", systemImage: "building.columns.fill") }
-                .tag(3)
-            AssetsView()
-                .tabItem { Label("Assets", systemImage: "wallet.pass.fill") }
-                .tag(4)
+        ZStack(alignment: .topTrailing) {
+            TabView(selection: $appState.selectedTab) {
+                HomeView()
+                    .tabItem { Label("Home", systemImage: "house.fill") }
+                    .tag(0)
+                MarketsView()
+                    .tabItem { Label("Markets", systemImage: "chart.line.uptrend.xyaxis") }
+                    .tag(1)
+                TradeContainerView()
+                    .tabItem { Label("Trade", systemImage: "arrow.left.arrow.right") }
+                    .tag(2)
+                TradFiView()
+                    .tabItem { Label("TradFi", systemImage: "building.columns.fill") }
+                    .tag(3)
+                AssetsView()
+                    .tabItem { Label("Assets", systemImage: "wallet.pass.fill") }
+                    .tag(4)
+            }
+            .tint(Color(hex: "F0B90B"))
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        appState.toggleTheme()
+                    } label: {
+                        Image(systemName: appState.isDarkMode ? "sun.max.fill" : "moon.fill")
+                            .foregroundColor(Color(hex: "F0B90B"))
+                    }
+                }
+            }
         }
-        .tint(Color(hex: "F0B90B"))
     }
 }
 

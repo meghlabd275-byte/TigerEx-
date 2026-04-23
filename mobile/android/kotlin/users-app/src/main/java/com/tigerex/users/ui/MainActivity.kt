@@ -1,7 +1,9 @@
 package com.tigerex.users.app.ui
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.tigerex.users.app.R
@@ -11,18 +13,52 @@ import com.tigerex.users.app.ui.fragments.*
 class MainActivity : AppCompatActivity() {
     
     private lateinit var binding: ActivityMainBinding
+    private var isDarkMode = true  // Default to dark mode
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Load saved theme preference
+        isDarkMode = getSharedPreferences("tigerex_prefs", MODE_PRIVATE)
+            .getBoolean("isDarkMode", true)
+        
+        applyTheme(isDarkMode)
+        
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
+        setupToolbar()
         setupBottomNavigation()
         
         if (savedInstanceState == null) {
             loadFragment(HomeFragment())
             updateToolbarTitle("Home")
         }
+    }
+    
+    private fun setupToolbar() {
+        setSupportActionBar(binding.toolbar)
+        
+        // Theme toggle button
+        binding.btnTheme.setOnClickListener {
+            isDarkMode = !isDarkMode
+            applyTheme(isDarkMode)
+            Toast.makeText(this, if (isDarkMode) "Dark Mode" else "Light Mode", Toast.LENGTH_SHORT).show()
+        }
+    }
+    
+    private fun applyTheme(dark: Boolean) {
+        if (dark) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+        
+        // Save preference
+        getSharedPreferences("tigerex_prefs", MODE_PRIVATE)
+            .edit()
+            .putBoolean("isDarkMode", dark)
+            .apply()
     }
     
     private fun setupBottomNavigation() {
