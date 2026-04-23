@@ -1,170 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Register - TigerEx</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        * { -webkit-tap-highlight-color: transparent; }
-        :root {
-            --primary: #F0B90B;
-            --bg-dark: #0B0B0F;
-            --bg-card: #1E1E1E;
-            --text-dark: #FFFFFF;
-        }
-        body { background: var(--bg-dark); color: var(--text-dark); min-height: 100vh; min-height: 100dvh; }
-        .social-google { background: #4285F4; }
-        .social-apple { background: #000; border: 1px solid #333; }
-        .social-github { background: #333; }
-        .social-btn { transition: transform 0.2s; }
-        .social-btn:hover { transform: scale(1.05); }
-        .social-btn:active { transform: scale(0.95); }
-        .input-dark { background: #2A2A2A; border: 1px solid #3A3A3A; color: white; }
-        .input-dark:focus { border-color: var(--primary); outline: none; }
-        .social-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
-        @media (max-width: 360px) { .social-grid { grid-template-columns: repeat(2, 1fr); } }
-        .login-card { width: 100%; max-width: 420px; padding: 1.25rem; }
-        @media (min-width: 640px) { .login-card { padding: 2rem; } }
-        .title-lg { font-size: 1.5rem; }
-        @media (min-width: 640px) { .title-lg { font-size: 2rem; } }
-        .touch-target { min-height: 48px; min-width: 48px; }
-        /* Light theme */
-        body.light {
-            --bg-dark: #F5F5F5;
-            --bg-card: #FFFFFF;
-            --text-dark: #1A1A1A;
-        }
-        body.light { background: var(--bg-dark); color: var(--text-dark); }
-        body.light .bg-\[\#1E1E1E\] { background: var(--bg-card) !important; }
-        body.light .bg-\[\#2A2A2A\] { background: #FFFFFF !important; border-color: #E0E0E0; }
-        body.light .text-gray-400 { color: #666666; }
-        body.light .bg-gray-700 { background: #CCCCCC; }
-        body.light .border-gray-700 { border-color: #DDDDDD; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register - TigerEx</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+*{-webkit-tap-highlight-color:transparent}
+:root{--primary:#F0B90B;--bg-dark:#0B0B0F}
+body{background:var(--bg-dark);color:#fff;min-height:100vh}
+.input-dark{background:#2A2A2A;border:1px solid #3A3A3A;color:#fff}
+.input-dark:focus{border-color:var(--primary);outline:none}
+.login-card{width:100%;max-width:420px;padding:1.25rem}
+.touch-target{min-height:48px}
+.tab-btn{flex:1;padding:10px;border-radius:8px;font-weight:600;transition:all .2s}
+.tab-btn.active{background:var(--primary);color:#000}
+.tab-btn:not(.active){background:#2A2A2A;color:#9CA3AF}
+body.light{background:#F5F5F5;color:#1A1A1A}
+body.light .bg-\[#1E1E1E\]{background:#FFF}
+body.light .bg-\[#2A2A2A\]{background:#FFF;border-color:#E0E0E0}
+</style>
 </head>
-<body class="flex items-center justify-center p-4 sm:p-6 md:p-8">
-    <!-- Theme Toggle -->
-    <button id="themeToggle" onclick="toggleTheme()" class="fixed top-4 right-4 z-50 p-3 rounded-full bg-[#1E1E1E] hover:bg-[#2A2A2A] transition-all shadow-lg touch-target">
-        <svg id="themeIconDark" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/>
-        </svg>
-        <svg id="themeIconLight" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1z"/>
-        </svg>
-    </button>
-    
-    <div class="login-card">
-        <!-- Logo -->
-        <div class="text-center mb-6 sm:mb-8">
-            <h1 class="title-lg font-bold" style="color: var(--primary)">TigerEx</h1>
-            <p class="text-gray-400 mt-2 text-sm sm:text-base">Create your account</p>
-        </div>
-        
-        <!-- Register Card -->
-        <div class="bg-[#1E1E1E] rounded-2xl shadow-xl">
-            <form id="registerForm" class="p-4 sm:p-6 space-y-4">
-                <div>
-                    <label class="block text-sm text-gray-400 mb-2">Email</label>
-                    <input type="email" id="email" placeholder="Enter your email" 
-                           class="input-dark w-full px-4 py-3 rounded-lg touch-target text-base" required>
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-400 mb-2">Password</label>
-                    <input type="password" id="password" placeholder="Create password" 
-                           class="input-dark w-full px-4 py-3 rounded-lg touch-target text-base" required>
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-400 mb-2">Confirm Password</label>
-                    <input type="password" id="confirmPassword" placeholder="Confirm password" 
-                           class="input-dark w-full px-4 py-3 rounded-lg touch-target text-base" required>
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-400 mb-2">Referral Code (Optional)</label>
-                    <input type="text" id="referralCode" placeholder="Enter referral code" 
-                           class="input-dark w-full px-4 py-3 rounded-lg touch-target text-base">
-                </div>
-                <div class="flex items-start text-xs sm:text-sm">
-                    <input type="checkbox" id="terms" class="mr-2 w-4 h-4 mt-1 rounded" required>
-                    <span class="text-gray-400">I agree to the <a href="/terms" class="text-yellow-500">Terms of Service</a> and <a href="/privacy" class="text-yellow-500">Privacy Policy</a></span>
-                </div>
-                <button type="submit" class="w-full py-3 rounded-lg font-bold text-black touch-target text-base" style="background: var(--primary)">
-                    Create Account
-                </button>
-            </form>
-            
-            <!-- Divider -->
-            <div class="flex items-center my-4 px-4 sm:px-6">
-                <div class="flex-1 h-px bg-gray-700"></div>
-                <span class="px-4 text-gray-500 text-xs sm:text-sm">or sign up with</span>
-                <div class="flex-1 h-px bg-gray-700"></div>
-            </div>
-            
-            <!-- Social Buttons -->
-            <div class="px-4 sm:px-6 pb-4 sm:pb-6">
-                <div class="social-grid">
-                    <button class="social-btn social-google py-3 px-2 rounded-lg flex items-center justify-center touch-target" title="Google">
-                        <svg viewBox="0 0 24 24" class="w-5 h-5 sm:w-6 sm:h-6" fill="#fff"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-                    </button>
-                    <button class="social-btn social-apple py-3 px-2 rounded-lg flex items-center justify-center touch-target" title="Apple">
-                        <svg viewBox="0 0 24 24" class="w-5 h-5 sm:w-6 sm:h-6" fill="#fff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-                    </button>
-                    <button class="social-btn social-github py-3 px-2 rounded-lg flex items-center justify-center touch-target" title="GitHub">
-                        <svg viewBox="0 0 24 24" class="w-5 h-5 sm:w-6 sm:h-6" fill="#fff"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Login Link -->
-            <div class="p-4 sm:p-6 text-center border-t border-gray-700">
-                <p class="text-gray-400 text-sm">Already have an account? <a href="login.html" class="text-yellow-500 hover:text-yellow-400 font-medium">Sign in</a></p>
-            </div>
-        </div>
-    </div>
-    
-    <script src="../utils/api.js"></script>
-    <script>
-        // Theme Toggle
-        function toggleTheme() {
-            document.body.classList.toggle('light');
-            const isLight = document.body.classList.contains('light');
-            localStorage.setItem('theme', isLight ? 'light' : 'dark');
-            document.getElementById('themeIconDark').classList.toggle('hidden', !isLight);
-            document.getElementById('themeIconLight').classList.toggle('hidden', isLight);
-        }
-        
-        // Load saved theme
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'light') {
-                document.body.classList.add('light');
-                document.getElementById('themeIconDark').classList.remove('hidden');
-                document.getElementById('themeIconLight').classList.add('hidden');
-            }
-        });
-        
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const referralCode = document.getElementById('referralCode').value;
-            
-            if (password !== confirmPassword) {
-                alert('Passwords do not match!');
-                return;
-            }
-            
-            try {
-                const response = await API.auth.register(email, password, referralCode);
-                if (response.token) {
-                    localStorage.setItem('tigerex_token', response.token);
-                    window.location.href = '/';
-                }
-            } catch (error) {
-                alert('Registration failed: ' + error.message);
-            }
-        });
-    </script>
+<body class="flex items-center justify-center p-4">
+<button id="themeToggle" onclick="toggleTheme()" class="fixed top-4 right-4 z-50 p-3 rounded-full bg-[#1E1E1E] hover:bg-[#2A2A2A] touch-target">
+<svg id="themeIconDark" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
+<svg id="themeIconLight" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>
+</button>
+<div class="login-card">
+<div class="text-center mb-6"><h1 class="text-2xl font-bold" style="color:var(--primary)">TigerEx</h1><p class="text-gray-400 mt-2">Create your account</p></div>
+<div class="bg-[#1E1E1E] rounded-2xl shadow-xl">
+<form id="registerForm" class="p-6 space-y-4">
+<div class="flex rounded-lg bg-[#2A2A2A] p-1">
+<button type="button" id="emailTab" class="tab-btn active" onclick="switchTab('email')">Email</button>
+<button type="button" id="phoneTab" class="tab-btn" onclick="switchTab('phone')">Phone</button>
+</div>
+<div id="emailField">
+<label class="block text-sm text-gray-400 mb-2">Email</label>
+<input type="email" id="email" placeholder="name@example.com" class="input-dark w-full px-4 py-3 rounded-lg touch-target" required>
+</div>
+<div id="phoneField" class="hidden">
+<label class="block text-sm text-gray-400 mb-2">Phone Number</label>
+<div class="flex gap-2">
+<select id="countryCode" class="input-dark w-24 px-2 py-3 rounded-lg touch-target">
+<option value="+1">+1</option><option value="+44">+44</option><option value="+91" selected>+91</option><option value="+86">+86</option><option value="+81">+81</option><option value="+82">+82</option><option value="+49">+49</option><option value="+33">+33</option><option value="+39">+39</option><option value="+7">+7</option><option value="+971">+971</option><option value="+966">+966</option><option value="+20">+20</option><option value="+62">+62</option><option value="+60">+60</option><option value="+65">+65</option><option value="+66">+66</option><option value="+90">+90</option><option value="+92">+92</option><option value="+880">+880</option><option value="+964">+964</option><option value="+98">+98</option><option value="+962">+962</option><option value="+965">+965</option><option value="+968">+968</option><option value="+973">+973</option><option value="+974">+974</option><option value="+970">+970</option><option value="+216">+216</option><option value="+212">+212</option><option value="+213">+213</option><option value="+249">+249</option><option value="+221">+221</option><option value="+252">+252</option><option value="+254">+254</option><option value="+256">+256</option><option value="+250">+250</option><option value="+257">+257</option><option value="+251">+251</option><option value="+225">+225</option><option value="+229">+229</option><option value="+237">+237</option><option value="+241">+241</option><option value="+242">+242</option><option value="+243">+243</option><option value="+244">+244</option><option value="+245">+245</option><option value="+246">+246</option><option value="+248">+248</option><option value="+267">+267</option><option value="+263">+263</option><option value="+264">+264</option><option value="+265">+265</option><option value="+266">+266</option><option value="+350">+350</option><option value="+351">+351</option><option value="+352">+352</option><option value="+353">+353</option><option value="+354">+354</option><option value="+355">+355</option><option value="+356">+356</option><option value="+357">+357</option><option value="+358">+358</option><option value="+359">+359</option><option value="+370">+370</option><option value="+371">+371</option><option value="+372">+372</option><option value="+373">+373</option><option value="+374">+374</option><option value="+375">+375</option><option value="+376">+376</option><option value="+377">+377</option><option value="+378">+378</option><option value="+380">+380</option><option value="+381">+381</option><option value="+382">+382</option><option value="+385">+385</option><option value="+386">+386</option><option value="+387">+387</option><option value="+389">+389</option><option value="+420">+420</option><option value="+421">+421</option><option value="+423">+423</option><option value="+595">+595</option><option value="+509">+509</option><option value="+590">+590</option><option value="+682">+682</option><option value="+685">+685</option><option value="+687">+687</option><option value="+689">+689</option><option value="+691">+691</option><option value="+692">+692</option><option value="+850">+850</option><option value="+852">+852</option><option value="+853">+853</option><option value="+855">+855</option><option value="+856">+856</option><option value="+872">+872</option><option value="+886">+886</option><option value="+975">+975</option><option value="+976">+976</option><option value="+977">+977</option><option value="+992">+992</option><option value="+993">+993</option><option value="+994">+994</option><option value="+995">+995</option><option value="+996">+996</option><option value="+998">+998</option>
+</select>
+<input type="tel" id="phone" placeholder="1234567890" class="input-dark flex-1 px-4 py-3 rounded-lg touch-target">
+</div>
+</div>
+<div><label class="block text-sm text-gray-400 mb-2">Password</label><input type="password" id="password" placeholder="Create password" class="input-dark w-full px-4 py-3 rounded-lg touch-target" required></div>
+<div><label class="block text-sm text-gray-400 mb-2">Confirm Password</label><input type="password" id="confirmPassword" placeholder="Confirm password" class="input-dark w-full px-4 py-3 rounded-lg touch-target" required></div>
+<div><label class="block text-sm text-gray-400 mb-2">Referral Code (Optional)</label><input type="text" id="referralCode" placeholder="Enter code" class="input-dark w-full px-4 py-3 rounded-lg touch-target"></div>
+<div class="flex items-start text-sm"><input type="checkbox" id="terms" class="mr-2 w-4 h-4 mt-1 rounded" required><span class="text-gray-400">I agree to the <a href="#" class="text-yellow-500">Terms</a> and <a href="#" class="text-yellow-500">Privacy</a></span></div>
+<button type="submit" class="w-full py-3 rounded-lg font-bold text-black touch-target" style="background:var(--primary)">Create Account</button>
+</form>
+<div class="p-6 text-center border-t border-gray-700"><p class="text-gray-400">Already have an account? <a href="login.html" class="text-yellow-500 font-medium">Sign in</a></p></div>
+</div>
+</div>
+<script src="../utils/api.js"></script>
+<script>
+function toggleTheme(){document.body.classList.toggle('light');localStorage.setItem('theme',document.body.classList.contains('light')?'light':'dark');document.getElementById('themeIconDark').classList.toggle('hidden',!document.body.classList.contains('light'));document.getElementById('themeIconLight').classList.toggle('hidden',document.body.classList.contains('light'))}
+function switchTab(tab){const emailTab=document.getElementById('emailTab'),phoneTab=document.getElementById('phoneTab'),emailField=document.getElementById('emailField'),phoneField=document.getElementById('phoneField');if(tab==='email'){emailTab.className='tab-btn active';phoneTab.className='tab-btn';emailField.classList.remove('hidden');phoneField.classList.add('hidden');document.getElementById('email').required=true;document.getElementById('phone').required=false}else{phoneTab.className='tab-btn active';emailTab.className='tab-btn';phoneField.classList.remove('hidden');emailField.classList.add('hidden');document.getElementById('phone').required=true;document.getElementById('email').required=false}}
+document.addEventListener('DOMContentLoaded',()=>{if(localStorage.getItem('theme')==='light'){document.body.classList.add('light');document.getElementById('themeIconDark').classList.remove('hidden');document.getElementById('themeIconLight').classList.add('hidden')}});
+document.getElementById('registerForm').addEventListener('submit',async(e)=>{e.preventDefault();const isEmail=!document.getElementById('emailField').classList.contains('hidden');let loginId=isEmail?document.getElementById('email').value:document.getElementById('countryCode').value+document.getElementById('phone').value;const password=document.getElementById('password').value,confirmPassword=document.getElementById('confirmPassword').value;if(password!==confirmPassword){alert('Passwords do not match!');return}try{const response=await API.auth.register(loginId,password,document.getElementById('referralCode').value);if(response.token){localStorage.setItem('tigerex_token',response.token);window.location.href='../../../trading-dashboard/pages/trade/index.html?symbol=BTCUSDT&mode=spot'}}catch(error){alert('Registration failed: '+error.message)}});
+</script>
 </body>
 </html>
