@@ -1,615 +1,635 @@
 <!--
- * TigerEx Web Page
- * @file register.html
- * @description TigerEx trading platform page
- * @author TigerEx Development Team
+@file register.html
+@description TigerEx Register Page - Binance Clone Design
+@author TigerEx Development Team
 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="assets/css/theme.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up | TigerEx</title>
+  <title>Register | TigerEx</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/theme.css">
   <style>
     :root {
-      --primary-color: #F0B90B;
-      --primary-dark: #F0B90B;
+      --primary: #F0B90B;
       --bg-dark: #0B0E11;
       --bg-card: #1E2329;
-      --bg-elevated: #252A32;
       --text-primary: #EAECEF;
       --text-secondary: #848E9C;
-      --accent-green: #00C087;
-      --accent-red: #F6465D;
-      --border-color: #2B3139;
-      --hover-bg: #2B3139;
+      --border: #2B3139;
+      --green: #00C087;
     }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg-dark);
       color: var(--text-primary);
-      line-height: 1.6;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
     }
-
+    
+    body.light-mode {
+      --bg-dark: #F5F5F5;
+      --bg-card: #FFFFFF;
+      --text-primary: #1A1A1A;
+      --text-secondary: #666666;
+      --border: #E0E0E0;
+    }
+    
+    /* Top Banner */
+    .top-banner {
+      background: linear-gradient(90deg, #F0B90B 0%, #FFD84D 100%);
+      color: #000;
+      text-align: center;
+      padding: 10px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
     /* Header */
-    .auth-header {
-      padding: 20px 24px;
+    .header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid var(--border-color);
+      align-items: center;
+      padding: 16px 24px;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
     }
-
-    .auth-logo {
+    
+    .logo {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-primary);
       font-size: 24px;
       font-weight: 700;
-      color: var(--text-primary);
-      text-decoration: none;
     }
-
+    
     .logo-icon {
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, var(--primary-color), #FF6B6B);
-      border-radius: 12px;
+      width: 36px;
+      height: 36px;
+      background: var(--primary);
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 20px;
     }
-
-    .header-lang {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      font-size: 14px;
-      color: var(--text-primary);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .header-lang:hover {
-      background: var(--hover-bg);
-    }
-
-    /* Main Content */
-    .auth-main {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 24px;
-    }
-
-    .auth-container {
-      width: 100%;
-      max-width: 420px;
-    }
-
-    .auth-title {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      text-align: center;
-    }
-
-    .auth-subtitle {
-      font-size: 14px;
-      color: var(--text-secondary);
-      margin-bottom: 32px;
-      text-align: center;
-    }
-
-    .auth-form {
-      background: var(--bg-card);
-      border-radius: 16px;
-      padding: 32px;
-      border: 1px solid var(--border-color);
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 8px;
-      color: var(--text-secondary);
-    }
-
-    .form-input {
-      width: 100%;
-      padding: 14px 16px;
-      background: var(--bg-dark);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      font-size: 15px;
-      color: var(--text-primary);
-      transition: all 0.2s;
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: var(--primary-color);
-    }
-
-    .form-input::placeholder {
-      color: var(--text-secondary);
-    }
-
-    .form-select {
-      width: 100%;
-      padding: 14px 16px;
-      background: var(--bg-dark);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      font-size: 15px;
-      color: var(--text-primary);
-      cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23848E9C' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      background-size: 20px;
-    }
-
-    .form-select:focus {
-      outline: none;
-      border-color: var(--primary-color);
-    }
-
-    .form-error {
-      color: var(--accent-red);
-      font-size: 13px;
-      margin-top: 8px;
-    }
-
-    .btn-primary {
-      width: 100%;
-      padding: 14px;
-      background: var(--primary-color);
-      color: var(--bg-dark);
-      border: none;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-primary:hover {
-      background: #E5A809;
-    }
-
-    .btn-primary:disabled {
-      background: var(--border-color);
-      color: var(--text-secondary);
-      cursor: not-allowed;
-    }
-
-    .divider {
+    
+    .header-right {
       display: flex;
       align-items: center;
       gap: 16px;
-      margin: 24px 0;
-      color: var(--text-secondary);
-      font-size: 13px;
     }
-
-    .divider::before,
-    .divider::after {
+    
+    .lang-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    .theme-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    
+    /* Main Content */
+    .main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+      min-height: calc(100vh - 200px);
+    }
+    
+    .register-card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 32px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+    }
+    
+    .rewards-badge {
+      background: linear-gradient(135deg, var(--primary) 0%, #FFD84D 100%);
+      color: #000;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+    
+    .rewards-badge span {
+      font-size: 16px;
+    }
+    
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .subtitle {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+    
+    .stats {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    
+    .stat-item {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    
+    .stat-item strong {
+      color: var(--text-primary);
+    }
+    
+    /* Form */
+    .form-group {
+      margin-bottom: 16px;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .input-wrapper {
+      position: relative;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    
+    .form-input:focus {
+      border-color: var(--primary);
+    }
+    
+    .form-input::placeholder {
+      color: var(--text-secondary);
+    }
+    
+    .country-select {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 20px;
+    }
+    
+    .checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    
+    .checkbox-group input {
+      margin-top: 3px;
+      accent-color: var(--primary);
+    }
+    
+    .checkbox-group label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+    
+    .checkbox-group a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    
+    .submit-btn:hover {
+      opacity: 0.9;
+    }
+    
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 24px 0;
+    }
+    
+    .divider::before, .divider::after {
       content: '';
       flex: 1;
       height: 1px;
-      background: var(--border-color);
+      background: var(--border);
     }
-
-    .social-login {
+    
+    .divider span {
+      padding: 0 16px;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+    
+    /* Social Buttons */
+    .social-btns {
       display: flex;
-      flex-direction: column;
       gap: 12px;
     }
-
+    
     .social-btn {
+      flex: 1;
+      padding: 12px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      padding: 14px;
-      background: var(--bg-dark);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--text-primary);
-      cursor: pointer;
-      transition: all 0.2s;
+      transition: background 0.2s;
     }
-
+    
     .social-btn:hover {
-      background: var(--hover-bg);
+      background: var(--hover-bg, #2B3139);
     }
-
-    .social-icon {
-      font-size: 20px;
+    
+    .social-btn svg {
+      width: 20px;
+      height: 20px;
     }
-
-    .auth-footer {
-      margin-top: 24px;
+    
+    /* Entity Link */
+    .entity-link {
       text-align: center;
-    }
-
-    .auth-footer-text {
-      color: var(--text-secondary);
+      margin-top: 24px;
       font-size: 14px;
+      color: var(--text-secondary);
     }
-
-    .auth-footer-link {
-      color: var(--primary-color);
+    
+    .entity-link a {
+      color: var(--primary);
       text-decoration: none;
       font-weight: 500;
     }
-
-    .auth-footer-link:hover {
-      text-decoration: underline;
-    }
-
+    
     /* Footer */
-    .auth-footer-outer {
-      padding: 20px 24px;
+    .footer {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      padding: 20px;
       text-align: center;
-      border-top: 1px solid var(--border-color);
     }
-
+    
     .footer-links {
       display: flex;
       justify-content: center;
       gap: 24px;
       margin-bottom: 12px;
     }
-
-    .footer-link {
+    
+    .footer-links a {
       color: var(--text-secondary);
-      font-size: 12px;
       text-decoration: none;
+      font-size: 13px;
     }
-
-    .footer-link:hover {
+    
+    .footer-links a:hover {
       color: var(--text-primary);
     }
-
-    .footer-copyright {
+    
+    .footer-copy {
       color: var(--text-secondary);
       font-size: 12px;
     }
-
-    /* Checkbox */
-    .checkbox-group {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .checkbox-input {
-      width: 20px;
-      height: 20px;
-      margin-top: 2px;
-      accent-color: var(--primary-color);
-      cursor: pointer;
-    }
-
-    .checkbox-label {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-    }
-
-    .checkbox-label a {
-      color: var(--primary-color);
-      text-decoration: none;
-    }
-
-    .checkbox-label a:hover {
-      text-decoration: underline;
-    }
-
-    /* Referral Code */
-    .referral-toggle {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 16px;
-    }
-
-    .referral-btn {
-      background: none;
-      border: none;
-      color: var(--primary-color);
-      font-size: 14px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .referral-btn:hover {
-      text-decoration: underline;
-    }
-
-    .referral-box {
+    
+    /* Country Modal */
+    .country-modal {
       display: none;
-      margin-bottom: 20px;
-    }
-
-    .referral-box.show {
-      display: block;
-    }
-
-    /* Password Strength */
-    .password-strength {
-      margin-top: 12px;
-    }
-
-    .strength-bar {
-      height: 4px;
-      background: var(--border-color);
-      border-radius: 2px;
-      overflow: hidden;
-      margin-bottom: 8px;
-    }
-
-    .strength-fill {
-      height: 100%;
-      border-radius: 2px;
-      transition: all 0.3s;
-    }
-
-    .strength-fill.weak {
-      width: 33%;
-      background: var(--accent-red);
-    }
-
-    .strength-fill.medium {
-      width: 66%;
-      background: var(--primary-color);
-    }
-
-    .strength-fill.strong {
-      width: 100%;
-      background: var(--accent-green);
-    }
-
-    .strength-text {
-      font-size: 12px;
-      color: var(--text-secondary);
-    }
-
-    /* Success Message */
-    .success-message {
-      display: none;
-      text-align: center;
-      padding: 40px;
-    }
-
-    .success-message.show {
-      display: block;
-    }
-
-    .success-icon {
-      width: 80px;
-      height: 80px;
-      background: rgba(0, 192, 135, 0.15);
-      border-radius: 50%;
-      display: flex;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 24px;
-      font-size: 40px;
     }
-
-    .success-title {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 12px;
+    
+    .country-modal.active {
+      display: flex;
     }
-
-    .success-text {
-      color: var(--text-secondary);
-      margin-bottom: 32px;
+    
+    .country-list {
+      background: var(--bg-card);
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 20px;
     }
-  .theme-toggle { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; padding: 8px; } .theme-toggle:hover { background: var(--bg-card-hover); } body { transition: background-color 0.3s, color 0.3s; }
-    </style>
+    
+    .country-list h3 {
+      margin-bottom: 16px;
+      font-size: 18px;
+    }
+    
+    .country-item {
+      padding: 12px;
+      cursor: pointer;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .country-item:hover {
+      background: var(--bg-dark);
+    }
+    
+    /* Error */
+    .error-msg {
+      color: #F6465D;
+      font-size: 13px;
+      margin-top: 8px;
+      display: none;
+    }
+    
+    .error-msg.show {
+      display: block;
+    }
+    
+    /* Responsive */
+    @media (max-width: 480px) {
+      .register-card {
+        padding: 24px 16px;
+      }
+      
+      h1 {
+        font-size: 24px;
+      }
+      
+      .stats {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <!-- Top Banner -->
+  <div class="top-banner">
+    <span>📢</span> Up to 100 USDT Sign Up Rewards
+  </div>
+  
   <!-- Header -->
-  <header class="auth-header">
-    <a href="/" class="auth-logo">
-      <img src="assets/screenshots/IMG_20251112_234200_242.jpg" alt="TigerEx Logo" class="logo-img" style="width:48px;height:48px;border-radius:8px;">
+  <header class="header">
+    <a href="/" class="logo">
+      <div class="logo-icon">🐯</div>
       <span>TigerEx</span>
     </a>
-    <div class="header-lang">
-      <span>🌐</span>
-      <span>English</span>
+    <div class="header-right">
+      <button class="lang-btn" onclick="showCountries()">
+        <span id="selectedFlag">🇺🇸</span> <span id="selectedLang">English</span>
+      </button>
+      <button class="theme-btn" onclick="toggleTheme()">
+        <span id="themeIcon">🌙</span>
+      </button>
     </div>
   </header>
-
+  
   <!-- Main Content -->
-  <main class="auth-main">
-    <div class="auth-container">
-      <h1 class="auth-title">Create a TigerEx Account</h1>
-      <p class="auth-subtitle">Join the world's most trusted crypto exchange.</p>
-
-      <div class="auth-form" id="registerFormContainer">
-        <form id="registerForm">
-          <div class="form-group">
-            <label class="form-label">Country of Residence</label>
-            <select class="form-select" required>
-              <option value="">Select your country</option>
-              <option value="US">United States</option>
-              <option value="GB">United Kingdom</option>
-              <option value="AU">Australia</option>
-              <option value="CA">Canada</option>
-              <option value="DE">Germany</option>
-              <option value="FR">France</option>
-              <option value="JP">Japan</option>
-              <option value="SG">Singapore</option>
-              <option value="KR">South Korea</option>
-              <option value="IN">India</option>
-              <option value="BR">Brazil</option>
-              <option value="AE">United Arab Emirates</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Email</label>
-            <input type="email" class="form-input" placeholder="Enter your email" required>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Password</label>
-            <input type="password" class="form-input" id="password" placeholder="Create a password (8+ characters)" minlength="8" required>
-            <div class="password-strength">
-              <div class="strength-bar">
-                <div class="strength-fill" id="strengthFill"></div>
-              </div>
-              <span class="strength-text" id="strengthText"></span>
-            </div>
-          </div>
-
-          <div class="referral-toggle">
-            <button type="button" class="referral-btn" onclick="toggleReferral()">
-              <span id="referralIcon">+</span> Have a referral code?
-            </button>
-          </div>
-
-          <div class="referral-box" id="referralBox">
-            <input type="text" class="form-input" placeholder="Referral code (optional)">
-          </div>
-
-          <div class="checkbox-group">
-            <input type="checkbox" class="checkbox-input" id="terms" required>
-            <label class="checkbox-label" for="terms">
-              I agree to TigerEx's 
-              <a href="#">Terms of Use</a> 
-              and 
-              <a href="#">Privacy Policy</a>
-            </label>
-          </div>
-
-          <button type="submit" class="btn-primary">Create Account</button>
-        </form>
-
-        <div class="divider">or</div>
-
-        <div class="social-login">
-          <button class="social-btn">
-            <span class="social-icon">🔴</span>
-            Continue with Google
-          </button>
-          <button class="social-btn">
-            <span class="social-icon">🍎</span>
-            Continue with Apple
-          </button>
-          <button class="social-btn">
-            <span class="social-icon">✈️</span>
-            Continue with Telegram
-          </button>
-        </div>
-
-        <div class="auth-footer">
-          <p class="auth-footer-text">
-            Already have an account? 
-            <a href="/login.html" class="auth-footer-link">Log In</a>
-          </p>
-        </div>
+  <main class="main">
+    <div class="register-card">
+      <div class="rewards-badge">
+        <span>🎁</span> Up to <span style="font-size:18px">100 USDT</span> Sign Up Rewards
       </div>
-
-      <!-- Success Message -->
-      <div class="success-message" id="successMessage">
-        <div class="success-icon">✓</div>
-        <h2 class="success-title">Account Created!</h2>
-        <p class="success-text">We've sent a verification email to your inbox. Please check and verify your email to start trading.</p>
-        <a href="/login.html" class="btn-primary" style="max-width: 200px; margin: 0 auto;">Go to Log In</a>
+      
+      <h1>Create Your Account</h1>
+      <p class="subtitle">Join the world's leading crypto exchange</p>
+      
+      <div class="stats">
+        <div class="stat-item"><strong>50M+</strong> Users</div>
+        <div class="stat-item"><strong>No.1</strong> In Trading Volume</div>
+        <div class="stat-item"><strong>SAFU</strong> Fund</div>
+      </div>
+      
+      <form id="registerForm" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label class="form-label">Email / Phone number</label>
+          <div class="input-wrapper">
+            <input type="text" id="emailInput" class="form-input" placeholder="Email or phone number" required>
+            <span class="country-select" onclick="showCountries()">🇺🇸</span>
+          </div>
+          <div class="error-msg" id="emailError">Please enter a valid email or phone number</div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="passwordInput" class="form-input" placeholder="At least 8 characters" required minlength="8">
+          <div class="error-msg" id="passwordError">Password must be at least 8 characters</div>
+        </div>
+        
+        <div class="checkbox-group">
+          <input type="checkbox" id="termsCheck" required>
+          <label for="termsCheck">I agree to TigerEx's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+        </div>
+        
+        <button type="submit" class="submit-btn">Create Account</button>
+      </form>
+      
+      <div class="divider">
+        <span>or</span>
+      </div>
+      
+      <div class="social-btns">
+        <button class="social-btn" onclick="socialLogin('google')" title="Continue with Google">
+          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        </button>
+        <button class="social-btn" onclick="socialLogin('apple')" title="Continue with Apple">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        </button>
+        <button class="social-btn" onclick="socialLogin('telegram')" title="Continue with Telegram">
+          <svg viewBox="0 0 24 24" fill="#0088CC"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.466.466 0 0 1 .103 1.525c-.116.306-.11 1.548.087 2.195-.39.955-.934 1.712-1.793 2.559-.498.493-1.085 1.035-1.766 1.452-.086.072-.21.053-.265-.043a1.01 1.01 0 0 1-.194-.276c.064-.116.21-.197.325-.143.09.04.181.08.27.12.05.02.137.028.16.052.054.06.012.158-.053.257-.054.083-.11.163-.163.246-.032.05-.073.098-.127.13-.04.024-.102.008-.129-.054-.015-.036-.03-.075-.044-.112a.42.42 0 0 1-.027-.185c.01-.094.048-.164.128-.207a.46.46 0 0 1 .26-.052c.11.004.22.04.293.118.035.04.07.08.1.122.032.04.045.094.012.149-.016.03-.044.056-.094.062-.11.014-.223-.008-.324-.052z"/></svg>
+        </button>
+      </div>
+      
+      <div class="entity-link">
+        <a href="#">Sign up as an entity</a> or <a href="login.html">Log in</a>
       </div>
     </div>
   </main>
-
+  
   <!-- Footer -->
-  <footer class="auth-footer-outer">
+  <footer class="footer">
     <div class="footer-links">
-      <a href="#" class="footer-link">Cookies</a>
-      <a href="#" class="footer-link">Privacy</a>
-      <a href="#" class="footer-link">Terms</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Cookies</a>
+      <a href="#">API</a>
     </div>
-    <p class="footer-copyright">© 2026 TigerEx. All rights reserved.</p>
+    <div class="footer-copy">© 2024 TigerEx - All rights reserved</div>
   </footer>
+  
+  <!-- Country Modal -->
+  <div class="country-modal" id="countryModal" onclick="closeCountries(event)">
+    <div class="country-list" onclick="event.stopPropagation()">
+      <h3>Select Country/Territory</h3>
+      <div class="country-item" onclick="selectCountry('🇺🇸', 'United States', 'en')">
+        <span>🇺🇸</span> <span>United States</span>
+      </div>
+      <div class="country-item" onclick="selectCountry('🇬🇧', 'United Kingdom', 'en')">
+        <span>🇬🇧</span> <span>United Kingdom</span>
+      </div>
+      <div class="country-item" onclick="selectCountry('🇩🇪', 'Germany', 'de')">
+        <span>🇩🇪</span> <span>Germany</span>
+      </div>
+      <div class="country-item" onclick="selectCountry('🇫🇷', 'France', 'fr')">
+        <span>🇫🇷</span> <span>France</span>
+      </div>
+      <div class="country-item" onclick="selectCountry('🇪🇸', 'Spain', 'es')">
+        <span>🇪🇸</span> <span>Spain</span>
+      </div>
+      <div class="country-item" onclick="selectCountry('🇮🇳', 'India', 'hi')">
+        <span>🇮🇳</span> <span>India</span>
+      </div>
+      <div class="country-item" onclick="selectCountry('🇯🇵', 'Japan', 'ja')">
+        <span>🇯🇵</span> <span>Japan</span>
+      </div>
+      <div class="country-item" onclick="selectCountry('🇰🇷', 'South Korea', 'ko')">
+        <span>🇰🇷</span> <span>South Korea</span>
+      </div>
+      <div class="country-item" onclick="selectCountry('🇨🇳', 'China', 'zh')">
+        <span>🇨🇳</span> <span>China</span>
+      </div>
+      <div class="country-item" onclick="selectCountry('🇧🇩', 'Bangladesh', 'bn')">
+        <span>🇧🇩</span> <span>Bangladesh</span>
+      </div>
+      <div class="country-item" onclick="selectCountry('🇧🇷', 'Brazil', 'pt')">
+        <span>🇧🇷</span> <span>Brazil</span>
+      </div>
+      <div class="country-item" onclick="selectCountry('🇷🇺', 'Russia', 'ru')">
+        <span>🇷🇺</span> <span>Russia</span>
+      </div>
+    </div>
+  </div>
 
   <script>
-    // Password strength indicator
-    document.getElementById('password').addEventListener('input', function(e) {
-      const password = e.target.value;
-      const fill = document.getElementById('strengthFill');
-      const text = document.getElementById('strengthText');
-      
-      if (password.length < 6) {
-        fill.className = 'strength-fill weak';
-        text.textContent = '';
-      } else if (password.length < 10) {
-        fill.className = 'strength-fill medium';
-        text.textContent = 'Medium strength';
-      } else {
-        fill.className = 'strength-fill strong';
-        text.textContent = 'Strong password';
-      }
-    });
-
-    // Referral code toggle
-    function toggleReferral() {
-      const box = document.getElementById('referralBox');
-      const icon = document.getElementById('referralIcon');
-      box.classList.toggle('show');
-      icon.textContent = box.classList.contains('show') ? '−' : '+';
+    // Theme Toggle
+    function toggleTheme() {
+      const isLight = document.body.classList.toggle('light-mode');
+      localStorage.setItem('tigerex_theme', isLight ? 'light' : 'dark');
+      document.getElementById('themeIcon').textContent = isLight ? '☀️' : '🌙';
     }
-
-    // Form submission
-    document.getElementById('registerForm').addEventListener('submit', function(e) {
+    
+    // Load saved theme
+    const savedTheme = localStorage.getItem('tigerex_theme');
+    if (savedTheme === 'light') {
+      document.body.classList.add('light-mode');
+      document.getElementById('themeIcon').textContent = '☀️';
+    }
+    
+    // Country Modal
+    function showCountries() {
+      document.getElementById('countryModal').classList.add('active');
+    }
+    
+    function closeCountries(e) {
+      if (e.target.id === 'countryModal') {
+        document.getElementById('countryModal').classList.remove('active');
+      }
+    }
+    
+    function selectCountry(flag, country, lang) {
+      document.getElementById('selectedFlag').textContent = flag;
+      document.getElementById('selectedLang').textContent = country;
+      document.querySelector('.country-select').textContent = flag;
+      document.getElementById('countryModal').classList.remove('active');
+    }
+    
+    // Social Login
+    function socialLogin(provider) {
+      alert(provider + ' login coming soon!');
+    }
+    
+    // Form Handling
+    function handleRegister(e) {
       e.preventDefault();
-      const form = document.getElementById('registerFormContainer');
-      const success = document.getElementById('successMessage');
+      const email = document.getElementById('emailInput').value;
+      const password = document.getElementById('passwordInput').value;
+      const terms = document.getElementById('termsCheck').checked;
       
-      // Show success and redirect to login after a delay
-      form.style.display = 'none';
-      success.classList.add('show');
+      let valid = true;
       
-      // Redirect to login after 3 seconds
-      setTimeout(() => {
-        window.location.href = '/login.html';
-      }, 3000);
-    });
+      if (!email || !email.includes('@')) {
+        document.getElementById('emailError').classList.add('show');
+        valid = false;
+      } else {
+        document.getElementById('emailError').classList.remove('show');
+      }
+      
+      if (password.length < 8) {
+        document.getElementById('passwordError').classList.add('show');
+        valid = false;
+      } else {
+        document.getElementById('passwordError').classList.remove('show');
+      }
+      
+      if (!terms) {
+        alert('Please agree to the Terms of Service');
+        return;
+      }
+      
+      if (valid) {
+        localStorage.setItem('tigerex_token', 'demo_token_' + Date.now());
+        window.location.href = 'dashboard.html';
+      }
+    }
   </script>
-    <script src="assets/js/theme.js"></script>
 </body>
 </html>
