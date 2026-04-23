@@ -3,6 +3,168 @@ import SwiftUI
 @main
 struct TigerExUsersApp: App {
     @StateObject private var appState = AppState()
+    @Environment(\.colorScheme) var colorScheme
+    
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .environmentObject(appState)
+                .preferredColorScheme(appState.isDarkMode ? .dark : .light)
+        }
+    }
+}
+
+// MARK: - App State
+@MainActor
+final class AppState: ObservableObject {
+    @Published var isAuthenticated = false
+    @Published var isDarkMode = true  // Dark by default
+    @Published var currentUser: User?
+    @Published var selectedTab = 0
+}
+
+// MARK: - Main Content View
+struct ContentView: View {
+    @EnvironmentObject var appState: AppState
+    
+    var body: some View {
+        TabView(selection: $appState.selectedTab) {
+            HomeView()
+                .tabItem { Label("Home", systemImage: "house.fill") }
+                .tag(0)
+            MarketsView()
+                .tabItem { Label("Markets", systemImage: "chart.line.uptrend.xyaxis") }
+                .tag(1)
+            TradeContainerView()
+                .tabItem { Label("Trade", systemImage: "arrow.left.arrow.right") }
+                .tag(2)
+            TradFiView()
+                .tabItem { Label("TradFi", systemImage: "building.columns.fill") }
+                .tag(3)
+            AssetsView()
+                .tabItem { Label("Assets", systemImage: "wallet.pass.fill") }
+                .tag(4)
+        }
+        .tint(Color(hex: "F0B90B"))
+    }
+}
+
+// MARK: - Trade Container with All Modes
+struct TradeContainerView: View {
+    @State private var selectedMode = 0
+    let tradingModes = ["Spot", "Futures", "Margin", "Option", "Alpha", "Copy", "TradeX"]
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            Picker("Mode", selection: $selectedMode) {
+                ForEach(0..<tradingModes.count, id: \.self) { Text($0).tag($1) }
+            }
+            .pickerStyle(.segmented)
+            .padding()
+            
+            TabView(selection: $selectedMode) {
+                SpotTradeView().tag(0)
+                FuturesTradeView().tag(1)
+                Text("Margin").tag(2)
+                Text("Option").tag(3)
+                Text("Alpha").tag(4)
+                CopyTradeView().tag(5)
+                Text("TradeX").tag(6)
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+        }
+        .navigationTitle("Trade")
+    }
+}
+
+struct SpotTradeView: View {
+    @State private var isBuy = true
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 16) {
+                Text("$43,250.00").font(.title.bold())
+                Text("+2.5%").foregroundStyle(.green)
+                
+                HStack(spacing: 12) {
+                    Button { isBuy = true } label: { Text("Buy").frame(maxWidth:.infinity).padding().background(isBuy ? .green : .clear).clipShape(RoundedRectangle(cornerRadius:8)) }.foregroundColor(isBuy ? .white : .red)
+                    Button { isBuy = false } label: { Text("Sell").frame(maxWidth:.infinity).padding().background(!isBuy ? .red : .clear).clipShape(RoundedRectangle(cornerRadius:8)) }.foregroundColor(!isBuy ? .white : .red)
+                }
+                
+                TextField("Price", text:.constant("")).textFieldStyle(.roundedBorder)
+                TextField("Amount", text:.constant("")).textFieldStyle(.roundedBorder)
+                
+                Button(isBuy ? "Buy BTC" : "Sell BTC") {}
+                    .frame(maxWidth:.infinity).padding().background(isBuy ? .green : .red).foregroundColor(.white)
+            }
+            .padding()
+        }
+    }
+}
+
+struct FuturesTradeView: View {
+    @State private var isLong = true
+    @State private var leverage = 20
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 16) {
+                HStack{ VStack{Text("Open").foregroundStyle(.secondary);Text("$0.00")};Spacer();VStack{Text("PnL").foregroundStyle(.secondary);Text("$0.00").foregroundStyle(.green)};Spacer();VStack{Text("ROE%").foregroundStyle(.secondary);Text("0.00%")} }
+                .padding().background(Color(.systemGray6)).clipShape(RoundedRectangle(cornerRadius:12))
+                
+                Text("Leverage: \(leverage)x")
+                Slider(value: Binding(get: { Double(leverage) }, set: { leverage = Int($0) }), in: 1...125, step: 1).tint(Color(hex:"F0B90B"))
+                
+                HStack(spacing:12) {
+                    Button{isLong = true} label:{Text("Long").frame(maxWidth:.infinity).padding().background(isLong ? .green : .clear).clipShape(RoundedRectangle(cornerRadius:8)))}.foregroundColor(isLong ? .white : .red)
+                    Button{isLong = false} label:{Text("Short").frame(maxWidth:.infinity).padding().background(!isLong ? .red : .clear).clipShape(RoundedRectangle(cornerRadius:8)))}.foregroundColor(!isLong ? .white : .red)
+                }
+                
+                Button(isLong ? "Open Long" : "Open Short") {}
+                    .frame(maxWidth:.infinity).padding().background(isLong ? .green : .red).foregroundColor(.white)
+            }
+            .padding()
+        }
+    }
+}
+
+struct CopyTradeView: View {
+    var body: some View {
+        List(0..<10, id: \.self) { _ in
+            HStack {
+                Circle().fill(Color(hex:"F0B90B")).frame(width:40,height:40).overlay(Text("T").foregroundColor(.white))
+                VStack(alignment:.leading){Text("Trader").font(.headline);Text("Win: 75%").font(.caption).foregroundStyle(.secondary)}
+                Spacer()
+                VStack(alignment:.trailing){Text("+45%").foregroundStyle(.green);Text("120 copiers").font(.caption).foregroundStyle(.secondary)}
+                Button("Copy"){}.buttonStyle(.bordered).tint(Color(hex:"F0B90B"))
+            }
+        }
+    }
+}
+
+// MARK: - All Other Views
+struct HomeView: View { var body: some View { NavigationStack{Text("Home").navigationTitle("TigerEx")} }}
+struct MarketsView: View { var body: some View { NavigationStack{Text("Markets").navigationTitle("Markets")} }}
+struct TradFiView: View { var body: some View { NavigationStack{Text("TradFi").navigationTitle("TradFi")} }}
+struct AssetsView: View { var body: some View { NavigationStack{Text("Assets").navigationTitle("Assets")} }}
+struct SettingsView: View { @EnvironmentObject var appState: AppState; var body: some View { List{Toggle("Dark Mode", isOn: $appState.isDarkMode)}.navigationTitle("Settings") }}
+struct User: Identifiable { let id = UUID(); let email: String; let role: String }
+
+extension Color {
+    init(hex: String) {
+        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int: UInt64 = 0
+        Scanner(string: hex).scanHexInt64(&int)
+        let a,r,g,b: UInt64
+        switch hex.count {
+        case 6: (a,r,g,b) = (255,int>>16,int>>8&0xFF,int&0xFF)
+        default: (a,r,g,b) = (255,0,0,0)
+        }
+        self.init(.sRGB, red: Double(r)/255, green: Double(g)/255, blue: Double(b)/255, opacity: Double(a)/255)
+    }
+}
+
+@main
+struct TigerExUsersApp: App {
+    @StateObject private var appState = AppState()
     
     var body: some Scene {
         WindowGroup {
