@@ -7,8 +7,25 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Light/Dark Theme */
+        body.light { --bg-primary: #F5F5F5; }
+        body.light .bg-gray-900 { background: #F5F5F5 !important; }
+        body.light .bg-gray-800 { background: #FFFFFF !important; }
+        body.light .bg-gray-700 { background: #E0E0E0 !important; }
+        body.light .text-white { color: #1A1A1A !important; }
+        body.light .text-gray-300 { color: #444444 !important; }
+        body.light .text-gray-400 { color: #666666 !important; }
+        body.light .border-gray-700 { border-color: #DDDDDD !important; }
+    </style>
 </head>
 <body class="bg-gray-900 text-white">
+    <!-- Theme Toggle -->
+    <button onclick="toggleTheme()" class="fixed top-4 right-4 z-50 p-3 rounded-full bg-gray-800 hover:bg-gray-700 shadow-lg">
+        <svg id="themeIconDark" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
+        <svg id="themeIconLight" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5z"/></svg>
+    </button>
+    
     <div x-data="tigerExApp()" x-init="init()" class="min-h-screen">
         <!-- Header -->
         <header class="bg-gray-800 border-b border-gray-700 sticky top-0 z-50">
@@ -380,5 +397,25 @@
     <style>
         [x-cloak] { display: none !important; }
     </style>
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            const isLight = document.body.classList.contains('light');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            document.getElementById('themeIconDark').classList.toggle('hidden', isLight);
+            document.getElementById('themeIconLight').classList.toggle('hidden', !isLight);
+        }
+        
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light');
+                document.getElementById('themeIconDark').classList.add('hidden');
+                document.getElementById('themeIconLight').classList.remove('hidden');
+            }
+        });
+    </script>
 </body>
 </html>
