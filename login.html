@@ -1,6 +1,6 @@
 <!--
 @file login.html
-@description TigerEx Login Page - Binance Clone Design
+@description TigerEx Login Page - Binance Clone Design with Multi-Step Auth
 @author TigerEx Development Team
 -->
 <!DOCTYPE html>
@@ -78,7 +78,7 @@
       gap: 16px;
     }
     
-    .lang-btn {
+    .lang-btn, .theme-btn {
       background: none;
       border: 1px solid var(--border);
       color: var(--text-primary);
@@ -88,15 +88,7 @@
       font-size: 14px;
     }
     
-    .theme-btn {
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--text-primary);
-      padding: 8px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 16px;
-    }
+    .theme-btn { padding: 8px; }
     
     /* Main Content */
     .main {
@@ -122,10 +114,14 @@
       margin-bottom: 24px;
     }
     
-    /* Form */
-    .form-group {
-      margin-bottom: 16px;
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 24px;
     }
+    
+    /* Form */
+    .form-group { margin-bottom: 16px; }
     
     .form-label {
       display: block;
@@ -134,9 +130,7 @@
       font-weight: 500;
     }
     
-    .input-wrapper {
-      position: relative;
-    }
+    .input-wrapper { position: relative; }
     
     .form-input {
       width: 100%;
@@ -150,13 +144,8 @@
       transition: border-color 0.2s;
     }
     
-    .form-input:focus {
-      border-color: var(--primary);
-    }
-    
-    .form-input::placeholder {
-      color: var(--text-secondary);
-    }
+    .form-input:focus { border-color: var(--primary); }
+    .form-input::placeholder { color: var(--text-secondary); }
     
     .country-select {
       position: absolute;
@@ -181,9 +170,7 @@
       margin-top: 8px;
     }
     
-    .submit-btn:hover {
-      opacity: 0.9;
-    }
+    .submit-btn:hover { opacity: 0.9; }
     
     /* Divider */
     .divider {
@@ -206,11 +193,7 @@
     }
     
     /* Social Buttons */
-    .social-btns {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    .social-btns { display: flex; flex-direction: column; gap: 12px; }
     
     .social-btn {
       width: 100%;
@@ -229,16 +212,9 @@
       transition: background 0.2s;
     }
     
-    .social-btn:hover {
-      background: var(--hover-bg, #2B3139);
-    }
+    .social-btn:hover { background: var(--hover-bg, #2B3139); }
+    .social-btn svg { width: 20px; height: 20px; }
     
-    .social-btn svg {
-      width: 20px;
-      height: 20px;
-    }
-    
-    /* Help Links */
     .help-links {
       display: flex;
       justify-content: center;
@@ -252,9 +228,7 @@
       font-size: 13px;
     }
     
-    .help-links a:hover {
-      color: var(--text-primary);
-    }
+    .help-links a:hover { color: var(--text-primary); }
     
     /* Footer */
     .footer {
@@ -277,32 +251,20 @@
       font-size: 13px;
     }
     
-    .footer-links a:hover {
-      color: var(--text-primary);
-    }
-    
-    .footer-copy {
-      color: var(--text-secondary);
-      font-size: 12px;
-    }
+    .footer-copy { color: var(--text-secondary); font-size: 12px; }
     
     /* Country Modal */
     .country-modal {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(0,0,0,0.7);
       z-index: 1000;
       align-items: center;
       justify-content: center;
     }
     
-    .country-modal.active {
-      display: flex;
-    }
+    .country-modal.active { display: flex; }
     
     .country-list {
       background: var(--bg-card);
@@ -314,10 +276,7 @@
       padding: 20px;
     }
     
-    .country-list h3 {
-      margin-bottom: 16px;
-      font-size: 18px;
-    }
+    .country-list h3 { margin-bottom: 16px; font-size: 18px; }
     
     .country-item {
       padding: 12px;
@@ -328,9 +287,7 @@
       gap: 10px;
     }
     
-    .country-item:hover {
-      background: var(--bg-dark);
-    }
+    .country-item:hover { background: var(--bg-dark); }
     
     /* Error */
     .error-msg {
@@ -340,19 +297,106 @@
       display: none;
     }
     
-    .error-msg.show {
-      display: block;
+    .error-msg.show { display: block; }
+    
+    /* OTP Input */
+    .otp-inputs { display: flex; gap: 8px; justify-content: center; }
+    
+    .otp-input {
+      width: 48px;
+      height: 56px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 600;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      outline: none;
     }
     
-    /* Responsive */
+    .otp-input:focus { border-color: var(--primary); }
+    
+    /* Back Button */
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+    
+    .back-btn:hover { color: var(--text-primary); }
+    
+    /* Remember Me */
+    .remember-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 16px 0;
+    }
+    
+    .remember-row label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      cursor: pointer;
+    }
+    
+    .remember-row input { accent-color: var(--primary); }
+    .remember-row a { color: var(--primary); text-decoration: none; font-size: 14px; }
+    
+    /* Success Animation */
+    .success-checkmark {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 24px;
+      border-radius: 50%;
+      background: var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: scaleIn 0.3s ease;
+    }
+    
+    @keyframes scaleIn {
+      from { transform: scale(0); }
+      to { transform: scale(1); }
+    }
+    
+    .success-checkmark svg { width: 40px; height: 40px; fill: white; }
+    
+    /* Verification Tabs */
+    .verify-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+    
+    .verify-tab {
+      flex: 1;
+      padding: 10px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 13px;
+      text-align: center;
+    }
+    
+    .verify-tab.active {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    
+    .verify-tab:hover { border-color: var(--primary); }
+    
     @media (max-width: 480px) {
-      .login-card {
-        padding: 24px 16px;
-      }
-      
-      h1 {
-        font-size: 24px;
-      }
+      .login-card { padding: 24px 16px; }
+      h1 { font-size: 24px; }
     }
   </style>
 </head>
@@ -376,28 +420,120 @@
   <!-- Main Content -->
   <main class="main">
     <div class="login-card">
-      <h1>Log in</h1>
-      
-      <form id="loginForm" onsubmit="handleLogin(event)">
-        <div class="form-group">
-          <label class="form-label">Email / Phone number</label>
-          <div class="input-wrapper">
-            <input type="text" id="emailInput" class="form-input" placeholder="Email or phone number" required>
-            <span class="country-select" onclick="showCountries()">🇺🇸</span>
+      <!-- Step 1: Email -->
+      <div id="stepEmail">
+        <h1>Log in</h1>
+        <form id="emailForm" onsubmit="handleEmailSubmit(event)">
+          <div class="form-group">
+            <label class="form-label">Email / Phone number</label>
+            <div class="input-wrapper">
+              <input type="text" id="emailInput" class="form-input" placeholder="Email or phone number" required>
+              <span class="country-select" onclick="showCountries()">🇺🇸</span>
+            </div>
+            <div class="error-msg" id="emailError">Please enter a valid email or phone number</div>
           </div>
-          <div class="error-msg" id="emailError">Please enter a valid email or phone number</div>
+          <button type="submit" class="submit-btn">Continue</button>
+        </form>
+      </div>
+      
+      <!-- Step 2: Password -->
+      <div id="stepPassword" style="display: none;">
+        <button class="back-btn" onclick="goBack('email')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+          Back
+        </button>
+        <h1>Enter Password</h1>
+        <p class="subtitle" id="passwordEmailDisplay">user@example.com</p>
+        <form id="passwordForm" onsubmit="handlePasswordSubmit(event)">
+          <div class="form-group">
+            <input type="password" id="passwordInput" class="form-input" placeholder="Password" required>
+            <div class="error-msg" id="passwordError">Incorrect password</div>
+          </div>
+          <div class="remember-row">
+            <label><input type="checkbox" id="rememberMe"> Stay logged in</label>
+            <a href="#">Forgot password?</a>
+          </div>
+          <button type="submit" class="submit-btn">Log In</button>
+        </form>
+      </div>
+      
+      <!-- Step 3: Verification (2FA/Email/Phone) -->
+      <div id="stepVerify" style="display: none;">
+        <button class="back-btn" onclick="goBack('password')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+          Back
+        </button>
+        <h1>Verify Your Account</h1>
+        <p class="subtitle" id="verifyEmailDisplay">user@example.com</p>
+        
+        <div class="verify-tabs">
+          <div class="verify-tab active" onclick="switchVerifyTab('2fa', event)">2FA Code</div>
+          <div class="verify-tab" onclick="switchVerifyTab('email', event)">Email Code</div>
+          <div class="verify-tab" onclick="switchVerifyTab('phone', event)">Phone Code</div>
         </div>
         
-        <button type="submit" class="submit-btn">Continue</button>
-      </form>
+        <!-- 2FA Input -->
+        <div id="verify2fa" class="verify-content">
+          <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;">Enter the 6-digit code from your authenticator app</p>
+          <div class="otp-inputs">
+            <input type="text" class="otp-input" maxlength="1" data-index="0" oninput="handleOTPInput(this, '2fa')" onkeydown="handleOTPKeydown(event, this, 0, '2fa')">
+            <input type="text" class="otp-input" maxlength="1" data-index="1" oninput="handleOTPInput(this, '2fa')" onkeydown="handleOTPKeydown(event, this, 1, '2fa')">
+            <input type="text" class="otp-input" maxlength="1" data-index="2" oninput="handleOTPInput(this, '2fa')" onkeydown="handleOTPKeydown(event, this, 2, '2fa')">
+            <input type="text" class="otp-input" maxlength="1" data-index="3" oninput="handleOTPInput(this, '2fa')" onkeydown="handleOTPKeydown(event, this, 3, '2fa')">
+            <input type="text" class="otp-input" maxlength="1" data-index="4" oninput="handleOTPInput(this, '2fa')" onkeydown="handleOTPKeydown(event, this, 4, '2fa')">
+            <input type="text" class="otp-input" maxlength="1" data-index="5" oninput="handleOTPInput(this, '2fa')" onkeydown="handleOTPKeydown(event, this, 5, '2fa')">
+          </div>
+        </div>
+        
+        <!-- Email Code Input -->
+        <div id="verifyEmail" class="verify-content" style="display: none;">
+          <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;">Enter the 6-digit code sent to your email</p>
+          <div class="otp-inputs">
+            <input type="text" class="otp-input" maxlength="1" data-index="0" oninput="handleOTPInput(this, 'email')" onkeydown="handleOTPKeydown(event, this, 0, 'email')">
+            <input type="text" class="otp-input" maxlength="1" data-index="1" oninput="handleOTPInput(this, 'email')" onkeydown="handleOTPKeydown(event, this, 1, 'email')">
+            <input type="text" class="otp-input" maxlength="1" data-index="2" oninput="handleOTPInput(this, 'email')" onkeydown="handleOTPKeydown(event, this, 2, 'email')">
+            <input type="text" class="otp-input" maxlength="1" data-index="3" oninput="handleOTPInput(this, 'email')" onkeydown="handleOTPKeydown(event, this, 3, 'email')">
+            <input type="text" class="otp-input" maxlength="1" data-index="4" oninput="handleOTPInput(this, 'email')" onkeydown="handleOTPKeydown(event, this, 4, 'email')">
+            <input type="text" class="otp-input" maxlength="1" data-index="5" oninput="handleOTPInput(this, 'email')" onkeydown="handleOTPKeydown(event, this, 5, 'email')">
+          </div>
+          <p style="text-align: center; margin-top: 12px; font-size: 13px; color: var(--text-secondary);">Didn't receive code? <a href="#" style="color: var(--primary);" onclick="resendCode('email')">Resend</a></p>
+        </div>
+        
+        <!-- Phone Code Input -->
+        <div id="verifyPhone" class="verify-content" style="display: none;">
+          <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;">Enter the 6-digit code sent to your phone</p>
+          <div class="otp-inputs">
+            <input type="text" class="otp-input" maxlength="1" data-index="0" oninput="handleOTPInput(this, 'phone')" onkeydown="handleOTPKeydown(event, this, 0, 'phone')">
+            <input type="text" class="otp-input" maxlength="1" data-index="1" oninput="handleOTPInput(this, 'phone')" onkeydown="handleOTPKeydown(event, this, 1, 'phone')">
+            <input type="text" class="otp-input" maxlength="1" data-index="2" oninput="handleOTPInput(this, 'phone')" onkeydown="handleOTPKeydown(event, this, 2, 'phone')">
+            <input type="text" class="otp-input" maxlength="1" data-index="3" oninput="handleOTPInput(this, 'phone')" onkeydown="handleOTPKeydown(event, this, 3, 'phone')">
+            <input type="text" class="otp-input" maxlength="1" data-index="4" oninput="handleOTPInput(this, 'phone')" onkeydown="handleOTPKeydown(event, this, 4, 'phone')">
+            <input type="text" class="otp-input" maxlength="1" data-index="5" oninput="handleOTPInput(this, 'phone')" onkeydown="handleOTPKeydown(event, this, 5, 'phone')">
+          </div>
+          <p style="text-align: center; margin-top: 12px; font-size: 13px; color: var(--text-secondary);">Didn't receive code? <a href="#" style="color: var(--primary);" onclick="resendCode('phone')">Resend</a></p>
+        </div>
+        
+        <button class="submit-btn" style="margin-top: 24px;" onclick="submitVerification()">Verify</button>
+        <div class="error-msg" id="verifyError" style="text-align: center; margin-top: 12px;">Invalid verification code</div>
+      </div>
       
-      <div class="divider">
+      <!-- Step 4: Success -->
+      <div id="stepSuccess" style="display: none;">
+        <div class="success-checkmark">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        </div>
+        <h1 style="text-align: center;">Login Successful!</h1>
+        <p class="subtitle" style="text-align: center;">Welcome back to TigerEx</p>
+        <p style="text-align: center; color: var(--text-secondary); margin-top: 16px;">Redirecting to dashboard...</p>
+      </div>
+      
+      <div class="divider" id="loginDivider">
         <span>or</span>
       </div>
       
-      <div class="social-btns">
+      <div class="social-btns" id="socialBtns">
         <button class="social-btn" onclick="passkeyLogin()">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
           Continue with Passkey
         </button>
         <button class="social-btn" onclick="socialLogin('google')">
@@ -414,8 +550,8 @@
         </button>
       </div>
       
-      <div class="help-links">
-        <a href="register.html">Create a Binance Account</a>
+      <div class="help-links" id="helpLinks">
+        <a href="register.html">Create a TigerEx Account</a>
         <a href="#">Can't log in?</a>
       </div>
     </div>
@@ -435,56 +571,27 @@
   <div class="country-modal" id="countryModal" onclick="closeCountries(event)">
     <div class="country-list" onclick="event.stopPropagation()">
       <h3>Select Country/Territory</h3>
-      <div class="country-item" onclick="selectCountry('🇺🇸', 'United States', 'en')">
-        <span>🇺🇸</span> <span>United States</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇬🇧', 'United Kingdom', 'en')">
-        <span>🇬🇧</span> <span>United Kingdom</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇩🇪', 'Germany', 'de')">
-        <span>🇩🇪</span> <span>Germany</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇫🇷', 'France', 'fr')">
-        <span>🇫🇷</span> <span>France</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇪🇸', 'Spain', 'es')">
-        <span>🇪🇸</span> <span>Spain</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇮🇳', 'India', 'hi')">
-        <span>🇮🇳</span> <span>India</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇯🇵', 'Japan', 'ja')">
-        <span>🇯🇵</span> <span>Japan</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇰🇷', 'South Korea', 'ko')">
-        <span>🇰🇷</span> <span>South Korea</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇨🇳', 'China', 'zh')">
-        <span>🇨🇳</span> <span>China</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇧🇩', 'Bangladesh', 'bn')">
-        <span>🇧🇩</span> <span>Bangladesh</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇧🇷', 'Brazil', 'pt')">
-        <span>🇧🇷</span> <span>Brazil</span>
-      </div>
-      <div class="country-item" onclick="selectCountry('🇷🇺', 'Russia', 'ru')">
-        <span>🇷🇺</span> <span>Russia</span>
-      </div>
+      <div class="country-item" onclick="selectCountry('🇺🇸', 'United States')"><span>🇺🇸</span> <span>United States</span></div>
+      <div class="country-item" onclick="selectCountry('🇬🇧', 'United Kingdom')"><span>🇬🇧</span> <span>United Kingdom</span></div>
+      <div class="country-item" onclick="selectCountry('🇩🇪', 'Germany')"><span>🇩🇪</span> <span>Germany</span></div>
+      <div class="country-item" onclick="selectCountry('🇫🇷', 'France')"><span>🇫🇷</span> <span>France</span></div>
+      <div class="country-item" onclick="selectCountry('🇮🇳', 'India')"><span>🇮🇳</span> <span>India</span></div>
+      <div class="country-item" onclick="selectCountry('🇯🇵', 'Japan')"><span>🇯🇵</span> <span>Japan</span></div>
+      <div class="country-item" onclick="selectCountry('🇰🇷', 'South Korea')"><span>🇰🇷</span> <span>South Korea</span></div>
+      <div class="country-item" onclick="selectCountry('🇧🇩', 'Bangladesh')"><span>🇧🇩</span> <span>Bangladesh</span></div>
     </div>
   </div>
 
   <script>
     // Theme Toggle
     function toggleTheme() {
-      const isLight = document.body.classList.toggle('light-mode');
+      var isLight = document.body.classList.toggle('light-mode');
       localStorage.setItem('tigerex_theme', isLight ? 'light' : 'dark');
       document.getElementById('themeIcon').textContent = isLight ? '☀️' : '🌙';
     }
     
     // Load saved theme
-    const savedTheme = localStorage.getItem('tigerex_theme');
-    if (savedTheme === 'light') {
+    if (localStorage.getItem('tigerex_theme') === 'light') {
       document.body.classList.add('light-mode');
       document.getElementById('themeIcon').textContent = '☀️';
     }
@@ -500,7 +607,7 @@
       }
     }
     
-    function selectCountry(flag, country, lang) {
+    function selectCountry(flag, country) {
       document.getElementById('selectedFlag').textContent = flag;
       document.getElementById('selectedLang').textContent = country;
       document.querySelector('.country-select').textContent = flag;
@@ -512,28 +619,164 @@
       alert(provider + ' login coming soon!');
     }
     
-    // Passkey Login
     function passkeyLogin() {
       alert('Passkey login coming soon!');
     }
     
-    // Form Handling
-    function handleLogin(e) {
+    // Multi-step Login Logic
+    var currentStep = 'email';
+    var loginEmail = '';
+    var otpCodes = { '2fa': '', 'email': '', 'phone': '' };
+    var currentVerifyTab = '2fa';
+    
+    // Step 1: Email Submit
+    function handleEmailSubmit(e) {
       e.preventDefault();
-      const email = document.getElementById('emailInput').value;
+      var email = document.getElementById('emailInput').value;
       
-      if (!email) {
+      if (!email || !email.includes('@')) {
         document.getElementById('emailError').classList.add('show');
         return;
       }
       
-      // For demo, redirect to password page or dashboard
-      // Store email and redirect
-      sessionStorage.setItem('login_email', email);
-      alert('Email verified! Redirecting to password...');
-      // In real app, would go to password entry page
+      document.getElementById('emailError').classList.remove('show');
+      loginEmail = email;
+      
+      // Show password step
+      document.getElementById('stepEmail').style.display = 'none';
+      document.getElementById('stepPassword').style.display = 'block';
+      document.getElementById('passwordEmailDisplay').textContent = email;
+      document.getElementById('loginDivider').style.display = 'none';
+      document.getElementById('socialBtns').style.display = 'none';
+      document.getElementById('helpLinks').style.display = 'none';
+      currentStep = 'password';
+    }
+    
+    // Step 2: Password Submit
+    function handlePasswordSubmit(e) {
+      e.preventDefault();
+      var password = document.getElementById('passwordInput').value;
+      
+      if (!password || password.length < 1) {
+        document.getElementById('passwordError').classList.add('show');
+        return;
+      }
+      
+      document.getElementById('passwordError').classList.remove('show');
+      
+      // Show verification step (simulating 2FA required)
+      document.getElementById('stepPassword').style.display = 'none';
+      document.getElementById('stepVerify').style.display = 'block';
+      document.getElementById('verifyEmailDisplay').textContent = loginEmail;
+      currentStep = 'verify';
+      
+      // Focus first OTP input
+      setTimeout(function() {
+        document.querySelector('#verify2fa .otp-input').focus();
+      }, 100);
+    }
+    
+    // Back Navigation
+    function goBack(step) {
+      if (step === 'email') {
+        document.getElementById('stepPassword').style.display = 'none';
+        document.getElementById('stepEmail').style.display = 'block';
+        document.getElementById('loginDivider').style.display = 'flex';
+        document.getElementById('socialBtns').style.display = 'flex';
+        document.getElementById('helpLinks').style.display = 'flex';
+        currentStep = 'email';
+      } else if (step === 'password') {
+        document.getElementById('stepVerify').style.display = 'none';
+        document.getElementById('stepPassword').style.display = 'block';
+        currentStep = 'password';
+      }
+    }
+    
+    // Switch Verification Tab
+    function switchVerifyTab(tab, e) {
+      currentVerifyTab = tab;
+      
+      // Update tab styles
+      document.querySelectorAll('.verify-tab').forEach(function(t) { t.classList.remove('active'); });
+      e.target.classList.add('active');
+      
+      // Show corresponding input
+      document.getElementById('verify2fa').style.display = 'none';
+      document.getElementById('verifyEmail').style.display = 'none';
+      document.getElementById('verifyPhone').style.display = 'none';
+      document.getElementById('verify' + tab).style.display = 'block';
+      
+      // Clear OTP codes
+      otpCodes[tab] = '';
+      document.querySelectorAll('#verify' + tab + ' .otp-input').forEach(function(input) { input.value = ''; });
+      
+      // Focus first input
+      setTimeout(function() {
+        document.querySelector('#verify' + tab + ' .otp-input').focus();
+      }, 100);
+    }
+    
+    // OTP Input Handling
+    function handleOTPInput(input, type) {
+      var value = input.value;
+      
+      // Only allow numbers
+      if (!/^\d*$/.test(value)) {
+        input.value = '';
+        return;
+      }
+      
+      // Auto-advance to next input
+      if (value.length === 1) {
+        otpCodes[type] += value;
+        var index = parseInt(input.dataset.index);
+        var inputs = document.querySelectorAll('#verify' + type + ' .otp-input');
+        if (index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+      }
+    }
+    
+    function handleOTPKeydown(e, input, index, type) {
+      // Handle backspace
+      if (e.key === 'Backspace' && !input.value) {
+        var inputs = document.querySelectorAll('#verify' + type + ' .otp-input');
+        if (index > 0) {
+          inputs[index - 1].focus();
+        }
+      }
+    }
+    
+    // Resend Code
+    function resendCode(type) {
+      alert('Verification code resent to your ' + type + '!');
+    }
+    
+    // Submit Verification
+    function submitVerification() {
+      var code = otpCodes[currentVerifyTab];
+      
+      // Demo: Accept any 6-digit code
+      if (code.length !== 6) {
+        document.getElementById('verifyError').textContent = 'Please enter a 6-digit code';
+        document.getElementById('verifyError').classList.add('show');
+        return;
+      }
+      
+      document.getElementById('verifyError').classList.remove('show');
+      
+      // Show success
+      document.getElementById('stepVerify').style.display = 'none';
+      document.getElementById('stepSuccess').style.display = 'block';
+      
+      // Save token and redirect
       localStorage.setItem('tigerex_token', 'demo_token_' + Date.now());
-      window.location.href = 'dashboard.html';
+      localStorage.setItem('tigerex_user_email', loginEmail);
+      
+      // Redirect after delay
+      setTimeout(function() {
+        window.location.href = 'dashboard.html';
+      }, 2000);
     }
   </script>
 </body>
