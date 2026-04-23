@@ -863,6 +863,10 @@
                 <span class="icon">📈</span>
                 Trade
             </div>
+            <div class="mobile-nav-item" onclick="navigateMobile('more')">
+                <span class="icon">📋</span>
+                More
+            </div>
             <div class="mobile-nav-item" onclick="navigateMobile('assets')">
                 <span class="icon">💰</span>
                 Assets
@@ -941,6 +945,8 @@
                 window.location.href = 'pages/trade/index.html';
             } else if (page === 'assets') {
                 window.location.href = 'pages/assets/index.html';
+            } else if (page === 'more') {
+                window.location.href = 'pages/more/index.html';
             }
         }
     </script>
