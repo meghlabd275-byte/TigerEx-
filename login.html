@@ -13,6 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/theme.css">
   <style>
     :root {
       --primary-color: #F0B90B;
@@ -364,6 +365,9 @@
       <span>🌐</span>
       <span>English</span>
     </div>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme" style="padding: 8px;">
+      <span id="themeIcon">🌙</span>
+    </button>
   </header>
 
   <!-- Main Content -->
@@ -552,6 +556,22 @@
     const token = localStorage.getItem('tigerex_token') || sessionStorage.getItem('tigerex_token');
     if (token) {
       window.location.href = 'dashboard.html';
+    }
+    
+    // Theme Toggle
+    function toggleTheme() {
+      const isLight = document.body.classList.toggle('light-mode');
+      localStorage.setItem('tigerex_theme', isLight ? 'light' : 'dark');
+      const themeIcon = document.getElementById('themeIcon');
+      if (themeIcon) themeIcon.textContent = isLight ? '☀️' : '🌙';
+    }
+    
+    // Load saved theme
+    const savedTheme = localStorage.getItem('tigerex_theme');
+    if (savedTheme === 'light') {
+      document.body.classList.add('light-mode');
+      const themeIcon = document.getElementById('themeIcon');
+      if (themeIcon) themeIcon.textContent = '☀️';
     }
   </script>
 </body>
