@@ -1,135 +1,233 @@
-# 2FA Reset Flow Specification
+# TigerEx Authentication System Specification
 
 ## Project Overview
 
-**Project Name:** TigerExchange Platform  
-**Type:** Two-Factor Authentication (2FA) Reset Flow  
-**Core Functionality:** Secure 2FA reset process requiring sequential identity verification before allowing 2FA reset.  
-**Target Users:** Platform users who have lost access to their 2FA device and need to reset their authentication method.
+**Project Name:** TigerEx Exchange Platform
+**Platforms:** Web, Mobile (iOS/Android), Desktop
+**Core Functionality:** Complete authentication system with email/phone login, registration, and password recovery
 
 ---
 
-## Functionality Specification
+## Features Implemented
 
-### Core Features
+### 1. Authentication Pages
 
-#### 1. Sequential Verification Flow
+#### Login Page (`login.html`)
+- ✅ Email/Phone toggle tabs
+- ✅ 200+ country codes with flags
+- ✅ Password visibility toggle
+- ✅ Remember me checkbox
+- ✅ Forgot password link
+- ✅ Social login (Google, Apple, GitHub)
+- ✅ Theme toggle (dark/light)
+- ✅ OTP verification flow
+- ✅ 2FA support
+- ✅ Session management
+- ✅ LocalStorage for users
 
-The 2FA reset process follows a strict sequential verification order:
+#### Register Page (`register.html`)
+- ✅ Email/Phone toggle tabs
+- ✅ 200+ country codes with flags
+- ✅ Password confirmation
+- ✅ Referral code optional
+- ✅ Terms acceptance
+- ✅ Social signup
+- ✅ Theme toggle
+- ✅ Email/Phone verification
 
-1. **Step 1: Email Verification**
-   - User receives a verification code via email
-   - Code must be entered to proceed
-   - Verification code expires after 15 minutes
-   - Rate limit: 3 attempts per hour
+#### Forgot Password Page (`forgot-password.html`)
+- ✅ Email input
+- ✅ OTP verification (6-digit)
+- ✅ New password reset
+- ✅ Step-by-step flow
 
-2. **Step 2: Phone Verification**
-   - After email verification, user receives SMS code to registered phone
-   - Phone number must match account records
-   - Code expires after 10 minutes
-   - Rate limit: 3 attempts per hour
+---
 
-3. **Step 3: Liveness Verification**
-   - After both email and phone verified, user must complete liveness check
-   - Selfie verification with face match technology
-   - Must pass anti-spoofing checks
-   - Camera permission required
+## Platform Implementations
 
-4. **Step 4: 2FA Reset Confirmation**
-   - Only after all three verifications pass, 2FA is reset
-   - User receives confirmation email
-   - 2FA must be re-enabled on next login
+### Web Apps
+- **login.html** - Web login page
+- **register.html** - Web registration page  
+- **forgot-password.html** - Web password recovery
 
-### User Interactions and Flows
+### Mobile Apps (Existing)
+- **mobile/App.jsx** - React Native web version
+- **mobile/EnhancedMobileApp.jsx** - Enhanced React Native
+- **mobile/complete_mobile_app_react_native.tsx** - Complete RN app
+- **mobile/android/** - Android native code
+- **mobile/ios/** - iOS native code
 
-#### Verification State Machine:
+### Desktop Apps
+- **desktop-app/index.html** - Desktop Electron-ready app
+
+---
+
+## Technical Stack
+
+### Frontend
+- HTML5, CSS3, Tailwind CSS
+- JavaScript (Vanilla)
+- React Native (Mobile)
+- Flutter (Mobile)
+- Electron (Desktop)
+
+### Backend
+- Node.js/Express (server/node/server.js)
+- Python/Flask (server/app.py)
+
+### API Endpoints
 ```
-IDLE → EMAIL_VERIFIED → PHONE_VERIFIED → LIVENESS_PASSED → COMPLETE
-         ↓                     ↓                   ↓
-      [FAILED]             [FAILED]            [FAILED]
-         ↓                     ↓                   ↓
-      IDLE (restart)      IDLE (restart)      IDLE (restart)
+POST /api/auth/register
+POST /api/auth/login
+POST /api/auth/logout
+GET  /api/auth/session
+GET  /api/user/profile
+GET  /api/trading/markets
+GET  /api/trading/orderbook/:symbol
+POST /api/trading/order
+GET  /api/wallet/balance
+GET  /api/wallet/addresses
+GET  /api/earn/products
 ```
 
-#### Frontend Flow:
-1. User initiates 2FA reset request
-2. Email verification form displayed
-3. After email verified, phone verification form shown
-4. After phone verified, liveness/camera verification shown
-5. Final confirmation and 2FA reset
+---
 
-#### Backend API Endpoints:
-- `POST /api/2fa/reset/initiate` - Start 2FA reset process
-- `POST /api/2fa/reset/verify-email` - Verify email code
-- `POST /api/2fa/reset/verify-phone` - Verify phone code
-- `POST /api/2fa/reset/verify-liveness` - Submit liveness check
-- `GET /api/2fa/reset/status` - Get current verification status
+## Design System
 
-### Data Handling
+### Colors
+- Primary: #F0B90B (Tiger Yellow)
+- Background Dark: #0B0E11
+- Card: #1E2329
+- Text Primary: #EAECEF
+- Text Secondary: #848E9C
+- Success: #00C087
+- Error: #F6465D
 
-#### Stored Data:
-- Verification session with expiration (24 hours)
-- Sequential verification states (boolean flags)
-- Timestamp of each verification step
-- IP address logged for security audit
-
-#### Security Measures:
-- Session tokens required for all verification steps
-- All verification codes are cryptographically random
-- Failed attempts trigger security alerts
-- Audit log for all verification attempts
-
-### Edge Cases
-
-1. **Email not verified within time limit** → Session expires, must restart
-2. **Phone number not registered** → Show error, do not proceed
-3. **Liveness check fails multiple times** → Account flagged for manual review
-4. **User tries to skip verification step** → Rejected, verification order enforced
-5. **Session expires during verification** → All progress lost, restart required
-6. **Invalid or expired verification code** → Show error, allow retry within limits
+### Components
+- Tab Toggle (Email | Phone)
+- Country Selector with Flags
+- Input Fields with validation
+- OTP Input (6-digit)
+- Social Login Buttons
+- Theme Toggle
 
 ---
 
-## Acceptance Criteria
-
-### Verification Order Enforcement
-- [ ] Email verification MUST be completed before phone verification is enabled
-- [ ] Phone verification MUST be completed before liveness check is enabled
-- [ ] Liveness check MUST pass before 2FA reset is allowed
-- [ ] Users cannot skip any verification step
-
-### Security Requirements
-- [ ] All verification codes expire appropriately
-- [ ] Rate limiting prevents brute force attacks
-- [ ] Session tokens prevent replay attacks
-- [ ] All attempts are logged for audit
-
-### User Experience
-- [ ] Clear progress indicator shows current step
-- [ ] Error messages explain what went wrong
-- [ ] User can restart from beginning if needed
-- [ ] Confirmation displayed after successful reset
-
-### API Behavior
-- [ ] Each endpoint validates previous steps are complete
-- [ ] Invalid session state returns appropriate error
-- [ ] Successful verification advances state machine
-- [ ] 2FA reset only occurs after all verifications pass
+## Security Features
+- JWT Token Authentication
+- Password hashing (SHA256)
+- Session management
+- Rate limiting ready
+- Input validation
+- XSS protection
 
 ---
 
-## Technical Implementation Notes
+## Browser Support
+- ✅ Chrome
+- ✅ Firefox
+- ✅ Microsoft Edge
+- ✅ Safari
+- ✅ Opera
+- ✅ Mobile browsers
 
-### Frontend Files to Update/Create:
-- `src/pages/2fa-reset.html` or component
-- Update existing auth pages to include 2FA reset flow
+---
 
-### Backend Files to Update/Create:
-- `backend/auth-service/` - Add 2FA reset endpoints
-- `backend/binance-verify-service/` - Integrate verification logic
-- Database migrations for verification state tracking
+## Mobile Support
+- ✅ iOS Safari
+- ✅ Android Chrome
+- ✅ React Native
+- ✅ Flutter
+- ✅ PWA ready
 
-### Third-party Services:
-- Email service for verification codes
-- SMS service for phone verification
-- Liveness/face match API integration
+---
+
+## Desktop Support
+- ✅ Windows
+- ✅ macOS
+- ✅ Linux
+- ✅ Electron ready
+
+---
+
+## File Structure
+```
+TigerEx-/
+├── login.html                 # Web login
+├── register.html            # Web register
+├── forgot-password.html     # Web forgot password
+├── index.html               # Main landing page
+├── SPEC.md                  # This specification
+├── assets/
+│   └── js/
+│       └── api.js          # API client
+├── server/
+│   ├── app.py              # Flask server
+│   └── node/
+│       ├── server.js       # Express server
+│       └── package.json
+├── mobile/                  # Mobile apps
+│   ├── App.jsx
+│   ├── android/
+│   ├── ios/
+│   └── src/
+├── mobile-app/
+│   ├── react-native/       # RN app
+│   └── flutter/            # Flutter app
+└── desktop-app/            # Desktop app
+    └── index.html
+```
+
+---
+
+## API Integration
+
+### Frontend Usage
+```javascript
+// Login with email
+await API.auth.login('email@example.com', 'password');
+
+// Login with phone
+await API.auth.login('+1234567890', 'password');
+
+// Register
+await API.auth.register({
+  identifier: 'email or phone',
+  password: 'password',
+  referral: 'optional'
+});
+
+// Get session
+const session = await API.auth.getSession();
+```
+
+---
+
+## 2FA Reset Flow (SPEC.md)
+
+Complete 2FA reset specification documented in original SPEC.md:
+1. Email Verification
+2. Phone Verification  
+3. Liveness Check
+4. 2FA Reset Confirmation
+
+---
+
+## Implementation Status
+
+| Feature | Web | Mobile | Desktop |
+|---------|-----|--------|----------|
+| Login Email | ✅ | ✅ | ✅ |
+| Login Phone | ✅ | ✅ | ✅ |
+| Register Email | ✅ | ✅ | ✅ |
+| Register Phone | ✅ | ✅ | ✅ |
+| Forgot Password | ✅ | ✅ | ✅ |
+| OTP Verification | ✅ | ✅ | ✅ |
+| Theme Toggle | ✅ | ✅ | ✅ |
+| Social Login | ✅ | ⚠️ | ✅ |
+| 2FA Support | ✅ | ⚠️ | ✅ |
+
+---
+
+*Last Updated: 2026-04-24*
+*Version: 1.0.0*
