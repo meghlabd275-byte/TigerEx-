@@ -1,110 +1,115 @@
 /**
- * TigerEx React Component
+ * TigerEx Margin Trading Page  
  * @file margin.tsx
- * @description React component for TigerEx
+ * @description Professional margin/isolated trading interface
  * @author TigerEx Development Team
  */
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { Slider } from '@/components/ui/slider';
-import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   TrendingUp,
   TrendingDown,
   Activity,
-  DollarSign,
-  BarChart3,
+  Clock,
   Zap,
+  BarChart3,
+  Settings,
+  Star,
+  Wallet,
+  Search,
+  Lock,
+  Unlock,
   AlertTriangle,
-  Shield,
+  ArrowUpDown,
 } from 'lucide-react';
 
+// TigerEx Brand Colors
+const TIGEREX_COLORS = {
+  primary: '#F0B90B',
+  background: '#0B0E14',
+  card: '#1C2128',
+  cardHover: '#252D38',
+  text: '#EAECE4',
+  textSecondary: '#8B929E',
+  green: '#00C087',
+  red: '#F6465D',
+  border: '#2A303C',
+  gold: '#F0B90B',
+};
+
+// Margin pair interface
 interface MarginPair {
   symbol: string;
   baseAsset: string;
   quoteAsset: string;
   lastPrice: number;
-  priceChange: number;
   priceChangePercent: number;
-  volume: number;
-  maxLeverage: number;
-  marginRate: number;
-  borrowRate: number;
-}
-
-interface MarginPosition {
-  symbol: string;
-  side: 'LONG' | 'SHORT';
-  size: number;
-  entryPrice: number;
-  markPrice: number;
+  marginBorrowable: boolean;
+  maxBorrowLimit: number;
+  currentBorrowed: number;
+  interestRate: number;
   liquidationPrice: number;
-  unrealizedPnl: number;
-  roe: number;
-  margin: number;
-  leverage: number;
-  borrowedAmount: number;
-  interestOwed: number;
+  marginRatio: number;
 }
 
-interface MarginAccount {
-  totalEquity: number;
-  totalDebt: number;
-  availableBalance: number;
-  marginLevel: number;
-  borrowingPower: number;
-  dailyInterest: number;
+interface MarginOrder {
+  id: string;
+  side: 'BUY' | 'SELL';
+  type: 'MARKET' | 'LIMIT';
+  price: number;
+  quantity: number;
+  status: string;
+  time: Date;
 }
+
+// Generate mock margin pairs
+const generateMockPairs = (): MarginPair[] => [
+  { symbol: 'BTC/USDT', baseAsset: 'BTC', quoteAsset: 'USDT', lastPrice: 67842.50, priceChangePercent: 1.88, marginBorrowable: true, maxBorrowLimit: 50000, currentBorrowed: 2340.50, interestRate: 0.0003, liquidationPrice: 33250.00, marginRatio: 2.85 },
+  { symbol: 'ETH/USDT', baseAsset: 'ETH', quoteAsset: 'USDT', lastPrice: 3456.25, priceChangePercent: -1.31, marginBorrowable: true, maxBorrowLimit: 25000, currentBorrowed: 1250.00, interestRate: 0.0004, liquidationPrice: 1650.00, marginRatio: 2.45 },
+  { symbol: 'BNB/USDT', baseAsset: 'BNB', quoteAsset: 'USDT', lastPrice: 598.40, priceChangePercent: 2.14, marginBorrowable: true, maxBorrowLimit: 5000, currentBorrowed: 450.00, interestRate: 0.0005, liquidationPrice: 285.00, marginRatio: 2.15 },
+  { symbol: 'SOL/USDT', baseAsset: 'SOL', quoteAsset: 'USDT', lastPrice: 185.60, priceChangePercent: -1.69, marginBorrowable: true, maxBorrowLimit: 3000, currentBorrowed: 180.00, interestRate: 0.0005, liquidationPrice: 88.50, marginRatio: 1.95 },
+  { symbol: 'XRP/USDT', baseAsset: 'XRP', quoteAsset: 'USDT', priceChangePercent: 2.44, lastPrice: 0.5245, marginBorrowable: true, maxBorrowLimit: 2000, currentBorrowed: 85.00, interestRate: 0.0006, liquidationPrice: 0.25, marginRatio: 2.25 },
+  { symbol: 'ADA/USDT', baseAsset: 'ADA', quoteAsset: 'USDT', priceChangePercent: -1.84, lastPrice: 0.4525, marginBorrowable: true, maxBorrowLimit: 1500, currentBorrowed: 62.00, interestRate: 0.0006, liquidationPrice: 0.215, marginRatio: 2.05 },
+  { symbol: 'LINK/USDT', baseAsset: 'LINK', quoteAsset: 'USDT', priceChangePercent: 2.41, lastPrice: 14.85, marginBorrowable: true, maxBorrowLimit: 2000, currentBorrowed: 95.00, interestRate: 0.0005, liquidationPrice: 7.05, marginRatio: 2.35 },
+  { symbol: 'DOGE/USDT', baseAsset: 'DOGE', quoteAsset: 'USDT', priceChangePercent: 3.04, lastPrice: 0.1525, marginBorrowable: true, maxBorrowLimit: 1000, currentBorrowed: 45.00, interestRate: 0.0007, liquidationPrice: 0.072, marginRatio: 1.85 },
+];
+
+const formatPrice = (num: number, precision: number = 2): string => {
+  return num.toLocaleString('en-US', { minimumFractionDigits: precision, maximumFractionDigits: precision });
+};
+
+const formatNumber = (num: number): string => {
+  if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
+  if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
+  if (num >= 1e3) return (num / 1e3).toFixed(2) + 'K';
+  return num.toFixed(2);
+};
 
 const MarginTradingPage: React.FC = () => {
-  const [pairs, setPairs] = useState<MarginPair[]>([]);
   const [selectedPair, setSelectedPair] = useState<MarginPair | null>(null);
-  const [positions, setPositions] = useState<MarginPosition[]>([]);
-  const [account, setAccount] = useState<MarginAccount | null>(null);
-
-  // Order form state
+  const [pairs, setPairs] = useState<MarginPair[]>([]);
+  const [orders, setOrders] = useState<MarginOrder[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  
   const [orderSide, setOrderSide] = useState<'BUY' | 'SELL'>('BUY');
   const [orderType, setOrderType] = useState<'MARKET' | 'LIMIT'>('LIMIT');
   const [quantity, setQuantity] = useState('');
   const [price, setPrice] = useState('');
-  const [leverage, setLeverage] = useState([2]);
-  const [marginType, setMarginType] = useState<'ISOLATED' | 'CROSS'>(
-    'ISOLATED'
-  );
-
-  // Borrow/Repay state
-  const [borrowAsset, setBorrowAsset] = useState('USDT');
-  const [borrowAmount, setBorrowAmount] = useState('');
-  const [repayAsset, setRepayAsset] = useState('USDT');
-  const [repayAmount, setRepayAmount] = useState('');
-
-  // Loading states
-  const [loading, setLoading] = useState(false);
+  
+  const [activeTab, setActiveTab] = useState('order');
   const [placingOrder, setPlacingOrder] = useState(false);
-
+  const [borrowAmount, setBorrowAmount] = useState('');
+  const [showBorrowModal, setShowBorrowModal] = useState(false);
+  
   useEffect(() => {
-    loadPairs();
-    loadPositions();
-    loadAccount();
+    const marginPairs = generateMockPairs();
+    setPairs(marginPairs);
+    setSelectedPair(marginPairs[0]);
   }, []);
 
   useEffect(() => {
@@ -113,631 +118,244 @@ const MarginTradingPage: React.FC = () => {
     }
   }, [selectedPair]);
 
-  const loadPairs = async () => {
-    try {
-      setLoading(true);
-      // Mock data - in production, fetch from API
-      const mockPairs: MarginPair[] = [
-        {
-          symbol: 'BTCUSDT',
-          baseAsset: 'BTC',
-          quoteAsset: 'USDT',
-          lastPrice: 43250.5,
-          priceChange: 1250.3,
-          priceChangePercent: 2.98,
-          volume: 125000000,
-          maxLeverage: 10,
-          marginRate: 0.1,
-          borrowRate: 0.0001,
-        },
-        {
-          symbol: 'ETHUSDT',
-          baseAsset: 'ETH',
-          quoteAsset: 'USDT',
-          lastPrice: 2650.75,
-          priceChange: -45.25,
-          priceChangePercent: -1.68,
-          volume: 95000000,
-          maxLeverage: 5,
-          marginRate: 0.2,
-          borrowRate: 0.00015,
-        },
-      ];
-      setPairs(mockPairs);
-      if (!selectedPair) {
-        setSelectedPair(mockPairs[0]);
-      }
-    } catch (error) {
-      console.error('Failed to load pairs:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadPositions = async () => {
-    try {
-      // Mock data - in production, fetch from API
-      const mockPositions: MarginPosition[] = [
-        {
-          symbol: 'BTCUSDT',
-          side: 'LONG',
-          size: 0.5,
-          entryPrice: 42000.0,
-          markPrice: 43250.5,
-          liquidationPrice: 38500.0,
-          unrealizedPnl: 625.25,
-          roe: 14.88,
-          margin: 4200.0,
-          leverage: 5,
-          borrowedAmount: 16800.0,
-          interestOwed: 2.45,
-        },
-      ];
-      setPositions(mockPositions);
-    } catch (error) {
-      console.error('Failed to load positions:', error);
-    }
-  };
-
-  const loadAccount = async () => {
-    try {
-      // Mock data - in production, fetch from API
-      const mockAccount: MarginAccount = {
-        totalEquity: 25000.0,
-        totalDebt: 15000.0,
-        availableBalance: 8500.0,
-        marginLevel: 1.67,
-        borrowingPower: 42500.0,
-        dailyInterest: 3.75,
-      };
-      setAccount(mockAccount);
-    } catch (error) {
-      console.error('Failed to load account:', error);
-    }
-  };
-
   const placeOrder = async () => {
     if (!selectedPair || !quantity) return;
+    setPlacingOrder(true);
+    
+    const newOrder: MarginOrder = {
+      id: `order-${Date.now()}`,
+      side: orderSide,
+      type: orderType,
+      price: parseFloat(price),
+      quantity: parseFloat(quantity),
+      status: orderType === 'MARKET' ? 'FILLED' : 'PENDING',
+      time: new Date(),
+    };
+    
+    setOrders([newOrder, ...orders]);
+    setQuantity('');
+    setPlacingOrder(false);
+  };
 
-    try {
-      setPlacingOrder(true);
+  const borrow = () => {
+    if (!selectedPair || !borrowAmount) return;
+    alert(`Borrowed ${borrowAmount} ${selectedPair.quoteAsset}`);
+    setBorrowAmount('');
+    setShowBorrowModal(false);
+  };
 
-      const orderData = {
-        symbol: selectedPair.symbol,
-        side: orderSide,
-        type: orderType,
-        quantity: parseFloat(quantity),
-        price: orderType === 'LIMIT' ? parseFloat(price) : undefined,
-        leverage: leverage[0],
-        marginType: marginType,
-        timeInForce: 'GTC',
-      };
-
-      // Mock API call - in production, call actual API
-      console.log('Placing margin order:', orderData);
-
-      // Reset form
-      setQuantity('');
-      if (orderType === 'MARKET') {
-        setPrice('');
-      }
-    } catch (error) {
-      console.error('Failed to place order:', error);
-      alert('Failed to place order');
-    } finally {
-      setPlacingOrder(false);
+  const calculateLiquidationPrice = (): string => {
+    if (!selectedPair) return '0';
+    if (orderSide === 'SELL') {
+      return formatPrice(selectedPair.liquidationPrice);
     }
-  };
-
-  const formatNumber = (num: number, decimals: number = 2) => {
-    return new Intl.NumberFormat('en-US', {
-      minimumFractionDigits: decimals,
-      maximumFractionDigits: decimals,
-    }).format(num);
-  };
-
-  const formatVolume = (volume: number) => {
-    if (volume >= 1e9) return `${(volume / 1e9).toFixed(2)}B`;
-    if (volume >= 1e6) return `${(volume / 1e6).toFixed(2)}M`;
-    if (volume >= 1e3) return `${(volume / 1e3).toFixed(2)}K`;
-    return volume.toFixed(2);
-  };
-
-  const calculateMargin = () => {
-    if (!selectedPair || !quantity || !price) return 0;
-    return (parseFloat(quantity) * parseFloat(price)) / leverage[0];
-  };
-
-  const getMarginLevelColor = (level: number) => {
-    if (level >= 2) return 'text-green-600';
-    if (level >= 1.5) return 'text-yellow-600';
-    return 'text-red-600';
-  };
-
-  const getMarginLevelProgress = (level: number) => {
-    return Math.min((level / 3) * 100, 100);
+    return formatPrice(selectedPair.lastPrice * 0.85);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Margin Trading
-          </h1>
-          <p className="text-gray-600">
-            Trade with borrowed funds to amplify your positions
-          </p>
+    <div className="flex h-screen bg-[#0B0E14] text-[#EAECE4]" style={{ backgroundColor: TIGEREX_COLORS.background }}>
+      {/* Left - Margin Pairs */}
+      <div className="w-72 border-r border-[#2A3000]" style={{ borderColor: TIGEREX_COLORS.border }}>
+        <div className="p-3 border-b border-[#2A3000]" style={{ borderColor: TIGEREX_COLORS.border }}>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search pairs..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-3 py-2 bg-[#1C2128] border border-[#2A3000] rounded-lg text-sm text-white"
+            />
+          </div>
+        </div>
+        <ScrollArea className="h-[calc(100vh-64px)]">
+          {pairs.map((pair) => (
+            <div
+              key={pair.symbol}
+              onClick={() => setSelectedPair(pair)}
+              className={`p-3 cursor-pointer border-b border-[#2A3000] hover:bg-[#252D38] ${
+                selectedPair?.symbol === pair.symbol ? 'bg-[#252D38]' : ''
+              }`}
+            >
+              <div className="flex justify-between mb-1">
+                <span className="font-semibold text-white">{pair.symbol}</span>
+                <Badge variant={pair.marginBorrowable ? 'default' : 'destructive'} className="text-xs">
+                  {pair.marginBorrowable ? 'Isolated' : 'Suspended'}
+                </Badge>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-white">${formatPrice(pair.lastPrice)}</span>
+                <span className={pair.priceChangePercent >= 0 ? 'text-green-400' : 'text-red-400'}>
+                  {pair.priceChangePercent >= 0 ? '+' : ''}{pair.priceChangePercent.toFixed(2)}%
+                </span>
+              </div>
+            </div>
+          ))}
+        </ScrollArea>
+      </div>
+
+      {/* Center - Info */}
+      <div className="flex-1 flex flex-col">
+        <div className="p-3 border-b border-[#2A3000]" style={{ borderColor: TIGEREX_COLORS.border }}>
+          <div className="flex items-center gap-4">
+            <h2 className="text-xl font-bold text-white">{selectedPair?.symbol}</h2>
+            <span className="text-2xl font-bold text-white">${formatPrice(selectedPair?.lastPrice || 0)}</span>
+            <span className={`text-sm ${(selectedPair?.priceChangePercent || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+              {(selectedPair?.priceChangePercent || 0) >= 0 ? '+' : ''}{selectedPair?.priceChangePercent?.toFixed(2)}%
+            </span>
+          </div>
+        </div>
+        
+        <div className="flex-1 p-4 flex items-center justify-center">
+          <div className="text-center">
+            <Activity className="w-24 h-24 mx-auto mb-4 text-gray-600" />
+            <p className="text-gray-500">Margin Trading Chart</p>
+          </div>
         </div>
 
-        {/* Account Overview */}
-        {account && (
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Shield className="h-5 w-5" />
-                Margin Account Overview
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">
-                    ${formatNumber(account.totalEquity)}
-                  </div>
-                  <div className="text-sm text-gray-500">Total Equity</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-red-600">
-                    ${formatNumber(account.totalDebt)}
-                  </div>
-                  <div className="text-sm text-gray-500">Total Debt</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600">
-                    ${formatNumber(account.availableBalance)}
-                  </div>
-                  <div className="text-sm text-gray-500">Available</div>
-                </div>
-                <div className="text-center">
-                  <div
-                    className={`text-2xl font-bold ${getMarginLevelColor(account.marginLevel)}`}
-                  >
-                    {account.marginLevel.toFixed(2)}
-                  </div>
-                  <div className="text-sm text-gray-500">Margin Level</div>
-                  <Progress
-                    value={getMarginLevelProgress(account.marginLevel)}
-                    className="h-2 mt-1"
-                  />
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">
-                    ${formatNumber(account.borrowingPower)}
-                  </div>
-                  <div className="text-sm text-gray-500">Borrowing Power</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-orange-600">
-                    ${formatNumber(account.dailyInterest)}
-                  </div>
-                  <div className="text-sm text-gray-500">Daily Interest</div>
-                </div>
+        {/* Margin Info */}
+        <div className="border-t border-[#2A3000] p-4" style={{ borderColor: TIGEREX_COLORS.border }}>
+          <div className="grid grid-cols-4 gap-4">
+            <div className="text-center">
+              <div className="text-xs text-gray-500">Borrowable</div>
+              <div className="text-lg font-bold text-[#F0B90B]">${formatNumber(selectedPair?.maxBorrowLimit || 0)}</div>
+            </div>
+            <div className="text-center">
+              <div className="text-xs text-gray-500">Borrowed</div>
+              <div className="text-lg font-bold text-white">${formatNumber(selectedPair?.currentBorrowed || 0)}</div>
+            </div>
+            <div className="text-center">
+              <div className="text-xs text-gray-500">Interest Rate</div>
+              <div className="text-lg font-bold text-white">{((selectedPair?.interestRate || 0) * 100).toFixed(4)}%</div>
+            </div>
+            <div className="text-center">
+              <div className="text-xs text-gray-500">Margin Ratio</div>
+              <div className={`text-lg font-bold ${(selectedPair?.marginRatio || 0) < 1.5 ? 'text-red-400' : 'text-green-400'}`}>
+                {selectedPair?.marginRatio?.toFixed(2)}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
+          
+          <button
+            onClick={() => setShowBorrowModal(true)}
+            className="w-full mt-4 py-3 bg-[#F0B90B] text-black rounded-lg font-semibold hover:bg-[#E5A809]"
+          >
+            <Lock className="w-4 h-4 inline mr-2" />
+            Borrow More
+          </button>
+        </div>
+      </div>
+
+      {/* Right - Trading */}
+      <div className="w-80 border-l border-[#2A3000]" style={{ borderColor: TIGEREX_COLORS.border }}>
+        <div className="border-b border-[#2A3000]" style={{ borderColor: TIGEREX_COLORS.border }}>
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="w-full bg-transparent">
+              <TabsTrigger value="order" className="flex-1">Order</TabsTrigger>
+              <TabsTrigger value="history" className="flex-1">History</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+
+        {activeTab === 'order' && (
+          <div className="p-4 space-y-4">
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => setOrderSide('BUY')}
+                className={`py-3 rounded-lg font-semibold ${orderSide === 'BUY' ? 'bg-green-500 text-black' : 'bg-[#1C2128] text-gray-400'}`}
+              >
+                Buy/Long
+              </button>
+              <button
+                onClick={() => setOrderSide('SELL')}
+                className={`py-3 rounded-lg font-semibold ${orderSide === 'SELL' ? 'bg-red-500 text-white' : 'bg-[#1C2128] text-gray-400'}`}
+              >
+                Sell/Short
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-1">
+              {['MARKET', 'LIMIT'].map((type) => (
+                <button
+                  key={type}
+                  onClick={() => setOrderType(type as any)}
+                  className={`py-2 rounded text-sm ${orderType === type ? 'bg-[#F0B90B] text-black' : 'bg-[#1C2128] text-gray-400'}`}
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
+
+            {orderType === 'LIMIT' && (
+              <div>
+                <label className="block text-sm text-gray-400 mb-2">Price</label>
+                <input
+                  type="number"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  className="w-full px-3 py-3 bg-[#1C2128] border border-[#2A3000] rounded-lg text-white"
+                />
+              </div>
+            )}
+
+            <div>
+              <label className="block text-sm text-gray-400 mb-2">Amount</label>
+              <input
+                type="number"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                placeholder="0.0000"
+                className="w-full px-3 py-3 bg-[#1C2128] border border-[#2A3000] rounded-lg text-white"
+              />
+            </div>
+
+            <div className="p-3 bg-[#1C2128] rounded-lg">
+              <div className="flex justify-between text-sm mb-1">
+                <span className="text-gray-400">Est. Liquidation</span>
+                <span className="text-red-400">${calculateLiquidationPrice()}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-400">Value</span>
+                <span className="text-white">${(parseFloat(quantity || '0') * parseFloat(price || '0')).toFixed(2)}</span>
+              </div>
+            </div>
+
+            <button
+              onClick={placeOrder}
+              disabled={placingOrder || !quantity}
+              className={`w-full py-4 rounded-lg font-bold text-lg ${
+                orderSide === 'BUY' ? 'bg-green-500 hover:bg-green-600 text-black' : 'bg-red-500 hover:bg-red-600 text-white'
+              }`}
+            >
+              {placingOrder ? 'Processing...' : `${orderSide === 'BUY' ? 'Buy' : 'Sell'} ${selectedPair?.baseAsset}`}
+            </button>
+          </div>
         )}
 
-        {/* Trading Pairs */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Activity className="h-5 w-5" />
-              Margin Trading Pairs
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Pair</TableHead>
-                    <TableHead>Last Price</TableHead>
-                    <TableHead>24h Change</TableHead>
-                    <TableHead>Volume</TableHead>
-                    <TableHead>Max Leverage</TableHead>
-                    <TableHead>Borrow Rate</TableHead>
-                    <TableHead>Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {pairs.map((pair) => (
-                    <TableRow
-                      key={pair.symbol}
-                      className={
-                        selectedPair?.symbol === pair.symbol ? 'bg-blue-50' : ''
-                      }
-                    >
-                      <TableCell className="font-medium">
-                        <div>
-                          <div className="font-semibold">{pair.symbol}</div>
-                          <div className="text-sm text-gray-500">
-                            {pair.baseAsset}/{pair.quoteAsset}
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>${formatNumber(pair.lastPrice, 2)}</TableCell>
-                      <TableCell>
-                        <div
-                          className={`flex items-center gap-1 ${pair.priceChangePercent >= 0 ? 'text-green-600' : 'text-red-600'}`}
-                        >
-                          {pair.priceChangePercent >= 0 ? (
-                            <TrendingUp className="h-4 w-4" />
-                          ) : (
-                            <TrendingDown className="h-4 w-4" />
-                          )}
-                          {pair.priceChangePercent >= 0 ? '+' : ''}
-                          {pair.priceChangePercent.toFixed(2)}%
-                        </div>
-                      </TableCell>
-                      <TableCell>{formatVolume(pair.volume)}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{pair.maxLeverage}x</Badge>
-                      </TableCell>
-                      <TableCell>
-                        {(pair.borrowRate * 100).toFixed(3)}%/day
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          size="sm"
-                          variant={
-                            selectedPair?.symbol === pair.symbol
-                              ? 'default'
-                              : 'outline'
-                          }
-                          onClick={() => setSelectedPair(pair)}
-                        >
-                          {selectedPair?.symbol === pair.symbol
-                            ? 'Selected'
-                            : 'Select'}
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Order Form */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <DollarSign className="h-5 w-5" />
-                Place Order
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {selectedPair && (
-                <div className="text-center p-3 bg-gray-50 rounded-lg">
-                  <div className="font-semibold text-lg">
-                    {selectedPair.symbol}
+        {activeTab === 'history' && (
+          <ScrollArea className="flex-1 p-4">
+            {orders.length === 0 ? (
+              <div className="text-center py-8 text-gray-500">
+                <Clock className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <p>No orders</p>
+              </div>
+            ) : (
+              orders.map((order) => (
+                <div key={order.id} className="p-3 bg-[#1C2128] rounded-lg mb-2">
+                  <div className="flex justify-between">
+                    <span className="font-semibold">{order.side}</span>
+                    <Badge variant={order.status === 'FILLED' ? 'default' : 'destructive'}>
+                      {order.status}
+                    </Badge>
                   </div>
-                  <div className="text-sm text-gray-600">
-                    {selectedPair.baseAsset}/{selectedPair.quoteAsset}
+                  <div className="text-sm text-gray-400">
+                    {order.type} @ ${order.price} x {order.quantity}
                   </div>
                 </div>
-              )}
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Leverage: {leverage[0]}x
-                </label>
-                <Slider
-                  value={leverage}
-                  onValueChange={setLeverage}
-                  max={selectedPair?.maxLeverage || 10}
-                  min={1}
-                  step={1}
-                  className="w-full"
-                />
-              </div>
-
-              <Tabs
-                value={orderSide}
-                onValueChange={(value) => setOrderSide(value as 'BUY' | 'SELL')}
-              >
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="BUY" className="text-green-600">
-                    Buy
-                  </TabsTrigger>
-                  <TabsTrigger value="SELL" className="text-red-600">
-                    Sell
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Order Type
-                </label>
-                <Select
-                  value={orderType}
-                  onValueChange={(value) =>
-                    setOrderType(value as 'MARKET' | 'LIMIT')
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="MARKET">Market</SelectItem>
-                    <SelectItem value="LIMIT">Limit</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {orderType === 'LIMIT' && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Price
-                  </label>
-                  <Input
-                    type="number"
-                    placeholder="0.00"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    step="0.01"
-                  />
-                </div>
-              )}
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Quantity
-                </label>
-                <Input
-                  type="number"
-                  placeholder="0.00"
-                  value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
-                  step="0.001"
-                />
-              </div>
-
-              {selectedPair &&
-                quantity &&
-                (orderType === 'MARKET' || price) && (
-                  <div className="p-3 bg-gray-50 rounded-lg space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span>Margin Required:</span>
-                      <span className="font-semibold">
-                        ${formatNumber(calculateMargin(), 2)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span>Borrowed Amount:</span>
-                      <span className="font-semibold">
-                        $
-                        {formatNumber(calculateMargin() * (leverage[0] - 1), 2)}
-                      </span>
-                    </div>
-                  </div>
-                )}
-
-              <Button
-                className={`w-full ${orderSide === 'BUY' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'}`}
-                onClick={placeOrder}
-                disabled={
-                  placingOrder ||
-                  !selectedPair ||
-                  !quantity ||
-                  (orderType === 'LIMIT' && !price)
-                }
-              >
-                {placingOrder
-                  ? 'Placing Order...'
-                  : `${orderSide} ${selectedPair?.baseAsset || ''}`}
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Positions */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="h-5 w-5" />
-                Positions
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3 max-h-96 overflow-y-auto">
-                {positions.map((position, index) => (
-                  <div key={index} className="p-3 border rounded-lg">
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <div className="font-semibold">{position.symbol}</div>
-                        <div className="text-sm text-gray-500">
-                          {position.leverage}x {position.side}
-                        </div>
-                      </div>
-                      <Badge
-                        variant={
-                          position.side === 'LONG' ? 'default' : 'destructive'
-                        }
-                      >
-                        {position.side}
-                      </Badge>
-                    </div>
-
-                    <div className="text-sm space-y-1">
-                      <div className="flex justify-between">
-                        <span>Size:</span>
-                        <span>{formatNumber(position.size, 4)}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Entry Price:</span>
-                        <span>${formatNumber(position.entryPrice, 2)}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Unrealized PnL:</span>
-                        <span
-                          className={
-                            position.unrealizedPnl >= 0
-                              ? 'text-green-600'
-                              : 'text-red-600'
-                          }
-                        >
-                          ${formatNumber(position.unrealizedPnl, 2)} (
-                          {position.roe.toFixed(2)}%)
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Borrowed:</span>
-                        <span className="text-orange-600">
-                          ${formatNumber(position.borrowedAmount, 2)}
-                        </span>
-                      </div>
-                    </div>
-
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="w-full mt-2 text-red-600 hover:text-red-700"
-                    >
-                      Close Position
-                    </Button>
-                  </div>
-                ))}
-
-                {positions.length === 0 && (
-                  <div className="text-center py-8 text-gray-500">
-                    <BarChart3 className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>No open positions</p>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Borrow/Repay */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <DollarSign className="h-5 w-5" />
-                Borrow/Repay
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Tabs defaultValue="borrow" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="borrow">Borrow</TabsTrigger>
-                  <TabsTrigger value="repay">Repay</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="borrow" className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Asset
-                    </label>
-                    <Select value={borrowAsset} onValueChange={setBorrowAsset}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="USDT">USDT</SelectItem>
-                        <SelectItem value="BTC">BTC</SelectItem>
-                        <SelectItem value="ETH">ETH</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Amount
-                    </label>
-                    <Input
-                      type="number"
-                      placeholder="0.00"
-                      value={borrowAmount}
-                      onChange={(e) => setBorrowAmount(e.target.value)}
-                      step="0.01"
-                    />
-                  </div>
-
-                  <Button
-                    className="w-full bg-blue-600 hover:bg-blue-700"
-                    disabled={!borrowAmount}
-                  >
-                    Borrow {borrowAsset}
-                  </Button>
-                </TabsContent>
-
-                <TabsContent value="repay" className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Asset
-                    </label>
-                    <Select value={repayAsset} onValueChange={setRepayAsset}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="USDT">USDT</SelectItem>
-                        <SelectItem value="BTC">BTC</SelectItem>
-                        <SelectItem value="ETH">ETH</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Amount
-                    </label>
-                    <Input
-                      type="number"
-                      placeholder="0.00"
-                      value={repayAmount}
-                      onChange={(e) => setRepayAmount(e.target.value)}
-                      step="0.01"
-                    />
-                  </div>
-
-                  <Button
-                    className="w-full bg-green-600 hover:bg-green-700"
-                    disabled={!repayAmount}
-                  >
-                    Repay {repayAsset}
-                  </Button>
-                </TabsContent>
-              </Tabs>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Risk Warning */}
-        <Card className="mt-6 border-red-200 bg-red-50">
-          <CardContent className="p-4">
-            <div className="flex items-start gap-3">
-              <AlertTriangle className="h-5 w-5 text-red-600 mt-0.5" />
-              <div>
-                <h3 className="font-semibold text-red-800 mb-1">
-                  Margin Trading Risk Warning
-                </h3>
-                <p className="text-sm text-red-700">
-                  Margin trading involves substantial risk and may result in
-                  losses exceeding your initial investment. You may be subject
-                  to margin calls and forced liquidation. Interest charges apply
-                  to borrowed funds. Please ensure you understand the risks
-                  before trading on margin.
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+              ))
+            )}
+          </ScrollArea>
+        )}
       </div>
     </div>
   );
