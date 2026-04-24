@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TigerEx - Desktop Social Login</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root { --primary: #F0B90B; --bg-dark: #0B0E11; --bg-card: #1E2329; }
+body { background: var(--bg-dark); color: #EAECEF; font-family: 'Segoe UI', sans-serif; }
+.grid-cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.social-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 16px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.social-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+</style>
+</head>
+<body class="h-screen flex items-center justify-center">
+<div class="w-full max-w-2xl">
+<div class="bg-[#1E2329] rounded-2xl p-10">
+<h1 class="text-3xl font-bold text-center mb-2">🐯 TigerEx</h1>
+<p class="text-gray-400 text-center mb-8">Desktop Social Login - Electron Ready</p>
+
+<div class="grid-cols-3 gap-4 mb-6">
+<button class="social-btn bg-[#4285F4] text-white" onclick="login('google')">🔴 Google</button>
+<button class="social-btn bg-black text-white border border-gray-700" onclick="login('apple')">🍎 Apple</button>
+<button class="social-btn bg-[#1877F2] text-white" onclick="login('facebook')">📘 Facebook</button>
+<button class="social-btn bg-[#333] text-white" onclick="login('github')">🐙 GitHub</button>
+<button class="social-btn bg-[#1DA1F2] text-white" onclick="login('twitter')">🐦 Twitter</button>
+<button class="social-btn bg-[#5865F2] text-white" onclick="login('discord')">💬 Discord</button>
+<button class="social-btn bg-[#0088CC] text-white" onclick="login('telegram')">✈️ Telegram</button>
+<button class="social-btn bg-[#00B900] text-white" onclick="login('line')">💚 LINE</button>
+<button class="social-btn bg-[#07C160] text-white" onclick="login('wechat')">💚 WeChat</button>
+<button class="social-btn bg-[#FEE500] text-[#3C1E1E]" onclick="login('kakao')">💛 Kakao</button>
+<button class="social-btn bg-[#00A4EF] text-white" onclick="login('microsoft')">🪟 Microsoft</button>
+<button class="social-btn bg-[#0A66C2] text-white" onclick="login('linkedin')">💼 LinkedIn</button>
+</div>
+
+<p class="text-center text-gray-500 text-sm">By continuing, you agree to TigerEx Terms of Service</p>
+</div>
+</div>
+<script>
+function login(provider) {
+  alert('Desktop OAuth Login: ' + provider + '\n\nConfigure OAuth credentials in your backend');
+  // OAuth redirect would happen here
+}
+</script>
+</body>
+</html>

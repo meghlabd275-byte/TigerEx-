@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TigerEx - Social Login</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root { --primary: #F0B90B; --bg-dark: #0B0E11; --bg-card: #1E2329; --text: #EAECEF; }
+body { background: var(--bg-dark); color: var(--text); font-family: system-ui, sans-serif; }
+.social-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.social-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; border-radius: 10px; font-weight: 600; transition: transform 0.2s; }
+.social-btn:hover { transform: scale(1.02); }
+.google { background: #4285F4; color: white; }
+.apple { background: #000; color: white; border: 1px solid #333; }
+.facebook { background: #1877F2; color: white; }
+.github { background: #333; color: white; }
+.twitter { background: #1DA1F2; color: white; }
+.discord { background: #5865F2; color: white; }
+.telegram { background: #0088CC; color: white; }
+.line { background: #00B900; color: white; }
+.wechat { background: #07C160; color: white; }
+.kakao { background: #FEE500; color: #3C1E1E; }
+.microsoft { background: #00A4EF; color: white; }
+.linkedin { background: #0A66C2; color: white; }
+</style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+<div class="w-full max-w-md">
+<div class="bg-[#1E2329] rounded-2xl p-8">
+<h1 class="text-2xl font-bold text-center mb-2">🐯 TigerEx</h1>
+<p class="text-gray-400 text-center mb-6">Continue with your social account</p>
+
+<div class="social-grid">
+<button class="social-btn google" onclick="socialLogin('google')"><span>🔴</span> Google</button>
+<button class="social-btn apple" onclick="socialLogin('apple')"><span>🍎</span> Apple</button>
+<button class="social-btn facebook" onclick="socialLogin('facebook')"><span>📘</span> Facebook</button>
+<button class="social-btn github" onclick="socialLogin('github')"><span>🐙</span> GitHub</button>
+<button class="social-btn twitter" onclick="socialLogin('twitter')"><span>🐦</span> Twitter</button>
+<button class="social-btn discord" onclick="socialLogin('discord')"><span>💬</span> Discord</button>
+<button class="social-btn telegram" onclick="socialLogin('telegram')"><span>✈️</span> Telegram</button>
+<button class="social-btn line" onclick="socialLogin('line')"><span>💚</span> LINE</button>
+<button class="social-btn wechat" onclick="socialLogin('wechat')"><span>💚</span> WeChat</button>
+<button class="social-btn kakao" onclick="socialLogin('kakao')"><span>💛</span> Kakao</button>
+<button class="social-btn microsoft" onclick="socialLogin('microsoft')"><span>🪟</span> Microsoft</button>
+<button class="social-btn linkedin" onclick="socialLogin('linkedin')"><span>💼</span> LinkedIn</button>
+</div>
+
+<p class="text-center mt-6 text-gray-500 text-sm">By continuing, you agree to TigerEx Terms of Service</p>
+</div>
+</div>
+
+<script>
+function socialLogin(provider) {
+const endpoints = {
+google: 'https://accounts.google.com/o/oauth2/v2/auth?client_id=GOOGLE_ID&redirect_uri=REDIRECT&response_type=code&scope=email%20profile',
+apple: 'https://appleid.apple.com/auth/authorize?client_id=APPLE_ID&redirect_uri=REDIRECT&response_type=code&scope=name%20email',
+facebook: 'https://www.facebook.com/v18.0/dialog/oauth?client_id=FB_ID&redirect_uri=REDIRECT&scope=email%20public_profile',
+github: 'https://github.com/login/oauth/authorize?client_id=GITHUB_ID&redirect_uri=REDIRECT&scope=user:email',
+twitter: 'https://twitter.com/i/oauth2/authorize?client_id=TWITTER_ID&redirect_uri=REDIRECT&response_type=code&scope=tweet.read',
+discord: 'https://discord.com/api/oauth2/authorize?client_id=DISCORD_ID&redirect_uri=REDIRECT&scope=identify%20email',
+telegram: 'https://oauth.telegram.org/auth?bot_token=TELEGRAM_BOT&redirect_uri=REDIRECT',
+line: 'https://access.line.me/oauth2/v2.1/authorize?client_id=LINE_ID&redirect_uri=REDIRECT&scope=openid%20profile%20email',
+wechat: 'https://open.weixin.qq.com/connect/qrconnect?appid=WECHAT_ID&redirect_uri=REDIRECT&scope=snsapi_login',
+kakao: 'https://kauth.kakao.com/oauth/authorize?client_id=KAKAO_ID&redirect_uri=REDIRECT&scope=profile_nickname',
+microsoft: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=MS_ID&redirect_uri=REDIRECT&scope=User.Read',
+linkedin: 'https://www.linkedin.com/oauth/v2/authorization?client_id=LINKEDIN_ID&redirect_uri=REDIRECT&scope=r_liteprofile'
+};
+const url = endpoints[provider];
+if (url) alert('OAuth redirect: ' + provider + '\n\nConfigure your OAuth credentials in the backend');
+}
+</script>
+</body>
+</html>
