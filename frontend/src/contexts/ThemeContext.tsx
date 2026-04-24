@@ -1,92 +1,234 @@
 /**
- * TigerEx React Component
+ * TigerEx Theme Context - Light/Dark Mode Toggle
  * @file ThemeContext.tsx
- * @description React component for TigerEx
+ * @description Global theme system for light/dark mode
  * @author TigerEx Development Team
  */
-'use client'
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+export interface ThemeColors {
+  // Primary colors
+  primary: string;
+  primaryDark: string;
+  primaryLight: string;
+  
+  // Background colors
+  background: string;
+  backgroundSecondary: string;
+  card: string;
+  cardHover: string;
+  cardActive: string;
+  
+  // Text colors
+  text: string;
+  textSecondary: string;
+  textMuted: string;
+  
+  // Accent colors
+  green: string;
+  greenLight: string;
+  red: string;
+  redLight: string;
+  
+  // Border colors
+  border: string;
+  borderLight: string;
+  
+  // Utility
+  white: string;
+  black: string;
+  transparent: string;
+  
+  // Status
+  success: string;
+  warning: string;
+  error: string;
+  info: string;
+}
 
-type Theme = 'light' | 'dark' | 'system'
+// Dark Theme (Default - Exchange Style)
+export const darkTheme: ThemeColors = {
+  primary: '#F0B90B',
+  primaryDark: '#E5A809',
+  primaryLight: '#FFD54F',
+  background: '#0B0E14',
+  backgroundSecondary: '#151A21',
+  card: '#1C2128',
+  cardHover: '#252D38',
+  cardActive: '#2D3540',
+  text: '#EAECE4',
+  textSecondary: '#8B929E',
+  textMuted: '#5C6370',
+  green: '#00C087',
+  greenLight: '#00E5A8',
+  red: '#F6465D',
+  redLight: '#FF6B7A',
+  border: '#2A303C',
+  borderLight: '#3A4250',
+  white: '#FFFFFF',
+  black: '#000000',
+  transparent: 'transparent',
+  success: '#00C087',
+  warning: '#F0B90B',
+  error: '#F6465D',
+  info: '#3B82F6',
+};
+
+// Light Theme
+export const lightTheme: ThemeColors = {
+  primary: '#F0B90B',
+  primaryDark: '#E5A809',
+  primaryLight: '#6D4C00',
+  background: '#FFFFFF',
+  backgroundSecondary: '#F8FAFC',
+  card: '#FFFFFF',
+  cardHover: '#F1F5F9',
+  cardActive: '#E2E8F0',
+  text: '#1E293B',
+  textSecondary: '#64748B',
+  textMuted: '#94A3B8',
+  green: '#059669',
+  greenLight: '#10B981',
+  red: '#DC2626',
+  redLight: '#EF4444',
+  border: '#E2E8F0',
+  borderLight: '#CBD5E1',
+  white: '#FFFFFF',
+  black: '#000000',
+  transparent: 'transparent',
+  success: '#059669',
+  warning: '#D97706',
+  error: '#DC2626',
+  info: '#2563EB',
+};
 
 interface ThemeContextType {
-  theme: Theme
-  setTheme: (theme: Theme) => void
-  resolvedTheme: 'light' | 'dark'
+  theme: 'light' | 'dark';
+  colors: ThemeColors;
+  toggleTheme: () => void;
+  setTheme: (theme: 'light' | 'dark') => void;
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
-
-export const useTheme = () => {
-  const context = useContext(ThemeContext)
-  if (context === undefined) {
-    throw new Error('useTheme must be used within a ThemeProvider')
-  }
-  return context
-}
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 interface ThemeProviderProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>('system')
-  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light')
+  const [theme, setThemeState] = useState<'light' | 'dark'>('dark');
+  const [colors, setColors] = useState<ThemeColors>(darkTheme);
 
+  // Initialize from localStorage
   useEffect(() => {
-    // Get saved theme from localStorage
-    const savedTheme = localStorage.getItem('theme') as Theme
-    if (savedTheme && ['light', 'dark', 'system'].includes(savedTheme)) {
-      setThemeState(savedTheme)
+    const savedTheme = localStorage.getItem('tigerex-theme') as 'light' | 'dark' | null;
+    if (savedTheme) {
+      setThemeState(savedTheme);
+      setColors(savedTheme === 'dark' ? darkTheme : lightTheme);
     }
-  }, [])
+  }, []);
 
+  // Update colors when theme changes
   useEffect(() => {
-    const updateTheme = () => {
-      let resolved: 'light' | 'dark'
-      
-      if (theme === 'system') {
-        resolved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-      } else {
-        resolved = theme
-      }
-      
-      setResolvedTheme(resolved)
-      
-      // Update document class
-      if (resolved === 'dark') {
-        document.documentElement.classList.add('dark')
-      } else {
-        document.documentElement.classList.remove('dark')
-      }
-    }
+    setColors(theme === 'dark' ? darkTheme : lightTheme);
+    localStorage.setItem('tigerex-theme', theme);
+    
+    // Update document class for global styles
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(theme);
+  }, [theme]);
 
-    updateTheme()
+  const toggleTheme = useCallback(() => {
+    setThemeState(prev => prev === 'dark' ? 'light' : 'dark');
+  }, []);
 
-    // Listen for system theme changes
-    if (theme === 'system') {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-      const handleChange = () => updateTheme()
-      mediaQuery.addEventListener('change', handleChange)
-      return () => mediaQuery.removeEventListener('change', handleChange)
-    }
-  }, [theme])
-
-  const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme)
-    localStorage.setItem('theme', newTheme)
-  }
-
-  const value: ThemeContextType = {
-    theme,
-    setTheme,
-    resolvedTheme
-  }
+  const setTheme = useCallback((newTheme: 'light' | 'dark') => {
+    setThemeState(newTheme);
+  }, []);
 
   return (
-    <ThemeContext.Provider value={value}>
+    <ThemeContext.Provider value={{ theme, colors, toggleTheme, setTheme }}>
       {children}
     </ThemeContext.Provider>
-  )
-}
+  );
+};
+
+export const useTheme = (): ThemeContextType => {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error('useTheme must be used within a ThemeProvider');
+  }
+  return context;
+};
+
+// Utility hook for theme-based styles
+export const useThemeStyles = () => {
+  const { colors } = useTheme();
+  
+  return {
+    // Common container styles
+    container: {
+      backgroundColor: colors.background,
+      color: colors.text,
+    },
+    containerSecondary: {
+      backgroundColor: colors.backgroundSecondary,
+      color: colors.text,
+    },
+    card: {
+      backgroundColor: colors.card,
+      color: colors.text,
+      borderColor: colors.border,
+    },
+    cardHover: {
+      backgroundColor: colors.cardHover,
+      color: colors.text,
+    },
+    
+    // Button styles
+    buttonPrimary: {
+      backgroundColor: colors.primary,
+      color: colors.black,
+    },
+    buttonSuccess: {
+      backgroundColor: colors.green,
+      color: colors.white,
+    },
+    buttonDanger: {
+      backgroundColor: colors.red,
+      color: colors.white,
+    },
+    
+    // Text styles
+    textPrimary: {
+      color: colors.text,
+    },
+    textSecondary: {
+      color: colors.textSecondary,
+    },
+    textMuted: {
+      color: colors.textMuted,
+    },
+    
+    // Border styles
+    border: {
+      borderColor: colors.border,
+    },
+    borderLight: {
+      borderColor: colors.borderLight,
+    },
+    
+    // Status colors
+    success: {
+      color: colors.green,
+    },
+    error: {
+      color: colors.red,
+    },
+    warning: {
+      color: colors.warning,
+    },
+  };
+};
+
+export default ThemeProvider;
