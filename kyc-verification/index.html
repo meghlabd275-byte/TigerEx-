@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TigerEx - KYC Verification</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root { --primary: #F0B90B; --bg-dark: #0B0E11; --bg-card: #1E2329; --success: #00C087; --error: #F6465D; }
+body { background: var(--bg-dark); color: #EAECEF; font-family: system-ui, -apple-system, sans-serif; }
+.upload-zone { border: 2px dashed #2B3139; border-radius: 12px; padding: 40px; text-align: center; cursor: pointer; transition: all 0.3s; }
+.upload-zone:hover { border-color: var(--primary); background: rgba(240, 185, 11, 0.1); }
+.upload-zone.dragover { border-color: var(--primary); background: rgba(240, 185, 11, 0.15); }
+.preview-img { max-width: 100%; max-height: 200px; border-radius: 8px; margin-top: 12px; }
+.step { display: none; }
+.step.active { display: block; }
+.step-indicator { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; transition: all 0.3s; }
+.step-indicator.active { background: var(--primary); color: #000; }
+.step-indicator.completed { background: var(--success); color: #fff; }
+.step-indicator.pending { background: #2B3139; color: #848E9C; }
+.camera-box { width: 100%; max-width: 400px; aspect-ratio: 4/3; background: #000; border-radius: 12px; overflow: hidden; position: relative; margin: 0 auto; }
+#selfieVideo, #liveVideo { width: 100%; height: 100%; object-fit: cover; }
+.capture-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 70px; height: 70px; border-radius: 50%; background: var(--primary); border: 4px solid #fff; cursor: pointer; }
+.capture-btn:active { transform: translateX(-50%) scale(0.95); }
+#canvas { display: none; }
+.verification-status { padding: 16px; border-radius: 8px; text-align: center; margin-top: 12px; }
+.verification-status.success { background: rgba(0, 192, 135, 0.2); color: var(--success); }
+.verification-status.error { background: rgba(246, 70, 93, 0.2); color: var(--error); }
+.verification-status.pending { background: rgba(132, 142, 156, 0.2); color: #848E9C; }
+.progress-bar { height: 6px; background: #2B3139; border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--primary); transition: width 0.5s; }
+</style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+<div class="max-w-2xl mx-auto">
+<!-- Header -->
+<div class="text-center mb-8">
+<h1 class="text-3xl font-bold">🐯 TigerEx</h1>
+<p class="text-gray-400 mt-2">KYC Identity Verification</p>
+</div>
+
+<!-- Progress -->
+<div class="mb-8">
+<div class="flex justify-between mb-2">
+<span class="text-sm">Step <span id="stepNum">1</span> of 5</span>
+<span class="text-sm text-gray-400" id="stepName">Document Type</span>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="progress" style="width: 20%"></div></div>
+</div>
+
+<!-- Step 1: Document Type -->
+<div class="step active" id="step1">
+<h2 class="text-xl font-bold mb-6">Select Document Type</h2>
+<div class="grid grid-cols-1 gap-4">
+<button class="doc-btn p-4 bg-[#1E2329] rounded-xl text-left" onclick="selectDocType('passport')">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-[#F0B90B] rounded-lg flex items-center justify-center text-2xl">🛂</div>
+<div>
+<h3 class="font-bold">Passport</h3>
+<p class="text-sm text-gray-400">Government issued passport</p>
+</div>
+</div>
+</button>
+<button class="doc-btn p-4 bg-[#1E2329] rounded-xl text-left" onclick="selectDocType('national_id')">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-[#F0B90B] rounded-lg flex items-center justify-center text-2xl">🪪</div>
+<div>
+<h3 class="font-bold">National ID</h3>
+<p class="text-sm text-gray-400">National identity card</p>
+</div>
+</div>
+</button>
+<button class="doc-btn p-4 bg-[#1E2329] rounded-xl text-left" onclick="selectDocType('driver_license')">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-[#F0B90B] rounded-lg flex items-center justify-center text-2xl">🚗</div>
+<div>
+<h3 class="font-bold">Driver's License</h3>
+<p class="text-sm text-gray-400">Driving license</p>
+</div>
+</div>
+</button>
+<button class="doc-btn p-4 bg-[#1E2329] rounded-xl text-left" onclick="selectDocType('residence_permit')">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-[#F0B90B] rounded-lg flex items-center justify-center text-2xl">🏠</div>
+<div>
+<h3 class="font-bold">Residence Permit</h3>
+<p class="text-sm text-gray-400">Residence permit card</p>
+</div>
+</div>
+</button>
+</div>
+</div>
+
+<!-- Step 2: Front Side -->
+<div class="step" id="step2">
+<h2 class="text-xl font-bold mb-6">Upload Document Front Side</h2>
+<div class="upload-zone" id="frontZone" onclick="document.getElementById('frontInput').click()">
+<input type="file" id="frontInput" class="hidden" accept="image/*" onchange="handleUpload(this, 'front')">
+<div class="text-4xl mb-4">📄</div>
+<p class="font-medium">Click to upload or drag and drop</p>
+<p class="text-sm text-gray-400 mt-2">PNG, JPG up to 10MB</p>
+<div id="frontPreview"></div>
+</div>
+<div class="verification-status pending" id="frontStatus">Waiting for document...</div>
+<div class="flex gap-4 mt-6">
+<button class="flex-1 py-3 bg-[#2B3139] rounded-lg" onclick="goBack()">← Back</button>
+<button class="flex-1 py-3 bg-[#F0B90B] text-black font-bold rounded-lg" onclick="nextStep()" id="frontNext" disabled>Continue →</button>
+</div>
+</div>
+
+<!-- Step 3: Back Side -->
+<div class="step" id="step3">
+<h2 class="text-xl font-bold mb-6">Upload Document Back Side</h2>
+<div class="upload-zone" id="backZone" onclick="document.getElementById('backInput').click()">
+<input type="file" id="backInput" class="hidden" accept="image/*" onchange="handleUpload(this, 'back')">
+<div class="text-4xl mb-4">📃</div>
+<p class="font-medium">Click to upload or drag and drop</p>
+<p class="text-sm text-gray-400 mt-2">PNG, JPG up to 10MB</p>
+<div id="backPreview"></div>
+</div>
+<div class="verification-status pending" id="backStatus">Waiting for document...</div>
+<div class="flex gap-4 mt-6">
+<button class="flex-1 py-3 bg-[#2B3139] rounded-lg" onclick="goBack()">← Back</button>
+<button class="flex-1 py-3 bg-[#F0B90B] text-black font-bold rounded-lg" onclick="nextStep()" id="backNext" disabled>Continue →</button>
+</div>
+</div>
+
+<!-- Step 4: Selfie with Document -->
+<div class="step" id="step4">
+<h2 class="text-xl font-bold mb-6">Selfie with Document</h2>
+<p class="text-gray-400 mb-4">Take a selfie holding your document next to your face</p>
+<div class="camera-box" id="selfieBox">
+<video id="selfieVideo" autoplay playsinline></video>
+<canvas id="selfieCanvas"></canvas>
+<button class="capture-btn" onclick="captureSelfie()"></button>
+</div>
+<div class="grid grid-cols-3 gap-4 mt-6">
+<div class="text-center">
+<button class="w-full py-2 bg-[#2B3139] rounded-lg" onclick="switchCamera('selfie')">📷 Switch</button>
+</div>
+<div class="text-center">
+<button class="w-full py-2 bg-[#2B3139] rounded-lg" onclick="retakeSelfie()">🔄 Retake</button>
+</div>
+<div class="text-center">
+<button class="w-full py-2 bg-[#F0B90B] text-black font-bold rounded-lg" onclick="confirmSelfie()">✓ Confirm</button>
+</div>
+</div>
+<div id="selfiePreview" class="mt-4"></div>
+<div class="verification-status pending" id="selfieStatus">Waiting for selfie...</div>
+</div>
+
+<!-- Step 5: Live Verification -->
+<div class="step" id="step5">
+<h2 class="text-xl font-bold mb-6">Live Face Verification</h2>
+<p class="text-gray-400 mb-4">Please face the camera and blink slowly</p>
+<div class="camera-box" id="liveBox">
+<video id="liveVideo" autoplay playsinline></video>
+<canvas id="liveCanvas"></canvas>
+<div class="absolute top-4 left-4 bg-black/50 px-3 py-1 rounded-full text-sm">🟢 Live</div>
+<button class="capture-btn" onclick="captureLive()"></button>
+</div>
+<div class="verification-status pending" id="liveStatus">Initializing camera...</div>
+<div id="liveResult" class="mt-4"></div>
+</div>
+
+<!-- Complete -->
+<div class="step" id="stepComplete">
+<div class="text-center">
+<div class="text-6xl mb-4">✅</div>
+<h2 class="text-2xl font-bold mb-2">Verification Complete!</h2>
+<p class="text-gray-400">Your documents have been submitted for review</p>
+<div class="bg-[#1E2329] rounded-xl p-6 mt-6">
+<p class="text-sm text-gray-400">Reference Number</p>
+<p class="text-xl font-bold text-[#F0B90B]" id="refNumber">KYC-XXXXXX</p>
+</div>
+<button class="w-full py-4 bg-[#F0B90B] text-black font-bold rounded-xl mt-6" onclick="location.href='index.html'">Return to Home</button>
+</div>
+</div>
+</div>
+
+<script>
+// State
+let currentStep = 1;
+let docType = '';
+let documents = { front: null, back: null, selfie: null, live: null };
+let selfieStream = null;
+let liveStream = null;
+
+// Document Types
+function selectDocType(type) {
+docType = type;
+nextStep();
+}
+
+// Upload handling
+function handleUpload(input, type) {
+const file = input.files[0];
+if (!file) return;
+if (file.size > 10 * 1024 * 1024) { alert('File too large (max 10MB)'); return; }
+
+const reader = new FileReader();
+reader.onload = (e) => {
+documents[type] = e.target.result;
+const preview = document.getElementById(type + 'Preview');
+preview.innerHTML = `<img src="${e.target.result}" class="preview-img">`;
+
+const status = document.getElementById(type + 'Status');
+status.className = 'verification-status success';
+status.textContent = '✓ Document uploaded';
+
+document.getElementById(type + 'Next').disabled = false;
+};
+reader.readAsDataURL(file);
+}
+
+// Navigation
+function nextStep() {
+document.getElementById('step' + currentStep).classList.remove('active');
+currentStep++;
+document.getElementById('step' + currentStep).classList.add('active');
+
+document.getElementById('stepNum').textContent = currentStep;
+document.getElementById('progress').style.width = (currentStep * 20) + '%';
+
+const stepNames = ['', 'Document Type', 'Front Side', 'Back Side', 'Selfie', 'Live Verification'];
+document.getElementById('stepName').textContent = stepNames[currentStep];
+
+if (currentStep === 4) startSelfieCamera();
+if (currentStep === 5) startLiveCamera();
+if (currentStep === 6) showComplete();
+}
+
+function goBack() {
+if (currentStep > 1) {
+document.getElementById('step' + currentStep).classList.remove('active');
+currentStep--;
+document.getElementById('step' + currentStep).classList.add('active');
+document.getElementById('stepNum').textContent = currentStep;
+document.getElementById('progress').style.width = (currentStep * 20) + '%';
+}
+}
+
+// Selfie Camera
+async function startSelfieCamera() {
+try {
+const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+document.getElementById('selfieVideo').srcObject = stream;
+selfieStream = stream;
+} catch (e) { alert('Camera access denied'); }
+}
+
+function captureSelfie() {
+const video = document.getElementById('selfieVideo');
+const canvas = document.getElementById('selfieCanvas');
+canvas.width = video.videoWidth;
+canvas.height = video.videoHeight;
+canvas.getContext('2d').drawImage(video, 0, 0);
+documents.selfie = canvas.toDataURL('image/jpeg');
+
+document.getElementById('selfiePreview').innerHTML = `<img src="${documents.selfie}" class="preview-img">`;
+const status = document.getElementById('selfieStatus');
+status.className = 'verification-status success';
+status.textContent = '✓ Selfie captured';
+}
+
+function retakeSelfie() {
+documents.selfie = null;
+document.getElementById('selfiePreview').innerHTML = '';
+const status = document.getElementById('selfieStatus');
+status.className = 'verification-status pending';
+status.textContent = 'Waiting for selfie...';
+}
+
+function confirmSelfie() {
+if (!documents.selfie) { alert('Please take a selfie first'); return; }
+nextStep();
+}
+
+// Live Verification
+async function startLiveCamera() {
+try {
+const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+document.getElementById('liveVideo').srcObject = stream;
+liveStream = stream;
+
+const status = document.getElementById('liveStatus');
+status.className = 'verification-status success';
+status.textContent = '✓ Face detected - Now processing...';
+
+// Simulate face matching
+await simulateLiveVerify();
+} catch (e) {
+const status = document.getElementById('liveStatus');
+status.className = 'verification-status error';
+status.textContent = '✗ Camera access denied';
+}
+}
+
+async function simulateLiveVerify() {
+await new Promise(r => setTimeout(r, 2000));
+const status = document.getElementById('liveStatus');
+status.className = 'verification-status success';
+status.textContent = '✓ Face verification passed!';
+
+document.getElementById('liveResult').innerHTML = `
+<div class="bg-[#1E2329] rounded-lg p-4">
+<p class="text-green-500 font-bold">✓ Liveness detected</p>
+<p class="text-sm text-gray-400 mt-2">Face matched with selfie</p>
+</div>
+`;
+
+setTimeout(() => nextStep(), 1500);
+}
+
+function captureLive() {
+const video = document.getElementById('liveVideo');
+const canvas = document.getElementById('liveCanvas');
+canvas.width = video.videoWidth;
+canvas.height = video.videoHeight;
+canvas.getContext('2d').drawImage(video, 0, 0);
+documents.live = canvas.toDataURL('image/jpeg');
+}
+
+// Complete
+function showComplete() {
+document.getElementById('step5').classList.remove('active');
+document.getElementById('stepComplete').classList.add('active');
+document.getElementById('stepNum').textContent = '5';
+document.getElementById('progress').style.width = '100%';
+document.getElementById('refNumber').textContent = 'KYC-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+
+// Stop cameras
+if (selfieStream) selfieStream.getTracks().forEach(t => t.stop());
+if (liveStream) liveStream.getTracks().forEach(t => t.stop());
+}
+
+// Drag and drop
+['frontZone', 'backZone'].forEach(id => {
+const zone = document.getElementById(id);
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+zone.addEventListener('drop', e => {
+e.preventDefault();
+zone.classList.remove('dragover');
+const file = e.dataTransfer.files[0];
+if (file) {
+const input = document.getElementById(id.replace('Zone', 'Input'));
+input.files = e.dataTransfer.files;
+handleUpload(input, id.replace('Zone', ''));
+}
+});
+});
+</script>
+</body>
+</html>

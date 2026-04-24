@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TigerEx - 2FA Reset</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root { --primary: #F0B90B; --bg-dark: #0B0E11; --bg-card: #1E2329; --success: #00C087; --error: #F6465D; }
+body { background: var(--bg-dark); color: #EAECEF; font-family: system-ui, sans-serif; }
+.step { display: none; }
+.step.active { display: block; }
+.camera-box { width: 100%; max-width: 400px; aspect-ratio: 4/3; background: #000; border-radius: 12px; overflow: hidden; position: relative; margin: 0 auto; }
+#liveVideo { width: 100%; height: 100%; object-fit: cover; }
+.capture-btn { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 70px; height: 70px; border-radius: 50%; background: var(--primary); border: 4px solid #fff; }
+.verification-box { padding: 20px; background: var(--bg-card); border-radius: 12px; text-align: center; margin: 12px 0; }
+.verification-box.success { border: 2px solid var(--success); }
+.verification-box.error { border: 2px solid var(--error); }
+.verification-box.pending { border: 2px solid #2B3139; }
+.otp-input { width: 50px; height: 60px; font-size: 24px; text-align: center; background: var(--bg-card); border: 1px solid #2B3139; border-radius: 8px; color: #fff; }
+.otp-input:focus { border-color: var(--primary); outline: none; }
+.progress-step { display: flex; gap: 8px; margin-bottom: 24px; }
+.progress-dot { width: 12px; height: 12px; border-radius: 50%; background: #2B3139; }
+.progress-dot.active { background: var(--primary); }
+.progress-dot.completed { background: var(--success); }
+</style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+<div class="max-w-lg mx-auto">
+<div class="text-center mb-6">
+<h1 class="text-3xl font-bold">🐯 TigerEx</h1>
+<p class="text-gray-400">2FA Reset Verification</p>
+</div>
+
+<!-- Progress -->
+<div class="progress-step justify-center mb-8">
+<div class="progress-dot active" id="prog1"></div>
+<div class="progress-dot" id="prog2"></div>
+<div class="progress-dot" id="prog3"></div>
+</div>
+
+<!-- Step 1: Email Verification -->
+<div class="step active" id="step1">
+<h2 class="text-xl font-bold mb-4">Step 1: Email Verification</h2>
+<p class="text-gray-400 mb-6">Enter 6-digit code sent to your email</p>
+
+<div class="mb-6">
+<input type="email" id="emailInput" placeholder="your@email.com" class="w-full px-4 py-3 bg-[#1E2329] border border-[#2B3139] rounded-lg mb-4">
+<button class="w-full py-3 bg-[#2B3139] rounded-lg" onclick="sendEmailCode()">Send Code</button>
+</div>
+
+<div class="flex justify-center gap-2 mb-6">
+<input type="text" maxlength="1" class="otp-input" oninput="nextInput(this, 1)">
+<input type="text" maxlength="1" class="otp-input" oninput="nextInput(this, 2)">
+<input type="text" maxlength="1" class="otp-input" oninput="nextInput(this, 3)">
+<input type="text" maxlength="1" class="otp-input" oninput="nextInput(this, 4)">
+<input type="text" maxlength="1" class="otp-input" oninput="nextInput(this, 5)">
+<input type="text" maxlength="1" class="otp-input" oninput="nextInput(this, 6)">
+</div>
+
+<div class="verification-box pending" id="emailStatus">
+<p>Waiting for email verification...</p>
+</div>
+
+<div class="flex gap-4">
+<button class="flex-1 py-3 bg-[#2B3139] rounded-lg" onclick="resetAll()">Reset</button>
+<button class="flex-1 py-3 bg-[#F0B90B] text-black font-bold rounded-lg" onclick="verifyEmail()">Verify →</button>
+</div>
+</div>
+
+<!-- Step 2: Phone Verification -->
+<div class="step" id="step2">
+<h2 class="text-xl font-bold mb-4">Step 2: Phone Verification</h2>
+<p class="text-gray-400 mb-6">Enter 6-digit code sent to your phone</p>
+
+<div class="mb-6">
+<div class="flex gap-2 mb-4">
+<select class="px-3 py-3 bg-[#1E2329] border border-[#2B3139] rounded-lg">
+<option>+1 🇺🇸</option><option>+44 🇬🇧</option>
+<option>+91 🇮🇳</option><option>+86 🇨🇳</option>
+</select>
+<input type="tel" id="phoneInput" placeholder="Phone number" class="flex-1 px-4 py-3 bg-[#1E2329] border border-[#2B3139] rounded-lg">
+</div>
+<button class="w-full py-3 bg-[#2B3139] rounded-lg" onclick="sendPhoneCode()">Send Code</button>
+</div>
+
+<div class="flex justify-center gap-2 mb-6">
+<input type="text" maxlength="1" class="otp-input" id="p1" oninput="nextInput(this, 'p')">
+<input type="text" maxlength="1" class="otp-input" id="p2" oninput="nextInput(this, 'p')">
+<input type="text" maxlength="1" class="otp-input" id="p3" oninput="nextInput(this, 'p')">
+<input type="text" maxlength="1" class="otp-input" id="p4" oninput="nextInput(this, 'p')">
+<input type="text" maxlength="1" class="otp-input" id="p5" oninput="nextInput(this, 'p')">
+<input type="text" maxlength="1" class="otp-input" id="p6" oninput="nextInput(this, 'p')">
+</div>
+
+<div class="verification-box pending" id="phoneStatus">
+<p>Waiting for phone verification...</p>
+</div>
+
+<div class="flex gap-4">
+<button class="flex-1 py-3 bg-[#2B3139] rounded-lg" onclick="goToStep(1)">← Back</button>
+<button class="flex-1 py-3 bg-[#F0B90B] text-black font-bold rounded-lg" onclick="verifyPhone()">Verify →</button>
+</div>
+</div>
+
+<!-- Step 3: Live Face Verification -->
+<div class="step" id="step3">
+<h2 class="text-xl font-bold mb-4">Step 3: Live Face Verification</h2>
+<p class="text-gray-400 mb-4">Face must match KYC selfie. Please blink slowly</p>
+
+<div class="camera-box">
+<video id="liveVideo" autoplay playsinline></video>
+<canvas id="liveCanvas"></canvas>
+<button class="capture-btn" onclick="captureFace()"></button>
+</div>
+
+<div class="verification-box pending mt-4" id="liveStatus">
+<p>Initializing camera...</p>
+</div>
+
+<div id="liveResult"></div>
+
+<div class="flex gap-4 mt-6">
+<button class="flex-1 py-3 bg-[#2B3139] rounded-lg" onclick="goToStep(2)">← Back</button>
+<button class="flex-1 py-3 bg-[#F0B90B] text-black font-bold rounded-lg" onclick="verifyLive()">Verify →</button>
+</div>
+</div>
+
+<!-- Complete -->
+<div class="step" id="stepComplete">
+<div class="text-center">
+<div class="text-6xl mb-4">✅</div>
+<h2 class="text-2xl font-bold mb-2">2FA Reset Complete!</h2>
+<p class="text-gray-400">Your 2FA has been disabled</p>
+<div class="bg-[#1E2329] rounded-xl p-6 mt-6">
+<p class="text-sm text-gray-400">Reference</p>
+<p class="text-xl font-bold text-[#F0B90B]">2FA-RESET-XXXXXX</p>
+</div>
+<button class="w-full py-4 bg-[#F0B90B] text-black font-bold rounded-xl mt-6" onclick="location.href='index.html'">Return Home</button>
+</div>
+</div>
+</div>
+
+<script>
+let currentStep = 1;
+let emailVerified = false;
+let phoneVerified = false;
+let liveVerified = false;
+let liveStream = null;
+let liveCapture = null;
+
+// OTP Input navigation
+function nextInput(input, step) {
+if (input.value && step !== 'p') {
+const inputs = document.querySelectorAll('.otp-input');
+const index = Array.from(inputs).indexOf(input);
+if (index < inputs.length - 1) inputs[index + 1].focus();
+} else if (step === 'p') {
+const inputs = document.querySelectorAll('#phoneStatus input');
+const index = Array.from(inputs).indexOf(input);
+if (index < 4) inputs[index + 1].focus();
+}
+input.value = input.value.replace(/[^0-9]/g, '');
+}
+
+// Email verification
+function sendEmailCode() {
+const email = document.getElementById('emailInput').value;
+if (!email || !email.includes('@')) { alert('Enter valid email'); return; }
+const status = document.getElementById('emailStatus');
+status.className = 'verification-box success';
+status.innerHTML = '<p>✓ Code sent to ' + email + '</p><p class="text-sm text-gray-400">Code: 123456 (demo)</p>';
+}
+
+function verifyEmail() {
+const inputs = document.querySelectorAll('#step1 .otp-input');
+let code = '';
+inputs.forEach(i => code += i.value);
+if (code.length !== 6 || code !== '123456') {
+document.getElementById('emailStatus').innerHTML = '<p>✗ Invalid code</p>';
+return;
+}
+emailVerified = true;
+document.getElementById('emailStatus').className = 'verification-box success';
+document.getElementById('emailStatus').innerHTML = '<p>✓ Email verified!</p>';
+setTimeout(() => goToStep(2), 1000);
+}
+
+// Phone verification
+function sendPhoneCode() {
+const phone = document.getElementById('phoneInput').value;
+if (!phone || phone.length < 10) { alert('Enter valid phone'); return; }
+const status = document.getElementById('phoneStatus');
+status.className = 'verification-box success';
+status.innerHTML = '<p>✓ Code sent to ' + phone + '</p><p class="text-sm text-gray-400">Code: 123456 (demo)</p>';
+}
+
+function verifyPhone() {
+const inputs = document.querySelectorAll('#step2 .otp-input');
+let code = '';
+inputs.forEach(i => code += i.value);
+if (code.length !== 6 || code !== '123456') {
+document.getElementById('phoneStatus').className = 'verification-box error';
+document.getElementById('phoneStatus').innerHTML = '<p>✗ Invalid code</p>';
+return;
+}
+phoneVerified = true;
+document.getElementById('phoneStatus').className = 'verification-box success';
+document.getElementById('phoneStatus').innerHTML = '<p>✓ Phone verified!</p>';
+setTimeout(() => goToStep(3), 1000);
+}
+
+// Live verification
+async function startCamera() {
+try {
+const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+document.getElementById('liveVideo').srcObject = stream;
+liveStream = stream;
+const status = document.getElementById('liveStatus');
+status.className = 'verification-box success';
+status.innerHTML = '<p>✓ Camera ready - Please blink slowly</p>';
+} catch (e) {
+document.getElementById('liveStatus').className = 'verification-box error';
+document.getElementById('liveStatus').innerHTML = '<p>✗ Camera denied</p>';
+}
+}
+
+function captureFace() {
+const video = document.getElementById('liveVideo');
+const canvas = document.getElementById('liveCanvas');
+canvas.width = video.videoWidth;
+canvas.height = video.videoHeight;
+canvas.getContext('2d').drawImage(video, 0, 0);
+liveCapture = canvas.toDataURL('image/jpeg');
+document.getElementById('liveResult').innerHTML = '<img src="' + liveCapture + '" class="w-full rounded-lg mt-4">';
+}
+
+async function verifyLive() {
+if (!liveCapture) { alert('Capture your face first'); return; }
+const status = document.getElementById('liveStatus');
+status.className = 'verification-box pending';
+status.innerHTML = '<p>🔄 Verifying face...</p>';
+
+// Simulate face match
+await new Promise(r => setTimeout(r, 2000));
+liveVerified = true;
+status.className = 'verification-box success';
+status.innerHTML = '<p>✓ Face verified!</p><p class="text-sm text-gray-400">Matched with KYC selfie</p>';
+setTimeout(showComplete, 1500);
+}
+
+// Navigation
+function goToStep(step) {
+document.getElementById('step' + currentStep).classList.remove('active');
+currentStep = step;
+document.getElementById('step' + currentStep).classList.add('active');
+updateProgress();
+if (step === 3) startCamera();
+}
+
+function updateProgress() {
+for (let i = 1; i <= 3; i++) {
+const dot = document.getElementById('prog' + i);
+if (i < currentStep) dot.className = 'progress-dot completed';
+else if (i === currentStep) dot.className = 'progress-dot active';
+else dot.className = 'progress-dot';
+}
+}
+
+function showComplete() {
+document.getElementById('step' + currentStep).classList.remove('active');
+currentStep = 4;
+document.getElementById('stepComplete').classList.add('active');
+document.getElementById('prog3').className = 'progress-dot completed';
+if (liveStream) liveStream.getTracks().forEach(t => t.stop());
+}
+
+function resetAll() {
+currentStep = 1;
+emailVerified = phoneVerified = liveVerified = false;
+goToStep(1);
+}
+// Start camera when on step 3
+Object.defineProperty(window, 'showComplete', { writable: true, configurable: true });
+</script>
+</body>
+</html>
