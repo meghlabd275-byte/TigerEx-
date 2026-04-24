@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0B0E11">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Logo -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🐯 TigerEx"
+            android:textSize="36sp"
+            android:textColor="#F0B90B"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="40dp"/>
+
+        <!-- Login Layout -->
+        <LinearLayout
+            android:id="@+id/loginLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="40dp">
+
+            <!-- Tab Toggle -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/tabEmail"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="48dp"
+                    android:text="Email"
+                    android:background="#F0B90B"/>
+
+                <Button
+                    android:id="@+id/tabPhone"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="48dp"
+                    android:text="Phone"
+                    android:background="#2B3139"/>
+            </LinearLayout>
+
+            <!-- Inputs -->
+            <EditText
+                android:id="@+id/emailPhoneInput"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="24dp"
+                android:hint="Email or Phone"
+                android:textColor="#EAECEF"
+                android:padding="16dp"
+                android:background="@drawable/input_bg"/>
+
+            <EditText
+                android:id="@+id/passwordInput"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                android:hint="Password"
+                android:textColor="#EAECEF"
+                android:inputType="textPassword"
+                android:padding="16dp"
+                android:background="@drawable/input_bg"/>
+
+            <TextView
+                android:id="@+id/forgotPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Forgot Password?"
+                android:textColor="#F0B90B"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:padding="8dp"/>
+
+            <Button
+                android:id="@+id/loginBtn"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="24dp"
+                android:text="Sign In"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:background="#F0B90B"/>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:layout_marginTop="16dp"/>
+        </LinearLayout>
+
+        <!-- OTP Layout -->
+        <LinearLayout
+            android:id="@+id/otpLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="40dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Verification Code"
+                android:textSize="24sp"
+                android:textColor="#EAECEF"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Test Code: 727752"
+                android:textColor="#F0B90B"
+                android:layout_marginTop="8dp"/>
+
+            <EditText
+                android:id="@+id/otpInput"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="24dp"
+                android:hint="000000"
+                android:textSize="24sp"
+                android:textColor="#EAECEF"
+                android:textAlignment="center"
+                android:inputType="number"
+                android:maxLength="6"
+                android:background="@drawable/input_bg"/>
+
+            <Button
+                android:id="@+id/verifyBtn"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="24dp"
+                android:text="Verify"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:background="#F0B90B"/>
+        </LinearLayout>
+
+        <!-- Main Layout -->
+        <LinearLayout
+            android:id="@+id/mainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="✓ Welcome to TigerEx!"
+                android:textSize="24sp"
+                android:textColor="#00C087"
+                android:textStyle="bold"
+                android:gravity="center"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
