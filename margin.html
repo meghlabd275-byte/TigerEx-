@@ -1,0 +1,139 @@
+<!--
+@file margin.html
+@description TigerEx Margin Trading page
+@author TigerEx Development Team
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Margin Trading | TigerEx</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root { --primary:#F0B90B; --bg:#0B0E11; --bg2:#151A21; --card:#1E2329; --text:#EAECEF; --text2:#848E9C; --border:#2B3139; --green:#00C087; --red:#F6465D; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); margin:0; min-height:100vh; }
+.header { background:var(--card); padding:12px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; }
+.logo { display:flex; align-items:center; gap:8px; font-size:20px; font-weight:700; }
+.logo-icon { width:32px; height:32px; background:linear-gradient(135deg,var(--primary),#FF6B6B); border-radius:8px; display:flex; align-items:center; justify-content:center; }
+.nav { display:flex; gap:4px; }
+.nav-link { padding:8px 14px; font-size:13px; color:var(--text); border-radius:6px; text-decoration:none; }
+.nav-link.active { background:var(--bg2); }
+.container { display:flex; height:calc(100vh - 57px); }
+.sidebar { width:260px; background:var(--card); border-right:1px solid var(--border); overflow-y:auto; }
+.pair-item { padding:12px; border-bottom:1px solid var(--border); cursor:pointer; }
+.pair-item:hover { background:var(--bg2); }
+.pair-item.active { background:var(--bg2); border-left:2px solid var(--primary); }
+.pair-symbol { font-size:14px; font-weight:600; }
+.pair-price { font-size:14px; }
+.pair-change { font-size:12px; color:var(--text2); }
+.main-panel { flex:1; display:flex; flex-direction:column; }
+.chart-area { flex:1; min-height:250px; background:var(--card); display:flex; align-items:center; justify-content:center; }
+.info-row { display:flex; gap:24px; font-size:13px; color:var(--text2); }
+.info-row span { color:var(--text); }
+.order-panel { width:320px; background:var(--card); }
+.panel-tabs { display:flex; border-bottom:1px solid var(--border); }
+.panel-tab { flex:1; padding:14px; text-align:center; font-size:14px; font-weight:600; cursor:pointer; border-bottom:2px solid transparent; }
+.panel-tab.active { border-color:var(--green); color:var(--green); }
+.panel-tab.sell { color:var(--red); }
+.trade-type { display:flex; padding:12px; gap:4px; }
+.tt-btn { flex:1; padding:8px; font-size:12px; border-radius:6px; background:var(--bg); cursor:pointer; text-align:center; }
+.tt-btn.active { background:var(--primary); color:var(--bg); }
+.form-group { padding:0 12px; margin-bottom:12px; }
+.form-label { display:block; font-size:12px; color:var(--text2); margin-bottom:6px; }
+.form-input { width:100%; padding:10px 12px; background:var(--bg); border:1px solid var(--border); border-radius:6px; color:var(--text); }
+.percentages { display:flex; padding:0 12px; gap:4px; margin-bottom:12px; }
+.pct-btn { flex:1; padding:6px; font-size:11px; background:var(--bg); border:1px solid var(--border); border-radius:4px; cursor:pointer; text-align:center; }
+.stats-row { display:flex; padding:12px; gap:16px; border-bottom:1px solid var(--border); }
+.stat-box { flex:1; text-align:center; }
+.stat-label { font-size:12px; color:var(--text2); margin-bottom:4px; }
+.stat-value { font-size:16px; font-weight:600; }
+.submit-btn { margin:12px; padding:14px; background:var(--green); color:#fff; border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; }
+.submit-btn.sell { background:var(--red); }
+.theme-toggle { width:36px; height:36px; border-radius:8px; background:var(--bg2); border:1px solid var(--border); cursor:pointer; }
+</style>
+</head>
+<body>
+<div class="header">
+<a href="index.html" class="logo"><div class="logo-icon">🐯</div>TigerEx</a>
+<div class="nav">
+<a href="index.html" class="nav-link">Home</a>
+<a href="spot.html" class="nav-link">Spot</a>
+<a href="futures.html" class="nav-link">Futures</a>
+<a href="margin.html" class="nav-link active">Margin</a>
+<a href="p2p.html" class="nav-link">P2P</a>
+<button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+</div>
+</div>
+<div class="container">
+<div class="sidebar">
+<div class="pair-item active">
+<div class="pair-symbol">BTC/USDT</div>
+<div class="pair-price" style="color:var(--green)">$95,432.50</div>
+<div class="pair-change">+2.45%</div>
+</div>
+<div class="pair-item">
+<div class="pair-symbol">ETH/USDT</div>
+<div class="pair-price" style="color:var(--green)">$3,245.80</div>
+<div class="pair-change">+3.21%</div>
+</div>
+<div class="pair-item">
+<div class="pair-symbol">SOL/USDT</div>
+<div class="pair-price" style="color:var(--red)">$182.45</div>
+<div class="pair-change">-1.23%</div>
+</div>
+</div>
+<div class="main-panel">
+<div class="chart-area">
+<div style="text-align:center">
+<div style="font-size:32px; font-weight:700; color:var(--green)">$95,432.50</div>
+<div style="font-size:14px; color:var(--green)">+2.45%</div>
+</div>
+</div>
+<div class="order-panel">
+<div class="panel-tabs">
+<div class="panel-tab active" onclick="setSide('buy')">Buy/Long</div>
+<div class="panel-tab sell" onclick="setSide('sell')">Sell/Short</div>
+</div>
+<div class="trade-type">
+<div class="tt-btn active">Limit</div>
+<div class="tt-btn">Market</div>
+</div>
+<div class="form-group">
+<label class="form-label">Price (USDT)</label>
+<input type="text" class="form-input" value="95,432.50">
+</div>
+<div class="form-group">
+<label class="form-label">Amount (BTC)</label>
+<input type="text" class="form-input" placeholder="0.00">
+</div>
+<div class="percentages">
+<div class="pct-btn" onclick="setAmount(25)">25%</div>
+<div class="pct-btn" onclick="setAmount(50)">50%</div>
+<div class="pct-btn" onclick="setAmount(75)">75%</div>
+<div class="pct-btn" onclick="setAmount(100)">100%</div>
+</div>
+<div class="stats-row">
+<div class="stat-box"><div class="stat-label">Borrowable</div><div class="stat-value">$5,000</div></div>
+<div class="stat-box"><div class="stat-label">Interest Rate</div><div class="stat-value">0.02%</div></div>
+</div>
+<button class="submit-btn" id="submitBtn" onclick="placeOrder()">Buy/Long</button>
+</div>
+</div>
+</div>
+<script src="assets/js/ServiceConnector.js"></script>
+<script src="assets/js/theme.js"></script>
+<script>
+function toggleTheme() { document.body.classList.toggle('light-theme'); }
+function setSide(side) {
+    document.querySelectorAll('.panel-tab').forEach(el => el.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('submitBtn').textContent = side === 'buy' ? 'Buy/Long' : 'Sell/Short';
+    document.getElementById('submitBtn').className = 'submit-btn' + (side === 'sell' ? ' sell' : '');
+}
+function setAmount(pct) { document.getElementById('amount').value = (5000 * pct / 100).toFixed(2); }
+function placeOrder() { alert('Order placed'); }
+</script>
+</body>
+</html>

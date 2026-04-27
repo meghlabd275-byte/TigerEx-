@@ -1,0 +1,189 @@
+<!--
+@file futures.html
+@description TigerEx Futures Trading page
+@author TigerEx Development Team
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Futures Trading | TigerEx</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root { --primary:#F0B90B; --bg:#0B0E11; --bg2:#151A21; --card:#1E2329; --text:#EAECEF; --text2:#848E9C; --border:#2B3139; --green:#00C087; --red:#F6465D; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); margin:0; min-height:100vh; }
+.header { background:var(--card); padding:12px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; }
+.logo { display:flex; align-items:center; gap:8px; font-size:20px; font-weight:700; }
+.logo-icon { width:32px; height:32px; background:linear-gradient(135deg,var(--primary),#FF6B6B); border-radius:8px; display:flex; align-items:center; justify-content:center; }
+.nav { display:flex; gap:4px; }
+.nav-link { padding:8px 14px; font-size:13px; color:var(--text); border-radius:6px; text-decoration:none; }
+.nav-link.active { background:var(--bg2); }
+.container { display:flex; height:calc(100vh - 57px); }
+.sidebar { width:260px; background:var(--card); border-right:1px solid var(--border); overflow-y:auto; }
+.contract-item { padding:12px; border-bottom:1px solid var(--border); cursor:pointer; }
+.contract-item:hover { background:var(--bg2); }
+.contract-item.active { background:var(--bg2); border-left:2px solid var(--primary); }
+.contract-name { font-size:14px; font-weight:600; }
+.contract-price { font-size:14px; }
+.contract-change { font-size:12px; color:var(--text2); }
+.main-content { flex:1; display:flex; flex-direction:column; }
+.chart-area { flex:1; min-height:280px; background:var(--card); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:center; }
+.price-display { text-align:center; }
+.price-main { font-size:36px; font-weight:700; }
+.price-green { color:var(--green); }
+.price-red { color:var(--red); }
+.info-row { display:flex; gap:24px; padding:12px; justify-content:center; font-size:13px; color:var(--text2); }
+.info-row span { color:var(--text); }
+.order-book { width:260px; background:var(--card); border-right:1px solid var(--border); }
+.ob-title { padding:12px; font-weight:600; font-size:13px; border-bottom:1px solid var(--border); }
+.ob-row { display:flex; justify-content:space-between; padding:4px 12px; font-size:12px; }
+.ob-ask { color:var(--red); }
+.ob-bid { color:var(--green); }
+.trade-panel { width:340px; background:var(--card); display:flex; flex-direction:column; }
+.panel-header { padding:12px; border-bottom:1px solid var(--border); display:flex; gap:8px; }
+.panel-tab { flex:1; padding:10px; text-align:center; font-size:13px; font-weight:500; border-radius:6px; cursor:pointer; }
+.panel-tab.active { background:var(--primary); color:var(--bg); }
+.panel-tab.long { color:var(--green); border:1px solid var(--green); }
+.panel-tab.short { color:var(--red); border:1px solid var(--red); }
+.leverage-slider { padding:12px; border-bottom:1px solid var(--border); }
+.leverage-label { display:flex; justify-content:space-between; font-size:13px; margin-bottom:8px; }
+.leverage-value { color:var(--primary); font-weight:600; }
+.slider { width:100%; -webkit-appearance:none; height:6px; background:var(--bg); border-radius:3px; outline:none; }
+.slider::-webkit-slider-thumb { -webkit-appearance:none; width:16px; height:16px; background:var(--primary); border-radius:50%; cursor:pointer; }
+.margin-type { display:flex; padding:12px; gap:8px; }
+.mt-btn { flex:1; padding:8px; font-size:12px; border-radius:6px; background:var(--bg); border:1px solid var(--border); cursor:pointer; text-align:center; }
+.mt-btn.active { border-color:var(--primary); color:var(--primary); }
+.order-form { padding:12px; }
+.form-group { margin-bottom:12px; }
+.form-label { display:block; font-size:12px; color:var(--text2); margin-bottom:6px; }
+.form-input { width:100%; padding:10px 12px; background:var(--bg); border:1px solid var(--border); border-radius:6px; color:var(--text); }
+.quick amounts { display:flex; gap:4px; margin-bottom:12px; }
+.qty-btn { flex:1; padding:6px; font-size:11px; background:var(--bg); border:1px solid var(--border); border-radius:4px; cursor:pointer; text-align:center; }
+.info-item { display:flex; justify-content:space-between; padding:8px 0; font-size:13px; border-bottom:1px solid var(--border); }
+.info-item span:first-child { color:var(--text2); }
+.submit-btn { padding:14px; background:var(--green); color:#fff; border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; margin:12px; }
+.submit-btn.sell { background:var(--red); }
+.theme-toggle { width:36px; height:36px; border-radius:8px; background:var(--bg2); border:1px solid var(--border); cursor:pointer; }
+</style>
+</head>
+<body>
+<div class="header">
+<a href="index.html" class="logo"><div class="logo-icon">🐯</div>TigerEx</a>
+<div class="nav">
+<a href="index.html" class="nav-link">Home</a>
+<a href="dashboard.html" class="nav-link">Markets</a>
+<a href="spot.html" class="nav-link">Spot</a>
+<a href="futures.html" class="nav-link active">Futures</a>
+<a href="margin.html" class="nav-link">Margin</a>
+<a href="earn.html" class="nav-link">Earn</a>
+<button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+</div>
+</div>
+<div class="container">
+<div class="sidebar">
+<div class="contract-item active">
+<div class="contract-name">BTCUSDT</div>
+<div class="contract-price price-green">$95,432.50</div>
+<div class="contract-change">+2.45%</div>
+</div>
+<div class="contract-item">
+<div class="contract-name">ETHUSDT</div>
+<div class="contract-price price-green">$3,245.80</div>
+<div class="contract-change">+3.21%</div>
+</div>
+<div class="contract-item">
+<div class="contract-name">SOLUSDT</div>
+<div class="contract-price price-red">$182.45</div>
+<div class="contract-change">-1.23%</div>
+</div>
+<div class="contract-item">
+<div class="contract-name">NVDAUSDT</div>
+<div class="contract-price price-green">$892.50</div>
+<div class="contract-change">+4.56%</div>
+</div>
+<div class="contract-item">
+<div class="contract-name">TSLAUSDT</div>
+<div class="contract-price price-red">$178.23</div>
+<div class="contract-change">-2.34%</div>
+</div>
+</div>
+
+<div class="main-content">
+<div class="chart-area">
+<div class="price-display">
+<div class="price-main price-green">$95,432.50</div>
+<div class="price-green">+2.45%</div>
+<div class="info-row">
+<div>24h Vol: <span>$2.4B</span></div>
+<div>24h High: <span>$96,500</span></div>
+<div>24h Low: <span>$92,100</span></div>
+</div>
+</div>
+</div>
+<div class="order-book">
+<div class="ob-title">Order Book</div>
+<div class="ob-row"><span class="ob-ask">95,435</span><span>0.52</span></div>
+<div class="ob-row"><span class="ob-ask">95,434</span><span>1.23</span></div>
+<div class="ob-row"><span class="ob-ask">95,433</span><span>2.45</span></div>
+<div style="padding:6px 12px; text-align:center; font-weight:600;">95,432</div>
+<div class="ob-row"><span class="ob-bid">95,431</span><span>2.12</span></div>
+<div class="ob-row"><span class="ob-bid">95,430</span><span>1.56</span></div>
+<div class="ob-row"><span class="ob-bid">95,429</span><span>3.21</span></div>
+</div>
+</div>
+
+<div class="trade-panel">
+<div class="panel-header">
+<div class="panel-tab long active" onclick="setSide('long')">Long</div>
+<div class="panel-tab short" onclick="setSide('short')">Short</div>
+</div>
+<div class="leverage-slider">
+<div class="leverage-label"><span>Leverage</span><span class="leverage-value" id="levValue">20x</span></div>
+<input type="range" class="slider" min="1" max="125" value="20" oninput="updateLeverage(this.value)">
+</div>
+<div class="margin-type">
+<div class="mt-btn active">Cross</div>
+<div class="mt-btn">Isolated</div>
+</div>
+<div class="order-form">
+<div class="form-group">
+<label class="form-label">Order Price</label>
+<input type="text" class="form-input" value="95,432.50">
+</div>
+<div class="form-group">
+<label class="form-label">Amount (BTC)</label>
+<input type="text" class="form-input" placeholder="0.00">
+</div>
+<div class="quick amounts">
+<div class="qty-btn">25%</div>
+<div class="qty-btn">50%</div>
+<div class="qty-btn">75%</div>
+<div class="qty-btn">100%</div>
+</div>
+<div class="info-item"><span>Liquidation</span><span id="liqPrice">$90,123</span></div>
+<div class="info-item"><span>Margin</span><span id="margin">$500.00</span></div>
+</div>
+<button class="submit-btn" id="submitBtn" onclick="placeOrder()">Long BTC</button>
+</div>
+</div>
+</div>
+
+<script src="assets/js/ServiceConnector.js"></script>
+<script src="assets/js/theme.js"></script>
+<script>
+let currentSide = 'long';
+function toggleTheme() { document.body.classList.toggle('light-theme'); }
+function updateLeverage(val) { document.getElementById('levValue').textContent = val + 'x'; }
+function setSide(side) {
+    currentSide = side;
+    document.querySelectorAll('.panel-tab').forEach(el => el.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('submitBtn').textContent = side.toUpperCase() + ' BTC';
+    document.getElementById('submitBtn').className = 'submit-btn' + (side === 'short' ? ' sell' : '');
+}
+function placeOrder() { alert(currentSide.toUpperCase() + ' order placed'); }
+</script>
+</body>
+</html>

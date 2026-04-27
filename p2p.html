@@ -1,0 +1,121 @@
+<!--
+@file p2p.html
+@description TigerEx P2P Trading page
+@author TigerEx Development Team
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P2P Trading | TigerEx</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root { --primary:#F0B90B; --bg:#0B0E11; --bg2:#151A21; --card:#1E2329; --text:#EAECEF; --text2:#848E9C; --border:#2B3139; --green:#00C087; --red:#F6465D; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); margin:0; }
+.header { background:var(--card); padding:12px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; }
+.logo { display:flex; align-items:center; gap:8px; font-size:20px; font-weight:700; }
+.logo-icon { width:32px; height:32px; background:linear-gradient(135deg,var(--primary),#FF6B6B); border-radius:8px; }
+.nav { display:flex; gap:4px; }
+.nav-link { padding:8px 14px; font-size:13px; color:var(--text); border-radius:6px; text-decoration:none; }
+.nav-link.active { background:var(--bg2); }
+.container { max-width:1200px; margin:0 auto; padding:24px; }
+.filters { display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap; }
+.filter-select { padding:10px 14px; background:var(--card); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:13px; }
+.filter-input { padding:10px 14px; background:var(--card); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:13px; }
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:16px; }
+.ad-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; }
+.ad-header { display:flex; justify-content:space-between; margin-bottom:12px; }
+.ad-user { display:flex; align-items:center; gap:8px; }
+.avatar { width:36px; height:36px; border-radius:50%; background:var(--primary); display:flex; align-items:center; justify-content:center; color:var(--bg); font-weight:600; }
+.user-name { font-weight:600; }
+.ad-rating { font-size:12px; color:var(--text2); }
+.ad-rate { font-size:14px; font-weight:600; }
+.ad-limit { font-size:13px; color:var(--text2); margin-bottom:12px; }
+.pay-methods { display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap; }
+.pay-badge { padding:4px 10px; background:var(--bg2); border-radius:20px; font-size:12px; }
+.price-row { display:flex; justify-content:space-between; margin-bottom:12px; }
+.price-label { font-size:13px; color:var(--text2); }
+.price-value { font-size:20px; font-weight:700; }
+.action-btn { width:100%; padding:12px; background:var(--green); color:#fff; border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; }
+.action-btn:hover { opacity:0.9; }
+.theme-toggle { width:36px; height:36px; border-radius:8px; background:var(--bg2); border:1px solid var(--border); cursor:pointer; }
+</style>
+</head>
+<body>
+<div class="header">
+<a href="index.html" class="logo"><div class="logo-icon">🐯</div>TigerEx</a>
+<div class="nav">
+<a href="index.html" class="nav-link">Home</a>
+<a href="spot.html" class="nav-link">Spot</a>
+<a href="futures.html" class="nav-link">Futures</a>
+<a href="margin.html" class="nav-link">Margin</a>
+<a href="p2p.html" class="nav-link active">P2P</a>
+<button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+</div>
+</div>
+<div class="container">
+<h1 style="font-size:28px; font-weight:700; margin-bottom:8px;">P2P Trading</h1>
+<p style="color:var(--text2); margin-bottom:24px;">Buy and sell crypto directly with other users</p>
+
+<div class="filters">
+<select class="filter-select"><option>All Crypto</option><option>BTC</option><option>ETH</option><option>USDT</option></select>
+<select class="filter-select"><option>Fiat: All</option><option>USD</option><option>EUR</option><option>GBP</option></select>
+<select class="filter-select"><option>Payment: All</option><option>Bank Transfer</option><option>PayPal</option><option>Crypto</option></select>
+<select class="filter-select"><option>Amount: All</option><option>$100+</option><option>$1000+</option></select>
+</div>
+
+<div class="grid">
+<div class="ad-card">
+<div class="ad-header">
+<div class="ad-user">
+<div class="avatar">A</div>
+<div><div class="user-name">AlexTrader</div><div class="ad-rating">97% (500+)</div></div>
+</div>
+<div class="ad-rate" style="color:var(--green)">Buy</div>
+</div>
+<div class="ad-limit">Limits: $100 - $10,000</div>
+<div class="pay-methods"><span class="pay-badge">Bank Transfer</span><span class="pay-badge">PayPal</span></div>
+<div class="price-row"><span class="price-label">Price</span><span class="price-value">$95,450</span></div>
+<button class="action-btn" onclick="trade('buy')">Buy BTC</button>
+</div>
+
+<div class="ad-card">
+<div class="ad-header">
+<div class="ad-user">
+<div class="avatar">M</div>
+<div><div class="user-name">MariaK</div><div class="ad-rating">99% (1200+)</div></div>
+</div>
+<div class="ad-rate" style="color:var(--green)">Buy</div>
+</div>
+<div class="ad-limit">Limits: $50 - $5,000</div>
+<div class="pay-methods"><span class="pay-badge">Wise</span><span class="pay-badge">Revolut</span></div>
+<div class="price-row"><span class="price-label">Price</span><span class="price-value">$95,420</span></div>
+<button class="action-btn" onclick="trade('buy')">Buy BTC</button>
+</div>
+
+<div class="ad-card">
+<div class="ad-header">
+<div class="ad-user">
+<div class="avatar">J</div>
+<div><div class="user-name">JohnCrypto</div><div class="ad-rating">95% (200+)</div></div>
+</div>
+<div class="ad-rate" style="color:var(--red)">Sell</div>
+</div>
+<div class="ad-limit">Limits: $200 - $20,000</div>
+<div class="pay-methods"><span class="pay-badge">Bank Transfer</span></div>
+<div class="price-row"><span class="price-label">Price</span><span class="price-value">$95,500</span></div>
+<button class="action-btn" onclick="trade('sell')">Sell BTC</button>
+</div>
+</div>
+</div>
+
+<script src="assets/js/ServiceConnector.js"></script>
+<script src="assets/js/theme.js"></script>
+<script>
+function toggleTheme() { document.body.classList.toggle('light-theme'); }
+function trade(side) { alert(side.toUpperCase() + ' trade initiated'); }
+</script>
+</body>
+</html>
