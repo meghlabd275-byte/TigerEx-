@@ -1,0 +1,228 @@
+<!--
+@file tradfi.html
+@description TigerEx TradFi (CFD, Stocks, Commodities) page
+@author TigerEx Development Team
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradFi | TigerEx</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root { --primary:#F0B90B; --bg:#0B0E11; --bg2:#151A21; --card:#1E2329; --text:#EAECEF; --text2:#848E9C; --border:#2B3139; --green:#00C087; --red:#F6465D; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); margin:0; min-height:100vh; }
+.header { background:var(--card); padding:12px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; }
+.logo { display:flex; align-items:center; gap:8px; font-size:20px; font-weight:700; }
+.logo-icon { width:32px; height:32px; background:linear-gradient(135deg,var(--primary),#FF6B6B); border-radius:8px; }
+.nav { display:flex; gap:8px; }
+.nav-link { padding:8px 14px; font-size:13px; color:var(--text); border-radius:6px; text-decoration:none; }
+.nav-link:hover, .nav-link.active { background:var(--bg2); }
+.container { max-width:1400px; margin:0 auto; padding:24px; }
+.category-tabs { display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap; }
+.cat-tab { padding:10px 20px; font-size:14px; font-weight:500; border-radius:8px; background:var(--card); border:1px solid var(--border); cursor:pointer; }
+.cat-tab.active { background:var(--primary); color:var(--bg); border-color:var(--primary); }
+.instrument-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; }
+.card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; }
+.card-header { display:flex; justify-content:space-between; margin-bottom:12px; }
+.instrument-name { font-size:16px; font-weight:600; }
+.instrument-full { font-size:12px; color:var(--text2); }
+.price-display { margin-bottom:16px; }
+.current-price { font-size:24px; font-weight:700; }
+.price-change { font-size:14px; }
+.price-up { color:var(--green); }
+.price-down { color:var(--red); }
+.info-row { display:flex; justify-content:space-between; padding:8px 0; font-size:13px; border-bottom:1px solid var(--border); }
+.info-row:last-child { border:none; }
+.info-label { color:var(--text2); }
+.info-value { font-weight:500; }
+.leverage-select { margin-bottom:12px; }
+.leverage-options { display:flex; gap:4px; flex-wrap:wrap; }
+.leverage-btn { padding:6px 12px; font-size:12px; background:var(--bg); border:1px solid var(--border); border-radius:4px; cursor:pointer; }
+.leverage-btn.active { border-color:var(--primary); color:var(--primary); }
+.trade-btns { display:flex; gap:8px; margin-top:16px; }
+.trade-btn { flex:1; padding:12px; font-size:14px; font-weight:600; border:none; border-radius:8px; cursor:pointer; }
+.trade-btn.buy { background:var(--green); color:#fff; }
+.trade-btn.sell { background:var(--red); color:#fff; }
+.sidebar { width:340px; background:var(--card); border-radius:12px; padding:20px; position:fixed; right:24px; top:100px; }
+.order-form { margin-bottom:16px; }
+.form-group { margin-bottom:12px; }
+.form-label { display:block; font-size:13px; color:var(--text2); margin-bottom:6px; }
+.form-input { width:100%; padding:10px 12px; background:var(--bg); border:1px solid var(--border); border-radius:6px; color:var(--text); }
+.form-select { width:100%; padding:10px 12px; background:var(--bg); border:1px solid var(--border); border-radius:6px; color:var(--text); }
+.order-summary { background:var(--bg2); border-radius:8px; padding:12px; margin:16px 0; }
+.summary-row { display:flex; justify-content:space-between; font-size:13px; margin-bottom:8px; }
+.summary-row:last-child { margin-bottom:0; font-weight:600; }
+.submit-btn { width:100%; padding:14px; background:var(--green); color:#fff); border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; }
+.submit-btn.sell { background:var(--red); }
+.theme-toggle { width:36px; height:36px; border-radius:8px; background:var(--bg2); border:1px solid var(--border); cursor:pointer; }
+</style>
+</head>
+<body>
+<div class="header">
+<a href="index.html" class="logo"><div class="logo-icon">🐯</div>TigerEx</a>
+<div class="nav">
+<a href="index.html" class="nav-link">Home</a>
+<a href="spot.html" class="nav-link">Spot</a>
+<a href="futures.html" class="nav-link">Futures</a>
+<a href="alpha.html" class="nav-link">Alpha</a>
+<a href="tradfi.html" class="nav-link active">TradFi</a>
+<button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+</div>
+</div>
+<div class="container">
+<h1 style="font-size:28px; font-weight:700; margin-bottom:8px;">TradFi Trading</h1>
+<p style="color:var(--text2); margin-bottom:24px;">Trade CFDs, Stocks, Commodities, and Forex</p>
+
+<div class="category-tabs">
+<div class="cat-tab active">CFDs</div>
+<div class="cat-tab">Stocks</div>
+<div class="cat-tab">Commodities</div>
+<div class="cat-tab">Forex</div>
+<div class="cat-tab">Indices</div>
+<div class="cat-tab">Crypto Indices</div>
+</div>
+
+<div class="sidebar">
+<h3 style="font-size:16px; margin-bottom:16px;">Place Trade</h3>
+<div class="order-form">
+<div class="form-group">
+<label class="form-label">Instrument</label>
+<select class="form-select" id="instrument"><option>XAUUSD - Gold</option><option>XAGUSD - Silver</option><option>NVDA - Nvidia</option><option>AAPL - Apple</option></select>
+</div>
+<div class="form-group">
+<label class="form-label">Order Type</label>
+<select class="form-select"><option>Market</option><option>Limit</option><option>Stop</option></select>
+</div>
+<div class="form-group">
+<label class="form-label">Amount</label>
+<input type="text" class="form-input" id="amount" placeholder="0" oninput="calcPnl()">
+</div>
+<div class="form-group">
+<label class="form-label">Leverage</label>
+<div class="leverage-options">
+<div class="leverage-btn active" onclick="setLeverage(1)">1x</div>
+<div class="leverage-btn" onclick="setLeverage(5)">5x</div>
+<div class="leverage-btn" onclick="setLeverage(10)">10x</div>
+<div class="leverage-btn" onclick="setLeverage(20)">20x</div>
+<div class="leverage-btn" onclick="setLeverage(50)">50x</div>
+</div>
+</div>
+<div class="leverage-select">
+<label class="form-label">Direction</label>
+<div class="leverage-options">
+<div class="leverage-btn active" onclick="setDirection('buy')">Long ↗</div>
+<div class="leverage-btn" onclick="setDirection('sell')">Short ↘</div>
+</div>
+</div>
+<div class="order-summary">
+<div class="summary-row"><span>Required Margin</span><span id="margin">$0.00</span></div>
+<div class="summary-row"><span>Potential P&L</span><span id="pnl">$0.00</span></div>
+</div>
+<button class="submit-btn" id="submitBtn" onclick="placeTrade()">Buy Long</button>
+</div>
+</div>
+
+<div class="instrument-grid">
+<div class="card">
+<div class="card-header">
+<div><div class="instrument-name">XAUUSD</div><div class="instrument-full">Gold / USD</div></div>
+</div>
+<div class="price-display">
+<div class="current-price price-up">$2,342.50</div>
+<div class="price-change price-up">+1.24%</div>
+</div>
+<div class="info-row"><span class="info-label">Spread</span><span class="info-value">0.5</span></div>
+<div class="info-row"><span class="info-label">Min Trade</span><span class="info-value">0.01 lot</span></div>
+<div class="info-row"><span class="info-label">Max Leverage</span><span class="info-value">200x</span></div>
+<div class="trade-btns"><button class="trade-btn buy" onclick="quickTrade('XAUUSD','buy')">Buy</button><button class="trade-btn sell" onclick="quickTrade('XAUUSD','sell')">Sell</button></div>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div><div class="instrument-name">XAGUSD</div><div class="instrument-full">Silver / USD</div></div>
+</div>
+<div class="price-display">
+<div class="current-price price-down">$27.85</div>
+<div class="price-change price-down">-0.45%</div>
+</div>
+<div class="info-row"><span class="info-label">Spread</span><span class="info-value">0.8</span></div>
+<div class="info-row"><span class="info-label">Min Trade</span><span class="info-value">0.01 lot</span></div>
+<div class="info-row"><span class="info-label">Max Leverage</span><span class="info-value">100x</span></div>
+<div class="trade-btns"><button class="trade-btn buy" onclick="quickTrade('XAGUSD','buy')">Buy</button><button class="trade-btn sell" onclick="quickTrade('XAGUSD','sell')">Sell</button></div>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div><div class="instrument-name">NVDA</div><div class="instrument-full">Nvidia Corp</div></div>
+</div>
+<div class="price-display">
+<div class="current-price price-up">$892.45</div>
+<div class="price-change price-up">+3.21%</div>
+</div>
+<div class="info-row"><span class="info-label">Spread</span><span class="info-value">1.2</span></div>
+<div class="info-row"><span class="info-label">Min Trade</span><span class="info-value">1 share</span></div>
+<div class="info-row"><span class="info-label">Max Leverage</span><span class="info-value">20x</span></div>
+<div class="trade-btns"><button class="trade-btn buy" onclick="quickTrade('NVDA','buy')">Buy</button><button class="trade-btn sell" onclick="quickTrade('NVDA','sell')">Sell</button></div>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div><div class="instrument-name">EURUSD</div><div class="instrument-full">Euro / USD</div></div>
+</div>
+<div class="price-display">
+<div class="current-price price-down">1.0845</div>
+<div class="price-change price-down">-0.12%</div>
+</div>
+<div class="info-row"><span class="info-label">Spread</span><span class="info-value">0.2</span></div>
+<div class="info-row"><span class="info-label">Min Trade</span><span class="info-value">0.01 lot</span></div>
+<div class="info-row"><span class="info-label">Max Leverage</span><span class="info-value">100x</span></div>
+<div class="trade-btns"><button class="trade-btn buy" onclick="quickTrade('EURUSD','buy')">Buy</button><button class="trade-btn sell" onclick="quickTrade('EURUSD','sell')">Sell</button></div>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div><div class="instrument-name">US30</div><div class="instrument-full">Dow Jones</div></div>
+</div>
+<div class="price-display">
+<div class="current-price price-up">38,892</div>
+<div class="price-change price-up">+0.85%</div>
+</div>
+<div class="info-row"><span class="info-label">Spread</span><span class="info-value">2.0</span></div>
+<div class="info-row"><span class="info-label">Min Trade</span><span class="info-value">0.1 lot</span></div>
+<div class="info-row"><span class="info-label">Max Leverage</span><span class="info-value">50x</span></div>
+<div class="trade-btns"><button class="trade-btn buy" onclick="quickTrade('US30','buy')">Buy</button><button class="trade-btn sell" onclick="quickTrade('US30','sell')">Sell</button></div>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div><div class="instrument-name">BTCUSD</div><div class="instrument-full">Bitcoin Strategy</div></div>
+</div>
+<div class="price-display">
+<div class="current-price price-up">$96,450</div>
+<div class="price-change price-up">+2.34%</div>
+</div>
+<div class="info-row"><span class="info-label">Spread</span><span class="info-value">50</span></div>
+<div class="info-row"><span class="info-label">Min Trade</span><span class="info-value">0.01 lot</span></div>
+<div class="info-row"><span class="info-label">Max Leverage</span><span class="info-value">50x</span></div>
+<div class="trade-btns"><button class="trade-btn buy" onclick="quickTrade('BTCUSD','buy')">Buy</button><button class="trade-btn sell" onclick="quickTrade('BTCUSD','sell')">Sell</button></div>
+</div>
+</div>
+</div>
+
+<script src="assets/js/ServiceConnector.js"></script>
+<script src="assets/js/theme.js"></script>
+<script>
+let leverage = 1;
+let direction = 'buy';
+function toggleTheme() { document.body.classList.toggle('light-theme'); }
+function setLeverage(l) { leverage = l; document.querySelectorAll('.leverage-options:first-of-type .leverage-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); }
+function setDirection(d) { direction = d; document.getElementById('submitBtn').textContent = d === 'buy' ? 'Buy Long' : 'Sell Short'; document.getElementById('submitBtn').className = 'submit-btn' + (d === 'sell' ? ' sell' : ''); }
+function calcPnl() { const amt = parseFloat(document.getElementById('amount').value) || 0; document.getElementById('margin').textContent = '$' + (amt / leverage).toFixed(2); }
+function quickTrade(symbol, dir) { alert(dir.toUpperCase() + ' ' + symbol); }
+function placeTrade() { alert(direction.toUpperCase() + ' order placed'); }
+</script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!--
+@file alpha.html
+@description TigerEx Alpha (Launchpad) page
+@author TigerEx Development Team
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alpha | TigerEx</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root { --primary:#F0B90B; --bg:#0B0E11; --bg2:#151A21; --card:#1E2329; --text:#EAECEF; --text2:#848E9C; --border:#2B3139; --green:#00C087; --red:#F6465D; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); margin:0; min-height:100vh; }
+.header { background:var(--card); padding:12px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; }
+.logo { display:flex; align-items:center; gap:8px; font-size:20px; font-weight:700; }
+.logo-icon { width:32px; height:32px; background:linear-gradient(135deg,var(--primary),#FF6B6B); border-radius:8px; display:flex; align-items:center; justify-content:center; }
+.nav { display:flex; gap:8px; }
+.nav-link { padding:8px 14px; font-size:13px; color:var(--text); border-radius:6px; text-decoration:none; }
+.nav-link:hover, .nav-link.active { background:var(--bg2); }
+.container { max-width:1200px; margin:0 auto; padding:24px; }
+.tabs { display:flex; gap:8px; margin-bottom:24px; border-bottom:1px solid var(--border); }
+.tab { padding:12px 20px; font-size:14px; font-weight:500; color:var(--text2); cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; }
+.tab.active { color:var(--primary); border-color:var(--primary); }
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:16px; }
+.card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; }
+.card-header { display:flex; justify-content:space-between; margin-bottom:16px; }
+.coin-icon { width:48px; height:48px; border-radius:50%; background:var(--bg2); display:flex; align-items:center; justify-content:center; font-size:24px; }
+.coin-name { font-size:18px; font-weight:700; }
+.coin-symbol { font-size:13px; color:var(--text2); }
+.status-badge { padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600; }
+.status-live { background:rgba(0,192,135,0.2); color:var(--green); }
+.status-upcoming { background:rgba(240,185,11,0.2); color:var(--primary); }
+.status-ended { background:rgba(136,146,156,0.2); color:var(--text2); }
+.price-info { margin-bottom:16px; }
+.price-label { font-size:12px; color:var(--text2); margin-bottom:4px; }
+.price-value { font-size:20px; font-weight:700; }
+.progress-bar { height:8px; background:var(--bg2); border-radius:4px; margin-bottom:8px; overflow:hidden; }
+.progress-fill { height:100%; background:var(--primary); border-radius:4px; transition:width 0.3s; }
+.progress-labels { display:flex; justify-content:space-between; font-size:12px; color:var(--text2); margin-bottom:16px; }
+.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:16px; }
+.stat-item { text-align:center; }
+.stat-label { font-size:11px; color:var(--text2); margin-bottom:4px; }
+.stat-value { font-size:14px; font-weight:600; }
+.action-btn { width:100%; padding:12px; background:var(--primary); color:var(--bg); border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; }
+.action-btn:hover { background:var(--primary); opacity:0.9; }
+.action-btn:disabled { background:var(--bg2); color:var(--text2); cursor:not-allowed; }
+.theme-toggle { width:36px; height:36px; border-radius:8px; background:var(--bg2); border:1px solid var(--border); cursor:pointer; }
+</style>
+</head>
+<body>
+<div class="header">
+<a href="index.html" class="logo"><div class="logo-icon">🐯</div>TigerEx</a>
+<div class="nav">
+<a href="index.html" class="nav-link">Home</a>
+<a href="spot.html" class="nav-link">Spot</a>
+<a href="futures.html" class="nav-link">Futures</a>
+<a href="alpha.html" class="nav-link active">Alpha</a>
+<a href="etf.html" class="nav-link">ETF</a>
+<a href="tradfi.html" class="nav-link">TradFi</a>
+<button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+</div>
+</div>
+<div class="container">
+<h1 style="font-size:28px; font-weight:700; margin-bottom:8px;">Alpha Launchpad</h1>
+<p style="color:var(--text2); margin-bottom:24px;">Discover and invest in early-stage crypto projects</p>
+
+<div class="tabs">
+<div class="tab active">Live</div>
+<div class="tab">Upcoming</div>
+<div class="tab">Ended</div>
+</div>
+
+<div class="grid">
+<div class="card">
+<div class="card-header">
+<div style="display:flex;gap:12px;align-items:center;">
+<div class="coin-icon">🚀</div>
+<div><div class="coin-name">MetaVerse</div><div class="coin-symbol">MVS</div></div>
+</div>
+<span class="status-badge status-live">Live</span>
+</div>
+<div class="price-info">
+<div class="price-label">Current Price</div>
+<div class="price-value">$0.0250</div>
+</div>
+<div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div>
+<div class="progress-labels"><span>75% Filled</span><span>Soft Cap</span></div>
+<div class="stats-row">
+<div class="stat-item"><div class="stat-label">Participants</div><div class="stat-value">12,450</div></div>
+<div class="stat-item"><div class="stat-label">Total Raised</div><div class="stat-value">$750K</div></div>
+<div class="stat-item"><div class="stat-label">Ends In</div><div class="stat-value">2 days</div></div>
+</div>
+<button class="action-btn" onclick="subscribe('MVS')">Subscribe Now</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div style="display:flex;gap:12px;align-items:center;">
+<div class="coin-icon">🔗</div>
+<div><div class="coin-name">ChainLink Pro</div><div class="coin-symbol">CLP</div></div>
+</div>
+<span class="status-badge status-live">Live</span>
+</div>
+<div class="price-info">
+<div class="price-label">Current Price</div>
+<div class="price-value">$0.1200</div>
+</div>
+<div class="progress-bar"><div class="progress-fill" style="width:45%"></div></div>
+<div class="progress-labels"><span>45% Filled</span><span>Soft Cap</span></div>
+<div class="stats-row">
+<div class="stat-item"><div class="stat-label">Participants</div><div class="stat-value">8,230</div></div>
+<div class="stat-item"><div class="stat-label">Total Raised</div><div class="stat-value">$450K</div></div>
+<div class="stat-item"><div class="stat-label">Ends In</div><div class="stat-value">5 days</div></div>
+</div>
+<button class="action-btn" onclick="subscribe('CLP')">Subscribe Now</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div style="display:flex;gap:12px;align-items:center;">
+<div class="coin-icon">🎮</div>
+<div><div class="coin-name">GameFi Token</div><div class="coin-symbol">GFT</div></div>
+</div>
+<span class="status-badge status-upcoming">Upcoming</span>
+</div>
+<div class="price-info">
+<div class="price-label">Offering Price</div>
+<div class="price-value">$0.0500</div>
+</div>
+<div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+<div class="progress-labels"><span>0%</span><span>Starts Soon</span></div>
+<div class="stats-row">
+<div class="stat-item"><div class="stat-label">Target</div><div class="stat-value">$500K</div></div>
+<div class="stat-item"><div class="stat-label">Allocation</div><div class="stat-value">10M GFT</div></div>
+<div class="stat-item"><div class="stat-label">Starts</div><div class="stat-value">May 1</div></div>
+</div>
+<button class="action-btn" onclick="notifyMe('GFT')">Get Notified</button>
+</div>
+
+<div class="card">
+<div class="card-header">
+<div style="display:flex;gap:12px;align-items:center;">
+<div class="coin-icon">🌐</div>
+<div><div class="coin-name">Web3 Builder</div><div class="coin-symbol">W3B</div></div>
+</div>
+<span class="status-badge status-upcoming">Upcoming</span>
+</div>
+<div class="price-info">
+<div class="price-label">Offering Price</div>
+<div class="price-value">$0.0800</div>
+</div>
+<div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+<div class="progress-labels"><span>0%</span><span>Registration Open</span></div>
+<div class="stats-row">
+<div class="stat-item"><div class="stat-label">Target</div><div class="stat-value">$1M</div></div>
+<div class="stat-item"><div class="stat-label">Allocation</div><div class="stat-value">12.5M W3B</div></div>
+<div class="stat-item"><div class="stat-label">Starts</div><div class="stat-value">May 15</div></div>
+</div>
+<button class="action-btn" onclick="notifyMe('W3B')">Register Interest</button>
+</div>
+</div>
+</div>
+
+<script src="assets/js/ServiceConnector.js"></script>
+<script src="assets/js/theme.js"></script>
+<script>
+function toggleTheme() { document.body.classList.toggle('light-theme'); }
+function subscribe(token) { alert('Subscribe to ' + token + ' - Opens wallet connection'); }
+function notifyMe(token) { alert('You will be notified when ' + token + ' launches'); }
+</script>
+</body>
+</html>
