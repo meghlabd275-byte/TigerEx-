@@ -1,41 +1,88 @@
 <!--
- * TigerEx Web Page
- * @file request.html
- * @description TigerEx trading platform page
- * @author TigerEx Development Team
+@file PAGENAME
+@description TigerEx page
+@author TigerEx Development Team
 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="assets/css/theme.css">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Submit Request | TigerEx</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root { --primary:#F0B90B; --bg:#0B0E11; --card:#1E2329; --text:#EAECEF; --text2:#848E9C; --border:#2B3139; }
-    body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); margin:0; min-height:100vh; }
-    .h { background:var(--card); padding:16px 24px; display:flex; align-items:center; gap:16px; border-bottom:1px solid var(--border); }
-    .logo { display:flex; align-items:center; gap:8px; font-size:22px; font-weight:700; color:var(--text); text-decoration:none; }
-    .i { width:36px; height:36px; background:linear-gradient(135deg,var(--primary),#FF6B6B); border-radius:10px; display:flex; align-items:center; justify-content:center; }
-    .b { color:var(--text); text-decoration:none; font-size:14px; padding:8px 12px; background:var(--bg); border:1px solid var(--border); border-radius:8px; }
-    .c { max-width:800px; margin:0 auto; padding:40px 24px; text-align:center; }
-    h1 { font-size:32px; margin-bottom:16px; }
-    p { color:var(--text2); font-size:16px; margin-bottom:24px; }
-    .btn { padding:14px 32px; background:var(--primary); color:var(--bg); border:none; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; }
-  .theme-toggle { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; padding: 8px; } .theme-toggle:hover { background: var(--bg-card-hover); } body { transition: background-color 0.3s, color 0.3s; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PAGETITLE | TigerEx</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root { --primary:#F0B90B; --bg:#0B0E11; --bg2:#151A21; --card:#1E2329; --text:#EAECEF; --text2:#848E9C; --border:#2B3139; --green:#00C087; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); margin:0; min-height:100vh; }
+.header { background:var(--card); padding:16px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); position:sticky; top:0; }
+.logo { display:flex; align-items:center; gap:8px; font-size:22px; font-weight:700; color:var(--text); text-decoration:none; }
+.logo-icon { width:36px; height:36px; background:linear-gradient(135deg,var(--primary),#FF6B6B); border-radius:10px; display:flex; align-items:center; justify-content:center; }
+.nav { display:flex; gap:8px; }
+.nav-link { padding:8px 16px; font-size:14px; color:var(--text); border-radius:8px; }
+.container { max-width:1200px; margin:0 auto; padding:40px 24px; }
+.card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px; margin-bottom:16px; }
+.card-title { font-size:18px; font-weight:600; margin-bottom:16px; }
+.stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-bottom:32px; }
+.stat-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; }
+.stat-label { font-size:14px; color:var(--text2); margin-bottom:8px; }
+.stat-value { font-size:24px; font-weight:700; }
+.stat-value.green { color:var(--green); }
+.btn { background:var(--primary); color:var(--bg); border:none; padding:12px 24px; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; width:100%; }
+.btn-outline { background:transparent; border:1px solid var(--border); color:var(--text); }
+.form-group { margin-bottom:16px; }
+.form-label { display:block; font-size:14px; color:var(--text2); margin-bottom:8px; }
+.form-input { width:100%; padding:12px; background:var(--bg2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:14px; }
+.form-input:focus { outline:none; border-color:var(--primary); }
+.table { width:100%; border-collapse:collapse; }
+.table th, .table td { padding:12px; text-align:left; border-bottom:1px solid var(--border); }
+.table th { color:var(--text2); font-weight:500; font-size:13px; }
+.status { padding:4px 8px; border-radius:4px; font-size:12px; }
+.status.success { background:rgba(0,192,135,0.2); color:var(--green); }
+.status.pending { background:rgba(240,185,11,0.2); color:var(--primary); }
+.theme-toggle { width:40px; height:40px; border-radius:10px; background:var(--bg2); border:1px solid var(--border); cursor:pointer; }
+</style>
 </head>
 <body>
-  <div class="h">
-    <a href="dashboard.html" class="b">← Back</a>
-    <a href="dashboard.html" class="logo"><div class="i">🐯</div>TigerEx</a>
-  </div>
-  <div class="c">
-    <h1>Coming Soon</h1>
-    <p>This feature is under development.</p>
-    <a href="dashboard.html" class="btn">Go to Dashboard</a>
-  </div>
-    <script src="assets/js/theme.js"></script>
+<div class="header">
+<a href="index.html" class="logo"><div class="logo-icon">🐯</div>TigerEx</a>
+<div class="nav">
+<a href="index.html" class="nav-link">Home</a>
+<a href="dashboard.html" class="nav-link">Dashboard</a>
+<button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+</div>
+</div>
+<div class="container">
+<h1 style="font-size:32px; font-weight:700; margin-bottom:8px;">PAGETITLE</h1>
+<p style="color:var(--text2); margin-bottom:32px;">Manage your PAGEFEATURE</p>
+
+<div class="stat-grid">
+<div class="stat-card"><div class="stat-label">Total Balance</div><div class="stat-value">$12,450.00</div></div>
+<div class="stat-card"><div class="stat-label">Available</div><div class="stat-value green">$8,320.00</div></div>
+<div class="stat-card"><div class="stat-label">In Orders</div><div class="stat-value">$4,130.00</div></div>
+</div>
+
+<div class="card">
+<div class="card-title">Recent PAGEFEATURE</div>
+<table class="table">
+<tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr>
+<tr><td>2026-04-27</td><td>Deposit</td><td>$1,000.00</td><td><span class="status success">Completed</span></td></tr>
+<tr><td>2026-04-25</td><td>Withdrawal</td><td>$500.00</td><td><span class="status success">Completed</span></td></tr>
+<tr><td>2026-04-22</td><td>Deposit</td><td>$2,500.00</td><td><span class="status pending">Pending</span></td></tr>
+</table>
+</div>
+
+<div class="card">
+<div class="card-title">Quick Actions</div>
+<button class="btn" onclick="action1()">Action 1</button>
+<button class="btn btn-outline" style="margin-top:8px" onclick="action2()">Action 2</button>
+</div>
+</div>
+
+<script src="assets/js/theme.js"></script>
+<script>
+function toggleTheme() { document.body.classList.toggle('light-theme'); }
+function action1() { alert('Action 1 executed'); }
+function action2() { alert('Action 2 executed'); }
+</script>
 </body>
 </html>
