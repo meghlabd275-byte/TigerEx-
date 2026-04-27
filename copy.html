@@ -1,0 +1,154 @@
+<!--
+@file copy.html
+@description TigerEx Copy Trading page
+@author TigerEx Development Team
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copy Trading | TigerEx</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root { --primary:#F0B90B; --bg:#0B0E11; --bg2:#151A21; --card:#1E2329; --text:#EAECEF; --text2:#848E9C; --border:#2B3139; --green:#00C087; --red:#F6465D; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); margin:0; min-height:100vh; }
+.header { background:var(--card); padding:12px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; }
+.logo { display:flex; align-items:center; gap:8px; font-size:20px; font-weight:700; }
+.logo-icon { width:32px; height:32px; background:linear-gradient(135deg,var(--primary),#FF6B6B); border-radius:8px; }
+.nav { display:flex; gap:8px; }
+.nav-link { padding:8px 14px; font-size:13px; color:var(--text); border-radius:6px; text-decoration:none; }
+.nav-link:hover, .nav-link.active { background:var(--bg2); }
+.container { max-width:1400px; margin:0 auto; padding:24px; }
+.tabs { display:flex; gap:8px; margin-bottom:24px; }
+.tab { padding:12px 24px; font-size:14px; font-weight:500; border-radius:8px; background:var(--card); border:1px solid var(--border); cursor:pointer; }
+.tab.active { background:var(--primary); color:var(--bg); border-color:var(--primary); }
+.leaderboard { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:16px; }
+.trader-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; }
+.trader-header { display:flex; justify-content:space-between; margin-bottom:16px; }
+.trader-info { display:flex; gap:12px; align-items:center; }
+.avatar { width:48px; height:48px; border-radius:50%; background:var(--primary); display:flex; align-items:center; justify-content:center; font-size:20px; color:var(--bg); font-weight:700; }
+.name { font-size:16px; font-weight:600; }
+.handle { font-size:13px; color:var(--text2); }
+.copy-btn { padding:8px 16px; background:var(--green); color:#fff; border:none; border-radius:6px; font-size:13px; font-weight:600; cursor:pointer; }
+.copy-btn.copied { background:var(--text2); }
+.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:16px; }
+.stat { text-align:center; }
+.stat-label { font-size:11px; color:var(--text2); margin-bottom:4px; }
+.stat-value { font-size:16px; font-weight:600; }
+.stat-value.green { color:var(--green); }
+.stat-value.red { color:var(--red); }
+.graph { height:60px; background:var(--bg2); border-radius:8px; margin-bottom:12px; position:relative; overflow:hidden; }
+.graph-line { position:absolute; bottom:0; left:0; right:0; height:100%; background:linear-gradient(to top, rgba(0,192,135,0.3), transparent); border-bottom:2px solid var(--green); }
+.copy-info { display:flex; justify-content:space-between; font-size:13px; }
+.copy-info span:first-child { color:var(--text2); }
+.sidebar { width:320px; background:var(--card); border-radius:12px; padding:20px; position:fixed; right:24px; top:100px; }
+.my-trades { margin-bottom:24px; }
+.trade-item { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); font-size:13px; }
+.trade-pair { font-weight:600; }
+.trade-pnl.positive { color:var(--green); }
+.trade-pnl.negative { color:var(--red); }
+.theme-toggle { width:36px; height:36px; border-radius:8px; background:var(--bg2); border:1px solid var(--border); cursor:pointer; }
+</style>
+</head>
+<body>
+<div class="header">
+<a href="index.html" class="logo"><div class="logo-icon">🐯</div>TigerEx</a>
+<div class="nav">
+<a href="index.html" class="nav-link">Home</a>
+<a href="spot.html" class="nav-link">Spot</a>
+<a href="futures.html" class="nav-link">Futures</a>
+<a href="copy.html" class="nav-link active">Copy Trading</a>
+<button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+</div>
+</div>
+<div class="container">
+<h1 style="font-size:28px; font-weight:700; margin-bottom:8px;">Copy Trading</h1>
+<p style="color:var(--text2); margin-bottom:24px;">Follow and copy top traders</p>
+
+<div class="tabs">
+<div class="tab active">Top Traders</div>
+<div class="tab">My Copiers</div>
+<div class="tab">My Following</div>
+</div>
+
+<div class="sidebar">
+<h3 style="font-size:16px; margin-bottom:16px;">My Copy Trades</h3>
+<div class="my-trades">
+<div class="trade-item"><span class="trade-pair">BTC/USDT</span><span class="trade-pnl positive">+$245.50</span></div>
+<div class="trade-item"><span class="trade-pair">ETH/USDT</span><span class="trade-pnl positive">+$89.20</span></div>
+<div class="trade-item"><span class="trade-pair">SOL/USDT</span><span class="trade-pnl negative">-$45.30</span></div>
+</div>
+<div><strong>Total P&L: </strong><span style="color:var(--green)">+$289.40</span></div>
+</div>
+
+<div class="leaderboard">
+<div class="trader-card">
+<div class="trader-header">
+<div class="trader-info">
+<div class="avatar">A</div>
+<div><div class="name">AlexTrader</div><div class="handle">@alex_pro</div></div>
+</div>
+<button class="copy-btn" onclick="copyTrade(this, 'Alex')">Copy</button>
+</div>
+<div class="graph"><div class="graph-line" style="width:80%"></div></div>
+<div class="stats-grid">
+<div class="stat"><div class="stat-label">Win Rate</div><div class="stat-value green">78%</div></div>
+<div class="stat"><div class="stat-label">Profit</div><div class="stat-value green">+234%</div></div>
+<div class="stat"><div class="stat-label">Trades</div><div class="stat-value">1,245</div></div>
+<div class="stat"><div class="stat-label">Copiers</div><div class="stat-value">523</div></div>
+</div>
+<div class="copy-info"><span>Min: $100</span><span>10x copying</span></div>
+</div>
+
+<div class="trader-card">
+<div class="trader-header">
+<div class="trader-info">
+<div class="avatar">M</div>
+<div><div class="name">MariaCrypto</div><div class="handle">@maria_dex</div></div>
+</div>
+<button class="copy-btn" onclick="copyTrade(this, 'Maria')">Copy</button>
+</div>
+<div class="graph"><div class="graph-line" style="width:65%"></div></div>
+<div class="stats-grid">
+<div class="stat"><div class="stat-label">Win Rate</div><div class="stat-value green">72%</div></div>
+<div class="stat"><div class="stat-label">Profit</div><div class="stat-value green">+189%</div></div>
+<div class="stat"><div class="stat-label">Trades</div><div class="stat-value">856</div></div>
+<div class="stat"><div class="stat-label">Copiers</div><div class="stat-value">312</div></div>
+</div>
+<div class="copy-info"><span>Min: $50</span><span>5x copying</span></div>
+</div>
+
+<div class="trader-card">
+<div class="trader-header">
+<div class="trader-info">
+<div class="avatar">J</div>
+<div><div class="name">JohnDeFi</div><div class="handle">@john_defi</div></div>
+</div>
+<button class="copy-btn" onclick="copyTrade(this, 'John')">Copy</button>
+</div>
+<div class="graph"><div class="graph-line" style="width:90%"></div></div>
+<div class="stats-grid">
+<div class="stat"><div class="stat-label">Win Rate</div><div class="stat-value green">85%</div></div>
+<div class="stat"><div class="stat-label">Profit</div><div class="stat-value green">+312%</div></div>
+<div class="stat"><div class="stat-label">Trades</div><div class="stat-value">2,341</div></div>
+<div class="stat"><div class="stat-label">Copiers</div><div class="stat-value">756</div></div>
+</div>
+<div class="copy-info"><span>Min: $200</span><span>20x copying</span></div>
+</div>
+</div>
+</div>
+
+<script src="assets/js/ServiceConnector.js"></script>
+<script src="assets/js/theme.js"></script>
+<script>
+function toggleTheme() { document.body.classList.toggle('light-theme'); }
+function copyTrade(btn, name) {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    alert('Now copying ' + name + ' - Your account will sync their trades');
+}
+</script>
+</body>
+</html>
