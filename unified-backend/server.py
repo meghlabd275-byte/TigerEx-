@@ -119,6 +119,14 @@ class ExternalRequest(BaseModel):
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info(f"✅ {EXCHANGE_NAME} v{VERSION} started")
+    
+    # Initialize Market Maker
+    global mm_engine
+    from market_maker import MarketMakerEngine
+    mm_engine = MarketMakerEngine()
+    await mm_engine.start()
+    logger.info("✅ Market Maker Engine initialized")
+    
     yield
     logger.info(f"⏹️ {EXCHANGE_NAME} stopped")
 
@@ -257,11 +265,6 @@ async def register_external(request: ExternalRequest):
 async def get_admin_stats():
     return {"exchange_name": EXCHANGE_NAME, "version": VERSION, "total_users": len(storage.users), "total_orders": len(storage.orders), "active_bots": len([b for b in storage.bots.values() if b.get("status") == "active"])}
 
-# ============= RUN =============
-if __name__ == "__main__":
-    import uvicorn
-    port = int(os.getenv("PORT", "8000"))
-    uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
 # ============= MARKET MAKER =============
 mm_engine = None
 
@@ -271,13 +274,6 @@ def get_mm_engine():
         from market_maker import MarketMakerEngine
         mm_engine = MarketMakerEngine()
     return mm_engine
-
-@app.on_event("startup")
-async def startup_event():
-    global mm_engine
-    from market_maker import MarketMakerEngine
-    mm_engine = MarketMakerEngine()
-    await mm_engine.start()
 
 @app.get("/api/market-maker/stats")
 async def get_mm_stats():
@@ -338,3 +334,9 @@ async def provide_liquidity(mm_id: str, symbol: str, amount: float):
 async def stabilize_price(mm_id: str, symbol: str, target_price: float):
     engine = get_mm_engine()
     return await engine.stabilize_price(mm_id, symbol, target_price)
+
+# ============= RUN =============
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.getenv("PORT", "8000"))
+    uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
