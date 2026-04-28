@@ -212,6 +212,68 @@ class TigerExAPI {
     return this.request('/api/exchange/info');
   }
 
+  // Market Maker
+  async getMMStats() {
+    return this.request('/api/market-maker/stats');
+  }
+
+  async getAllMMs(ownerId = '') {
+    return this.request(`/api/market-maker?owner_id=${ownerId}`);
+  }
+
+  async createMM(name, strategy = 'all', symbols = []) {
+    return this.request('/api/market-maker', {
+      method: 'POST',
+      body: JSON.stringify({ name, strategy, symbols }),
+    });
+  }
+
+  async getMM(mmId) {
+    return this.request(`/api/market-maker/${mmId}`);
+  }
+
+  async startMM(mmId) {
+    return this.request(`/api/market-maker/${mmId}/start`, {
+      method: 'POST',
+    });
+  }
+
+  async stopMM(mmId) {
+    return this.request(`/api/market-maker/${mmId}/stop`, {
+      method: 'POST',
+    });
+  }
+
+  async deleteMM(mmId) {
+    return this.request(`/api/market-maker/${mmId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async getMMOrderbook(symbol) {
+    return this.request(`/api/market-maker/orderbook/${symbol}`);
+  }
+
+  async executeArbitrage(mmId) {
+    return this.request(`/api/market-maker/${mmId}/arbitrage`, {
+      method: 'POST',
+    });
+  }
+
+  async provideLiquidity(mmId, symbol, amount) {
+    return this.request(`/api/market-maker/${mmId}/liquidity`, {
+      method: 'POST',
+      body: JSON.stringify({ symbol, amount }),
+    });
+  }
+
+  async stabilizePrice(mmId, symbol, targetPrice) {
+    return this.request(`/api/market-maker/${mmId}/stabilize`, {
+      method: 'POST',
+      body: JSON.stringify({ symbol, target_price: targetPrice }),
+    });
+  }
+
   // User
   async getProfile() {
     return this.request('/api/user/profile');

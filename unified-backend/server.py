@@ -262,3 +262,79 @@ if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", "8000"))
     uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
+# ============= MARKET MAKER =============
+mm_engine = None
+
+def get_mm_engine():
+    global mm_engine
+    if mm_engine is None:
+        from market_maker import MarketMakerEngine
+        mm_engine = MarketMakerEngine()
+    return mm_engine
+
+@app.on_event("startup")
+async def startup_event():
+    global mm_engine
+    from market_maker import MarketMakerEngine
+    mm_engine = MarketMakerEngine()
+    await mm_engine.start()
+
+@app.get("/api/market-maker/stats")
+async def get_mm_stats():
+    engine = get_mm_engine()
+    return await engine.get_stats()
+
+@app.get("/api/market-maker")
+async def get_mms(owner_id: str = ""):
+    engine = get_mm_engine()
+    return await engine.get_all_market_makers(owner_id)
+
+@app.post("/api/market-maker")
+async def create_mm(
+    name: str,
+    strategy: str = "all",
+    symbols: List[str] = None,
+    owner_id: str = "USR_demo"
+):
+    engine = get_mm_engine()
+    return await engine.create_market_maker(owner_id, name, strategy, symbols or [])
+
+@app.get("/api/market-maker/{mm_id}")
+async def get_mm(mm_id: str):
+    engine = get_mm_engine()
+    return await engine.get_market_maker(mm_id)
+
+@app.post("/api/market-maker/{mm_id}/start")
+async def start_mm(mm_id: str):
+    engine = get_mm_engine()
+    return await engine.start_market_maker(mm_id)
+
+@app.post("/api/market-maker/{mm_id}/stop")
+async def stop_mm(mm_id: str):
+    engine = get_mm_engine()
+    return await engine.stop_market_maker(mm_id)
+
+@app.delete("/api/market-maker/{mm_id}")
+async def delete_mm(mm_id: str):
+    engine = get_mm_engine()
+    return await engine.delete_market_maker(mm_id)
+
+@app.get("/api/market-maker/orderbook/{symbol}")
+async def get_mm_orderbook(symbol: str, limit: int = 20):
+    engine = get_mm_engine()
+    return await engine.get_orderbook(symbol, limit)
+
+@app.post("/api/market-maker/{mm_id}/arbitrage")
+async def execute_arbitrage(mm_id: str):
+    engine = get_mm_engine()
+    return await engine.execute_arbitrage(mm_id)
+
+@app.post("/api/market-maker/{mm_id}/liquidity")
+async def provide_liquidity(mm_id: str, symbol: str, amount: float):
+    engine = get_mm_engine()
+    return await engine.provide_liquidity(mm_id, symbol, amount)
+
+@app.post("/api/market-maker/{mm_id}/stabilize")
+async def stabilize_price(mm_id: str, symbol: str, target_price: float):
+    engine = get_mm_engine()
+    return await engine.stabilize_price(mm_id, symbol, target_price)
