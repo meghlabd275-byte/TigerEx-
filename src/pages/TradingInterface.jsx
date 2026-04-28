@@ -27,8 +27,8 @@ import {
 // ============= CONFIGURATION =============
 const CONFIG = {
   exchangeName: 'TigerEx',
-  apiBaseUrl: '/api',
-  wsUrl: 'ws://localhost:8765',
+  apiBaseUrl: 'http://localhost:8000',  // Connect to TigerEx backend
+  wsUrl: 'ws://localhost:8000',
   theme: {
     primary: '#F0B90B',
     background: '#0B0E11',
@@ -105,78 +105,120 @@ class TigerExAPI {
     return this.request(`/trading/trades?symbol=${symbol}&limit=${limit}`);
   }
 
+  // Trading Pairs
+  async getTradingPairs() {
+    return this.request('/api/trading/pairs');
+  }
+
   // Market Data
   async getTickers() {
-    return this.request('/market/tickers');
+    return this.request('/api/trading/tickers');
   }
 
   async getTicker(symbol) {
-    return this.request(`/market/ticker/${symbol}`);
+    return this.request(`/api/trading/ticker/${symbol}`);
   }
 
   async getKlines(symbol, interval = '1h', limit = 100) {
-    return this.request(`/market/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`);
+    return this.request(`/api/trading/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`);
   }
 
   // Wallet
   async getBalance() {
-    return this.request('/wallet/balance');
+    return this.request('/api/wallet/balance');
   }
 
-  async getDepositAddress(currency, network = '') {
-    return this.request(`/wallet/deposit?currency=${currency}&network=${network}`);
+  async deposit(currency, amount) {
+    return this.request('/api/wallet/deposit', {
+      method: 'POST',
+      body: JSON.stringify({ currency, amount }),
+    });
   }
 
   async withdraw(currency, amount, address) {
-    return this.request('/wallet/withdraw', {
+    return this.request('/api/wallet/withdraw', {
       method: 'POST',
       body: JSON.stringify({ currency, amount, address }),
     });
   }
 
   // Trading Bots
+  async getBots() {
+    return this.request('/api/bots');
+  }
+
   async createBot(config) {
-    return this.request('/bots', {
+    return this.request('/api/bots', {
       method: 'POST',
       body: JSON.stringify(config),
     });
   }
 
   async startBot(botId) {
-    return this.request(`/bots/${botId}/start`, {
+    return this.request(`/api/bots/${botId}/start`, {
       method: 'POST',
     });
   }
 
   async stopBot(botId) {
-    return this.request(`/bots/${botId}/stop`, {
+    return this.request(`/api/bots/${botId}/stop`, {
       method: 'POST',
     });
   }
 
   async getBots() {
-    return this.request('/bots');
+    return this.request('/api/bots');
   }
 
-  // Exchange Connections
-  async connectExchange(exchange, apiKey, apiSecret, passphrase = '') {
-    return this.request('/exchanges/connect', {
+  // Peers (TigerEx-to-TigerEx)
+  async getPeers() {
+    return this.request('/api/peers');
+  }
+
+  async addPeer(peer) {
+    return this.request('/api/peers', {
       method: 'POST',
-      body: JSON.stringify({ exchange, apiKey, apiSecret, passphrase }),
+      body: JSON.stringify(peer),
     });
   }
 
-  async getExchanges() {
-    return this.request('/exchanges');
+  async removePeer(peerId) {
+    return this.request(`/api/peers/${peerId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async syncPeers() {
+    return this.request('/api/peers/sync', {
+      method: 'POST',
+    });
+  }
+
+  // External API Registration
+  async registerExternal(name, permissions) {
+    return this.request('/api/external/register', {
+      method: 'POST',
+      body: JSON.stringify({ name, permissions }),
+    });
+  }
+
+  // Admin
+  async getAdminStats() {
+    return this.request('/api/admin/stats');
+  }
+
+  // Exchange Info
+  async getExchangeInfo() {
+    return this.request('/api/exchange/info');
   }
 
   // User
   async getProfile() {
-    return this.request('/user/profile');
+    return this.request('/api/user/profile');
   }
 
   async updateProfile(data) {
-    return this.request('/user/profile', {
+    return this.request('/api/user/profile', {
       method: 'PUT',
       body: JSON.stringify(data),
     });
