@@ -297,6 +297,100 @@ async def mm_orderbook(symbol: str):
     e = get_mm_engine()
     return await e.get_orderbook(symbol)
 
+# ============= MINING SERVICE =============
+mining_service = None
+
+def get_mining_service():
+    global mining_service
+    if mining_service is None:
+        from mining_service import MiningService
+        mining_service = MiningService()
+    return mining_service
+
+@app.get("/api/mining/stats")
+async def mining_stats():
+    m = get_mining_service()
+    return await m.get_stats()
+
+@app.get("/api/mining")
+async def get_all_mining():
+    m = get_mining_service()
+    return await m.get_all_data()
+
+# Stake Pools
+@app.get("/api/mining/stake-pools")
+async def get_stake_pools(status: str = ""):
+    m = get_mining_service()
+    return await m.get_stake_pools(status)
+
+@app.get("/api/mining/stake-pools/{pool_id}")
+async def get_stake_pool(pool_id: str):
+    m = get_mining_service()
+    return await m.get_stake_pool(pool_id)
+
+@app.post("/api/mining/stake")
+async def stake_tokens(pool_id: str, user_id: str, amount: float):
+    m = get_mining_service()
+    return await m.stake(pool_id, user_id, amount)
+
+@app.post("/api/mining/unstake")
+async def unstake_tokens(position_id: str):
+    m = get_mining_service()
+    return await m.unstake(position_id)
+
+@app.get("/api/mining/stake-positions")
+async def get_stake_positions(user_id: str = ""):
+    m = get_mining_service()
+    return await m.get_stake_positions(user_id)
+
+# Yield Farms
+@app.get("/api/mining/yield-farms")
+async def get_yield_farms():
+    m = get_mining_service()
+    return await m.get_yield_farms()
+
+@app.get("/api/mining/yield-farms/{farm_id}")
+async def get_yield_farm(farm_id: str):
+    m = get_mining_service()
+    return await m.get_yield_farm(farm_id)
+
+@app.post("/api/mining/yield-add")
+async def add_yield_liquidity(farm_id: str, user_id: str, amount_a: float, amount_b: float):
+    m = get_mining_service()
+    return await m.add_yield_liquidity(farm_id, user_id, amount_a, amount_b)
+
+# Validators
+@app.get("/api/mining/validators")
+async def get_validators(chain: str = ""):
+    m = get_mining_service()
+    return await m.get_validators(chain)
+
+@app.get("/api/mining/validators/{validator_id}")
+async def get_validator(validator_id: str):
+    m = get_mining_service()
+    return await m.get_validator(validator_id)
+
+@app.post("/api/mining/delegate")
+async def delegate_to_validator(validator_id: str, user_id: str, amount: float):
+    m = get_mining_service()
+    return await m.delegate_to_validator(validator_id, user_id, amount)
+
+# Cloud Miners
+@app.get("/api/mining/cloud-miners")
+async def get_cloud_miners():
+    m = get_mining_service()
+    return await m.get_cloud_miners()
+
+@app.get("/api/mining/cloud-miners/{miner_id}")
+async def get_cloud_miner(miner_id: str):
+    m = get_mining_service()
+    return await m.get_cloud_miner(miner_id)
+
+@app.post("/api/mining/cloud-purchase")
+async def purchase_hashrate(miner_id: str, user_id: str, gh_s: float):
+    m = get_mining_service()
+    return await m.purchase_hashrate(miner_id, user_id, gh_s)
+
 # ============ RUN ============
 if __name__ == "__main__":
     import uvicorn
