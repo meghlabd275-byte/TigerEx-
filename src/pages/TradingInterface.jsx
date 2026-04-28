@@ -66,14 +66,14 @@ class TigerExAPI {
 
   // Auth
   async login(email, password) {
-    return this.request('/auth/login', {
+    return this.request('/api/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     });
   }
 
   async register(data) {
-    return this.request('/auth/register', {
+    return this.request('/api/auth/register', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -81,28 +81,28 @@ class TigerExAPI {
 
   // Trading
   async createOrder(order) {
-    return this.request('/trading/order', {
+    return this.request('/api/trading/order', {
       method: 'POST',
       body: JSON.stringify(order),
     });
   }
 
   async cancelOrder(orderId) {
-    return this.request(`/trading/order/${orderId}`, {
+    return this.request(`/api/trading/order/${orderId}`, {
       method: 'DELETE',
     });
   }
 
   async getOrderbook(symbol) {
-    return this.request(`/trading/orderbook/${symbol}`);
+    return this.request(`/api/trading/orderbook/${symbol}`);
   }
 
   async getOpenOrders(symbol = '') {
-    return this.request(`/trading/orders/open${symbol ? `?symbol=${symbol}` : ''}`);
+    return this.request(`/api/trading/orders/open${symbol ? `?symbol=${symbol}` : ''}`);
   }
 
   async getTradeHistory(symbol = '', limit = 50) {
-    return this.request(`/trading/trades?symbol=${symbol}&limit=${limit}`);
+    return this.request(`/api/trading/trades?symbol=${symbol}&limit=${limit}`);
   }
 
   // Trading Pairs
@@ -288,15 +288,15 @@ class TigerExAPI {
 
   // Admin
   async getAdminStats() {
-    return this.request('/admin/stats');
+    return this.request('/api/admin/stats');
   }
 
   async getAllUsers() {
-    return this.request('/admin/users');
+    return this.request('/api/admin/users');
   }
 
   async getAllOrders() {
-    return this.request('/admin/orders');
+    return this.request('/api/admin/orders');
   }
 }
 
