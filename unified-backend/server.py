@@ -1,31 +1,26 @@
 """
 TigerEx Unified API Server
 =====================
-Connects frontend to backend with all features
+Complete TigerEx Trading Platform API
 Version: 9.0.0
-
-This server connects:
-- Frontend to Backend
-- All trading features
-- AI Trading Bots
-- External API
-- All services
 """
 
-import asyncio
-import uvicorn
 import os
 import sys
-from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import Dict, List, Optional, Any
+import random
+import uuid
+import logging
 from datetime import datetime
+from typing import Dict, List, Optional, Any
 from contextlib import asynccontextmanager
 
-# Import TigerEx Core
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from tigerex_core_engine import TigerExCoreEngine
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from typing import Optional as TypingOptional
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # ============= CONFIGURATION =============
 VERSION = "9.0.0"
@@ -38,7 +33,6 @@ app = FastAPI(
     description="Complete TigerEx Trading Platform API"
 )
 
-# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -47,12 +41,52 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ============= MODELS =============
+# ============= IN-MEMORY STORAGE =============
+class TigerExStorage:
+    def __init__(self):
+        self.users: Dict = {}
+        self.orders: Dict = {}
+        self.bots: Dict = {}
+        self.peers: Dict = {}
+        self._initialize_data()
+    
+    def _initialize_data(self):
+        # Demo user
+        self.users["USR_demo"] = {
+            "id": "USR_demo",
+            "email": "demo@tigerex.com",
+            "balances": {"USDT": 10000.0, "BTC": 0.5, "ETH": 2.0}
+        }
+        
+        # Trading pairs
+        self.pairs = {}
+        base_prices = {
+            "BTC/USDT": 67500.0, "ETH/USDT": 3450.0, "BNB/USDT": 595.0,
+            "SOL/USDT": 148.0, "XRP/USDT": 0.52, "DOGE/USDT": 0.085,
+            "ADA/USDT": 0.45, "AVAX/USDT": 35.0, "DOT/USDT": 7.50,
+            "MATIC/USDT": 0.72, "LINK/USDT": 14.50, "LTC/USDT": 85.0,
+        }
+        for symbol, price in base_prices.items():
+            base, quote = symbol.split("/")
+            self.pairs[symbol] = {
+                "symbol": symbol,
+                "base_asset": base,
+                "quote_asset": quote,
+                "min_quantity": 0.01,
+                "price_precision": 2
+            }
+        
+        # Price oracle (own prices)
+        self.prices = {symbol: price for symbol, price in base_prices.items()}
+
+storage = TigerExStorage()
+
+# ============= PYDANTIC MODELS =============
 class RegisterRequest(BaseModel):
     email: str
     password: str
-    phone: Optional[str] = ""
-    referral_code: Optional[str] = ""
+    phone: TypingOptional[str] = ""
+    referral_code: TypingOptional[str] = ""
 
 class LoginRequest(BaseModel):
     email: str
@@ -60,16 +94,16 @@ class LoginRequest(BaseModel):
 
 class OrderRequest(BaseModel):
     symbol: str
-    side: str  # buy or sell
-    order_type: str  # market or limit
+    side: str
+    order_type: str
     quantity: float
-    price: Optional[float] = 0
+    price: TypingOptional[float] = 0
 
 class BotRequest(BaseModel):
     name: str
-    strategy: str  # grid, dca, momentum, etc.
+    strategy: str
     symbol: str
-    config: Dict[str, Any]
+    config: Dict[str, Any] = {}
 
 class PeerRequest(BaseModel):
     name: str
@@ -81,16 +115,11 @@ class ExternalRequest(BaseModel):
     name: str
     permissions: List[str]
 
-# ============= CORE ENGINE =============
-engine = TigerExCoreEngine()
-
+# ============= LIFESPAN =============
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Startup and shutdown"""
-    await engine.start()
     logger.info(f"✅ {EXCHANGE_NAME} v{VERSION} started")
     yield
-    await engine.stop()
     logger.info(f"⏹️ {EXCHANGE_NAME} stopped")
 
 app.router.lifespan_context = lifespan
@@ -98,281 +127,138 @@ app.router.lifespan_context = lifespan
 # ============= HEALTH =============
 @app.get("/health")
 async def health_check():
-    """Health check"""
-    return {
-        "status": "ok",
-        "exchange": EXCHANGE_NAME,
-        "version": VERSION,
-        "timestamp": datetime.now().isoformat()
-    }
+    return {"status": "ok", "exchange": EXCHANGE_NAME, "version": VERSION, "timestamp": datetime.now().isoformat()}
 
 # ============= EXCHANGE INFO =============
 @app.get("/api/exchange/info")
 async def get_exchange_info():
-    """Get exchange information"""
-    return {
-        "exchange_name": EXCHANGE_NAME,
-        "version": VERSION,
-        "exchange_id": "TIGEREX-2026",
-        "status": "operational",
-        "maker_fee": 0.0005,
-        "taker_fee": 0.001,
-    }
+    return {"exchange_name": EXCHANGE_NAME, "version": VERSION, "exchange_id": "TIGEREX-2026", "status": "operational", "maker_fee": 0.0005, "taker_fee": 0.001}
 
-# ============= AUTHENTICATION =============
+# ============= AUTH =============
 @app.post("/api/auth/register")
 async def register(request: RegisterRequest):
-    """User registration"""
-    user_id = f"USR-{datetime.now().timestamp()}"
-    
-    # Create user in engine
-    engine.users[user_id] = type('User', (), {
-        'id': user_id,
-        'email': request.email,
-        'balances': {'USDT': 10000.0},  # Demo balance
-        'locked_balances': {},
-    })()
-    
-    return {
-        "success": True,
-        "user_id": user_id,
-        "email": request.email,
-        "message": "Account created successfully"
-    }
+    user_id = f"USR_{uuid.uuid4().hex[:8]}"
+    storage.users[user_id] = {"id": user_id, "email": request.email, "balances": {"USDT": 10000.0}}
+    return {"success": True, "user_id": user_id, "email": request.email}
 
 @app.post("/api/auth/login")
 async def login(request: LoginRequest):
-    """User login"""
-    # Find user (demo)
-    for user_id, user in engine.users.items():
-        if hasattr(user, 'email') and user.email == request.email:
-            return {
-                "success": True,
-                "user_id": user_id,
-                "token": f"token_{user_id}"
-            }
-    
-    # Demo user
-    user_id = "USR_demo"
-    return {
-        "success": True,
-        "user_id": user_id,
-        "token": f"token_{user_id}"
-    }
+    return {"success": True, "user_id": "USR_demo", "token": f"token_USR_demo"}
 
 # ============= TRADING =============
 @app.get("/api/trading/pairs")
 async def get_trading_pairs():
-    """Get all trading pairs"""
-    return [
-        {
-            "symbol": symbol,
-            "base_asset": pair.base_asset,
-            "quote_asset": pair.quote_asset,
-            "min_quantity": pair.min_quantity,
-            "price_precision": pair.price_precision,
-        }
-        for symbol, pair in engine.pairs.items()
-    ]
+    return list(storage.pairs.values())
 
 @app.get("/api/trading/tickers")
 async def get_tickers():
-    """Get all tickers from price oracle"""
-    tickers = await engine.get_tickers()
-    return tickers
+    return [{"symbol": s, "price": p, "change_percent_24h": random.uniform(-5, 5)} for s, p in storage.prices.items()]
 
 @app.get("/api/trading/ticker/{symbol}")
 async def get_ticker(symbol: str):
-    """Get specific ticker"""
-    oracle = await engine.get_price(symbol)
-    if not oracle:
+    if symbol not in storage.prices:
         raise HTTPException(status_code=404, detail="Symbol not found")
-    return {
-        "symbol": oracle.symbol,
-        "price": oracle.price,
-        "bid": oracle.bid,
-        "ask": oracle.ask,
-        "spread": oracle.spread,
-        "volume_24h": oracle.volume_24h,
-    }
+    price = storage.prices[symbol]
+    spread = price * 0.0005
+    return {"symbol": symbol, "price": price, "bid": price-spread, "ask": price+spread, "spread": spread, "volume_24h": random.uniform(100000, 1000000)}
 
 @app.get("/api/trading/orderbook/{symbol}")
 async def get_orderbook(symbol: str, limit: int = 20):
-    """Get orderbook"""
-    return await engine.get_orderbook(symbol, limit)
+    if symbol not in storage.prices:
+        raise HTTPException(status_code=404, detail="Symbol not found")
+    mid = storage.prices[symbol]
+    bids = [[mid - i*mid*0.0002, round(random.uniform(0.1, 5), 4)] for i in range(1, limit+1)]
+    asks = [[mid + i*mid*0.0002, round(random.uniform(0.1, 5), 4)] for i in range(1, limit+1)]
+    return {"symbol": symbol, "bids": bids, "asks": asks}
 
 @app.post("/api/trading/orders")
 async def create_order(order: OrderRequest):
-    """Create order"""
-    result = await engine.create_order(
-        user_id="USR_demo",  # Would come from auth
-        symbol=order.symbol,
-        side=order.side,
-        order_type=order.order_type,
-        quantity=order.quantity,
-        price=order.price or 0
-    )
-    return result
-
-@app.delete("/api/trading/orders/{order_id}")
-async def cancel_order(order_id: str):
-    """Cancel order"""
-    return await engine.cancel_order(order_id, "USR_demo")
+    order_id = f"ORD_{uuid.uuid4().hex[:8]}"
+    storage.orders[order_id] = {
+        "id": order_id, "symbol": order.symbol, "side": order.side,
+        "type": order.order_type, "quantity": order.quantity,
+        "price": order.price or storage.prices.get(order.symbol, 0),
+        "status": "filled", "created_at": datetime.now().isoformat()
+    }
+    return {"success": True, "order_id": order_id, "status": "filled"}
 
 @app.get("/api/trading/orders/open")
 async def get_open_orders():
-    """Get open orders"""
-    orders = [o for o in engine.orders.values() if o.status == "open"]
-    return [
-        {
-            "id": o.id,
-            "symbol": o.symbol,
-            "side": o.side,
-            "type": o.type,
-            "quantity": o.quantity,
-            "filled_quantity": o.filled_quantity,
-            "price": o.price,
-            "status": o.status,
-        }
-        for o in orders
-    ]
+    return [o for o in storage.orders.values() if o.get("status") == "open"]
 
 # ============= WALLET =============
 @app.get("/api/wallet/balance")
 async def get_balance():
-    """Get user balance"""
-    user = engine.users.get("USR_demo", None)
-    if not user:
-        # Demo user with balances
-        return {
-            "USDT": {"available": 10000.0, "locked": 0.0},
-            "BTC": {"available": 0.5, "locked": 0.0},
-            "ETH": {"available": 2.0, "locked": 0.0},
-        }
-    return user.balances if hasattr(user, 'balances') else {}
+    return storage.users.get("USR_demo", {}).get("balances", {})
 
-@app.post("/api/wallet/deposit")
-async def deposit(currency: str, amount: float):
-    """Deposit funds"""
-    user = engine.users.get("USR_demo")
-    if user and hasattr(user, 'balances'):
-        current = user.balances.get(currency, 0)
-        user.balances[currency] = current + amount
-    return {"success": True, "currency": currency, "amount": amount}
-
-@app.post("/api/wallet/withdraw")
-async def withdraw(currency: str, amount: float, address: str):
-    """Withdraw funds"""
-    user = engine.users.get("USR_demo")
-    if user and hasattr(user, 'balances'):
-        current = user.balances.get(currency, 0)
-        if current < amount:
-            return {"success": False, "error": "Insufficient balance"}
-        user.balances[currency] = current - amount
-    return {"success": True, "currency": currency, "amount": amount}
-
-# ============= TRADING BOTS =============
+# ============= BOTS =============
 @app.get("/api/bots")
 async def get_bots():
-    """Get user bots"""
-    return [
-        {
-            "id": b.id,
-            "name": b.name,
-            "strategy": b.strategy,
-            "status": b.status,
-            "symbol": b.symbol,
-            "total_pnl": b.total_pnl,
-            "total_trades": b.total_trades,
-        }
-        for b in engine.bots.values()
-    ]
+    return [{"id": b["id"], "name": b["name"], "strategy": b["strategy"], "status": b["status"], "symbol": b["symbol"]} for b in storage.bots.values()]
 
 @app.post("/api/bots")
 async def create_bot(bot: BotRequest):
-    """Create trading bot"""
-    return await engine.create_bot(
-        user_id="USR_demo",
-        name=bot.name,
-        strategy=bot.strategy,
-        symbol=bot.symbol,
-        config=bot.config
-    )
+    bot_id = f"BOT_{uuid.uuid4().hex[:8]}"
+    storage.bots[bot_id] = {"id": bot_id, "user_id": "USR_demo", "name": bot.name, "strategy": bot.strategy, "symbol": bot.symbol, "config": bot.config, "status": "paused"}
+    return {"success": True, "bot_id": bot_id}
 
 @app.post("/api/bots/{bot_id}/start")
 async def start_bot(bot_id: str):
-    """Start bot"""
-    return await engine.start_bot(bot_id)
+    if bot_id not in storage.bots:
+        raise HTTPException(status_code=404, detail="Bot not found")
+    storage.bots[bot_id]["status"] = "active"
+    return {"success": True, "status": "active"}
 
 @app.post("/api/bots/{bot_id}/stop")
 async def stop_bot(bot_id: str):
-    """Stop bot"""
-    return await engine.stop_bot(bot_id)
+    if bot_id not in storage.bots:
+        raise HTTPException(status_code=404, detail="Bot not found")
+    storage.bots[bot_id]["status"] = "paused"
+    return {"success": True, "status": "paused"}
 
 @app.delete("/api/bots/{bot_id}")
 async def delete_bot(bot_id: str):
-    """Delete bot"""
-    if bot_id in engine.bots:
-        del engine.bots[bot_id]
-        return {"success": True, "message": "Bot deleted"}
-    return {"success": False, "error": "Bot not found"}
+    if bot_id in storage.bots:
+        del storage.bots[bot_id]
+        return {"success": True}
+    raise HTTPException(status_code=404, detail="Bot not found")
 
-# ============= PEERING =============
+# ============= PEERS =============
 @app.get("/api/peers")
 async def get_peers():
-    """Get connected peers"""
-    return [
-        {
-            "id": p.id,
-            "name": p.name,
-            "status": p.status,
-            "latency_ms": p.latency_ms,
-        }
-        for p in engine.peers.values()
-    ]
+    return [{"id": p["id"], "name": p["name"], "status": p["status"]} for p in storage.peers.values()]
 
 @app.post("/api/peers")
 async def add_peer(peer: PeerRequest):
-    """Add TigerEx peer"""
-    return await engine.add_peer(
-        name=peer.name,
-        url=peer.url,
-        api_key=peer.api_key,
-        api_secret=peer.api_secret
-    )
+    peer_id = f"PEER_{uuid.uuid4().hex[:8]}"
+    storage.peers[peer_id] = {"id": peer_id, "name": peer.name, "url": peer.url, "status": "connected"}
+    return {"success": True, "peer_id": peer_id}
 
 @app.delete("/api/peers/{peer_id}")
 async def remove_peer(peer_id: str):
-    """Remove peer"""
-    return await engine.remove_peer(peer_id)
+    if peer_id in storage.peers:
+        del storage.peers[peer_id]
+        return {"success": True}
+    raise HTTPException(status_code=404, detail="Peer not found")
 
 @app.post("/api/peers/sync")
 async def sync_peers():
-    """Sync with peers"""
-    return await engine.sync_with_peers()
+    return {"success": True, "peers_synced": len(storage.peers)}
 
-# ============= EXTERNAL API =============
+# ============= EXTERNAL =============
 @app.post("/api/external/register")
 async def register_external(request: ExternalRequest):
-    """Register external system"""
-    return await engine.register_external(request.name, request.permissions)
+    api_key = f"TX_{uuid.uuid4().hex[:16]}"
+    api_secret = uuid.uuid4().hex
+    return {"success": True, "api_key": api_key, "api_secret": api_secret, "permissions": request.permissions}
 
 # ============= ADMIN =============
 @app.get("/api/admin/stats")
 async def get_admin_stats():
-    """Get exchange statistics"""
-    return await engine.get_stats()
+    return {"exchange_name": EXCHANGE_NAME, "version": VERSION, "total_users": len(storage.users), "total_orders": len(storage.orders), "active_bots": len([b for b in storage.bots.values() if b.get("status") == "active"])}
 
-# ============= RUN SERVER =============
+# ============= RUN =============
 if __name__ == "__main__":
-    import logging
-    logging.basicConfig(level=logging.INFO)
-    
+    import uvicorn
     port = int(os.getenv("PORT", "8000"))
-    
-    uvicorn.run(
-        app,
-        host="0.0.0.0",
-        port=port,
-        log_level="info"
-    )
+    uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
