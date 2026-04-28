@@ -1,7 +1,7 @@
 """
-TigerEx Unified API Server
-=====================
-Complete TigerEx Trading Platform API
+TigerEx Unified API Server - Complete
+================================
+All systems connected
 Version: 9.0.0
 """
 
@@ -27,245 +27,221 @@ VERSION = "9.0.0"
 EXCHANGE_NAME = "TigerEx"
 
 # ============= FASTAPI APP =============
-app = FastAPI(
-    title=f"{EXCHANGE_NAME} API",
-    version=VERSION,
-    description="Complete TigerEx Trading Platform API"
-)
+app = FastAPI(title=f"{EXCHANGE_NAME} API", version=VERSION, description="Complete TigerEx Trading Platform")
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 # ============= IN-MEMORY STORAGE =============
 class TigerExStorage:
     def __init__(self):
-        self.users: Dict = {}
-        self.orders: Dict = {}
-        self.bots: Dict = {}
-        self.peers: Dict = {}
-        self._initialize_data()
-    
-    def _initialize_data(self):
-        # Demo user
-        self.users["USR_demo"] = {
-            "id": "USR_demo",
-            "email": "demo@tigerex.com",
-            "balances": {"USDT": 10000.0, "BTC": 0.5, "ETH": 2.0}
-        }
-        
-        # Trading pairs
+        self.users = {"USR_demo": {"id": "USR_demo", "email": "demo@tigerex.com", "balances": {"USDT": 10000, "BTC": 0.5, "ETH": 2.0}}}
+        self.orders = {}
+        self.bots = {}
         self.pairs = {}
-        base_prices = {
-            "BTC/USDT": 67500.0, "ETH/USDT": 3450.0, "BNB/USDT": 595.0,
-            "SOL/USDT": 148.0, "XRP/USDT": 0.52, "DOGE/USDT": 0.085,
-            "ADA/USDT": 0.45, "AVAX/USDT": 35.0, "DOT/USDT": 7.50,
-            "MATIC/USDT": 0.72, "LINK/USDT": 14.50, "LTC/USDT": 85.0,
-        }
-        for symbol, price in base_prices.items():
+        self._initialize()
+    
+    def _initialize(self):
+        prices = {"BTC/USDT": 67500, "ETH/USDT": 3450, "BNB/USDT": 595, "SOL/USDT": 148, "XRP/USDT": 0.52, "DOGE/USDT": 0.085, "ADA/USDT": 0.45, "AVAX/USDT": 35, "DOT/USDT": 7.5, "MATIC/USDT": 0.72, "LINK/USDT": 14.5, "LTC/USDT": 85}
+        for symbol, price in prices.items():
             base, quote = symbol.split("/")
-            self.pairs[symbol] = {
-                "symbol": symbol,
-                "base_asset": base,
-                "quote_asset": quote,
-                "min_quantity": 0.01,
-                "price_precision": 2
-            }
-        
-        # Price oracle (own prices)
-        self.prices = {symbol: price for symbol, price in base_prices.items()}
+            self.pairs[symbol] = {"symbol": symbol, "base_asset": base, "quote_asset": quote, "price": price}
 
 storage = TigerExStorage()
 
-# ============= PYDANTIC MODELS =============
-class RegisterRequest(BaseModel):
-    email: str
-    password: str
-    phone: TypingOptional[str] = ""
-    referral_code: TypingOptional[str] = ""
+# ============= MODELS =============
+class RegisterRequest(BaseModel): email: str; password: str; phone: str = ""; referral_code: str = ""
+class LoginRequest(BaseModel): email: str; password: str
+class OrderRequest(BaseModel): symbol: str; side: str; order_type: str; quantity: float; price: float = 0
+class BotRequest(BaseModel): name: str; strategy: str; symbol: str; config: Dict[str, Any] = {}
+class PairRequest(BaseModel): symbol: str; base: str; quote: str
 
-class LoginRequest(BaseModel):
-    email: str
-    password: str
-
-class OrderRequest(BaseModel):
-    symbol: str
-    side: str
-    order_type: str
-    quantity: float
-    price: TypingOptional[float] = 0
-
-class BotRequest(BaseModel):
-    name: str
-    strategy: str
-    symbol: str
-    config: Dict[str, Any] = {}
-
-class PeerRequest(BaseModel):
-    name: str
-    url: str
-    api_key: str
-    api_secret: str
-
-class ExternalRequest(BaseModel):
-    name: str
-    permissions: List[str]
-
-# ============= LIFESPAN =============
+# ============= LIFESPAN ============
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info(f"✅ {EXCHANGE_NAME} v{VERSION} started")
-    
-    # Initialize Market Maker
-    global mm_engine
-    from market_maker import MarketMakerEngine
-    mm_engine = MarketMakerEngine()
-    await mm_engine.start()
-    logger.info("✅ Market Maker Engine initialized")
-    
+    # Initialize pair manager
+    from pairs_manager import TradingPairManager
+    global pair_manager
+    pair_manager = TradingPairManager()
+    logger.info("✅ Trading Pairs Manager initialized")
     yield
     logger.info(f"⏹️ {EXCHANGE_NAME} stopped")
 
 app.router.lifespan_context = lifespan
 
-# ============= HEALTH =============
+# ============ CORE ENDPOINTS ============
 @app.get("/health")
-async def health_check():
-    return {"status": "ok", "exchange": EXCHANGE_NAME, "version": VERSION, "timestamp": datetime.now().isoformat()}
+async def health(): return {"status": "ok", "exchange": EXCHANGE_NAME, "version": VERSION}
 
-# ============= EXCHANGE INFO =============
 @app.get("/api/exchange/info")
-async def get_exchange_info():
-    return {"exchange_name": EXCHANGE_NAME, "version": VERSION, "exchange_id": "TIGEREX-2026", "status": "operational", "maker_fee": 0.0005, "taker_fee": 0.001}
+async def exchange_info(): return {"exchange_name": EXCHANGE_NAME, "version": VERSION, "status": "operational", "maker_fee": 0.0005, "taker_fee": 0.001}
 
-# ============= AUTH =============
 @app.post("/api/auth/register")
-async def register(request: RegisterRequest):
+async def register(r: RegisterRequest):
     user_id = f"USR_{uuid.uuid4().hex[:8]}"
-    storage.users[user_id] = {"id": user_id, "email": request.email, "balances": {"USDT": 10000.0}}
-    return {"success": True, "user_id": user_id, "email": request.email}
+    storage.users[user_id] = {"id": user_id, "email": r.email, "balances": {"USDT": 10000}}
+    return {"success": True, "user_id": user_id}
 
 @app.post("/api/auth/login")
-async def login(request: LoginRequest):
-    return {"success": True, "user_id": "USR_demo", "token": f"token_USR_demo"}
+async def login(r: LoginRequest): return {"success": True, "user_id": "USR_demo", "token": "token_USR_demo"}
 
-# ============= TRADING =============
+# ============ TRADING PAIRS ============
 @app.get("/api/trading/pairs")
-async def get_trading_pairs():
-    return list(storage.pairs.values())
+async def get_trading_pairs(): return list(storage.pairs.values())
 
 @app.get("/api/trading/tickers")
-async def get_tickers():
-    return [{"symbol": s, "price": p, "change_percent_24h": random.uniform(-5, 5)} for s, p in storage.prices.items()]
-
-@app.get("/api/trading/ticker/{symbol}")
-async def get_ticker(symbol: str):
-    if symbol not in storage.prices:
-        raise HTTPException(status_code=404, detail="Symbol not found")
-    price = storage.prices[symbol]
-    spread = price * 0.0005
-    return {"symbol": symbol, "price": price, "bid": price-spread, "ask": price+spread, "spread": spread, "volume_24h": random.uniform(100000, 1000000)}
+async def get_tickers(): return [{"symbol": s, "price": p["price"], "change": random.uniform(-5, 5)} for s, p in storage.pairs.items()]
 
 @app.get("/api/trading/orderbook/{symbol}")
 async def get_orderbook(symbol: str, limit: int = 20):
-    if symbol not in storage.prices:
-        raise HTTPException(status_code=404, detail="Symbol not found")
-    mid = storage.prices[symbol]
+    pair = storage.pairs.get(symbol) or storage.pairs.get(symbol.replace("_", "/"))
+    if not pair: raise HTTPException(404, "Symbol not found")
+    mid = pair["price"]
     bids = [[mid - i*mid*0.0002, round(random.uniform(0.1, 5), 4)] for i in range(1, limit+1)]
     asks = [[mid + i*mid*0.0002, round(random.uniform(0.1, 5), 4)] for i in range(1, limit+1)]
     return {"symbol": symbol, "bids": bids, "asks": asks}
 
 @app.post("/api/trading/orders")
-async def create_order(order: OrderRequest):
+async def create_order(o: OrderRequest):
     order_id = f"ORD_{uuid.uuid4().hex[:8]}"
-    storage.orders[order_id] = {
-        "id": order_id, "symbol": order.symbol, "side": order.side,
-        "type": order.order_type, "quantity": order.quantity,
-        "price": order.price or storage.prices.get(order.symbol, 0),
-        "status": "filled", "created_at": datetime.now().isoformat()
-    }
+    storage.orders[order_id] = {"id": order_id, "symbol": o.symbol, "side": o.side, "qty": o.quantity, "price": o.price, "status": "filled"}
     return {"success": True, "order_id": order_id, "status": "filled"}
 
 @app.get("/api/trading/orders/open")
-async def get_open_orders():
-    return [o for o in storage.orders.values() if o.get("status") == "open"]
+async def get_open_orders(): return [o for o in storage.orders.values() if o.get("status") == "open"]
 
-# ============= WALLET =============
+# ============ WALLET ============
 @app.get("/api/wallet/balance")
-async def get_balance():
-    return storage.users.get("USR_demo", {}).get("balances", {})
+async def get_balance(): return storage.users.get("USR_demo", {}).get("balances", {})
 
-# ============= BOTS =============
+# ============ TRADING BOTS ============
 @app.get("/api/bots")
-async def get_bots():
-    return [{"id": b["id"], "name": b["name"], "strategy": b["strategy"], "status": b["status"], "symbol": b["symbol"]} for b in storage.bots.values()]
+async def get_bots(): return [{"id": b["id"], "name": b["name"], "status": b["status"]} for b in storage.bots.values()]
 
 @app.post("/api/bots")
-async def create_bot(bot: BotRequest):
+async def create_bot(b: BotRequest):
     bot_id = f"BOT_{uuid.uuid4().hex[:8]}"
-    storage.bots[bot_id] = {"id": bot_id, "user_id": "USR_demo", "name": bot.name, "strategy": bot.strategy, "symbol": bot.symbol, "config": bot.config, "status": "paused"}
+    storage.bots[bot_id] = {"id": bot_id, "name": b.name, "strategy": b.strategy, "symbol": b.symbol, "status": "paused"}
     return {"success": True, "bot_id": bot_id}
 
 @app.post("/api/bots/{bot_id}/start")
 async def start_bot(bot_id: str):
-    if bot_id not in storage.bots:
-        raise HTTPException(status_code=404, detail="Bot not found")
+    if bot_id not in storage.bots: raise HTTPException(404, "Bot not found")
     storage.bots[bot_id]["status"] = "active"
     return {"success": True, "status": "active"}
 
 @app.post("/api/bots/{bot_id}/stop")
 async def stop_bot(bot_id: str):
-    if bot_id not in storage.bots:
-        raise HTTPException(status_code=404, detail="Bot not found")
+    if bot_id not in storage.bots: raise HTTPException(404, "Bot not found")
     storage.bots[bot_id]["status"] = "paused"
     return {"success": True, "status": "paused"}
 
 @app.delete("/api/bots/{bot_id}")
 async def delete_bot(bot_id: str):
-    if bot_id in storage.bots:
-        del storage.bots[bot_id]
-        return {"success": True}
-    raise HTTPException(status_code=404, detail="Bot not found")
+    if bot_id in storage.bots: del storage.bots[bot_id]
+    return {"success": True}
 
-# ============= PEERS =============
+# ============ PEERS ============
+peers_storage = {}
+
 @app.get("/api/peers")
-async def get_peers():
-    return [{"id": p["id"], "name": p["name"], "status": p["status"]} for p in storage.peers.values()]
+async def get_peers(): return [{"id": p["id"], "name": p["name"], "status": p["status"]} for p in peers_storage.values()]
 
 @app.post("/api/peers")
-async def add_peer(peer: PeerRequest):
+async def add_peer(name: str, url: str):
     peer_id = f"PEER_{uuid.uuid4().hex[:8]}"
-    storage.peers[peer_id] = {"id": peer_id, "name": peer.name, "url": peer.url, "status": "connected"}
+    peers_storage[peer_id] = {"id": peer_id, "name": name, "url": url, "status": "connected"}
     return {"success": True, "peer_id": peer_id}
 
 @app.delete("/api/peers/{peer_id}")
 async def remove_peer(peer_id: str):
-    if peer_id in storage.peers:
-        del storage.peers[peer_id]
-        return {"success": True}
-    raise HTTPException(status_code=404, detail="Peer not found")
+    if peer_id in peers_storage: del peers_storage[peer_id]
+    return {"success": True}
 
-@app.post("/api/peers/sync")
-async def sync_peers():
-    return {"success": True, "peers_synced": len(storage.peers)}
-
-# ============= EXTERNAL =============
+# ============ EXTERNAL API ============
 @app.post("/api/external/register")
-async def register_external(request: ExternalRequest):
+async def register_external(name: str, permissions: List[str]):
     api_key = f"TX_{uuid.uuid4().hex[:16]}"
-    api_secret = uuid.uuid4().hex
-    return {"success": True, "api_key": api_key, "api_secret": api_secret, "permissions": request.permissions}
+    return {"success": True, "api_key": api_key, "permissions": permissions}
 
-# ============= ADMIN =============
+# ============ ADMIN ============
 @app.get("/api/admin/stats")
-async def get_admin_stats():
-    return {"exchange_name": EXCHANGE_NAME, "version": VERSION, "total_users": len(storage.users), "total_orders": len(storage.orders), "active_bots": len([b for b in storage.bots.values() if b.get("status") == "active"])}
+async def admin_stats(): return {"exchange": EXCHANGE_NAME, "version": VERSION, "users": len(storage.users), "orders": len(storage.orders)}
 
-# ============= MARKET MAKER =============
+# ============ TRADING PAIRS MANAGER ============
+pair_manager = None
+
+def get_pair_manager():
+    global pair_manager
+    if pair_manager is None:
+        from pairs_manager import TradingPairManager
+        pair_manager = TradingPairManager()
+    return pair_manager
+
+@app.get("/api/trading-pairs")
+async def get_pairs(status: str = ""):
+    m = get_pair_manager()
+    return await m.get_pairs(status)
+
+@app.get("/api/trading-pairs/{symbol}")
+async def get_pair(symbol: str):
+    m = get_pair_manager()
+    return await m.get_pair(symbol)
+
+# ============ TOKENS ============
+@app.get("/api/tokens")
+async def get_tokens():
+    m = get_pair_manager()
+    return await m.get_tokens()
+
+@app.get("/api/tokens/{token_id}")
+async def get_token(token_id: str):
+    m = get_pair_manager()
+    return await m.get_token(token_id)
+
+# ============ BLOCKCHAINS ============
+@app.get("/api/blockchains")
+async def get_blockchains():
+    m = get_pair_manager()
+    return await m.get_blockchains()
+
+@app.get("/api/blockchains/{chain_id}")
+async def get_blockchain(chain_id: str):
+    m = get_pair_manager()
+    return await m.get_blockchain(chain_id)
+
+@app.get("/api/blockchains/{chain_id}/deposits")
+async def get_deposits(chain_id: str):
+    m = get_pair_manager()
+    return await m.get_blockchain_deposits(chain_id)
+
+# ============ LIQUIDITY ============
+@app.get("/api/liquidity/pools")
+async def get_pools():
+    m = get_pair_manager()
+    return await m.get_pools()
+
+@app.get("/api/liquidity/pools/{pair_id}")
+async def get_pool(pair_id: str):
+    m = get_pair_manager()
+    return await m.get_pool(pair_id)
+
+@app.post("/api/liquidity/add")
+async def add_liquidity(pair_id: str, amount_a: float, amount_b: float):
+    m = get_pair_manager()
+    return await m.add_liquidity(pair_id, amount_a, amount_b)
+
+@app.get("/api/liquidity/stats")
+async def liquidity_stats():
+    m = get_pair_manager()
+    return await m.get_stats()
+
+@app.get("/api/markets/data")
+async def markets_data():
+    m = get_pair_manager()
+    return await m.get_markets_data()
+
+# ============ MARKET MAKER ============
 mm_engine = None
 
 def get_mm_engine():
@@ -275,67 +251,53 @@ def get_mm_engine():
         mm_engine = MarketMakerEngine()
     return mm_engine
 
+@app.on_event("startup")
+async def startup_mm():
+    global mm_engine
+    m = get_mm_engine()
+    await m.start()
+
 @app.get("/api/market-maker/stats")
-async def get_mm_stats():
-    engine = get_mm_engine()
-    return await engine.get_stats()
+async def mm_stats():
+    e = get_mm_engine()
+    return await e.get_stats()
 
 @app.get("/api/market-maker")
-async def get_mms(owner_id: str = ""):
-    engine = get_mm_engine()
-    return await engine.get_all_market_makers(owner_id)
+async def get_mms():
+    e = get_mm_engine()
+    return await e.get_all_market_makers()
 
 @app.post("/api/market-maker")
-async def create_mm(
-    name: str,
-    strategy: str = "all",
-    symbols: List[str] = None,
-    owner_id: str = "USR_demo"
-):
-    engine = get_mm_engine()
-    return await engine.create_market_maker(owner_id, name, strategy, symbols or [])
+async def create_mm(name: str, strategy: str = "all", symbols: List[str] = None):
+    e = get_mm_engine()
+    return await e.create_market_maker("USR_demo", name, strategy, symbols or [])
 
 @app.get("/api/market-maker/{mm_id}")
 async def get_mm(mm_id: str):
-    engine = get_mm_engine()
-    return await engine.get_market_maker(mm_id)
+    e = get_mm_engine()
+    return await e.get_market_maker(mm_id)
 
 @app.post("/api/market-maker/{mm_id}/start")
 async def start_mm(mm_id: str):
-    engine = get_mm_engine()
-    return await engine.start_market_maker(mm_id)
+    e = get_mm_engine()
+    return await e.start_market_maker(mm_id)
 
 @app.post("/api/market-maker/{mm_id}/stop")
 async def stop_mm(mm_id: str):
-    engine = get_mm_engine()
-    return await engine.stop_market_maker(mm_id)
+    e = get_mm_engine()
+    return await e.stop_market_maker(mm_id)
 
 @app.delete("/api/market-maker/{mm_id}")
 async def delete_mm(mm_id: str):
-    engine = get_mm_engine()
-    return await engine.delete_market_maker(mm_id)
+    e = get_mm_engine()
+    return await e.delete_market_maker(mm_id)
 
 @app.get("/api/market-maker/orderbook/{symbol}")
-async def get_mm_orderbook(symbol: str, limit: int = 20):
-    engine = get_mm_engine()
-    return await engine.get_orderbook(symbol, limit)
+async def mm_orderbook(symbol: str):
+    e = get_mm_engine()
+    return await e.get_orderbook(symbol)
 
-@app.post("/api/market-maker/{mm_id}/arbitrage")
-async def execute_arbitrage(mm_id: str):
-    engine = get_mm_engine()
-    return await engine.execute_arbitrage(mm_id)
-
-@app.post("/api/market-maker/{mm_id}/liquidity")
-async def provide_liquidity(mm_id: str, symbol: str, amount: float):
-    engine = get_mm_engine()
-    return await engine.provide_liquidity(mm_id, symbol, amount)
-
-@app.post("/api/market-maker/{mm_id}/stabilize")
-async def stabilize_price(mm_id: str, symbol: str, target_price: float):
-    engine = get_mm_engine()
-    return await engine.stabilize_price(mm_id, symbol, target_price)
-
-# ============= RUN =============
+# ============ RUN ============
 if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", "8000"))
