@@ -3,7 +3,6 @@ TigerEx White Label Multi-Tenant Database System
 PostgreSQL with schema separation per client
 """
 import psycopg2
-from psycopg2.extras import RealDictCursor
 import os
 
 class WhiteLabelDB:
@@ -17,9 +16,7 @@ class WhiteLabelDB:
     
     def create_client_database(self, client_id, client_name):
         """Create new database schema for white label client"""
-        # This would create a new schema in PostgreSQL
         schema = self.get_client_schema(client_id)
-        # SQL would be: CREATE SCHEMA IF NOT EXISTS {schema}
         return {'schema': schema, 'client_id': client_id}
     
     def get_client_config(self, client_id):
@@ -31,7 +28,7 @@ class WhiteLabelDB:
             'status': 'active'
         }
 
-# Migration script for multi-tenant setup
+# Migration SQL for PostgreSQL
 MIGRATION_SQL = """
 -- Master database for white labels
 CREATE TABLE IF NOT EXISTS white_label_clients (
@@ -45,7 +42,6 @@ CREATE TABLE IF NOT EXISTS white_label_clients (
     updated_at TIMESTAMP DEFAULT NOW()
 );
 
--- Client-specific settings
 CREATE TABLE IF NOT EXISTS client_settings (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     client_id UUID REFERENCES white_label_clients(id),
@@ -54,7 +50,6 @@ CREATE TABLE IF NOT EXISTS client_settings (
     UNIQUE(client_id, key)
 );
 
--- Client subscriptions
 CREATE TABLE IF NOT EXISTS client_subscriptions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     client_id UUID REFERENCES white_label_clients(id),
@@ -66,4 +61,4 @@ CREATE TABLE IF NOT EXISTS client_subscriptions (
 );
 """
 
-print("Multi-tenant database module created")
+print("White Label Database Module Ready")
