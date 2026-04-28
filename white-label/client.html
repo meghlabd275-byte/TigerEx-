@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>White Label Management</title>
+<style>
+:root { --primary:#F0B90B; --bg:#0B0E11; --card:#1E2329; --text:#EAECEF; }
+body { font-family:Inter,sans-serif; background:var(--bg); color:var(--text); margin:0; padding:20px; }
+.container { max-width:1200px; margin:0 auto; }
+h1 { color:var(--primary); }
+.card { background:var(--card); padding:20px; border-radius:12px; margin:20px 0; }
+.form-group { margin-bottom:16px; }
+label { display:block; margin-bottom:8px; }
+input, select { width:100%; padding:12px; background:var(--bg); border:1px solid #333; border-radius:8px; color:var(--text); }
+button { background:var(--primary); color:#000; padding:12px 24px; border:none; border-radius:8px; cursor:pointer; font-weight:600; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>🐯 White Label Management</h1>
+
+<div class="card">
+<h2>Create New White Label</h2>
+<div class="form-group">
+<label>Exchange Name</label>
+<input type="text" id="name" placeholder="My Crypto Exchange">
+</div>
+<div class="form-group">
+<label>Logo (emoji)</label>
+<input type="text" id="logo" placeholder="🦁">
+</div>
+<div class="form-group">
+<label>Primary Color</label>
+<input type="color" id="primaryColor" value="#F0B90B">
+</div>
+<div class="form-group">
+<label>Domain</label>
+<input type="text" id="domain" placeholder="myexchange.com">
+</div>
+<button onclick="createWhiteLabel()">Create White Label</button>
+</div>
+
+<div class="card">
+<h2>Existing White Labels</h2>
+<div id="whitelist"></div>
+</div>
+
+<script>
+async function createWhiteLabel() {
+const data = {
+name: document.getElementById('name').value,
+logo: document.getElementById('logo').value,
+primaryColor: document.getElementById('primaryColor').value,
+domain: document.getElementById('domain').value
+};
+alert('Creating white label: ' + JSON.stringify(data));
+}
+
+async function loadWhitelist() {
+document.getElementById('whitelist').innerHTML = '<p>Loading...</p>';
+}
+loadWhitelist();
+</script>
+</div>
+</body>
+</html>
