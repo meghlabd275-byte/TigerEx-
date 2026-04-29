@@ -63,5 +63,6 @@ function switchTab(tab){const emailTab=document.getElementById('emailTab'),phone
 document.addEventListener('DOMContentLoaded',()=>{if(localStorage.getItem('theme')==='light'){document.body.classList.add('light');document.getElementById('themeIconDark').classList.remove('hidden');document.getElementById('themeIconLight').classList.add('hidden')}});
 document.getElementById('registerForm').addEventListener('submit',async(e)=>{e.preventDefault();const isEmail=!document.getElementById('emailField').classList.contains('hidden');let loginId=isEmail?document.getElementById('email').value:document.getElementById('countryCode').value+document.getElementById('phone').value;const password=document.getElementById('password').value,confirmPassword=document.getElementById('confirmPassword').value;if(password!==confirmPassword){alert('Passwords do not match!');return}try{const response=await API.auth.register(loginId,password,document.getElementById('referralCode').value);if(response.token){localStorage.setItem('tigerex_token',response.token);window.location.href='../../../trading-dashboard/pages/trade/index.html?symbol=BTCUSDT&mode=spot'}}catch(error){alert('Registration failed: '+error.message)}});
 </script>
+    <script src="assets/js/auth-guard.js"></script>
 </body>
 </html>
