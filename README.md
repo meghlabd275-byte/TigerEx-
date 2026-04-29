@@ -812,6 +812,87 @@ GET /api/v1/whitelabel/chains/:clientId
 
 ---
 
+## тЪб WHITE LABEL WALLET
+
+TigerEx provides **complete multi-chain HD wallet** for white label clients.
+
+### Wallet Creator
+
+**Frontend:** `white-label/wallet-creator.html`
+
+A complete UI with:
+- Create new HD wallet (24-word seed phrase)
+- Import existing wallet (seed phrase or private key)
+- Multi-chain support
+- Send, receive, swap, buy crypto
+- Add custom tokens
+- Transaction history
+
+### Wallet Backend
+
+**Backend:** `white-label/wallet_backend.js`
+
+### Wallet API
+
+```bash
+# Create wallet (non-custodial)
+POST /api/v1/wallet/create
+
+# Import from seed
+POST /api/v1/wallet/import
+
+# Import from private key
+POST /api/v1/wallet/import/key
+
+# Get balance
+GET /api/v1/wallet/:walletId/balance
+
+# Send transaction
+POST /api/v1/wallet/send
+
+# Get transactions
+GET /api/v1/wallet/:walletId/transactions
+
+# Add token
+POST /api/v1/wallet/:walletId/token
+
+# Get receive address
+GET /api/v1/wallet/:walletId/receive/:chain
+
+# Create custodial wallet (white label)
+POST /api/v1/custodial/create
+
+# Admin: Transfer
+POST /api/v1/admin/custodial/transfer
+```
+
+### Supported Chains
+
+| Chain | Type | Support |
+|------|------|---------|
+| Ethereum | EVM | ✅ |
+| BSC | EVM | ✅ |
+| Polygon | EVM | ✅ |
+| Arbitrum | EVM | ✅ |
+| Solana | Non-EVM | ✅ |
+| Bitcoin | Non-EVM | ✅ |
+| Cardano | Non-EVM | ✅ |
+
+### Wallet Features
+
+| Feature | Description |
+|---------|-------------|
+| **HD Wallet** | BIP39 24-word seed phrase |
+| **Multi-chain** | EVM + Non-EVM |
+| **Non-custodial** | User controls keys |
+| **Custodial** | White label managed |
+| **Token Import** | Any ERC20/ERC721 |
+| **Swap** | DEX integration |
+| **Buy Crypto** | Fiat on/off ramp |
+| **Explorer** | Built-in |
+
+---
+
 ## тЪб SUPPORT
 
 - **Email:** support@tigerex.com

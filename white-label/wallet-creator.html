@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx Wallet - Multi-Chain HD Wallet</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #627eea; --dark: #0d1117; --darker: #010409; --light: #c9d1d9; --success: #3fb950; --warning: #d29922; --danger: #f85149; }
+        body { background: var(--darker); color: var(--light); font-family: 'Segoe UI', system-ui, sans-serif; }
+        .navbar { background: var(--dark) !important; border-bottom: 1px solid #30363d; }
+        .navbar-brand { font-weight: 700; font-size: 22px; }
+        .navbar-brand span { color: var(--primary); }
+        .card-dark { background: var(--dark); border: 1px solid #30363d; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+        .wallet-card { background: linear-gradient(135deg, #1a1f35 0%, #0d1117 100%); border: 1px solid #30363d; border-radius: 16px; padding: 24px; }
+        .wallet-balance { font-size: 32px; font-weight: 700; }
+        .address-box { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px; font-family: monospace; word-break: break-all; }
+        .chain-tabs .nav-link { color: #8b949e; border: none; padding: 8px 16px; }
+        .chain-tabs .nav-link.active { color: var(--primary); background: transparent; border-bottom: 2px solid var(--primary); }
+        .token-row { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #21262d; }
+        .token-row:hover { background: #161b22; }
+        .token-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-weight: 700; }
+        .btn-primary { background: var(--primary); border: none; }
+        .btn-success { background: var(--success); border: none; }
+        .btn-danger { background: var(--danger); border: none; }
+        .btn-outline-light { border-color: #30363d; color: var(--light); }
+        .form-control { background: #161b22; border: 1px solid #30363d; color: white; }
+        .form-control:focus { background: #161b22; border-color: var(--primary); color: white; }
+        .seed-word { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 8px 12px; text-align: center; font-family: monospace; }
+        .seed-word:hover { border-color: var(--primary); }
+        .copy-btn { cursor: pointer; }
+        .qr-code { background: white; padding: 20px; border-radius: 8px; display: inline-block; }
+        footer { background: var(--dark); border-top: 1px solid #30363d; padding: 20px; text-align: center; color: #8b949e; }
+        .tab-active { border-color: var(--primary); background: rgba(98,126,234,0.1); }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/"><i class="fas fa-wallet"></i> TigerEx <span>Wallet</span></a>
+            <div class="d-flex align-items-center gap-3">
+                <span class="navbar-text"><i class="fas fa-user me-1"></i> <span id="walletName">My Wallet</span></span>
+                <span class="badge bg-success" id="walletType">Non-Custodial</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Wallet Options -->
+    <section class="py-5" id="walletOptions">
+        <div class="container">
+            <h2 class="text-center mb-4">Create or Import Wallet</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="card-dark text-center" onclick="createWallet()">
+                        <i class="fas fa-plus-circle fa-3x text-primary mb-3"></i>
+                        <h4>Create New Wallet</h4>
+                        <p class="text-muted">Generate a new HD wallet with 24-word seed phrase</p>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="card-dark text-center" onclick="showImport()">
+                        <i class="fas fa-file-import fa-3x text-warning mb-3"></i>
+                        <h4>Import Wallet</h4>
+                        <p class="text-muted">Import using seed phrase or private key</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Create Wallet -->
+    <section class="py-5" id="createWallet" style="display:none;">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card-dark">
+                        <h4><i class="fas fa-shield-alt me-2"></i>Your Recovery Phrase</h4>
+                        <p class="text-muted">Write down these 24 words in order and store safely. Anyone with this phrase can access your funds.</p>
+                        
+                        <div class="row mb-4" id="seedPhrase"></div>
+                        
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Important:</strong> Store this phrase safely. If you lose it, you lose access to your funds forever.
+                        </div>
+                        
+                        <button class="btn btn-primary me-2" onclick="confirmSeed()">I've Written It Down</button>
+                        <button class="btn btn-outline-light" onclick="backToOptions()">Back</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Import Wallet -->
+    <section class="py-5" id="importWallet" style="display:none;">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card-dark">
+                        <h4><i class="fas fa-file-import me-2"></i>Import Wallet</h4>
+                        
+                        <ul class="nav nav-tabs mb-3">
+                            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#seedTab">Seed Phrase</a></li>
+                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#privateKeyTab">Private Key</a></li>
+                        </ul>
+                        
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="seedTab">
+                                <div class="mb-3">
+                                    <label class="form-label">Enter 24-word seed phrase</label>
+                                    <textarea class="form-control" id="importSeed" rows="3" placeholder="word1 word2 word3 ..."></textarea>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="privateKeyTab">
+                                <div class="mb-3">
+                                    <label class="form-label">Enter private key</label>
+                                    <input type="password" class="form-control" id="importKey" placeholder="0x...">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" onclick="importWallet()">Import Wallet</button>
+                        <button class="btn btn-outline-light ms-2" onclick="backToOptions()">Back</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard -->
+    <section class="py-4" id="dashboard" style="display:none;">
+        <div class="container">
+            <!-- Wallet Info -->
+            <div class="wallet-card mb-4">
+                <div class="row">
+                    <div class="col-md-8">
+                        <p class="text-muted mb-1">Total Balance</p>
+                        <div class="wallet-balance" id="totalBalance">$0.00</div>
+                        <div class="mt-3">
+                            <span class="text-muted me-3"><i class="fas fa-link me-1"></i><span id="walletAddress">0x...</span></span>
+                            <i class="fas fa-copy copy-btn ms-2" onclick="copyAddress()" title="Copy"></i>
+                            <i class="fas fa-qr-code ms-2 copy-btn" onclick="showQR()" title="QR Code"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <div class="mb-2">
+                            <button class="btn btn-success btn-sm" onclick="showSend()"><i class="fas fa-paper-plane me-1"></i> Send</button>
+                            <button class="btn btn-primary btn-sm" onclick="showReceive()"><i class="fas fa-arrow-down me-1"></i> Receive</button>
+                        </div>
+                        <div>
+                            <button class="btn btn-outline-light btn-sm" onclick="showSwap()"><i class="fas fa-exchange-alt me-1"></i> Swap</button>
+                            <button class="btn btn-outline-light btn-sm" onclick="showBuy()"><i class="fas fa-credit-card me-1"></i> Buy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="row mb-4">
+                <div class="col-md-2 col-4">
+                    <div class="card-dark text-center" onclick="showSwap()">
+                        <i class="fas fa-exchange-alt fa-lg mb-2 text-primary"></i>
+                        <div class="small">Swap</div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-4">
+                    <div class="card-dark text-center" onclick="showBuy()">
+                        <i class="fas fa-credit-card fa-lg mb-2 text-success"></i>
+                        <div class="small">Buy</div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-4">
+                    <div class="card-dark text-center" onclick="showStake()">
+                        <i class="fas fa-coins fa-lg mb-2 text-warning"></i>
+                        <div class="small">Stake</div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-4">
+                    <div class="card-dark text-center" onclick="showBridge()">
+                        <i class="fas fa-bridge fa-lg mb-2 text-info"></i>
+                        <div class="small">Bridge</div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-4">
+                    <div class="card-dark text-center" onclick="showNFTs()">
+                        <i class="fas fa-image fa-lg mb-2 text-purple"></i>
+                        <div class="small">NFTs</div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-4">
+                    <div class="card-dark text-center" onclick="showDApps()">
+                        <i class="fas fa-globe fa-lg mb-2 text-danger"></i>
+                        <div class="small">DApps</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chain Tabs -->
+            <ul class="nav nav-pills chain-tabs mb-3" id="chainTabs">
+                <li class="nav-item"><a class="nav-link active" onclick="selectChain('all')">All</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="selectChain('ethereum')">Ethereum</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="selectChain('bsc')">BSC</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="selectChain('polygon')">Polygon</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="selectChain('solana')">Solana</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="selectChain('bitcoin')">Bitcoin</a></li>
+            </ul>
+
+            <!-- Token List -->
+            <div class="card-dark">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">Assets</h5>
+                    <button class="btn btn-sm btn-outline-primary" onclick="showAddToken()"><i class="fas fa-plus"></i> Add Token</button>
+                </div>
+                <div id="tokenList"></div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="card-dark mt-4">
+                <h5 class="mb-3">Recent Transactions</h5>
+                <div id="txHistory"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Send Modal -->
+    <div class="modal fade" id="sendModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title">Send</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Recipient Address</label>
+                        <input type="text" class="form-control" id="sendTo" placeholder="0x...">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Amount</label>
+                        <input type="number" class="form-control" id="sendAmount" placeholder="0.00">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Network</label>
+                        <select class="form-select" id="sendNetwork">
+                            <option value="ethereum">Ethereum</option>
+                            <option value="bsc">BNB Chain</option>
+                            <option value="polygon">Polygon</option>
+                        </select>
+                    </div>
+                    <div class="alert alert-info">
+                        <small>Network Fee: ~0.001 ETH</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-success" onclick="sendTx()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receive Modal -->
+    <div class="modal fade" id="receiveModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title">Receive</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="qr-code mb-3">
+                        <i class="fas fa-qrcode fa-5x"></i>
+                    </div>
+                    <div class="address-box mb-3" id="receiveAddress">0x...</div>
+                    <button class="btn btn-primary" onclick="copyAddress()"><i class="fas fa-copy me-1"></i> Copy Address</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Token Modal -->
+    <div class="modal fade" id="addTokenModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Custom Token</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Token Contract Address</label>
+                        <input type="text" class="form-control" id="tokenAddress" placeholder="0x...">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Symbol</label>
+                        <input type="text" class="form-control" id="tokenSymbol" placeholder="e.g., USDT">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Decimals</label>
+                        <input type="number" class="form-control" id="tokenDecimals" value="18">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" onclick="addToken()">Add Token</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Network Selector -->
+    <div class="network-selector" onclick="showNetworkSelector()">
+        <span class="network-dot" style="background: #627eea;"></span>
+        <span id="currentNetwork">Ethereum</span> <i class="fas fa-chevron-up"></i>
+    </div>
+
+    <!-- Network Modal -->
+    <div class="modal fade" id="networkModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title">Select Network</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="token-row" onclick="switchNetwork('ethereum', '#627eea')">
+                        <div class="token-icon" style="background: #627eea20; color: #627eea;">E</div>
+                        <div><strong>Ethereum</strong><br><small class="text-muted">ETH</small></div>
+                    </div>
+                    <div class="token-row" onclick="switchNetwork('bsc', '#f3ba2f')">
+                        <div class="token-icon" style="background: #f3ba2f20; color: #f3ba2f;">B</div>
+                        <div><strong>BNB Chain</strong><br><small class="text-muted">BNB</small></div>
+                    </div>
+                    <div class="token-row" onclick="switchNetwork('polygon', '#8247e5')">
+                        <div class="token-icon" style="background: #8247e520; color: #8247e5;">P</div>
+                        <div><strong>Polygon</strong><br><small class="text-muted">MATIC</small></div>
+                    </div>
+                    <div class="token-row" onclick="switchNetwork('arbitrum', '#28a0f0')">
+                        <div class="token-icon" style="background: #28a0f020; color: #28a0f0;">A</div>
+                        <div><strong>Arbitrum</strong><br><small class="text-muted">ETH</small></div>
+                    </div>
+                    <div class="token-row" onclick="switchNetwork('solana', '#9945ff')">
+                        <div class="token-icon" style="background: #9945ff20; color: #9945ff;">S</div>
+                        <div><strong>Solana</strong><br><small class="text-muted">SOL</small></div>
+                    </div>
+                    <div class="token-row" onclick="switchNetwork('bitcoin', '#f7931a')">
+                        <div class="token-icon" style="background: #f7931a20; color: #f7931a;">B</div>
+                        <div><strong>Bitcoin</strong><br><small class="text-muted">BTC</small></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p><i class="fas fa-wallet"></i> TigerEx Multi-Chain Wallet &copy; 2024 | <a href="#" class="text-primary">Support</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // BIP39 wordlist (simplified - 24 words)
+        const BIP39_WORDLIST = [
+            'abandon', 'ability', 'able', 'about', 'above', 'absent', 'absorb', 'abstract', 
+            'absurd', 'abuse', 'access', 'accident', 'account', 'accuse', 'achieve', 'acid',
+            'acoustic', 'acquire', 'across', 'act', 'action', 'actor', 'actress', 'actual'
+        ];
+
+        let currentWallet = {
+            address: '',
+            privateKey: '',
+            seedPhrase: [],
+            chain: 'ethereum'
+        };
+
+        const TOKENS = [
+            { symbol: 'ETH', name: 'Ethereum', chain: 'ethereum', balance: 0, decimals: 18 },
+            { symbol: 'BNB', name: 'BNB', chain: 'bsc', balance: 0, decimals: 18 },
+            { symbol: 'MATIC', name: 'Polygon', chain: 'polygon', balance: 0, decimals: 18 },
+            { symbol: 'SOL', name: 'Solana', chain: 'solana', balance: 0, decimals: 9 },
+            { symbol: 'BTC', name: 'Bitcoin', chain: 'bitcoin', balance: 0, decimals: 8 },
+            { symbol: 'USDT', name: 'Tether', chain: 'ethereum', balance: 0, decimals: 6 },
+            { symbol: 'USDC', name: 'USD Coin', chain: 'ethereum', balance: 0, decimals: 6 }
+        ];
+
+        const TRANSACTIONS = [
+            { hash: '0x1234...', type: 'receive', amount: '0.5 ETH', from: '0xabcd...', status: 'confirmed' },
+            { hash: '0x5678...', type: 'send', amount: '100 USDT', to: '0xefgh...', status: 'confirmed' },
+            { hash: '0x9abc...', type: 'receive', amount: '0.1 BTC', from: '0xijkl...', status: 'pending' }
+        ];
+
+        // Generate random seed phrase
+        function generateSeedPhrase() {
+            const words = [];
+            for (let i = 0; i < 24; i++) {
+                words.push(BIP39_WORDLIST[Math.floor(Math.random() * BIP39_WORDLIST.length)]);
+            }
+            return words;
+        }
+
+        // Generate address from seed
+        function deriveAddress(seed) {
+            // Simplified - in production use proper HD key derivation
+            return '0x' + Math.random().toString(16).slice(2, 42).padEnd(40, '0');
+        }
+
+        function createWallet() {
+            const seed = generateSeedPhrase();
+            currentWallet.seedPhrase = seed;
+            currentWallet.address = deriveAddress(seed);
+            
+            let html = '';
+            seed.forEach((word, i) => {
+                html += `<div class="col-md-2 col-4 mb-2"><div class="seed-word">${i+1}. ${word}</div></div>`;
+            });
+            document.getElementById('seedPhrase').innerHTML = html;
+            
+            document.getElementById('walletOptions').style.display = 'none';
+            document.getElementById('createWallet').style.display = 'block';
+        }
+
+        function confirmSeed() {
+            document.getElementById('createWallet').style.display = 'none';
+            showDashboard();
+        }
+
+        function showImport() {
+            document.getElementById('walletOptions').style.display = 'none';
+            document.getElementById('importWallet').style.display = 'block';
+        }
+
+        function importWallet() {
+            const seedText = document.getElementById('importSeed').value.trim();
+            if (seedText.split(/\s+/).length !== 24) {
+                alert('Please enter exactly 24 words');
+                return;
+            }
+            
+            currentWallet.seedPhrase = seedText.split(/\s+/);
+            currentWallet.address = deriveAddress(currentWallet.seedPhrase);
+            
+            document.getElementById('importWallet').style.display = 'none';
+            showDashboard();
+        }
+
+        function backToOptions() {
+            document.getElementById('walletOptions').style.display = 'block';
+            document.getElementById('createWallet').style.display = 'none';
+            document.getElementById('importWallet').style.display = 'none';
+        }
+
+        function showDashboard() {
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('walletAddress').textContent = currentWallet.address.slice(0, 10) + '...' + currentWallet.address.slice(-8);
+            document.getElementById('receiveAddress').textContent = currentWallet.address;
+            
+            renderTokens();
+            renderTransactions();
+        }
+
+        function renderTokens() {
+            let html = '';
+            TOKENS.forEach(token => {
+                const price = getMockPrice(token.symbol);
+                const value = token.balance * price;
+                const colors = {
+                    'ETH': '#627eea', 'BNB': '#f3ba2f', 'MATIC': '#8247e5',
+                    'SOL': '#9945ff', 'BTC': '#f7931a', 'USDT': '#26a17b', 'USDC': '#2775ca'
+                };
+                
+                html += `<div class="token-row" onclick="selectToken('${token.symbol}')">
+                    <div class="token-icon" style="background: ${colors[token.symbol]}20; color: ${colors[token.symbol]}">${token.symbol[0]}</div>
+                    <div class="flex-grow-1">
+                        <div class="fw-bold">${token.symbol}</div>
+                        <small class="text-muted">${token.name}</small>
+                    </div>
+                    <div class="text-end">
+                        <div class="fw-bold">${token.balance.toFixed(6)}</div>
+                        <small class="text-muted">$${value.toFixed(2)}</small>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('tokenList').innerHTML = html;
+            
+            // Calculate total
+            const total = TOKENS.reduce((sum, t) => sum + t.balance * getMockPrice(t.symbol), 0);
+            document.getElementById('totalBalance').textContent = '$' + total.toFixed(2);
+        }
+
+        function getMockPrice(symbol) {
+            const prices = { 'ETH': 3250, 'BNB': 280, 'MATIC': 0.85, 'SOL': 95, 'BTC': 42500, 'USDT': 1, 'USDC': 1 };
+            return prices[symbol] || 0;
+        }
+
+        function renderTransactions() {
+            let html = '';
+            TRANSACTIONS.forEach(tx => {
+                const isReceive = tx.type === 'receive';
+                html += `<div class="token-row">
+                    <div class="token-icon" style="background: ${isReceive ? 'rgba(63,185,80,0.2)' : 'rgba(248,81,73,0.2)'}; color: ${isReceive ? '#3fb950' : '#f85149'}">
+                        <i class="fas fa-arrow-${isReceive ? 'down' : 'up'}"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="fw-bold">${isReceive ? 'Received' : 'Sent'} ${tx.amount}</div>
+                        <small class="text-muted">${tx.hash}</small>
+                    </div>
+                    <div><span class="badge ${tx.status === 'confirmed' ? 'bg-success' : 'bg-warning'}">${tx.status}</span></div>
+                </div>`;
+            });
+            document.getElementById('txHistory').innerHTML = html;
+        }
+
+        function selectChain(chain) {
+            event.target.classList.add('active');
+            document.querySelectorAll('#chainTabs .nav-link').forEach(l => l.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (chain === 'all') {
+                renderTokens();
+            } else {
+                const filtered = TOKENS.filter(t => t.chain === chain);
+                let html = '';
+                filtered.forEach(token => {
+                    const price = getMockPrice(token.symbol);
+                    const value = token.balance * price;
+                    html += `<div class="token-row">
+                        <div class="token-icon" style="background: #627eea20; color: #627eea">${token.symbol[0]}</div>
+                        <div class="flex-grow-1"><div class="fw-bold">${token.symbol}</div><small class="text-muted">${token.name}</small></div>
+                        <div class="text-end"><div class="fw-bold">${token.balance.toFixed(6)}</div><small class="text-muted">$${value.toFixed(2)}</small></div>
+                    </div>`;
+                });
+                document.getElementById('tokenList').innerHTML = html;
+            }
+        }
+
+        function showSend() { new bootstrap.Modal(document.getElementById('sendModal')).show(); }
+        function showReceive() { new bootstrap.Modal(document.getElementById('receiveModal')).show(); }
+        function showAddToken() { new bootstrap.Modal(document.getElementById('addTokenModal')).show(); }
+        function showSwap() { alert('Swap feature coming soon!'); }
+        function showBuy() { alert('Buy crypto feature coming soon!'); }
+
+        function copyAddress() {
+            navigator.clipboard.writeText(currentWallet.address);
+            alert('Address copied!');
+        }
+
+        function showQR() { alert('QR Code: ' + currentWallet.address); }
+
+        function sendTx() {
+            const to = document.getElementById('sendTo').value;
+            const amount = document.getElementById('sendAmount').value;
+            
+            if (!to || !amount) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            alert(`Sending ${amount} to ${to}...\n\nTransaction submitted!`);
+            bootstrap.Modal.getInstance(document.getElementById('sendModal')).hide();
+        }
+
+        function addToken() {
+            const address = document.getElementById('tokenAddress').value;
+            const symbol = document.getElementById('tokenSymbol').value.toUpperCase();
+            const decimals = parseInt(document.getElementById('tokenDecimals').value);
+            
+            if (!address || !symbol) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            TOKENS.push({ symbol, name: symbol, chain: currentWallet.chain, balance: 0, decimals, custom: true });
+            renderTokens();
+            bootstrap.Modal.getInstance(document.getElementById('addTokenModal')).hide();
+            alert(`${symbol} added successfully!`);
+        }
+
+        function selectToken(symbol) {
+            console.log('Selected:', symbol);
+        }
+
+        // Web3 Wallet Features
+        function showStake() { alert('Staking - Coming soon!'); }
+        function showNFTs() { alert('NFT Gallery - Coming soon!'); }
+        function showDApps() { alert('DApp Browser - Coming soon!'); }
+        function showBridge() { alert('Bridge - Coming soon!'); }
+        function showGas() { alert('Gas Tracker - Coming soon!'); }
+        function showExport() { alert('Export Private Key'); }
+
+        // DApp connection simulation
+        function connectDApp(dappName) {
+            alert(`Connected to ${dappName}!`);
+        }
+
+        // Network switching
+        let currentNetworkName = 'ethereum';
+        let currentNetworkColor = '#627eea';
+
+        function showNetworkSelector() {
+            new bootstrap.Modal(document.getElementById('networkModal')).show();
+        }
+
+        function switchNetwork(network, color) {
+            currentNetworkName = network;
+            currentNetworkColor = color;
+            document.getElementById('currentNetwork').textContent = network.charAt(0).toUpperCase() + network.slice(1);
+            document.querySelector('.network-dot').style.background = color;
+            bootstrap.Modal.getInstance(document.getElementById('networkModal')).hide();
+            alert(`Switched to ${network.charAt(0).toUpperCase() + network.slice(1)}`);
+        }
+
+        // Settings
+        function showSettings() {
+            alert('Settings: Export Private Key, Change Network, Security, Backup');
+        }
+    </script>
+</body>
+</html>
