@@ -1,1 +1,1 @@
-/** TS */
+export const p2p = {};

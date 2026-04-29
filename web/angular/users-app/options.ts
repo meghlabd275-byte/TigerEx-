@@ -1,1 +1,1 @@
-/** Angular */
+export class options {}

@@ -1,1 +1,1 @@
-<!-- ASP -->
+<% dashboard %>

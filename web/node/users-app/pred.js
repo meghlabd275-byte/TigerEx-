@@ -1,0 +1,1 @@
+const pred = require('./pred');

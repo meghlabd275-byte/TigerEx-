@@ -1,0 +1,1 @@
+const kyc = require('./kyc');

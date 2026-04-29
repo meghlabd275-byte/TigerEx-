@@ -1,0 +1,1 @@
+const earn = require('./earn');
