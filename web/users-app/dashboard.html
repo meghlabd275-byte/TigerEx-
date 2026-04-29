@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx - Professional Crypto Trading</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #f0b90b; --dark: #0b0e11; --darker: #050608; --light: #eaecee; --success: #00c853; --danger: #ff1744; }
+        body { background: var(--darker); color: var(--light); font-family: -apple-system, sans-serif; }
+        .navbar { background: var(--dark); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .navbar-brand { font-weight: 700; font-size: 24px; }
+        .navbar-brand span { color: var(--primary); }
+        .nav-link { color: rgba(255,255,255,0.7) !important; }
+        .nav-link:hover, .nav-link.active { color: var(--primary) !important; }
+        .sidebar { background: var(--dark); min-height: 100vh; border-right: 1px solid rgba(255,255,255,0.1); }
+        .sidebar .nav-link { padding: 12px 16px; border-radius: 8px; margin: 2px 8px; transition: 0.3s; }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active { background: rgba(240,185,11,0.1); color: var(--primary); }
+        .market-card { background: var(--dark); border-radius: 12px; padding: 16px; margin: 8px 0; border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.3s; }
+        .market-card:hover { border-color: var(--primary); transform: translateX(5px); }
+        .market-card.active { border-color: var(--primary); background: rgba(240,185,11,0.05); }
+        .price-up { color: var(--success); }
+        .price-down { color: var(--danger); }
+        .btn-primary { background: var(--primary); border: none; color: #000; font-weight: 600; }
+        .btn-success { background: var(--success); border: none; }
+        .btn-danger { background: var(--danger); border: none; }
+        .trading-panel { background: var(--dark); border-radius: 12px; padding: 20px; }
+        .order-tabs .nav-link { color: #848e9c; border: none; background: transparent; padding: 8px 16px; }
+        .order-tabs .nav-link.active { background: transparent; color: var(--primary); border-bottom: 2px solid var(--primary); }
+        .form-control { background: #1e2329; border: 1px solid #2b3139; color: white; }
+        .form-control:focus { background: #1e2329; border-color: var(--primary); color: white; }
+        .table { color: var(--light); }
+        .wallet-card { background: linear-gradient(135deg, rgba(240,185,11,0.2) 0%, rgba(30,30,50,1) 100%); border-radius: 16px; padding: 20px; }
+        .balance-amount { font-size: 24px; font-weight: 700; }
+        .profile-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #000; }
+        .tab-content { background: var(--dark); border-radius: 12px; padding: 20px; margin-top: 16px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+        .stat-box { background: var(--dark); border-radius: 12px; padding: 16px; text-align: center; }
+        .stat-value { font-size: 20px; font-weight: 700; }
+        .stat-label { color: #848e9c; font-size: 12px; }
+        .p2p-card { background: var(--dark); border-radius: 12px; padding: 16px; margin: 8px 0; border: 1px solid rgba(255,255,255,0.1); }
+        .p2p-card:hover { border-color: var(--primary); }
+        .trader-card { background: var(--dark); border-radius: 12px; padding: 16px; margin: 8px 0; text-align: center; }
+        .trader-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .copy-btn { background: var(--primary); color: #000; border: none; padding: 8px 24px; border-radius: 8px; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><i class="fas fa-bolt"></i> Tiger<span>Ex</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#spot">Spot</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#futures">Futures</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#p2p">P2P</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#copy">Copy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#earn">Earn</a></li>
+                    <li class="nav-item"><a class="nav-link" href="# wallet">Wallet</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="text-muted"><i class="fas fa-bell"></i></span>
+                    <span class="text-muted"><i class="fas fa-envelope"></i></span>
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="profile-avatar">D</div>
+                        <div><div style="font-weight: 600;">demo_user</div><small class="text-muted">Verified</small></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar py-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link active" href="#dashboard"><i class="fas fa-th-large me-2"></i> Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#spot"><i class="fas fa-chart-line me-2"></i> Spot Trading</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#futures"><i class="fas fa-chart-area me-2"></i> Futures</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#p2p"><i class="fas fa-handshake me-2"></i> P2P Trading</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#copy"><i class="fas fa-copy me-2"></i> Copy Trading</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#earn"><i class="fas fa-coins me-2"></i> Earn</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#wallet"><i class="fas fa-wallet me-2"></i> Wallet</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#orders"><i class="fas fa-list me-2"></i> Orders</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#history"><i class="fas fa-history me-2"></i> History</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#api"><i class="fas fa-key me-2"></i> API Keys</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#settings"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-10 p-4">
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-box"><div class="stat-value">$12,547.32</div><div class="stat-label">Total Balance (USDT)</div></div>
+                    <div class="stat-box"><div class="stat-value price-up">+$245.67</div><div class="stat-label">24h Profit</div></div>
+                    <div class="stat-box"><div class="stat-value">3</div><div class="stat-label">Open Orders</div></div>
+                    <div class="stat-box"><div class="stat-value">0.5 BTC</div><div class="stat-label">BTC Holdings</div></div>
+                </div>
+
+                <!-- Spot Trading -->
+                <div class="row">
+                    <!-- Markets -->
+                    <div class="col-md-3">
+                        <h5 class="mb-3"><i class="fas fa-fire text-warning"></i> Markets</h5>
+                        <div id="marketsList">
+                            <div class="market-card active" onclick="selectMarket('BTC/USDT')">
+                                <div class="d-flex justify-content-between">
+                                    <div><div class="fw-bold">BTC/USDT</div><small class="text-muted">Bitcoin</small></div>
+                                    <div class="text-end"><div class="fw-bold">$42,547</div><div class="price-up">+2.45%</div></div>
+                                </div>
+                            </div>
+                            <div class="market-card" onclick="selectMarket('ETH/USDT')">
+                                <div class="d-flex justify-content-between">
+                                    <div><div class="fw-bold">ETH/USDT</div><small class="text-muted">Ethereum</small></div>
+                                    <div class="text-end"><div class="fw-bold">$2,256</div><div class="price-up">+3.12%</div></div>
+                                </div>
+                            </div>
+                            <div class="market-card" onclick="selectMarket('BNB/USDT')">
+                                <div class="d-flex justify-content-between">
+                                    <div><div class="fw-bold">BNB/USDT</div><small class="text-muted">BNB</small></div>
+                                    <div class="text-end"><div class="fw-bold">$324</div><div class="price-down">-1.2%</div></div>
+                                </div>
+                            </div>
+                            <div class="market-card" onclick="selectMarket('SOL/USDT')">
+                                <div class="d-flex justify-content-between">
+                                    <div><div class="fw-bold">SOL/USDT</div><small class="text-muted">Solana</small></div>
+                                    <div class="text-end"><div class="fw-bold">$98</div><div class="price-up">+5.67%</div></div>
+                                </div>
+                            </div>
+                            <div class="market-card" onclick="selectMarket('XRP/USDT')">
+                                <div class="d-flex justify-content-between">
+                                    <div><div class="fw-bold">XRP/USDT</div><small class="text-muted">Ripple</small></div>
+                                    <div class="text-end"><div class="fw-bold">$0.62</div><div class="price-up">+1.5%</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Trading Panel -->
+                    <div class="col-md-6">
+                        <div class="trading-panel">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h4 class="mb-0 selectedSymbol">BTC/USDT</h4>
+                                    <span class="price-up">$42,547.32 (+2.45%)</span>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-outline-light">1H</button>
+                                    <button class="btn btn-sm btn-outline-light">4H</button>
+                                    <button class="btn btn-sm btn-primary">1D</button>
+                                    <button class="btn btn-sm btn-outline-light">1W</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Chart placeholder -->
+                            <div class="bg-dark rounded p-3 mb-3 text-center" style="height: 200px; display: flex; align-items: center; justify-content: center;">
+                                <img src="https://via.placeholder.com/500x180?text=Trading+Chart" class="img-fluid rounded" alt="Chart">
+                            </div>
+
+                            <!-- Order Form -->
+                            <ul class="nav nav-tabs order-tabs mb-3">
+                                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#buy">Buy</a></li>
+                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#sell">Sell</a></li>
+                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="# limit">Limit</a></li>
+                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#market">Market</a></li>
+                            </ul>
+                            
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="buy">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Price (USDT)</label>
+                                            <input type="number" class="form-control" id="buyPrice" placeholder="0.00">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Amount (BTC)</label>
+                                            <input type="number" class="form-control" id="buyAmount" placeholder="0.00">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Total</label>
+                                        <input type="text" class="form-control" id="buyTotal" readonly placeholder="0.00 USDT">
+                                    </div>
+                                    <button class="btn btn-success w-100 btn-lg" onclick="placeOrder('buy')">Buy BTC</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Book -->
+                    <div class="col-md-3">
+                        <div class="trading-panel">
+                            <h6 class="mb-3">Order Book</h6>
+                            <table class="table table-sm">
+                                <thead><tr><th>Price</th><th>Amount</th><th>Total</th></tr></thead>
+                                <tbody id="orderBook">
+                                    <tr><td class="price-up">42,550</td><td>0.5234</td><td>22,258</td></tr>
+                                    <tr><td class="price-up">42,551</td><td>1.2345</td><td>52,543</td></tr>
+                                    <tr><td class="price-up">42,552</td><td>0.8765</td><td>37,324</td></tr>
+                                    <tr><td class="price-down">42,545</td><td>0.6543</td><td>27,876</td></tr>
+                                    <tr><td class="price-down">42,544</td><td>1.5432</td><td>65,679</td></tr>
+                                    <tr><td class="price-down">42,543</td><td>0.9876</td><td>42,012</td></tr>
+                                </tbody>
+                            </table>
+                            
+                            <hr>
+                            
+                            <h6 class="mb-3">Recent Trades</h6>
+                            <table class="table table-sm">
+                                <tbody id="recentTrades">
+                                    <tr><td class="price-up">42,547</td><td>0.1</td><td>4,254</td></tr>
+                                    <tr><td class="price-down">42,546</td><td>0.25</td><td>10,636</td></tr>
+                                    <tr><td class="price-up">42,547</td><td>0.5</td><td>21,273</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content Areas -->
+                <div class="tab-content mt-4">
+                    <!-- P2P -->
+                    <div class="tab-pane" id="p2p">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4><i class="fas fa-handshake"></i> P2P Trading</h4>
+                            <button class="btn btn-primary"><i class="fas fa-plus"></i> Create Ad</button>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <select class="form-select mb-3"><option>All Types</option><option>Buy</option><option>Sell</option></select>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select mb-3"><option>All Fiat</option><option>USD</option><option>EUR</option></select>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select mb-3"><option>All Payments</option><option>Bank Transfer</option><option>PayPal</option></select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="p2p-card">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="profile-avatar" style="width:32px;height:32px;font-size:14px;">A</div>
+                                            <div><strong>Alice_trader</strong><br><small class="text-success">98% • 500+ orders</small></div>
+                                        </div>
+                                        <span class="badge bg-success">Buy</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Price:</span><span class="fw-bold text-success">$42,600</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Limit:</span><span>$100-$10,000</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <span>Payment:</span><span>Bank Transfer</span>
+                                    </div>
+                                    <button class="btn btn-primary w-100">Buy USDT</button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="p2p-card">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="profile-avatar" style="width:32px;height:32px;font-size:14px;">B</div>
+                                            <div><strong>CryptoPro</strong><br><small class="text-success">99% • 1000+ orders</small></div>
+                                        </div>
+                                        <span class="badge bg-danger">Sell</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Price:</span><span class="fw-bold text-danger">$42,450</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Limit:</span><span>$50-$5,000</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <span>Payment:</span><span>PayPal</span>
+                                    </div>
+                                    <button class="btn btn-success w-100">Sell USDT</button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="p2p-card">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="profile-avatar" style="width:32px;height:32px;font-size:14px;">C</div>
+                                            <div><strong>FastTrade</strong><br><small class="text-success">95% • 200+ orders</small></div>
+                                        </div>
+                                        <span class="badge bg-success">Buy</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Price:</span><span class="fw-bold text-success">$42,550</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Limit:</span><span>$200-$20,000</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <span>Payment:</span><span>Wise</span>
+                                    </div>
+                                    <button class="btn btn-primary w-100">Buy USDT</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Copy Trading -->
+                    <div class="tab-pane" id="copy">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4><i class="fas fa-copy"></i> Copy Trading</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="trader-card">
+                                    <div class="profile-avatar mx-auto mb-2" style="width:60px;height:60px;font-size:24px;">W</div>
+                                    <h5>WhaleTrader</h5>
+                                    <div class="text-success mb-2">+$124,567 (30d)</div>
+                                    <div class="d-flex justify-content-around mb-2">
+                                        <div><small class="text-muted">Win Rate</small><div class="fw-bold">92%</div></div>
+                                        <div><small class="text-muted">Trades</small><div class="fw-bold">1,234</div></div>
+                                    </div>
+                                    <button class="copy-btn">Copy</button>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="trader-card">
+                                    <div class="profile-avatar mx-auto mb-2" style="width:60px;height:60px;font-size:24px;">S</div>
+                                    <h5>CryptoMaster</h5>
+                                    <div class="text-success mb-2">+$89,432 (30d)</div>
+                                    <div class="d-flex justify-content-around mb-2">
+                                        <div><small class="text-muted">Win Rate</small><div class="fw-bold">88%</div></div>
+                                        <div><small class="text-muted">Trades</small><div class="fw-bold">856</div></div>
+                                    </div>
+                                    <button class="copy-btn">Copy</button>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="trader-card">
+                                    <div class="profile-avatar mx-auto mb-2" style="width:60px;height:60px;font-size:24px;">B</div>
+                                    <h5>BitcoinKing</h5>
+                                    <div class="text-success mb-2">+$67,890 (30d)</div>
+                                    <div class="d-flex justify-content-around mb-2">
+                                        <div><small class="text-muted">Win Rate</small><div class="fw-bold">85%</div></div>
+                                        <div><small class="text-muted">Trades</small><div class="fw-bold">543</div></div>
+                                    </div>
+                                    <button class="copy-btn">Copy</button>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="trader-card">
+                                    <div class="profile-avatar mx-auto mb-2" style="width:60px;height:60px;font-size:24px;">E</div>
+                                    <h5>EthPro</h5>
+                                    <div class="text-success mb-2">+$45,678 (30d)</div>
+                                    <div class="d-flex justify-content-around mb-2">
+                                        <div><small class="text-muted">Win Rate</small><div class="fw-bold">82%</div></div>
+                                        <div><small class="text-muted">Trades</small><div class="fw-bold">432</div></div>
+                                    </div>
+                                    <button class="copy-btn">Copy</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Earn/Staking -->
+                    <div class="tab-pane" id="earn">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4><i class="fas fa-coins"></i> Earn</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="wallet-card">
+                                    <h5 class="mb-3">Fixed Savings</h5>
+                                    <div class="mb-2"><strong>USDT</strong> <span class="badge bg-success">APY 8.5%</span></div>
+                                    <p class="text-muted small">Flexible redemption</p>
+                                    <button class="btn btn-primary w-100">Subscribe</button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="wallet-card">
+                                    <h5 class="mb-3">Staking</h5>
+                                    <div class="mb-2"><strong>ETH 2.0</strong> <span class="badge bg-success">APY 5.2%</span></div>
+                                    <p class="text-muted small">30 days lock period</p>
+                                    <button class="btn btn-primary w-100">Stake</button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="wallet-card">
+                                    <h5 class="mb-3">DeFi Staking</h5>
+                                    <div class="mb-2"><strong>SOL</strong> <span class="badge bg-success">APY 12%</span></div>
+                                    <p class="text-muted small">90 days lock period</p>
+                                    <button class="btn btn-primary w-100">Stake</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wallet -->
+                    <div class="tab-pane" id="wallet">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4><i class="fas fa-wallet"></i> Wallet</h4>
+                            <div class="gap-2">
+                                <button class="btn btn-success"><i class="fas fa-arrow-down"></i> Deposit</button>
+                                <button class="btn btn-danger"><i class="fas fa-arrow-up"></i> Withdraw</button>
+                            </div>
+                        </div>
+                        <div class="table-card bg-dark rounded">
+                            <table class="table table-dark">
+                                <thead><tr><th>Asset</th><th>Balance</th><th>Available</th><th>Locked</th><th>USDT Value</th><th>Action</th></tr></thead>
+                                <tbody>
+                                    <tr><td><i class="fab fa-bitcoin text-warning me-2"></i><strong>BTC</strong></td><td>0.5234</td><td>0.5234</td><td>0</td><td>$22,258</td><td><button class="btn btn-sm btn-outline-light">Trade</button></td></tr>
+                                    <tr><td><i class="fab fa-ethereum text-primary me-2"></i><strong>ETH</strong></td><td>3.5</td><td>3.5</td><td>0</td><td>$7,896</td><td><button class="btn btn-sm btn-outline-light">Trade</button></td></tr>
+                                    <tr><td><i class="fas fa-dollar-sign text-success me-2"></i><strong>USDT</strong></td><td>5,000</td><td>4,500</td><td>500</td><td>$5,000</td><td><button class="btn btn-sm btn-outline-light">Trade</button></td></tr>
+                                    <tr><td><i class="fab fa-bnb text-warning me-2"></i><strong>BNB</strong></td><td>10</td><td>10</td><td>0</td><td>$3,240</td><td><button class="btn btn-sm btn-outline-light">Trade</button></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Market selection
+        function selectMarket(symbol) {
+            document.querySelectorAll('.market-card').forEach(card => card.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.querySelector('.selectedSymbol').textContent = symbol;
+            document.getElementById('buyPrice').value = '';
+            document.getElementById('buyAmount').value = '';
+            document.getElementById('buyTotal').value = '';
+        }
+
+        // Calculate total
+        document.getElementById('buyPrice').addEventListener('input', calculateTotal);
+        document.getElementById('buyAmount').addEventListener('input', calculateTotal);
+
+        function calculateTotal() {
+            const price = parseFloat(document.getElementById('buyPrice').value) || 0;
+            const amount = parseFloat(document.getElementById('buyAmount').value) || 0;
+            document.getElementById('buyTotal').value = (price * amount).toFixed(2) + ' USDT';
+        }
+
+        // Place order
+        async function placeOrder(side) {
+            const symbol = document.querySelector('.selectedSymbol').textContent;
+            const price = document.getElementById('buyPrice').value;
+            const amount = document.getElementById('buyAmount').value;
+            
+            if (!price || !amount) {
+                alert('Please enter price and amount');
+                return;
+            }
+
+            // In production, call API
+            console.log(`Placing ${side} order: ${amount} ${symbol} at ${price}`);
+            
+            // Show success message
+            const btn = document.querySelector('.btn-success');
+            const originalText = btn.textContent;
+            btn.textContent = 'Order Placed!';
+            btn.classList.add('btn-primary');
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.classList.remove('btn-primary');
+                document.getElementById('buyPrice').value = '';
+                document.getElementById('buyAmount').value = '';
+                document.getElementById('buyTotal').value = '';
+            }, 2000);
+        }
+
+        // Load market data
+        fetch('/api/v1/markets').then(r => r.json()).then(data => {
+            console.log('Markets:', data.markets?.length || 0);
+        }).catch(() => console.log('Using demo data'));
+
+        // Update time
+        setInterval(() => {
+            document.getElementById('currentTime')?.setAttribute('datetime', new Date().toISOString());
+        }, 1000);
+    </script>
+</body>
+</html>

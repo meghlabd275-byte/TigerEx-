@@ -2,7 +2,7 @@
 
 /**
  * TigerEx High-Performance Trading Engine
- * Target: 500K TPS (Transactions Per Second)
+ * Target: 2M+ TPS (Transactions Per Second) - Industry Leading
  * 
  * Features:
  * - Multi-threaded order matching
@@ -10,6 +10,8 @@
  * - Redis pub/sub for real-time updates
  * - Sharding for horizontal scaling
  * - Kafka for event streaming
+ * - GPU acceleration
+ * - Lock-free data structures
  */
 
 const cluster = require('cluster');
@@ -19,13 +21,17 @@ const crypto = require('crypto');
 
 // ==================== CONFIGURATION ====================
 const CONFIG = {
-    TPS_TARGET: 1000000, // 1 Million TPS
-    MAX_WORKERS: os.cpus().length,
-    ORDER_BOOK_DEPTH: 1000,
-    MATCH_LATENCY_TARGET: 5, // microseconds - ULTRA FAST
+    TPS_TARGET: 2000000, // 2 Million TPS - Industry Leading
+    MAX_WORKERS: os.cpus().length * 4,
+    ORDER_BOOK_DEPTH: 5000,
+    MATCH_LATENCY_TARGET: 3,
     USE_GPU: true, // GPU acceleration
-    SHARDING_FACTOR: 32,
-    LOCK_FREE: true
+    GPU_CORES: 4096,
+    SHARDING_FACTOR: 64,
+    LOCK_FREE: true,
+    UNSAFE_MODE: true,
+    BATCH_PROCESSING: true,
+    BATCH_SIZE: 1000
 };
 
 // ==================== ULTRA HIGH-PERFORMANCE ORDER BOOK ====================
