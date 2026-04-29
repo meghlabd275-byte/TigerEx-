@@ -438,6 +438,260 @@ app.get('/api/v1/super/logs', requireSuperAdmin, async (req, res) => {
     }
 });
 
+// ==================== WHITE LABEL PRODUCT PERMISSIONS ====================
+
+// Grant product access to client
+app.post('/api/v1/super/client/:clientId/product/:productId/grant', requireSuperAdmin, async (req, res) => {
+    try {
+        const { clientId, productId } = req.params;
+        
+        await pg.query(
+            `INSERT INTO client_products (client_id, product_id, status, granted_at)
+             VALUES ($1, $2, 'active', NOW())
+             ON CONFLICT DO UPDATE SET status = 'active'`,
+            [clientId, productId]
+        );
+        
+        res.json({
+            success: true,
+            message: `Product ${productId} granted to client ${clientId}`
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Revoke product access from client
+app.post('/api/v1/super/client/:clientId/product/:productId/revoke', requireSuperAdmin, async (req, res) => {
+    try {
+        const { clientId, productId } = req.params;
+        
+        await pg.query(
+            'UPDATE client_products SET status = $1 WHERE client_id = $2 AND product_id = $3',
+            ['revoked', clientId, productId]
+        );
+        
+        res.json({
+            success: true,
+            message: `Product ${productId} revoked from client ${clientId}`
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get all products
+app.get('/api/v1/super/products', requireSuperAdmin, (req, res) => {
+    const products = [
+        { id: 'spot', name: 'Spot Trading', description: 'Basic spot exchange' },
+        { id: 'futures', name: 'Futures', description: 'USDT-M Futures' },
+        { id: 'margin', name: 'Margin Trading', description: 'Up to 125x leverage' },
+        { id: 'staking', name: 'Staking', description: 'Lock and earn' },
+        { id: 'bridge', name: 'Bridge', description: 'Cross-chain transfers' },
+        { id: 'wallet', name: 'Wallet', description: 'Multi-chain wallet' },
+        { id: 'launchpad', name: 'Launchpad', description: 'Token sales' },
+        { id: 'nft', name: 'NFT Marketplace', description: 'NFT trading' },
+        { id: 'p2p', name: 'P2P Trading', description: 'Peer-to-peer' },
+        { id: 'copy', name: 'Copy Trading', description: 'Follow traders' }
+    ];
+    
+    res.json({ success: true, products });
+});
+
+// ==================== TRADING PAIR MANAGEMENT ====================
+
+// Get client trading pairs
+app.get('/api/v1/super/client/:clientId/pairs', requireSuperAdmin, async (req, res) => {
+    try {
+        const { clientId } = req.params;
+        
+        const pairs = await pg.query(
+            'SELECT * FROM trading_pairs WHERE client_id = $1 ORDER BY volume DESC',
+            [clientId]
+        );
+        
+        res.json({
+            success: true,
+            pairs: pairs.rows
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Add trading pair
+app.post('/api/v1/super/client/:clientId/pair', requireSuperAdmin, async (req, res) => {
+    try {
+        const { clientId } = req.params;
+        const { base, quote, initialPrice, minPrice, maxPrice, minQty, maxQty } = req.body;
+        
+        const pairId = `${base}/${quote}`.toUpperCase();
+        
+        await pg.query(
+            `INSERT INTO trading_pairs (client_id, pair_id, base, quote, status, created_at)
+             VALUES ($1, $2, $3, $4, 'active', NOW())`,
+            [clientId, pairId, base, quote]
+        );
+        
+        res.json({
+            success: true,
+            pair: pairId,
+            message: `Trading pair ${pairId} created`
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Delist trading pair
+app.post('/api/v1/super/client/:clientId/pair/:pairId/delist', requireSuperAdmin, async (req, res) => {
+    try {
+        const { clientId, pairId } = req.params;
+        
+        await pg.query(
+            'UPDATE trading_pairs SET status = $1 WHERE client_id = $2 AND pair_id = $3',
+            ['delisted', clientId, pairId]
+        );
+        
+        res.json({
+            success: true,
+            message: `Pair ${pairId} has been DELISTED`
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Resume trading pair
+app.post('/api/v1/super/client/:clientId/pair/:pairId/resume', requireSuperAdmin, async (req, res) => {
+    try {
+        const { clientId, pairId } = req.params;
+        
+        await pg.query(
+            'UPDATE trading_pairs SET status = $1 WHERE client_id = $2 AND pair_id = $3',
+            ['active', clientId, pairId]
+        );
+        
+        res.json({
+            success: true,
+            message: `Pair ${pairId} has been RESUMED`
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ==================== TRADING CONTROL ====================
+
+// Pause all trading for client
+app.post('/api/v1/super/client/:clientId/trading/pause', requireSuperAdmin, async (req, res) => {
+    try {
+        const { clientId } = req.params;
+        
+        await redis.set(`trading:${clientId}:status`, 'paused');
+        
+        res.json({
+            success: true,
+            message: `Trading paused for client ${clientId}`
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Resume trading for client  
+app.post('/api/v1/super/client/:clientId/trading/resume', requireSuperAdmin, async (req, res) => {
+    try {
+        const { clientId } = req.params;
+        
+        await redis.set(`trading:${clientId}:status`, 'active');
+        
+        res.json({
+            success: true,
+            message: `Trading resumed for client ${clientId}`
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Halt trading for client
+app.post('/api/v1/super/client/:clientId/trading/halt', requireSuperAdmin, async (req, res) => {
+    try {
+        const { clientId } = req.params;
+        
+        await redis.set(`trading:${clientId}:status`, 'halted');
+        
+        res.json({
+            success: true,
+            message: `Trading HALTED for client ${clientId}`
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ==================== LIQUIDITY MANAGEMENT ====================
+
+// Get liquidity pools
+app.get('/api/v1/super/client/:clientId/liquidity', requireSuperAdmin, async (req, res) => {
+    try {
+        const { clientId } = req.params;
+        
+        const pools = await pg.query(
+            'SELECT * FROM liquidity_pools WHERE client_id = $1',
+            [clientId]
+        );
+        
+        res.json({
+            success: true,
+            pools: pools.rows
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Add liquidity pool
+app.post('/api/v1/super/client/:clientId/liquidity', requireSuperAdmin, async (req, res) => {
+    try {
+        const { clientId } = req.params;
+        const { tokenA, tokenB, amountA, amountB, apr } = req.body;
+        
+        await pg.query(
+            `INSERT INTO liquidity_pools (client_id, token_a, token_b, amount_a, amount_b, apr, created_at)
+             VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
+            [clientId, tokenA, tokenB, amountA, amountB, apr]
+        );
+        
+        res.json({
+            success: true,
+            message: `Liquidity pool ${tokenA}-${tokenB} created`
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Remove liquidity pool
+app.delete('/api/v1/super/client/:clientId/liquidity/:poolId', requireSuperAdmin, async (req, res) => {
+    try {
+        const { clientId, poolId } = req.params;
+        
+        await pg.query(
+            'DELETE FROM liquidity_pools WHERE client_id = $1 AND id = $2',
+            [clientId, poolId]
+        );
+        
+        res.json({
+            success: true,
+            message: 'Liquidity pool removed'
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // ==================== HEALTH ====================
 
 app.get('/health', (req, res) => {
