@@ -749,6 +749,69 @@ POST /api/v1/whitelabel/chain/create
 
 ---
 
+## тЪб WHITE LABEL BLOCKCHAIN CREATOR
+
+TigerEx provides **complete custom blockchain creation** for white label clients.
+
+### White Label Blockchain Creator
+
+**Frontend:** `white-label/blockchain-creator.html`
+
+A complete UI for creating custom blockchains with:
+- EVM or Non-EVM chain selection
+- Step-by-step configuration wizard
+- Consensus mechanism selection (PoA, PoS, PoW)
+- Validator setup
+- Deploy management
+
+### White Label Blockchain Services
+
+| Feature | Description |
+|---------|-------------|
+| **Custom Chain Creation** | Create your own blockchain |
+| **EVM Chains** | ETH, BSC, Polygon, Arbitrum, Optimism, Avalanche, Fantom, Cronos |
+| **Non-EVM Chains** | Solana, Cardano, Polkadot, NEAR, Algorand, Cosmos, Sui, Aptos |
+| **Token Deployment** | ERC20, ERC721, ERC1155 |
+| **Cross-Chain Bridge** | Bridge between chains |
+| **Smart Contracts** | Deploy on custom chain |
+| **Validators** | Add/manage validators |
+| **Block Explorer** | Built-in explorer |
+
+### White Label Blockchain API
+
+```bash
+# Create custom chain
+POST /api/v1/whitelabel/chain/create
+
+# Get chain status
+GET /api/v1/whitelabel/chain/:chainId/status
+
+# Deploy contract
+POST /api/v1/whitelabel/chain/:chainId/contract
+
+# Add validator
+POST /api/v1/whitelabel/chain/:chainId/validator
+
+# Get transactions
+GET /api/v1/whitelabel/chain/:chainId/transactions
+
+# Bridge
+POST /api/v1/whitelabel/bridge
+
+# List client chains
+GET /api/v1/whitelabel/chains/:clientId
+```
+
+### Supported Chains
+
+**EVM (8 chains):**
+- Ethereum, BNB Smart Chain, Polygon, Arbitrum, Optimism, Avalanche, Fantom, Cronos
+
+**Non-EVM (8 chains):**
+- Solana, Cardano, Polkadot, NEAR, Algorand, Cosmos, Sui, Aptos
+
+---
+
 ## тЪб SUPPORT
 
 - **Email:** support@tigerex.com
