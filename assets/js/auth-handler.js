@@ -65,7 +65,7 @@
     function initAuthUI() {
         const loggedIn = isLoggedIn();
         
-        // Update header - desktop
+        // Update header - desktop (index.html style)
         const headerLoginLink = document.getElementById('headerLoginLink');
         const headerSignupLink = document.getElementById('headerSignupLink');
         const headerUserMenu = document.getElementById('headerUserMenu');
@@ -86,7 +86,7 @@
             if (headerUserMenu) headerUserMenu.style.display = 'none';
         }
 
-        // Update header - mobile
+        // Update header - mobile (index.html style)
         const mobileLoginLink = document.getElementById('mobileLoginLink');
         const mobileSignupLink = document.getElementById('mobileSignupLink');
         const mobileUserMenu = document.getElementById('mobileUserMenu');
@@ -107,6 +107,23 @@
             if (mobileLoginLink) mobileLoginLink.style.display = 'inline-flex';
             if (mobileSignupLink) mobileSignupLink.style.display = 'inline-flex';
             if (mobileUserMenu) mobileUserMenu.style.display = 'none';
+        }
+
+        // Update dashboard-style profile drawer
+        const profileAvatar = document.querySelector('.profile-avatar');
+        const profileName = document.querySelector('.profile-name');
+        const profileEmail = document.querySelector('.profile-email');
+        
+        if (loggedIn) {
+            if (profileAvatar) profileAvatar.textContent = getDisplayName().charAt(0).toUpperCase();
+            if (profileName) profileName.textContent = getDisplayName();
+            if (profileEmail) profileEmail.textContent = getUserEmail();
+            
+            // Add logout button if not present
+            const logoutBtn = document.querySelector('.logout-btn');
+            if (logoutBtn && !logoutBtn.hasAttribute('onclick')) {
+                logoutBtn.setAttribute('onclick', 'handleLogout()');
+            }
         }
 
         // Fire custom event for other scripts to listen

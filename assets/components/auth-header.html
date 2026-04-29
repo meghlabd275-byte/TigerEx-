@@ -1,0 +1,247 @@
+<!-- TigerEx Navigation Component -->
+<!-- Include this in all pages for consistent header with auth state support -->
+<!-- Usage: Include auth-handler.js before this component -->
+<!-- Note: Add IDs 'headerNavbar' and 'headerScripts' to your page if needed -->
+
+<style>
+/* Auth Header Styles - included here for component isolation */
+.auth-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: var(--bg-dark, #0B0E11);
+    border-bottom: 1px solid var(--border, #2B3139);
+    height: 64px;
+}
+.auth-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+.auth-header-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+.auth-header-logo-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--primary, #F0B90B);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+    color: #000;
+}
+.auth-header-logo-text {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary, #EAECEF);
+}
+.auth-header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.auth-header-link {
+    padding: 8px 16px;
+    color: var(--text-primary, #EAECEF);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+.auth-header-link:hover {
+    background: var(--bg-card, #1E2329);
+}
+.auth-header-link-primary {
+    background: var(--primary, #F0B90B);
+    color: #000 !important;
+}
+.auth-header-link-primary:hover {
+    background: var(--primary-hover, #E5A809);
+}
+.auth-user-menu {
+    position: relative;
+}
+.auth-user-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: var(--bg-card, #1E2329);
+    border: 1px solid var(--border, #2B3139);
+    border-radius: 8px;
+    color: var(--text-primary, #EAECEF);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.auth-user-trigger:hover {
+    background: var(--bg-card-hover, #252A32);
+}
+.auth-user-avatar {
+    width: 28px;
+    height: 28px;
+    background: var(--primary, #F0B90B);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    color: #000;
+}
+.auth-user-email {
+    font-size: 14px;
+    font-weight: 500;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.auth-user-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 200px;
+    background: var(--bg-card, #1E2329);
+    border: 1px solid var(--border, #2B3139);
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+.auth-user-dropdown.show {
+    display: block;
+}
+.auth-user-dropdown-item {
+    display: block;
+    padding: 12px 16px;
+    color: var(--text-primary, #EAECEF);
+    text-decoration: none;
+    font-size: 14px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+.auth-user-dropdown-item:hover {
+    background: var(--bg-card-hover, #252A32);
+}
+.auth-user-dropdown-divider {
+    height: 1px;
+    background: var(--border, #2B3139);
+    margin: 8px 0;
+}
+.auth-logout-btn {
+    color: #F6465D !important;
+}
+</style>
+
+<div class="auth-header" id="authHeader">
+    <div class="auth-header-inner">
+        <!-- Logo -->
+        <a href="index.html" class="auth-header-logo">
+            <div class="auth-header-logo-icon">🐯</div>
+            <span class="auth-header-logo-text">TigerEx</span>
+        </a>
+        
+        <!-- Right Side -->
+        <div class="auth-header-right">
+            <!-- Login/Signup - shown when NOT logged in -->
+            <a href="login.html" class="auth-header-link" id="authLoginLink">Log In</a>
+            <a href="register.html" class="auth-header-link auth-header-link-primary" id="authSignupLink">Sign Up</a>
+            
+            <!-- User Menu - shown when logged in -->
+            <div class="auth-user-menu" id="authUserMenu" style="display: none;">
+                <button class="auth-user-trigger" onclick="toggleAuthUserMenu()">
+                    <span class="auth-user-avatar" id="authUserAvatar">U</span>
+                    <span class="auth-user-email" id="authUserEmail">user@example.com</span>
+                    <span>▼</span>
+                </button>
+                <div class="auth-user-dropdown" id="authUserDropdown">
+                    <a href="profile.html" class="auth-user-dropdown-item">👤 My Profile</a>
+                    <a href="wallet.html" class="auth-user-dropdown-item">💰 My Wallet</a>
+                    <a href="order-history.html" class="auth-user-dropdown-item">📜 Orders</a>
+                    <a href="security.html" class="auth-user-dropdown-item">🔒 Security</a>
+                    <a href="preferences.html" class="auth-user-dropdown-item">⚙️ Preferences</a>
+                    <div class="auth-user-dropdown-divider"></div>
+                    <button class="auth-user-dropdown-item auth-logout-btn" onclick="authLogout()">🚪 Log Out</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Auth Header Script -->
+<script>
+(function() {
+    // Initialize auth header
+    function initAuthHeader() {
+        const token = localStorage.getItem('tigerex_token');
+        const isLoggedIn = token && token.length > 0;
+        const email = localStorage.getItem('tigerex_user_email') || '';
+        const userData = localStorage.getItem('tigerex_user_data');
+        const name = userData ? JSON.parse(userData).name || email.split('@')[0] : email.split('@')[0];
+        
+        const loginLink = document.getElementById('authLoginLink');
+        const signupLink = document.getElementById('authSignupLink');
+        const userMenu = document.getElementById('authUserMenu');
+        const userAvatar = document.getElementById('authUserAvatar');
+        const userEmail = document.getElementById('authUserEmail');
+        
+        if (isLoggedIn) {
+            if (loginLink) loginLink.style.display = 'none';
+            if (signupLink) signupLink.style.display = 'none';
+            if (userMenu) userMenu.style.display = 'block';
+            if (userAvatar) userAvatar.textContent = name.charAt(0).toUpperCase();
+            if (userEmail) userEmail.textContent = email;
+        } else {
+            if (loginLink) loginLink.style.display = 'inline-block';
+            if (signupLink) signupLink.style.display = 'inline-block';
+            if (userMenu) userMenu.style.display = 'none';
+        }
+    }
+    
+    // Toggle user dropdown
+    window.toggleAuthUserMenu = function() {
+        const dropdown = document.getElementById('authUserDropdown');
+        if (dropdown) {
+            dropdown.classList.toggle('show');
+        }
+    };
+    
+    // Logout function
+    window.authLogout = function() {
+        localStorage.removeItem('tigerex_token');
+        localStorage.removeItem('tigerex_user_email');
+        localStorage.removeItem('tigerex_user_data');
+        window.location.href = 'index.html';
+    };
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        const userMenu = document.getElementById('authUserMenu');
+        const dropdown = document.getElementById('authUserDropdown');
+        if (userMenu && dropdown && !userMenu.contains(e.target)) {
+            dropdown.classList.remove('show');
+        }
+    });
+    
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAuthHeader);
+    } else {
+        initAuthHeader();
+    }
+})();
+</script>
