@@ -826,19 +826,22 @@
     padding: 20px 24px;
     cursor: pointer;
     font-weight: 600;
+    background: var(--bg-card);
+    border-radius: 8px;
+    margin-bottom: 8px;
 }
 .faq-answer {
-    padding: 0 24px;
+    padding: 0 24px 20px;
     color: var(--text-secondary);
     line-height: 1.7;
-    max-height: 0;
-    overflow: hidden;
-    transition: 0.3s;
+    display: block;
 }
-.faq-item.active .faq-answer {
-    padding: 0 24px 20px;
-    max-height: 200px;
+.faq-item .faq-answer {
+    max-height: none;
+    overflow: visible;
 }
+.faq-item.active .faq-question {
+    background: var(--bg-card-hover);
 
 /* More Menu - Mega Menu Expanded */
 .more-menu {
@@ -2309,6 +2312,21 @@
                 if (!submenu.contains(e.target) && !e.target.classList.contains('header-nav-item')) {
                     submenu.classList.remove('active');
                 }
+            });
+        });
+
+        // FAQ Toggle - Show all answers by default
+        function toggleFAQ(element) {
+            const faqItem = element.closest('.faq-item');
+            if (faqItem) {
+                faqItem.classList.toggle('active');
+            }
+        }
+
+        // Auto-expand all FAQs on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.add('active');
             });
         });
 
