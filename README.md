@@ -668,6 +668,87 @@ GET /api/v1/search/:query - Search
 
 ---
 
+## тЪб WHITE LABEL BLOCKCHAIN SERVICES
+
+TigerEx provides **complete blockchain services for white label clients**.
+
+### White Label Blockchain Features
+
+| Feature | Description |
+|---------|-------------|
+| **EVM Chains** | Ethereum, BSC, Polygon, Arbitrum, Optimism, Avalanche, Fantom, Cronos |
+| **Non-EVM Chains** | Solana, Cardano, Polkadot, NEAR, Algorand, Cosmos, Sui, Aptos |
+| **Custom Chain** | Create your own blockchain |
+| **Token Deployment** | ERC20, ERC721, ERC1155 |
+| **Cross-Chain Bridge** | Bridge between chains |
+| **Multi-Sig** | Secure transactions |
+
+### White Label Blockchain API
+
+```bash
+# Register white label client
+POST /api/v1/whitelabel/register
+
+# Get EVM chains
+GET /api/v1/evm/chains
+
+# Deploy EVM token
+POST /api/v1/evm/deploy/token
+
+# Get balance
+GET /api/v1/evm/balance/:chain/:address
+
+# Transfer tokens
+POST /api/v1/evm/transfer
+
+# Non-EVM chains
+GET /api/v1/non-evm/chains
+
+# Deploy Non-EVM token
+POST /api/v1/non-evm/deploy/token
+
+# Cross-chain bridge
+POST /api/v1/bridge/transfer
+
+# Create custom chain
+POST /api/v1/whitelabel/chain/create
+```
+
+### Supported Chains
+
+**EVM (8 chains):**
+- Ethereum (ETH)
+- BNB Smart Chain (BNB)
+- Polygon (MATIC)
+- Arbitrum (ETH)
+- Optimism (ETH)
+- Avalanche (AVAX)
+- Fantom (FTM)
+- Cronos (CRO)
+
+**Non-EVM (8 chains):**
+- Solana (SOL)
+- Cardano (ADA)
+- Polkadot (DOT)
+- NEAR (NEAR)
+- Algorand (ALGO)
+- Cosmos (ATOM)
+- Sui (SUI)
+- Aptos (APT)
+
+### Smart Contracts (3,600+ lines)
+- Tokens (ERC20/721/1155)
+- Staking
+- Governance
+- DeFi
+- NFT
+- Bridge
+- Margin Trading
+- Futures
+- Vault
+
+---
+
 ## тЪб SUPPORT
 
 - **Email:** support@tigerex.com
