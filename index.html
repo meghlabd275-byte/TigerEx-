@@ -1394,8 +1394,29 @@
                     <span style="font-size: 16px;">🌙</span>
                 </div>
                 
-                <a href="login.html" class="header-right-link">Log In</a>
-                <a href="register.html" class="header-right-link btn-primary">Sign Up</a>
+                <!-- Login/Signup links - shown when NOT logged in -->
+                <a href="login.html" class="header-right-link" id="headerLoginLink">Log In</a>
+                <a href="register.html" class="header-right-link btn-primary" id="headerSignupLink">Sign Up</a>
+                
+                <!-- User Menu - shown when logged in -->
+                <div class="user-menu-container" id="headerUserMenu" style="display: none;">
+                    <div class="user-dropdown">
+                        <button class="user-menu-trigger" onclick="toggleUserDropdown()">
+                            <span class="user-avatar" id="headerUserAvatar">U</span>
+                            <span class="user-name" id="headerUserEmail">User</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </button>
+                        <div class="user-dropdown-menu" id="userDropdownMenu">
+                            <a href="profile.html" class="dropdown-item">👤 My Profile</a>
+                            <a href="wallet.html" class="dropdown-item">💰 My Wallet</a>
+                            <a href="order-history.html" class="dropdown-item">📜 Orders</a>
+                            <a href="security.html" class="dropdown-item">🔒 Security</a>
+                            <a href="preferences.html" class="dropdown-item">⚙️ Preferences</a>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-item logout-btn" onclick="handleLogout()">🚪 Log Out</button>
+                        </div>
+                    </div>
+                </div>
                 
                 <!-- Mobile Menu Button (☰) - Always visible -->
                 <button id="mobileMenuBtn" class="header-menu-btn" onclick="toggleMobileMenu()" title="Menu" style="display:flex;">
@@ -1413,8 +1434,26 @@
             
             <!-- Menu Header -->
             <div class="mobile-menu-header">
-                <a href="login.html" class="mobile-menu-link">Log In</a>
-                <a href="register.html" class="mobile-menu-link mobile-menu-link-primary">Sign Up</a>
+                <a href="login.html" class="mobile-menu-link" id="mobileLoginLink">Log In</a>
+                <a href="register.html" class="mobile-menu-link mobile-menu-link-primary" id="mobileSignupLink">Sign Up</a>
+            </div>
+            
+            <!-- Mobile User Menu - shown when logged in -->
+            <div class="mobile-user-menu" id="mobileUserMenu" style="display: none;">
+                <div class="mobile-user-info">
+                    <span class="mobile-user-avatar" id="mobileUserAvatar">U</span>
+                    <div class="mobile-user-details">
+                        <span class="mobile-user-name" id="mobileUserName">User</span>
+                        <span class="mobile-user-email" id="mobileUserEmail">user@example.com</span>
+                    </div>
+                </div>
+                <a href="profile.html" class="mobile-menu-link">👤 My Profile</a>
+                <a href="wallet.html" class="mobile-menu-link">💰 My Wallet</a>
+                <a href="order-history.html" class="mobile-menu-link">📜 Orders</a>
+                <a href="security.html" class="mobile-menu-link">🔒 Security</a>
+                <a href="preferences.html" class="mobile-menu-link">⚙️ Preferences</a>
+                <div class="mobile-menu-divider"></div>
+                <button class="mobile-menu-link mobile-logout-btn" onclick="handleLogout()">🚪 Log Out</button>
             </div>
             
             <!-- Products Section -->
@@ -2195,6 +2234,7 @@
     </script>
     <script src="assets/js/theme.js"></script>
 <script src="assets/js/api.js"></script>
+<script src="assets/js/auth-handler.js"></script>
 <script src="assets/js/auth-guard.js"></script>
 </body>
 </html>
