@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerChain Explorer - Blockchain Explorer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #627eea; --dark: #0d1117; --darker: #010409; --light: #c9d1d9; --success: #3fb950; --warning: #d29922; --danger: #f85149; }
+        body { background: var(--darker); color: var(--light); font-family: 'Segoe UI', system-ui, sans-serif; }
+        .navbar { background: var(--dark) !important; border-bottom: 1px solid #30363d; }
+        .navbar-brand { font-weight: 700; font-size: 20px; }
+        .navbar-brand span { color: var(--primary); }
+        .search-box { background: var(--dark); border: 1px solid #30363d; border-radius: 8px; padding: 8px 16px; display: flex; align-items: center; gap: 8px; }
+        .search-box input { background: transparent; border: none; color: white; outline: none; width: 300px; }
+        .stat-card { background: var(--dark); border: 1px solid #30363d; border-radius: 8px; padding: 16px; text-align: center; }
+        .stat-value { font-size: 24px; font-weight: 700; color: var(--primary); }
+        .stat-label { color: #8b949e; font-size: 12px; }
+        .data-table { background: var(--dark); border-radius: 8px; overflow: hidden; }
+        .data-table th { background: #161b22; border-bottom: 1px solid #30363d; color: #8b949e; font-weight: 600; font-size: 12px; text-transform: uppercase; padding: 12px 16px; }
+        .data-table td { border-bottom: 1px solid #21262d; padding: 12px 16px; font-size: 14px; }
+        .data-table tr:hover { background: #161b22; }
+        .hash { font-family: 'Courier New', monospace; color: var(--primary); }
+        .address { font-family: 'Courier New', monospace; color: var(--light); }
+        .badge-success { background: rgba(63,185,80,0.2); color: var(--success); }
+        .badge-warning { background: rgba(210,153,34,0.2); color: var(--warning); }
+        .badge-danger { background: rgba(248,81,73,0.2); color: var(--danger); }
+        .chart-container { background: var(--dark); border: 1px solid #30363d; border-radius: 8px; padding: 20px; }
+        .nav-tabs { border-bottom: 1px solid #30363d; }
+        .nav-tabs .nav-link { color: #8b949e; border: none; padding: 12px 20px; }
+        .nav-tabs .nav-link:hover { color: var(--light); border: none; }
+        .nav-tabs .nav-link.active { color: var(--primary); border: none; border-bottom: 2px solid var(--primary); background: transparent; }
+        .block-link { color: var(--primary); cursor: pointer; }
+        .block-link:hover { text-decoration: underline; }
+        footer { background: var(--dark); border-top: 1px solid #30363d; padding: 20px; text-align: center; color: #8b949e; }
+        .live-indicator { width: 8px; height: 8px; border-radius: 50%; background: var(--success); animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><i class="fas fa-cube"></i> Tiger<span>Chain</span> Explorer</a>
+            <div class="search-box me-3">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search by Address / Txn Hash / Block / Token" id="searchInput">
+                <button class="btn btn-sm btn-primary" onclick="search()">Search</button>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <span><i class="fas fa-sync me-1"></i> <span id="currentBlock">18,500,001</span></span>
+                <span><div class="live-indicator me-1"></div> Live</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Stats Banner -->
+    <div class="container-fluid py-4" style="background: var(--dark);">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2"><div class="stat-card"><div class="stat-value" id="tps">145</div><div class="stat-label">TPS</div></div></div>
+                <div class="col-md-2"><div class="stat-card"><div class="stat-value" id="gasPrice">25.4</div><div class="stat-label">Gas (Gwei)</div></div></div>
+                <div class="col-md-2"><div class="stat-card"><div class="stat-value">245M</div><div class="stat-label">Total Addresses</div></div></div>
+                <div class="col-md-2"><div class="stat-card"><div class="stat-value">45M</div><div class="stat-label">Total Contracts</div></div></div>
+                <div class="col-md-2"><div class="stat-card"><div class="stat-value">$8.5B</div><div class="stat-label">Market Cap</div></div></div>
+                <div class="col-md-2"><div class="stat-card"><div class="stat-value">125K</div><div class="stat-label">Tiger Burned</div></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container py-4">
+        <!-- Tabs -->
+        <ul class="nav nav-tabs mb-4">
+            <li class="nav-item"><a class="nav-link active" href="#home" data-bs-toggle="tab">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#blocks" data-bs-toggle="tab">Blocks</a></li>
+            <li class="nav-item"><a class="nav-link" href="#transactions" data-bs-toggle="tab">Transactions</a></li>
+            <li class="nav-item"><a class="nav-link" href="#tokens" data-bs-toggle="tab">Tokens</a></li>
+            <li class="nav-item"><a class="nav-link" href="#nfts" data-bs-toggle="tab">NFTs</a></li>
+            <li class="nav-item"><a class="nav-link" href="#validators" data-bs-toggle="tab">Validators</a></li>
+            <li class="nav-item"><a class="nav-link" href="#charts" data-bs-toggle="tab">Analytics</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <!-- Home Tab -->
+            <div class="tab-pane fade show active" id="home">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="chart-container mb-4">
+                            <h5><i class="fas fa-chart-line me-2"></i>Transaction History (30 Days)</h5>
+                            <canvas id="txChart" height="100"></canvas>
+                        </div>
+                        <div class="data-table">
+                            <div class="p-3 border-bottom border-secondary"><h5>Recent Blocks</h5></div>
+                            <table class="table mb-0">
+                                <thead><tr><th>Block</th><th>Hash</th><th>Transactions</th><th>Gas Used</th><th>Miner</th><th>Time</th></tr></thead>
+                                <tbody id="recentBlocks"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-table mb-4">
+                            <div class="p-3 border-bottom border-secondary"><h5>Top Tokens</h5></div>
+                            <div class="p-3 border-bottom"><div class="d-flex justify-content-between"><span><i class="fab fa-ethereum text-warning"></i> TIGER</span><span class="badge bg-success">$42.50</span></div><small class="text-muted">Market Cap: $4.2B</small></div>
+                            <div class="p-3 border-bottom"><div class="d-flex justify-content-between"><span><i class="fas fa-coins text-primary"></i> THC</span><span class="badge bg-success">$12.80</span></div><small class="text-muted">Market Cap: $1.2B</small></div>
+                            <div class="p-3 border-bottom"><div class="d-flex justify-content-between"><span><i class="fas fa-exchange-alt text-info"></i> TSWAP</span><span class="badge bg-success">$5.40</span></div><small class="text-muted">Market Cap: $540M</small></div>
+                            <div class="p-3"><div class="d-flex justify-content-between"><span><i class="fas fa-database text-warning"></i> TDEF</span><span class="badge bg-success">$2.10</span></div><small class="text-muted">Market Cap: $210M</small></div>
+                        </div>
+                        <div class="data-table">
+                            <div class="p-3 border-bottom border-secondary"><h5>Top Holders</h5></div>
+                            <div id="topHolders"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blocks Tab -->
+            <div class="tab-pane fade" id="blocks">
+                <div class="data-table">
+                    <table class="table mb-0">
+                        <thead><tr><th>Block</th><th>Hash</th><th>Parent Hash</th><th>Transactions</th><th>Gas Used</th><th>Reward</th><th>Miner</th><th>Time</th></tr></thead>
+                        <tbody id="blocksTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Transactions Tab -->
+            <div class="tab-pane fade" id="transactions">
+                <div class="data-table">
+                    <table class="table mb-0">
+                        <thead><tr><th>Tx Hash</th><th>Block</th><th>From</th><th>To</th><th>Value</th><th>Gas Price</th><th>Status</th><th>Time</th></tr></thead>
+                        <tbody id="txTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tokens Tab -->
+            <div class="tab-pane fade" id="tokens">
+                <div class="data-table">
+                    <table class="table mb-0">
+                        <thead><tr><th>#</th><th>Token</th><th>Type</th><th>Holders</th><th>Transfers</th><th>Price</th><th>Market Cap</th><th>Volume (24h)</th></tr></thead>
+                        <tbody id="tokensTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- NFTs Tab -->
+            <div class="tab-pane fade" id="nfts">
+                <div class="row" id="nftsGrid"></div>
+            </div>
+
+            <!-- Validators Tab -->
+            <div class="tab-pane fade" id="validators">
+                <div class="data-table">
+                    <table class="table mb-0">
+                        <thead><tr><th>Rank</th><th>Validator</th><th>Votes</th><th>Uptime</th><th>Commission</th><th>Bonded</th></tr></thead>
+                        <tbody id="validatorsTable"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div class="tab-pane fade" id="charts">
+                <div class="row">
+                    <div class="col-md-6"><div class="chart-container mb-4"><h5>Daily Transactions</h5><canvas id="dailyTxChart"></canvas></div></div>
+                    <div class="col-md-6"><div class="chart-container mb-4"><h5>Gas Price History</h5><canvas id="gasChart"></canvas></div></div>
+                    <div class="col-md-6"><div class="chart-container mb-4"><h5>New Addresses</h5><canvas id="addressesChart"></canvas></div></div>
+                    <div class="col-md-6"><div class="chart-container mb-4"><h5>Contract Deployments</h5><canvas id="contractsChart"></canvas></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p><i class="fas fa-cube"></i> TigerChain Explorer &copy; 2024 | <a href="#" class="text-primary">API</a> | <a href="#" class="text-primary">Docs</a> | <a href="#" class="text-primary">Support</a></p>
+            <small>TigerChain Network: 18,500,001 blocks | 2.75B transactions</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API = 'http://localhost:4000/api/v1';
+
+        // Load Home Data
+        async function loadHome() {
+            try {
+                const [homeRes, blocksRes, txsRes, tokensRes] = await Promise.all([
+                    fetch(`${API}/home`),
+                    fetch(`${API}/blocks?page=1&limit=10`),
+                    fetch(`${API}/transactions?page=1&limit=10`),
+                    fetch(`${API}/tokens?page=1&limit=5`)
+                ]);
+                
+                const home = await homeRes.json();
+                const blocks = await blocksRes.json();
+                const txs = await txsRes.json();
+                const tokens = await tokensRes.json();
+
+                // Update stats
+                document.getElementById('currentBlock').textContent = home.data.currentBlock.toLocaleString();
+                document.getElementById('tps').textContent = home.data.tps;
+                document.getElementById('gasPrice').textContent = home.data.avgGasPrice;
+
+                // Render blocks
+                let blocksHtml = '';
+                blocks.data.forEach(block => {
+                    blocksHtml += `<tr>
+                        <td><a class="block-link" onclick="viewBlock(${block.number})">${block.number.toLocaleString()}</a></td>
+                        <td><span class="hash">${block.hash.slice(0, 10)}...${block.hash.slice(-8)}</span></td>
+                        <td>${block.transactions}</td>
+                        <td>${((block.gasUsed / block.gasLimit) * 100).toFixed(1)}%</td>
+                        <td><span class="address">${block.miner.slice(0, 8)}...${block.miner.slice(-6)}</span></td>
+                        <td>${timeAgo(block.timestamp)}</td>
+                    </tr>`;
+                });
+                document.getElementById('recentBlocks').innerHTML = blocksHtml;
+
+                // Render transactions
+                let txsHtml = '';
+                txs.data.forEach(tx => {
+                    txsHtml += `<tr>
+                        <td><span class="hash">${tx.hash.slice(0, 10)}...${tx.hash.slice(-8)}</span></td>
+                        <td><a class="block-link">${tx.blockNumber.toLocaleString()}</a></td>
+                        <td><span class="address">${tx.from.slice(0, 8)}...</span></td>
+                        <td><span class="address">${tx.to.slice(0, 8)}...</span></td>
+                        <td>${tx.value} TIGER</td>
+                        <td>${tx.gasPrice} Gwei</td>
+                        <td><span class="badge badge-success">Success</span></td>
+                        <td>${timeAgo(tx.timestamp)}</td>
+                    </tr>`;
+                });
+
+            } catch (e) {
+                console.log('Using demo data');
+                loadDemoData();
+            }
+        }
+
+        function loadDemoData() {
+            // Demo blocks
+            let blocksHtml = '';
+            for (let i = 0; i < 10; i++) {
+                const num = 18500000 - i;
+                blocksHtml += `<tr>
+                    <td><a class="block-link">${num.toLocaleString()}</a></td>
+                    <td><span class="hash">0x${Math.random().toString(16).slice(2, 12)}...</span></td>
+                    <td>${Math.floor(Math.random() * 200) + 50}</td>
+                    <td>${(Math.random() * 50 + 30).toFixed(1)}%</td>
+                    <td><span class="address">0x${Math.random().toString(16).slice(2, 10)}...</span></td>
+                    <td>${Math.floor(Math.random() * 60)}s ago</td>
+                </tr>`;
+            }
+            document.getElementById('recentBlocks').innerHTML = blocksHtml;
+        }
+
+        // Load Blocks
+        async function loadBlocks() {
+            let html = '';
+            for (let i = 0; i < 20; i++) {
+                const num = 18500000 - i;
+                html += `<tr>
+                    <td><a class="block-link">${num.toLocaleString()}</a></td>
+                    <td><span class="hash">0x${Math.random().toString(16).slice(2, 12)}...</span></td>
+                    <td><span class="hash">0x${Math.random().toString(16).slice(2, 12)}...</span></td>
+                    <td>${Math.floor(Math.random() * 200) + 50}</td>
+                    <td>${(Math.random() * 50 + 30).toFixed(1)}%</td>
+                    <td>2.5 TIGER</td>
+                    <td><span class="address">0x${Math.random().toString(16).slice(2, 10)}...</span></td>
+                    <td>${Math.floor(Math.random() * 60)}s ago</td>
+                </tr>`;
+            }
+            document.getElementById('blocksTable').innerHTML = html;
+        }
+
+        // Load Transactions
+        async function loadTransactions() {
+            let html = '';
+            for (let i = 0; i < 20; i++) {
+                html += `<tr>
+                    <td><span class="hash">0x${Math.random().toString(16).slice(2, 12)}...</span></td>
+                    <td><a class="block-link">${18500000 - Math.floor(Math.random() * 100)}</a></td>
+                    <td><span class="address">0x${Math.random().toString(16).slice(2, 10)}...</span></td>
+                    <td><span class="address">0x${Math.random().toString(16).slice(2, 10)}...</span></td>
+                    <td>${(Math.random() * 10).toFixed(4)} TIGER</td>
+                    <td>${(Math.random() * 50 + 10).toFixed(2)} Gwei</td>
+                    <td><span class="badge badge-success">Success</span></td>
+                    <td>${Math.floor(Math.random() * 3600)}s ago</td>
+                </tr>`;
+            }
+            document.getElementById('txTable').innerHTML = html;
+        }
+
+        // Load Tokens
+        async function loadTokens() {
+            const tokens = ['TIGER', 'THC', 'TSWAP', 'TDEF', 'TNFT', 'TBRG', 'TBOND'];
+            let html = '';
+            for (let i = 0; i < 15; i++) {
+                html += `<tr>
+                    <td>${i + 1}</td>
+                    <td><i class="fas fa-coins text-warning me-2"></i><strong>${tokens[i % tokens.length]}</strong></td>
+                    <td><span class="badge bg-primary">ERC20</span></td>
+                    <td>${(Math.random() * 50000 + 1000).toLocaleString()}</td>
+                    <td>${(Math.random() * 1000000 + 10000).toLocaleString()}</td>
+                    <td class="text-success">$${(Math.random() * 100).toFixed(2)}</td>
+                    <td>$${(Math.random() * 1000000000).toLocaleString()}</td>
+                    <td>$${(Math.random() * 100000000).toLocaleString()}</td>
+                </tr>`;
+            }
+            document.getElementById('tokensTable').innerHTML = html;
+        }
+
+        // Load NFTs
+        function loadNFTs() {
+            let html = '';
+            for (let i = 0; i < 8; i++) {
+                html += `<div class="col-md-3 mb-4">
+                    <div class="data-table p-3">
+                        <div style="height: 150px; background: linear-gradient(45deg, #627eea, #8b5cf6); border-radius: 8px; margin-bottom: 10px;"></div>
+                        <h6>Tiger NFT #${i + 1}</h6>
+                        <small class="text-muted">ERC721</small>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span>Floor: ${(Math.random() * 5).toFixed(2)} ETH</span>
+                            <span class="text-success">Vol: $${(Math.random() * 100000).toLocaleString()}</span>
+                        </div>
+                    </div>
+                </div>`;
+            }
+            document.getElementById('nftsGrid').innerHTML = html;
+        }
+
+        // Load Validators
+        function loadValidators() {
+            let html = '';
+            for (let i = 0; i < 21; i++) {
+                html += `<tr>
+                    <td>${i + 1}</td>
+                    <td><span class="address">0x${Math.random().toString(16).slice(2, 10)}...</span></td>
+                    <td>${(Math.random() * 10000000).toLocaleString()}</td>
+                    <td><span class="badge badge-success">${(Math.random() * 5 + 95).toFixed(2)}%</span></td>
+                    <td>${Math.floor(Math.random() * 20)}%</td>
+                    <td>${(Math.random() * 1000000).toFixed(2)} TIGER</td>
+                </tr>`;
+            }
+            document.getElementById('validatorsTable').innerHTML = html;
+        }
+
+        // Load Top Holders
+        function loadTopHolders() {
+            let html = '';
+            for (let i = 0; i < 5; i++) {
+                html += `<div class="p-3 border-bottom">
+                    <div class="d-flex justify-content-between">
+                        <span><span class="text-warning">#${i + 1}</span> <span class="address">0x${Math.random().toString(16).slice(2, 8)}...</span></span>
+                        <span>${(Math.random() * 10000).toFixed(2)} TIGER</span>
+                    </div>
+                </div>`;
+            }
+            document.getElementById('topHolders').innerHTML = html;
+        }
+
+        // Search
+        function search() {
+            const query = document.getElementById('searchInput').value;
+            if (query) {
+                alert('Searching for: ' + query);
+            }
+        }
+
+        // View Block
+        function viewBlock(number) {
+            alert('Viewing block: ' + number);
+        }
+
+        // Time helper
+        function timeAgo(timestamp) {
+            const seconds = Math.floor((Date.now() - timestamp) / 1000);
+            if (seconds < 60) return seconds + 's ago';
+            if (seconds < 3600) return Math.floor(seconds / 60) + 'm ago';
+            if (seconds < 86400) return Math.floor(seconds / 3600) + 'h ago';
+            return Math.floor(seconds / 86400) + 'd ago';
+        }
+
+        // Event Listeners
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('shown.bs.tab', (e) => {
+                const target = e.target.getAttribute('href');
+                if (target === '#blocks') loadBlocks();
+                if (target === '#transactions') loadTransactions();
+                if (target === '#tokens') loadTokens();
+                if (target === '#nfts') loadNFTs();
+                if (target === '#validators') loadValidators();
+            });
+        });
+
+        // Search on enter
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') search();
+        });
+
+        // Initialize
+        loadHome();
+        loadTopHolders();
+    </script>
+</body>
+</html>

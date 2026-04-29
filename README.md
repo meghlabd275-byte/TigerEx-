@@ -619,6 +619,55 @@ pm2 startup
 
 ---
 
+## тЪб BLOCK EXPLORER
+
+TigerEx includes a **complete Block Explorer** for the TigerChain network.
+
+### Block Explorer Features
+| Feature | Description |
+|---------|-------------|
+| Blocks | Real-time block data |
+| Transactions | All blockchain transactions |
+| Tokens | ERC20/ERC721/ERC1155 tracking |
+| NFTs | NFT collections & transfers |
+| Contracts | Smart contract verification |
+| Addresses | Full address analytics |
+| Validators | PoS validator info |
+| Charts | Historical analytics |
+| Search | Address/tx/block search |
+| WebSocket | Real-time updates |
+
+### Running Block Explorer
+```bash
+cd block-explorer/backend
+npm install
+node explorer.js
+# Opens on port 4000
+```
+
+### Block Explorer API
+```bash
+GET /api/v1/home      - Network stats
+GET /api/v1/blocks   - Block list
+GET /api/v1/block/:n - Block details
+GET /api/v1/transactions - Transactions
+GET /api/v1/tx/:hash - Transaction details
+GET /api/v1/tokens   - Token list
+GET /api/v1/token/:addr - Token details
+GET /api/v1/contracts - Contracts
+GET /api/v1/address/:addr - Address details
+GET /api/v1/charts   - Analytics
+GET /api/v1/validators - Validator list
+GET /api/v1/nfts     - NFT collections
+GET /api/v1/search/:query - Search
+```
+
+### Frontend
+- Open `block-explorer/frontend/index.html` in browser
+- Or serve via nginx for production
+
+---
+
 ## тЪб SUPPORT
 
 - **Email:** support@tigerex.com
