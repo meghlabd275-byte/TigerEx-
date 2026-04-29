@@ -50,7 +50,7 @@
 
 | Speed Feature | TigerEx | Binance | Coinbase | Kraken | KuCoin | ByBit | BitGet | OKX | MEXC | Gate.io | Huobi | Crypto.com | Gemini | Bitfinex | Liquid | Binance US |
 |-------------|:------:|:-------:|:---------:|:------:|:-----:|:-----:|:-----:|:---:|:----:|:------:|:----:|:--------:|:------:|:-------:|:------:|:---------:|
-| **SPOT TPS** | 100K | 1.4M | 100K | 50K | 500K | 100K | 200K | 100K | 100K | 100K | 500K | 50K | 50K | 50K | 50K | 100K |
+| **SPOT TPS** | 500K | 1.4M | 100K | 50K | 500K | 100K | 200K | 100K | 100K | 100K | 500K | 50K | 50K | 50K | 50K | 100K |
 | **API LATENCY** | <1ms | <2ms | <3ms | <2ms | <1ms | <1ms | <1ms | <1ms | <2ms | <1ms | <1ms | <3ms | <2ms | <2ms | <1ms | <2ms |
 | **ORDER MATCHING** | <50μs | <100μs | <200μs | <100μs | <50μs | <50μs | <50μs | <50μs | <100μs | <50μs | <50μs | <200μs | <100μs | <100μs | <100μs | <100μs |
 | **HTTP/WS** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
