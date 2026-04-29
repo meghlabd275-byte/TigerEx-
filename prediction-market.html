@@ -1,0 +1,493 @@
+<!--
+@file prediction-market.html
+@description TigerEx Prediction Market - Predict crypto prices, events, and win rewards
+Features like Polymarket, Poloniex - Binary outcome predictions
+@author TigerEx Development Team
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Market | TigerEx</title>
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #F0B90B; --bg-dark: #0B0E14; --bg-card: #1C2128; --text-primary: #EAECE4; --text-secondary: #8B929E; --border: #2A303C; --green: #00C087; --red: #F6465D; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-dark); color: var(--text-primary); min-height: 100vh; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: var(--bg-card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 700; color: var(--primary); text-decoration: none; }
+        .logo span { font-size: 28px; }
+        .nav { display: flex; gap: 24px; }
+        .nav a { color: var(--text-secondary); text-decoration: none; font-size: 14px; }
+        .nav a:hover, .nav a.active { color: var(--primary); }
+        .header-right { display: flex; gap: 12px; }
+        .user-balance { background: var(--bg-dark); padding: 8px 16px; border-radius: 8px; }
+        .user-balance span { color: var(--green); font-weight: 600; }
+        .main { padding: 24px; max-width: 1400px; margin: 0 auto; }
+        
+        .page-title { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+        .page-subtitle { color: var(--text-secondary); margin-bottom: 24px; }
+        
+        /* Stats Banner */
+        .stats-banner { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: var(--bg-card); border-radius: 12px; padding: 20px; text-align: center; }
+        .stat-value { font-size: 24px; font-weight: 700; color: var(--primary); }
+        .stat-label { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+        
+        /* Category Tabs */
+        .cat-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+        .cat-tabs button { padding: 10px 20px; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-secondary); border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; }
+        .cat-tabs button.active { background: var(--primary); color: #000; border-color: var(--primary); }
+        
+        /* Market Grid */
+        .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
+        
+        .market-card { background: var(--bg-card); border-radius: 16px; padding: 24px; transition: all 0.2s; }
+        .market-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+        
+        .market-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
+        .market-category { display: flex; align-items: center; gap: 8px; }
+        .cat-badge { padding: 4px 10px; background: rgba(240, 185, 11, 0.15); color: var(--primary); border-radius: 4px; font-size: 11px; font-weight: 600; }
+        .market-status { width: 10px; height: 10px; border-radius: 50%; background: var(--green); }
+        .market-status.closed { background: var(--red); }
+        .market-status.resolved { background: var(--primary); }
+        
+        .market-question { font-size: 16px; font-weight: 600; line-height: 1.4; margin-bottom: 16px; min-height: 48px; }
+        
+        .odds-display { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+        .odds-col { text-align: center; }
+        .odds-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+        .odds-value { font-size: 28px; font-weight: 700; }
+        .odds-value.yes { color: var(--green); }
+        .odds-value.no { color: var(--red); }
+        
+        .market-stats { display: flex; justify-content: space-between; padding: 12px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+        .market-stat { text-align: center; }
+        .market-stat-label { font-size: 11px; color: var(--text-secondary); }
+        .market-stat-value { font-size: 14px; font-weight: 600; }
+        
+        .end-date { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; }
+        
+        .trade-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .trade-btn { padding: 14px; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .trade-btn.yes { background: var(--green); color: #000; }
+        .trade-btn.no { background: var(--red); color: #fff; }
+        .trade-btn:hover { opacity: 0.85; transform: scale(1.02); }
+        .trade-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        
+        /* Result Badge */
+        .result-badge { display: inline-block; padding: 8px 16px; border-radius: 8px; font-weight: 700; margin-top: 12px; }
+        .result-badge.yes { background: var(--green); color: #000; }
+        .result-badge.no { background: var(--red); color: #fff; }
+        .result-badge.pending { background: var(--text-secondary); color: #000; }
+        
+        /* Leaderboard */
+        .leaderboard { background: var(--bg-card); border-radius: 16px; padding: 24px; margin-top: 32px; }
+        .leaderboard-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+        .leader-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); }
+        .leader-row:last-child { border: none; }
+        .leader-rank { font-size: 18px; font-weight: 700; width: 40px; }
+        .leader-rank.gold { color: #FFD700; }
+        .leader-rank.silver { color: #C0C0C0; }
+        .leader-rank.bronze { color: #CD7F32; }
+        .leader-info { flex: 1; margin-left: 16px; }
+        .leader-name { font-weight: 600; }
+        .leader-accuracy { font-size: 13px; color: var(--text-secondary); }
+        .leader-pnl { font-weight: 700; color: var(--green); }
+        
+        /* Create Market */
+        .create-card { background: var(--bg-card); border: 2px dashed var(--border); border-radius: 16px; padding: 40px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .create-card:hover { border-color: var(--primary); }
+        .create-icon { font-size: 32px; margin-bottom: 12px; }
+        .create-text { font-weight: 600; margin-bottom: 8px; }
+        .create-subtext { font-size: 13px; color: var(--text-secondary); }
+        
+        @media (max-width: 768px) {
+            .stats-banner { grid-template-columns: 1fr 1fr; }
+            .market-grid { grid-template-columns: 1fr; }
+            .leaderboard { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo"><span>🐯</span> TigerEx Prediction</a>
+        <nav class="nav">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="pre-market.html">Pre-Market</a>
+            <a href="prediction-market.html" class="active">Predictions</a>
+            <a href="earn.html">Earn</a>
+        </nav>
+        <div class="header-right">
+            <div class="user-balance">Balance: <span>$0.00</span></div>
+        </div>
+    </header>
+
+    <main class="main">
+        <h1 class="page-title">Prediction Market</h1>
+        <p class="page-subtitle">Predict outcomes and earn rewards - Crypto, Sports, Politics, & More</p>
+
+        <!-- Stats -->
+        <div class="stats-banner">
+            <div class="stat-card">
+                <div class="stat-value">$1.2M</div>
+                <div class="stat-label">Prize Pool</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">89</div>
+                <div class="stat-label">Active Markets</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">12,450</div>
+                <div class="stat-label">Traders</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">$4.2M</div>
+                <div class="stat-label">24h Volume</div>
+            </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="cat-tabs">
+            <button class="active" data-cat="all">All</button>
+            <button data-cat="crypto">Crypto</button>
+            <button data-cat="sports">Sports</button>
+            <button data-cat="politics">Politics</button>
+            <button data-cat="economy">Economy</button>
+            <button data-cat="tech">Tech</button>
+            <button data-cat="entertainment">Entertainment</button>
+        </div>
+
+        <!-- Markets Grid -->
+        <div class="market-grid">
+            <!-- Market 1 -->
+            <div class="market-card" data-category="crypto">
+                <div class="market-header">
+                    <div class="market-category">
+                        <span class="cat-badge">CRYPTO</span>
+                        <span class="market-status"></span>
+                    </div>
+                </div>
+                <div class="market-question">Will BTC reach $100,000 by December 31, 2026?</div>
+                <div class="odds-display">
+                    <div class="odds-col">
+                        <div class="odds-label">YES</div>
+                        <div class="odds-value yes">62%</div>
+                    </div>
+                    <div class="odds-col">
+                        <div class="odds-label">NO</div>
+                        <div class="odds-value no">38%</div>
+                    </div>
+                </div>
+                <div class="market-stats">
+                    <div class="market-stat">
+                        <div class="market-stat-label">Volume</div>
+                        <div class="market-stat-value">$245K</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-label">Traders</div>
+                        <div class="market-stat-value">1,890</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-label">Ends</div>
+                        <div class="market-stat-value">Dec 31</div>
+                    </div>
+                </div>
+                <button class="trade-btn yes" data-action="buy" data-outcome="yes" data-market="btc100k">Bet YES $50</button>
+                <button class="trade-btn no" data-action="buy" data-outcome="no" data-market="btc100k">Bet NO $50</button>
+            </div>
+
+            <!-- Market 2 -->
+            <div class="market-card" data-category="crypto">
+                <div class="market-header">
+                    <div class="market-category">
+                        <span class="cat-badge">CRYPTO</span>
+                        <span class="market-status"></span>
+                    </div>
+                </div>
+                <div class="market-question">Will ETH flippin BTC market cap by end of 2026?</div>
+                <div class="odds-display">
+                    <div class="odds-col">
+                        <div class="odds-label">YES</div>
+                        <div class="odds-value yes">18%</div>
+                    </div>
+                    <div class="odds-col">
+                        <div class="odds-label">NO</div>
+                        <div class="odds-value no">82%</div>
+                    </div>
+                </div>
+                <div class="market-stats">
+                    <div class="market-stat">
+                        <div class="market-stat-label">Volume</div>
+                        <div class="market-stat-value">$89K</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-label">Traders</div>
+                        <div class="market-stat-value">542</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-label">Ends</div>
+                        <div class="market-stat-value">Dec 31</div>
+                    </div>
+                </div>
+                <button class="trade-btn yes" data-action="buy" data-outcome="yes" data-market="ethflip">Bet YES $50</button>
+                <button class="trade-btn no" data-action="buy" data-outcome="no" data-market="ethflip">Bet NO $50</button>
+            </div>
+
+            <!-- Market 3 -->
+            <div class="market-card" data-category="crypto">
+                <div class="market-header">
+                    <div class="market-category">
+                        <span class="cat-badge">CRYPTO</span>
+                        <span class="market-status"></span>
+                    </div>
+                </div>
+                <div class="market-question">Will Solana hit $500 in 2026?</div>
+                <div class="odds-display">
+                    <div class="odds-col">
+                        <div class="odds-label">YES</div>
+                        <div class="odds-value yes">45%</div>
+                    </div>
+                    <div class="odds-col">
+                        <div class="odds-label">NO</div>
+                        <div class="odds-value no">55%</div>
+                    </div>
+                </div>
+                <div class="market-stats">
+                    <div class="market-stat">
+                        <div class="market-stat-label">Volume</div>
+                        <div class="market-stat-value">$156K</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-label">Traders</div>
+                        <div class="market-stat-value">1,245</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-label">Ends</div>
+                        <div class="market-stat-value">Dec 31</div>
+                    </div>
+                </div>
+                <button class="trade-btn yes" data-action="buy" data-outcome="yes" data-market="sol500">Bet YES $50</button>
+                <button class="trade-btn no" data-action="buy" data-outcome="no" data-market="sol500">Bet NO $50</button>
+            </div>
+
+            <!-- Market 4 -->
+            <div class="market-card" data-category="tech">
+                <div class="market-header">
+                    <div class="market-category">
+                        <span class="cat-badge">TECH</span>
+                        <span class="market-status"></span>
+                    </div>
+                </div>
+                <div class="market-question">Will GPT-5 be released in 2026?</div>
+                <div class="odds-display">
+                    <div class="odds-col">
+                        <div class="odds-label">YES</div>
+                        <div class="odds-value yes">72%</div>
+                    </div>
+                    <div class="odds-col">
+                        <div class="odds-label">NO</div>
+                        <div class="odds-value no">28%</div>
+                    </div>
+                </div>
+                <div class="market-stats">
+                    <div class="market-stat">
+                        <div class="market-stat-label">Volume</div>
+                        <div class="market-stat-value">$98K</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-label">Traders</div>
+                        <div class="market-stat-value">892</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-label">Ends</div>
+                        <div class="market-stat-value">Dec 31</div>
+                    </div>
+                </div>
+                <button class="trade-btn yes" data-action="buy" data-outcome="yes" data-market="gpt5">Bet YES $50</button>
+                <button class="trade-btn no" data-action="buy" data-outcome="no" data-market="gpt5">Bet NO $50</button>
+            </div>
+
+            <!-- Market 5 -->
+            <div class="market-card" data-category="economy">
+                <div class="market-header">
+                    <div class="market-category">
+                        <span class="cat-badge">ECONOMY</span>
+                        <span class="market-status"></span>
+                    </div>
+                </div>
+                <div class="market-question">Will Fed cut rates below 4% in 2026?</div>
+                <div class="odds-display">
+                    <div class="odds-col">
+                        <div class="odds-label">YES</div>
+                        <div class="odds-value yes">55%</div>
+                    </div>
+                    <div class="odds-col">
+                        <div class="odds-label">NO</div>
+                        <div class="odds-value no">45%</div>
+                    </div>
+                </div>
+                <div class="market-stats">
+                    <div class="market-stat">
+                        <div class="market-stat-label">Volume</div>
+                        <div class="market-stat-value">$67K</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-label">Traders</div>
+                        <div class="market-stat-value">445</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-label">Ends</div>
+                        <div class="market-stat-value">Dec 31</div>
+                    </div>
+                </div>
+                <button class="trade-btn yes" data-action="buy" data-outcome="yes" data-market="fedrates">Bet YES $50</button>
+                <button class="trade-btn no" data-action="buy" data-outcome="no" data-market="fedrates">Bet NO $50</button>
+            </div>
+
+            <!-- Market 6 -->
+            <div class="market-card" data-category="sports">
+                <div class="market-header">
+                    <div class="market-category">
+                        <span class="cat-badge">SPORTS</span>
+                        <span class="market-status"></span>
+                    </div>
+                </div>
+                <div class="market-question">Will Team USA win more than 30 gold medals at 2026 Winter Olympics?</div>
+                <div class="odds-display">
+                    <div class="odds-col">
+                        <div class="odds-label">YES</div>
+                        <div class="odds-value yes">38%</div>
+                    </div>
+                    <div class="odds-col">
+                        <div class="odds-label">NO</div>
+                        <div class="odds-value no">62%</div>
+                    </div>
+                </div>
+                <div class="market-stats">
+                    <div class="market-stat">
+                        <div class="market-stat-label">Volume</div>
+                        <div class="market-stat-value">$45K</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-label">Traders</div>
+                        <div class="market-stat-value">312</div>
+                    </div>
+                    <div class="market-stat">
+                        <div class="market-stat-label">Ends</div>
+                        <div class="market-stat-value">Feb 8</div>
+                    </div>
+                </div>
+                <button class="trade-btn yes" data-action="buy" data-outcome="yes" data-market="olympics">Bet YES $50</button>
+                <button class="trade-btn no" data-action="buy" data-outcome="no" data-market="olympics">Bet NO $50</button>
+            </div>
+
+            <!-- Create Market -->
+            <div class="create-card" onclick="createMarket()">
+                <div class="create-icon">+</div>
+                <div class="create-text">Create Your Market</div>
+                <div class="create-subtext">Propose a new prediction market</div>
+            </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="leaderboard">
+            <div class="leaderboard-title">🏆 Top Predictors This Week</div>
+            <div class="leader-row">
+                <div class="leader-rank gold">1</div>
+                <div class="leader-info">
+                    <div class="leader-name">CryptoKing</div>
+                    <div class="leader-accuracy">92% accuracy</div>
+                </div>
+                <div class="leader-pnl">+$12,450</div>
+            </div>
+            <div class="leader-row">
+                <div class="leader-rank silver">2</div>
+                <div class="leader-info">
+                    <div class="leader-name">WhaleHunter</div>
+                    <div class="leader-accuracy">88% accuracy</div>
+                </div>
+                <div class="leader-pnl">+$8,920</div>
+            </div>
+            <div class="leader-row">
+                <div class="leader-rank bronze">3</div>
+                <div class="leader-info">
+                    <div class="leader-name">DefiDegen</div>
+                    <div class="leader-accuracy">85% accuracy</div>
+                </div>
+                <div class="leader-pnl">+$6,340</div>
+            </div>
+            <div class="leader-row">
+                <div class="leader-rank">4</div>
+                <div class="leader-info">
+                    <div class="leader-name">MoonShot</div>
+                    <div class="leader-accuracy">82% accuracy</div>
+                </div>
+                <div class="leader-pnl">+$4,120</div>
+            </div>
+            <div class="leader-row">
+                <div class="leader-rank">5</div>
+                <div class="leader-info">
+                    <div class="leader-name">AlphaSeeker</div>
+                    <div class="leader-accuracy">79% accuracy</div>
+                </div>
+                <div class="leader-pnl">+$3,890</div>
+            </div>
+        </div>
+    </main>
+
+    <script src="assets/js/auth-guard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Category tabs
+            document.querySelectorAll('.cat-tabs button').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.cat-tabs button').forEach(function(b) {
+                        b.classList.remove('active');
+                    });
+                    btn.classList.add('active');
+                    
+                    var cat = btn.dataset.cat;
+                    document.querySelectorAll('.market-card').forEach(function(card) {
+                        if(cat === 'all' || card.dataset.category === cat) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Trade buttons
+            document.querySelectorAll('.trade-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    if(window.TigerAuth && window.TigerAuth.isAuthenticated()) {
+                        const outcome = btn.dataset.outcome;
+                        const market = btn.dataset.market;
+                        alert('Bet placed: ' + outcome.toUpperCase() + ' on ' + market + '!');
+                    } else {
+                        alert('Please login to place predictions');
+                        window.location.href = 'login.html';
+                    }
+                });
+            });
+
+            console.log('TigerEx Prediction Market Loaded');
+        });
+
+        function createMarket() {
+            const question = prompt('Enter your prediction question:');
+            if(question) {
+                const endDate = prompt('Enter end date (YYYY-MM-DD):');
+                if(endDate) {
+                    alert('Market "' + question + '" created! Waiting for approval.');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
