@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx White Label Admin - Client Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #627eea; --dark: #0d1117; --darker: #010409; --light: #c9d1d9; --success: #3fb950; --warning: #d29922; --danger: #f85149; }
+        body { background: var(--darker); color: var(--light); font-family: 'Segoe UI', system-ui, sans-serif; }
+        .sidebar { background: var(--dark); min-height: 100vh; border-right: 1px solid #30363d; }
+        .sidebar-header { padding: 20px; border-bottom: 1px solid #30363d; }
+        .nav-link { color: #8b949e; padding: 12px 20px; border-radius: 0; }
+        .nav-link:hover { color: var(--light); background: #161b22; }
+        .nav-link.active { color: var(--primary); background: rgba(98,126,234,0.1); border-left: 3px solid var(--primary); }
+        .main-content { padding: 24px; }
+        .card-dark { background: var(--dark); border: 1px solid #30363d; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+        .stat-card { background: var(--dark); border: 1px solid #30363d; border-radius: 12px; padding: 20px; }
+        .stat-value { font-size: 28px; font-weight: 700; }
+        .btn-primary { background: var(--primary); border: none; }
+        .btn-success { background: var(--success); border: none; }
+        .btn-danger { background: var(--danger); border: none; }
+        .form-control { background: #161b22; border: 1px solid #30363d; color: white; }
+        .form-control:focus { background: #161b22; border-color: var(--primary); color: white; }
+        .form-select { background: #161b22; border: 1px solid #30363d; color: white; }
+        .table-dark { background: var(--dark); border-radius: 12px; overflow: hidden; }
+        .table-dark th { background: #161b22; border-color: #30363d; color: #8b949e; }
+        .table-dark td { border-color: #21262d; }
+        .badge-active { background: rgba(63,185,80,0.2); color: var(--success); }
+        .badge-inactive { background: rgba(248,81,73,0.2); color: var(--danger); }
+        .feature-toggle { width: 50px; height: 26px; background: #30363d; border-radius: 13px; position: relative; cursor: pointer; }
+        .feature-toggle.active { background: var(--success); }
+        .feature-toggle::after { content: ''; position: absolute; width: 22px; height: 22px; background: white; border-radius: 50%; top: 2px; left: 2px; transition: 0.3s; }
+        .feature-toggle.active::after { left: 26px; }
+        .product-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar">
+            <div class="sidebar-header">
+                <h5><i class="fas fa-cube text-primary"></i> TigerEx</h5>
+                <small class="text-muted">White Label Admin</small>
+            </div>
+            <div class="nav flex-column">
+                <a class="nav-link active" href="#dashboard" onclick="showSection('dashboard')">
+                    <i class="fas fa-th-large me-2"></i> Dashboard
+                </a>
+                <a class="nav-link" href="#products" onclick="showSection('products')">
+                    <i class="fas fa-box me-2"></i> Products
+                </a>
+                <a class="nav-link" href="#users" onclick="showSection('users')">
+                    <i class="fas fa-users me-2"></i> Users
+                </a>
+                <a class="nav-link" href="#blockchain" onclick="showSection('blockchain')">
+                    <i class="fas fa-link me-2"></i> Blockchain
+                </a>
+                <a class="nav-link" href="#wallet" onclick="showSection('wallet')">
+                    <i class="fas fa-wallet me-2"></i> Wallet
+                </a>
+                <a class="nav-link" href="#trading" onclick="showSection('trading')">
+                    <i class="fas fa-chart-line me-2"></i> Trading
+                </a>
+                <a class="nav-link" href="#api" onclick="showSection('api')">
+                    <i class="fas fa-code me-2"></i> API Keys
+                </a>
+                <a class="nav-link" href="#branding" onclick="showSection('branding')">
+                    <i class="fas fa-palette me-2"></i> Branding
+                </a>
+                <a class="nav-link" href="#settings" onclick="showSection('settings')">
+                    <i class="fas fa-cog me-2"></i> Settings
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center py-3 border-bottom border-secondary">
+                <h4 id="pageTitle">Dashboard</h4>
+                <div class="d-flex gap-3">
+                    <span class="navbar-text">
+                        <i class="fas fa-user me-1"></i> <span id="clientName">DemoClient</span>
+                    </span>
+                    <button class="btn btn-sm btn-outline-light" onclick="logout()">Logout</button>
+                </div>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section">
+                <div class="row mt-4">
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="text-muted">Total Users</div>
+                            <div class="stat-value text-primary">12,450</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="text-muted">Active Wallets</div>
+                            <div class="stat-value text-success">8,230</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="text-muted">Total Volume</div>
+                            <div class="stat-value">$2.4M</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="text-muted">Fees Earned</div>
+                            <div class="stat-value text-warning">$48,500</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card-dark">
+                            <h5>Recent Activity</h5>
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span><i class="fas fa-user-plus text-success me-2"></i> New user registered</span>
+                                <small class="text-muted">2 min ago</small>
+                            </div>
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span><i class="fas fa-wallet text-primary me-2"></i> Wallet created</span>
+                                <small class="text-muted">5 min ago</small>
+                            </div>
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span><i class="fas fa-exchange-alt text-warning me-2"></i> Swap executed</span>
+                                <small class="text-muted">12 min ago</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-dark">
+                            <h5>Enabled Products</h5>
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span><i class="fas fa-chart-line me-2"></i> Spot Trading</span>
+                                <span class="badge badge-active">Active</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span><i class="fas fa-coins me-2"></i> Staking</span>
+                                <span class="badge badge-active">Active</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span><i class="fas fa-link me-2"></i> Bridge</span>
+                                <span class="badge badge-active">Active</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2">
+                                <span><i class="fas fa-wallet me-2"></i> Wallet</span>
+                                <span class="badge badge-active">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Section -->
+            <div id="products" class="section" style="display:none;">
+                <div class="d-flex justify-content-between mt-4">
+                    <h5>Manage Products</h5>
+                    <button class="btn btn-primary" onclick="addProduct()">
+                        <i class="fas fa-plus me-1"></i> Add Product
+                    </button>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div class="card-dark">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="product-icon bg-primary-subtle" style="background: rgba(98,126,234,0.2); color: var(--primary);">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h5 class="mb-0">Spot Trading</h5>
+                                    <small class="text-muted">Basic spot exchange</small>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="feature-toggle active" onclick="toggleFeature(this)"></div>
+                                <button class="btn btn-sm btn-outline-primary">Configure</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-dark">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="product-icon bg-success-subtle" style="background: rgba(63,185,64,0.2); color: var(--success);">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h5 class="mb-0">Staking</h5>
+                                    <small class="text-muted">Earn rewards</small>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="feature-toggle active" onclick="toggleFeature(this)"></div>
+                                <button class="btn btn-sm btn-outline-primary">Configure</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-dark">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="product-icon bg-warning-subtle" style="background: rgba(210,153,34,0.2); color: var(--warning);">
+                                    <i class="fas fa-link"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h5 class="mb-0">Bridge</h5>
+                                    <small class="text-muted">Cross-chain transfer</small>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="feature-toggle active" onclick="toggleFeature(this)"></div>
+                                <button class="btn btn-sm btn-outline-primary">Configure</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-dark">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="product-icon bg-info-subtle" style="background: rgba(59,130,246,0.2); color: #3b82f6;">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h5 class="mb-0">Wallet</h5>
+                                    <small class="text-muted">Multi-chain wallet</small>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="feature-toggle active" onclick="toggleFeature(this)"></div>
+                                <button class="btn btn-sm btn-outline-primary">Configure</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-dark">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="product-icon bg-danger-subtle" style="background: rgba(248,81,73,0.2); color: var(--danger);">
+                                    <i class="fas fa-rocket"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h5 class="mb-0">Launchpad</h5>
+                                    <small class="text-muted">Token sales</small>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="feature-toggle" onclick="toggleFeature(this)"></div>
+                                <button class="btn btn-sm btn-outline-primary">Configure</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-dark">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="product-icon bg-purple-subtle" style="background: rgba(168,85,247,0.2); color: #a855f7;">
+                                    <i class="fas fa-image"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h5 class="mb-0">NFT Marketplace</h5>
+                                    <small class="text-muted">NFT trading</small>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="feature-toggle" onclick="toggleFeature(this)"></div>
+                                <button class="btn btn-sm btn-outline-primary">Configure</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Section -->
+            <div id="users" class="section" style="display:none;">
+                <div class="d-flex justify-content-between mt-4">
+                    <h5>User Management</h5>
+                    <button class="btn btn-primary" onclick="addUser()">
+                        <i class="fas fa-user-plus me-1"></i> Add User
+                    </button>
+                </div>
+
+                <div class="card-dark mt-3">
+                    <table class="table table-dark mb-0">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Verified</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><i class="fas fa-user-circle me-2"></i> John Doe</td>
+                                <td>john@example.com</td>
+                                <td><span class="badge badge-active">Active</span></td>
+                                <td><span class="badge badge-active">KYC Verified</span></td>
+                                <td>2024-01-15</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">Edit</button>
+                                    <button class="btn btn-sm btn-outline-danger">Ban</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><i class="fas fa-user-circle me-2"></i> Jane Smith</td>
+                                <td>jane@example.com</td>
+                                <td><span class="badge badge-active">Active</span></td>
+                                <td><span class="badge badge-inactive">Pending</span></td>
+                                <td>2024-02-20</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary">Edit</button>
+                                    <button class="btn btn-sm btn-outline-danger">Ban</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Blockchain Section -->
+            <div id="blockchain" class="section" style="display:none;">
+                <div class="d-flex justify-content-between mt-4">
+                    <h5>Blockchain Management</h5>
+                    <button class="btn btn-primary" onclick="createChain()">
+                        <i class="fas fa-plus me-1"></i> Create Chain
+                    </button>
+                </div>
+
+                <div class="card-dark mt-3">
+                    <h6>My Blockchains</h6>
+                    <div class="table-dark">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Chain</th>
+                                    <th>Chain ID</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Blocks</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>TigerChain</strong></td>
+                                    <td>0x152</td>
+                                    <td><span class="badge badge-active">EVM</span></td>
+                                    <td><span class="badge badge-active">Active</span></td>
+                                    <td>1.2M</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary">Explorer</button>
+                                        <button class="btn btn-sm btn-outline-warning">Settings</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card-dark mt-3">
+                    <h6>Supported Networks</h6>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <span class="badge bg-primary">Ethereum</span>
+                        <span class="badge bg-warning text-dark">BNB Chain</span>
+                        <span class="badge" style="background: #8247e5;">Polygon</span>
+                        <span class="badge" style="background: #28a0f0;">Arbitrum</span>
+                        <span class="badge" style="background: #f7931a;">Bitcoin</span>
+                        <span class="badge" style="background: #9945ff;">Solana</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wallet Section -->
+            <div id="wallet" class="section" style="display:none;">
+                <div class="d-flex justify-content-between mt-4">
+                    <h5>Wallet Configuration</h5>
+                    <button class="btn btn-primary" onclick="configureWallet()">
+                        <i class="fas fa-cog me-1"></i> Configure
+                    </button>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="card-dark">
+                            <h6>Wallet Types</h6>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" checked>
+                                <label class="form-check-label">Non-Custodial (User controls keys)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" checked>
+                                <label class="form-check-label">Custodial (Admin controlled)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" checked>
+                                <label class="form-check-label">Multi-Sig Support</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-dark">
+                            <h6>Supported Chains</h6>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <span class="badge bg-primary">ETH</span>
+                                <span class="badge bg-warning text-dark">BNB</span>
+                                <span class="badge" style="background: #8247e5;">MATIC</span>
+                                <span class="badge" style="background: #f7931a;">BTC</span>
+                                <span class="badge" style="background: #9945ff;">SOL</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trading Section -->
+            <div id="trading" class="section" style="display:none;">
+                <h5 class="mt-4">Trading Configuration</h5>
+
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="card-dark">
+                            <h6>Trading Pairs</h6>
+                            <table class="table">
+                                <tr><td>BTC/USDT</td><td><span class="badge badge-active">Active</span></td></tr>
+                                <tr><td>ETH/USDT</td><td><span class="badge badge-active">Active</span></td></tr>
+                                <tr><td>TIGER/USDT</td><td><span class="badge badge-active">Active</span></td></tr>
+                            </table>
+                            <button class="btn btn-sm btn-primary">Add Pair</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-dark">
+                            <h6>Fee Structure</h6>
+                            <div class="mb-2">
+                                <label>Maker Fee</label>
+                                <input type="number" class="form-control" value="0.001">
+                            </div>
+                            <div class="mb-2">
+                                <label>Taker Fee</label>
+                                <input type="number" class="form-control" value="0.001">
+                            </div>
+                            <button class="btn btn-sm btn-primary">Update Fees</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Section -->
+            <div id="api" class="section" style="display:none;">
+                <h5 class="mt-4">API Keys</h5>
+
+                <div class="card-dark mt-3">
+                    <button class="btn btn-primary mb-3" onclick="createApiKey()">
+                        <i class="fas fa-plus me-1"></i> Create API Key
+                    </button>
+                    <table class="table table-dark">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Key</th>
+                                <th>Permissions</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Trading Bot</td>
+                                <td><code>tigex_live_***********</code></td>
+                                <td>Read, Write</td>
+                                <td>2024-01-15</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-danger">Revoke</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Branding Section -->
+            <div id="branding" class="section" style="display:none;">
+                <h5 class="mt-4">Branding Configuration</h5>
+
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="card-dark">
+                            <h6>Company Info</h6>
+                            <div class="mb-2">
+                                <label>Company Name</label>
+                                <input type="text" class="form-control" id="brandName" placeholder="My Exchange">
+                            </div>
+                            <div class="mb-2">
+                                <label>Support Email</label>
+                                <input type="email" class="form-control" placeholder="support@myexchange.com">
+                            </div>
+                            <div class="mb-2">
+                                <label>Website</label>
+                                <input type="url" class="form-control" placeholder="https://myexchange.com">
+                            </div>
+                            <button class="btn btn-primary" onclick="saveBranding()">Save</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-dark">
+                            <h6>Theme Colors</h6>
+                            <div class="mb-2">
+                                <label>Primary Color</label>
+                                <input type="color" class="form-control" value="#627eea">
+                            </div>
+                            <div class="mb-2">
+                                <label>Secondary Color</label>
+                                <input type="color" class="form-control" value="#0d1117">
+                            </div>
+                            <div class="mb-2">
+                                <label>Accent Color</label>
+                                <input type="color" class="form-control" value="#3fb950">
+                            </div>
+                            <button class="btn btn-primary">Apply Theme</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings" class="section" style="display:none;">
+                <h5 class="mt-4">Admin Settings</h5>
+
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="card-dark">
+                            <h6>Security</h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" checked>
+                                <label>Require 2FA for admin</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" checked>
+                                <label>IP Whitelist</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox">
+                                <label>API Rate Limiting</label>
+                            </div>
+                            <button class="btn btn-primary">Save Security</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-dark">
+                            <h6>Notifications</h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" checked>
+                                <label>Email alerts</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" checked>
+                                <label>SMS alerts</label>
+                            </div>
+                            <button class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Section navigation
+    function showSection(id) {
+        document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+        document.getElementById(id).style.display = 'block';
+        
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        const titles = {
+            'dashboard': 'Dashboard',
+            'products': 'Products Management',
+            'users': 'User Management',
+            'blockchain': 'Blockchain Management',
+            'wallet': 'Wallet Configuration',
+            'trading': 'Trading Settings',
+            'api': 'API Keys',
+            'branding': 'Branding',
+            'settings': 'Settings'
+        };
+        document.getElementById('pageTitle').textContent = titles[id] || 'Dashboard';
+    }
+
+    // Toggle feature
+    function toggleFeature(el) {
+        el.classList.toggle('active');
+    }
+
+    // Add product
+    function addProduct() {
+        alert('Opening product creator wizard...');
+    }
+
+    // Add user  
+    function addUser() {
+        alert('Opening add user form...');
+    }
+
+    // Create blockchain
+    function createChain() {
+        alert('Opening blockchain creator...');
+    }
+
+    // Configure wallet
+    function configureWallet() {
+        alert('Wallet configuration panel...');
+    }
+
+    // Create API key
+    function createApiKey() {
+        alert('Creating new API key...');
+    }
+
+    // Save branding
+    function saveBranding() {
+        const name = document.getElementById('brandName').value;
+        alert(`Branding saved for ${name || 'your exchange'}!`);
+    }
+
+    // Logout
+    function logout() {
+        alert('Logging out...');
+    }
+</script>
+</body>
+</html>
