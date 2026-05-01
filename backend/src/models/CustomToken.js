@@ -402,7 +402,7 @@ customTokenSchema.statics.findActiveTokens = function(options = {}) {
   }
   
   return this.find(query)
-    .sort({ options.sortBy || 'marketCap', options.sortOrder || -1 })
+    .sort({ sortBy: options.sortBy || 'marketCap', sortOrder: options.sortOrder || -1 })
     .limit(options.limit || 100)
     .skip(options.offset || 0)
     .populate('createdBy', 'username email');
@@ -453,7 +453,7 @@ customTokenSchema.statics.searchTokens = function(searchTerm, options = {}) {
   }
   
   return this.find(query)
-    .sort({ options.sortBy || 'marketCap', options.sortOrder || -1 })
+    .sort({ sortBy: options.sortBy || 'marketCap', sortOrder: options.sortOrder || -1 })
     .limit(options.limit || 50)
     .skip(options.offset || 0)
     .populate('createdBy', 'username email');

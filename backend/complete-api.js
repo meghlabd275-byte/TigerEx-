@@ -142,12 +142,13 @@ app.post('/api/v1/auth/register', authLimiter, async (req, res) => {
         }
         
         const hash = await bcrypt.hash(password, 12);
-        const referralCode = 'REF' + uuidv4().slice(0, 8).toUpperCase();
+        // Use body referralCode if provided, otherwise generate new one
+        const userReferralCode = referralCode || 'REF' + uuidv4().slice(0, 8).toUpperCase();
         
         const result = await pg.query(
             `INSERT INTO users (email, username, password_hash, referral_code, created_at) 
              VALUES ($1, $2, $3, $4, NOW()) RETURNING id, email, username`,
-            [email.toLowerCase(), username.toLowerCase(), hash, referralCode]
+            [email.toLowerCase(), username.toLowerCase(), hash, userReferralCode]
         );
         
         await pg.query(
