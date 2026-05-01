@@ -1,4 +1,5 @@
 # TigerEx - Complete Cryptocurrency Exchange Platform
+## Version 3.0.0 | Production Ready
 
 ![Version](https://img.shields.io/badge/Version-3.0.0-blue)
 ![TPS](https://img.shields.io/badge/TPS-2M%2B-green)
