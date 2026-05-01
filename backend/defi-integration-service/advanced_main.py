@@ -72,7 +72,7 @@ class DeFiProtocol(str, Enum):
     RAYDIUM = "raydium"
     SERUM = "serum"
     BALANCER = "balancer"
-    1INCH = "1inch"
+    ONEINCH = "1inch"
     ALGEBRA = "algebra"
 
 class YieldType(str, Enum):

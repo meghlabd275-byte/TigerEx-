@@ -586,7 +586,7 @@ async def resume_trading_pair(pair_id: str, admin_id: str = "current_admin"):
             raise HTTPException(status_code=404, detail="Trading pair not found")
         
         if pair["status"] != CoinStatus.SUSPENDED:
-            raise HTTPException(status_code=400, detail="Pair is not paused"
+            raise HTTPException(status_code=400, detail="Pair is not paused")
         
         # Update status
         await update_pair_status(pair_id, CoinStatus.ACTIVE)
@@ -605,7 +605,7 @@ async def resume_trading_pair(pair_id: str, admin_id: str = "current_admin"):
         }
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail(str(e))
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.delete("/pairs/{pair_id}")
 async def delete_trading_pair(
@@ -682,12 +682,12 @@ async def allocate_coins_to_holder(
         # Check existing holder
         existing_holder = await get_coin_holder(holder.holder_id, holder.coin_id)
         if existing_holder:
-            raise HTTPException(status_code=409, detail("Holder already exists for this coin"))
+            raise HTTPException(status_code=409, detail="Holder already exists for this coin")
         
         # Validate allocation amount
         allocation_amount = float(holder.balance)
         if allocation_amount <= 0:
-            raise HTTPException(status_code=400, detail("Allocation amount must be positive"))
+            raise HTTPException(status_code=400, detail="Allocation amount must be positive")
         
         # Check available supply
         available_supply = await get_available_coin_supply(holder.coin_id)
@@ -750,7 +750,7 @@ async def unlock_holder_coins(
     try:
         holder = await get_coin_holder(holder_id, coin_id)
         if not holder:
-            raise HTTPException(status_code=404, detail("Coin holder not found"))
+            raise HTTPException(status_code=404, detail="Coin holder not found")
         
         locked_balance = float(holder["locked_balance"])
         if unlock_amount > locked_balance:
@@ -785,7 +785,7 @@ async def unlock_holder_coins(
         }
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail(str(e))
+        raise HTTPException(status_code=500, detail=str(e))
 
 # ============================================================================
 # MARKET MAKING AND LIQUIDITY MANAGEMENT
@@ -806,7 +806,7 @@ async def update_coin_market_making(
     try:
         coin = await get_virtual_coin(coin_id)
         if not coin:
-            raise HTTPException(status_code=404, detail("Virtual coin not found"))
+            raise HTTPException(status_code=404, detail="Virtual coin not found")
         
         # Update market making settings
         market_making_updates = {}
@@ -839,10 +839,10 @@ async def update_coin_market_making(
         }
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail(str(e))
+        raise HTTPException(status_code=500, detail=str(e))
 
 # ============================================================================
- BATCH OPERATIONS
+# BATCH OPERATIONS
 # ============================================================================
 
 @router.post("/batch/update-prices")
@@ -868,7 +868,7 @@ async def batch_update_coin_prices(admin_id: str = "current_admin"):
         }
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail(str(e))
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/batch/process-vesting")
 async def batch_process_vesting_releases(admin_id: str = "current_admin"):
@@ -893,7 +893,7 @@ async def batch_process_vesting_releases(admin_id: str = "current_admin"):
         }
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail(str(e))
+        raise HTTPException(status_code=500, detail=str(e))
 
 # ============================================================================
 # MONITORING AND ANALYTICS
@@ -910,7 +910,7 @@ async def get_virtual_coin_overview(timeframe: str = "24h"):
             "analytics": analytics
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail(str(e))
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/monitoring/coin-health")
 async def get_coin_health_monitoring():
@@ -923,7 +923,7 @@ async def get_coin_health_monitoring():
             "timestamp": datetime.now()
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail(str(e))
+        raise HTTPException(status_code=500, detail=str(e))
 
 # ============================================================================
 # UTILITY FUNCTIONS (Placeholders - would be implemented in actual system)

@@ -340,10 +340,10 @@ async def get_system_stats(
 
 @router.get("/user-activity")
 async def get_user_activity(
-    current_admin: User = Depends(get_current_admin_user),
-    db: Session = Depends(get_db),
     user_id: str,
-    days: int = 30
+    days: int = 30,
+    current_admin: User = Depends(get_current_admin_user),
+    db: Session = Depends(get_db)
 ):
     """Get detailed user activity"""
     

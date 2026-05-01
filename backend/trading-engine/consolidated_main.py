@@ -638,7 +638,7 @@ class ConsolidatedTradingEngine:
         
         return orders
     
-    def cancel_order(self, order_id: str, user_id: str) -> Order:
+    async def cancel_order(self, order_id: str, user_id: str) -> Order:
         """Cancel an order"""
         if order_id not in self.orders:
             raise HTTPException(status_code=404, detail="Order not found")

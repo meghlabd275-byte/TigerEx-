@@ -149,8 +149,8 @@ class Portfolio:
     total_value_usd: float = 0.0
     total_value_btc: float = 0.0
     total_value_eth: float = 0.0
-    24h_change_usd: float = 0.0
-    24h_change_percentage: float = 0.0
+    change_24h_usd: float = 0.0
+    change_24h_percentage: float = 0.0
     assets: Dict[str, Dict[str, float]] = field(default_factory=dict)  # symbol -> {amount, value_usd, percentage}
     last_updated: datetime = field(default_factory=datetime.now)
 

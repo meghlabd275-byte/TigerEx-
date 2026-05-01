@@ -323,7 +323,7 @@ def get_exchange_accounts():
 
 @app.route('/api/tiger-unified/trading/balance/<exchange_account_id>', methods=['GET'])
 @jwt_required()
-def get_account_balance(exchange_account_id):
+async def get_account_balance(exchange_account_id):
     try:
         user_id = get_jwt_identity()
         

@@ -139,7 +139,7 @@ class CloudMiningService:
         
         # Apply bonus
         if 'Bonus' in str(miner.get('features', [])):
-            bonus = int(''.join(filter(str.isdigit), str(miner.get('features', ['0%'])[0])))) or 0
+            bonus = int(''.join([c for c in str(miner.get('features', ['0%'])[0]) if c.isdigit()])) or 0
             reward *= (1 + bonus / 100)
         
         miner['total_earned'] += reward

@@ -676,7 +676,7 @@ async def update_contract_collateral(
             raise HTTPException(status_code=404, detail="IOU contract not found")
         
         if not contract["collateral_required"]:
-            raise HTTPException(status_code=400, detail("Contract does not require collateral"))
+            raise HTTPException(status_code=400, detail="Contract does not require collateral")
         
         # Check new collateral availability
         collateral_check = await check_user_collateral(
@@ -730,7 +730,7 @@ async def update_contract_collateral(
         raise HTTPException(status_code=500, detail=str(e))
 
 # ============================================================================
- BATCH OPERATIONS
+# BATCH OPERATIONS
 # ============================================================================
 
 @router.post("/batch/process-expired")
