@@ -4,8 +4,7 @@
 @description TigerEx platform page
 @author TigerEx Development Team
 -->
-<!DOCTYPE html>
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <link rel="stylesheet" href="assets/css/theme.css">
@@ -198,7 +197,7 @@
             fill: var(--text-primary);
         }
 
-        /* Responsive - Desktop */
+        /* Responsive - Desktop (1025px+) */
         @media (min-width: 1025px) {
             .header-menu-btn {
                 display: none !important;
@@ -206,10 +205,37 @@
             .mobile-overlay {
                 display: none !important;
             }
+            .header-nav {
+                display: flex !important;
+            }
+            .header-right-link {
+                display: inline-flex !important;
+            }
         }
 
-        /* Responsive - Mobile/Tablet */
-        @media (max-width: 1024px) {
+        /* Responsive - Tablet (768px to 1024px) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .header-nav {
+                display: none !important;
+            }
+            .header-right-link:not(.header-menu-btn):not(.theme-toggle):not(.btn-primary) {
+                display: none !important;
+            }
+            .header-menu-btn {
+                display: flex !important;
+            }
+            .theme-toggle {
+                display: flex !important;
+            }
+            .btn-primary {
+                display: inline-flex !important;
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+        }
+
+        /* Responsive - Mobile/Tablet (max-width: 768px) */
+        @media (max-width: 768px) {
             .header-nav {
                 display: none !important;
             }
@@ -221,6 +247,15 @@
             }
             .theme-toggle {
                 display: flex !important;
+            }
+            .header-right {
+                gap: 4px;
+            }
+            .header-logo-text {
+                font-size: 18px;
+            }
+            .header-logo img {
+                height: 28px;
             }
         }
         
@@ -265,9 +300,28 @@
             background: var(--bg-dark);
             z-index: 999;
             overflow-y: auto;
+            animation: slideIn 0.3s ease;
         }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
         .mobile-overlay.active { 
             display: block; 
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
         /* Full Mobile Menu - Binance Style */
@@ -275,6 +329,7 @@
             background: var(--bg-card);
             max-height: 100vh;
             overflow-y: auto;
+            padding-bottom: 80px;
         }
         
         .mobile-menu-header {
@@ -356,6 +411,18 @@
             position: relative;
         }
         
+        .mobile-menu-item-dropdown > a::after {
+            content: '▼';
+            position: absolute;
+            right: 0;
+            font-size: 10px;
+            transition: transform 0.3s;
+        }
+        
+        .mobile-menu-item-dropdown.active > a::after {
+            transform: rotate(180deg);
+        }
+        
         .mobile-menu-submenu {
             display: none;
             padding-left: 16px;
@@ -366,6 +433,13 @@
         
         .mobile-menu-submenu.active {
             display: block;
+        }
+        
+        /* Touch-friendly mobile menu items */
+        .mobile-menu-item-link, 
+        .mobile-menu-subitem {
+            min-height: 44px;
+            padding: 12px 16px;
         }
         
         .mobile-menu-subitem {
@@ -1342,7 +1416,7 @@
             </a>
             
             <!-- Navigation Menu (Simple Links) -->
-            <nav class="header-nav" style="display:flex;">
+            <nav class="header-nav">
                 <a href="buy-crypto.html" class="header-nav-item">Buy Crypto</a>
                 <a href="#markets" class="header-nav-item">Markets 📊</a>
                 <a href="spot.html" class="header-nav-item">Exchange</a>
@@ -1399,7 +1473,7 @@
                 <a href="register.html" class="header-right-link btn-primary">Sign Up</a>
                 
                 <!-- Mobile Menu Button (☰) - Always visible -->
-                <button id="mobileMenuBtn" class="header-menu-btn" onclick="toggleMobileMenu()" title="Menu" style="display:flex;">
+                <button id="mobileMenuBtn" class="header-menu-btn" onclick="toggleMobileMenu()" title="Menu">
                     <svg viewBox="0 0 24 24" fill="currentColor">
                         <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
                     </svg>
@@ -5610,7 +5684,7 @@
     </footer>
 
     <script>
-        // Mobile Menu Functions
+        // Mobile Menu Functions with Toggle Support
         function toggleMobileMenu() {
             const overlay = document.getElementById('mobileOverlay');
             overlay.classList.toggle('active');
@@ -5621,15 +5695,18 @@
             const overlay = document.getElementById('mobileOverlay');
             overlay.classList.remove('active');
             document.body.style.overflow = '';
+            // Reset all submenus when closing
+            document.querySelectorAll('.mobile-menu-item-dropdown.active, .mobile-menu-submenu.active').forEach(el => {
+                el.classList.remove('active');
+            });
         }
 
-        // Submenu Toggle
+        // Mobile Submenu Toggle - works with click on dropdown parent
         function toggleSubmenu(element, menuId) {
-            const submenu = element.nextElementSibling;
-            if (submenu && submenu.classList.contains('mobile-menu-submenu')) {
-                submenu.classList.toggle('active');
-                event.preventDefault();
-                event.stopPropagation();
+            // Support both toggleSubmenu(this) and toggleSubmenu(this, 'id') formats
+            const dropdown = element.closest('.mobile-menu-item-dropdown') || element.parentElement;
+            if (dropdown && dropdown.classList.contains('mobile-menu-item-dropdown')) {
+                dropdown.classList.toggle('active');
             }
         }
 
@@ -5643,6 +5720,13 @@
             if (submenu) {
                 submenu.classList.toggle('active');
             }
+        }
+
+        // Close all submenus when closing mobile menu
+        function closeAllSubmenus() {
+            document.querySelectorAll('.mobile-menu-item-dropdown.active').forEach(dd => {
+                dd.classList.remove('active');
+            });
         }
 
         // Close submenus when clicking outside
@@ -5681,40 +5765,19 @@
             if (themeIcon) themeIcon.textContent = '☀️';
         }
 
-        // Handle responsive menu button visibility
+        // Handle responsive - only for edge cases and menu state
         function handleResponsive() {
-            const menuBtn = document.getElementById('mobileMenuBtn');
-            const themeToggle = document.querySelector('.theme-toggle');
-            const nav = document.querySelector('.header-nav');
-            const loginLink = document.querySelector('.header-right-link:not(.btn-primary):not(.theme-toggle)');
-            const signupLink = document.querySelector('.header-right-link.btn-primary');
-            
             const isMobile = window.innerWidth <= 1024;
+            const isTablet = window.innerWidth >= 769 && window.innerWidth <= 1024;
+            const isSmallMobile = window.innerWidth <= 480;
             
-            if (menuBtn) {
-                menuBtn.style.display = isMobile ? 'flex' : 'none';
-            }
-            
-            if (themeToggle) {
-                themeToggle.style.display = 'flex';
-            }
-            
-            if (nav) {
-                nav.style.display = isMobile ? 'none' : 'flex';
-            }
-            
-            if (loginLink) {
-                loginLink.style.display = isMobile ? 'none' : 'inline-flex';
-            }
-            
-            if (signupLink) {
-                signupLink.style.display = isMobile ? 'none' : 'inline-flex';
-            }
-            
-            // Close mobile menu on resize to desktop
+            // Close mobile menu when resizing to desktop
             if (!isMobile) {
                 closeMobileMenu();
             }
+            
+            // Log for debugging
+            console.log('🐯 Responsive:', isMobile ? 'Mobile' : 'Desktop');
         }
 
         // Run on load and resize
