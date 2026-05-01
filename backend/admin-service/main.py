@@ -1,7 +1,7 @@
-/**
+"""
 admin-service Service with Complete RBAC
 Version: 3.0.0
-*/
+"""
 
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
