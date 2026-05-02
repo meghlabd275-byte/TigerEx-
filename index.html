@@ -1415,18 +1415,30 @@
                 <span class="header-logo-text">TigerEx</span>
             </a>
             
-            <!-- Navigation Menu (Simple Links) -->
+            <!-- Navigation Menu (Updated) -->
             <nav class="header-nav">
-                <a href="buy-crypto.html" class="header-nav-item">Buy Crypto</a>
-                <a href="#markets" class="header-nav-item">Markets 📊</a>
-                <a href="spot.html" class="header-nav-item">Exchange</a>
-                <a href="trade.html" class="header-nav-item">Trade</a>
-                <a href="futures.html" class="header-nav-item">Futures</a>
-                <a href="onchain.html">On-Chain</a>
+                <!-- Products Dropdown with Search -->
+                <div class="header-nav-dropdown" style="position:relative;">
+                    <a href="#" class="header-nav-item" onclick="toggleDesktopSubmenu('products-submenu', event)">Products</a>
+                    <div class="desktop-submenu" id="products-submenu">
+                        <div style="padding:12px 16px;border-bottom:1px solid var(--border);">
+                            <input type="text" placeholder="Search coins, tokens..." style="width:100%;padding:8px 12px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:14px;">
+                        </div>
+                        <a href="buy-crypto.html" class="desktop-submenu-item">Buy Crypto</a>
+                        <a href="#markets" class="desktop-submenu-item">Markets</a>
+                        <a href="spot.html" class="desktop-submenu-item">Exchange</a>
+                        <a href="trade.html" class="desktop-submenu-item">Trade</a>
+                        <a href="futures.html" class="desktop-submenu-item">Futures</a>
+                        <a href="tradfi.html" class="desktop-submenu-item">TradFi</a>
+                        <a href="convert.html" class="desktop-submenu-item">Convert</a>
+                        <a href="payment.html" class="desktop-submenu-item">Pay</a>
+                    </div>
+                </div>
+
+                <a href="onchain.html" class="header-nav-item">On-Chain</a>
                 <a href="alpha.html" class="header-nav-item">Alpha</a>
                 <a href="etf.html" class="header-nav-item">ETF</a>
-                <a href="tradfi.html" class="header-nav-item">TradFi</a>
-                <a href="more-services.html">More</a>
+                <a href="more-services.html" class="header-nav-item">More</a>
                 <a href="earn.html" class="header-nav-item">Earn</a>
                 <a href="copy.html" class="header-nav-item">Copy</a>
                 <a href="staking.html" class="header-nav-item">Staking</a>
@@ -1494,97 +1506,36 @@
             
             <!-- Products Section -->
             <div class="mobile-menu-section">
+                <div style="padding: 16px;border-bottom: 1px solid var(--border);">
+                    <input type="text" placeholder="Search coins, tokens..." style="width:100%;padding:12px 16px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:16px;">
+                </div>
                 <div class="mobile-menu-section-title">Products 🐯</div>
                 <div class="mobile-menu-item-dropdown">
-                    <a href="markets.html" class="mobile-menu-item-link">Markets 📊</a>
-                    <div class="mobile-menu-submenu">
-                        <a href="#" class="mobile-menu-subitem">🔥 All Markets</a>
-                        <a href="#" class="mobile-menu-subitem">Bitcoin (BTC)</a>
-                        <a href="#" class="mobile-menu-subitem">Ethereum (ETH)</a>
-                        <a href="#" class="mobile-menu-subitem">TIGER (TigerEx)</a>
-                        <a href="#" class="mobile-menu-subitem">USDT</a>
-                        <a href="#" class="mobile-menu-subitem">BNB</a>
-                        <a href="#" class="mobile-menu-subitem">Solana (SOL)</a>
-                        <a href="#" class="mobile-menu-subitem">Ripple (XRP)</a>
-                        <a href="#" class="mobile-menu-subitem">Cardano (ADA)</a>
-                        <a href="#" class="mobile-menu-subitem">Dogecoin (DOGE)</a>
-                        <a href="#" class="mobile-menu-subitem">Polkadot (DOT)</a>
-                        <a href="#" class="mobile-menu-subitem">Avalanche (AVAX)</a>
-                        <a href="#" class="mobile-menu-subitem">Chainlink (LINK)</a>
-                        <a href="#" class="mobile-menu-subitem">Polygon (MATIC)</a>
-                        <a href="#" class="mobile-menu-subitem">Litecoin (LTC)</a>
-                        <a href="#" class="mobile-menu-subitem">View All 500+ Coins</a>
-                    </div>
+                    <a href="buy-crypto.html" class="mobile-menu-item-link">Buy Crypto</a>
+                </div>
+                <div class="mobile-menu-item-dropdown">
+                    <a href="markets.html" class="mobile-menu-item-link">Markets</a>
                 </div>
                 <div class="mobile-menu-item-dropdown">
                     <a href="exchange.html" class="mobile-menu-item-link">Exchange</a>
                 </div>
                 <div class="mobile-menu-item-dropdown">
-                    <a href="buy-crypto.html" class="mobile-menu-item-link">Buy Crypto</a>
+                    <a href="trade.html" class="mobile-menu-item-link">Trade</a>
                 </div>
                 <div class="mobile-menu-item-dropdown">
-                    <a href="tigerpay.html" class="mobile-menu-item-link">Pay ▸</a>
-                    <div class="mobile-menu-submenu">
-                        <a href="#" class="mobile-menu-subitem">TigerPay</a>
-                        <a href="#" class="mobile-menu-subitem">Crypto Payments</a>
-                    </div>
+                    <a href="futures.html" class="mobile-menu-item-link">Futures</a>
                 </div>
                 <div class="mobile-menu-item-dropdown">
-                    <a href="nft.html" class="mobile-menu-item-link">NFT ▸</a>
-                    <div class="mobile-menu-submenu">
-                        <a href="#" class="mobile-menu-subitem">Tiger NFT</a>
-                        <a href="#" class="mobile-menu-subitem">Marketplace</a>
-                        <a href="#" class="mobile-menu-subitem">Collections</a>
-                        <a href="#" class="mobile-menu-subitem">Mystery Box</a>
-                    </div>
+                    <a href="tradfi.html" class="mobile-menu-item-link">TradFi</a>
                 </div>
                 <div class="mobile-menu-item-dropdown">
-                    <a href="more-services.html">More</a>
-                <a href="earn.html" class="mobile-menu-item-link">Earn ▸</a>
-                    <div class="mobile-menu-submenu">
-                        <a href="#" class="mobile-menu-subitem">Simple Earn</a>
-                        <a href="#" class="mobile-menu-subitem">Staking</a>
-                        <a href="#" class="mobile-menu-subitem">Launchpool</a>
-                        <a href="#" class="mobile-menu-subitem">Dual Mining</a>
-                        <a href="#" class="mobile-menu-subitem">Auto-Invest</a>
-                        <a href="#" class="mobile-menu-subitem">ETH Staking</a>
-                        <a href="#" class="mobile-menu-subitem">Cloud Mining 💰</a>
-                        <a href="#" class="mobile-menu-subitem">Liquidity Mining 💰</a>
-                    </div>
+                    <a href="convert.html" class="mobile-menu-item-link">Convert</a>
                 </div>
                 <div class="mobile-menu-item-dropdown">
-                    <a href="trade.html" class="mobile-menu-item-link">Trade ▸</a>
-                    <div class="mobile-menu-submenu">
-                        <a href="#" class="mobile-menu-subitem">Classic</a>
-                        <a href="#" class="mobile-menu-subitem">Advanced</a>
-                        <a href="#" class="mobile-menu-subitem">Margin</a>
-                        <a href="#" class="mobile-menu-subitem">Futures</a>
-                        <a href="#" class="mobile-menu-subitem">Strategy</a>
-                        <a href="#" class="mobile-menu-subitem">Options</a>
-                        <a href="#" class="mobile-menu-subitem">Copy Trading</a>
-                        <a href="#" class="mobile-menu-subitem">P2P Trading</a>
-                    </div>
+                    <a href="payment.html" class="mobile-menu-item-link">Pay</a>
                 </div>
-                <div class="mobile-menu-item-dropdown">
-                    <a href="futures.html" class="mobile-menu-item-link">Futures ▸</a>
-                    <div class="mobile-menu-submenu">
-                        <a href="#" class="mobile-menu-subitem">Tiger Futures</a>
-                        <a href="#" class="mobile-menu-subitem">USDT-M Futures</a>
-                        <a href="#" class="mobile-menu-subitem">COIN-M Futures</a>
-                        <a href="#" class="mobile-menu-subitem">Delivery Futures</a>
-                        <a href="#" class="mobile-menu-subitem">Futures V2</a>
-                    </div>
-                </div>
-                <a href="#" class="mobile-menu-item-link">Academy</a>
-                <a href="#" class="mobile-menu-item-link">Gift Card</a>
-                <a href="#" class="mobile-menu-item-link">Launchpool</a>
-                <a href="#" class="mobile-menu-item-link">TABT</a>
-                <a href="#" class="mobile-menu-item-link">TradFi</a>
-                <a href="#" class="mobile-menu-item-link">Research</a>
-                <a href="#" class="mobile-menu-item-link">Charity</a>
-                <a href="#" class="mobile-menu-item-link">TIGER</a>
             </div>
-            
+
             <!-- Business Section -->
             <div class="mobile-menu-section">
                 <div class="mobile-menu-section-title">Business 💼</div>
@@ -5679,6 +5630,10 @@
                     <a href="#">📘</a>
                     <a href="#">📸</a>
                 </div>
+            </div>
+            <div style="padding:20px 0;text-align:center;color:var(--text-secondary);font-size:11px;line-height:1.6;border-top:1px solid var(--border);">
+                <p style="margin-bottom:8px;">TigerEx ADGM entities are regulated by FSRA of ADGM as follows: (1) Nest Exchange Limited - Recognised Investment Exchange; (2) Nest Clearing and Custody Limited - Recognised Clearing House; (3) Nest Trading Limited - Authorised for Dealing in Investments as Principal/Agent, Arranging Deals, Managing Assets, Providing Money Services, Arranging Custody.</p>
+                <p>Risk Warning: virtual asset prices can be volatile. The value of your investment may go down or up and you may not get back the amount invested. You are solely responsible for your investment decisions and TigerEx is not liable for any trading losses you may incur.</p>
             </div>
         </div>
     </footer>
