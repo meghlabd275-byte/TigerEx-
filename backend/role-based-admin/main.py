@@ -1,27 +1,34 @@
-"""TigerEx Service"""
+"""TigerEx Admin Control"""
 from fastapi import FastAPI
-from typing import Dict, List
-import uuid, asyncio, random
-from datetime import datetime
+from typing import List
 
 app = FastAPI()
 
-data = {}
+class Admin:
+    def __init__(self):
+        self.users = {}
+        self.logs = []
+    
+    def add_user(self, uid, role):
+        self.users[uid] = {"role": role, "active": True}
+    
+    def get_user(self, uid):
+        return self.users.get(uid)
+    
+    def log(self, action):
+        self.logs.append(action)
+
+a = Admin()
 
 @app.get("/health")
-async def health():
-    return {"status": "ok", "service": "active"}
+async def h():
+    return {"s": "ok"}
 
-@app.get("/api/v1/list")
-async def list_items():
-    return list(data.values())
-
-@app.post("/api/v1/add")
-async def add(item: Dict):
-    id = str(uuid.uuid4())
-    data[id] = {**item, "id": id, "created": datetime.now().isoformat()}
-    return data[id]
+@app.post("/user")
+async def user(d: dict):
+    a.add_user(d["user_id"], d["role"])
+    return {"status": "ok"}
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, port=8000)
+    uvicorn.run(app)
