@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const PaymentService = require('../services/PaymentService');
 const StripeService = require('../services/StripeService');
+const Payment = require('../models/Payment');
+const PlatformControlService = require('../services/PlatformControlService');
 const authMiddleware = require('../middleware/auth');
 const {
   validatePaymentCreation,
@@ -9,11 +11,30 @@ const {
 } = require('../middleware/validation');
 const { asyncHandler } = require('../middleware/errorHandler');
 
+const requireAdmin = (req, res, next) => {
+  if (!req.user?.roles?.includes('admin')) {
+    return res.status(403).json({ success: false, message: 'Admin privileges required' });
+  }
+  return next();
+};
+
+const ensurePaymentsActive = (req, res, next) => {
+  if (PlatformControlService.isPaymentsBlocked()) {
+    return res.status(423).json({
+      success: false,
+      message: 'Payments are temporarily unavailable by admin control',
+      controlState: PlatformControlService.getState(),
+    });
+  }
+  return next();
+};
+
 // Create new payment
 router.post(
   '/',
   authMiddleware,
   validatePaymentCreation,
+  ensurePaymentsActive,
   asyncHandler(async (req, res) => {
     const paymentData = {
       ...req.body,
@@ -41,6 +62,7 @@ router.post(
   '/:paymentId/process',
   authMiddleware,
   validatePaymentProcessing,
+  ensurePaymentsActive,
   asyncHandler(async (req, res) => {
     const { paymentId } = req.params;
 
@@ -228,13 +250,8 @@ router.post(
 router.get(
   '/admin/all',
   authMiddleware,
+  requireAdmin,
   asyncHandler(async (req, res) => {
-    if (!req.user.roles.includes('admin')) {
-      return res.status(403).json({
-        success: false,
-        message: 'Admin privileges required',
-      });
-    }
 
     const {
       userId,
@@ -289,13 +306,8 @@ router.get(
 router.patch(
   '/admin/:paymentId/status',
   authMiddleware,
+  requireAdmin,
   asyncHandler(async (req, res) => {
-    if (!req.user.roles.includes('admin')) {
-      return res.status(403).json({
-        success: false,
-        message: 'Admin privileges required',
-      });
-    }
 
     const { paymentId } = req.params;
     const { status, reason } = req.body;
@@ -323,13 +335,8 @@ router.patch(
 router.get(
   '/admin/statistics',
   authMiddleware,
+  requireAdmin,
   asyncHandler(async (req, res) => {
-    if (!req.user.roles.includes('admin')) {
-      return res.status(403).json({
-        success: false,
-        message: 'Admin privileges required',
-      });
-    }
 
     const statistics = await PaymentService.generateStatistics();
 
@@ -339,5 +346,19 @@ router.get(
     });
   })
 );
+
+// Admin runtime control for payment operations
+router.get('/admin/control', authMiddleware, requireAdmin, (req, res) => {
+  res.json({ success: true, data: PlatformControlService.getState() });
+});
+
+router.patch('/admin/control', authMiddleware, requireAdmin, (req, res) => {
+  const { halted, paymentsPaused, withdrawalsPaused, depositsPaused, reason } = req.body;
+  const updated = PlatformControlService.updateState(
+    { halted, paymentsPaused, withdrawalsPaused, depositsPaused, reason },
+    req.user.userId
+  );
+  res.json({ success: true, message: 'Platform control updated', data: updated });
+});
 
 module.exports = router;
