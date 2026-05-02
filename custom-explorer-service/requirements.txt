@@ -1,0 +1,5 @@
+# TigerEx Custom Explorer Requirements
+
+flask>=2.3.0
+flask-cors>=4.0.0
+flask-limiter>=3.0.0
