@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx P2P Trading</title>
+    
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/web3@1.10.0/dist/web3.min.js"></script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        :root { --primary: #00d4aa; --dark: #0b0e14; --dark2: #161c25; --dark3: #1e2633; --light: #eaeaea; --dim: #8b8b8b; --green: #00c087; --red: #f6465d; --orange: #f0b90b; --blue: #371db4; --border: #2a3140; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--dark); color: var(--light); font-family: -apple-system, sans-serif; font-size: 12px; }
+        .card { background: var(--dark2); border: 1px solid var(--border); border-radius: 8px; }
+        .text-up { color: var(--green) !important; }
+        .text-down { color: var(--red) !important; }
+        .text-orange { color: var(--orange) !important; }
+        .text-blue { color: var(--blue) !important; }
+        .btn-buy { background: var(--green); color: #000; font-weight: 600; }
+        .btn-sell { background: var(--red); color: #fff; font-weight: 600; }
+        .btn-action { background: var(--primary); color: #000; font-weight: 600; }
+        .input-field { background: var(--dark3); border: 1px solid var(--border); color: var(--light); padding: 10px; border-radius: 4px; width: 100%; }
+        .input-field:focus { border-color: var(--primary); outline: none; }
+        .filter-tab { padding: 8px 16px; background: var(--dark3); border: 1px solid var(--border); border-radius: 20px; cursor: pointer; }
+        .filter-tab:hover, .filter-tab.active { background: var(--primary); color: #000; border-color: var(--primary); }
+        .vendor-card { background: var(--dark2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; transition: 0.2s; }
+        .vendor-card:hover { border-color: var(--primary); }
+        .vendor-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
+        .vendor-row:last-child { border-bottom: none; }
+        .payment-badge { background: var(--dark3); padding: 4px 10px; border-radius: 4px; font-size: 11px; margin-right: 6px; }
+        .limit-range { height: 4px; background: var(--dark3); border-radius: 2px; overflow: hidden; }
+        .limit-fill { height: 100%; background: var(--primary); }
+        .ticker { background: linear-gradient(90deg, var(--primary), #00b894); height: 36px; overflow: hidden; display: flex; }
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 11px; }
+        .status-online { background: rgba(0,192,135,0.2); color: var(--green); }
+        .status-offline { background: rgba(246,70,93,0.2); color: var(--red); }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        
+        const useWeb3 = () => {
+            const [s, setS] = useState({connected: false, account: null});
+            const connect = async () => {
+                if (window.ethereum) {
+                    const [acc] = await window.ethereum.request({method: 'eth_requestAccounts'});
+                    if (acc) setS({connected: true, account: acc});
+                }
+            };
+            return {...s, connect};
+        };
+        
+        const Ticker = () => {
+            const [t, setT] = useState([{s:'BTC',p:78440,c:0.26},{s:'ETH',p:2310,c:0.12},{s:'BNB',p:619,c:-0.23}]);
+            useEffect(() => { const i = setInterval(() => setT(p => p.map(x => ({...x, p: x.p*(0.999+Math.random()*0.002)}))), 2000); return () => clearInterval(i); }, []);
+            return <div className="ticker">{[...t,...t].map((x,i) => <div key={i} className="d-inline-flex gap-2 px-4 align-items-center" style={{whiteSpace:'nowrap',borderRight:'1px solid rgba(0,0,0,0.15)'}}><span style={{fontWeight:600,color:'#000'}}>{x.s}/USDT</span><span style={{color:'#000'}}>${x.p.toFixed(2)}</span></div>)}</div>;
+        };
+        
+        const FilterBar = ({ fiat, setFiat, pay, setPay, onSearch }) => {
+            const fiats = ['USD', 'EUR', 'GBP', 'CNY', 'INR', 'KRW', 'JPY', 'VND'];
+            const payments = ['All', 'Bank Transfer', '支付宝', '微信支付', 'PayNow', 'Wise', 'Remitly'];
+            return (
+                <div className="card p-3 mb-3">
+                    <div className="d-flex gap-2 mb-3 flex-wrap">
+                        <select className="input-field" style={{width:'auto'}} value={fiat} onChange={e=>setFiat(e.target.value)}>
+                            {fiats.map(f => <option key={f}>{f}</option>)}
+                        </select>
+                        {payments.map(p => <span key={p} className={`filter-tab ${pay===p?'active':''}`} onClick={()=>setPay(p)}>{p}</span>)}
+                    </div>
+                    <div className="d-flex gap-2">
+                        <input type="text" className="input-field" placeholder="Search merchants..." onChange={onSearch} />
+                        <button className="btn btn-action">Refresh</button>
+                    </div>
+                </div>
+            );
+        };
+        
+        const VendorCard = ({ vendor, onTrade }) => {
+            const limitPercent = (vendor.orders / (vendor.orders + vendor.completed)) * 100;
+            return (
+                <div className="vendor-card">
+                    <div className="d-flex justify-content-between align-items-start mb-3">
+                        <div className="d-flex align-items-center gap-3">
+                            <div style={{width:48,height:48,borderRadius:'50%',background:'var(--dark3)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:20,fontWeight:600}}>{vendor.name[0]}</div>
+                            <div>
+                                <div style={{fontWeight:600}}>{vendor.name}</div>
+                                <div className="d-flex align-items-center gap-2">
+                                    <span className="status-badge status-online">● Online</span>
+                                    <span className="text-muted" style={{fontSize:11}}>{vendor.orders} orders</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="text-end">
+                            <div className="text-orange" style={{fontSize:20,fontWeight:700}}>{vendor.price}</div>
+                            <div className="text-muted">{vendor.fiat}</div>
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <div className="d-flex gap-1 flex-wrap">
+                            {vendor.payments.map((p,i) => <span key={i} className="payment-badge">{p}</span>)}
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <div className="d-flex justify-content-between mb-1" style={{fontSize:11}}>
+                            <span className="text-muted">Limits</span>
+                            <span>{vendor.minLimit} - {vendor.maxLimit} {vendor.fiat}</span>
+                        </div>
+                        <div className="limit-range"><div className="limit-fill" style={{width:limitPercent+'%'}}></div></div>
+                    </div>
+                    <div className="d-flex gap-2">
+                        <button className="btn btn-buy flex-fill" onClick={()=>onTrade(vendor,'buy')}>Buy</button>
+                        <button className="btn btn-sell flex-fill" onClick={()=>onTrade(vendor,'sell')}>Sell</button>
+                    </div>
+                </div>
+            );
+        };
+        
+        const MyOrders = () => {
+            const [orders, setO] = useState([
+                {id:'P2P001', type:'buy', asset:'USDT', amount:500, price:84.50, fiat:'INR', status:'Completed', time:'2024-05-01 10:30'},
+                {id:'P2P002', type:'sell', asset:'USDT', amount:1000, price:84.45, fiat:'INR', status:'Pending', time:'2024-05-02 09:15'},
+            ]);
+            return (
+                <div className="card mt-3">
+                    <div className="p-3 border-bottom" style={{borderColor:'var(--border)',fontWeight:600}}>My P2P Orders</div>
+                    {orders.map((o,i) => (
+                        <div key={i} className="vendor-row">
+                            <div>
+                                <span className={o.type==='buy'?'text-up':'text-down'} style={{fontWeight:600}}>{o.type.toUpperCase()}</span>
+                                <span className="ms-2">{o.asset}</span>
+                            </div>
+                            <div>{o.amount} × {o.price} = <span className="text-orange">{o.fiat} {(o.amount*o.price).toFixed(2)}</span></div>
+                            <div className="text-end">
+                                <span className={`status-badge ${o.status==='Completed'?'status-online':'status-offline'}`}>{o.status}</span>
+                                <div className="text-muted" style={{fontSize:10}}>{o.time}</div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            );
+        };
+        
+        const CreateOrder = ({ show, onClose }) => {
+            const [side, setS] = useState('buy');
+            const [asset, setA] = useState('USDT');
+            const [amount, setAmt] = useState('');
+            const [price, setP] = useState('');
+            const [fiat, setF] = useState('INR');
+            const [payMethod, setPM] = useState('');
+            
+            if (!show) return null;
+            
+            return (
+                <div style={{position:'fixed',top:0,left:0,right:0,bottom:0,background:'rgba(0,0,0,0.7)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000}}>
+                    <div className="card p-4" style={{width:'400px',maxHeight:'90vh',overflow:'auto'}}>
+                        <div className="d-flex justify-content-between align-items-center mb-4">
+                            <h5>Create P2P Ad</h5>
+                            <button onClick={onClose} style={{background:'none',border:'none',color:'var(--light)',fontSize:24}}>×</button>
+                        </div>
+                        <div className="d-flex gap-2 mb-3">
+                            <button className={`flex-fill btn ${side==='buy'?'btn-buy':'btn-outline-secondary'}`} onClick={()=>setS('buy')}>Buy</button>
+                            <button className={`flex-fill btn ${side==='sell'?'btn-sell':'btn-outline-secondary'}`} onClick={()=>setS('sell')}>Sell</button>
+                        </div>
+                        <div className="mb-3">
+                            <label className="text-muted d-block mb-1">Asset</label>
+                            <select className="input-field" value={asset} onChange={e=>setA(e.target.value)}>
+                                <option>USDT</option><option>BTC</option><option>ETH</option><option>BUSD</option>
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label className="text-muted d-block mb-1">Price (Fixed)</label>
+                            <input type="number" className="input-field" placeholder="84.50" value={price} onChange={e=>setP(e.target.value)} />
+                        </div>
+                        <div className="mb-3">
+                            <label className="text-muted d-block mb-1">Fiat</label>
+                            <select className="input-field" value={fiat} onChange={e=>setF(e.target.value)}>
+                                <option>INR</option><option>USD</option><option>EUR</option><option>GBP</option>
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label className="text-muted d-block mb-1">Payment Method</label>
+                            <select className="input-field" value={payMethod} onChange={e=>setPM(e.target.value)}>
+                                <option>Bank Transfer</option><option>Paytm</option><option>Google Pay</option>
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label className="text-muted d-block mb-1">Amount ({asset})</label>
+                            <input type="number" className="input-field" placeholder="100" value={amount} onChange={e=>setAmt(e.target.value)} />
+                        </div>
+                        <button className="btn btn-action w-100">Publish Ad</button>
+                    </div>
+                </div>
+            );
+        };
+        
+        const App = () => {
+            const {connected, account, connect} = useWeb3();
+            const [fiat, setFiat] = useState('INR');
+            const [pay, setPay] = useState('All');
+            const [showCreate, setShow] = useState(false);
+            
+            const vendors = [
+                {name:'CryptoKing_IN', price:84.50, fiat:'INR', payments:['Bank Transfer','Paytm','GPay'], minLimit:1000, maxLimit:50000, orders:156, completed:1420},
+                {name:'FastTrade_Official', price:84.48, fiat:'INR', payments:['Bank Transfer','IMPS'], minLimit:5000, maxLimit:100000, orders:89, completed:567},
+                {name:'CoinDealer_IN', price:84.45, fiat:'INR', payments:['UPI','Bank Transfer'], minLimit:500, maxLimit:25000, orders:234, completed:1890},
+                {name:'SecureP2P', price:84.52, fiat:'INR', payments:['Paytm','PhonePe','GPay'], minLimit:100, maxLimit:10000, orders:45, completed:320},
+            ];
+            
+            const handleTrade = (vendor, side) => {
+                alert(`${side.toUpperCase()} ${vendor.name}'s ${vendor.fiat} ${vendor.price} - ${vendor.fiat} ${vendor.minLimit}-${vendor.maxLimit}`);
+            };
+            
+            return (
+                <div>
+                    <Ticker />
+                    <nav className="d-flex justify-content-between align-items-center px-4 py-2" style={{background:'var(--dark2)',borderBottom:'1px solid var(--border)'}}>
+                        <span className="h4" style={{background:'linear-gradient(135deg,#00d4aa,#00f5d4)','-webkit-background-clip':'text','-webkit-text-fill-color':'transparent',fontWeight:700}}>
+                            <i className="bi bi-person-rolodex me-2"></i>TigerEx P2P
+                        </span>
+                        <div className="d-flex gap-2">
+                            <button className="btn btn-action" onClick={()=>setShow(true)}><i className="bi bi-plus-lg me-2"></i>Create Ad</button>
+                            <button className="btn btn-primary" style={{background:connected?'green':'linear-gradient(135deg,#627eea,#00d4aa)'}} onClick={connect}>
+                                {connected ? account?.slice(0,8)+'...' : 'Connect'}
+                            </button>
+                        </div>
+                    </nav>
+                    <div className="container-fluid p-3">
+                        <div className="row">
+                            <div className="col-md-8">
+                                <FilterBar fiat={fiat} setFiat={setFiat} pay={pay} setPay={setPay} />
+                                <div className="d-flex justify-content-between align-items-center mb-3">
+                                    <h5>Buy USDT</h5>
+                                    <div className="d-flex gap-2">
+                                        <span className="filter-tab active">Buy</span>
+                                        <span className="filter-tab">Sell</span>
+                                    </div>
+                                </div>
+                                {vendors.map((v,i) => <VendorCard key={i} vendor={v} onTrade={handleTrade} />)}
+                            </div>
+                            <div className="col-md-4">
+                                <div className="card p-3 mb-3">
+                                    <h6 className="mb-3">P2P Statistics</h6>
+                                    <div className="d-flex justify-content-between mb-2"><span className="text-muted">Active Merchants</span><span className="text-up">2,456</span></div>
+                                    <div className="d-flex justify-content-between mb-2"><span className="text-muted">Today's Volume</span><span className="text-orange">$12.5M</span></div>
+                                    <div className="d-flex justify-content-between"><span className="text-muted">Success Rate</span><span className="text-up">99.2%</span></div>
+                                </div>
+                                <MyOrders />
+                            </div>
+                        </div>
+                    </div>
+                    <CreateOrder show={showCreate} onClose={()=>setShow(false)} />
+                </div>
+            );
+        };
+        
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+    </script>
+</body>
+</html>

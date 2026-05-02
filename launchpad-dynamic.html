@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx Launchpad - Token Sales</title>
+    
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/web3@1.10.0/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        :root { --primary: #00d4aa; --dark: #0b0e14; --dark2: #161c25; --dark3: #1e2633; --light: #eaeaea; --dim: #8b8b8b; --green: #00c087; --red: #f6465d; --orange: #f0b90b; --purple: #7645d9; --blue: #371db4; --border: #2a3140; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--dark); color: var(--light); font-family: -apple-system, sans-serif; font-size: 12px; }
+        .card { background: var(--dark2); border: 1px solid var(--border); border-radius: 8px; }
+        .text-up { color: var(--green) !important; }
+        .text-down { color: var(--red) !important; }
+        .text-orange { color: var(--orange) !important; }
+        .text-purple { color: var(--purple) !important; }
+        .text-blue { color: var(--blue) !important; }
+        .btn-stake { background: var(--primary); color: #000; font-weight: 600; }
+        .input-field { background: var(--dark3); border: 1px solid var(--border); color: var(--light); padding: 10px; border-radius: 4px; width: 100%; }
+        .input-field:focus { border-color: var(--primary); outline: none; }
+        .tier-badge { padding: 6px 16px; border-radius: 20px; font-weight: 600; }
+        .tier-bronze { background: linear-gradient(135deg, #cd7f32, #8b4513); color: #fff; }
+        .tier-silver { background: linear-gradient(135deg, #c0c0c0, #808080); color: #000; }
+        .tier-gold { background: linear-gradient(135deg, #ffd700, #daa520); color: #000; }
+        .tier-platinum { background: linear-gradient(135deg, #e5e4e2, #a0a0a0); color: #000; }
+        .progress-bar { height: 8px; background: var(--dark3); border-radius: 4px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--purple)); transition: width 0.3s; }
+        .project-card { background: var(--dark2); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: 0.3s; }
+        .project-card:hover { border-color: var(--primary); transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,212,170,0.2); }
+        .countdown { font-family: 'SF Mono', Monaco, monospace; font-size: 24px; font-weight: 700; }
+        .ticker { background: linear-gradient(90deg, var(--primary), #00b894); height: 36px; overflow: hidden; display: flex; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+        
+        const useWeb3 = () => {
+            const [s, setS] = useState({connected: false, account: null});
+            const connect = async () => {
+                if (window.ethereum) {
+                    const [acc] = await window.ethereum.request({method: 'eth_requestAccounts'});
+                    if (acc) setS({connected: true, account: acc});
+                }
+            };
+            return {...s, connect};
+        };
+        
+        const Ticker = () => {
+            const [t, setT] = useState([{s:'BTC',p:78440},{s:'ETH',p:2310},{s:'TIG',p:2.5}]);
+            useEffect(() => { const i = setInterval(() => setT(p => p.map(x => ({...x, p: x.p*(0.999+Math.random()*0.002)}))), 2000); return () => clearInterval(i); }, []);
+            return <div className="ticker">{[...t,...t].map((x,i) => <div key={i} className="d-inline-flex gap-2 px-4 align-items-center" style={{whiteSpace:'nowrap',borderRight:'1px solid rgba(0,0,0,0.15)'}}><span style={{fontWeight:600,color:'#000'}}>{x.s}/USDT</span><span style={{color:'#000'}}>${x.p.toFixed(2)}</span></div>)}</div>;
+        };
+        
+        const Timer = ({ endTime }) => {
+            const [time, setTime] = useState({d:0,h:0,m:0,s:0});
+            useEffect(() => {
+                const update = () => {
+                    const now = Date.now();
+                    const diff = Math.max(0, endTime - now);
+                    setTime({d:Math.floor(diff/(1000*60*60*24)), h:Math.floor((diff%(1000*60*60*24))/(1000*60*60)), m:Math.floor((diff%(1000*60*60))/(1000*60)), s:Math.floor((diff%(1000*60))/1000)});
+                };
+                update();
+                const i = setInterval(update, 1000);
+                return () => clearInterval(i);
+            }, [endTime]);
+            return <div className="countdown text-purple">{String(time.d).padStart(2,'0')}:{String(time.h).padStart(2,'0')}:{String(time.m).padStart(2,'0')}:{String(time.s).padStart(2,'0')}</div>;
+        };
+        
+        const TierInfo = () => {
+            const tiers = [
+                {name:'Bronze', holding:'100+ TIG', allocation:'$10', color:'tier-bronze'},
+                {name:'Silver', holding:'1,000+ TIG', allocation:'$100', color:'tier-silver'},
+                {name:'Gold', holding:'10,000+ TIG', allocation:'$1,000', color:'tier-gold'},
+                {name:'Platinum', holding:'100,000+ TIG', allocation:'$10,000', color:'tier-platinum'},
+            ];
+            return (
+                <div className="card p-3 mb-3">
+                    <h6 className="mb-3">Your Tier & Allocation</h6>
+                    <div className="d-flex gap-2 mb-3 flex-wrap">
+                        {tiers.map((t,i) => <span key={i} className={`tier-badge ${t.color}`}>{t.name}</span>)}
+                    </div>
+                    <div className="d-flex justify-content-between">
+                        <div><div className="text-muted small">Your TIG Holdings</div><div className="text-orange h5 mb-0">12,500 TIG</div></div>
+                        <div className="text-end"><div className="text-muted small">Your Allocation</div><div className="text-up h5 mb-0">$100</div></div>
+                    </div>
+                </div>
+            );
+        };
+        
+        const ProjectCard = ({ project, onSubscribe }) => {
+            const progress = (project.raised / project.target) * 100;
+            return (
+                <div className="project-card mb-4">
+                    <div className="p-4">
+                        <div className="d-flex justify-content-between align-items-start mb-3">
+                            <div className="d-flex align-items-center gap-3">
+                                <div style={{width:64,height:64,borderRadius:'50%',background:'linear-gradient(135deg, var(--purple), var(--primary))',display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,fontWeight:700,color:'#fff'}}>{project.symbol}</div>
+                                <div>
+                                    <div style={{fontSize:22,fontWeight:700}}>{project.name}</div>
+                                    <div className="text-muted">{project.description}</div>
+                                </div>
+                            </div>
+                            <div className="text-end">
+                                <div className="text-orange" style={{fontSize:28,fontWeight:700}}>{project.roi}x</div>
+                                <div className="text-muted">Est. ROI</div>
+                            </div>
+                        </div>
+                        
+                        <div className="mb-3">
+                            <Timer endTime={project.endTime} />
+                            <div className="text-center text-muted mt-1">{project.status === 'live' ? 'Ends in' : 'Starts in'}</div>
+                        </div>
+                        
+                        <div className="mb-2">
+                            <div className="d-flex justify-content-between mb-1"><span className="text-muted">Progress</span><span>{progress.toFixed(1)}%</span></div>
+                            <div className="progress-bar"><div className="progress-fill" style={{width:progress+'%'}}></div></div>
+                        </div>
+                        
+                        <div className="row mb-3">
+                            <div className="col-6"><div className="text-muted small">Raised</div><div className="text-up" style={{fontWeight:600}}>${project.raised.toLocaleString()}</div></div>
+                            <div className="col-6"><div className="text-muted small">Target</div><div style={{fontWeight:600}}>${project.target.toLocaleString()}</div></div>
+                        </div>
+                        
+                        <div className="row mb-3">
+                            <div className="col-4"><div className="text-muted small">Price</div><div>${project.price}</div></div>
+                            <div className="col-4"><div className="text-muted small">Token</div><div>{project.symbol}</div></div>
+                            <div className="col-4"><div className="text-muted small">Max</div><div>{project.maxAllocation}</div></div>
+                        </div>
+                        
+                        {project.status === 'live' ? (
+                            <button className="btn btn-stake w-100" onClick={()=>onSubscribe(project)}>Subscribe Now</button>
+                        ) : (
+                            <button className="btn w-100" style={{background:'var(--dark3)',color:'var(--dim)'}} disabled>Coming Soon</button>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+        
+        const UpcomingProject = ({ project }) => (
+            <div className="card p-3 mb-3">
+                <div className="d-flex gap-3">
+                    <div style={{width:48,height:48,borderRadius:'50%',background:'var(--dark3)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:20,fontWeight:700}}>{project.symbol[0]}</div>
+                    <div className="flex-grow-1">
+                        <div style={{fontWeight:600}}>{project.name}</div>
+                        <div className="text-muted small">{project.description}</div>
+                        <div className="mt-2 d-flex gap-2">
+                            <span className="text-muted">Starts:</span>
+                            <span className="text-orange">{new Date(project.startTime).toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+        
+        const SubscribeModal = ({ project, show, onClose }) => {
+            const [amount, setAmt] = useState('');
+            if (!show || !project) return null;
+            const estTokens = amount ? (amount / project.price * project.roi).toFixed(2) : '0';
+            return (
+                <div style={{position:'fixed',top:0,left:0,right:0,bottom:0,background:'rgba(0,0,0,0.8)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000}}>
+                    <div className="card p-4" style={{width:'420px'}}>
+                        <div className="d-flex justify-content-between align-items-center mb-4">
+                            <h5>Subscribe - {project.name}</h5>
+                            <button onClick={onClose} style={{background:'none',border:'none',color:'var(--light)',fontSize:24}}>×</button>
+                        </div>
+                        <div className="mb-3"><label className="text-muted d-block mb-1">Subscription Amount (USDT)</label><input type="number" className="input-field" placeholder="100" value={amount} onChange={e=>setAmt(e.target.value)} /></div>
+                        <div className="p-3 mb-3" style={{background:'var(--dark3)',borderRadius:8}}>
+                            <div className="d-flex justify-content-between mb-2"><span className="text-muted">Your Tier</span><span className="tier-badge tier-silver">Silver</span></div>
+                            <div className="d-flex justify-content-between mb-2"><span className="text-muted">Max Allocation</span><span>$100</span></div>
+                            <div className="d-flex justify-content-between"><span className="text-muted">Est. {project.symbol}</span><span className="text-up">{estTokens}</span></div>
+                        </div>
+                        <button className="btn btn-stake w-100">Confirm Subscription</button>
+                    </div>
+                </div>
+            );
+        };
+        
+        const App = () => {
+            const {connected, account, connect} = useWeb3();
+            const [subscribe, setSub] = useState(null);
+            
+            const liveProjects = [
+                {name:'MegaToken', symbol:'MEGA', description:'Next-gen blockchain protocol', price:0.05, roi:5.2, raised:450000, target:1000000, maxAllocation:'$100', status:'live', endTime:Date.now()+86400000*2},
+                {name:'ChainVerse', symbol:'CVT', description:'Web3 gaming ecosystem', price:0.12, roi:3.8, raised:320000, target:500000, maxAllocation:'$100', status:'live', endTime:Date.now()+86400000*1},
+            ];
+            
+            const upcomingProjects = [
+                {name:'DeFi Pro', symbol:'DFP', description:'DeFi aggregator', startTime:Date.now()+86400000*7},
+                {name:'NFT Arena', symbol:'NAR', description:'NFT gaming platform', startTime:Date.now()+86400000*14},
+            ];
+            
+            return (
+                <div>
+                    <Ticker />
+                    <nav className="d-flex justify-content-between align-items-center px-4 py-2" style={{background:'var(--dark2)',borderBottom:'1px solid var(--border)'}}>
+                        <span className="h4" style={{background:'linear-gradient(135deg,#7645d9,#00d4aa)','-webkit-background-clip':'text','-webkit-text-fill-color':'transparent',fontWeight:700}}><i className="bi bi-rocket-takeoff me-2"></i>TigerEx Launchpad</span>
+                        <button className="btn btn-stake" style={{background:connected?'green':'linear-gradient(135deg,#627eea,#00d4aa)'}} onClick={connect}>{connected ? account?.slice(0,8)+'...' : 'Connect'}</button>
+                    </nav>
+                    <div className="container-fluid p-3">
+                        <TierInfo />
+                        <div className="row">
+                            <div className="col-md-8">
+                                <h5 className="mb-3">Live Projects</h5>
+                                {liveProjects.map((p,i) => <ProjectCard key={i} project={p} onSubscribe={setSub}/>)}
+                                <h5 className="mb-3 mt-4">Upcoming Projects</h5>
+                                {upcomingProjects.map((p,i) => <UpcomingProject key={i} project={p}/>)}
+                            </div>
+                            <div className="col-md-4">
+                                <div className="card p-3">
+                                    <h6 className="mb-3">How it Works</h6>
+                                    <div className="mb-2"><span className="text-purple me-2">1</span>Hold TIG to qualify</div>
+                                    <div className="mb-2"><span className="text-purple me-2">2</span>Subscribe during period</div>
+                                    <div className="mb-2"><span className="text-purple me-2">3</span>Allocation determined</div>
+                                    <div><span className="text-purple me-2">4</span>Receive tokens at launch</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <SubscribeModal project={subscribe} show={!!subscribe} onClose={()=>setSub(null)} />
+                </div>
+            );
+        };
+        
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+    </script>
+</body>
+</html>
