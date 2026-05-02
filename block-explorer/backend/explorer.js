@@ -1,100 +1,180 @@
 /**
- * TigerChain Explorer - Dynamic API Connector
- * Connects to backend block-explorer service
+ * TigerEx Explorer API Client - Production Version
+ * With error handling, caching, and retry logic
+
+ * @version 2.0.0
  */
-const EXPLORER_API = window.location.port === '3000' || window.location.port === '5173'
-  ? 'http://localhost:8000'
-  : '/api';
 
-// Block Explorer Service
-const ExplorerService = {
-  baseURL: EXPLORER_API,
+(function() {
+    'use strict';
 
-  // Get all blocks
-  async getBlocks(limit = 20, offset = 0) {
-    const res = await fetch(`${this.baseURL}/api/v1/blocks?limit=${limit}&offset=${offset}`);
-    return res.json();
-  },
+    // Configuration
+    const CONFIG = {
+        baseURL: window.TIGEREX_EXPLORER_URL || window.location.origin,
+        cacheTTL: 30000, // 30 seconds
+        retryAttempts: 3,
+        retryDelay: 1000
+    };
 
-  // Get block by number
-  async getBlock(blockNum) {
-    const res = await fetch(`${this.baseURL}/api/v1/blocks/${blockNum}`);
-    return res.json();
-  },
+    // Cache
+    const _cache = new Map();
 
-  // Get block by hash
-  async getBlockByHash(hash) {
-    const res = await fetch(`${this.baseURL}/api/v1/blocks/hash/${hash}`);
-    return res.json();
-  },
+    // ==================== HELPERS ====================
 
-  // Get transactions for block
-  async getBlockTransactions(blockNum) {
-    const res = await fetch(`${this.baseURL}/api/v1/blocks/${blockNum}/transactions`);
-    return res.json();
-  },
+    function cacheKey(endpoint, params = {}) {
+        return `${endpoint}?${new URLSearchParams(params).toString()}`;
+    }
 
-  // Get transaction by hash
-  async getTransaction(txHash) {
-    const res = await fetch(`${this.baseURL}/api/v1/transactions/${txHash}`);
-    return res.json();
-  },
+    function getCached(key) {
+        const cached = _cache.get(key);
+        if (cached && Date.now() < cached.expires) {
+            return cached.data;
+        }
+        _cache.delete(key);
+        return null;
+    }
 
-  // Get transactions (paginated)
-  async getTransactions(limit = 20, offset = 0) {
-    const res = await fetch(`${this.baseURL}/api/v1/transactions?limit=${limit}&offset=${offset}`);
-    return res.json();
-  },
+    function setCache(key, data, ttl = CONFIG.cacheTTL) {
+        _cache.set(key, {
+            data,
+            expires: Date.now() + ttl
+        });
+    }
 
-  // Search (address, tx, block)
-  async search(query) {
-    const res = await fetch(`${this.baseURL}/api/v1/search?q=${encodeURIComponent(query)}`);
-    return res.json();
-  },
+    async function request(endpoint, options = {}) {
+        const {
+            params = {},
+            method = 'GET',
+            cache = true,
+            retryCount = 0
+        } = options;
 
-  // Get address info
-  async getAddress(address) {
-    const res = await fetch(`${this.baseURL}/api/v1/addresses/${address}`);
-    return res.json();
-  },
+        const url = new URL(`${CONFIG.baseURL}${endpoint}`);
+        Object.entries(params).forEach(([k, v]) => url.searchParams.append(k, v));
 
-  // Get address transactions
-  async getAddressTransactions(address, limit = 20) {
-    const res = await fetch(`${this.baseURL}/api/v1/addresses/${address}/transactions?limit=${limit}`);
-    return res.json();
-  },
+        const cacheKeyValue = cacheKey(endpoint, params);
+        if (cache && method === 'GET') {
+            const cached = getCached(cacheKeyValue);
+            if (cached) return cached;
+        }
 
-  // Get tokens
-  async getTokens(limit = 50) {
-    const res = await fetch(`${this.baseURL}/api/v1/tokens?limit=${limit}`);
-    return res.json();
-  },
+        try {
+            const response = await fetch(url.toString(), {
+                method,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
 
-  // Get token holders
-  async getTokenHolders(tokenAddress, limit = 100) {
-    const res = await fetch(`${this.baseURL}/api/v1/tokens/${tokenAddress}/holders?limit=${limit}`);
-    return res.json();
-  },
+            // Handle rate limiting
+            if (response.status === 429 && retryCount < CONFIG.retryAttempts) {
+                await new Promise(r => setTimeout(r, CONFIG.retryDelay * (retryCount + 1)));
+                return request(endpoint, { ...options, retryCount: retryCount + 1 });
+            }
 
-  // Get NFTs
-  async getNFTs(limit = 20) {
-    const res = await fetch(`${this.baseURL}/api/v1/nfts?limit=${limit}`);
-    return res.json();
-  },
+            if (!response.ok) {
+                const error = await response.json().catch(() => ({}));
+                throw new Error(error.error || `HTTP ${response.status}`);
+            }
 
-  // Get validators
-  async getValidators() {
-    const res = await fetch(`${this.baseURL}/api/v1/validators`);
-    return res.json();
-  },
+            const data = await response.json();
 
-  // Get stats
-  async getStats() {
-    const res = await fetch(`${this.baseURL}/api/v1/stats`);
-    return res.json();
-  }
-};
+            if (cache && method === 'GET') {
+                setCache(cacheKeyValue, data);
+            }
 
-// Export
-window.ExplorerService = ExplorerService;
-console.log('Explorer API connected to backend');
+            return data;
+        } catch (error) {
+            if (retryCount < CONFIG.retryAttempts && error.name === 'TypeError') {
+                await new Promise(r => setTimeout(r, CONFIG.retryDelay));
+                return request(endpoint, { ...options, retryCount: retryCount + 1 });
+            }
+            throw error;
+        }
+    }
+
+    // ==================== EXPLORER SERVICE ====================
+
+    const ExplorerService = {
+        // Clear cache
+        clearCache() {
+            _cache.clear();
+        },
+
+        // Blocks
+        async getBlocks(limit = 20, offset = 0) {
+            return request('/api/v1/blocks', { params: { limit, offset } });
+        },
+
+        async getBlock(blockNum) {
+            return request(`/api/v1/blocks/${blockNum}`);
+        },
+
+        async getBlockByHash(hash) {
+            return request(`/api/v1/blocks/hash/${hash}`);
+        },
+
+        async getBlockTransactions(blockNum) {
+            return request(`/api/v1/blocks/${blockNum}/transactions`);
+        },
+
+        // Transactions
+        async getTransactions(limit = 20, offset = 0) {
+            return request('/api/v1/transactions', { params: { limit, offset } });
+        },
+
+        async getTransaction(txHash) {
+            return request(`/api/v1/transactions/${txHash}`);
+        },
+
+        // Addresses
+        async getAddress(address) {
+            return request(`/api/v1/addresses/${address}`);
+        },
+
+        async getAddressTransactions(address, limit = 20) {
+            return request(`/api/v1/addresses/${address}/transactions`, { params: { limit } });
+        },
+
+        // Tokens
+        async getTokens(limit = 50) {
+            return request('/api/v1/tokens', { params: { limit } });
+        },
+
+        async getTokenHolders(tokenAddress, limit = 100) {
+            return request(`/api/v1/tokens/${tokenAddress}/holders`, { params: { limit } });
+        },
+
+        // NFTs
+        async getNFTs(limit = 20) {
+            return request('/api/v1/nfts', { params: { limit } });
+        },
+
+        // Validators
+        async getValidators() {
+            return request('/api/v1/validators');
+        },
+
+        // Stats
+        async getStats() {
+            return request('/api/v1/stats');
+        },
+
+        // Search
+        async search(query) {
+            return request('/api/v1/search', { params: { q: query } });
+        },
+
+        // Health check
+        async health() {
+            return request('/health');
+        }
+    };
+
+    // Export
+    if (typeof module !== 'undefined' && module.exports) {
+        module.exports = ExplorerService;
+    } else if (typeof window !== 'undefined') {
+        window.ExplorerService = ExplorerService;
+    }
+})();

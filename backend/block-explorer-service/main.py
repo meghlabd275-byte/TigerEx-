@@ -1,18 +1,47 @@
 #!/usr/bin/env python3
 """
-TigerEx Block Explorer Service
-Real blockchain exploration with live data
+TigerEx Block Explorer Service - Production Version
+With caching, rate limiting, and error handling
+
+@version 2.0.0
 """
+
 import os
 import json
+import time
+import hashlib
+import secrets
 import logging
-import requests
-from typing import Dict, List, Optional
 from datetime import datetime
+from functools import wraps
 from collections import defaultdict
+from typing import Dict, List, Optional, Any
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+import requests
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+from flask_limiter import Limiter
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
+
+# Flask app
+app = Flask(__name__)
+CORS(app)
+
+# Rate limiting
+limiter = Limiter(
+    key_func=lambda: request.headers.get('X-Forwarded-For', request.remote_addr),
+    app=app,
+    default_limits=["200 per day", "50 per hour"]
+)
+
+PORT = int(os.environ.get('PORT', 8000))
+CACHE_TTL = int(os.environ.get('CACHE_TTL', '30'))
 
 CHAINS = {
     "ethereum": {"id": 1, "rpc": os.environ.get("ETH_RPC", "https://eth.llamarpc.com"), "explorer": "api.etherscan.io"},
