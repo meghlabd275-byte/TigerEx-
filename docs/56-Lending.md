@@ -1,5 +1,0 @@
-# Lending
-
-## Supply
-## Borrow
-## Interest

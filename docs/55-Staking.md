@@ -1,5 +1,0 @@
-# Staking
-
-## Rewards
-## Locking
-## Claims

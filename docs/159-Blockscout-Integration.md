@@ -1,5 +1,0 @@
-# Blockscout
-
-## API
-## Explorer
-## Data

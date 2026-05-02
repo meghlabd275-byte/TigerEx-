@@ -1,5 +1,0 @@
-# Launchpad
-
-## Tiers
-## Allocations
-## Distribution

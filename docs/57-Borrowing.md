@@ -1,5 +1,0 @@
-# Borrowing
-
-## Collateral
-## Rates
-## Liquidation

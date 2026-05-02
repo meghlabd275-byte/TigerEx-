@@ -1,5 +1,0 @@
-# Monitoring
-
-## Metrics
-## Alerts
-## Dashboards

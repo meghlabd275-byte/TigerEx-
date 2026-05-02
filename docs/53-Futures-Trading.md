@@ -1,5 +1,0 @@
-# Futures
-
-## Perpetual
-## Expirations
-## Settlement
