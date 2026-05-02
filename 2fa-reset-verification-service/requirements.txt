@@ -1,0 +1,8 @@
+# TigerEx 2FA Verification Requirements
+
+flask>=2.3.0
+flask-cors>=4.0.0
+flask-limiter>=3.0.0
+
+# For production
+gunicorn>=21.0.0
