@@ -1,0 +1,38 @@
+# Multi-Engine Trading System Requirements
+
+# Core
+python>=3.10
+multiprocessing-utils>=0.3.0
+
+# Async
+asyncio-redis>=0.16.0
+aiokafka>=0.10.0
+
+# Web
+flask>=3.0.0
+flask-cors>=4.0.0
+gevent>=24.2.0
+
+# HTTP
+requests>=2.32.0
+aiohttp>=3.11.0
+
+# Database
+redis>=5.2.0
+pymongo>=4.10.1
+
+# Encryption
+cryptography>=44.0.0
+
+# Rate limiting
+slowapi>=0.1.9
+
+# Monitoring
+prometheus-client>=0.21.0
+
+# Logging
+structlog>=24.2.0
+
+# Testing
+pytest>=8.3.4
+pytest-asyncio>=0.24.0
