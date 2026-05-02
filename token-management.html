@@ -14,7 +14,15 @@
     <div id="root"></div>
     <script type="text/babel">
         const{useState}=React;
-        const App=()=>useState(null);
+        const App=()=>{
+            const[d,setD]=useState({q:'',a:''});
+            return(<div className="container-fluid p-4">
+                <h4>TigerEx Management</h4>
+                <div className="card-panel p-3">
+                    <input className="form-control mb-2" placeholder="Search..." value={d.q} onChange={e=>setD({...d,q:e.target.value})}/>
+                </div>
+            </div>);
+        };
         ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
     </script>
 </body>
