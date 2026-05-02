@@ -1,0 +1,11 @@
+/* TigerEx Responsive 2FA Styles */
+@media (max-width: 640px) {
+  .otp-input { width: 40px; height: 50px; font-size: 18px; }
+  .camera-box { max-width: 300px; }
+  .progress-step { gap: 6px; }
+  .progress-dot { width: 10px; height: 10px; }
+}
+@media (min-width: 768px) {
+  .otp-input { width: 60px; height: 70px; font-size: 28px; }
+  .step { max-width: 500px; margin: 0 auto; }
+}
