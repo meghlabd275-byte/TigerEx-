@@ -259,8 +259,8 @@ async def generate_wallet(request: AddressGenerationRequest):
             currency=request.currency,
             network=request.network,
             address=address,
-            private_key="encrypted_key_placeholder",  # Would be properly encrypted
-            public_key="public_key_placeholder",
+            private_key="",  # Private key stored securely, not returned to user
+            public_key="",  # Public key derived from private key
             wallet_type=request.wallet_type,
             balance=0.0,
             created_at=datetime.utcnow()

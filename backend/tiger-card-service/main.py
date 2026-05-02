@@ -472,29 +472,34 @@ def check_card_limits(card, amount):
     return True
 
 def convert_to_crypto(amount, from_currency, to_crypto):
-    """Convert fiat amount to cryptocurrency"""
+    """Convert fiat amount to cryptocurrency using real-time rates"""
     try:
-        # This is a placeholder for actual exchange rate API
-        # Integration with exchange APIs needed
-        exchange_rates = {
-            'USD-BTC': 0.000025,
-            'USD-ETH': 0.00035,
-            'EUR-BTC': 0.000027,
-            'EUR-ETH': 0.00038
-        }
+        # Fetch live exchange rates from API
+        import requests
+        from_currency_code = from_currency.replace("USD", "").replace("EUR", "")
         
-        rate_key = f"{from_currency}-{to_crypto}"
-        if rate_key not in exchange_rates:
-            return None
+        # Get live price
+        resp = requests.get(
+            f"https://api.coingecko.com/api/v3/simple/price?ids={to_crypto.lower()}&vs_currencies={from_currency.lower()}",
+            timeout=5
+        )
         
-        rate = Decimal(str(exchange_rates[rate_key]))
-        crypto_amount = amount * rate
+        if resp.status_code == 200:
+            data = resp.json()
+            rate = data.get(to_crypto.lower(), {}).get(from_currency.lower(), 0)
+            if rate:
+                crypto_amount = amount / Decimal(str(rate))
+                return {
+                    'amount': float(crypto_amount),
+                    'currency': to_crypto,
+                    'rate': rate,
+                    'source': 'coingecko'
+                }
         
-        return {
-            'amount': crypto_amount,
-            'currency': to_crypto,
-            'rate': rate
-        }
+        # Fallback - return error if rate not available
+        logger.warning(f"Could not fetch rate for {from_currency} to {to_crypto}")
+        return None
+        
     except Exception as e:
         logger.error(f"Currency conversion error: {str(e)}")
         return None
