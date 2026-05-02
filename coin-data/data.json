@@ -1,177 +1,7 @@
 {
-  "users": [
-    {
-      "id": 1,
-      "username": "admin",
-      "email": "admin@tigerex.com",
-      "password": "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
-      "role": "admin",
-      "status": "active"
-    }
-  ],
-  "coins": [
-    {
-      "id": 1,
-      "name": "Bitcoin",
-      "symbol": "BTC",
-      "type": "coin",
-      "logo_url": "",
-      "status": "active",
-      "decimals": 8,
-      "website_url": "https://bitcoin.org",
-      "whitepaper_url": "",
-      "description": "Bitcoin is a decentralized digital currency.",
-      "is_listed": true,
-      "networks": [
-        {
-          "network": "bitcoin",
-          "deposit_address": "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
-          "withdraw_address": "bc1q8kqr4g6k6zr5pq7z3z3z3z3z3z3z3z3z3z3z",
-          "deposit_enabled": true,
-          "withdraw_enabled": true,
-          "min_deposit_amount": 0.0001,
-          "min_withdraw_amount": 0.0001
-        }
-      ],
-      "socials": {
-        "twitter": "https://twitter.com/bitcoin",
-        "telegram": ""
-      }
-    },
-    {
-      "id": 2,
-      "name": "Ethereum",
-      "symbol": "ETH",
-      "type": "token",
-      "logo_url": "",
-      "status": "active",
-      "decimals": 18,
-      "contract_address": "0x0000000000000000000000000000000000000000",
-      "website_url": "https://ethereum.org",
-      "whitepaper_url": "",
-      "description": "Ethereum is a decentralized blockchain platform.",
-      "is_listed": true,
-      "networks": [
-        {
-          "network": "ethereum",
-          "deposit_address": "0x742d35Cc6634C0532925a3b5448C0f6d3f7d3d3d3",
-          "withdraw_address": "0x892d35Cc6634C0532925a3b5448C0f6d3f7d3d3d3",
-          "deposit_enabled": true,
-          "withdraw_enabled": true,
-          "min_deposit_amount": 0.001,
-          "min_withdraw_amount": 0.001
-        }
-      ],
-      "socials": {
-        "twitter": "https://twitter.com/ethereum",
-        "telegram": ""
-      }
-    },
-    {
-      "id": 3,
-      "name": "BNB",
-      "symbol": "BNB",
-      "type": "token",
-      "logo_url": "",
-      "status": "active",
-      "decimals": 18,
-      "contract_address": "0xbb8cd8b60c245645b246c5a564d5f74d1f6e49d6e",
-      "website_url": "https://bnbchain.org",
-      "whitepaper_url": "",
-      "description": "BNB is the native token of BNB Chain.",
-      "is_listed": true,
-      "networks": [
-        {
-          "network": "bsc",
-          "deposit_address": "0x742d35Cc6634C0532925a3b5448C0f6d3f7d3d3d3",
-          "withdraw_address": "0x992d35Cc6634C0532925a3b5448C0f6d3f7d3d3d3",
-          "deposit_enabled": true,
-          "withdraw_enabled": true,
-          "min_deposit_amount": 0.001,
-          "min_withdraw_amount": 0.001
-        }
-      ],
-      "socials": {
-        "twitter": "https://twitter.com/BNBChain",
-        "telegram": ""
-      }
-    },
-    {
-      "id": 4,
-      "name": "Solana",
-      "symbol": "SOL",
-      "type": "coin",
-      "logo_url": "",
-      "status": "active",
-      "decimals": 9,
-      "website_url": "https://solana.com",
-      "whitepaper_url": "",
-      "description": "Solana is a high-performance blockchain.",
-      "is_listed": true,
-      "networks": [
-        {
-          "network": "solana",
-          "deposit_address": "7xKXtg2CW87d97TXJSDbDToRdfGjnz6rBf6uccrF7F6P",
-          "withdraw_address": "8yLXtg2CW87d97TXJSDbDToRdfGjnz6rBf6uccrF7F6P",
-          "deposit_enabled": true,
-          "withdraw_enabled": true,
-          "min_deposit_amount": 0.01,
-          "min_withdraw_amount": 0.01
-        }
-      ],
-      "socials": {
-        "twitter": "https://twitter.com/solana",
-        "telegram": ""
-      }
-    },
-    {
-      "id": 5,
-      "name": "Tether USD",
-      "symbol": "USDT",
-      "type": "token",
-      "logo_url": "",
-      "status": "active",
-      "decimals": 6,
-      "contract_address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
-      "website_url": "https://tether.to",
-      "whitepaper_url": "",
-      "description": "USD-pegged stablecoin",
-      "is_listed": true,
-      "networks": [
-        {
-          "network": "ethereum",
-          "deposit_address": "0x742d35Cc6634C0532925a3b5448C0f6d3f7d3d3d3",
-          "withdraw_address": "0x892d35Cc6634C0532925a3b5448C0f6d3f7d3d3d3",
-          "deposit_enabled": true,
-          "withdraw_enabled": true,
-          "min_deposit_amount": 10,
-          "min_withdraw_amount": 10
-        },
-        {
-          "network": "bsc",
-          "deposit_address": "0x742d35Cc6634C0532925a3b5448C0f6d3f7d3d3d3",
-          "withdraw_address": "0x892d35Cc6634C0532925a3b5448C0f6d3f7d3d3d3",
-          "deposit_enabled": true,
-          "withdraw_enabled": true,
-          "min_deposit_amount": 10,
-          "min_withdraw_amount": 10
-        },
-        {
-          "network": "tron",
-          "deposit_address": "TXkCwm3BiWqY5GgF1khiV4F2Y8a6x6J3r9",
-          "withdraw_address": "UXkCwm3BiWqY5GgF1khiV4F2Y8a6x6J3r9",
-          "deposit_enabled": true,
-          "withdraw_enabled": true,
-          "min_deposit_amount": 10,
-          "min_withdraw_amount": 10
-        }
-      ],
-      "socials": {
-        "twitter": "https://twitter.com/Tether_to",
-        "telegram": ""
-      }
-    }
-  ],
+  "--comment": "TigerEx Coin Data - Dynamic Configuration",
+  "--note": "Addresses are now generated dynamically via Wallet Service. Never store addresses in version control.",
+
   "networks": [
     {
       "id": 1,
@@ -179,10 +9,12 @@
       "symbol": "BTC",
       "chain_id": "1",
       "type": "main",
-      "rpc_url": "https://blockstream.info/api",
+      "rpc_url": "${BTC_RPC_URL}",
       "explorer_url": "https://blockstream.info",
       "color": "#F7931A",
-      "status": "active"
+      "status": "active",
+      "confirmations": 1,
+      "min_deposit": 0.0001
     },
     {
       "id": 2,
@@ -190,10 +22,12 @@
       "symbol": "ETH",
       "chain_id": "1",
       "type": "erc20",
-      "rpc_url": "https://eth.llamarpc.com",
+      "rpc_url": "${ETH_RPC_URL}",
       "explorer_url": "https://etherscan.io",
       "color": "#627EEA",
-      "status": "active"
+      "status": "active",
+      "confirmations": 12,
+      "min_deposit": 0.001
     },
     {
       "id": 3,
@@ -201,10 +35,12 @@
       "symbol": "BSC",
       "chain_id": "56",
       "type": "bep20",
-      "rpc_url": "https://bsc-dataseed.binance.org",
+      "rpc_url": "${BSC_RPC_URL}",
       "explorer_url": "https://bscscan.com",
       "color": "#F0B90B",
-      "status": "active"
+      "status": "active",
+      "confirmations": 15,
+      "min_deposit": 0.001
     },
     {
       "id": 4,
@@ -212,10 +48,12 @@
       "symbol": "SOL",
       "chain_id": "main",
       "type": "spl",
-      "rpc_url": "https://api.mainnet-beta.solana.com",
+      "rpc_url": "${SOL_RPC_URL}",
       "explorer_url": "https://solscan.io",
       "color": "#00D4A1",
-      "status": "active"
+      "status": "active",
+      "confirmations": 1,
+      "min_deposit": 0.01
     },
     {
       "id": 5,
@@ -223,10 +61,12 @@
       "symbol": "MATIC",
       "chain_id": "137",
       "type": "erc20",
-      "rpc_url": "https://polygon.llamarpc.com",
+      "rpc_url": "${MATIC_RPC_URL}",
       "explorer_url": "https://polygonscan.com",
       "color": "#8247E5",
-      "status": "active"
+      "status": "active",
+      "confirmations": 12,
+      "min_deposit": 0.1
     },
     {
       "id": 6,
@@ -234,10 +74,12 @@
       "symbol": "AVAX",
       "chain_id": "43114",
       "type": "c-chain",
-      "rpc_url": "https://api.avax.network/ext/bc/C/rpc",
+      "rpc_url": "${AVAX_RPC_URL}",
       "explorer_url": "https://snowtrace.io",
       "color": "#E84142",
-      "status": "active"
+      "status": "active",
+      "confirmations": 12,
+      "min_deposit": 0.01
     },
     {
       "id": 7,
@@ -245,10 +87,12 @@
       "symbol": "ARB",
       "chain_id": "42161",
       "type": "erc20",
-      "rpc_url": "https://arb1.arbitrum.io/rpc",
+      "rpc_url": "${ARB_RPC_URL}",
       "explorer_url": "https://arbiscan.io",
       "color": "#28A0F0",
-      "status": "active"
+      "status": "active",
+      "confirmations": 12,
+      "min_deposit": 0.001
     },
     {
       "id": 8,
@@ -256,10 +100,12 @@
       "symbol": "OP",
       "chain_id": "10",
       "type": "erc20",
-      "rpc_url": "https://mainnet.optimism.io",
+      "rpc_url": "${OP_RPC_URL}",
       "explorer_url": "https://optimistic.etherscan.io",
       "color": "#FF0420",
-      "status": "active"
+      "status": "active",
+      "confirmations": 12,
+      "min_deposit": 0.001
     },
     {
       "id": 9,
@@ -267,73 +113,143 @@
       "symbol": "TRX",
       "chain_id": "main",
       "type": "trc20",
-      "rpc_url": "https://api.trongrid.io",
+      "rpc_url": "${TRX_RPC_URL}",
       "explorer_url": "https://tronscan.org",
       "color": "#FF0013",
-      "status": "active"
+      "status": "active",
+      "confirmations": 19,
+      "min_deposit": 10
     }
   ],
+
+  "coins": [
+    {
+      "id": 1,
+      "name": "Bitcoin",
+      "symbol": "BTC",
+      "type": "coin",
+      "status": "active",
+      "is_listed": true,
+      "decimals": 8,
+      "networks": [1],
+      "description": "Bitcoin is a decentralized digital currency."
+    },
+    {
+      "id": 2,
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "type": "token",
+      "status": "active",
+      "is_listed": true,
+      "decimals": 18,
+      "contract_address": "${ETH_CONTRACT}",
+      "networks": [2, 7, 8],
+      "description": "Ethereum is a decentralized blockchain platform."
+    },
+    {
+      "id": 3,
+      "name": "BNB",
+      "symbol": "BNB",
+      "type": "token",
+      "status": "active",
+      "is_listed": true,
+      "decimals": 18,
+      "contract_address": "${BSC_CONTRACT}",
+      "networks": [3],
+      "description": "BNB is the native token of BNB Chain."
+    },
+    {
+      "id": 4,
+      "name": "Solana",
+      "symbol": "SOL",
+      "type": "coin",
+      "status": "active",
+      "is_listed": true,
+      "decimals": 9,
+      "networks": [4],
+      "description": "Solana is a high-performance blockchain."
+    },
+    {
+      "id": 5,
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "type": "token",
+      "status": "active",
+      "is_listed": true,
+      "decimals": 6,
+      "contract_address": "${USDT_CONTRACT}",
+      "networks": [2, 3, 9],
+      "description": "USD-pegged stablecoin"
+    }
+  ],
+
   "trading_pairs": [
     {
       "id": 1,
       "base_coin_id": 1,
       "quote_coin_id": 5,
-      "base_coin": "BTC",
-      "quote_coin": "USDT",
       "pair_symbol": "BTC/USDT",
       "status": "active",
+      "is_active": true,
       "maker_fee": 0.001,
       "taker_fee": 0.001,
       "min_trade_amount": 0.0001,
       "price_precision": 2,
-      "quantity_precision": 6,
-      "is_active": true
+      "quantity_precision": 6
     },
     {
       "id": 2,
       "base_coin_id": 2,
       "quote_coin_id": 5,
-      "base_coin": "ETH",
-      "quote_coin": "USDT",
       "pair_symbol": "ETH/USDT",
       "status": "active",
+      "is_active": true,
       "maker_fee": 0.001,
       "taker_fee": 0.001,
       "min_trade_amount": 0.001,
       "price_precision": 2,
-      "quantity_precision": 6,
-      "is_active": true
+      "quantity_precision": 6
     },
     {
       "id": 3,
       "base_coin_id": 3,
       "quote_coin_id": 5,
-      "base_coin": "BNB",
-      "quote_coin": "USDT",
       "pair_symbol": "BNB/USDT",
       "status": "active",
+      "is_active": true,
       "maker_fee": 0.001,
       "taker_fee": 0.001,
       "min_trade_amount": 0.001,
       "price_precision": 2,
-      "quantity_precision": 4,
-      "is_active": true
+      "quantity_precision": 4
     },
     {
       "id": 4,
       "base_coin_id": 4,
       "quote_coin_id": 5,
-      "base_coin": "SOL",
-      "quote_coin": "USDT",
       "pair_symbol": "SOL/USDT",
       "status": "active",
+      "is_active": true,
       "maker_fee": 0.001,
       "taker_fee": 0.001,
       "min_trade_amount": 0.01,
       "price_precision": 2,
-      "quantity_precision": 4,
-      "is_active": true
+      "quantity_precision": 4
     }
   ],
-  "transactions": []
+
+  "--env_vars_needed": [
+    "BTC_RPC_URL",
+    "ETH_RPC_URL", 
+    "BSC_RPC_URL",
+    "SOL_RPC_URL",
+    "MATIC_RPC_URL",
+    "AVAX_RPC_URL",
+    "ARB_RPC_URL",
+    "OP_RPC_URL",
+    "TRX_RPC_URL",
+    "ETH_CONTRACT",
+    "BSC_CONTRACT",
+    "USDT_CONTRACT"
+  ]
 }
