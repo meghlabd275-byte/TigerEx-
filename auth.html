@@ -3,15 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TigerEx</title>
+    <title>TigerEx - Auth</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>:root{--primary:#00d4aa;--dark:#0b0e14;--light:#eaeaea}body{background:var(--dark);color:var(--light)}</style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root { --primary: #00d4aa; --dark: #0b0e14; --dark2: #161c25; --light: #eaeaea; --border: #2a3140; }
+        body { background: var(--dark); color: var(--light); }
+    </style>
 </head>
 <body>
     <div id="root"></div>
-    <script type="text/babel">const App=()=><div className="container-fluid p-4"><h4>TigerEx</h4></div>;ReactDOM.createRoot(document.getElementById('root')).render(<App/>);</script>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        
+        const App = () => {
+            const [tab, setTab] = useState('login');
+            const [email, setEmail] = useState('');
+            const [password, setPassword] = useState('');
+            const [code, setCode] = useState('');
+            const [loading, setLoading] = useState(false);
+            const [error, setError] = useState('');
+            
+            const handleLogin = () => {
+                if(!email || !password) { setError('Fill all fields'); return; }
+                setLoading(true);
+                setTimeout(() => {
+                    setLoading(false);
+                    alert('Login successful!');
+                }, 1500);
+            };
+            
+            const handleRegister = () => {
+                if(!email || !password || !code) { setError('Fill all fields'); return; }
+                setLoading(true);
+                setTimeout(() => {
+                    setLoading(false);
+                    alert('Registration successful!');
+                }, 1500);
+            };
+            
+            const handleForgot = () => {
+                if(!email) { setError('Enter email'); return; }
+                alert('Reset link sent!');
+            };
+            
+            return (
+                <div className="min-vh-100 d-flex align-items-center justify-content-center">
+                    <div className="card-panel p-4" style={{width:400}}>
+                        <div className="text-center mb-4">
+                            <h3 style={{background:'linear-gradient(135deg,#00d4aa,#00f5d4)','-webkit-background-clip':'text','-webkit-text-fill-color':'transparent'}}>
+                                <i className="bi bi-gem me-2"></i>TigerEx
+                            </h3>
+                        </div>
+                        <div className="d-flex gap-2 mb-4">
+                            <button className={`btn flex-fill ${tab==='login'?'btn-primary':''}`} style={tab==='login'?{background:'var(--primary)',color:'#000'}:{}} onClick={()=>setTab('login')}>Login</button>
+                            <button className={`btn flex-fill ${tab==='register'?'btn-primary':''}`} style={tab==='register'?{background:'var(--primary)',color:'#000'}:{}} onClick={()=>setTab('register')}>Register</button>
+                            <button className={`btn flex-fill ${tab==='forgot'?'btn-primary':''}`} style={tab==='forgot'?{background:'var(--primary)',color:'#000'}:{}} onClick={()=>setTab('forgot')}>Reset</button>
+                        </div>
+                        {error && <div className="alert alert-danger p-2 mb-2">{error}</div>}
+                        
+                        {tab==='login' && (
+                            <>
+                                <input className="form-control mb-2" placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} />
+                                <input className="form-control mb-2" type="password" placeholder="Password" value={password} onChange={e=>setPassword(e.target.value)} />
+                                <button className="btn w-100" style={{background:'var(--primary)',color:'#000'}} onClick={handleLogin} disabled={loading}>
+                                    {loading ? 'Logging in...' : 'Login'}
+                                </button>
+                            </>
+                        )}
+                        
+                        {tab==='register' && (
+                            <>
+                                <input className="form-control mb-2" placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} />
+                                <input className="form-control mb-2" type="password" placeholder="Password" value={password} onChange={e=>setPassword(e.target.value)} />
+                                <input className="form-control mb-2" placeholder="Referral Code (optional)" />
+                                <button className="btn w-100" style={{background:'var(--primary)',color:'#000'}} onClick={handleRegister} disabled={loading}>
+                                    {loading ? 'Creating...' : 'Register'}
+                                </button>
+                            </>
+                        )}
+                        
+                        {tab==='forgot' && (
+                            <>
+                                <input className="form-control mb-2" placeholder="Enter your email" value={email} onChange={e=>setEmail(e.target.value)} />
+                                <button className="btn w-100" style={{background:'var(--primary)',color:'#000'}} onClick={handleForgot}>
+                                    Send Reset Link
+                                </button>
+                            </>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+        
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
 </body>
 </html>
