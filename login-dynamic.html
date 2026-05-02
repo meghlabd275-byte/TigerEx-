@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx - Login</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/web3@1.10.0/dist/web3.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root { --primary: #f0b90b; --bg: #0b0e11; --card: #1e2329; --text: #eaecef; --text2: #848e9c; --green: #00c087; --red: #f6465d; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+        .login-card { background: var(--card); border: 1px solid #2b3139; border-radius: 16px; padding: 40px; }
+        .btn-primary-custom { background: var(--primary); color: #000; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+        
+        const App = () => {
+            const [email, setEmail] = useState('');
+            const [password, setPassword] = useState('');
+            const [loading, setLoading] = useState(false);
+            const [error, setError] = useState('');
+            
+            const handleLogin = (e) => {
+                e.preventDefault();
+                if(!email || !password) { setError('Please fill all fields'); return; }
+                setLoading(true);
+                setTimeout(() => {
+                    setLoading(false);
+                    alert('Login successful! Redirecting...');
+                }, 1500);
+            };
+            
+            const handleMetaMask = async () => {
+                if(window.ethereum) {
+                    try {
+                        const accounts = await window.ethereum.request({method: 'eth_requestAccounts'});
+                        if(accounts[0]) alert('Connected: ' + accounts[0].slice(0,10) + '...');
+                    } catch(e) { alert('Connection failed'); }
+                } else alert('Please install MetaMask');
+            };
+            
+            return (
+                <div className="min-vh-100 d-flex align-items-center justify-content-center">
+                    <div className="login-card" style={{width:400}}>
+                        <div className="text-center mb-4">
+                            <h2 style={{background:'linear-gradient(135deg,#f0b90b,#ff6b6b)','-webkit-background-clip':'text','-webkit-text-fill-color':'transparent'}}>
+                                <i className="bi bi-gem me-2"></i>TigerEx
+                            </h2>
+                            <p className="text-muted">Welcome back!</p>
+                        </div>
+                        {error && <div className="alert alert-danger">{error}</div>}
+                        <form onSubmit={handleLogin}>
+                            <div className="mb-3">
+                                <input type="email" className="form-control" placeholder="Email" style={{background:'#1a1f2e',border:'1px solid #2b3139',color:'white',padding:12}} value={email} onChange={e=>setEmail(e.target.value)} />
+                            </div>
+                            <div className="mb-3">
+                                <input type="password" className="form-control" placeholder="Password" style={{background:'#1a1f2e',border:'1px solid #2b3139',color:'white',padding:12}} value={password} onChange={e=>setPassword(e.target.value)} />
+                            </div>
+                            <div className="d-flex justify-content-between mb-3">
+                                <label className="text-muted"><input type="checkbox" className="me-2" />Remember</label>
+                                <a href="#" className="text-warning">Forgot?</a>
+                            </div>
+                            <button type="submit" className="btn btn-primary-custom w-100 mb-3" disabled={loading}>
+                                {loading ? 'Loading...' : 'Login'}
+                            </button>
+                        </form>
+                        <div className="text-center mb-3"><span className="text-muted">or</span></div>
+                        <button className="btn w-100 mb-3" style={{background:'#1a1f2e',border:'1px solid #2b3139'}} onClick={handleMetaMask}>
+                            <i className="bi bi-wallet2 me-2"></i>MetaMask
+                        </button>
+                        <div className="text-center mt-3">
+                            <span className="text-muted">No account?</span>
+                            <a href="#" className="text-warning ms-1">Register</a>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+        
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>
