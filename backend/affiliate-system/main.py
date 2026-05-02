@@ -1,58 +1,78 @@
-"""TigerEx Affiliate System"""
+"""
+TigerEx Complete Affiliate System
+"""
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import List, Optional
 from datetime import datetime
+import uuid
 
 app = FastAPI()
 
-class AffiliateStore:
+class Affiliate(BaseModel):
+    code: str
+    user_id: str
+    commission: float = 0.05
+
+class Referral(BaseModel):
+    affiliate_code: str
+    referred_id: str
+    tier: int = 1
+
+class Store:
     def __init__(self):
         self.affiliates = {}
         self.referrals = {}
+        self.commissions = {}
     
-    def register(self, code: str, user_id: str):
-        self.affiliates[code] = {"user": user_id, "referrals": 0, "earnings": 0, "joined": datetime.now().isoformat()}
-        return self.affiliates[code]
+    def register(self, code: str, user_id: str) -> Affiliate:
+        af = Affiliate(code=code, user_id=user_id)
+        self.affiliates[code] = af
+        return af
     
-    def track_referral(self, code: str):
-        if code in self.affiliates:
-            self.affiliates[code]["referrals"] += 1
-            return True
-        return False
+    def add_referral(self, code: str, user_id: str):
+        if code not in self.affiliates:
+            raise HTTPException(404, "Affiliate not found")
+        ref = Referral(affiliate_code=code, referred_id=user_id)
+        self.referrals[user_id] = ref
+        self.affiliates[code].referred_count = getattr(self.affiliates[code], 'referred_count', 0) + 1
     
-    def add_earnings(self, code: str, amount: float):
-        if code in self.affiliates:
-            self.affiliates[code]["earnings"] += amount
-            return True
-        return False
+    def track_commission(self, code: str, amount: float):
+        if code in self.commissions:
+            self.commissions[code] += amount * 0.05
+        else:
+            self.commissions[code] = amount * 0.05
     
     def get_stats(self, code: str):
-        return self.affiliates.get(code, {})
+        if code not in self.affiliates:
+            return {}
+        a = self.affiliates[code]
+        return {
+            "code": a.code,
+            "user_id": a.user_id,
+            "referred": getattr(a, 'referred_count', 0),
+            "commission": self.commissions.get(code, 0)
+        }
 
-store = AffiliateStore()
+store = Store()
 
-class ReferralModel(BaseModel):
-    code: str
-    user_id: str
+@app.post("/register")
+async def register(req: dict):
+    return store.register(req["code"], req["user_id"])
 
-@app.post("/affiliate/register")
-async def registerAffiliate(r: ReferralModel):
-    return store.register(r.code, r.user_id)
+@app.post("/referral")
+async def add_ref(req: dict):
+    store.add_referral(req["code"], req["user_id"])
+    return {"status": "ok"}
 
-@app.post("/affiliate/referral")
-async def trackReferral(code: str):
-    if store.track_referral(code):
-        return {"status": "ok", "referrals": store.affiliates[code]["referrals"]}
-    raise HTTPException(status_code=404, detail="Code not found")
+@app.get("/stats/{code}")
+async def stats(code: str):
+    return store.get_stats(code)
 
-@app.get("/affiliate/stats/{code}")
-async def getStats(code: str):
-    stats = store.get_stats(code)
-    if not stats:
-        raise HTTPException(status_code=404)
-    return stats
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, port=8003)
+    uvicorn.run(app)

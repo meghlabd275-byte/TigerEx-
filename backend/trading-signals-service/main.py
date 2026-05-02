@@ -1,27 +1,48 @@
-"""TigerEx Service"""
+"""TigerEx Trading Signals Service"""
 from fastapi import FastAPI
-from typing import Dict, List
-import uuid, asyncio, random
-from datetime import datetime
+from typing import List
+import time
 
 app = FastAPI()
 
-data = {}
+class Signal:
+    def __init__(self, sid, symbol, action, price, confidence):
+        self.sid, self.symbol = sid, symbol
+        self.action, self.price = action, price
+        self.confidence = confidence
+        self.time = time.time()
+
+class SignalStore:
+    def __init__(self):
+        self.signals = {}
+        self.cnt = 0
+    
+    def create(self, symbol, action, price, confidence):
+        self.cnt += 1
+        s = Signal(f"SIG-{self.cnt}", symbol, action, price, confidence)
+        self.signals[s.sid] = s
+        return s
+    
+    def get_recent(self, symbol=None, limit=10):
+        sigs = list(self.signals.values())
+        if symbol:
+            sigs = [s for s in sigs if s.symbol == symbol]
+        return sigs[-limit:]
+
+store = SignalStore()
 
 @app.get("/health")
-async def health():
-    return {"status": "ok", "service": "active"}
+async def h():
+    return {"s": "ok", "signals": len(store.signals)}
 
-@app.get("/api/v1/list")
-async def list_items():
-    return list(data.values())
+@app.post("/signal")
+async def signal(d: dict):
+    return store.create(d["symbol"], d["action"], d["price"], d["confidence"])
 
-@app.post("/api/v1/add")
-async def add(item: Dict):
-    id = str(uuid.uuid4())
-    data[id] = {**item, "id": id, "created": datetime.now().isoformat()}
-    return data[id]
+@app.get("/signals")
+async def signals(s: str = None):
+    return store.get_recent(s)
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, port=8000)
+    uvicorn.run(app)

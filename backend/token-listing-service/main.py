@@ -1,27 +1,49 @@
-"""TigerEx Service"""
+"""TigerEx Token Listing Service"""
 from fastapi import FastAPI
-from typing import Dict, List
-import uuid, asyncio, random
-from datetime import datetime
+from typing import Optional
+import time
 
 app = FastAPI()
 
-data = {}
+class Token:
+    def __init__(self, symbol, name, decimals, total_supply):
+        self.symbol, self.name = symbol, name
+        self.decimals, self.supply = decimals, total_supply
+        self.listed = False
+        self.time = time.time()
+
+class ListingStore:
+    def __init__(self):
+        self.tokens = {}
+    
+    def request(self, symbol, name, decimals, supply):
+        t = Token(symbol, name, decimals, supply)
+        self.tokens[symbol] = t
+        return t
+    
+    def approve(self, symbol):
+        if symbol in self.tokens:
+            self.tokens[symbol].listed = True
+            return True
+        return False
+    
+    def get(self, symbol):
+        return self.tokens.get(symbol)
+
+store = ListingStore()
 
 @app.get("/health")
-async def health():
-    return {"status": "ok", "service": "active"}
+async def h():
+    return {"s": "ok", "tokens": len(store.tokens)}
 
-@app.get("/api/v1/list")
-async def list_items():
-    return list(data.values())
+@app.post("/request")
+async def request(d: dict):
+    return store.request(d["symbol"], d["name"], d["decimals"], d["supply"])
 
-@app.post("/api/v1/add")
-async def add(item: Dict):
-    id = str(uuid.uuid4())
-    data[id] = {**item, "id": id, "created": datetime.now().isoformat()}
-    return data[id]
+@app.post("/approve/{symbol}")
+async def approve(symbol: str):
+    return store.approve(symbol)
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, port=8000)
+    uvicorn.run(app)
