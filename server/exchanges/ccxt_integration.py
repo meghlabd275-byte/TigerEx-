@@ -158,7 +158,8 @@ def get_deposit_address(exchange):
         if not ex:
             return jsonify({'error': 'Unsupported exchange'}), 400
         
-        # Try to fetch deposit address
+        # Try to fetch deposit address from exchange
+        # For demo without API keys, return error indicating API needed
         try:
             address = ex.fetch_deposit_address(currency)
             return jsonify({
@@ -166,11 +167,13 @@ def get_deposit_address(exchange):
                 'address': address['address'],
                 'tag': address.get('tag', '')
             })
-        except:
+        except Exception as api_err:
+            # If API call fails (no API key), indicate setup required
             return jsonify({
                 'currency': currency,
-                'address': f'{currency.lower()}_deposit_address_placeholder',
-                'tag': ''
+                'error': 'API key required for deposit address',
+                'setup_required': True,
+                'message': f'Configure {exchange} API key to get deposit address'
             })
     except Exception as e:
         return jsonify({'error': str(e)}), 400

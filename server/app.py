@@ -525,13 +525,39 @@ def get_trading_book(symbol):
 
 @app.route('/api/trading/ticker/<symbol>', methods=['GET'])
 def get_trading_ticker(symbol):
-    """Get ticker with real-time price"""
+    """Get ticker with real-time price from price sync service"""
+    symbol = symbol.upper()
+    
+    # Try to get price from price-sync service
+    try:
+        price_url = os.environ.get('PRICE_SYNC_URL', 'http://localhost:5200')
+        resp = requests.get(f'{price_url}/price/{symbol}', timeout=3)
+        if resp.status_code == 200:
+            data = resp.json()
+            if data.get('success'):
+                return jsonify(data.get('price', {}))
+    except:
+        pass
+    
+    # Fallback to trading coordinator
     if trading_coordinator:
         ticker = trading_coordinator.get_ticker(symbol)
         return jsonify(ticker)
     
-    # Fallback to market data
-    return get_markets()
+    # Fallback to market data API
+    try:
+        get_real_market_data()
+    except:
+        pass
+    
+    symbol_lower = symbol.replace('USDT', '').lower()
+    data = market_cache.get('prices', {}).get(symbol_lower, {})
+    
+    return jsonify({
+        "symbol": symbol,
+        "price": data.get('usd', 0),
+        "change24h": data.get('usd_24h_change', 0)
+    })
 
 @app.route('/api/trading/stats', methods=['GET'])
 def get_trading_stats():
