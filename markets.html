@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx - Markets</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root { --primary: #00d4aa; --dark: #0b0e14; --dark2: #161c25; --light: #eaeaea; --border: #2a3140; }
+        body { background: var(--dark); color: var(--light); }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        
+        const App = () => {
+            const [markets, setMarkets] = useState([
+                {pair:'BTC/USDT',price:78440,change:2.5,vol:1.2},
+                {pair:'ETH/USDT',price:2310,change:-1.2,vol:0.8},
+                {pair:'BNB/USDT',price:619,change:0.5,vol:0.3},
+            ]);
+            
+            return (
+                <div className="container-fluid p-4">
+                    <h4 className="mb-4"><i className="bi bi-list-ul me-2"></i>All Markets</h4>
+                    <table className="w-100">
+                        <thead><tr style={{borderBottom:'1px solid var(--border)'}}><th className="p-2">Pair</th><th className="p-2">Price</th><th className="p-2">24h Change</th><th className="p-2">Volume</th></tr></thead>
+                        <tbody>{markets.map((m,i)=><tr key={i} style={{borderBottom:'1px solid var(--border)'}}>
+                            <td className="p-2" style={{fontWeight:600}}>{m.pair}</td>
+                            <td className="p-2">${m.price.toFixed(2)}</td>
+                            <td className={`p-2 ${m.change>=0?'text-success':'text-danger'}`}>{m.change>=0?'+':''}{m.change}%</td>
+                            <td className="p-2">{m.vol}B</td>
+                        </tr>)}</tbody>
+                    </table>
+                </div>
+            );
+        };
+        
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>
