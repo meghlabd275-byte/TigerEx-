@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx - Complete Trading Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root { --primary: #00d4aa; --secondary: #1a1a2e; --dark: #0f0f1a; --light: #f8f9fa; }
+        body { background: var(--dark); color: var(--light); font-family: 'Segoe UI', system-ui, sans-serif; overflow-x: hidden; }
+        .navbar { background: var(--secondary) !important; border-bottom: 1px solid #2a2a4a; padding: 0.75rem 0; }
+        .navbar-brand { color: var(--primary) !important; font-weight: bold; font-size: 1.5rem; }
+        .btn-primary { background: var(--primary); border: none; color: var(--dark); }
+        .btn-primary:hover { background: #00b894; }
+        .card { background: var(--secondary); border: 1px solid #2a2a4a; border-radius: 12px; margin-bottom: 20px; }
+        .card-header { background: transparent; border-bottom: 1px solid #2a2a4a; color: var(--primary); font-weight: 600; }
+        .sidebar { background: var(--secondary); min-height: 100vh; padding: 20px 0; }
+        .sidebar-link { display: flex; align-items: center; padding: 12px 20px; color: #aaa; text-decoration: none; transition: all 0.2s; }
+        .sidebar-link:hover, .sidebar-link.active { background: var(--primary); color: var(--dark); border-radius: 8px; margin: 0 10px; }
+        .sidebar-link i { margin-right: 10px; }
+        .ticker-tape { background: linear-gradient(90deg, var(--primary), #00b894); padding: 10px 0; overflow: hidden; }
+        .ticker-content { display: flex; animation: scroll 30s linear infinite; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .price-up { color: #00ff88; }
+        .price-down { color: #ff4757; }
+        .order-book { max-height: 400px; overflow: auto; }
+        .order-row { display: flex; justify-content: space-between; padding: 4px 10px; font-family: monospace; font-size: 0.85rem; }
+        .depth-bar { height: 100%; position: absolute; opacity: 0.3; }
+        .wallet-card { background: linear-gradient(135deg, #1a1a2e, #252545); border-radius: 12px; padding: 15px; margin-bottom: 10px; }
+        .chain-badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; background: #2a2a4a; }
+        .evm { background: #627eea; }
+        .non-evm { background: #00d4aa; color: #000; }
+        .wallet-address { font-family: monospace; background: var(--dark); padding: 8px 12px; border-radius: 6px; word-break: break-all; }
+        .nav-tabs .nav-link { color: #aaa; border: none; }
+        .nav-tabs .nav-link.active { background: var(--secondary); color: var(--primary); border-bottom: 2px solid var(--primary); }
+        .form-control, .form-select { background: var(--dark); border-color: #2a2a4a; color: white; }
+        .form-control:focus { background: var(--dark); border-color: var(--primary); color: white; }
+        .table { color: var(--light); }
+        .table th { border-color: #2a2a4a; color: var(--primary); }
+        .table td { border-color: #2a2a4a; }
+        .modal-content { background: var(--secondary); border: 1px solid #2a2a4a; }
+        .modal-header { border-color: #2a2a4a; }
+        .modal-footer { border-color: #2a2a4a; }
+        .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; }
+        .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--primary); border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <!-- Ticker Tape -->
+    <div class="ticker-tape">
+        <div class="ticker-content" id="tickerTape"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><i class="bi bi-graph-up-arrow"></i> TigerEx</a>
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-muted" id="connectionStatus"><i class="bi bi-circle-fill text-success"></i> Connected</span>
+                <button class="btn btn-sm btn-outline-light" onclick="showSection('wallet')"><i class="bi bi-wallet2"></i> Wallet</button>
+                <button class="btn btn-sm btn-outline-light" onclick="showSection('exchange')"><i class="bi bi-arrow-left-right"></i> Trade</button>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown">Network</button>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item" href="#" onclick="switchNetwork('ethereum')">Ethereum</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="switchNetwork('bsc')">BNB Chain</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="switchNetwork('polygon')">Polygon</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="switchNetwork('solana')">Solana</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="switchNetwork('tigerex')">TigerEx</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar d-none d-md-block">
+                <a class="sidebar-link active" href="#" onclick="showSection('dashboard')"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                <a class="sidebar-link" href="#" onclick="showSection('exchange')"><i class="bi bi-arrow-left-right"></i> Exchange</a>
+                <a class="sidebar-link" href="#" onclick="showSection('wallet')"><i class="bi bi-wallet2"></i> Wallet</a>
+                <a class="sidebar-link" href="#" onclick="showSection('blockchain')"><i class="bi bi-boxes"></i> Blockchain</a>
+                <a class="sidebar-link" href="#" onclick="showSection('liquidity')"><i class="bi bi-droplet"></i> Liquidity</a>
+                <a class="sidebar-link" href="#" onclick="showSection('orders')"><i class="bi bi-list-check"></i> Orders</a>
+                <a class="sidebar-link" href="#" onclick="showSection('history')"><i class="bi bi-clock-history"></i> History</a>
+                <a class="sidebar-link" href="#" onclick="showSection('settings')"><i class="bi bi-gear"></i> Settings</a>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-10">
+                <!-- Dashboard -->
+                <div id="section-dashboard">
+                    <div class="row mt-4">
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h2 class="text-primary" id="totalPortfolio">$0.00</h2>
+                                    <p class="text-muted mb-0">Total Portfolio</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h2 class="text-primary" id="totalTrades">0</h2>
+                                    <p class="text-muted mb-0">Total Trades</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h2 class="text-primary" id="pnl24h">$0.00</h2>
+                                    <p class="text-muted mb-0">24h P&L</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h2 class="text-primary" id="rank">-</h2>
+                                    <p class="text-muted mb-0">Trader Rank</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">Portfolio Breakdown</div>
+                                <div class="card-body" id="portfolioBreakdown">
+                                    <p class="text-muted">Loading...</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">Recent Trades</div>
+                                <div class="card-body" id="recentTrades">
+                                    <p class="text-muted">No trades yet</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exchange -->
+                <div id="section-exchange" style="display: none;">
+                    <div class="row mt-4">
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-header">
+                                    <select id="tradingPair" class="form-select form-select-sm" onchange="loadOrderBook()">
+                                        <option value="TIG/USDC">TIG/USDC</option>
+                                        <option value="ETH/USDC">ETH/USDC</option>
+                                        <option value="BTC/USDC">BTC/USDC</option>
+                                        <option value="BNB/USDC">BNB/USDC</option>
+                                    </select>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="order-book" id="orderBook">
+                                        <div class="p-2 text-muted text-center">Loading...</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between">
+                                    <span id="currentPrice">$0.00</span>
+                                    <div>
+                                        <span class="badge bg-success me-1">24h: <span id="priceChange">0%</span></span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="nav nav-tabs mb-3">
+                                        <li class="nav-item"><a class="nav-link active" onclick="setOrderSide('buy')">Buy</a></li>
+                                        <li class="nav-item"><a class="nav-link" onclick="setOrderSide('sell')">Sell</a></li>
+                                    </ul>
+                                    <div class="mb-3">
+                                        <label class="form-label">Price</label>
+                                        <input type="number" id="orderPrice" class="form-control" placeholder="0.00" oninput="calcTotal()">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Amount</label>
+                                        <input type="number" id="orderAmount" class="form-control" placeholder="0.00" oninput="calcTotal()">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Total</label>
+                                        <input type="text" id="orderTotal" class="form-control" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="btn-group w-100">
+                                            <button class="btn btn-outline-secondary" onclick="setPercent(25)">25%</button>
+                                            <button class="btn btn-outline-secondary" onclick="setPercent(50)">50%</button>
+                                            <button class="btn btn-outline-secondary" onclick="setPercent(75)">75%</button>
+                                            <button class="btn btn-outline-secondary" onclick="setPercent(100)">100%</button>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-success w-100" id="submitOrder" onclick="placeOrder()">Place Buy Order</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-header">My Orders</div>
+                                <div class="card-body p-0" style="max-height: 400px; overflow-y: auto;" id="myOrders">
+                                    <p class="text-muted p-2">No orders</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wallet -->
+                <div id="section-wallet" style="display: none;">
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="d-flex justify-content-between">
+                                        <span>My Wallets</span>
+                                        <button class="btn btn-sm btn-primary" onclick="createWalletModal()">+ New</button>
+                                    </div>
+                                </div>
+                                <div class="card-body" id="walletList">
+                                    <p class="text-muted">Loading...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">Balance</div>
+                                <div class="card-body" id="walletBalance">
+                                    <p class="text-muted">Select a wallet</p>
+                                </div>
+                            </div>
+
+                            <div class="card mt-3">
+                                <div class="card-header">Send / Receive</div>
+                                <div class="card-body">
+                                    <ul class="nav nav-tabs mb-3">
+                                        <li class="nav-item"><a class="nav-link active" onclick="setWalletTab('send')">Send</a></li>
+                                        <li class="nav-item"><a class="nav-link" onclick="setWalletTab('receive')">Receive</a></li>
+                                    </ul>
+                                    <div id="walletTabSend">
+                                        <div class="mb-3">
+                                            <label>To Address</label>
+                                            <input type="text" id="sendTo" class="form-control" placeholder="0x...">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>Amount</label>
+                                            <input type="number" id="sendAmount" class="form-control" placeholder="0.00">
+                                        </div>
+                                        <button class="btn btn-primary" onclick="sendCrypto()">Send</button>
+                                    </div>
+                                    <div id="walletTabReceive" style="display: none;">
+                                        <div class="wallet-address text-center p-3" id="receiveAddress">Select a wallet</div>
+                                        <button class="btn btn-outline-primary w-100" onclick="copyReceiveAddress()">Copy Address</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blockchain -->
+                <div id="section-blockchain" style="display: none;">
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">Explorer</div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <input type="text" id="explorerSearch" class="form-control" placeholder="Search block, tx, or address...">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button class="btn btn-primary w-100" onclick="explorerSearch()">Search</button>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4" id="explorerResults"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Liquidity -->
+                <div id="section-liquidity" style="display: none;">
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">Add Liquidity</div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label>Token A</label>
+                                        <select id="liqTokenA" class="form-select">
+                                            <option value="TIG">TIG</option>
+                                            <option value="ETH">ETH</option>
+                                            <option value="USDC">USDC</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Amount A</label>
+                                        <input type="number" id="liqAmountA" class="form-control" placeholder="0">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Amount B</label>
+                                        <input type="number" id="liqAmountB" class="form-control" placeholder="0">
+                                    </div>
+                                    <button class="btn btn-primary w-100" onclick="addLiquidity()">Add Liquidity</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">My Pools</div>
+                                <div class="card-body" id="liquidityPools">
+                                    <p class="text-muted">No pools</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders -->
+                <div id="section-orders" style="display: none;">
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">Open Orders</div>
+                                <div class="card-body">
+                                    <table class="table" id="ordersTable">
+                                        <thead><tr><th>Pair</th><th>Side</th><th>Price</th><th>Amount</th><th>Filled</th><th>Action</th></tr></thead>
+                                        <tbody id="ordersBody"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History -->
+                <div id="section-history" style="display: none;">
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">Trade History</div>
+                                <div class="card-body">
+                                    <table class="table">
+                                        <thead><tr><th>Time</th><th>Pair</th><th>Side</th><th>Price</th><th>Amount</th><th>Total</th></tr></thead>
+                                        <tbody id="historyBody"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings -->
+                <div id="section-settings" style="display: none;">
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">Account Settings</div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label>API Key</label>
+                                        <input type="text" class="form-control" placeholder="Generate API key">
+                                    </div>
+                                    <button class="btn btn-primary">Generate</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Wallet Modal -->
+    <div class="modal fade" id="walletModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Wallet</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label>Network</label>
+                        <select id="newWalletChain" class="form-select">
+                            <option value="ethereum">Ethereum</option>
+                            <option value="bsc">BNB Chain</option>
+                            <option value="polygon">Polygon</option>
+                            <option value="tigerex">TigerEx</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label>Type</label>
+                        <select id="newWalletType" class="form-select">
+                            <option value="custodial">Custodial (Managed)</option>
+                            <option value="non_custodial">Non-Custodial (Your Keys)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="createWallet()">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Configuration
+        let userId = 'user_' + Math.random().toString(36).substr(2, 9);
+        let currentNetwork = 'ethereum';
+        let currentWallet = null;
+        let orderSide = 'buy';
+        let walletTab = 'send';
+
+        // API Configuration
+        const APIs = {
+            exchange: 'http://localhost:5900',
+            wallet: 'http://localhost:6000',
+            blockchain: 'http://localhost:5800',
+            production: 'http://localhost:5300'
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTicker();
+            loadWallets();
+            setInterval(refreshData, 5000);
+        });
+
+        // Navigation
+        function showSection(name) {
+            document.querySelectorAll('[id^="section-"]').forEach(el => el.style.display = 'none');
+            document.getElementById('section-' + name).style.display = 'block';
+            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Network
+        function switchNetwork(network) {
+            currentNetwork = network;
+            document.getElementById('connectionStatus').innerHTML = `<i class="bi bi-circle-fill text-success"></i> ${network}`;
+            loadOrderBook();
+        }
+
+        // Ticker
+        async function loadTicker() {
+            const pairs = ['TIG', 'ETH', 'BTC', 'BNB', 'SOL', 'MATIC'];
+            const prices = {TIG: 2.5, ETH: 2800, BTC: 45000, BNB: 280, SOL: 95, MATIC: 0.85};
+            const changes = {TIG: 5.2, ETH: 2.1, BTC: -1.5, BNB: 3.2, SOL: 8.5, MATIC: -2.1};
+            
+            let html = '';
+            pairs.forEach(p => {
+                html += `<span class="mx-4">${p}/USDC: <span class="${changes[p] >= 0 ? 'price-up' : 'price-down'}">$${prices[p]} (${changes[p]}%)</span></span>`;
+            });
+            document.getElementById('tickerTape').innerHTML = html + html;
+        }
+
+        // Order Book
+        async function loadOrderBook() {
+            const pair = document.getElementById('tradingPair').value;
+            document.getElementById('currentPrice').textContent = '$2.50';
+            document.getElementById('priceChange').textContent = '+5.2%';
+            
+            let bids = '', asks = '';
+            for (let i = 0; i < 10; i++) {
+                bids += `<div class="order-row"><span class="price-down">${(2.50 - i * 0.01).toFixed(2)}</span><span>${(Math.random() * 100).toFixed(2)}</span></div>`;
+                asks += `<div class="order-row"><span>${(Math.random() * 100).toFixed(2)}</span><span class="price-up">${(2.51 + i * 0.01).toFixed(2)}</span></div>`;
+            }
+            document.getElementById('orderBook').innerHTML = bids + asks;
+        }
+
+        // Order Functions
+        function setOrderSide(side) {
+            orderSide = side;
+            document.querySelectorAll('.nav-tabs .nav-link').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('submitOrder').className = `btn btn-${side === 'buy' ? 'success' : 'danger'} w-100`;
+            document.getElementById('submitOrder').textContent = `Place ${side.charAt(0).toUpperCase() + side.slice(1)} Order`;
+        }
+
+        function calcTotal() {
+            const price = parseFloat(document.getElementById('orderPrice').value) || 0;
+            const amount = parseFloat(document.getElementById('orderAmount').value) || 0;
+            document.getElementById('orderTotal').value = (price * amount).toFixed(2);
+        }
+
+        function setPercent(pct) {
+            const max = 10; // Would get from balance
+            document.getElementById('orderAmount').value = (max * pct / 100).toFixed(4);
+            calcTotal();
+        }
+
+        async function placeOrder() {
+            const pair = document.getElementById('tradingPair').value;
+            const price = parseFloat(document.getElementById('orderPrice').value);
+            const amount = parseFloat(document.getElementById('orderAmount').value);
+            
+            if (!price || !amount) return alert('Enter price and amount');
+            
+            const order = {
+                user_id: userId,
+                pair: pair,
+                side: orderSide,
+                type: 'limit',
+                price: price,
+                quantity: amount
+            };
+            
+            // Simulate order placement
+            const orderId = 'ORD' + Math.random().toString(36).substr(2, 8).toUpperCase();
+            const ordersList = document.getElementById('ordersBody');
+            ordersList.innerHTML = `<tr><td>${pair}</td><td class="${orderSide === 'buy' ? 'price-up' : 'price-down'}">${orderSide.toUpperCase()}</td><td>${price}</td><td>${amount}</td><td>0</td><td><button class="btn btn-sm btn-danger" onclick="cancelOrder('${orderId}')">Cancel</button></td></tr>` + ordersList.innerHTML;
+            
+            alert('Order placed: ' + orderId);
+        }
+
+        // Wallet Functions
+        function createWalletModal() {
+            new bootstrap.Modal(document.getElementById('walletModal')).show();
+        }
+
+        async function createWallet() {
+            const chain = document.getElementById('newWalletChain').value;
+            const type = document.getElementById('newWalletType').value;
+            
+            const endpoint = type === 'custodial' ? '/wallet/create/custodial' : '/wallet/create/non-custodial';
+            
+            // Simulate wallet creation
+            const address = '0x' + Math.random().toString(16).substr(2, 40);
+            const walletId = (type === 'custodial' ? 'CUST_' : 'NONCUST_') + Math.random().toString(36).substr(2, 10);
+            
+            document.getElementById('walletList').innerHTML += `
+                <div class="wallet-card" onclick="selectWallet('${walletId}', '${address}', '${chain}', '${type}')">
+                    <div class="d-flex justify-content-between">
+                        <span class="chain-badge ${chain === 'solana' ? 'non-evm' : 'evm'}">${chain}</span>
+                        <span class="badge bg-warning">${type}</span>
+                    </div>
+                    <div class="wallet-address mt-2">${address.substring(0, 10)}...</div>
+                </div>
+            `;
+            
+            bootstrap.Modal.getInstance(document.getElementById('walletModal')).hide();
+        }
+
+        async function loadWallets() {
+            // Simulate loading wallets
+            document.getElementById('walletList').innerHTML = `
+                <div class="wallet-card" onclick="selectWallet('wallet1', '0x742d35Cc6634C0532925a3b8D0D2C8D3D5A5B5B5', 'ethereum', 'custodial')">
+                    <div class="d-flex justify-content-between">
+                        <span class="chain-badge evm">ethereum</span>
+                        <span class="badge bg-warning">custodial</span>
+                    </div>
+                    <div class="wallet-address mt-2">0x742d...B5B5</div>
+                </div>
+            `;
+        }
+
+        function selectWallet(id, address, chain, type) {
+            currentWallet = {id, address, chain, type};
+            document.getElementById('walletBalance').innerHTML = `
+                <div class="d-flex justify-content-between balance-item">
+                    <span>ETH</span><span>1.25</span>
+                </div>
+                <div class="d-flex justify-content-between balance-item">
+                    <span>USDC</span><span>5,000</span>
+                </div>
+                <div class="d-flex justify-content-between balance-item">
+                    <span>TIG</span><span>250</span>
+                </div>
+            `;
+            document.getElementById('receiveAddress').textContent = address;
+        }
+
+        function setWalletTab(tab) {
+            walletTab = tab;
+            document.getElementById('walletTabSend').style.display = tab === 'send' ? 'block' : 'none';
+            document.getElementById('walletTabReceive').style.display = tab === 'receive' ? 'block' : 'none';
+            document.querySelectorAll('.nav-tabs .nav-link').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        async function sendCrypto() {
+            const to = document.getElementById('sendTo').value;
+            const amount = document.getElementById('sendAmount').value;
+            if (!to || !amount) return alert('Enter address and amount');
+            alert('Transaction sent!');
+        }
+
+        function copyReceiveAddress() {
+            navigator.clipboard.writeText(document.getElementById('receiveAddress').textContent);
+            alert('Address copied!');
+        }
+
+        // Liquidity
+        async function addLiquidity() {
+            const tokenA = document.getElementById('liqTokenA').value;
+            const amountA = document.getElementById('liqAmountA').value;
+            const amountB = document.getElementById('liqAmountB').value;
+            
+            if (!amountA || !amountB) return alert('Enter amounts');
+            
+            alert('Liquidity added!');
+        }
+
+        // Explorer
+        async function explorerSearch() {
+            const query = document.getElementById('explorerSearch').value;
+            if (!query) return;
+            
+            let result = '';
+            if (query.startsWith('0x') && query.length === 66) {
+                result = `<div class="alert alert-info">Transaction: ${query}</div>`;
+            } else if (query.length === 42 && query.startsWith('0x')) {
+                result = `<div class="alert alert-info">Address: ${query}</div>`;
+            } else if (!isNaN(query)) {
+                result = `<div class="alert alert-info">Block #${query}</div>`;
+            } else {
+                result = `<div class="alert alert-warning">Not found</div>`;
+            }
+            document.getElementById('explorerResults').innerHTML = result;
+        }
+
+        // Refresh
+        function refreshData() {
+            loadTicker();
+        }
+    </script>
+</body>
+</html>
