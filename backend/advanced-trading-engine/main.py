@@ -1,97 +1,85 @@
-"""
-TigerEx Advanced Trading Engine v10.0
-High-frequency trading with AI signals
-"""
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from typing import Dict, List, Optional
-import asyncio
-import random
+"""TigerEx Advanced Trading Engine"""
+from fastapi import FastAPI
+from pydantic import BaseModel
+from typing import List
+from collections import defaultdict
+from enum import Enum
 import time
-from datetime import datetime
 
 app = FastAPI()
 
-class TradingEngine:
+class Status(Enum):
+    OPEN = "open"
+    FILLED = "filled"
+    CANCELLED = "cancelled"
+
+class Order:
+    def __init__(self, oid, user, side, sym, price, qty):
+        self.oid, self.user, self.side = oid, user, side
+        self.sym, self.price, self.qty = sym, price, qty
+        self.filled = 0
+        self.status = Status.OPEN
+        self.time = time.time()
+
+class Engine:
     def __init__(self):
         self.orders = {}
-        self.order_id = 0
-        self.order_book = {"buy": [], "sell": []}
+        self.ob = defaultdict(lambda: {"bids": [], "asks": []})
+        self.cnt = 0
     
-    async def place_order(self, side: str, symbol: str, price: float, amount: float):
-        self.order_id += 1
-        order = {
-            "id": self.order_id,
-            "side": side,
-            "symbol": symbol,
-            "price": price,
-            "amount": amount,
-            "status": "open",
-            "timestamp": datetime.now().isoformat()
-        }
-        self.orders[self.order_id] = order
-        if side == "buy":
-            self.order_book["buy"].append(order)
-        else:
-            self.order_book["sell"].append(order)
-        return order
+    def new_id(self):
+        self.cnt += 1
+        return f"ORD-{self.cnt}"
     
-    async def match_orders(self, symbol: str):
-        matched = []
-        buy_orders = sorted([o for o in self.order_book["buy"] if o["symbol"] == symbol], key=lambda x: x["price"], reverse=True)
-        sell_orders = sorted([o for o in self.order_book["sell"] if o["symbol"] == symbol], key=lambda x: x["price"])
-        
-        for buy in buy_orders:
-            for sell in sell_orders:
-                if buy["price"] >= sell["price"] and buy["amount"] > 0 and sell["amount"] > 0:
-                    trade_amount = min(buy["amount"], sell["amount"])
-                    matched.append({
-                        "symbol": symbol,
-                        "price": sell["price"],
-                        "amount": trade_amount,
-                        "buyer": buy["id"],
-                        "seller": sell["id"],
-                        "time": datetime.now().isoformat()
-                    })
-                    buy["amount"] -= trade_amount
-                    sell["amount"] -= trade_amount
-        return matched
+    def create(self, user, side, sym, price, qty):
+        o = Order(self.new_id(), user, side, sym, price, qty)
+        self.orders[o.oid] = o
+        self.ob[sym]["bids" if side == "buy" else "asks"].append(o)
+        self.sort(sym)
+        return o, self.match(sym)
     
-    async def get_ticker(self, symbol: str) -> Dict:
-        return {
-            "symbol": symbol,
-            "last": random.uniform(1000, 50000),
-            "change": random.uniform(-5, 5),
-            "volume": random.uniform(100, 10000),
-            "high": random.uniform(1000, 50000),
-            "low": random.uniform(1000, 50000)
-        }
+    def sort(self, sym):
+        self.ob[sym]["bids"].sort(key=lambda x: (-x.price, x.time))
+        self.ob[sym]["asks"].sort(key=lambda x: (x.price, x.time))
+    
+    def match(self, sym):
+        tr = []
+        b, a = self.ob[sym]["bids"], self.ob[sym]["asks"]
+        while b and a and b[0].price >= a[0].price:
+            q = min(b[0].qty - b[0].filled, a[0].qty - a[0].filled)
+            tr.append({"p": a[0].price, "q": q, "buy": b[0].user, "sell": a[0].user})
+            b[0].filled += q
+            a[0].filled += q
+            if b[0].qty <= b[0].filled:
+                b.pop(0)
+            if a[0].qty <= a[0].filled:
+                a.pop(0)
+        return tr
 
-engine = TradingEngine()
+engine = Engine()
 
-@app.websocket("/ws/market")
-async def market_websocket(ws: WebSocket):
-    await ws.accept()
-    try:
-        while True:
-            data = await ws.receive_text()
-            msg = data.json()
-            if msg.get("action") == "subscribe":
-                symbol = msg.get("symbol", "BTC/USDT")
-                while True:
-                    ticker = await engine.get_ticker(symbol)
-                    await ws.send_json(ticker)
-                    await asyncio.sleep(1)
-    except WebSocketDisconnect:
-        pass
+class R(BaseModel):
+    user_id: str
+    side: str
+    symbol: str
+    price: float
+    qty: float
 
-@app.post("/api/v1/order")
-async def place_order(side: str, symbol: str, price: float, amount: float):
-    return await engine.place_order(side, symbol, price, amount)
+@app.get("/health") 
+async def h():
+    return {"s": "ok", "o": len(engine.orders)}
 
-@app.get("/api/v1/ticker/{symbol}")
-async def get_ticker(symbol: str):
-    return await engine.get_ticker(symbol)
+@app.post("/o")
+async def c(r: R):
+    o, t = engine.create(r.user_id, r.side, r.symbol, r.price, r.qty)
+    return {"id": o.oid, "st": o.status.value, "tr": t}
+
+@app.get("/ob/{s}")
+async def ob(s: str):
+    b = [{"p": x.price, "q": x.qty - x.filled} for x in engine.ob[s]["bids"][:10]]
+    a = [{"p": x.price, "q": x.qty - x.filled} for x in engine.ob[s]["asks"][:10]]
+    return {"b": b, "a": a}
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    uvicorn.run(app, port=8001)
