@@ -1,0 +1,29 @@
+# TigerEx Deployment Addresses
+# Update this file after deployment
+
+{
+  "mainnet": {
+    "TigerExTrading": "",
+    "TradingEngine": "",
+    "AdminController": "",
+    "USDC": "",
+    "USDT": ""
+  },
+  "sepolia": {
+    "TigerExTrading": "0x1234567890123456789012345678901234567890",
+    "TradingEngine": "0x1234567890123456789012345678901234567890",
+    "AdminController": "0x1234567890123456789012345678901234567890",
+    "USDC": "0x1234567890123456789012345678901234567890",
+    "USDT": "0x1234567890123456789012345678901234567890"
+  },
+  "polygon": {
+    "TigerExTrading": "",
+    "TradingEngine": "",
+    "AdminController": ""
+  },
+  "bsc": {
+    "TigerExTrading": "",
+    "TradingEngine": "",
+    "AdminController": ""
+  }
+}
