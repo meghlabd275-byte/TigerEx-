@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx - Support & Help</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root { --primary: #00d4aa; --dark: #0b0e14; --dark2: #161c25; --dark3: #1e2633; --light: #eaeaea; --dim: #8b8b8b; --green: #00c087; --red: #f6465d; --orange: #f0b90b; --border: #2a3140; }
+        body { background: var(--dark); color: var(--light); font-size: 13px; }
+        .card-panel { background: var(--dark2); border: 1px solid var(--border); border-radius: 12px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+        
+        const FAQ = ({q, a}) => (
+            <div className="mb-3">
+                <div style={{fontWeight:600}}>{q}</div>
+                <div className="text-muted mt-1">{a}</div>
+            </div>
+        );
+        
+        const TicketForm = () => {
+            const [subject, setSubject] = useState('');
+            const [msg, setMsg] = useState('');
+            const [tickets, setTickets] = useState([
+                {id:'TK001', subject:'Login issue', status:'open', time:'2024-05-02'},
+                {id:'TK002', subject:'Withdrawal', status:'closed', time:'2024-05-01'},
+            ]);
+            return (
+                <div className="card-panel p-4">
+                    <h5 className="mb-3">Support Tickets</h5>
+                    <select className="form-control mb-3" style={{background:'var(--dark3)',border:'1px solid var(--border)',color:'white'}} value={subject} onChange={e=>setSubject(e.target.value)}>
+                        <option>Select Subject</option>
+                        <option>Login Issue</option>
+                        <option>Withdrawal Problem</option>
+                        <option>Trading Issue</option>
+                        <option>Account Verification</option>
+                        <option>Other</option>
+                    </select>
+                    <textarea className="form-control mb-3" rows={4} placeholder="Describe your issue..." style={{background:'var(--dark3)',border:'1px solid var(--border)',color:'white'}} value={msg} onChange={e=>setMsg(e.target.value)}></textarea>
+                    <button className="btn" style={{background:'var(--primary)',color:'#000',fontWeight:600}} onClick={()=>alert('Ticket submitted!')}>Submit Ticket</button>
+                </div>
+            );
+        };
+        
+        const App = () => {
+            const [tab, setTab] = useState('faq');
+            const faqs = [
+                {q:'How to deposit?', a:'Go to Wallet > Deposit, select coin, copy address.'},
+                {q:'How to trade?', a:'Navigate to Trade, select pair, place buy/sell order.'},
+                {q:'Fees?', a:'Maker: 0.1%, Taker: 0.2%. Discounts available.'},
+                {q:'Verifications?', a:'Complete KYC in Settings > Verification.'},
+                {q:'2FA setup?', a:'Go to Security > Enable 2FA.'},
+            ];
+            
+            return (
+                <div>
+                    <nav className="d-flex justify-content-between p-4" style={{background:'var(--dark2)',borderBottom:'1px solid var(--border)'}}>
+                        <span className="h4" style={{background:'linear-gradient(135deg,#00d4aa,#00f5d4)','-webkit-background-clip':'text','-webkit-text-fill-color':'transparent'}}><i className="bi bi-question-circle me-2"></i>TigerEx Help</span>
+                    </nav>
+                    <div className="container-fluid p-4">
+                        <div className="d-flex gap-2 mb-4">
+                            <button className={`btn ${tab==='faq'?'btn-primary':''}`} style={tab==='faq'?{background:'var(--primary)',color:'#000'}:{}} onClick={()=>setTab('faq')}>FAQ</button>
+                            <button className={`btn ${tab==='tickets'?'btn-primary':''}`} style={tab==='tickets'?{background:'var(--primary)',color:'#000'}:{}} onClick={()=>setTab('tickets')}>Tickets</button>
+                            <button className={`btn ${tab==='docs'?'btn-primary':''}`} style={tab==='docs'?{background:'var(--primary)',color:'#000'}:{}} onClick={()=>setTab('docs')}>Documentation</button>
+                        </div>
+                        {tab==='faq' && <div className="card-panel p-4">{faqs.map((f,i)=><FAQ key={i} q={f.q} a={f.a} />)}</div>}
+                        {tab==='tickets' && <TicketForm />}
+                        {tab==='docs' && <div className="card-panel p-4"><h5>Documentation</h5><ul><li>Getting Started Guide</li><li>API Documentation</li><li>Trading FAQ</li><li>Security Guide</li></ul></div>}
+                    </div>
+                </div>
+            );
+        };
+        
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>
