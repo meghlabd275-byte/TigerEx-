@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerEx Futures - USDT-Margined</title>
+    
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/web3@1.10.0/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        :root { --primary: #00d4aa; --dark: #0b0e14; --dark2: #161c25; --dark3: #1e2633; --light: #eaeaea; --dim: #8b8b8b; --green: #00c087; --red: #f6465d; --orange: #f0b90b; --border: #2a3140; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--dark); color: var(--light); font-family: -apple-system, sans-serif; font-size: 12px; }
+        .card { background: var(--dark2); border: 1px solid var(--border); border-radius: 8px; }
+        .btn-long { background: var(--green); color: #000; font-weight: 600; }
+        .btn-short { background: var(--red); color: #fff; font-weight: 600; }
+        .text-up { color: var(--green) !important; }
+        .text-down { color: var(--red) !important; }
+        .text-orange { color: var(--orange) !important; }
+        .input-field { background: var(--dark3); border: 1px solid var(--border); color: var(--light); padding: 10px; border-radius: 4px; width: 100%; }
+        .lev-btn { padding: 4px 8px; background: var(--dark3); border: 1px solid var(--border); border-radius: 4px; font-size: 11px; cursor: pointer; }
+        .lev-btn:hover, .lev-btn.active { background: var(--orange); color: #000; border-color: var(--orange); }
+        .row-item { display: flex; justify-content: space-between; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+        .depth-row { display: flex; padding: 3px 10px; font-family: monospace; font-size: 11px; position: relative; }
+        .depth-bid { position: absolute; right: 0; top: 0; bottom: 0; background: rgba(0,192,135,0.15); }
+        .depth-ask { position: absolute; right: 0; top: 0; bottom: 0; background: rgba(246,70,93,0.15); }
+        .ticker { background: linear-gradient(90deg, var(--primary), #00b894); height: 36px; overflow: hidden; display: flex; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+        
+        const useWeb3 = () => {
+            const [s, setS] = useState({web3:null, account:null, balance:null, connected:false});
+            const connect = async () => {
+                if(window.ethereum){
+                    const w3 = new Web3(window.ethereum);
+                    const [acc] = await window.ethereum.request({method:'eth_requestAccounts'});
+                    if(acc){ const bal = await w3.eth.getBalance(acc); setS({web3:w3, account:acc, balance:w3.utils.fromWei(bal), connected:true}); }
+                }
+            };
+            return {...s, connect};
+        };
+        
+        const Ticker = () => {
+            const [t, setT] = useState([{s:'BTC',p:78440,c:0.26},{s:'ETH',p:2310,c:0.12},{s:'BNB',p:619,c:-0.23},{s:'SOL',p:84.17,c:0.04}]);
+            useEffect(() => { const i = setInterval(() => setT(p => p.map(x => ({...x, p:x.p*(0.999+Math.random()*0.002), c:x.c+(Math.random()-0.5)*0.1}))), 2000); return ()=>clearInterval(i); }, []);
+            return <div className="ticker">{[...t,...t].map((x,i)=><div key={i} className="d-inline-flex gap-2 px-4 align-items-center" style={{whiteSpace:'nowrap',borderRight:'1px solid rgba(0,0,0,0.15)'}}><span style={{fontWeight:600,color:'#000'}}>{x.s}/USDT</span><span style={{color:'#000'}}>${x.p>=1000?x.p.toFixed(2):x.p.toFixed(4)}</span><span style={{color:x.c>=0?'#000':'#333'}}>{x.c>=0?'+':''}{x.c.toFixed(2)}%</span></div>)}</div>;
+        };
+        
+        const Chart = () => {
+            const ref = useRef(null);
+            useEffect(() => {
+                if(!ref.current) return;
+                const ctx = ref.current.getContext('2d');
+                if(window.chart) window.chart.destroy();
+                window.chart = new Chart(ctx, {type:'line', data:{labels:Array(60).fill(0), datasets:[{data:Array(60).fill(78440).map(x=>x*(0.995+Math.random()*0.01), borderColor:'#00d4aa', backgroundColor:'rgba(0,212,170,0.1)', fill:true, tension:0.4, pointRadius:0, borderWidth:2}]}, options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{display:false}, y:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#8b8b8b'}}}}});
+                return () => { if(window.chart) window.chart.destroy(); };
+            }, []);
+            return <canvas ref={ref}></canvas>;
+        };
+        
+        const OrderBook = () => {
+            const [b, setB] = useState([]), [a, setA] = useState([]);
+            useEffect(() => { const gen = () => { setB(Array.from({length:15},(_,i)=>({p:78440-i*0.8, a:Math.random()*50+1}))); setA(Array.from({length:15},(_,i)=>({p:78440+i*0.4, a:Math.random()*50+1}))); }; gen(); const i = setInterval(gen, 1000); return ()=>clearInterval(i); }, []);
+            return (
+                <div className="card">
+                    <div className="p-3 border-bottom" style={{borderColor:'var(--border)'}}>Order Book</div>
+                    <div className="d-flex p-2" style={{fontSize:'11px',color:'var(--dim)'}}><span style={{flex:1}}>Price</span><span style={{flex:1,textAlign:'right'}}>Amount</span></div>
+                    <div style={{maxHeight:'280px',overflow:'auto'}}>
+                        {[...a].reverse().map((x,i)=><div key={i} className="depth-row"><span className="text-down" style={{flex:1,zIndex:1}}>{x.p>=1000?x.p.toFixed(2):x.p.toFixed(4)}</span><span style={{flex:1,textAlign:'right',zIndex:1}}>{x.a.toFixed(2)}</span><div className="depth-ask" style={{width:(x.a/50)*100+'%'}}></div></div>)}
+                        <div className="p-3 text-up" style={{fontWeight:700,fontSize:'16px',borderTop:'1px solid var(--border)',borderBottom:'1px solid var(--border)',background:'var(--dark3)'}}>78,440.00</div>
+                        {b.map((x,i)=><div key={i} className="depth-row"><span className="text-up" style={{flex:1,zIndex:1}}>{x.p>=1000?x.p.toFixed(2):x.p.toFixed(4)}</span><span style={{flex:1,textAlign:'right',zIndex:1}}>{x.a.toFixed(2)}</span><div className="depth-bid" style={{width:(x.a/50)*100+'%'}}></div></div>)}
+                    </div>
+                </div>
+            );
+        };
+        
+        const TradeForm = ({account, connected, connect}) => {
+            const [side, setS] = useState('long');
+            const [lev, setLev] = useState(10);
+            const [price, setP] = useState('');
+            const [qty, setQ] = useState('');
+            const total = price && qty ? (price*qty/lev).toFixed(2) : '0.00';
+            return (
+                <div className="card">
+                    <div className="d-flex border-bottom" style={{borderColor:'var(--border)'}}>
+                        <div className={`flex-fill p-3 text-center ${side==='long'?'text-up':''}`} style={{borderBottom:side==='long'?'2px solid var(--green)':'none'}} onClick={()=>setS('long')}>Long</div>
+                        <div className={`flex-fill p-3 text-center ${side==='short'?'text-down':''}`} style={{borderBottom:side==='short'?'2px solid var(--red)':'none'}} onClick={()=>setS('short')}>Short</div>
+                    </div>
+                    <div className="p-3">
+                        <div className="mb-3"><label className="text-muted small d-block mb-1">Leverage</label>
+                        <div className="d-flex gap-1 flex-wrap">{[5,10,20,25,50,75,100].map(l => <button key={l} className={`lev-btn ${lev===l?'active':''}`} onClick={()=>setLev(l)}>{l}x</button>)}</div></div>
+                        <input type="number" className="input-field mb-3" placeholder="Price" value={price} onChange={e=>setP(e.target.value)} />
+                        <input type="number" className="input-field mb-3" placeholder="Quantity" value={qty} onChange={e=>setQ(e.target.value)} />
+                        <div className="d-flex justify-content-between mb-2" style={{color:'var(--dim)'}}><span>Margin</span><span>${total}</span></div>
+                        <button className={`w-100 ${side==='long'?'btn-long':'btn-short'}`} onClick={connected?()=>alert('Position opened!'):connect}>
+                            {connected ? `${side==='long'?'Long':'Short'} BTC` : 'Connect Wallet'}
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+        
+        const Positions = () => (
+            <div className="card mt-3">
+                <div className="p-3 border-bottom" style={{borderColor:'var(--border)'}}>Positions</div>
+                <div className="row-item"><div><span className="badge bg-success me-2" style={{color:'#000'}}>LONG</span>BTC/USDT</div><div className="text-end"><div className="text-up">$220.00</div><div className="text-up" style={{fontSize:'11px'}}>+5.64%</div></div><div className="text-end"><div>0.50</div><div className="text-muted" style={{fontSize:'11px'}}>@ 78,440</div></div></div>
+            </div>
+        );
+        
+        const Funding = () => (
+            <div className="card mt-3">
+                <div className="p-3 border-bottom" style={{borderColor:'var(--border)'}}>Funding</div>
+                <div className="row p-3">
+                    <div className="col-6"><div className="text-muted small">Mark Price</div><div className="text-orange" style={{fontSize:'18px',fontWeight:600}}>78,440.00</div></div>
+                    <div className="col-6"><div className="text-muted small">Funding</div><div className="text-orange" style={{fontSize:'18px',fontWeight:600}}>0.01%</div></div>
+                </div>
+            </div>
+        );
+        
+        const App = () => {
+            const {account, connected, connect} = useWeb3();
+            return (
+                <div>
+                    <Ticker />
+                    <nav className="d-flex justify-content-between align-items-center px-4 py-2" style={{background:'var(--dark2)',borderBottom:'1px solid var(--border)'}}>
+                        <div className="d-flex align-items-center"><span className="h4 me-4 text-gradient" style={{background:'linear-gradient(135deg,#00d4aa,#00f5d4)','-webkit-background-clip':'text','-webkit-text-fill-color':'transparent',fontWeight:700}}><i className="bi bi-gem me-2"></i>TigerEx Futures</span></div>
+                        <button className="btn btn-primary" style={{background:connected?'green':'linear-gradient(135deg,#627eea,#00d4aa)'}} onClick={connected?connect:connect}>{connected ? account?.slice(0,6)+'...' : 'Connect'}</button>
+                    </nav>
+                    <div className="container-fluid p-3">
+                        <div className="row g-3">
+                            <div className="col-md-7">
+                                <div className="card" style={{height:'300px'}}><div className="p-3 border-bottom" style={{borderColor:'var(--border)'}}><span style={{fontSize:'20px',fontWeight:700}}>BTC/USDT</span> <span className="text-up ms-2">$78,440.00</span></div><div style={{height:'260px',padding:'10px'}}><Chart/></div></div>
+                                <div className="mt-3"><OrderBook/></div>
+                            </div>
+                            <div className="col-md-5">
+                                <TradeForm account={account} connected={connected} connect={connect}/>
+                                <Funding />
+                                <Positions />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+        
+        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+    </script>
+</body>
+</html>
