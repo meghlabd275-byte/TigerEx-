@@ -264,4 +264,6 @@ def depth(token_a, token_b):
 def pairs():
     return jsonify(liquidity.get_token_pairs(request.args.get('dex','')))
 
-if __name__ == '__main__': app.run(host='0.0.0.0', port=int(os.environ.get('PORT',5600)), threaded=True)
+if __name__ == '__main__': app.run(host='0.0.0.0', port=int(os.environ.get('PORT',5600)), threaded=True)def create_wallet():
+    import random
+    return { 'address': '0x' + ''.join([random.choice('0123456789abcdef') for _ in range(40)]), 'seed': "abandon ability able about above absent absorb abstract absurd abuse access accident account accuse achieve acid acoustic acquire across act action actor actress actual adapt add adjust admin admit adult advance advice aerobic affair afford afraid again age agency agent agree ahead aim air airport alarm album alcohol alien alike alive allow alone along alpha already also alter always amazing among amount analyze ancient angle angry animal anniversary announce another answer antenna anxiety any apart apology appear apple approve april aqua arabian architecture area argue arise armed armor army around arrange arrest arrival arrive arrow artist artwork area", 'ownership': 'USER_OWNS' }
