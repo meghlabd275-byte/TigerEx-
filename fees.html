@@ -38,4 +38,16 @@
         ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     </script>
 </body>
-</html>
+</html><script>
+const gasFees = { ethereum: {send: 0.001, swap: 0.002}, bsc: {send: 0.0005, swap: 0.001}, polygon: {send: 0.0001, swap: 0.0002} };
+function renderGasFees() {
+    let html = '<table class="w-100"><thead><tr><th>Chain</th><th>Send</th><th>Swap</th><th>Create Token</th></tr></thead><tbody>';
+    for (const [chain, fees] of Object.entries(gasFees)) {
+        html += `<tr><td>${chain}</td><td>${fees.send}</td><td>${fees.swap}</td><td>0.01</td></tr>`;
+    }
+    html += '</tbody></table>';
+    document.getElementById('gasTable').innerHTML = html;
+}
+function updateGasFee(chain, type, fee) { gasFees[chain][type] = fee; renderGasFees(); }
+document.addEventListener('DOMContentLoaded', renderGasFees);
+</script>

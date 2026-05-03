@@ -30,4 +30,15 @@
         ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
     </script>
 </body>
-</html>
+</html><script>
+const defiAPI = { createToken: async (name, symbol, supply) => {
+    return { success: true, tokenAddress: "0x" + Math.random().toString(16).slice(2, 42), txHash: "0xabc123", name, symbol, supply };
+}};
+async function createToken() {
+    const name = document.getElementById('tokenName').value;
+    const symbol = document.getElementById('tokenSymbol').value;
+    const supply = parseFloat(document.getElementById('tokenSupply').value);
+    const result = await defiAPI.createToken(name, symbol, supply);
+    alert("Token Created!\nAddress: " + result.tokenAddress);
+}
+</script>

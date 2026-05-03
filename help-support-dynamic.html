@@ -83,4 +83,13 @@
         ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     </script>
 </body>
-</html>
+</html><script>
+const helpTopics = ["Getting Started", "Wallet Setup", "Trading Guide", "API Usage", "Security", "DeFi"];
+function renderHelp() {
+    let html = '<ul>';
+    helpTopics.forEach(t => html += `<li><a href="#${t}">${t}</a></li>`);
+    html += '</ul>';
+    document.getElementById('topics').innerHTML = html;
+}
+document.addEventListener('DOMContentLoaded', renderHelp);
+</script>

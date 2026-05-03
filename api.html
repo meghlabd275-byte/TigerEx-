@@ -19,7 +19,7 @@
     <div id="root"></div>
     <script type="text/babel">
         const { useState } = React;
-        
+
         const EndpointRow = ({method, path, desc}) => (
             <tr style={{borderBottom:'1px solid var(--border)'}}>
                 <td className="p-2"><span className="badge bg-success">{method}</span></td>
@@ -27,51 +27,68 @@
                 <td className="p-2 text-muted">{desc}</td>
             </tr>
         );
-        
+
         const App = () => {
-            const [keys, setKeys] = useState([
-                {key:'ak_xxxx...', secret:'as_xxxx...', name:'Main API',_perms:'Read+Write',status:'Active'},
-            ]);
             const [showKey, setShowKey] = useState(false);
-            
+            const [keys, setKeys] = useState([
+                {name: "Main API Key", key: "ak_live_xxxx", status: "Active"},
+                {name: "Test Key", key: "ak_test_yyyy", status: "Test"}
+            ]);
+
             return (
-                <div>
-                    <nav className="d-flex justify-content-between p-4" style={{background:'var(--dark2)',borderBottom:'1px solid var(--border)'}}>
-                        <span className="h4"><i className="bi bi-code-slash me-2 text-primary"></i>TigerEx API</span>
-                    </nav>
-                    <div className="container-fluid p-4">
-                        <div className="row g-3 mb-4">
-                            <div className="col-md-4"><div className="card-panel p-3"><h6>Requests (24h)</h6><h4>1.2M</h4></div></div>
-                            <div className="col-md-4"><div className="card-panel p-3"><h6>Rate Limit</h6><h4>1200/min</h4></div></div>
-                            <div className="col-md-4"><div className="card-panel p-3"><h6>Errors</h6><h4 className="text-danger">0.01%</h4></div></div>
+                <div className="container py-4">
+                    <div className="d-flex justify-content-between align-items-center mb-4">
+                        <div><h3 className="mb-0"><i className="bi bi-lightning-charge-fill text-warning"></i> TigerEx API</h3></div>
+                        <div className="d-flex gap-2">
+                            <button className="btn btn-sm" style={{background:'var(--primary)',color:'#000'}}>Documentation</button>
+                            <button className="btn btn-sm btn-outline-light">SDKs</button>
                         </div>
-                        <div className="card-panel p-3 mb-3">
-                            <h5 className="mb-3">API Keys</h5>
-                            {keys.map((k,i)=><div key={i} className="d-flex justify-content-between p-2 mb-2" style={{background:'var(--dark3)',borderRadius:8}}>
-                                <div><div style={{fontWeight:600}}>{k.name}</div>
-                                <code className="text-muted">{showKey?k.key:'ak_xxxx...xxxx'}</code></div>
-                                <div className="d-flex gap-2 align-items-center">
-                                    <span className="badge bg-success">{k.status}</span>
-                                    <button className="btn btn-sm" style={{background:'var(--primary)',color:'#000'}} onClick={()=>setShowKey(!showKey)}>{showKey?'Hide':'Show'}</button>
-                                </div>
-                            </div>)}
-                            <button className="btn" style={{background:'var(--primary)',color:'#000'}}>Create Key</button>
+                    </div>
+                    <div className="row">
+                        <div className="col-md-8">
+                            <div className="card-panel p-3 mb-3">
+                                <h5 className="mb-3">Endpoints</h5>
+                                <table style={{width:'100%'}}>
+                                    <thead><tr><th>Method</th><th>Path</th><th>Description</th></tr></thead>
+                                    <tbody>
+                                        <EndpointRow method="GET" path="/api/v1/ticker" desc="24h price change" />
+                                        <EndpointRow method="GET" path="/api/v1/depth" desc="Order book" />
+                                        <EndpointRow method="POST" path="/api/v1/order" desc="Place order" />
+                                        <EndpointRow method="GET" path="/api/v1/account" desc="Account info" />
+                                        <EndpointRow method="GET" path="/api/v1/balance" desc="Wallet balance" />
+                                        <EndpointRow method="POST" path="/api/wallet/create" desc="Create wallet (24-word seed)" />
+                                        <EndpointRow method="GET" path="/api/wallet/list" desc="List wallets" />
+                                        <EndpointRow method="GET" path="/api/wallet/import" desc="Import wallet" />
+                                        <EndpointRow method="POST" path="/api/defi/swap" desc="Token swap" />
+                                        <EndpointRow method="POST" path="/api/defi/pool" desc="Create liquidity pool" />
+                                        <EndpointRow method="POST" path="/api/defi/stake" desc="Stake tokens" />
+                                        <EndpointRow method="POST" path="/api/defi/bridge" desc="Bridge tokens" />
+                                        <EndpointRow method="POST" path="/api/defi/create-token" desc="Create new token" />
+                                        <EndpointRow method="GET" path="/api/admin/gas-fees" desc="Get gas fees" />
+                                        <EndpointRow method="POST" path="/api/admin/set-gas-fee" desc="Set gas fee" />
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <div className="card-panel p-3">
-                            <h5 className="mb-3">Endpoints</h5>
-                            <table><tbody>
-                                <EndpointRow method="GET" path="/api/v1/ticker" desc="24h price change" />
-                                <EndpointRow method="GET" path="/api/v1/depth" desc="Order book" />
-                                <EndpointRow method="POST" path="/api/v1/order" desc="Place order" />
-                                <EndpointRow method="GET" path="/api/v1/account" desc="Account info" />
-                                <EndpointRow method="GET" path="/api/v1/balance" desc="Wallet balance" />
-                            </tbody></table>
+                        <div className="col-md-4">
+                            <div className="card-panel p-3 mb-3">
+                                <h5 className="mb-3">API Keys</h5>
+                                {keys.map((k,i)=><div key={i} className="d-flex justify-content-between p-2 mb-2" style={{background:'var(--dark3)',borderRadius:8}}>
+                                    <div><div style={{fontWeight:600}}>{k.name}</div>
+                                    <code className="text-muted">{showKey?k.key:'ak_xxxx...xxxx'}</code></div>
+                                    <div className="d-flex gap-2 align-items-center">
+                                        <span className="badge bg-success">{k.status}</span>
+                                        <button className="btn btn-sm" style={{background:'var(--primary)',color:'#000'}} onClick={()=>setShowKey(!showKey)}>{showKey?'Hide':'Show'}</button>
+                                    </div>
+                                </div>)}
+                                <button className="btn" style={{background:'var(--primary)',color:'#000'}}>Create Key</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             );
         };
-        
+
         ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     </script>
 </body>

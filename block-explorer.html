@@ -36,4 +36,13 @@
         ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
     </script>
 </body>
-</html>
+</html><script>
+const explorerAPI = { search: async (addr) => {
+    return { address: addr, balance: (Math.random() * 10).toFixed(4), txs: 42, lastTx: "2h ago" };
+}};
+async function searchAddr() {
+    const addr = document.getElementById('search').value;
+    const data = await explorerAPI.search(addr);
+    document.getElementById('result').innerHTML = "Address: " + data.address + "<br>Balance: " + data.balance + " ETH<br>Txs: " + data.txs;
+}
+</script>

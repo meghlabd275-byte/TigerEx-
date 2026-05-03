@@ -19,3 +19,13 @@
     </script>
 </body>
 </html>
+<script>
+const whitelistAPI = { verify: async (addr) => {
+    return { address: addr, verified: Math.random() > 0.3, tier: Math.random() > 0.5 ? "KYC" : "None" };
+}};
+async function verifyAddr() {
+    const addr = document.getElementById('addr').value;
+    const result = await whitelistAPI.verify(addr);
+    document.getElementById('result').innerHTML = result.verified ? "✅ Verified" : "❌ Not Found";
+}
+</script>

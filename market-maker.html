@@ -19,3 +19,18 @@
     </script>
 </body>
 </html>
+<script>
+const makerAPI = { getPairs: () => [
+    {pair: "BTC/USDT", bid: "42,495", ask: "42,500", spread: "0.01%"},
+    {pair: "ETH/USDT", bid: "2,248", ask: "2,250", spread: "0.09%"}
+]};
+function loadPairs() {
+    let html = '<table><thead><tr><th>Pair</th><th>Bid</th><th>Ask</th><th>Spread</th></tr></thead><tbody>';
+    makerAPI.getPairs().forEach(p => {
+        html += `<tr><td>${p.pair}</td><td>${p.bid}</td><td>${p.ask}</td><td>${p.spread}</td></tr>`;
+    });
+    html += '</tbody></table>';
+    document.getElementById('pairs').innerHTML = html;
+}
+document.addEventListener('DOMContentLoaded', loadPairs);
+</script>

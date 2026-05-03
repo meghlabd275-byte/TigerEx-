@@ -27,4 +27,19 @@
         ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
     </script>
 </body>
-</html>
+</html><script>
+const copyAPI = { getTraders: () => [
+    {name: "TradeMaster", pnl: "+245%", followers: 1250},
+    {name: "AlphaTrader", pnl: "+189%", followers: 890},
+    {name: "SignalPro", pnl: "+156%", followers: 2100}
+]};
+function loadTraders() {
+    let html = '<div class="row">';
+    copyAPI.getTraders().forEach(t => {
+        html += `<div class="col-md-4 p-3"><div class="card"><h5>${t.name}</h5><p>PnL: <span class="text-success">${t.pnl}</span></p><p>Followers: ${t.followers}</p><button class="btn btn-primary">Copy</button></div></div>`;
+    });
+    html += '</div>';
+    document.getElementById('traders').innerHTML = html;
+}
+document.addEventListener('DOMContentLoaded', loadTraders);
+</script>

@@ -122,4 +122,16 @@
         ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     </script>
 </body>
-</html>
+</html><script>
+const analytics = { volume: 1250000000, users: 1250000, trades: 4500000, pairs: 85 };
+function loadAnalytics() {
+    document.getElementById('stats').innerHTML = `
+        <div class="row">
+            <div class="col"><h3>$${(analytics.volume/1e9).toFixed(1)}B</h3><p>Volume</p></div>
+            <div class="col"><h3>${(analytics.users/1e6).toFixed(1)}M</h3><p>Users</p></div>
+            <div class="col"><h3>${(analytics.trades/1e6).toFixed(1)}M</h3><p>Trades</p></div>
+            <div class="col"><h3>${analytics.pairs}</h3><p>Pairs</p></div>
+        </div>`;
+}
+document.addEventListener('DOMContentLoaded', loadAnalytics);
+</script>

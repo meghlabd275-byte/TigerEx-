@@ -19,3 +19,19 @@
     </script>
 </body>
 </html>
+<script>
+const pairsAPI = { getPairs: () => [
+    {base: "BTC", quote: "USDT", price: "42,500", change: "+2.5%"},
+    {base: "ETH", quote: "USDT", price: "2,250", change: "+1.2%"},
+    {base: "BNB", quote: "USDT", price: "310", change: "-0.5%"}
+]};
+function loadPairs() {
+    let html = '<table><thead><tr><th>Pair</th><th>Price</th><th>24h Change</th></tr></thead><tbody>';
+    pairsAPI.getPairs().forEach(p => {
+        html += `<tr><td>${p.base}/${p.quote}</td><td>${p.price}</td><td class="${p.change.startsWith('+')?'text-success':'text-danger'}">${p.change}</td></tr>`;
+    });
+    html += '</tbody></table>';
+    document.getElementById('pairsTable').innerHTML = html;
+}
+document.addEventListener('DOMContentLoaded', loadPairs);
+</script>

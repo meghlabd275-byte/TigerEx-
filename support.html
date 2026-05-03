@@ -31,3 +31,12 @@
     </script>
 </body>
 </html>
+<script>
+const supportTopics = ["Wallet Issues", "Trading Problems", "KYC Verification", "API Integration", "DeFi Support", "Token Creation"];
+function renderTopics() {
+    let html = '';
+    supportTopics.forEach(t => html += `<button class="btn btn-outline-light m-1">${t}</button>`);
+    document.getElementById('topics').innerHTML = html;
+}
+document.addEventListener('DOMContentLoaded', renderTopics);
+</script>

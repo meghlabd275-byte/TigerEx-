@@ -7,96 +7,175 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #1e88e5;
-            --dark: #1a1a2e;
-            --darker: #0f0f1a;
-            --light: #f5f5f5;
-            --success: #00c853;
-            --danger: #ff1744;
-            --warning: #ffab00;
-        }
+        :root { --primary: #1e88e5; --dark: #1a1a2e; --darker: #0f0f1a; --light: #f5f5f5; --success: #00c853; --danger: #ff1744; --warning: #ffab00; }
         body { background: var(--darker); color: var(--light); font-family: 'Segoe UI', system-ui, sans-serif; }
         .sidebar { background: var(--dark); min-height: 100vh; border-right: 1px solid rgba(255,255,255,0.1); }
         .sidebar .nav-link { color: rgba(255,255,255,0.7); padding: 12px 20px; border-radius: 8px; margin: 4px 0; transition: all 0.3s; }
         .sidebar .nav-link:hover, .sidebar .nav-link.active { background: var(--primary); color: white; }
-        .sidebar .nav-link i { width: 24px; }
         .stat-card { background: var(--dark); border-radius: 12px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
-        .stat-card:hover { transform: translateY(-5px); }
-        .stat-card .icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-        .stat-card .number { font-size: 28px; font-weight: 700; }
-        .table-card { background: var(--dark); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; }
-        .table-dark { --bs-table-bg: transparent; background: transparent !important; }
-        .table-dark th { background: rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.1); font-weight: 600; text-transform: uppercase; font-size: 12px; }
-        .table-dark td { border-color: rgba(255,255,255,0.05); }
-        .badge-pending { background: var(--warning); color: black; }
-        .badge-approved { background: var(--success); }
-        .badge-rejected { background: var(--danger); }
-        .badge-active { background: var(--success); }
-        .badge-suspended { background: var(--danger); }
-        .top-bar { background: var(--dark); border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .search-box { background: var(--darker); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 16px; }
-        .search-box input { background: transparent; border: none; color: white; outline: none; }
-        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 600; }
+        .table-dark { --bs-table-bg: transparent; }
     </style>
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-3 col-lg-2 sidebar p-0">
-                <div class="p-3">
-                    <h4 class="text-center mb-4"><i class="fas fa-bolt text-warning"></i> TigerEx <span class="badge bg-primary">Admin</span></h4>
-                    <ul class="nav flex-column">
-                        <li class="nav-item"><a class="nav-link active" href="#dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#users"><i class="fas fa-users"></i> Users</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#kyc"><i class="fas fa-id-card"></i> KYC Verification</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#markets"><i class="fas fa-chart-bar"></i> Markets</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#orders"><i class="fas fa-exchange-alt"></i> Orders</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#deposits"><i class="fas fa-arrow-down"></i> Deposits</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#withdrawals"><i class="fas fa-arrow-up"></i> Withdrawals</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#p2p"><i class="fas fa-handshake"></i> P2P Trading</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#fees"><i class="fas fa-percent"></i> Fees</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#settings"><i class="fas fa-cog"></i> Settings</a></li>
-                        <li class="nav-item mt-3"><a class="nav-link text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                    </ul>
-                </div>
+            <div class="col-md-2 sidebar p-3">
+                <h4 class="text-warning mb-4"><i class="fas fa-bolt"></i> TigerEx</h4>
+                <nav class="nav flex-column">
+                    <a class="nav-link active" href="#dashboard" onclick="showSection('dashboard')"><i class="fas fa-chart-line"></i> Dashboard</a>
+                    <a class="nav-link" href="#wallets" onclick="showSection('wallets')"><i class="fas fa-wallet"></i> Wallets</a>
+                    <a class="nav-link" href="#defi" onclick="showSection('defi')"><i class="fas fa-exchange-alt"></i> DeFi</a>
+                    <a class="nav-link" href="#gas-fees" onclick="showSection('gas-fees')"><i class="fas fa-gas-pump"></i> Gas Fees</a>
+                    <a class="nav-link" href="#users" onclick="showSection('users')"><i class="fas fa-users"></i> Users</a>
+                    <a class="nav-link" href="#chains" onclick="showSection('chains')"><i class="fas fa-link"></i> Chains</a>
+                </nav>
             </div>
-            <div class="col-md-9 col-lg-10 p-0">
-                <div class="top-bar p-3 d-flex justify-content-between align-items-center">
-                    <div class="search-box"><i class="fas fa-search text-muted"></i><input type="text" placeholder="Search..." id="searchInput"></div>
-                    <div class="user-menu">
-                        <span class="text-muted"><i class="fas fa-bell"></i></span>
-                        <div class="user-avatar">A</div>
-                        <div><div class="fw-bold">Admin</div><small class="text-muted">Super Admin</small></div>
+            <div class="col-md-10 p-4">
+                <!-- Dashboard -->
+                <div id="dashboard" class="section">
+                    <h2 class="mb-4">Admin Dashboard</h2>
+                    <div class="row">
+                        <div class="col-md-3 mb-3"><div class="stat-card"><h5>Total Users</h5><h2 class="text-warning">1.2M</h2></div></div>
+                        <div class="col-md-3 mb-3"><div class="stat-card"><h5>Wallets</h5><h2 class="text-success">850K</h2></div></div>
+                        <div class="col-md-3 mb-3"><div class="stat-card"><h5>DeFi Transactions</h5><h2 class="text-info">2.4M</h2></div></div>
+                        <div class="col-md-3 mb-3"><div class="stat-card"><h5>Volume</h5><h2 class="text-primary">$48B</h2></div></div>
                     </div>
                 </div>
-                <div class="p-4">
-                    <div class="row mb-4">
-                        <div class="col-md-3"><div class="stat-card"><div class="d-flex justify-content-between"><div><div class="text-muted small">Total Users</div><div class="number" id="totalUsers">125,432</div><small class="text-success">+12% today</small></div><div class="icon bg-primary bg-opacity-25 text-primary"><i class="fas fa-users"></i></div></div></div></div>
-                        <div class="col-md-3"><div class="stat-card"><div class="d-flex justify-content-between"><div><div class="text-muted small">24h Volume</div><div class="number" id="volume24h">$1.2B</div><small class="text-success">+8% today</small></div><div class="icon bg-success bg-opacity-25 text-success"><i class="fas fa-chart-line"></i></div></div></div></div>
-                        <div class="col-md-3"><div class="stat-card"><div class="d-flex justify-content-between"><div><div class="text-muted small">Active Orders</div><div class="number" id="activeOrders">45,234</div></div><div class="icon bg-warning bg-opacity-25 text-warning"><i class="fas fa-exchange-alt"></i></div></div></div></div>
-                        <div class="col-md-3"><div class="stat-card"><div class="d-flex justify-content-between"><div><div class="text-muted small">Revenue 24h</div><div class="number">$2.4M</div></div><div class="icon bg-info bg-opacity-25 text-info"><i class="fas fa-dollar-sign"></i></div></div></div></div>
+                
+                <!-- Wallets -->
+                <div id="wallets" class="section" style="display:none;">
+                    <h2 class="mb-4"><i class="fas fa-wallet"></i> Wallet Management</h2>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped">
+                            <thead><tr><th>User ID</th><th>Type</th><th>Chain</th><th>Address</th><th>Ownership</th><th>Created</th></tr></thead>
+                            <tbody id="walletTable"></tbody>
+                        </table>
                     </div>
-                    <div class="table-card">
-                        <div class="p-3 border-bottom border-light"><h5 class="mb-0"><i class="fas fa-users"></i> Recent Users</h5></div>
-                        <div class="table-responsive">
-                            <table class="table table-dark table-hover mb-0">
-                                <thead><tr><th>ID</th><th>Username</th><th>Email</th><th>Status</th><th>KYC</th><th>Created</th><th>Actions</th></tr></thead>
-                                <tbody id="usersTable">
-                                    <tr><td>1001</td><td>john_trader</td><td>john@example.com</td><td><span class="badge badge-active">Active</span></td><td><span class="badge badge-approved">Approved</span></td><td>2024-01-15</td><td><button class="btn btn-sm btn-outline-light"><i class="fas fa-edit"></i></button></td></tr>
-                                    <tr><td>1002</td><td>crypto_king</td><td>king@crypto.com</td><td><span class="badge badge-active">Active</span></td><td><span class="badge badge-pending">Pending</span></td><td>2024-01-14</td><td><button class="btn btn-sm btn-outline-light"><i class="fas fa-edit"></i></button></td></tr>
-                                    <tr><td>1003</td><td>btc_whale</td><td>whale@btc.com</td><td><span class="badge badge-suspended">Suspended</span></td><td><span class="badge badge-rejected">Rejected</span></td><td>2024-01-13</td><td><button class="btn btn-sm btn-outline-light"><i class="fas fa-edit"></i></button></td></tr>
-                                </tbody>
+                </div>
+                
+                <!-- DeFi -->
+                <div id="defi" class="section" style="display:none;">
+                    <h2 class="mb-4"><i class="fas fa-exchange-alt"></i> DeFi Management</h2>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card">
+                                <h5>Total Swaps</h5><h3 class="text-success">1.2M</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card">
+                                <h5>Liquidity Pools</h5><h3 class="text-warning">8,450</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="stat-card">
+                                <h5>Staked Value</h5><h3 class="text-info">$12.4B</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Gas Fees -->
+                <div id="gas-fees" class="section" style="display:none;">
+                    <h2 class="mb-4"><i class="fas fa-gas-pump"></i> Gas Fee Configuration</h2>
+                    <div class="card-dark p-4">
+                        <h5 class="mb-3">Update Gas Fees</h5>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <select class="form-control" id="chainSelect">
+                                    <option value="ethereum">Ethereum</option>
+                                    <option value="bsc">BSC</option>
+                                    <option value="polygon">Polygon</option>
+                                    <option value="avalanche">Avalanche</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <select class="form-control" id="txType">
+                                    <option value="send">Send</option>
+                                    <option value="swap">Swap</option>
+                                    <option value="create_token">Create Token</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <input type="number" class="form-control" id="feeAmount" placeholder="Fee (ETH)" step="0.0001">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <button class="btn btn-warning w-100" onclick="updateGasFee()">Update Fee</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive mt-4">
+                            <table class="table table-dark" id="gasFeesTable">
+                                <thead><tr><th>Chain</th><th>Send</th><th>Swap</th><th>Create Token</th></tr></thead>
+                                <tbody></tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+                
+                <!-- Users -->
+                <div id="users" class="section" style="display:none;">
+                    <h2 class="mb-4"><i class="fas fa-users"></i> User Management</h2>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped">
+                            <thead><tr><th>ID</th><th>Email</th><th>Wallets</th><th>DeFi Positions</th><th>Joined</th></tr></thead>
+                            <tbody><tr><td>1</td><td>user@example.com</td><td>3</td><td>5</td><td>2024-01-15</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Chains -->
+                <div id="chains" class="section" style="display:none;">
+                    <h2 class="mb-4"><i class="fas fa-link"></i> Blockchain Management</h2>
+                    <div class="row">
+                        <div class="col-md-4 mb-3"><div class="stat-card text-center"><h5>Ethereum</h5><span class="badge bg-success">Active</span></div></div>
+                        <div class="col-md-4 mb-3"><div class="stat-card text-center"><h5>BNB Chain</h5><span class="badge bg-success">Active</span></div></div>
+                        <div class="col-md-4 mb-3"><div class="stat-card text-center"><h5>Polygon</h5><span class="badge bg-success">Active</span></div></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
-        function logout() { localStorage.removeItem('token'); window.location.href = '/login.html'; }
+    const wordlist = ["abandon","ability","able","about","above","absent","absorb","abstract","absurd","abuse","access","accident","account","accuse","achieve","acid","acoustic","acquire","across","act","action","actor","actress","actual","adapt"];
+    let gasFees = {
+        ethereum: { send: 0.001, swap: 0.002, create_token: 0.01 },
+        bsc: { send: 0.0005, swap: 0.001, create_token: 0.005 },
+        polygon: { send: 0.0001, swap: 0.0002, create_token: 0.002 }
+    };
+    
+    function showSection(id) {
+        document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+        document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+        document.getElementById(id).style.display = 'block';
+        event.target.classList.add('active');
+    }
+    
+    function updateGasFee() {
+        const chain = document.getElementById('chainSelect').value;
+        const txType = document.getElementById('txType').value;
+        const fee = parseFloat(document.getElementById('feeAmount').value);
+        gasFees[chain][txType] = fee;
+        alert(`Gas fee updated: ${chain} ${txType} = ${fee}`);
+        renderGasFees();
+    }
+    
+    function renderGasFees() {
+        let html = '';
+        for (const [chain, fees] of Object.entries(gasFees)) {
+            html += `<tr><td>${chain}</td><td>${fees.send}</td><td>${fees.swap}</td><td>${fees.create_token}</td></tr>`;
+        }
+        document.querySelector('#gasFeesTable tbody').innerHTML = html;
+    }
+    
+    function createWallet(type = 'dex') {
+        const seed = wordlist.slice(0, 24).join(' ');
+        const address = '0x' + Math.random().toString(16).slice(2, 42);
+        return { type, seed, address, ownership: type === 'dex' ? 'USER_OWNS' : 'EXCHANGE_CONTROLLED' };
+    }
+    
+    // Initialize
+    renderGasFees();
     </script>
 </body>
 </html>

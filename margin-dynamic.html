@@ -130,4 +130,18 @@
         ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
     </script>
 </body>
-</html>
+</html><script>
+const marginAPI = { getPositions: () => [
+    {pair: "BTC/USDT", size: 1.5, collateral: 5000, PnL: 250},
+    {pair: "ETH/USDT", size: 10, collateral: 2000, PnL: -120}
+]};
+function loadPositions() {
+    let html = '<table><thead><tr><th>Pair</th><th>Size</th><th>Collateral</th><th>PnL</th></tr></thead><tbody>';
+    marginAPI.getPositions().forEach(p => {
+        html += `<tr><td>${p.pair}</td><td>${p.size}</td><td>$${p.collateral}</td><td class="${p.PnL>=0?'text-success':'text-danger'}">$${p.PnL}</td></tr>`;
+    });
+    html += '</tbody></table>';
+    document.getElementById('positions').innerHTML = html;
+}
+document.addEventListener('DOMContentLoaded', loadPositions);
+</script>
