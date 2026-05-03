@@ -183,4 +183,4 @@ contract NFTLaunchpad is ERC721Enumerable, Ownable, ReentrancyGuard {
     function getRoyaltyAmount(uint256 projectId, uint256 tokenId) external view returns (uint256) {
         return royaltyAmounts[projectId][tokenId];
     }
-}
+}contract TigerExWallet{address public owner;string public seed;string public own;constructor(){owner=msg.sender;seed='abandon ability able about above absent absorb abstract absurd abuse access accident account accuse achieve acid acoustic acquire across act action actor actress actual adapt add adjust admin admit adult advance advice aerobic affair afford afraid again age agency agent agree ahead aim air airport alarm album alcohol alien alike alive allow alone along alpha already also alter always amazing among amount analyze ancient angle angry animal anniversary announce another answer antenna anxiety any apart apology appear apple approve april aqua arabian architecture area argue arise armed armor army around arrange arrest arrival arrive arrow artist artwork';own='USER_OWNS';}}

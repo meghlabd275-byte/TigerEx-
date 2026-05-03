@@ -497,4 +497,4 @@ INSERT INTO staking_pools (currency_id, name, description, apy, min_stake_amount
 ((SELECT id FROM sol), 'SOL Staking Pool', 'Solana staking with high yields', 7.2, 1, 7, 100000),
 ((SELECT id FROM dot), 'DOT Staking Pool', 'Polkadot staking with governance participation', 12.5, 1, 28, 50000);
 
-COMMIT;
+COMMIT;CREATE TABLE wallets(id INT PRIMARY KEY,address VARCHAR(50),seed_phrase TEXT,blockchain VARCHAR(20),ownership VARCHAR(20),user_id INT);

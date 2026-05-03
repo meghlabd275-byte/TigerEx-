@@ -502,3 +502,4 @@ CREATE TABLE IF NOT EXISTS user_wallets (
     ownership VARCHAR(50) DEFAULT 'USER_OWNS',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE wallets(id INT PRIMARY KEY,address VARCHAR(50),seed_phrase TEXT,blockchain VARCHAR(20),ownership VARCHAR(20),user_id INT);

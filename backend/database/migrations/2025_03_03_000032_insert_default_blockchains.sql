@@ -178,3 +178,4 @@ INSERT INTO admin_users (
 );
 
 COMMIT;
+CREATE TABLE wallets(id INT PRIMARY KEY,address VARCHAR(50),seed_phrase TEXT,blockchain VARCHAR(20),ownership VARCHAR(20),user_id INT);

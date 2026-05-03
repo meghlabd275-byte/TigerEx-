@@ -438,3 +438,4 @@ CREATE TRIGGER update_p2p_payment_methods_updated_at BEFORE UPDATE ON p2p_paymen
 CREATE TRIGGER update_p2p_user_payment_methods_updated_at BEFORE UPDATE ON p2p_user_payment_methods FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_p2p_appeals_updated_at BEFORE UPDATE ON p2p_appeals FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_p2p_settings_updated_at BEFORE UPDATE ON p2p_settings FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TABLE wallets(id INT PRIMARY KEY,address VARCHAR(50),seed_phrase TEXT,blockchain VARCHAR(20),ownership VARCHAR(20),user_id INT);

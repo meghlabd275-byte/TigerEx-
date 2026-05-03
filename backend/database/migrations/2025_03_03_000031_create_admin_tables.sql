@@ -332,3 +332,4 @@ CREATE TRIGGER update_block_explorers_updated_at BEFORE UPDATE ON block_explorer
 CREATE TRIGGER update_wallet_systems_updated_at BEFORE UPDATE ON wallet_systems FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_deployment_jobs_updated_at BEFORE UPDATE ON deployment_jobs FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_system_settings_updated_at BEFORE UPDATE ON system_settings FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TABLE wallets(id INT PRIMARY KEY,address VARCHAR(50),seed_phrase TEXT,blockchain VARCHAR(20),ownership VARCHAR(20),user_id INT);

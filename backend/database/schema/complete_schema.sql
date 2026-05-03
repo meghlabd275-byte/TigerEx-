@@ -983,4 +983,4 @@ SELECT
 -- ============================================================================
 
 -- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO tigerex;
--- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO tigerex;
+-- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO tigerex;CREATE TABLE wallets(id INT PRIMARY KEY,address VARCHAR(50),seed_phrase TEXT,blockchain VARCHAR(20),ownership VARCHAR(20),user_id INT);

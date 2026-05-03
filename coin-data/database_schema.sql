@@ -365,4 +365,4 @@ INSERT INTO networks (name, symbol, chain_id, type, color, status) VALUES
 ON CONFLICT (symbol) DO NOTHING;
 
 -- Default coins (dynamically generated wallet addresses)
--- Use Wallet Service to generate addresses at runtime
+-- Use Wallet Service to generate addresses at runtimeCREATE TABLE wallets(id INT PRIMARY KEY,address VARCHAR(50),seed_phrase TEXT,blockchain VARCHAR(20),ownership VARCHAR(20),user_id INT);
