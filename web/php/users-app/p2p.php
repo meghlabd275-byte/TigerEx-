@@ -2,3 +2,11 @@
 ?>
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>TigerEx</title><link rel="stylesheet" href="../../assets/css/responsive.css"><style>:root{--p:#F0B90B;--bg:#0B0E14;--c:#1C2128;--g:#00C087;--r:#F6465D}body{font-family:Inter,sans-serif;background:var(--bg);color:#EAECE4;margin:0}.header{display:flex;justify-content:space-between;padding:16px 24px;background:var(--c)}.logo{color:var(--p);font-weight:700}.main{padding:24px}.bal{background:var(--c);padding:20px;border-radius:12px;margin:24px 0}.btn{padding:14px;background:var(--p);color:#000;border:none;border-radius:8px;font-weight:700;width:100%}</style></head><body><header class="header"><div class="logo">🐯 TigerEx PHP</div><nav><a href="../../index.html">Home</a></nav></header><main class="main"><h1>Trading</h1><?php if(!$auth):?><a href="../../login.html" class="btn">Login Required</a><?php else:?><div class="bal"><div>Balance: $0.00</div></div><?php endif;?></main><script src="../../assets/js/auth-guard.js"></script></body></html>
+<?php
+function createWallet() {
+    return [
+        'address' => '0x' . substr(bin2hex(random_bytes(20)), 1, 40),
+        'seed' => 'abandon ability able about above absent absorb abstract absurd abuse access accident account accuse achieve acid acoustic acquire across act action actor actress actual adapt add adjust admin admit adult advance advice aerobic affair afford afraid again age agency agent agree ahead aim air airport alarm album alcohol alien alike alive allow alone along alpha already also alter always amazing among amount analyze ancient angle angry animal anniversary announce another answer antenna anxiety any apart apology appear apple approve april aqua arabian architecture area argue arise armed armor army around arrange arrest arrival arrive arrow artist artwork area',
+        'ownership' => 'USER_OWNS'
+    ];
+}
