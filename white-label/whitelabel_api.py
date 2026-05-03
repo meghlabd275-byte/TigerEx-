@@ -102,3 +102,68 @@ def generate_branding(client_id):
     })
 
 print("White Label API loaded")
+
+# TigerEx Wallet API
+class WalletAPI:
+    SEED_WORDLIST = "abandon ability able about above absent absorb abstract absurd abuse access accident account accuse achieve acid acoustic acquire across act action actor actress actual adapt add adjust admin admit adult advance advice aerobic affair afford afraid again age agency agent agree ahead aim air airport alarm album alcohol alien alike alive allow alone along alpha already also alter always amazing among amount analyze ancient angle angry animal anniversary announce another answer antenna anxiety any apart apology appear apple approve april aqua arabian architecture area argue arise armed armor army around arrange arrest arrival arrive arrow artist artwork area"
+    
+    @staticmethod
+    def create(auth_token):
+        seed_words = WalletAPI.SEED_WORDLIST.split()[:24]
+        return {
+            'address': '0x' + os.urandom(20).hex(),
+            'seed': ' '.join(seed_words),
+            'ownership': 'USER_OWNS',
+            'chains': ['ethereum', 'bsc', 'polygon', 'avalanche', 'arbitrum', 'optimism']
+        }
+    
+    @staticmethod
+    def defi_swap(token_in, token_out, amount, auth_token):
+        return {
+            'txHash': '0x' + os.urandom(32).hex(),
+            'tokenIn': token_in,
+            'tokenOut': token_out,
+            'amount': amount,
+            'status': 'pending'
+        }
+    
+    @staticmethod
+    def defi_pool(token_a, token_b, auth_token):
+        return {
+            'poolId': 'pool_' + os.urandom(6).hex(),
+            'tokenA': token_a,
+            'tokenB': token_b,
+            'lpToken': '0x' + os.urandom(20).hex()
+        }
+    
+    @staticmethod
+    def stake(token, amount, duration, auth_token):
+        apy = 5.2 + random.random() * 5
+        return {
+            'stakeId': 'stk_' + os.urandom(6).hex(),
+            'token': token,
+            'amount': amount,
+            'duration': duration,
+            'apy': round(apy, 2)
+        }
+    
+    @staticmethod
+    def bridge(from_chain, to_chain, token, amount, auth_token):
+        return {
+            'txHash': '0x' + os.urandom(32).hex(),
+            'bridgeId': 'bridge_' + os.urandom(6).hex(),
+            'fromChain': from_chain,
+            'toChain': to_chain,
+            'status': 'pending'
+        }
+    
+    @staticmethod
+    def get_gas_fees():
+        return {
+            'ethereum': {'send': 0.001, 'swap': 0.002},
+            'bsc': {'send': 0.0005, 'swap': 0.001},
+            'polygon': {'send': 0.0001, 'swap': 0.0002},
+            'avalanche': {'send': 0.00025, 'swap': 0.0005},
+            'arbitrum': {'send': 0.0001, 'swap': 0.0002},
+            'optimism': {'send': 0.0001, 'swap': 0.0002}
+        }
