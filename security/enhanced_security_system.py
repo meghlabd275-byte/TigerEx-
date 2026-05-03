@@ -748,3 +748,22 @@ if __name__ == "__main__":
     
     security_event = security_system.analyze_request_security(request_data)
     print(f"Security event: {security_event.threat_type.value}, Risk Score: {security_event.risk_score}")
+# ==================== WALLET SECURITY MODULE ====================
+WORDLIST = ["abandon","ability","able","about","above","absent","absorb","abstract","absurd","abuse",
+    "access","accident","account","accuse","achieve","acid","acoustic","acquire","across","act","action",
+    "actor","actress","actual","adapt"]
+
+def encrypt_seed_phrase(seed: str, password: str) -> str:
+    """Encrypt seed with password"""
+    salt = secrets.token_bytes(16)
+    key = hashlib.pbkdf2_hmac('sha256', password.encode(), salt, 100000)
+    f = Fernet(base64.urlsafe_b64_encode(key))
+    return base64.b64encode(salt).decode() + "." + f.encrypt(seed.encode()).decode()
+
+def create_backup_key(user_id: str) -> str:
+    """Create wallet backup key"""
+    return "BKP_" + secrets.token_hex(8)
+
+def validate_wallet_owner(wallet: dict, user_id: str) -> bool:
+    """Validate wallet ownership"""
+    return wallet.get("owner") == user_id

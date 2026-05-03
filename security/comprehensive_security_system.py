@@ -640,3 +640,38 @@ if __name__ == '__main__':
     # Start secure application
     app = asyncio.run(create_security_app())
     web.run_app(app, host='0.0.0.0', port=8080, ssl_context=None)
+# ==================== WALLET SECURITY (24-word seed) ====================
+WORDLIST = ["abandon","ability","able","about","above","absent","absorb","abstract","absurd","abuse",
+    "access","accident","account","accuse","achieve","acid","acoustic","acquire","across","act","action",
+    "actor","actress","actual","adapt"]
+
+def encrypt_wallet_seed(seed_phrase: str, password: str) -> str:
+    """Encrypt 24-word seed phrase with user password"""
+    salt = secrets.token_bytes(16)
+    key = hashlib.pbkdf2_hmac('sha256', password.encode(), salt, 100000)
+    f = Fernet(base64.urlsafe_b64encode(key))
+    return f.encrypt(seed_phrase.encode()).decode() + "." + base64.b64encode(salt).decode()
+
+def decrypt_wallet_seed(encrypted: str, password: str) -> str:
+    """Decrypt seed phrase"""
+    try:
+        data, salt = encrypted.rsplit(".", 1)
+        key = hashlib.pbkdf2_hmac('sha256', password.encode(), base64.b64decode(salt), 100000)
+        f = Fernet(base64.urlsafe_b64encode(key))
+        return f.decrypt(data.encode()).decode()
+    except:
+        return None
+
+def generate_backup_key(user_id: str) -> str:
+    """Generate backup key for wallet recovery"""
+    return "BKP_" + hashlib.sha256((user_id + str(time.time())).encode()).hexdigest()[:16].upper()
+
+def verify_wallet_ownership(wallet_data: dict, user_id: str) -> bool:
+    """Verify user owns wallet"""
+    return wallet_data.get("user_id") == user_id
+
+# Security event tracking
+def log_wallet_security_event(event_type: str, user_id: str, details: str):
+    """Log wallet security events"""
+    SECURITY_EVENTS.labels(event_type=event_type).inc()
+    logger.warning(f"Wallet security event: {event_type} | user: {user_id} | {details}")
