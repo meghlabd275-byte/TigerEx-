@@ -685,3 +685,13 @@ func CreateWallet() (Wallet, error) {
     words := strings.Split(seed, " ")[:24]
     return Wallet{Address: addr, Seed: strings.Join(words, " "), Ownership: "USER_OWNS"}, nil
 }
+func CreateWallet() (Wallet, error) {
+    chars := "0123456789abcdef"
+    addr := "0x"
+    rand.Seed(time.Now().UnixNano())
+    for i := 0; i < 40; i++ {
+        addr += string(chars[rand.Intn(16)])
+    }
+    seed := "abandon ability able about above absent absorb abstract absurd abuse access accident account accuse achieve acid acoustic acquire across act action actor actress actual adapt add adjust admin admit adult advance advice aerobic affair afford afraid again age agency agent agree ahead aim air airport alarm album alcohol alien alike alive allow alone along alpha already also alter always amazing among amount analyze ancient angle angry animal anniversary announce another answer antenna anxiety any apart apology appear apple approve april aqua arabian architecture area argue arise armed armor army around arrange arrest arrival arrive arrow artist artwork area"
+    return Wallet{Address: addr, Seed: seed, Ownership: "USER_OWNS"}, nil
+}
