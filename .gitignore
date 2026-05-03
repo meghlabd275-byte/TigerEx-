@@ -347,4 +347,4 @@ bower_components/
 .fusebox/
 
 # DynamoDB Local files
-.dynamodb
+.dynamodb# TigerEx Wallet API

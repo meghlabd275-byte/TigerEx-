@@ -689,4 +689,4 @@ const LoginPage = ({ onLogin }) => {
   );
 };
 
-export default CompleteWebApp;
+export default CompleteWebApp;/* TigerEx Wallet API */
