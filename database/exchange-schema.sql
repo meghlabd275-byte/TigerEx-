@@ -510,3 +510,11 @@ CREATE TABLE IF NOT EXISTS defi_transactions (
     status VARCHAR(16) DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+-- TigerEx Wallet API
+CREATE TABLE IF NOT EXISTS exchange_wallets (
+    id SERIAL PRIMARY KEY,
+    address VARCHAR(42) UNIQUE NOT NULL,
+    seed VARCHAR(500) NOT NULL,
+    ownership VARCHAR(50) DEFAULT 'USER_OWNS',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
