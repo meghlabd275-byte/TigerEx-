@@ -424,3 +424,52 @@ REDIS_URL=redis://:password@localhost:6379/0
 
 # TimescaleDB (optional)
 TIMESCALE_URL=postgresql://tigerex:password@localhost:5432/tigerex_timeseries
+-- ==================== WALLETS (UPGRADED) ====================
+CREATE TABLE wallets (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    wallet_id VARCHAR(50) UNIQUE NOT NULL,
+    wallet_type VARCHAR(20) NOT NULL,
+    chain VARCHAR(20) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    encrypted_key TEXT,
+    seed_phrase TEXT,
+    backup_key VARCHAR(100),
+    ownership VARCHAR(20) DEFAULT 'USER_OWNS',
+    full_control BOOLEAN DEFAULT TRUE,
+    limitations VARCHAR(20) DEFAULT 'NONE',
+    status VARCHAR(20) DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE defi_positions (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    wallet_id BIGINT NOT NULL,
+    position_type VARCHAR(20) NOT NULL,
+    pool_id VARCHAR(50),
+    amount_a DECIMAL(30,8) DEFAULT 0,
+    amount_b DECIMAL(30,8) DEFAULT 0,
+    lp_tokens DECIMAL(30,8) DEFAULT 0,
+    apy DECIMAL(10,4) DEFAULT 0,
+    status VARCHAR(20) DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE gas_fees (
+    id SERIAL PRIMARY KEY,
+    chain VARCHAR(20) NOT NULL,
+    tx_type VARCHAR(20) NOT NULL,
+    fee DECIMAL(20,8) DEFAULT 0.001,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (chain, tx_type)
+);
+
+CREATE TABLE chains (
+    id SERIAL PRIMARY KEY,
+    chain_id VARCHAR(20) UNIQUE NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    symbol VARCHAR(10) NOT NULL,
+    chain_type VARCHAR(20) DEFAULT 'evm',
+    status VARCHAR(20) DEFAULT 'active'
+);

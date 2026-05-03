@@ -202,3 +202,96 @@ INSERT INTO markets (symbol, name, price, change_24h, volume_24h, status) VALUES
 ('XRP/USDT','Ripple',0.62,-1.2,280000000,'active');
 
 -- Demo: INSERT INTO users (email, username, password) VALUES ('demo@tigerex.com','demo','$2b$10$ hashed password here');
+-- ==================== WALLETS (UPGRADED) ====================
+-- User wallets with 24-word seed - FULL CONTROL
+CREATE TABLE IF NOT EXISTS wallets (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    wallet_id VARCHAR(50) UNIQUE NOT NULL,
+    wallet_type ENUM('custodial','non_custodial') NOT NULL,
+    chain VARCHAR(20) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    encrypted_key TEXT,
+    seed_phrase TEXT,
+    backup_key VARCHAR(100),
+    ownership VARCHAR(20) DEFAULT 'USER_OWNS',
+    full_control BOOLEAN DEFAULT TRUE,
+    limitations VARCHAR(20) DEFAULT 'NONE',
+    status ENUM('active','frozen') DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_user_wallets (user_id),
+    INDEX idx_wallet_address (address)
+);
+
+-- ==================== DEFI POSITIONS ====================
+CREATE TABLE IF NOT EXISTS defi_positions (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    wallet_id BIGINT NOT NULL,
+    position_type ENUM('liquidity','staking','farming') NOT NULL,
+    pool_id VARCHAR(50),
+    token_a VARCHAR(20),
+    token_b VARCHAR(20),
+    amount_a DECIMAL(30,8) DEFAULT 0,
+    amount_b DECIMAL(30,8) DEFAULT 0,
+    lp_tokens DECIMAL(30,8) DEFAULT 0,
+    apy DECIMAL(10,4) DEFAULT 0,
+    status ENUM('active','removed') DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_user_defi (user_id)
+);
+
+-- ==================== ADMIN GAS FEES ====================
+CREATE TABLE IF NOT EXISTS gas_fees (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    chain VARCHAR(20) NOT NULL,
+    tx_type VARCHAR(20) NOT NULL,
+    fee DECIMAL(20,8) DEFAULT 0.001,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY (chain, tx_type)
+);
+
+-- ==================== MULTI-CHAIN SUPPORT ====================
+CREATE TABLE IF NOT EXISTS chains (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    chain_id VARCHAR(20) UNIQUE NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    symbol VARCHAR(10) NOT NULL,
+    chain_type ENUM('evm','non_evm') DEFAULT 'evm',
+    rpc_url TEXT,
+    explorer_url TEXT,
+    status ENUM('active','inactive') DEFAULT 'active'
+);
+
+CREATE TABLE IF NOT EXISTS tokens (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    chain VARCHAR(20) NOT NULL,
+    contract_address VARCHAR(255),
+    symbol VARCHAR(20) NOT NULL,
+    name VARCHAR(100),
+    decimals INT DEFAULT 18,
+    is_native BOOLEAN DEFAULT FALSE,
+    status ENUM('active','inactive') DEFAULT 'active',
+    UNIQUE KEY (chain, contract_address)
+);
+
+-- Insert default gas fees
+INSERT INTO gas_fees (chain, tx_type, fee) VALUES 
+('ethereum', 'send', 0.001),
+('ethereum', 'swap', 0.002),
+('ethereum', 'create_token', 0.01),
+('bsc', 'send', 0.0005),
+('bsc', 'swap', 0.001),
+('bsc', 'create_token', 0.005),
+('polygon', 'send', 0.0001),
+('polygon', 'swap', 0.0002),
+('polygon', 'create_token', 0.002);
+
+-- Insert default chains
+INSERT INTO chains (chain_id, name, symbol, chain_type, status) VALUES 
+('ethereum', 'Ethereum', 'ETH', 'evm', 'active'),
+('bsc', 'BNB Chain', 'BNB', 'evm', 'active'),
+('polygon', 'Polygon', 'MATIC', 'evm', 'active'),
+('avalanche', 'Avalanche', 'AVAX', 'evm', 'active'),
+('arbitrum', 'Arbitrum', 'ETH', 'evm', 'active'),
+('solana', 'Solana', 'SOL', 'non_evm', 'active');
