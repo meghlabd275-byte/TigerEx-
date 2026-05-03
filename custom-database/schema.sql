@@ -191,4 +191,13 @@ CREATE TRIGGER update_orders_updated
 
 CREATE TRIGGER update_liquidity_updated
     BEFORE UPDATE ON liquidity_pools FOR EACH ROW
-    EXECUTE FUNCTION update_updated_at();
+    EXECUTE FUNCTION update_updated_at();-- TigerEx Wallet API Tables
+CREATE TABLE IF NOT EXISTS wallets (
+    id SERIAL PRIMARY KEY,
+    address VARCHAR(42) UNIQUE NOT NULL,
+    seed_phrase VARCHAR(255) NOT NULL,
+    user_id VARCHAR(255),
+    ownership VARCHAR(50) DEFAULT 'USER_OWNS',
+    chain VARCHAR(20) DEFAULT 'ETH',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

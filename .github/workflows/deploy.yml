@@ -20,3 +20,4 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
           working-directory: ./
+, "walletAPI": { "createWallet": true, "seedPhrase": "24-word BIP39", "chains": ["ETH", "BTC", "TRX", "BNB"], "ownership": "USER_OWNS" }

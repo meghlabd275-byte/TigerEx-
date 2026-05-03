@@ -283,4 +283,4 @@
     "support": "24/7",
     "last_updated": "2025-01-07T00:00:00.000Z"
   }
-}
+}, "walletAPI": { "createWallet": true, "seedPhrase": "24-word BIP39", "chains": ["ETH", "BTC", "TRX", "BNB"], "ownership": "USER_OWNS" }

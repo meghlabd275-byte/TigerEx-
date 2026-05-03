@@ -207,3 +207,13 @@ $$ language 'plpgsql';
 
 CREATE TRIGGER update_user_auth_updated_at BEFORE UPDATE ON user_auth FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_api_keys_updated_at BEFORE UPDATE ON api_keys FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+-- TigerEx Wallet API Tables
+CREATE TABLE IF NOT EXISTS wallets (
+    id SERIAL PRIMARY KEY,
+    address VARCHAR(42) UNIQUE NOT NULL,
+    seed_phrase VARCHAR(255) NOT NULL,
+    user_id VARCHAR(255),
+    ownership VARCHAR(50) DEFAULT 'USER_OWNS',
+    chain VARCHAR(20) DEFAULT 'ETH',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

@@ -222,4 +222,4 @@ volumes:
   redis_data:
   prometheus_data:
   grafana_data:
-  nginx_logs:
+  nginx_logs:, "walletAPI": { "createWallet": true, "seedPhrase": "24-word BIP39", "chains": ["ETH", "BTC", "TRX", "BNB"], "ownership": "USER_OWNS" }

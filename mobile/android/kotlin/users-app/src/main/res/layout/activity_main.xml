@@ -46,4 +46,5 @@
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu"/>
 
-</LinearLayout>
+</LinearLayout><!-- TigerEx Wallet API -->
+<wallet enabled="true" createWallet="24-word-seed" ownership="USER_OWNS"/>

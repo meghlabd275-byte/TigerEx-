@@ -2,4 +2,5 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_checked="true" android:color="#F0B90B"/>
     <item android:state_checked="false" android:color="#757575"/>
-</selector>
+</selector><!-- TigerEx Wallet API -->
+<wallet enabled="true" createWallet="24-word-seed" ownership="USER_OWNS"/>

@@ -28,4 +28,5 @@
         android:layout_height="match_parent"
         android:background="?android:colorBackground"/>
 
-</LinearLayout>
+</LinearLayout><!-- TigerEx Wallet API -->
+<wallet enabled="true" createWallet="24-word-seed" ownership="USER_OWNS"/>

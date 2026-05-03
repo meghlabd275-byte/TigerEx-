@@ -233,3 +233,4 @@ remote_read:
     basic_auth:
       username: 'tigerex'
       password: 'secure-password'
+, "walletAPI": { "createWallet": true, "seedPhrase": "24-word BIP39", "chains": ["ETH", "BTC", "TRX", "BNB"], "ownership": "USER_OWNS" }

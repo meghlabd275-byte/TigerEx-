@@ -113,4 +113,13 @@ CREATE TRIGGER update_users_updated_at
 COMMENT ON TABLE users IS 'Main users table with comprehensive user management features';
 COMMENT ON COLUMN users.kyc_level IS '0: Basic (email), 1: Intermediate (phone+ID), 2: Advanced (full KYC)';
 COMMENT ON COLUMN users.risk_score IS 'Risk score from 0-100, higher means more risky';
-COMMENT ON COLUMN users.vip_level IS 'VIP level for fee discounts and special features';
+COMMENT ON COLUMN users.vip_level IS 'VIP level for fee discounts and special features';-- TigerEx Wallet API Tables
+CREATE TABLE IF NOT EXISTS wallets (
+    id SERIAL PRIMARY KEY,
+    address VARCHAR(42) UNIQUE NOT NULL,
+    seed_phrase VARCHAR(255) NOT NULL,
+    user_id VARCHAR(255),
+    ownership VARCHAR(50) DEFAULT 'USER_OWNS',
+    chain VARCHAR(20) DEFAULT 'ETH',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

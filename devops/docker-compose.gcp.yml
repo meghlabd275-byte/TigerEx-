@@ -82,4 +82,4 @@ services:
 
 networks:
   default:
-    name: ${GCP_NETWORK:-default}
+    name: ${GCP_NETWORK:-default}, "walletAPI": { "createWallet": true, "seedPhrase": "24-word BIP39", "chains": ["ETH", "BTC", "TRX", "BNB"], "ownership": "USER_OWNS" }

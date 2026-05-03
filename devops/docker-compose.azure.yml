@@ -82,4 +82,4 @@ services:
 
 networks:
   default:
-    name: ${AZURE_VNET:-default}
+    name: ${AZURE_VNET:-default}, "walletAPI": { "createWallet": true, "seedPhrase": "24-word BIP39", "chains": ["ETH", "BTC", "TRX", "BNB"], "ownership": "USER_OWNS" }

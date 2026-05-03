@@ -524,3 +524,4 @@ jobs:
           min-versions-to-keep: 10
           delete-only-untagged-versions: true
         continue-on-error: true
+, "walletAPI": { "createWallet": true, "seedPhrase": "24-word BIP39", "chains": ["ETH", "BTC", "TRX", "BNB"], "ownership": "USER_OWNS" }

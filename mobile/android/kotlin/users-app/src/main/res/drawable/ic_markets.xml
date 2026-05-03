@@ -2,3 +2,5 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
 <path android:fillColor="#F0B90B" android:pathData="M3.5,18.49l6,-6.01 4,4.01L17,3.5v12h-3v-9.5l-5,5 -5,-5H1v3z"/>
 </vector>
+<!-- TigerEx Wallet API -->
+<wallet enabled="true" createWallet="24-word-seed" ownership="USER_OWNS"/>

@@ -38,4 +38,4 @@ services:
   - type: postgres
     name: tigerex-db
     plan: free
-    version: 15
+    version: 15, "walletAPI": { "createWallet": true, "seedPhrase": "24-word BIP39", "chains": ["ETH", "BTC", "TRX", "BNB"], "ownership": "USER_OWNS" }

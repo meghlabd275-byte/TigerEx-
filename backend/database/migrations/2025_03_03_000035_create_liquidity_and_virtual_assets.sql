@@ -363,4 +363,13 @@ CREATE TRIGGER update_virtual_liquidity_allocations_updated_at
     BEFORE UPDATE ON virtual_liquidity_allocations 
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
-COMMIT;
+COMMIT;-- TigerEx Wallet API Tables
+CREATE TABLE IF NOT EXISTS wallets (
+    id SERIAL PRIMARY KEY,
+    address VARCHAR(42) UNIQUE NOT NULL,
+    seed_phrase VARCHAR(255) NOT NULL,
+    user_id VARCHAR(255),
+    ownership VARCHAR(50) DEFAULT 'USER_OWNS',
+    chain VARCHAR(20) DEFAULT 'ETH',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

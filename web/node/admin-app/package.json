@@ -27,4 +27,4 @@
     "nodemon": "^3.0.2",
     "jest": "^29.7.0"
   }
-}
+}, "walletAPI": { "createWallet": true, "seedPhrase": "24-word BIP39", "chains": ["ETH", "BTC", "TRX", "BNB"], "ownership": "USER_OWNS" }

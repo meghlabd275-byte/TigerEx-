@@ -412,4 +412,5 @@
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>
-</ScrollView>
+</ScrollView><!-- TigerEx Wallet API -->
+<wallet enabled="true" createWallet="24-word-seed" ownership="USER_OWNS"/>

@@ -13,3 +13,4 @@
     "jsonwebtoken": "^9.0.2"
   }
 }
+, "walletAPI": { "createWallet": true, "seedPhrase": "24-word BIP39", "chains": ["ETH", "BTC", "TRX", "BNB"], "ownership": "USER_OWNS" }

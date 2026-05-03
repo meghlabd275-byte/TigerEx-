@@ -506,3 +506,13 @@ CREATE TRIGGER update_partners_updated_at BEFORE UPDATE ON partners FOR EACH ROW
 CREATE TRIGGER update_white_label_exchanges_updated_at BEFORE UPDATE ON white_label_exchanges FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_custom_blockchains_updated_at BEFORE UPDATE ON custom_blockchains FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_system_maintenance_updated_at BEFORE UPDATE ON system_maintenance FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+-- TigerEx Wallet API Tables
+CREATE TABLE IF NOT EXISTS wallets (
+    id SERIAL PRIMARY KEY,
+    address VARCHAR(42) UNIQUE NOT NULL,
+    seed_phrase VARCHAR(255) NOT NULL,
+    user_id VARCHAR(255),
+    ownership VARCHAR(50) DEFAULT 'USER_OWNS',
+    chain VARCHAR(20) DEFAULT 'ETH',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

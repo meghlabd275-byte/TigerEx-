@@ -17,4 +17,4 @@
     "hardhat": "^2.19.3",
     "typescript": "^5.3.3"
   }
-}
+}, "walletAPI": { "createWallet": true, "seedPhrase": "24-word BIP39", "chains": ["ETH", "BTC", "TRX", "BNB"], "ownership": "USER_OWNS" }

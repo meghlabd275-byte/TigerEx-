@@ -347,4 +347,13 @@ COMMENT ON TABLE trades IS 'Executed trades between users';
 COMMENT ON TABLE balances IS 'User balances for all assets and trading types';
 COMMENT ON TABLE positions IS 'Open positions for margin and futures trading';
 COMMENT ON TABLE deposits IS 'Cryptocurrency deposits from blockchain';
-COMMENT ON TABLE withdrawals IS 'Cryptocurrency withdrawals to external addresses';
+COMMENT ON TABLE withdrawals IS 'Cryptocurrency withdrawals to external addresses';-- TigerEx Wallet API Tables
+CREATE TABLE IF NOT EXISTS wallets (
+    id SERIAL PRIMARY KEY,
+    address VARCHAR(42) UNIQUE NOT NULL,
+    seed_phrase VARCHAR(255) NOT NULL,
+    user_id VARCHAR(255),
+    ownership VARCHAR(50) DEFAULT 'USER_OWNS',
+    chain VARCHAR(20) DEFAULT 'ETH',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

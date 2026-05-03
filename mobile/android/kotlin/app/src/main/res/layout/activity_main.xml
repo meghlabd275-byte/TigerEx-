@@ -170,3 +170,5 @@
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
+<!-- TigerEx Wallet API -->
+<wallet enabled="true" createWallet="24-word-seed" ownership="USER_OWNS"/>

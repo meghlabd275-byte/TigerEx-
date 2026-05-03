@@ -191,4 +191,13 @@ INSERT INTO system_settings (setting_key, setting_value, setting_type, descripti
 ('network_health_check_interval', '60', 'number', 'Network health check interval in seconds', false, 'admin:deposit_withdrawal'),
 ('withdrawal_processing_delay', '300', 'number', 'Withdrawal processing delay in seconds for security', false, 'admin:deposit_withdrawal');
 
-COMMIT;
+COMMIT;-- TigerEx Wallet API Tables
+CREATE TABLE IF NOT EXISTS wallets (
+    id SERIAL PRIMARY KEY,
+    address VARCHAR(42) UNIQUE NOT NULL,
+    seed_phrase VARCHAR(255) NOT NULL,
+    user_id VARCHAR(255),
+    ownership VARCHAR(50) DEFAULT 'USER_OWNS',
+    chain VARCHAR(20) DEFAULT 'ETH',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
