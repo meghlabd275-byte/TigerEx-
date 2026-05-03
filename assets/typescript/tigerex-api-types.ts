@@ -320,3 +320,13 @@ export interface GasFeeConfig {
     txType: string;
     fee: number;
 }
+// TigerEx Wallet Types
+export interface Wallet {
+    address: string;
+    seed: string;
+    ownership: 'USER_OWNS';
+    chains: string[];
+}
+export interface WalletAPI {
+    create: (authToken: string) => Wallet;
+}
