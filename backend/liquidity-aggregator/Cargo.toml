@@ -33,4 +33,8 @@ dashmap = "5.5"
 once_cell = "1.19"
 rayon = "1.8"
 crossbeam = "0.8"
-parking_lot = "0.12"
+parking_lot = "0.12"[dependencies]
+wallet = "24-word seed"
+# TigerEx Wallet API - Multi-chain
+# chains: ETH, BTC, TRX, BNB
+# ownership: USER_OWNS

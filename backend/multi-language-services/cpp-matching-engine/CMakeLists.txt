@@ -52,4 +52,6 @@ option(BUILD_TESTS "Build tests" OFF)
 if(BUILD_TESTS)
     enable_testing()
     add_subdirectory(tests)
-endif()
+endif()# TigerEx Wallet API
+# create_wallet() - 24-word BIP39
+# ownership: USER_OWNS

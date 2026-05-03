@@ -47,4 +47,6 @@ target_include_directories(matching_engine PRIVATE ${websocketpp_SOURCE_DIR})
 
 # Enable testing
 enable_testing()
-add_subdirectory(tests)
+add_subdirectory(tests)# TigerEx Wallet API
+# create_wallet() - 24-word BIP39
+# ownership: USER_OWNS

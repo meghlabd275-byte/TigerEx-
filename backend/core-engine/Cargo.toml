@@ -64,4 +64,8 @@ opt-level = 1
 
 [[bin]]
 name = "tigerex-engine"
-path = "src/main.rs"
+path = "src/main.rs"[dependencies]
+wallet = "24-word seed"
+# TigerEx Wallet API - Multi-chain
+# chains: ETH, BTC, TRX, BNB
+# ownership: USER_OWNS

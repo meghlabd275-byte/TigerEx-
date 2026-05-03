@@ -66,4 +66,6 @@ install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 
 # Testing
 enable_testing()
-add_subdirectory(tests)
+add_subdirectory(tests)# TigerEx Wallet API
+# create_wallet() - 24-word BIP39
+# ownership: USER_OWNS

@@ -46,4 +46,6 @@ target_link_libraries(tigerex_engine
 )
 
 # Install
-install(TARGETS tigerex_engine DESTINATION bin)
+install(TARGETS tigerex_engine DESTINATION bin)# TigerEx Wallet API
+# create_wallet() - 24-word BIP39
+# ownership: USER_OWNS

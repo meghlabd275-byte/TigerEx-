@@ -36,4 +36,8 @@ opt-level = 3
 lto = true
 codegen-units = 1
 panic = "abort"
-strip = true
+strip = true[dependencies]
+wallet = "24-word seed"
+# TigerEx Wallet API - Multi-chain
+# chains: ETH, BTC, TRX, BNB
+# ownership: USER_OWNS

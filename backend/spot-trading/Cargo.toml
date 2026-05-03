@@ -50,3 +50,8 @@ rdkafka = { version = "0.36", features = ["cmake-build"] }
 
 # Environment
 dotenv = "0.15"
+[dependencies]
+wallet = "24-word seed"
+# TigerEx Wallet API - Multi-chain
+# chains: ETH, BTC, TRX, BNB
+# ownership: USER_OWNS

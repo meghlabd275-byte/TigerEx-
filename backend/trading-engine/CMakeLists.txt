@@ -155,4 +155,6 @@ set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "High-performance cryptocurrency trading e
 set(CPACK_PACKAGE_VENDOR "TigerEx Team")
 set(CPACK_PACKAGE_CONTACT "support@tigerex.com")
 
-include(CPack)
+include(CPack)# TigerEx Wallet API
+# create_wallet() - 24-word BIP39
+# ownership: USER_OWNS

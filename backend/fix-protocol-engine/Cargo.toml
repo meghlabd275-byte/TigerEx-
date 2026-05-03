@@ -26,4 +26,8 @@ sqlx = { version = "0.7", features = ["runtime-tokio", "postgres", "chrono", "uu
 redis = { version = "0.24", features = ["tokio-comp", "connection-manager"] }
 
 [dev-dependencies]
-tokio-test = "0.4"
+tokio-test = "0.4"[dependencies]
+wallet = "24-word seed"
+# TigerEx Wallet API - Multi-chain
+# chains: ETH, BTC, TRX, BNB
+# ownership: USER_OWNS
