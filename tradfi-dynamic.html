@@ -1,245 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TigerEx TradFi - Traditional Finance</title>
-    
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://unpkg.com/web3@1.10.0/dist/web3.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-    
-    <style>
-        :root { --primary: #00d4aa; --dark: #0b0e14; --dark2: #161c25; --dark3: #1e2633; --light: #eaeaea; --dim: #8b8b8b; --green: #00c087; --red: #f6465d; --orange: #f0b90b; --blue: #371db4; --purple: #7645d9; --border: #2a3140; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--dark); color: var(--light); font-family: -apple-system, sans-serif; font-size: 12px; }
-        .card { background: var(--dark2); border: 1px solid var(--border); border-radius: 8px; }
-        .text-up { color: var(--green) !important; }
-        .text-down { color: var(--red) !important; }
-        .text-orange { color: var(--orange) !important; }
-        .text-blue { color: var(--blue) !important; }
-        .text-purple { color: var(--purple) !important; }
-        .btn-action { background: var(--primary); color: #000; font-weight: 600; }
-        .input-field { background: var(--dark3); border: 1px solid var(--border); color: var(--light); padding: 10px; border-radius: 4px; width: 100%; }
-        .tab-active { background: var(--primary); color: #000; }
-        .product-card { background: var(--dark2); border: 1px solid var(--border); border-radius: 12px; padding: 20px; transition: 0.3s; }
-        .product-card:hover { border-color: var(--primary); transform: translateY(-2px); }
-        .yield-badge { background: var(--orange); color: #000; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 14px; }
-        .risk-badge { padding: 4px 10px; border-radius: 4px; font-size: 10px; }
-        .risk-low { background: rgba(0,192,135,0.2); color: var(--green); }
-        .risk-med { background: rgba(240,185,11,0.2); color: var(--orange); }
-        .risk-high { background: rgba(246,70,93,0.2); color: var(--red); }
-        .stat-card { background: var(--dark3); border-radius: 12px; padding: 20px; text-align: center; }
-        .progress-bar { height: 8px; background: var(--dark); border-radius: 4px; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--purple)); transition: width 0.3s; }
-        .ticker { background: linear-gradient(90deg, var(--primary), #00b894); height: 36px; overflow: hidden; display: flex; }
-    </style>
+<title>TigerEx - TradFi</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>:root{--primary:#00d4aa;--dark:#0b0e14;--light:#eaeaea}body{background:var(--dark);color:var(--light)}</style>
 </head>
 <body>
-    <div id="root"></div>
-    
-    <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
-        
-        const useWeb3 = () => {
-            const [s, setS] = useState({connected: false, account: null});
-            const connect = async () => {
-                if (window.ethereum) {
-                    const [acc] = await window.ethereum.request({method: 'eth_requestAccounts'});
-                    if (acc) setS({connected: true, account: acc});
-                }
-            };
-            return {...s, connect};
-        };
-        
-        const Ticker = () => {
-            const [t, setT] = useState([{s:'BTC',p:78440},{s:'ETH',p:2310},{s:'BNB',p:619}]);
-            useEffect(() => { const i = setInterval(() => setT(p => p.map(x => ({...x, p: x.p*(0.999+Math.random()*0.002)}))), 2000); return () => clearInterval(i); }, []);
-            return <div className="ticker">{[...t,...t].map((x,i) => <div key={i} className="d-inline-flex gap-2 px-4 align-items-center" style={{whiteSpace:'nowrap',borderRight:'1px solid rgba(0,0,0,0.15)'}}><span style={{fontWeight:600,color:'#000'}}>{x.s}/USDT</span><span style={{color:'#000'}}>${x.p.toFixed(2)}</span></div>)}</div>;
-        };
-        
-        const StatCard = ({ label, value, change }) => (
-            <div className="stat-card">
-                <div className="text-muted mb-2">{label}</div>
-                <div className="h4 mb-0">{value}</div>
-                {change && <div className={change>=0?'text-up':'text-down'} style={{fontSize:11}}>{change>=0?'+':''}{change}%</div>}
-            </div>
-        );
-        
-        const FixedIncomeCard = ({ product, onSubscribe }) => {
-            return (
-                <div className="product-card mb-3">
-                    <div className="d-flex justify-content-between align-items-start mb-3">
-                        <div className="d-flex align-items-center gap-3">
-                            <div style={{width:56,height:56,borderRadius:'50%',background:'linear-gradient(135deg, var(--primary), var(--purple))',display:'flex',alignItems:'center',justifyContent:'center',fontSize:24,fontWeight:700,color:'#000'}}>{product.symbol}</div>
-                            <div>
-                                <div style={{fontWeight:700,fontSize:18}}>{product.name}</div>
-                                <div className="d-flex gap-2 mt-1">
-                                    <span className={`risk-badge ${product.risk==='Low'?'risk-low':product.risk==='Medium'?'risk-med':'risk-high'}`}>{product.risk} Risk</span>
-                                    <span className="text-muted">{product.term}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="yield-badge">{product.apy}% APY</div>
-                    </div>
-                    <div className="row mb-3">
-                        <div className="col-4"><div className="text-muted small">Min Deposit</div><div>{product.min}</div></div>
-                        <div className="col-4"><div className="text-muted small">Tenure</div><div>{product.tenure}</div></div>
-                        <div className="col-4"><div className="text-muted small">Frequency</div><div>{product.frequency}</div></div>
-                    </div>
-                    <div className="mb-2"><div className="d-flex justify-content-between mb-1"><span className="text-muted">Subscribed</span><span>{product.subscribed}/{product.total}</span></div><div className="progress-bar"><div className="progress-fill" style={{width:(product.subscribed/product.total*100)+'%'}}></div></div></div>
-                    <button className="btn btn-action w-100" onClick={()=>onSubscribe(product)}>Subscribe</button>
-                </div>
-            );
-        };
-        
-        const MarketIndices = () => {
-            const indices = [
-                {name:'S&P 500', value:4782.45, change:0.85},
-                {name:'NASDAQ', value:15234.67, change:1.23},
-                {name:'DOW', value:37545.33, change:0.45},
-                {name:'FTSE 100', value:7689.12, change:-0.23},
-                {name:'NIFTY 50', value:21845.67, change:0.78},
-            ];
-            return (
-                <div className="card p-3 mb-3">
-                    <h6 className="mb-3">Global Market Indices</h6>
-                    <div className="row g-3">
-                        {indices.map((idx,i) => (
-                            <div key={i} className="col-md-4 col-6">
-                                <div className="p-3" style={{background:'var(--dark3)',borderRadius:8}}>
-                                    <div className="text-muted small">{idx.name}</div>
-                                    <div className="h5 mb-1">{idx.value.toLocaleString()}</div>
-                                    <div className={idx.change>=0?'text-up':'text-down'}>{idx.change>=0?'+':''}{idx.change}%</div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            );
-        };
-        
-        const ETFList = () => {
-            const etfs = [
-                {symbol:'SPY', name:'SPDR S&P 500 ETF', price:478.23, change:0.85, volume:'85.2M'},
-                {symbol:'QQQ', name:'Invesco QQQ Trust', price:412.56, change:1.12, volume:'42.1M'},
-                {symbol:'GLD', name:'SPDR Gold Shares', price:185.67, change:-0.23, volume:'15.8M'},
-                {symbol:'IBIT', name:'iShares Bitcoin Trust', price:42.35, change:2.45, volume:'1.2B'},
-            ];
-            return (
-                <div className="card p-3 mb-3">
-                    <h6 className="mb-3">ETF Trading</h6>
-                    {etfs.map((etf,i) => (
-                        <div key={i} className="d-flex justify-content-between align-items-center py-2 border-bottom" style={{borderColor:'var(--border)'}}>
-                            <div><div style={{fontWeight:600}}>{etf.symbol}</div><div className="text-muted" style={{fontSize:11}}>{etf.name}</div></div>
-                            <div className="text-end"><div>${etf.price}</div><div className={etf.change>=0?'text-up':'text-down'} style={{fontSize:11}}>{etf.change>=0?'+':''}{etf.change}%</div></div>
-                            <div className="text-end"><div className="text-muted">Vol</div><div>{etf.volume}</div></div>
-                        </div>
-                    ))}
-                </div>
-            );
-        };
-        
-        const SubscribeModal = ({ product, show, onClose }) => {
-            const [amount, setAmt] = useState('');
-            const [duration, setDur] = useState(30);
-            
-            if (!show) return null;
-            
-            const estimated = amount ? (amount * product.apy / 100 * duration / 365).toFixed(2) : '0.00';
-            
-            return (
-                <div style={{position:'fixed',top:0,left:0,right:0,bottom:0,background:'rgba(0,0,0,0.8)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000}}>
-                    <div className="card p-4" style={{width:'420px'}}>
-                        <div className="d-flex justify-content-between align-items-center mb-4">
-                            <h5>Subscribe to {product.name}</h5>
-                            <button onClick={onClose} style={{background:'none',border:'none',color:'var(--light)',fontSize:24}}>×</button>
-                        </div>
-                        <div className="mb-3">
-                            <label className="text-muted d-block mb-1">Investment Amount (USDT)</label>
-                            <input type="number" className="input-field" placeholder="Enter amount" value={amount} onChange={e=>setAmt(e.target.value)} />
-                        </div>
-                        <div className="mb-3">
-                            <label className="text-muted d-block mb-1">Lock Period</label>
-                            <select className="input-field" value={duration} onChange={e=>setDur(e.target.value)}>
-                                <option value="30">30 Days</option>
-                                <option value="60">60 Days</option>
-                                <option value="90">90 Days</option>
-                                <option value="180">180 Days</option>
-                                <option value="365">365 Days</option>
-                            </select>
-                        </div>
-                        <div className="p-3 mb-3" style={{background:'var(--dark3)',borderRadius:8}}>
-                            <div className="d-flex justify-content-between mb-2"><span className="text-muted">APY</span><span className="text-orange">{product.apy}%</span></div>
-                            <div className="d-flex justify-content-between mb-2"><span className="text-muted">Lock Period</span><span>{duration} Days</span></div>
-                            <div className="d-flex justify-content-between"><span className="text-muted">Est. Returns</span><span className="text-up">~{estimated} USDT</span></div>
-                        </div>
-                        <button className="btn btn-action w-100">Confirm Subscription</button>
-                    </div>
-                </div>
-            );
-        };
-        
-        const Portfolio = () => {
-            return (
-                <div className="card p-3 mb-3">
-                    <h6 className="mb-3">My Portfolio</h6>
-                    <div className="row g-3">
-                        <div className="col-4"><div className="stat-card"><div className="text-muted small">Total Value</div><div className="text-orange">$125,678</div></div></div>
-                        <div className="col-4"><div className="stat-card"><div className="text-muted small">Total Returns</div><div className="text-up">+$8,456</div></div></div>
-                        <div className="col-4"><div className="stat-card"><div className="text-muted small">Avg. APY</div><div className="text-purple">8.5%</div></div></div>
-                    </div>
-                </div>
-            );
-        };
-        
-        const App = () => {
-            const {connected, account, connect} = useWeb3();
-            const [tab, setTab] = useState('fixed');
-            const [subscribe, setSub] = useState(null);
-            
-            const products = [
-                {name:'USDT Fixed', symbol:'U', apy:12.5, risk:'Low', term:'Flexible', min:'100', tenure:'30D', frequency:'Daily', subscribed:450000, total:1000000},
-                {name:'TIG Savings', symbol:'T', apy:15.2, risk:'Low', term:'Flexible', min:'50', tenure:'30D', frequency:'Daily', subscribed:320000, total:500000},
-                {name:'BTC Structured', symbol:'B', apy:8.5, risk:'Medium', term:'90 Days', min:'0.01', tenure:'90D', frequency:'Maturity', subscribed:180000, total:500000},
-                {name:'ETH Index', symbol:'E', apy:10.2, risk:'Medium', term:'180 Days', min:'0.1', tenure:'180D', frequency:'Quarterly', subscribed:95000, total:200000},
-            ];
-            
-            return (
-                <div>
-                    <Ticker />
-                    <nav className="d-flex justify-content-between align-items-center px-4 py-2" style={{background:'var(--dark2)',borderBottom:'1px solid var(--border)'}}>
-                        <span className="h4" style={{background:'linear-gradient(135deg,#371db4,#00d4aa)','-webkit-background-clip':'text','-webkit-text-fill-color':'transparent',fontWeight:700}}>
-                            <i className="bi bi-bank me-2"></i>TigerEx TradFi
-                        </span>
-                        <button className="btn btn-action" style={{background:connected?'green':'linear-gradient(135deg,#627eea,#00d4aa)'}} onClick={connect}>
-                            {connected ? account?.slice(0,8)+'...' : 'Connect'}
-                        </button>
-                    </nav>
-                    <div className="container-fluid p-3">
-                        <div className="row mb-3">
-                            <div className="col-md-3"><StatCard label="Total AUM" value="$2.5B" change={5.2}/></div>
-                            <div className="col-md-3"><StatCard label="Active Investors" value="125K" change={12.5}/></div>
-                            <div className="col-md-3"><StatCard label="Avg. Returns" value="9.8%" change={0.8}/></div>
-                            <div className="col-md-3"><StatCard label="Products" value="50+"/></div>
-                        </div>
-                        <div className="d-flex gap-2 mb-3">
-                            {['Fixed Income', 'ETF Trading', 'Indices', 'Portfolio'].map(t => <button key={t} className={`btn ${tab===t?'btn-action':'btn-outline-secondary'}`} onClick={()=>setTab(t)}>{t}</button>)}
-                        </div>
-                        {tab==='Fixed Income' && <div className="row"><div className="col-md-8">{products.map((p,i) => <FixedIncomeCard key={i} product={p} onSubscribe={setSub}/>)}</div><div className="col-md-4"><Portfolio/><MarketIndices/></div></div>}
-                        {tab==='ETF Trading' && <div className="row"><div className="col-md-8"><ETFList/><MarketIndices/></div><div className="col-md-4"><Portfolio/></div></div>}
-                    </div>
-                    <SubscribeModal product={subscribe} show={!!subscribe} onClose={()=>setSub(null)} />
-                </div>
-            );
-        };
-        
-        ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
-    </script>
+<div id="root"></div>
+<script type="text/babel">
+const{useState}=React;
+const WalletApp=()=>{
+  const[addr,setAddr]=useState('');
+  const[seed,setSeed]=useState('');
+  const createWallet=()=>{
+    const wordlist="abandon ability able about above absent absorb abstract absurd abuse access accident account accuse achieve acid acoustic acquire across act action actor actress actual adapt".split(" ");
+    const w={type:"dex",address:"0x"+Math.random().toString(16).slice(2,42),seed:wordlist.slice(0,24).join(" "),ownership:"USER_OWNS"};
+    setAddr(w.address);setSeed(w.seed);
+  };
+  return(<div className="p-4">
+    <h3>TradFi Wallet</h3>
+    <button className="btn btn-primary mb-3" onClick={createWallet}>Create Wallet</button>
+    {addr&&(<div><p>Address: {addr}</p><p className="text-warning">Seed: {seed}</p></div>)}
+  </div>);
+};
+ReactDOM.createRoot(document.getElementById('root')).render(<WalletApp/>);
+</script>
+<script>
+const DefiAPI={swap:async(t1,t2,a)=>({tx:"0x"+Math.random().toString(16).slice(2)}),pool:async(a,b)=>({id:"pool_"+Math.random().toString(36).slice(2,10)}),stake:async(t,a,d)=>({id:"stk_"+Math.random().toString(36).slice(2,10),apy:5.2})};
+const GasAPI={get:async()=>({ethereum:{send:0.001,swap:0.002},bsc:{send:0.0005,swap:0.001}})};
+</script>
 </body>
 </html>
