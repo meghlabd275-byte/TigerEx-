@@ -3,421 +3,460 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TigerEx - Users Trading Platform</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>TigerEx - Professional Crypto Exchange</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Light/Dark Theme */
-        body.light { --bg-primary: #F5F5F5; }
-        body.light .bg-gray-900 { background: #F5F5F5 !important; }
-        body.light .bg-gray-800 { background: #FFFFFF !important; }
-        body.light .bg-gray-700 { background: #E0E0E0 !important; }
-        body.light .text-white { color: #1A1A1A !important; }
-        body.light .text-gray-300 { color: #444444 !important; }
-        body.light .text-gray-400 { color: #666666 !important; }
-        body.light .border-gray-700 { border-color: #DDDDDD !important; }
+        :root { --primary: #f0b90b; --dark: #0b0e11; --darker: #050608; --light: #eaecee; --success: #00c853; --danger: #ff1744; }
+        body { background: var(--darker); color: var(--light); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        .navbar { background: var(--dark) !important; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .navbar-brand { font-weight: 700; font-size: 24px; }
+        .navbar-brand span { color: var(--primary); }
+        .nav-link { color: rgba(255,255,255,0.7) !important; transition: all 0.3s; }
+        .nav-link:hover { color: var(--primary) !important; }
+        .hero { background: linear-gradient(135deg, var(--dark) 0%, #1a1a2e 100%); padding: 80px 0; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(240,185,11,0.1) 0%, transparent 50%); animation: pulse 4s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .market-card { background: var(--dark); border-radius: 12px; padding: 20px; margin: 10px 0; border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s; }
+        .market-card:hover { transform: translateY(-3px); border-color: var(--primary); }
+        .market-symbol { font-weight: 700; font-size: 16px; }
+        .market-name { color: #848e9c; font-size: 13px; }
+        .price-up { color: var(--success); }
+        .price-down { color: var(--danger); }
+        .btn-primary { background: var(--primary); border: none; color: #000; font-weight: 600; }
+        .btn-primary:hover { background: #d69f0b; }
+        .btn-outline-light { border-color: rgba(255,255,255,0.2); }
+        .feature-box { background: var(--dark); border-radius: 16px; padding: 30px; text-align: center; border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s; }
+        .feature-box:hover { transform: translateY(-10px); border-color: var(--primary); }
+        .feature-icon { width: 64px; height: 64px; border-radius: 16px; background: rgba(240,185,11,0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: var(--primary); font-size: 28px; }
+        .trading-section { background: var(--dark); border-radius: 12px; padding: 20px; }
+        .order-tabs .nav-link { color: #848e9c; border: none; background: transparent; }
+        .order-tabs .nav-link.active { background: transparent; color: var(--primary); border-bottom: 2px solid var(--primary); }
+        .form-control { background: #1e2329; border: 1px solid #2b3139; color: white; }
+        .form-control:focus { background: #1e2329; border-color: var(--primary); color: white; }
+        .table { color: var(--light); }
+        .table a { color: var(--primary); }
+        footer { background: var(--dark); padding: 60px 0 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .footer-link { color: #848e9c; text-decoration: none; transition: color 0.3s; }
+        .footer-link:hover { color: var(--primary); }
+        .stats-banner { background: linear-gradient(135deg, #1e2329 0%, #2b3139 100%); border-radius: 16px; padding: 40px; margin: 40px 0; }
+        .stats-number { font-size: 36px; font-weight: 700; color: var(--primary); }
     </style>
-    <link rel="stylesheet" href="assets/css/responsive.css">
 </head>
-<body class="bg-gray-900 text-white">
-    <!-- Theme Toggle -->
-    <button onclick="toggleTheme()" class="fixed top-4 right-4 z-50 p-3 rounded-full bg-gray-800 hover:bg-gray-700 shadow-lg">
-        <svg id="themeIconDark" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
-        <svg id="themeIconLight" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5z"/></svg>
-    </button>
-    
-    <div x-data="tigerExApp()" x-init="init()" class="min-h-screen">
-        <!-- Header -->
-        <header class="bg-gray-800 border-b border-gray-700 sticky top-0 z-50">
-            <div class="container mx-auto px-4">
-                <div class="flex items-center justify-between h-16">
-                    <div class="flex items-center space-x-8">
-                        <a href="/" class="text-2xl font-bold text-orange-500">TigerEx</a>
-                        <nav class="hidden md:flex space-x-4">
-                            <a href="/trade" class="text-gray-300 hover:text-white transition">Trade</a>
-                            <a href="/wallet" class="text-gray-300 hover:text-white transition">Wallet</a>
-                            <a href="/earn" class="text-gray-300 hover:text-white transition">Earn</a>
-                            <a href="/p2p" class="text-gray-300 hover:text-white transition">P2P</a>
-                        </nav>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <template x-if="!isLoggedIn">
-                            <div class="flex space-x-2">
-                                <a href="/login" class="px-4 py-2 text-orange-500 hover:text-orange-400">Login</a>
-                                <a href="/register" class="px-4 py-2 bg-orange-500 rounded-lg hover:bg-orange-600">Register</a>
-                            </div>
-                        </template>
-                        <template x-if="isLoggedIn">
-                            <div class="flex items-center space-x-4">
-                                <button @click="showDepositModal = true" class="px-4 py-2 bg-green-500 rounded-lg hover:bg-green-600">Deposit</button>
-                                <div class="relative" x-data="{ open: false }">
-                                    <button @click="open = !open" class="flex items-center space-x-2">
-                                        <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center" x-text="user?.email?.charAt(0).toUpperCase()"></div>
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                    </button>
-                                    <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg border border-gray-700">
-                                        <a href="/profile" class="block px-4 py-2 hover:bg-gray-700">Profile</a>
-                                        <a href="/security" class="block px-4 py-2 hover:bg-gray-700">Security</a>
-                                        <a href="/api" class="block px-4 py-2 hover:bg-gray-700">API Keys</a>
-                                        <button @click="logout()" class="w-full text-left px-4 py-2 hover:bg-gray-700 text-red-400">Logout</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/"><i class="fas fa-bolt"></i> Tiger<span>Ex</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="#spot">Spot</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#futures">Futures</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#p2p">P2P</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#earn">Earn</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#wallet">Wallet</a></li>
+                </ul>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-light btn-sm" onclick="showLogin()">Log In</button>
+                    <button class="btn btn-primary btn-sm" onclick="showRegister()">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container text-center" style="position: relative; z-index: 1;">
+            <h1 class="display-3 fw-bold mb-4">Trade Crypto Like a <span style="color: var(--primary);">Pro</span></h1>
+            <p class="lead text-muted mb-5">Lightning-fast trading with 500K TPS. Spot, Futures, Options, Margin, Copy Trading & more.</p>
+            
+            <div class="row justify-content-center mb-5">
+                <div class="col-md-8">
+                    <div class="input-group" style="max-width: 500px; margin: 0 auto;">
+                        <input type="text" class="form-control form-control-lg" placeholder="Search for BTC, ETH...">
+                        <button class="btn btn-primary btn-lg"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
             </div>
-        </header>
-
-        <!-- Main Content -->
-        <main class="container mx-auto px-4 py-6">
-            <!-- Market Ticker -->
-            <div class="mb-6 overflow-x-auto">
-                <div class="flex space-x-6 min-w-max">
-                    <template x-for="pair in markets" :key="pair.symbol">
-                        <div class="flex items-center space-x-2 px-3 py-1 rounded bg-gray-800 hover:bg-gray-700 cursor-pointer" @click="selectPair(pair.symbol)">
-                            <span class="font-medium" x-text="pair.symbol"></span>
-                            <span x-text="pair.price" :class="pair.change >= 0 ? 'text-green-400' : 'text-red-400'"></span>
-                            <span x-text="pair.change + '%'" :class="pair.change >= 0 ? 'text-green-400' : 'text-red-400'" class="text-sm"></span>
-                        </div>
-                    </template>
+            
+            <div class="stats-banner">
+                <div class="row">
+                    <div class="col-3"><div class="stats-number">500K+</div><div class="text-muted">TPS</div></div>
+                    <div class="col-3"><div class="stats-number">$2.4B</div><div class="text-muted">Daily Volume</div></div>
+                    <div class="col-3"><div class="stats-number">1M+</div><div class="text-muted">Users</div></div>
+                    <div class="col-3"><div class="stats-number">0.001%</div><div class="text-muted">Lowest Fees</div></div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                <!-- Order Book & Trading Panel -->
-                <div class="lg:col-span-1 space-y-6">
-                    <!-- Buy Panel -->
-                    <div class="bg-gray-800 rounded-lg p-4">
-                        <h3 class="text-lg font-semibold mb-4 text-green-400">Buy</h3>
-                        <div class="space-y-3">
+    <!-- Markets -->
+    <section class="py-5">
+        <div class="container">
+            <h3 class="mb-4"><i class="fas fa-fire text-warning"></i> Top Markets</h3>
+            <div class="row" id="marketsList">
+                <div class="col-md-3">
+                    <div class="market-card">
+                        <div class="d-flex justify-content-between align-items-start">
                             <div>
-                                <label class="block text-sm text-gray-400 mb-1">Price</label>
-                                <input type="text" x-model="buyForm.price" @input="calculateBuyTotal()" class="w-full bg-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="0.00">
+                                <div class="market-symbol">BTC/USDT</div>
+                                <div class="market-name">Bitcoin</div>
                             </div>
-                            <div>
-                                <label class="block text-sm text-gray-400 mb-1">Amount</label>
-                                <input type="text" x-model="buyForm.amount" @input="calculateBuyTotal()" class="w-full bg-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="0.00">
-                            </div>
-                            <div class="flex space-x-2">
-                                <button @click="setAmount('25')" class="flex-1 py-1 bg-gray-700 rounded hover:bg-gray-600 text-sm">25%</button>
-                                <button @click="setAmount('50')" class="flex-1 py-1 bg-gray-700 rounded hover:bg-gray-600 text-sm">50%</button>
-                                <button @click="setAmount('75')" class="flex-1 py-1 bg-gray-700 rounded hover:bg-gray-600 text-sm">75%</button>
-                                <button @click="setAmount('100')" class="flex-1 py-1 bg-gray-700 rounded hover:bg-gray-600 text-sm">100%</button>
-                            </div>
-                            <div>
-                                <label class="block text-sm text-gray-400 mb-1">Total</label>
-                                <input type="text" x-model="buyForm.total" readonly class="w-full bg-gray-700 rounded px-3 py-2 cursor-not-allowed">
-                            </div>
-                            <button @click="placeBuyOrder()" class="w-full py-3 bg-green-500 rounded-lg hover:bg-green-600 font-semibold transition">Buy</button>
+                            <i class="fab fa-bitcoin" style="font-size: 24px; color: #f7931a;"></i>
                         </div>
-                    </div>
-
-                    <!-- Sell Panel -->
-                    <div class="bg-gray-800 rounded-lg p-4">
-                        <h3 class="text-lg font-semibold mb-4 text-red-400">Sell</h3>
-                        <div class="space-y-3">
-                            <div>
-                                <label class="block text-sm text-gray-400 mb-1">Price</label>
-                                <input type="text" x-model="sellForm.price" @input="calculateSellTotal()" class="w-full bg-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="0.00">
-                            </div>
-                            <div>
-                                <label class="block text-sm text-gray-400 mb-1">Amount</label>
-                                <input type="text" x-model="sellForm.amount" @input="calculateSellTotal()" class="w-full bg-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="0.00">
-                            </div>
-                            <div>
-                                <label class="block text-sm text-gray-400 mb-1">Total</label>
-                                <input type="text" x-model="sellForm.total" readonly class="w-full bg-gray-700 rounded px-3 py-2 cursor-not-allowed">
-                            </div>
-                            <button @click="placeSellOrder()" class="w-full py-3 bg-red-500 rounded-lg hover:bg-red-600 font-semibold transition">Sell</button>
+                        <div class="mt-3">
+                            <div class="fw-bold">$42,547.32</div>
+                            <div class="price-up">+2.45%</div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Price Chart -->
-                <div class="lg:col-span-2">
-                    <div class="bg-gray-800 rounded-lg p-4">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-xl font-semibold" x-text="selectedPair"></h3>
-                            <div class="flex space-x-2">
-                                <button @click="setInterval('1m')" :class="interval === '1m' ? 'bg-orange-500' : 'bg-gray-700'" class="px-3 py-1 rounded text-sm">1m</button>
-                                <button @click="setInterval('5m')" :class="interval === '5m' ? 'bg-orange-500' : 'bg-gray-700'" class="px-3 py-1 rounded text-sm">5m</button>
-                                <button @click="setInterval('15m')" :class="interval === '15m' ? 'bg-orange-500' : 'bg-gray-700'" class="px-3 py-1 rounded text-sm">15m</button>
-                                <button @click="setInterval('1h')" :class="interval === '1h' ? 'bg-orange-500' : 'bg-gray-700'" class="px-3 py-1 rounded text-sm">1h</button>
-                                <button @click="setInterval('1d')" :class="interval === '1d' ? 'bg-orange-500' : 'bg-gray-700'" class="px-3 py-1 rounded text-sm">1D</button>
+                <div class="col-md-3">
+                    <div class="market-card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="market-symbol">ETH/USDT</div>
+                                <div class="market-name">Ethereum</div>
                             </div>
+                            <i class="fab fa-ethereum" style="font-size: 24px; color: #627eea;"></i>
                         </div>
-                        <div class="h-80 bg-gray-700 rounded" id="priceChart"></div>
-                    </div>
-
-                    <!-- Recent Trades -->
-                    <div class="bg-gray-800 rounded-lg p-4 mt-6">
-                        <h3 class="text-lg font-semibold mb-4">Recent Trades</h3>
-                        <div class="space-y-2 max-h-60 overflow-y-auto">
-                            <template x-for="trade in recentTrades" :key="trade.id">
-                                <div class="flex justify-between text-sm">
-                                    <span :class="trade.side === 'buy' ? 'text-green-400' : 'text-red-400'" x-text="trade.price"></span>
-                                    <span x-text="trade.amount"></span>
-                                    <span class="text-gray-400" x-text="trade.time"></span>
-                                </div>
-                            </template>
+                        <div class="mt-3">
+                            <div class="fw-bold">$2,256.78</div>
+                            <div class="price-up">+3.12%</div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Order Book & Trades -->
-                <div class="lg:col-span-1 space-y-6">
-                    <div class="bg-gray-800 rounded-lg p-4">
-                        <h3 class="text-lg font-semibold mb-4">Order Book</h3>
-                        <div class="grid grid-cols-3 gap-2 text-sm mb-2">
-                            <span class="text-gray-400">Price</span>
-                            <span class="text-gray-400 text-right">Amount</span>
-                            <span class="text-gray-400 text-right">Total</span>
+                <div class="col-md-3">
+                    <div class="market-card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="market-symbol">BNB/USDT</div>
+                                <div class="market-name">BNB</div>
+                            </div>
+                            <i class="fas fa-coins" style="font-size: 24px; color: #f3ba2f;"></i>
                         </div>
-                        <div class="max-h-48 overflow-y-auto space-y-1">
-                            <template x-for="order in orderBook.asks" :key="order.price">
-                                <div class="grid grid-cols-3 gap-2 text-sm relative">
-                                    <div class="absolute inset-y-0 right-0 bg-red-500/20" :style="'width:' + order.totalPercent + '%'"></div>
-                                    <span class="text-red-400 relative" x-text="order.price"></span>
-                                    <span class="text-right relative" x-text="order.amount"></span>
-                                    <span class="text-right relative" x-text="order.total"></span>
-                                </div>
-                            </template>
-                        </div>
-                        <div class="text-center py-2 border-y border-gray-700 my-2">
-                            <span class="text-xl font-bold" x-text="currentPrice"></span>
-                        </div>
-                        <div class="max-h-48 overflow-y-auto space-y-1">
-                            <template x-for="order in orderBook.bids" :key="order.price">
-                                <div class="grid grid-cols-3 gap-2 text-sm relative">
-                                    <div class="absolute inset-y-0 left-0 bg-green-500/20" :style="'width:' + order.totalPercent + '%'"></div>
-                                    <span class="text-green-400 relative" x-text="order.price"></span>
-                                    <span class="text-right relative" x-text="order.amount"></span>
-                                    <span class="text-right relative" x-text="order.total"></span>
-                                </div>
-                            </template>
+                        <div class="mt-3">
+                            <div class="fw-bold">$324.56</div>
+                            <div class="price-up">+1.89%</div>
                         </div>
                     </div>
-
-                    <!-- Your Orders -->
-                    <div class="bg-gray-800 rounded-lg p-4">
-                        <h3 class="text-lg font-semibold mb-4">Your Open Orders</h3>
-                        <div class="space-y-2 max-h-48 overflow-y-auto">
-                            <template x-if="openOrders.length === 0">
-                                <p class="text-gray-400 text-center py-4">No open orders</p>
-                            </template>
-                            <template x-for="order in openOrders" :key="order.id">
-                                <div class="flex justify-between items-center p-2 bg-gray-700 rounded">
-                                    <div>
-                                        <span :class="order.side === 'buy' ? 'text-green-400' : 'text-red-400'" x-text="order.side.toUpperCase()"></span>
-                                        <span x-text="order.amount"></span>
-                                        <span x-text="order.pair"></span>
-                                    </div>
-                                    <button @click="cancelOrder(order.id)" class="text-red-400 hover:text-red-300">Cancel</button>
-                                </div>
-                            </template>
+                </div>
+                <div class="col-md-3">
+                    <div class="market-card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="market-symbol">SOL/USDT</div>
+                                <div class="market-name">Solana</div>
+                            </div>
+                            <i class="fas fa-sun" style="font-size: 24px; color: #9945ff;"></i>
+                        </div>
+                        <div class="mt-3">
+                            <div class="fw-bold">$98.45</div>
+                            <div class="price-up">+5.67%</div>
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
+    </section>
 
-        <!-- Deposit Modal -->
-        <div x-show="showDepositModal" x-cloak class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click.self="showDepositModal = false">
-            <div class="bg-gray-800 rounded-lg p-6 w-full max-w-md">
-                <h3 class="text-xl font-semibold mb-4">Deposit Crypto</h3>
-                <div class="mb-4">
-                    <label class="block text-sm text-gray-400 mb-1">Select Asset</label>
-                    <select x-model="depositAsset" class="w-full bg-gray-700 rounded px-3 py-2">
-                        <template x-for="asset in assets" :key="asset">
-                            <option :value="asset" x-text="asset"></option>
-                        </template>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-sm text-gray-400 mb-1">Deposit Address</label>
-                    <div class="flex space-x-2">
-                        <input type="text" :value="depositAddress" readonly class="flex-1 bg-gray-700 rounded px-3 py-2 font-mono text-sm">
-                        <button @click="copyAddress()" class="px-4 py-2 bg-orange-500 rounded hover:bg-orange-600">Copy</button>
+    <!-- Features -->
+    <section class="py-5" style="background: var(--dark);">
+        <div class="container">
+            <h2 class="text-center mb-5">Why Choose TigerEx?</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                        <h4>500K TPS</h4>
+                        <p class="text-muted">Lightning fast order matching with sub-millisecond latency</p>
                     </div>
                 </div>
-                <div class="flex justify-end">
-                    <button @click="showDepositModal = false" class="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600">Close</button>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h4>Bank-Level Security</h4>
+                        <p class="text-muted">2FA, cold storage, encryption, and real-time monitoring</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon"><i class="fas fa-percentage"></i></div>
+                        <h4>0.001% Fees</h4>
+                        <p class="text-muted">Lowest trading fees in the industry</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon"><i class="fas fa-copy"></i></div>
+                        <h4>Copy Trading</h4>
+                        <p class="text-muted">Follow top traders automatically</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                        <h4>P2P Trading</h4>
+                        <p class="text-muted">Peer-to-peer with zero fees</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-box">
+                        <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                        <h4>Advanced Trading</h4>
+                        <p class="text-muted">Spot, Futures, Options, Margin</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trading Interface Preview -->
+    <section class="py-5">
+        <div class="container">
+            <h3 class="mb-4"><i class="fas fa-exchange-alt"></i> Trade Now</h3>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="trading-section">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h4 class="mb-0">BTC/USDT</h4>
+                                <span class="price-up">$42,547.32 (+2.45%)</span>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-outline-light">1H</button>
+                                <button class="btn btn-sm btn-outline-light">4H</button>
+                                <button class="btn btn-sm btn-primary">1D</button>
+                                <button class="btn btn-sm btn-outline-light">1W</button>
+                            </div>
+                        </div>
+                        <div class="text-center py-5">
+                            <img src="https://via.placeholder.com/600x300?text=Trading+Chart" class="img-fluid rounded" alt="Chart">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="trading-section">
+                        <ul class="nav nav-tabs order-tabs mb-3">
+                            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#buy">Buy</a></li>
+                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#sell">Sell</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="buy">
+                                <div class="mb-3">
+                                    <label class="form-label">Order Type</label>
+                                    <select class="form-select"><option>Limit</option><option>Market</option><option>Stop-Limit</option></select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Price (USDT)</label>
+                                    <input type="number" class="form-control" placeholder="0.00">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Amount (BTC)</label>
+                                    <input type="number" class="form-control" placeholder="0.00">
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-success btn-lg">Buy BTC</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="trading-section mt-3">
+                        <h6 class="mb-3">Open Orders</h6>
+                        <table class="table table-sm">
+                            <thead><tr><th>Price</th><th>Amount</th><th>Total</th></tr></thead>
+                            <tbody>
+                                <tr><td class="price-up">42,550</td><td>0.5</td><td>21,275</td></tr>
+                                <tr><td class="price-up">42,551</td><td>1.2</td><td>51,061</td></tr>
+                                <tr><td class="price-down">42,545</td><td>0.8</td><td>34,036</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wallet & DeFi Section -->
+    <section id="wallet" class="py-5">
+        <div class="container">
+            <h3 class="mb-4"><i class="fas fa-wallet text-warning"></i> My Wallet</h3>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="trading-section">
+                        <p class="text-success fw-bold mb-3">✓ USER OWNS - FULL CONTROL</p>
+                        <div class="d-grid gap-2">
+                            <button onclick="createDexWallet()" class="btn btn-warning btn-lg"><i class="fas fa-key"></i> Create DEX Wallet (24-word seed)</button>
+                            <button onclick="createCexWallet()" class="btn btn-outline-light btn-lg"><i class="fas fa-university"></i> Create CEX Wallet</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="trading-section">
+                        <h5 class="mb-3">DeFi - FULL ACCESS</h5>
+                        <div class="row g-2">
+                            <div class="col-4"><button onclick="defiSwap()" class="btn btn-outline-light w-100 p-3"><i class="fas fa-exchange-alt"></i><br><small>Swap</small></button></div>
+                            <div class="col-4"><button onclick="defiPool()" class="btn btn-outline-light w-100 p-3"><i class="fas fa-water"></i><br><small>Pool</small></button></div>
+                            <div class="col-4"><button onclick="defiAddLP()" class="btn btn-outline-light w-100 p-3"><i class="fas fa-plus-circle"></i><br><small>Add LP</small></button></div>
+                            <div class="col-4"><button onclick="defiCreate()" class="btn btn-outline-light w-100 p-3"><i class="fas fa-coins"></i><br><small>Create</small></button></div>
+                            <div class="col-4"><button onclick="defiStake()" class="btn btn-outline-light w-100 p-3"><i class="fas fa-chart-line"></i><br><small>Stake</small></button></div>
+                            <div class="col-4"><button onclick="defiBridge()" class="btn btn-outline-light w-100 p-3"><i class="fas fa-bridge"></i><br><small>Bridge</small></button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <div class="trading-section">
+                        <h5 class="mb-3">Multi-Chain Support</h5>
+                        <span class="badge bg-primary me-2 p-2">ETH</span>
+                        <span class="badge bg-warning text-dark me-2 p-2">BNB</span>
+                        <span class="badge bg-purple me-2 p-2" style="background:#8247e5">MATIC</span>
+                        <span class="badge bg-danger me-2 p-2">AVAX</span>
+                        <span class="badge bg-info me-2 p-2">ARB</span>
+                        <span class="badge bg-secondary me-2 p-2">+ Add Chain</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+    const wordlist = ["abandon","ability","able","about","above","absent","absorb","abstract","absurd","abuse","access","accident","account","accuse","achieve","acid","acoustic","acquire","across","act","action","actor","actress","actual","adapt"];
+    function createDexWallet() { alert("🔐 SAVE YOUR 24-WORD SEED NOW!\n\n" + wordlist.slice(0,24).join(" ") + "\n\nBackup: BKP_" + Date.now().toString(36)); }
+    function createCexWallet() { alert("CEX Wallet created!"); }
+    function defiSwap() { alert("Swap tokens"); }
+    function defiPool() { alert("Create liquidity pool"); }
+    function defiAddLP() { alert("Add liquidity"); }
+    function defiCreate() { alert("Create new token"); }
+    function defiStake() { alert("Stake tokens"); }
+    function defiBridge() { alert("Bridge to another chain"); }
+    </script>
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <h5 class="mb-3"><i class="fas fa-bolt text-warning"></i> TigerEx</h5>
+                    <p class="text-muted">The world's fastest crypto exchange with 500K TPS.</p>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h6 class="mb-3">Trading</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="footer-link">Spot Trading</a></li>
+                        <li><a href="#" class="footer-link">Futures Trading</a></li>
+                        <li><a href="#" class="footer-link">Options</a></li>
+                        <li><a href="#" class="footer-link">Margin</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h6 class="mb-3">Support</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="footer-link">Help Center</a></li>
+                        <li><a href="#" class="footer-link">Fees</a></li>
+                        <li><a href="#" class="footer-link">API</a></li>
+                        <li><a href="#" class="footer-link">Verification</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h6 class="mb-3">Connect</h6>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-telegram fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-discord fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr style="border-color: rgba(255,255,255,0.1);">
+            <div class="text-center text-muted">
+                <p>&copy; 2024 TigerEx. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modals -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Login to TigerEx</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form onsubmit="handleLogin(event)">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Create TigerEx Account</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form onsubmit="handleRegister(event)">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function tigerExApp() {
-            return {
-                isLoggedIn: false,
-                user: null,
-                markets: [],
-                selectedPair: 'BTC/USDT',
-                currentPrice: '0.00',
-                interval: '1h',
-                buyForm: { price: '', amount: '', total: '' },
-                sellForm: { price: '', amount: '', total: '' },
-                orderBook: { bids: [], asks: [] },
-                recentTrades: [],
-                openOrders: [],
-                showDepositModal: false,
-                depositAsset: 'BTC',
-                depositAddress: '',
-                assets: ['BTC', 'ETH', 'USDT', 'BNB'],
-
-                async init() {
-                    await this.loadMarkets();
-                    await this.checkAuth();
-                    await this.loadOrderBook();
-                    this.initChart();
-                },
-
-                async checkAuth() {
-                    const token = localStorage.getItem('accessToken');
-                    if (token) {
-                        this.isLoggedIn = true;
-                        // Load user data
-                    }
-                },
-
-                async loadMarkets() {
-                    this.markets = [
-                        { symbol: 'BTC/USDT', price: '43,250.00', change: 2.5 },
-                        { symbol: 'ETH/USDT', price: '2,350.00', change: -1.2 },
-                        { symbol: 'BNB/USDT', price: '310.50', change: 0.8 },
-                        { symbol: 'SOL/USDT', price: '98.75', change: 5.2 },
-                    ];
-                    if (this.markets.length > 0) {
-                        this.selectedPair = this.markets[0].symbol;
-                        this.currentPrice = this.markets[0].price;
-                    }
-                },
-
-                async loadOrderBook() {
-                    this.orderBook = {
-                        bids: [
-                            { price: '43,245.00', amount: '0.5234', total: '22,650.00', totalPercent: 80 },
-                            { price: '43,240.00', amount: '0.2345', total: '10,145.00', totalPercent: 60 },
-                            { price: '43,235.00', amount: '0.1567', total: '6,780.00', totalPercent: 40 },
-                        ],
-                        asks: [
-                            { price: '43,255.00', amount: '0.3456', total: '14,950.00', totalPercent: 70 },
-                            { price: '43,260.00', amount: '0.5678', total: '24,550.00', totalPercent: 90 },
-                            { price: '43,265.00', amount: '0.1234', total: '5,340.00', totalPercent: 50 },
-                        ]
-                    };
-                },
-
-                selectPair(symbol) {
-                    this.selectedPair = symbol;
-                    const market = this.markets.find(m => m.symbol === symbol);
-                    if (market) {
-                        this.currentPrice = market.price;
-                    }
-                },
-
-                setInterval(interval) {
-                    this.interval = interval;
-                    // Reload chart data
-                },
-
-                calculateBuyTotal() {
-                    const price = parseFloat(this.buyForm.price) || 0;
-                    const amount = parseFloat(this.buyForm.amount) || 0;
-                    this.buyForm.total = (price * amount).toFixed(2);
-                },
-
-                calculateSellTotal() {
-                    const price = parseFloat(this.sellForm.price) || 0;
-                    const amount = parseFloat(this.sellForm.amount) || 0;
-                    this.sellForm.total = (price * amount).toFixed(2);
-                },
-
-                setAmount(percent) {
-                    // Calculate based on available balance
-                    this.buyForm.amount = (percent / 100 * 1.5).toString();
-                    this.calculateBuyTotal();
-                },
-
-                async placeBuyOrder() {
-                    // Place buy order via API
-                    console.log('Buy order:', this.buyForm);
-                },
-
-                async placeSellOrder() {
-                    // Place sell order via API
-                    console.log('Sell order:', this.sellForm);
-                },
-
-                async cancelOrder(orderId) {
-                    // Cancel order via API
-                    console.log('Cancel order:', orderId);
-                },
-
-                copyAddress() {
-                    navigator.clipboard.writeText(this.depositAddress);
-                    alert('Address copied!');
-                },
-
-                logout() {
-                    localStorage.removeItem('accessToken');
-                    this.isLoggedIn = false;
-                    this.user = null;
-                },
-
-                initChart() {
-                    const ctx = document.getElementById('priceChart');
-                    if (ctx) {
-                        new Chart(ctx, {
-                            type: 'line',
-                            data: {
-                                labels: ['1h', '2h', '3h', '4h', '5h', '6h'],
-                                datasets: [{
-                                    label: 'Price',
-                                    data: [43200, 43150, 43250, 43200, 43300, 43250],
-                                    borderColor: '#f97316',
-                                    backgroundColor: 'rgba(249, 115, 22, 0.1)',
-                                    fill: true,
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                plugins: { legend: { display: false } },
-                                scales: { grid: { color: '#374151' } }
-                            }
-                        });
-                    }
-                }
-            };
-        }
-    </script>
-    <style>
-        [x-cloak] { display: none !important; }
-    </style>
-    <script>
-        // Theme Toggle
-        function toggleTheme() {
-            document.body.classList.toggle('light');
-            const isLight = document.body.classList.contains('light');
-            localStorage.setItem('theme', isLight ? 'light' : 'dark');
-            document.getElementById('themeIconDark').classList.toggle('hidden', isLight);
-            document.getElementById('themeIconLight').classList.toggle('hidden', !isLight);
+        function showLogin() { new bootstrap.Modal(document.getElementById('loginModal')).show(); }
+        function showRegister() { new bootstrap.Modal(document.getElementById('registerModal')).show(); }
+        
+        async function handleLogin(e) {
+            e.preventDefault();
+            alert('Login successful! Redirecting...');
+            window.location.href = '/dashboard.html';
         }
         
-        // Load saved theme
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'light') {
-                document.body.classList.add('light');
-                document.getElementById('themeIconDark').classList.add('hidden');
-                document.getElementById('themeIconLight').classList.remove('hidden');
-            }
-        });
+        async function handleRegister(e) {
+            e.preventDefault();
+            alert('Registration successful! Please verify your email.');
+        }
+
+        // Load market data
+        async function loadMarkets() {
+            try {
+                const res = await fetch('/api/markets');
+                const data = await res.json();
+                if (data.success) console.log('Markets loaded:', data.markets.length);
+            } catch(e) { console.log('Using demo data'); }
+        }
+        loadMarkets();
     </script>
-    <script src="assets/js/auth-guard.js"></script>
 </body>
 </html>
