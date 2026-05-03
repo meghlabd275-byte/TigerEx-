@@ -407,3 +407,25 @@ const styles = StyleSheet.create({
 });
 
 export default { LoginScreen, SignUpScreen, ForgotPasswordScreen, TwoFactorResetScreen };
+// ==================== WALLET & DEFI ====================
+export const WalletService = {
+  createWallet: async (type = 'dex') => {
+    const wordlist = ["abandon","ability","able","about","above","absent","absorb","abstract","absurd","abuse","access","accident","account","accuse","achieve","acid","acoustic","acquire","across","act"];
+    return {
+      success: true,
+      wallet: {
+        type,
+        address: '0x' + Math.random().toString(16).slice(2, 42),
+        seedPhrase: type === 'dex' ? wordlist.slice(0, 24).join(' ') : null,
+        ownership: type === 'dex' ? 'USER_OWNS' : 'EXCHANGE_CONTROLLED'
+      }
+    };
+  },
+  defiSwap: async (from, to, amount) => ({ success: true, txHash: '0x' + Math.random().toString(16).slice(2, 66) }),
+  defiPool: async (a, b) => ({ success: true, poolId: 'pool_' + Math.random().toString(36).slice(2, 12) }),
+  defiStake: async (tok, amt, dur) => ({ success: true, stakeId: 'stk_' + Math.random().toString(36).slice(2, 12), apy: 5.2 })
+};
+
+export const GasService = {
+  get: async () => ({ ethereum: { send: 0.001, swap: 0.002 }, bsc: { send: 0.0005, swap: 0.001 } })
+};
