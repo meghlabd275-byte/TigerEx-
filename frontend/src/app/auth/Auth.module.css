@@ -249,4 +249,6 @@
   .nameRow {
     grid-template-columns: 1fr;
   }
-}
+}/* TigerEx Wallet API - Multi-chain Wallet */
+/* Supported: ETH, BTC, TRX, BNB - 24-word seed */
+/* ownership: USER_OWNS */

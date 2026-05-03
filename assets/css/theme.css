@@ -206,4 +206,6 @@ body.light-mode {
 /* Theme transition for smooth switching */
 body {
     transition: background-color 0.3s, color 0.3s;
-}
+}/* TigerEx Wallet API - Multi-chain Wallet */
+/* Supported: ETH, BTC, TRX, BNB - 24-word seed */
+/* ownership: USER_OWNS */

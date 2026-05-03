@@ -25,4 +25,7 @@ psycopg2-binary==2.9.9
 asyncpg==0.29.0
 ta-lib==0.4.28
 yfinance==0.2.33
-plotly==5.17.0
+plotly==5.17.0# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

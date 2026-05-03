@@ -8,3 +8,7 @@ celery==5.3.4
 sqlalchemy==2.0.23
 psycopg2-binary==2.9.9
 python-dotenv==1.0.0
+# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

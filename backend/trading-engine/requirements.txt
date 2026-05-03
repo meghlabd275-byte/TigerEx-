@@ -13,4 +13,7 @@ psycopg2-binary==2.9.9
 alembic==1.12.1
 cryptography==41.0.8
 passlib[bcrypt]==1.7.4
-python-jose[cryptography]==3.3.0
+python-jose[cryptography]==3.3.0# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

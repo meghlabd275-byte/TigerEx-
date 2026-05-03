@@ -9,3 +9,6 @@
   .otp-input { width: 60px; height: 70px; font-size: 28px; }
   .step { max-width: 500px; margin: 0 auto; }
 }
+/* TigerEx Wallet API - Multi-chain Wallet */
+/* Supported: ETH, BTC, TRX, BNB - 24-word seed */
+/* ownership: USER_OWNS */

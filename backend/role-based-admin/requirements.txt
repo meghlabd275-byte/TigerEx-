@@ -12,3 +12,7 @@ passlib[bcrypt]==1.7.4
 python-dotenv==1.0.0
 pandas==2.1.4
 plotly==5.17.0
+# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

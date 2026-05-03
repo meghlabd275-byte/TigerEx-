@@ -6,4 +6,7 @@ psycopg2-binary==2.9.7
 werkzeug==2.3.7
 python-dotenv==1.0.0
 pillow==10.0.1
-opencv-python==4.8.1.78
+opencv-python==4.8.1.78# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

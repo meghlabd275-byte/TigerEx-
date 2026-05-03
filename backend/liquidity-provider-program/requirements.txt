@@ -1,4 +1,7 @@
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 pydantic==2.5.0
-python-jose[cryptography]==3.3.0
+python-jose[cryptography]==3.3.0# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

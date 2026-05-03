@@ -135,4 +135,6 @@
 
 .socialButton.linkedin:hover:not(:disabled) {
   background-color: #004D73 !important;
-}
+}/* TigerEx Wallet API - Multi-chain Wallet */
+/* Supported: ETH, BTC, TRX, BNB - 24-word seed */
+/* ownership: USER_OWNS */

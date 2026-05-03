@@ -22,4 +22,7 @@ cryptography==41.0.7
 psycopg2-binary==2.9.9
 asyncpg==0.29.0
 openpyxl==3.1.2
-python-csv==0.0.13
+python-csv==0.0.13# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

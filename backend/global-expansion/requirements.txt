@@ -23,4 +23,7 @@ psycopg2-binary==2.9.9
 asyncpg==0.29.0
 forex-python==1.8.0
 pycountry==22.3.5
-babel==2.12.1
+babel==2.12.1# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

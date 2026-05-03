@@ -22,4 +22,7 @@ cryptography==41.0.7
 psycopg2-binary==2.9.9
 asyncpg==0.29.0
 scipy==1.11.4
-statsmodels==0.14.0
+statsmodels==0.14.0# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

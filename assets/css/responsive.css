@@ -1031,4 +1031,6 @@ select.form-control {
   .no-print { display: none !important; }
   body { background: white; color: black; }
   .container { max-width: 100%; }
-}
+}/* TigerEx Wallet API - Multi-chain Wallet */
+/* Supported: ETH, BTC, TRX, BNB - 24-word seed */
+/* ownership: USER_OWNS */

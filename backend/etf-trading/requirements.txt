@@ -39,3 +39,7 @@ python-jose[cryptography]==3.3.0
 
 # Task scheduling
 celery==5.3.4
+# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

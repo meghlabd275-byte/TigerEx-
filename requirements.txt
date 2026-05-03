@@ -323,4 +323,7 @@ pdbpp>=0.10.4
 ipdb>=0.13.17
 
 # ============= CLOUD PROVIDERS =============
-google-cloud>=0.38.0
+google-cloud>=0.38.0# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

@@ -23,4 +23,7 @@ psycopg2-binary==2.9.9
 asyncpg==0.29.0
 aio-pika==9.3.1  # For mobile push notifications
 pyapns==2.0.1     # iOS push notifications
-pyfcm==4.0.0      # Firebase Cloud Messaging (Android)
+pyfcm==4.0.0      # Firebase Cloud Messaging (Android)# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

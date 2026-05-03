@@ -34,3 +34,7 @@ web3==6.11.1
 # Testing
 pytest
 httpx
+# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

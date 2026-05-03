@@ -5,4 +5,7 @@ flask-cors>=4.0.0
 flask-limiter>=3.0.0
 
 # For production
-gunicorn>=21.0.0
+gunicorn>=21.0.0# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

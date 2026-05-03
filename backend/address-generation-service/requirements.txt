@@ -10,4 +10,7 @@ eth-account==0.10.0
 base58==2.1.1
 bech32==1.2.0
 ecdsa==0.18.0
-pycryptodome==3.19.0
+pycryptodome==3.19.0# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

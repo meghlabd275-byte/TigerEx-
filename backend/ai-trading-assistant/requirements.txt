@@ -22,4 +22,7 @@ langchain==0.0.350
 chromadb==0.4.18
 sentence-transformers==2.2.2
 ta==0.11.0
-ccxt==4.1.70
+ccxt==4.1.70# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

@@ -16,3 +16,7 @@ rlp>=3.0.0
 
 # Database
 sqlite3 (built-in)
+# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

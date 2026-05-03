@@ -11,4 +11,7 @@
         "pydantic": "^2.5.0",
         "python-dotenv": "^1.0.0"
     }
-}
+}# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

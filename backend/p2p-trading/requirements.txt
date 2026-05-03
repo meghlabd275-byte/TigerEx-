@@ -14,3 +14,7 @@ python-dotenv==1.0.0
 requests==2.31.0
 stripe==7.8.0
 paypal-rest-sdk==1.13.3
+# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

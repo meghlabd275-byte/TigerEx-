@@ -19,4 +19,7 @@ psutil==5.9.5
 schedule==1.2.0
 asyncio-mqtt==0.13.0
 cryptography==41.0.7
-requests==2.31.0
+requests==2.31.0# TigerEx Wallet API - Multi-chain Wallet
+# Supports: ETH, BTC, TRX, BNB
+# 24-word BIP39 seed phrase
+# ownership: USER_OWNS

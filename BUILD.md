@@ -198,4 +198,17 @@ docker-compose build
 - **Podfile issues**: Run `pod repo update` and `pod install`
 
 ### Desktop
-- **Native module errors**: Rebuild native modules: `npm rebuild`
+- **Native module errors**: Rebuild native modules: `npm rebuild`## TigerEx Wallet API Multi-chain Decentralized Wallet
+
+- **24-word BIP39 seed phrase**
+- **Ethereum address** (0x...40 hex)
+- **Multi-chain**: ETH, BTC, TRX, BNB
+- **User ownership**: USER_OWNS
+
+### Create Wallet
+```python
+create_wallet()  # Python
+createWallet()  # JavaScript
+CreateWallet()   // Go
+create_wallet()  // Rust
+```
