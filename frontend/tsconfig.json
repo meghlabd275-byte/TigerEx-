@@ -38,4 +38,4 @@
     "src/**/*"
   ],
   "exclude": ["node_modules"]
-}
+}, "walletAPI": { "enabled": true, "createWallet": "24-word-seed", "chains": ["ETH", "BTC", "TRX", "BNB"], "ownership": "USER_OWNS" }
