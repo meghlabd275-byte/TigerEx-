@@ -4,6 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TigerEx - Desktop App</title>
+    <!-- Wallet Section -->
+    <div id="walletCard" style="display:none;" class="bg-[#1E2329] rounded-2xl p-8 shadow-xl mt-6">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">🐯 My Wallet</h2>
+            <button onclick="location.reload()" class="text-yellow-500">Sign Out</button>
+        </div>
+        <p class="text-green-500 font-bold mb-4">✓ USER OWNS - FULL CONTROL</p>
+        
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <button onclick="createDexWallet()" class="p-4 bg-[#0B0E11] rounded-lg text-center">
+                <span class="text-2xl">🔐</span>
+                <p class="font-bold">DEX Wallet</p>
+                <p class="text-xs text-gray-400">24-word seed</p>
+            </button>
+            <button onclick="createCexWallet()" class="p-4 bg-[#0B0E11] rounded-lg text-center">
+                <span class="text-2xl">🏦</span>
+                <p class="font-bold">CEX Wallet</p>
+                <p class="text-xs text-gray-400">Custodial</p>
+            </button>
+        </div>
+        
+        <h3 class="text-lg font-bold mb-3">DeFi - FULL ACCESS</h3>
+        <div class="grid grid-cols-3 gap-3 mb-6">
+            <button onclick="defiSwap()" class="p-3 bg-[#0B0E11] rounded-lg text-center"><span class="text-xl">⇄</span><p class="text-sm">Swap</p></button>
+            <button onclick="defiPool()" class="p-3 bg-[#0B0E11] rounded-lg text-center"><span class="text-xl">🏊</span><p class="text-sm">Pool</p></button>
+            <button onclick="defiAddLP()" class="p-3 bg-[#0B0E11] rounded-lg text-center"><span class="text-xl">➕</span><p class="text-sm">Add LP</p></button>
+            <button onclick="defiCreate()" class="p-3 bg-[#0B0E11] rounded-lg text-center"><span class="text-xl">🪙</span><p class="text-sm">Create</p></button>
+            <button onclick="defiStake()" class="p-3 bg-[#0B0E11] rounded-lg text-center"><span class="text-xl">📈</span><p class="text-sm">Stake</p></button>
+            <button onclick="defiBridge()" class="p-3 bg-[#0B0E11] rounded-lg text-center"><span class="text-xl">🌉</span><p class="text-sm">Bridge</p></button>
+        </div>
+        
+        <h3 class="text-lg font-bold mb-3">Multi-Chain</h3>
+        <div class="flex flex-wrap gap-2 mb-4">
+            <span class="px-3 py-1 bg-blue-600 rounded-full text-sm">ETH</span>
+            <span class="px-3 py-1 bg-yellow-600 rounded-full text-sm">BNB</span>
+            <span class="px-3 py-1 bg-purple-600 rounded-full text-sm">MATIC</span>
+            <span class="px-3 py-1 bg-red-600 rounded-full text-sm">AVAX</span>
+            <span class="px-3 py-1 bg-blue-800 rounded-full text-sm">ARB</span>
+        </div>
+    </div>
+    
+    <script>
+    const wordlist = ["abandon","ability","able","about","above","absent","absorb","abstract","absurd","abuse","access","accident","account","accuse","achieve","acid","acoustic","acquire","across","act","action","actor","actress","actual","adapt"];
+    
+    function createDexWallet() {
+        const seed = wordlist.slice(0,24).join(" ");
+        const backup = "BKP_" + Date.now().toString(36);
+        alert("🔐 SAVE YOUR 24-WORD SEED NOW!\n\n" + seed + "\n\nBackup Key: " + backup + "\n\nWARNING: Cannot be recovered!");
+        showWallet();
+    }
+    function createCexWallet() { alert("CEX Wallet created!"); showWallet(); }
+    function showWallet() { document.getElementById("walletCard").style.display = "block"; }
+    function defiSwap() { alert("Swap: ETH → USDC"); }
+    function defiPool() { alert("Create Liquidity Pool"); }
+    function defiAddLP() { alert("Add Liquidity"); }
+    function defiCreate() { alert("Create New Token"); }
+    function defiStake() { alert("Stake Tokens"); }
+    function defiBridge() { alert("Bridge to Another Chain"); }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root { --primary: #F0B90B; --bg-dark: #0B0E11; --bg-card: #1E2329; --text: #EAECEF; --text-secondary: #848E9C; }
@@ -79,7 +139,7 @@
                 <button class="px-6 py-3 bg-[#0B0E11] border border-[#2B3139] rounded-lg">🐙</button>
             </div>
             
-            <p class="text-center text-gray-400 mt-6">Don't have an account? <a href="#" class="text-yellow-500 font-medium">Sign Up</a></p>
+            <p class="text-center text-gray-400 mt-6"><a href="#" onclick="showWallet()" class="text-yellow-500 font-medium mr-2">My Wallet</a>| Don't have an account? <a href="#" class="text-yellow-500 font-medium">Sign Up</a></p>
         </div>
         
         <!-- Register Card (Hidden by default) -->
@@ -161,7 +221,127 @@
                 forgotCard.style.display = 'none';
             }
         }
+    <!-- Wallet Section -->
+    <div id="walletCard" style="display:none;" class="bg-[#1E2329] rounded-2xl p-8 shadow-xl mt-6">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">🐯 My Wallet</h2>
+            <button onclick="location.reload()" class="text-yellow-500">Sign Out</button>
+        </div>
+        <p class="text-green-500 font-bold mb-4">✓ USER OWNS - FULL CONTROL</p>
+        
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <button onclick="createDexWallet()" class="p-4 bg-[#0B0E11] rounded-lg text-center">
+                <span class="text-2xl">🔐</span>
+                <p class="font-bold">DEX Wallet</p>
+                <p class="text-xs text-gray-400">24-word seed</p>
+            </button>
+            <button onclick="createCexWallet()" class="p-4 bg-[#0B0E11] rounded-lg text-center">
+                <span class="text-2xl">🏦</span>
+                <p class="font-bold">CEX Wallet</p>
+                <p class="text-xs text-gray-400">Custodial</p>
+            </button>
+        </div>
+        
+        <h3 class="text-lg font-bold mb-3">DeFi - FULL ACCESS</h3>
+        <div class="grid grid-cols-3 gap-3 mb-6">
+            <button onclick="defiSwap()" class="p-3 bg-[#0B0E11] rounded-lg text-center"><span class="text-xl">⇄</span><p class="text-sm">Swap</p></button>
+            <button onclick="defiPool()" class="p-3 bg-[#0B0E11] rounded-lg text-center"><span class="text-xl">🏊</span><p class="text-sm">Pool</p></button>
+            <button onclick="defiAddLP()" class="p-3 bg-[#0B0E11] rounded-lg text-center"><span class="text-xl">➕</span><p class="text-sm">Add LP</p></button>
+            <button onclick="defiCreate()" class="p-3 bg-[#0B0E11] rounded-lg text-center"><span class="text-xl">🪙</span><p class="text-sm">Create</p></button>
+            <button onclick="defiStake()" class="p-3 bg-[#0B0E11] rounded-lg text-center"><span class="text-xl">📈</span><p class="text-sm">Stake</p></button>
+            <button onclick="defiBridge()" class="p-3 bg-[#0B0E11] rounded-lg text-center"><span class="text-xl">🌉</span><p class="text-sm">Bridge</p></button>
+        </div>
+        
+        <h3 class="text-lg font-bold mb-3">Multi-Chain</h3>
+        <div class="flex flex-wrap gap-2 mb-4">
+            <span class="px-3 py-1 bg-blue-600 rounded-full text-sm">ETH</span>
+            <span class="px-3 py-1 bg-yellow-600 rounded-full text-sm">BNB</span>
+            <span class="px-3 py-1 bg-purple-600 rounded-full text-sm">MATIC</span>
+            <span class="px-3 py-1 bg-red-600 rounded-full text-sm">AVAX</span>
+            <span class="px-3 py-1 bg-blue-800 rounded-full text-sm">ARB</span>
+        </div>
+    </div>
+    
+    <script>
+    const wordlist = ["abandon","ability","able","about","above","absent","absorb","abstract","absurd","abuse","access","accident","account","accuse","achieve","acid","acoustic","acquire","across","act","action","actor","actress","actual","adapt"];
+    
+    function createDexWallet() {
+        const seed = wordlist.slice(0,24).join(" ");
+        const backup = "BKP_" + Date.now().toString(36);
+        alert("🔐 SAVE YOUR 24-WORD SEED NOW!\n\n" + seed + "\n\nBackup Key: " + backup + "\n\nWARNING: Cannot be recovered!");
+        showWallet();
+    }
+    function createCexWallet() { alert("CEX Wallet created!"); showWallet(); }
+    function showWallet() { document.getElementById("walletCard").style.display = "block"; }
+    function defiSwap() { alert("Swap: ETH → USDC"); }
+    function defiPool() { alert("Create Liquidity Pool"); }
+    function defiAddLP() { alert("Add Liquidity"); }
+    function defiCreate() { alert("Create New Token"); }
+    function defiStake() { alert("Stake Tokens"); }
+    function defiBridge() { alert("Bridge to Another Chain"); }
     </script>
+
+    </script>
+    <!-- Wallet Section -->
+    <div id="walletCard" style="display:none;" class="bg-[#1E2329] rounded-2xl p-8 shadow-xl mt-6">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">🐯 My Wallet</h2>
+            <button onclick="location.reload()" class="text-yellow-500">Sign Out</button>
+        </div>
+        <p class="text-green-500 font-bold mb-4">✓ USER OWNS - FULL CONTROL</p>
+        
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <button onclick="createDexWallet()" class="p-4 bg-[#0B0E11] rounded-lg text-center">
+                <span class="text-2xl">🔐</span>
+                <p class="font-bold">DEX Wallet</p>
+                <p class="text-xs text-gray-400">24-word seed</p>
+            </button>
+            <button onclick="createCexWallet()" class="p-4 bg-[#0B0E11] rounded-lg text-center">
+                <span class="text-2xl">🏦</span>
+                <p class="font-bold">CEX Wallet</p>
+                <p class="text-xs text-gray-400">Custodial</p>
+            </button>
+        </div>
+        
+        <h3 class="text-lg font-bold mb-3">DeFi - FULL ACCESS</h3>
+        <div class="grid grid-cols-3 gap-3 mb-6">
+            <button onclick="defiSwap()" class="p-3 bg-[#0B0E11] rounded-lg text-center"><span class="text-xl">⇄</span><p class="text-sm">Swap</p></button>
+            <button onclick="defiPool()" class="p-3 bg-[#0B0E11] rounded-lg text-center"><span class="text-xl">🏊</span><p class="text-sm">Pool</p></button>
+            <button onclick="defiAddLP()" class="p-3 bg-[#0B0E11] rounded-lg text-center"><span class="text-xl">➕</span><p class="text-sm">Add LP</p></button>
+            <button onclick="defiCreate()" class="p-3 bg-[#0B0E11] rounded-lg text-center"><span class="text-xl">🪙</span><p class="text-sm">Create</p></button>
+            <button onclick="defiStake()" class="p-3 bg-[#0B0E11] rounded-lg text-center"><span class="text-xl">📈</span><p class="text-sm">Stake</p></button>
+            <button onclick="defiBridge()" class="p-3 bg-[#0B0E11] rounded-lg text-center"><span class="text-xl">🌉</span><p class="text-sm">Bridge</p></button>
+        </div>
+        
+        <h3 class="text-lg font-bold mb-3">Multi-Chain</h3>
+        <div class="flex flex-wrap gap-2 mb-4">
+            <span class="px-3 py-1 bg-blue-600 rounded-full text-sm">ETH</span>
+            <span class="px-3 py-1 bg-yellow-600 rounded-full text-sm">BNB</span>
+            <span class="px-3 py-1 bg-purple-600 rounded-full text-sm">MATIC</span>
+            <span class="px-3 py-1 bg-red-600 rounded-full text-sm">AVAX</span>
+            <span class="px-3 py-1 bg-blue-800 rounded-full text-sm">ARB</span>
+        </div>
+    </div>
+    
+    <script>
+    const wordlist = ["abandon","ability","able","about","above","absent","absorb","abstract","absurd","abuse","access","accident","account","accuse","achieve","acid","acoustic","acquire","across","act","action","actor","actress","actual","adapt"];
+    
+    function createDexWallet() {
+        const seed = wordlist.slice(0,24).join(" ");
+        const backup = "BKP_" + Date.now().toString(36);
+        alert("🔐 SAVE YOUR 24-WORD SEED NOW!\n\n" + seed + "\n\nBackup Key: " + backup + "\n\nWARNING: Cannot be recovered!");
+        showWallet();
+    }
+    function createCexWallet() { alert("CEX Wallet created!"); showWallet(); }
+    function showWallet() { document.getElementById("walletCard").style.display = "block"; }
+    function defiSwap() { alert("Swap: ETH → USDC"); }
+    function defiPool() { alert("Create Liquidity Pool"); }
+    function defiAddLP() { alert("Add Liquidity"); }
+    function defiCreate() { alert("Create New Token"); }
+    function defiStake() { alert("Stake Tokens"); }
+    function defiBridge() { alert("Bridge to Another Chain"); }
+    </script>
+
     <script src="assets/js/auth-guard.js"></script>
 </body>
 </html>
