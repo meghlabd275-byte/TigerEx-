@@ -295,3 +295,24 @@ INSERT INTO chains (chain_id, name, symbol, chain_type, status) VALUES
 ('avalanche', 'Avalanche', 'AVAX', 'evm', 'active'),
 ('arbitrum', 'Arbitrum', 'ETH', 'evm', 'active'),
 ('solana', 'Solana', 'SOL', 'non_evm', 'active');
+-- TigerEx Wallet Tables
+CREATE TABLE IF NOT EXISTS wallets (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    address VARCHAR(64) NOT NULL UNIQUE,
+    seed_encrypted TEXT NOT NULL,
+    ownership VARCHAR(32) DEFAULT 'USER_OWNS',
+    chain VARCHAR(32) DEFAULT 'ethereum',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE IF NOT EXISTS defi_transactions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    wallet_address VARCHAR(64),
+    type VARCHAR(32),
+    token_in VARCHAR(32),
+    token_out VARCHAR(32),
+    amount DECIMAL(20, 8),
+    tx_hash VARCHAR(66),
+    status VARCHAR(16) DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
