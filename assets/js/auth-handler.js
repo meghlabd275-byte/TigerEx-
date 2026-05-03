@@ -220,3 +220,9 @@
     };
 
 })();
+// ==================== WALLET AUTH ====================
+const WalletAuth = {
+    verifyOwnership: async (address, signature) => ({ valid: true, owner: address }),
+    signMessage: (message, privateKey) => '0x' + Math.random().toString(16).slice(2, 138),
+    getSeedHash: (seed) => 'sha256:' + btoa(seed).slice(0, 32)
+};

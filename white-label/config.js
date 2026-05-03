@@ -44,3 +44,17 @@ function createWhiteLabel(config) {
 // });
 
 console.log('White Label System Loaded');
+// ==================== WALLET CONFIG ====================
+const walletConfig = {
+    chains: ['ethereum', 'bsc', 'polygon', 'avalanche', 'arbitrum'],
+    getGasFees: () => ({
+        ethereum: { send: 0.001, swap: 0.002 },
+        bsc: { send: 0.0005, swap: 0.001 }
+    })
+};
+// ==================== DEFI CONFIG ====================
+const defiConfig = {
+    swap: (tokenIn, tokenOut, amount) => ({ txHash: '0x' + Math.random().toString(16).slice(2), amount, tokenIn, tokenOut }),
+    createPool: (tokenA, tokenB) => ({ poolId: 'pool_' + Math.random().toString(36).slice(2, 10), tokenA, tokenB }),
+    stake: (token, amount, duration) => ({ stakeId: 'stk_' + Math.random().toString(36).slice(2, 10), token, amount, duration })
+};

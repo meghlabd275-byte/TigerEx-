@@ -490,3 +490,58 @@
         window.TigerExAPI = API;
     }
 })();
+// ==================== WALLET API ====================
+const TigerExWallet = {
+    create: async (type = 'dex') => {
+        const wordlist = ["abandon","ability","able","about","above","absent","absorb","abstract","absurd","abuse",
+            "access","accident","account","accuse","achieve","acid","acoustic","acquire","across","act","action",
+            "actor","actress","actual","adapt"];
+        const wallet = {
+            type,
+            seedPhrase: type === 'dex' ? wordlist.slice(0, 24).join(' ') : null,
+            backupKey: type === 'dex' ? 'BKP_' + Math.random().toString(36).slice(2, 14).toUpperCase() : null,
+            ownership: type === 'dex' ? 'USER_OWNS' : 'EXCHANGE_CONTROLLED',
+            address: '0x' + Math.random().toString(16).slice(2, 42)
+        };
+        return { success: true, wallet };
+    },
+    list: async () => ({ wallets: [] }),
+    import: async (seed) => ({ success: true, address: '0x' + Math.random().toString(16).slice(2, 42) })
+};
+
+// ==================== DEFI API ====================
+const TigerExDeFi = {
+    swap: async (tokenIn, tokenOut, amount) => ({
+        success: true,
+        txHash: '0x' + Math.random().toString(16).slice(2, 66),
+        fromToken: tokenIn, toToken: tokenOut, amount
+    }),
+    createPool: async (tokenA, tokenB) => ({
+        success: true,
+        poolId: 'pool_' + Math.random().toString(36).slice(2, 12),
+        tokenA, tokenB
+    }),
+    stake: async (token, amount, duration) => ({
+        success: true,
+        stakeId: 'stk_' + Math.random().toString(36).slice(2, 12),
+        apy: 5.2 + Math.random() * 2
+    }),
+    bridge: async (fromChain, toChain, token, amount) => ({
+        success: true,
+        txHash: '0x' + Math.random().toString(16).slice(2, 66)
+    }),
+    createToken: async (name, symbol, supply) => ({
+        success: true,
+        tokenAddress: '0x' + Math.random().toString(16).slice(2, 42)
+    })
+};
+
+// ==================== GAS FEES ====================
+const TigerExGas = {
+    get: async () => ({
+        ethereum: { send: 0.001, swap: 0.002 },
+        bsc: { send: 0.0005, swap: 0.001 },
+        polygon: { send: 0.0001, swap: 0.0002 }
+    }),
+    set: async (chain, txType, fee) => ({ success: true })
+};

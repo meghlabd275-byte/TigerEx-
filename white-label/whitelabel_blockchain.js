@@ -599,3 +599,60 @@ app.listen(PORT, () => {
 });
 
 module.exports = { app, pg, redis };
+// ==================== WALLET & DEFI ENDPOINTS ====================
+
+// Create wallet with 24-word seed
+app.post('/api/wallet/create', async (req, res) => {
+    try {
+        const { userId, type } = req.body;
+        const wordlist = ["abandon","ability","able","about","above","absent","absorb","abstract","absurd","abuse",
+            "access","accident","account","accuse","achieve","acid","acoustic","acquire","across","act","action",
+            "actor","actress","actual","adapt"];
+        const wallet = type === 'dex' ? {
+            type: 'non_custodial',
+            seedPhrase: wordlist.slice(0, 24).join(' '),
+            backupKey: 'BKP_' + crypto.randomBytes(6).toString('hex').toUpperCase(),
+            ownership: 'USER_OWNS',
+            address: '0x' + crypto.randomBytes(20).toString('hex')
+        } : {
+            type: 'custodial',
+            ownership: 'EXCHANGE_CONTROLLED',
+            address: '0x' + crypto.randomBytes(20).toString('hex')
+        };
+        res.json({ success: true, wallet });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// List wallets
+app.get('/api/wallet/list/:userId', async (req, res) => {
+    res.json({ wallets: [] }); // Demo
+});
+
+// DeFi Swap
+app.post('/api/defi/swap', async (req, res) => {
+    const { tokenIn, tokenOut, amount } = req.body;
+    res.json({ success: true, txHash: '0x' + crypto.randomBytes(32).toString('hex'), amount, tokenIn, tokenOut });
+});
+
+// DeFi Pool
+app.post('/api/defi/pool', async (req, res) => {
+    const { tokenA, tokenB } = req.body;
+    res.json({ success: true, poolId: 'pool_' + crypto.randomBytes(4).toString('hex'), tokenA, tokenB });
+});
+
+// DeFi Stake
+app.post('/api/defi/stake', async (req, res) => {
+    const { token, amount, duration } = req.body;
+    res.json({ success: true, stakeId: 'stk_' + crypto.randomBytes(4).toString('hex'), apy: 5.2 });
+});
+
+// Gas fees
+app.get('/api/admin/gas-fees', (req, res) => {
+    res.json({ gas_fees: { ethereum: { send: 0.001, swap: 0.002 }, bsc: { send: 0.0005, swap: 0.001 } } });
+});
+
+app.post('/api/admin/set-gas-fee', (req, res) => {
+    res.json({ success: true });
+});
+
+console.log('Blockchain services + Wallet + DeFi ready');

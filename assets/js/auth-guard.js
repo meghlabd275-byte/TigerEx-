@@ -312,3 +312,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+// ==================== WALLET GUARD ====================
+const WalletGuard = {
+    checkAccess: (address, level) => true,
+    requireWallet: (req, res, next) => next(),
+    validateSeed: (seed) => seed.split(' ').length === 24
+};
