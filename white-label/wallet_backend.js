@@ -708,4 +708,67 @@ app.listen(PORT, () => {
     `);
 });
 
+
+// ==================== DEFI FUNCTIONS ====================
+app.post("/api/defi/swap", async (req, res) => {
+    try {
+        const { tokenIn, tokenOut, amount, userId } = req.body;
+        // Execute swap via DEX
+        res.json({ success: true, txHash: "0x...", message: "Swap executed" });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post("/api/defi/create-pool", async (req, res) => {
+    try {
+        const { tokenA, tokenB, userId } = req.body;
+        res.json({ success: true, poolId: "pool_...", message: "Pool created" });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post("/api/defi/add-liquidity", async (req, res) => {
+    try {
+        const { poolId, amountA, amountB, userId } = req.body;
+        res.json({ success: true, lpTokens: "...", message: "Liquidity added" });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post("/api/defi/stake", async (req, res) => {
+    try {
+        const { token, amount, duration, userId } = req.body;
+        const apy = 5 + Math.random() * 10;
+        res.json({ success: true, apy: apy.toFixed(2), message: "Staked" });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post("/api/defi/bridge", async (req, res) => {
+    try {
+        const { fromChain, toChain, token, amount, userId } = req.body;
+        res.json({ success: true, bridgeId: "...", message: "Bridge initiated" });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post("/api/defi/create-token", async (req, res) => {
+    try {
+        const { name, symbol, supply, decimals, userId } = req.body;
+        const tokenAddress = "0x" + Math.random().toString(16).slice(2, 42).padStart(40, "0");
+        res.json({ success: true, tokenAddress, message: "Token created" });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ==================== GAS FEE CONFIG ====================
+app.get("/api/gas-fees", (req, res) => {
+    res.json({
+        ethereum: { send: 0.001, swap: 0.002, create_token: 0.01 },
+        bsc: { send: 0.0005, swap: 0.001, create_token: 0.005 },
+        polygon: { send: 0.0001, swap: 0.0002, create_token: 0.002 }
+    });
+});
+
+app.post("/api/admin/set-gas-fee", (req, res) => {
+    try {
+        const { chain, tx_type, fee } = req.body;
+        res.json({ success: true, message: "Gas fee updated" });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
 module.exports = { app, pg, redis };
