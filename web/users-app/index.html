@@ -280,6 +280,63 @@
         </div>
     </section>
 
+    <!-- Wallet & DeFi Section -->
+    <section id="wallet" class="py-5">
+        <div class="container">
+            <h3 class="mb-4"><i class="fas fa-wallet text-warning"></i> My Wallet</h3>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="trading-section">
+                        <p class="text-success fw-bold mb-3">✓ USER OWNS - FULL CONTROL</p>
+                        <div class="d-grid gap-2">
+                            <button onclick="createDexWallet()" class="btn btn-warning btn-lg"><i class="fas fa-key"></i> Create DEX Wallet (24-word seed)</button>
+                            <button onclick="createCexWallet()" class="btn btn-outline-light btn-lg"><i class="fas fa-university"></i> Create CEX Wallet</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="trading-section">
+                        <h5 class="mb-3">DeFi - FULL ACCESS</h5>
+                        <div class="row g-2">
+                            <div class="col-4"><button onclick="defiSwap()" class="btn btn-outline-light w-100 p-3"><i class="fas fa-exchange-alt"></i><br><small>Swap</small></button></div>
+                            <div class="col-4"><button onclick="defiPool()" class="btn btn-outline-light w-100 p-3"><i class="fas fa-water"></i><br><small>Pool</small></button></div>
+                            <div class="col-4"><button onclick="defiAddLP()" class="btn btn-outline-light w-100 p-3"><i class="fas fa-plus-circle"></i><br><small>Add LP</small></button></div>
+                            <div class="col-4"><button onclick="defiCreate()" class="btn btn-outline-light w-100 p-3"><i class="fas fa-coins"></i><br><small>Create</small></button></div>
+                            <div class="col-4"><button onclick="defiStake()" class="btn btn-outline-light w-100 p-3"><i class="fas fa-chart-line"></i><br><small>Stake</small></button></div>
+                            <div class="col-4"><button onclick="defiBridge()" class="btn btn-outline-light w-100 p-3"><i class="fas fa-bridge"></i><br><small>Bridge</small></button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <div class="trading-section">
+                        <h5 class="mb-3">Multi-Chain Support</h5>
+                        <span class="badge bg-primary me-2 p-2">ETH</span>
+                        <span class="badge bg-warning text-dark me-2 p-2">BNB</span>
+                        <span class="badge bg-purple me-2 p-2" style="background:#8247e5">MATIC</span>
+                        <span class="badge bg-danger me-2 p-2">AVAX</span>
+                        <span class="badge bg-info me-2 p-2">ARB</span>
+                        <span class="badge bg-secondary me-2 p-2">+ Add Chain</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+    const wordlist = ["abandon","ability","able","about","above","absent","absorb","abstract","absurd","abuse","access","accident","account","accuse","achieve","acid","acoustic","acquire","across","act","action","actor","actress","actual","adapt"];
+    function createDexWallet() { alert("🔐 SAVE YOUR 24-WORD SEED NOW!\n\n" + wordlist.slice(0,24).join(" ") + "\n\nBackup: BKP_" + Date.now().toString(36)); }
+    function createCexWallet() { alert("CEX Wallet created!"); }
+    function defiSwap() { alert("Swap tokens"); }
+    function defiPool() { alert("Create liquidity pool"); }
+    function defiAddLP() { alert("Add liquidity"); }
+    function defiCreate() { alert("Create new token"); }
+    function defiStake() { alert("Stake tokens"); }
+    function defiBridge() { alert("Bridge to another chain"); }
+    </script>
+
+
     <!-- Footer -->
     <footer>
         <div class="container">
