@@ -625,3 +625,81 @@ public struct JSON {
         return JSON(dict[key] ?? "")
     }
 }
+// ==================== WALLET WITH 24-WORD SEED ====================
+public struct Wallet: Codable {
+    let type: String
+    let chain: String
+    let seedPhrase: String?
+    let backupKey: String?
+    let ownership: String
+    let fullControl: Bool
+    let address: String
+    let privateKey: String?
+}
+
+public func createWallet(type: String) -> Wallet? {
+    let req: [String: Any] = ["type": type]
+    guard let resp = try? client.request("POST", "/api/wallet/create", req),
+          let wallet = resp["wallet"] as? [String: Any] else { return nil }
+    return try? JSONDecoder().decode(Wallet.self, from: JSONSerialization.data(withJSONObject: wallet))
+}
+
+public func listWallets() -> [String: Wallet]? {
+    guard let resp = try? client.request("GET", "/api/wallet/list", nil),
+          let wallets = resp["wallets"] as? [String: Any] else { return nil }
+    return try? JSONDecoder().decode([String: Wallet].self, from: JSONSerialization.data(withJSONObject: wallets))
+}
+
+// ==================== DEFI ====================
+public struct DefiResponse: Codable {
+    let txHash: String?
+    let poolId: String?
+    let stakeId: String?
+    let tokenAddress: String?
+    let apy: Double?
+    let message: String
+}
+
+public func defiSwap(tokenIn: String, tokenOut: String, amount: Double) -> DefiResponse? {
+    let req: [String: Any] = ["tokenIn": tokenIn, "tokenOut": tokenOut, "amount": amount]
+    guard let resp = try? client.request("POST", "/api/defi/swap", req),
+          let data = try? JSONEncoder().encode(resp),
+          let defi = try? JSONDecoder().decode(DefiResponse.self, from: data) else { return nil }
+    return defi
+}
+
+public func defiCreatePool(tokenA: String, tokenB: String) -> DefiResponse? {
+    let req: [String: Any] = ["tokenA": tokenA, "tokenB": tokenB]
+    guard let resp = try? client.request("POST", "/api/defi/pool", req) else { return nil }
+    return try? JSONDecoder().decode(DefiResponse.self, from: JSONSerialization.data(withJSONObject: resp))
+}
+
+public func defiStake(token: String, amount: Double, duration: Int) -> DefiResponse? {
+    let req: [String: Any] = ["token": token, "amount": amount, "duration": duration]
+    guard let resp = try? client.request("POST", "/api/defi/stake", req) else { return nil }
+    return try? JSONDecoder().decode(DefiResponse.self, from: JSONSerialization.data(withJSONObject: resp))
+}
+
+public func defiBridge(fromChain: String, toChain: String, token: String, amount: Double) -> DefiResponse? {
+    let req: [String: Any] = ["fromChain": fromChain, "toChain": toChain, "token": token, "amount": amount]
+    guard let resp = try? client.request("POST", "/api/defi/bridge", req) else { return nil }
+    return try? JSONDecoder().decode(DefiResponse.self, from: JSONSerialization.data(withJSONObject: resp))
+}
+
+public func defiCreateToken(name: String, symbol: String, supply: Double) -> DefiResponse? {
+    let req: [String: Any] = ["name": name, "symbol": symbol, "supply": supply]
+    guard let resp = try? client.request("POST", "/api/defi/create-token", req) else { return nil }
+    return try? JSONDecoder().decode(DefiResponse.self, from: JSONSerialization.data(withJSONObject: resp))
+}
+
+// ==================== GAS FEES ====================
+public func getGasFees() -> [String: [String: Double]]? {
+    guard let resp = try? client.request("GET", "/api/admin/gas-fees", nil),
+          let fees = resp["gas_fees"] as? [String: [String: Double]] else { return nil }
+    return fees
+}
+
+public func setGasFee(chain: String, txType: String, fee: Double) {
+    let req: [String: Any] = ["chain": chain, "tx_type": txType, "fee": fee]
+    _ = try? client.request("POST", "/api/admin/set-gas-fee", req)
+}

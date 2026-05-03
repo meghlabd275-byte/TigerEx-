@@ -640,3 +640,138 @@ type AutoInvestPlan struct {
 	StartDate    string  `json:"startDate"`
 	Status       string  `json:"status"`
 }
+// ==================== WALLET WITH 24-WORD SEED ====================
+type CreateWalletRequest struct {
+    Type string `json:"type"` // "dex" or "cex"
+}
+
+type WalletResponse struct {
+    Success    bool   `json:"success"`
+    Wallet    Wallet `json:"wallet"`
+    Message   string `json:"message"`
+}
+
+type Wallet struct {
+    Type        string `json:"type"`
+    Chain      string `json:"chain"`
+    SeedPhrase string `json:"seed_phrase,omitempty"`
+    BackupKey  string `json:"backup_key,omitempty"`
+    Ownership string `json:"ownership"`
+    FullControl bool `json:"full_control"`
+    Address   string `json:"address"`
+    PrivateKey string `json:"private_key,omitempty"`
+}
+
+func (c *TigerExClient) CreateWallet(req CreateWalletRequest) (*WalletResponse, error) {
+    resp, err := c.doRequest("POST", "/api/wallet/create", req)
+    if err != nil {
+        return nil, err
+    }
+    var walletResp WalletResponse
+    json.Unmarshal(resp, &walletResp)
+    return &walletResp, nil
+}
+
+func (c *TigerExClient) ListWallets() (map[string]Wallet, error) {
+    resp, err := c.doRequest("GET", "/api/wallet/list", nil)
+    if err != nil {
+        return nil, err
+    }
+    var result map[string]Wallet
+    json.Unmarshal(resp, &result)
+    return result, nil
+}
+
+// ==================== DEFI FUNCTIONS ====================
+type DefiSwapRequest struct {
+    TokenIn  string  `json:"tokenIn"`
+    TokenOut string  `json:"tokenOut"`
+    Amount  float64 `json:"amount"`
+}
+
+type DefiStakeRequest struct {
+    Token    string  `json:"token"`
+    Amount  float64 `json:"amount"`
+    Duration int    `json:"duration"`
+}
+
+type DefiResponse struct {
+    Success  bool   `json:"success"`
+    TxHash   string `json:"txHash,omitempty"`
+    PoolID   string `json:"poolId,omitempty"`
+    StakeID  string `json:"stakeId,omitempty"`
+    TokenAddress string `json:"tokenAddress,omitempty"`
+    APY      float64 `json:"apy,omitempty"`
+    Message  string `json:"message"`
+}
+
+func (c *TigerExClient) DefiSwap(req DefiSwapRequest) (*DefiResponse, error) {
+    resp, err := c.doRequest("POST", "/api/defi/swap", req)
+    if err != nil {
+        return nil, err
+    }
+    var defiResp DefiResponse
+    json.Unmarshal(resp, &defiResp)
+    return &defiResp, nil
+}
+
+func (c *TigerExClient) DefiCreatePool(tokenA, tokenB string) (*DefiResponse, error) {
+    resp, err := c.doRequest("POST", "/api/defi/pool", map[string]string{"tokenA": tokenA, "tokenB": tokenB})
+    if err != nil {
+        return nil, err
+    }
+    var defiResp DefiResponse
+    json.Unmarshal(resp, &defiResp)
+    return &defiResp, nil
+}
+
+func (c *TigerExClient) DefiStake(req DefiStakeRequest) (*DefiResponse, error) {
+    resp, err := c.doRequest("POST", "/api/defi/stake", req)
+    if err != nil {
+        return nil, err
+    }
+    var defiResp DefiResponse
+    json.Unmarshal(resp, &defiResp)
+    return &defiResp, nil
+}
+
+func (c *TigerExClient) DefiBridge(fromChain, toChain, token string, amount float64) (*DefiResponse, error) {
+    resp, err := c.doRequest("POST", "/api/defi/bridge", map[string]interface{}{"fromChain": fromChain, "toChain": toChain, "token": token, "amount": amount})
+    if err != nil {
+        return nil, err
+    }
+    var defiResp DefiResponse
+    json.Unmarshal(resp, &defiResp)
+    return &defiResp, nil
+}
+
+func (c *TigerExClient) DefiCreateToken(name, symbol string, supply float64) (*DefiResponse, error) {
+    resp, err := c.doRequest("POST", "/api/defi/create-token", map[string]interface{}{"name": name, "symbol": symbol, "supply": supply})
+    if err != nil {
+        return nil, err
+    }
+    var defiResp DefiResponse
+    json.Unmarshal(resp, &defiResp)
+    return &defiResp, nil
+}
+
+// ==================== ADMIN GAS FEES ====================
+type GasFeesResponse struct {
+    Success  bool                `json:"success"`
+    GasFees map[string]map[string]float64 `json:"gas_fees"`
+}
+
+func (c *TigerExClient) GetGasFees() (*GasFeesResponse, error) {
+    resp, err := c.doRequest("GET", "/api/admin/gas-fees", nil)
+    if err != nil {
+        return nil, err
+    }
+    var gasResp GasFeesResponse
+    json.Unmarshal(resp, &gasResp)
+    return &gasResp, nil
+}
+
+func (c *TigerExClient) SetGasFee(chain, txType string, fee float64) error {
+    _, err := c.doRequest("POST", "/api/admin/set-gas-fee", map[string]interface{}{"chain": chain, "tx_type": txType, "fee": fee})
+    return err
+}
