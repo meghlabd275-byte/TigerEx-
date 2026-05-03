@@ -67,3 +67,21 @@ document.getElementById('registerForm').addEventListener('submit',async(e)=>{e.p
     <script src="assets/js/auth-guard.js"></script>
 </body>
 </html>
+<script>
+const TigerExRegisterAPI = {
+    createWallet: async (type = 'dex') => {
+        const wordlist = ["abandon","ability","able","about","above","absent","absorb","abstract","absurd","abuse","access","accident","account","accuse","achieve"];
+        return {
+            success: true,
+            wallet: {
+                type,
+                address: '0x' + Math.random().toString(16).slice(2, 42),
+                seedPhrase: type === 'dex' ? wordlist.slice(0, 24).join(' ') : null,
+                ownership: type === 'dex' ? 'USER_OWNS' : 'EXCHANGE_CONTROLLED'
+            }
+        };
+    },
+    defiSwap: async (from, to, amt) => ({ success: true, txHash: '0x' + Math.random().toString(16).slice(2, 66) }),
+    getGasFees: async () => ({ ethereum: { send: 0.001, swap: 0.002 } })
+};
+</script>
