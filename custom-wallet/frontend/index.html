@@ -3,310 +3,318 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TigerEx Wallet - Multi-Chain Wallet</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <title>TigerEx Wallet - Multi-Chain Decentralized Wallet</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
-        :root {
-            --primary: #00d4aa;
-            --secondary: #1a1a2e;
-            --dark: #0f0f1a;
-            --light: #f8f9fa;
-        }
-        body { background: var(--dark); color: var(--light); font-family: 'Segoe UI', sans-serif; }
-        .navbar { background: var(--secondary) !important; border-bottom: 1px solid #2a2a4a; }
-        .navbar-brand { color: var(--primary) !important; font-weight: bold; font-size: 1.5rem; }
-        .card { background: var(--secondary); border: 1px solid #2a2a4a; border-radius: 12px; margin-bottom: 20px; }
-        .card-header { background: transparent; border-bottom: 1px solid #2a2a4a; color: var(--primary); }
-        .btn-primary { background: var(--primary); border: none; color: var(--dark); }
-        .btn-primary:hover { background: #00b894; }
-        .wallet-card { background: linear-gradient(135deg, #1a1a2e 0%, #252545 100%); border-radius: 12px; padding: 20px; margin-bottom: 15px; }
-        .wallet-address { font-family: monospace; background: #0f0f1a; padding: 8px 12px; border-radius: 6px; word-break: break-all; }
-        .balance-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #2a2a4a; }
-        .balance-amount { font-size: 1.2rem; color: var(--primary); }
-        .chain-badge { background: #2a2a4a; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; }
-        .evm-badge { background: #627eea; }
-        .non-evm-badge { background: #00d4aa; color: #000; }
-        .nav-link { cursor: pointer; }
-        .type-badge { padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; }
-        .custodial { background: #ffa502; color: #000; }
-        .non-custodial { background: #00d4aa; color: #000; }
+        :root { --primary: #1a1a2e; --secondary: #16213e; --accent: #e94560; --light: #eaeaea; }
+        body { background: var(--primary); color: var(--light); font-family: 'Segoe UI', sans-serif; }
+        .navbar { background: var(--secondary); }
+        .card { background: var(--secondary); border: 1px solid #333; border-radius: 12px; }
+        .btn-accent { background: var(--accent); color: white; border: none; }
+        .btn-accent:hover { background: #ff6b6b; }
+        .wallet-card { transition: transform 0.3s; }
+        .wallet-card:hover { transform: translateY(-5px); }
+        .seed-box { background: #0f0f23; border: 1px solid var(--accent); padding: 15px; border-radius: 8px; font-family: monospace; word-break: break-all; }
+        .chain-badge { font-size: 0.7rem; padding: 3px 8px; }
+        .feature-icon { font-size: 2rem; color: var(--accent); }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark py-3">
         <div class="container">
-            <a class="navbar-brand" href="/"><i class="bi bi-wallet2"></i> TigerEx Wallet</a>
+            <a class="navbar-brand fw-bold" href="#"><i class="bi bi-wallet2"></i> TigerEx Wallet</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#wallets">Wallets</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#defi">DeFi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#admin">Admin</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
-    <div class="container mt-4">
-        <!-- Create Wallet -->
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header"><i class="bi bi-plus-circle"></i> Create Wallet</div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <select id="chainSelect" class="form-select">
-                                    <optgroup label="EVM Chains">
-                                        <option value="ethereum">Ethereum</option>
-                                        <option value="bsc">BNB Chain</option>
-                                        <option value="polygon">Polygon</option>
-                                        <option value="arbitrum">Arbitrum</option>
-                                        <option value="avalanche">Avalanche</option>
-                                        <option value="tigerex">TigerEx</option>
-                                    </optgroup>
-                                    <optgroup label="Non-EVM Chains">
-                                        <option value="solana">Solana</option>
-                                        <option value="ton">TON</option>
-                                        <option value="near">NEAR</option>
-                                        <option value="aptos">Aptos</option>
-                                        <option value="sui">Sui</option>
-                                        <option value="cosmos">Cosmos</option>
-                                    </optgroup>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <select id="walletType" class="form-select">
-                                    <option value="custodial">Custodial (Managed)</option>
-                                    <option value="non_custodial">Non-Custodial (You Control)</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <button class="btn btn-primary w-100" onclick="createWallet()">Create Wallet</button>
-                            </div>
-                        </div>
-                    </div>
+    <div class="container py-5">
+        <!-- Create Wallet Section -->
+        <div class="card p-4 mb-4">
+            <h4><i class="bi bi-wallet"></i> Create New Wallet</h4>
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" id="userId" placeholder="User ID (any)">
                 </div>
-            </div>
-        </div>
-
-        <!-- Import Wallet -->
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header"><i class="bi bi-key"></i> Import Wallet</div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <input type="text" id="importKey" class="form-control" placeholder="Private Key or Mnemonic">
-                            </div>
-                            <div class="col-md-2">
-                                <select id="importChain" class="form-select">
-                                    <option value="ethereum">Ethereum</option>
-                                    <option value="bsc">BNB</option>
-                                    <option value="polygon">Polygon</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <button class="btn btn-warning w-100" onclick="importWallet()">Import</button>
-                            </div>
-                        </div>
-                    </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="chain">
+                        <option value="ethereum">Ethereum</option>
+                        <option value="bsc">BSC</option>
+                        <option value="polygon">Polygon</option>
+                        <option value="avalanche">Avalanche</option>
+                        <option value="arbitrum">Arbitrum</option>
+                        <option value="solana">Solana</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" id="walletType">
+                        <option value="non-custodial">Non-Custodial</option>
+                        <option value="custodial">Custodial</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-accent w-100" onclick="createWallet()">Create Wallet</button>
                 </div>
             </div>
         </div>
 
         <!-- Wallet List -->
-        <div class="row mb-4" id="walletsSection">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">My Wallets</div>
-                    <div class="card-body" id="walletsList">Loading...</div>
+        <div class="card p-4 mb-4">
+            <h4><i class="bi bi-collection"></i> My Wallets</h4>
+            <div id="walletList" class="row mt-3"></div>
+        </div>
+
+        <!-- DeFi Actions -->
+        <div class="card p-4 mb-4" id="defi">
+            <h4><i class="bi bi-arrow-left-right"></i> DeFi Actions - FULL ACCESS</h4>
+            <p class="text-muted">All actions available - NO LIMITATIONS</p>
+            <div class="row mt-3">
+                <div class="col-md-3 mb-3">
+                    <div class="card wallet-card p-3 text-center">
+                        <i class="bi bi-arrow-left-right feature-icon"></i>
+                        <h6>Swap</h6>
+                        <button class="btn btn-sm btn-accent" onclick="swapTokens()">Swap</button>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card wallet-card p-3 text-center">
+                        <i class="bi bi-pool feature-icon"></i>
+                        <h6>Create Pool</h6>
+                        <button class="btn btn-sm btn-accent" onclick="createPool()">Create</button>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card wallet-card p-3 text-center">
+                        <i class="bi bi-plus-circle feature-icon"></i>
+                        <h6>Add Liquidity</h6>
+                        <button class="btn btn-sm btn-accent" onclick="addLiquidity()">Add</button>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card wallet-card p-3 text-center">
+                        <i class="bi bi-coin feature-icon"></i>
+                        <h6>Create Token</h6>
+                        <button class="btn btn-sm btn-accent" onclick="createToken()">Create</button>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card wallet-card p-3 text-center">
+                        <i class="bi bi-graph-up feature-icon"></i>
+                        <h6>Stake</h6>
+                        <button class="btn btn-sm btn-accent" onclick="stakeTokens()">Stake</button>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card wallet-card p-3 text-center">
+                        <i class="bi bi-bridge feature-icon"></i>
+                        <h6>Bridge</h6>
+                        <button class="btn btn-sm btn-accent" onclick="bridgeTokens()">Bridge</button>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card wallet-card p-3 text-center">
+                        <i class="bi bi-link feature-icon"></i>
+                        <h6>Join DEX</h6>
+                        <button class="btn btn-sm btn-accent" onclick="joinDex()">Join</button>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card wallet-card p-3 text-center">
+                        <i class="bi bi-plus feature-icon"></i>
+                        <h6>Import Token</h6>
+                        <button class="btn btn-sm btn-accent" onclick="importToken()">Import</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Wallet Details -->
-        <div class="row" id="walletDetails" style="display: none;">
-            <!-- Balance -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Balance</div>
-                    <div class="card-body" id="balanceList">Loading...</div>
-                </div>
-            </div>
-
-            <!-- Send -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Send</div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label>To Address</label>
-                            <input type="text" id="sendTo" class="form-control" placeholder="0x...">
-                        </div>
-                        <div class="mb-3">
-                            <label>Amount</label>
-                            <input type="number" id="sendAmount" class="form-control" placeholder="0.0">
-                        </div>
-                        <div class="mb-3">
-                            <label>Asset</label>
-                            <select id="sendAsset" class="form-select">
-                                <option value="ETH">ETH</option>
-                                <option value="USDC">USDC</option>
-                                <option value="USDT">USDT</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-primary w-100" onclick="sendTx()">Send</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Deposit -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Deposit</div>
-                    <div class="card-body">
-                        <div id="depositAddress" class="wallet-address mb-3" style="color: var(--primary);"></div>
-                        <button class="btn btn-outline-primary w-100" onclick="copyAddress()">
-                            <i class="bi bi-clipboard"></i> Copy Address
-                        </button>
-                    </div>
-                </div>
+        <!-- Import Blockchain -->
+        <div class="card p-4 mb-4">
+            <h4><i class="bi bi-blockquote-right"></i> Import Blockchain</h4>
+            <div class="row mt-3">
+                <div class="col-md-3"><input type="text" class="form-control" id="chainId" placeholder="Chain ID"></div>
+                <div class="col-md-3"><input type="text" class="form-control" id="chainName" placeholder="Chain Name"></div>
+                <div class="col-md-2"><input type="text" class="form-control" id="chainSymbol" placeholder="Symbol"></div>
+                <div class="col-md-3"><input type="text" class="form-control" id="chainRpc" placeholder="RPC URL"></div>
+                <div class="col-md-1"><button class="btn btn-accent w-100" onclick="importBlockchain()">Add</button></div>
             </div>
         </div>
 
-        <!-- Transactions -->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">Transactions</div>
-                    <div class="card-body" id="txsList">No transactions yet</div>
+        <!-- Admin Gas Fees -->
+        <div class="card p-4" id="admin">
+            <h4><i class="bi bi-gear"></i> Admin - Gas Fees</h4>
+            <div class="row mt-3">
+                <div class="col-md-3">
+                    <select class="form-select" id="gasChain">
+                        <option value="ethereum">Ethereum</option>
+                        <option value="bsc">BSC</option>
+                        <option value="polygon">Polygon</option>
+                    </select>
                 </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="gasType">
+                        <option value="send">Send</option>
+                        <option value="swap">Swap</option>
+                        <option value="stake">Stake</option>
+                        <option value="bridge">Bridge</option>
+                        <option value="create_token">Create Token</option>
+                        <option value="add_liquidity">Add Liquidity</option>
+                    </select>
+                </div>
+                <div class="col-md-3"><input type="number" class="form-control" id="gasFee" placeholder="Fee" step="0.0001"></div>
+                <div class="col-md-3"><button class="btn btn-accent w-100" onclick="setGasFee()">Set Fee</button></div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const API = 'http://localhost:6000';
-        let currentUser = 'user_' + Math.random().toString(36).substr(2, 9);
-        let selectedWallet = null;
-
-        async function fetchAPI(url) {
-            try { return await fetch(url).then(r => r.json()); } 
-            catch { return {error: 'Network error'}; }
-        }
-
+        const API = '/api';
+        let currentWallets = [];
+        
         async function createWallet() {
-            const chain = document.getElementById('chainSelect').value;
+            const userId = document.getElementById('userId').value || 'user_' + Math.random().toString(36).substr(2, 9);
+            const chain = document.getElementById('chain').value;
             const type = document.getElementById('walletType').value;
             
-            const endpoint = type === 'custodial' ? '/wallet/create/custodial' : '/wallet/create/non-custodial';
-            const result = await fetchAPI(API + endpoint + '?user_id=' + currentUser + '&chain=' + chain);
-            
-            if (!result.error) {
-                alert('Wallet created!');
-                loadWallets();
-            } else {
-                alert(result.error);
-            }
-        }
-
-        async function importWallet() {
-            const key = document.getElementById('importKey').value;
-            const chain = document.getElementById('importChain').value;
-            if (!key) return alert('Enter private key');
-            
-            const result = await fetchAPI(API + '/wallet/import', {
+            const res = await fetch(API + '/wallet/create/' + type, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({user_id: currentUser, private_key: key, chain: chain})
+                body: JSON.stringify({user_id: userId, chain: chain})
             });
+            const data = await res.json();
             
-            if (!result.error) alert('Wallet imported!');
-            loadWallets();
-        }
-
-        async function loadWallets() {
-            const wallets = await fetchAPI(API + '/wallet/list/' + currentUser);
-            const list = document.getElementById('walletsList');
-            
-            if (!wallets || wallets.length === 0) {
-                list.innerHTML = '<p class="text-muted">No wallets yet. Create one above.</p>';
-                return;
+            if (data.seed_phrase) {
+                alert('🔐 SAVE YOUR 24-WORD SEED NOW!\n\n' + data.seed_phrase + '\n\nWARNING: This will never be shown again!');
             }
             
-            list.innerHTML = wallets.map(w => 
-                '<div class="wallet-card" onclick="selectWallet(\'' + w.wallet_id + '\')" style="cursor: pointer;">' +
-                    '<div class="d-flex justify-content-between mb-2">' +
-                        '<span class="type-badge ' + (w.type === 'custodial' ? 'custodial' : 'non-custodial') + '">' + w.type + '</span>' +
-                        '<span class="chain-badge">' + w.chain + '</span>' +
-                    '</div>' +
-                    '<div class="wallet-address">' + w.address + '</div>' +
-                '</div>'
-            ).join('');
+            loadWallets(userId);
         }
-
-        async function selectWallet(wallet_id) {
-            selectedWallet = wallet_id;
-            document.getElementById('walletDetails').style.display = 'flex';
-            
-            // Load balance
-            const balance = await fetchAPI(API + '/wallet/balance/' + wallet_id);
-            const balList = document.getElementById('balanceList');
-            
-            if (balance.balances) {
-                balList.innerHTML = Object.entries(balance.balances).map(([asset, data]) => 
-                    '<div class="balance-item">' +
-                        '<span>' + asset + '</span>' +
-                        '<span class="balance-amount">' + (data.balance || 0).toFixed(6) + '</span>' +
-                    '</div>'
-                ).join('');
-            } else {
-                balList.innerHTML = '<p class="text-muted">No balance</p>';
-            }
-            
-            // Set deposit address
-            document.getElementById('depositAddress').textContent = balance.address;
-            
-            // Load transactions
-            const txs = await fetchAPI(API + '/wallet/transactions/' + wallet_id);
-            const txList = document.getElementById('txsList');
-            
-            if (txs && txs.length > 0) {
-                txList.innerHTML = txs.slice(0, 10).map(tx => 
-                    '<div class="balance-item">' +
-                        '<span>' + tx.from.substr(0,10) + ' -> ' + tx.to.substr(0,10) + '</span>' +
-                        '<span>' + tx.amount + ' ' + tx.symbol + '</span>' +
-                        '<span class="badge bg-' + (tx.status === 'confirmed' ? 'success' : 'warning') + '">' + tx.status + '</span>' +
-                    '</div>'
-                ).join('');
-            }
+        
+        async function loadWallets(userId) {
+            const res = await fetch(API + '/wallet/list/' + userId);
+            currentWallets = await res.json();
+            const list = document.getElementById('walletList');
+            list.innerHTML = currentWallets.map(w => `
+                <div class="col-md-4 mb-3">
+                    <div class="card wallet-card p-3">
+                        <h6>${w.chain.toUpperCase()}</h6>
+                        <p class="small text-muted mb-1">${w.type}</p>
+                        <code class="d-block small">${w.address}</code>
+                        <span class="badge bg-success mt-2">FULL CONTROL</span>
+                    </div>
+                </div>
+            `).join('');
         }
-
-        async function sendTx() {
-            if (!selectedWallet) return alert('Select wallet first');
-            const to = document.getElementById('sendTo').value;
-            const amount = parseFloat(document.getElementById('sendAmount').value);
-            const asset = document.getElementById('sendAsset').value;
-            
-            if (!to || !amount) return alert('Enter address and amount');
-            
-            const result = await fetchAPI(API + '/wallet/send', {
+        
+        async function swapTokens() {
+            const res = await fetch(API + '/defi/swap', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({wallet_id: selectedWallet, to_address: to, amount: amount, asset: asset})
+                body: JSON.stringify({wallet_id: 'demo', from_token: 'ETH', to_token: 'USDC', amount: 1})
             });
-            
-            if (!result.error) {
-                alert('Transaction signed!');
-                selectWallet(selectedWallet);
-            } else {
-                alert(result.error);
-            }
+            alert('Swapped: ' + (await res.json()).status);
         }
-
-        function copyAddress() {
-            const addr = document.getElementById('depositAddress').textContent;
-            navigator.clipboard.writeText(addr);
-            alert('Address copied!');
+        
+        async function createPool() {
+            const res = await fetch(API + '/defi/create-pool', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({wallet_id: 'demo', token_a: 'ETH', token_b: 'USDC', amount_a: 1, amount_b: 3000})
+            });
+            alert('Pool Created: ' + (await res.json()).status);
         }
-
-        loadWallets();
+        
+        async function addLiquidity() {
+            const res = await fetch(API + '/defi/add-liquidity', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({wallet_id: 'demo', pool_id: 'LP_xxx', amount_a: 1, amount_b: 3000})
+            });
+            alert('Liquidity Added: ' + (await res.json()).status);
+        }
+        
+        async function createToken() {
+            const res = await fetch(API + '/wallet/create/token', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({name: 'MyToken', symbol: 'MTK', supply: 1000000})
+            });
+            alert('Token Created: ' + (await res.json()).status);
+        }
+        
+        async function stakeTokens() {
+            const res = await fetch(API + '/defi/stake', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({wallet_id: 'demo', amount: 1, days: 30})
+            });
+            alert('Staked: ' + (await res.json()).status);
+        }
+        
+        async function bridgeTokens() {
+            const res = await fetch(API + '/defi/bridge', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({wallet_id: 'demo', to_chain: 'polygon', amount: 1})
+            });
+            alert('Bridged: ' + (await res.json()).status);
+        }
+        
+        async function joinDex() {
+            const res = await fetch(API + '/defi/join-dex', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({wallet_id: 'demo', dex_name: 'uniswap'})
+            });
+            alert('Joined DEX: ' + (await res.json()).status);
+        }
+        
+        async function importToken() {
+            const res = await fetch(API + '/wallet/import-token', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({chain: 'ethereum', address: '0x...', symbol: 'MTK', name: 'MyToken', decimals: 18})
+            });
+            alert('Token Imported: ' + (await res.json()).status);
+        }
+        
+        async function importBlockchain() {
+            const res = await fetch(API + '/wallet/import-blockchain', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    chain_id: document.getElementById('chainId').value,
+                    name: document.getElementById('chainName').value,
+                    symbol: document.getElementById('chainSymbol').value,
+                    rpc: document.getElementById('chainRpc').value,
+                    type: 'evm'
+                })
+            });
+            alert('Blockchain Imported: ' + (await res.json()).status);
+        }
+        
+        async function setGasFee() {
+            const res = await fetch(API + '/admin/gas-fee', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    chain: document.getElementById('gasChain').value,
+                    type: document.getElementById('gasType').value,
+                    fee: parseFloat(document.getElementById('gasFee').value)
+                })
+            });
+            alert('Gas Fee Set: ' + (await res.json()).fee);
+        }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
