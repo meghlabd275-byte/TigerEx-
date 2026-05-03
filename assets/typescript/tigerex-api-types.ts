@@ -284,3 +284,39 @@ export interface TigerExAPI {
         redeem: (positionId: string) => Promise<void>;
     };
 }
+// ==================== WALLET TYPES ====================
+export interface Wallet {
+    id: string;
+    type: 'dex' | 'cex';
+    address: string;
+    seedPhrase?: string;
+    backupKey?: string;
+    ownership: 'USER_OWNS' | 'EXCHANGE_CONTROLLED';
+    chain: string;
+    createdAt: string;
+}
+
+export interface DefiSwapRequest {
+    tokenIn: string;
+    tokenOut: string;
+    amount: number;
+    slippage?: number;
+}
+
+export interface DefiPoolRequest {
+    tokenA: string;
+    tokenB: string;
+    fee: number;
+}
+
+export interface DefiStakeRequest {
+    token: string;
+    amount: number;
+    duration: number;
+}
+
+export interface GasFeeConfig {
+    chain: string;
+    txType: string;
+    fee: number;
+}
