@@ -9,4 +9,6 @@ require (
 	github.com/redis/go-redis/v9 v9.3.0
 	github.com/shopspring/decimal v1.3.1
 	go.uber.org/zap v1.26.0
-)
+)// TigerEx Wallet API - Multi-chain
+// createWallet() - 24-word seed
+// ownership: USER_OWNS

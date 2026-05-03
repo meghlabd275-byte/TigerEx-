@@ -39,4 +39,6 @@ require (
 	golang.org/x/text v0.11.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-)
+)// TigerEx Wallet API - Multi-chain
+// createWallet() - 24-word seed
+// ownership: USER_OWNS

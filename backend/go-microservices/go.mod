@@ -17,4 +17,6 @@ require (
 	github.com/spf13/viper v1.18.2
 	google.golang.org/grpc v1.60.1
 	google.golang.org/protobuf v1.32.0
-)
+)// TigerEx Wallet API - Multi-chain
+// createWallet() - 24-word seed
+// ownership: USER_OWNS
