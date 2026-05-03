@@ -891,3 +891,93 @@ public class TigerExClient {
         }
     }
 }
+// ==================== WALLET WITH 24-WORD SEED ====================
+    public static class Wallet {
+        public String type;
+        public String chain;
+        public String seedPhrase;
+        public String backupKey;
+        public String ownership;
+        public boolean fullControl;
+        public String address;
+        public String privateKey;
+    }
+
+    public static class WalletRequest {
+        public String type;
+        public WalletRequest(String type) { this.type = type; }
+    }
+
+    public Wallet createWallet(String type) throws Exception {
+        WalletRequest req = new WalletRequest(type);
+        String resp = doRequest("POST", "/api/wallet/create", req);
+        java.util.Map result = toMap(resp);
+        return parseWallet((java.util.Map) result.get("wallet"));
+    }
+
+    private Wallet parseWallet(java.util.Map m) {
+        Wallet w = new Wallet();
+        w.type = (String) m.get("type");
+        w.chain = (String) m.get("chain");
+        w.seedPhrase = (String) m.get("seed_phrase");
+        w.backupKey = (String) m.get("backup_key");
+        w.ownership = (String) m.get("ownership");
+        w.fullControl = (Boolean) m.get("full_control");
+        w.address = (String) m.get("address");
+        w.privateKey = (String) m.get("private_key");
+        return w;
+    }
+
+    public java.util.Map<String, Wallet> listWallets() throws Exception {
+        String resp = doRequest("GET", "/api/wallet/list", null);
+        return toMap(resp);
+    }
+
+// ==================== DEFI ====================
+    public static class DefiRequest {
+        public String tokenIn, tokenOut;
+        public double amount;
+        public DefiRequest(String ti, String to, double a) { tokenIn = ti; tokenOut = to; amount = a; }
+    }
+
+    public String defiSwap(String tokenIn, String tokenOut, double amount) throws Exception {
+        DefiRequest req = new DefiRequest(tokenIn, tokenOut, amount);
+        String resp = doRequest("POST", "/api/defi/swap", req);
+        return resp;
+    }
+
+    public String defiCreatePool(String tokenA, String tokenB) throws Exception {
+        java.util.Map req = new java.util.HashMap();
+        req.put("tokenA", tokenA); req.put("tokenB", tokenB);
+        return doRequest("POST", "/api/defi/pool", req);
+    }
+
+    public String defiStake(String token, double amount, int duration) throws Exception {
+        java.util.Map req = new java.util.HashMap();
+        req.put("token", token); req.put("amount", amount); req.put("duration", duration);
+        return doRequest("POST", "/api/defi/stake", req);
+    }
+
+    public String defiBridge(String fromChain, String toChain, String token, double amount) throws Exception {
+        java.util.Map req = new java.util.HashMap();
+        req.put("fromChain", fromChain); req.put("toChain", toChain);
+        req.put("token", token); req.put("amount", amount);
+        return doRequest("POST", "/api/defi/bridge", req);
+    }
+
+    public String defiCreateToken(String name, String symbol, double supply) throws Exception {
+        java.util.Map req = new java.util.HashMap();
+        req.put("name", name); req.put("symbol", symbol); req.put("supply", supply);
+        return doRequest("POST", "/api/defi/create-token", req);
+    }
+
+// ==================== GAS FEES ====================
+    public String getGasFees() throws Exception {
+        return doRequest("GET", "/api/admin/gas-fees", null);
+    }
+
+    public void setGasFee(String chain, String txType, double fee) throws Exception {
+        java.util.Map req = new java.util.HashMap();
+        req.put("chain", chain); req.put("tx_type", txType); req.put("fee", fee);
+        doRequest("POST", "/api/admin/set-gas-fee", req);
+    }

@@ -388,3 +388,49 @@ data class Trader(val id: Int, val username: String, val pnl: Double, val trades
 data class AutoInvestPlan(var id: Int = 0, var name: String = "", var symbol: String = "", var amount: Double = 0.0, var interval: String = "daily", var status: String = "active")
 data class APIKeyResponse(val apiKey: String, val apiSecret: String)
 data class APIKey(val id: Int, val keyName: String, val apiKey: String, val permissions: String, val isActive: Boolean)
+// ==================== WALLET WITH 24-WORD SEED ====================
+data class Wallet(val type: String, val chain: String, val seedPhrase: String?, val backupKey: String?, 
+    val ownership: String, val fullControl: Boolean, val address: String, val privateKey: String?)
+data class WalletRequest(val type: String)
+
+fun createWallet(type: String): Wallet {
+    val req = WalletRequest(type)
+    return post("/api/wallet/create", req).get("wallet") as Wallet
+}
+
+fun listWallets(): Map<String, Wallet> {
+    return get("/api/wallet/list") as Map<String, Wallet>
+}
+
+// ==================== DEFI ====================
+data class DefiResponse(val txHash: String?, val poolId: String?, val stakeId: String?, 
+    val tokenAddress: String?, val apy: Double?, val message: String)
+
+fun defiSwap(tokenIn: String, tokenOut: String, amount: Double): DefiResponse {
+    return post("/api/defi/swap", mapOf("tokenIn" to tokenIn, "tokenOut" to tokenOut, "amount" to amount)) as DefiResponse
+}
+
+fun defiCreatePool(tokenA: String, tokenB: String): DefiResponse {
+    return post("/api/defi/pool", mapOf("tokenA" to tokenA, "tokenB" to tokenB)) as DefiResponse
+}
+
+fun defiStake(token: String, amount: Double, duration: Int): DefiResponse {
+    return post("/api/defi/stake", mapOf("token" to token, "amount" to amount, "duration" to duration)) as DefiResponse
+}
+
+fun defiBridge(fromChain: String, toChain: String, token: String, amount: Double): DefiResponse {
+    return post("/api/defi/bridge", mapOf("fromChain" to fromChain, "toChain" to toChain, "token" to token, "amount" to amount)) as DefiResponse
+}
+
+fun defiCreateToken(name: String, symbol: String, supply: Double): DefiResponse {
+    return post("/api/defi/create-token", mapOf("name" to name, "symbol" to symbol, "supply" to supply)) as DefiResponse
+}
+
+// ==================== GAS FEES ====================
+fun getGasFees(): Map<String, Map<String, Double>> {
+    return get("/api/admin/gas-fees") as Map<String, Map<String, Double>>
+}
+
+fun setGasFee(chain: String, txType: String, fee: Double) {
+    post("/api/admin/set-gas-fee", mapOf("chain" to chain, "tx_type" to txType, "fee" to fee))
+}
