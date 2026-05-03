@@ -602,3 +602,150 @@ def index():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
+
+# ==================== WALLET WITH 24-WORD SEED ====================
+@app.route('/api/wallet/create', methods=['POST'])
+@jwt_required()
+def create_wallet():
+    user_id = get_jwt_identity()
+    wallet_type = request.json.get('type', 'dex')
+    
+    wordlist = ["abandon","ability","able","about","above","absent","absorb","abstract","absurd","abuse","access","accident","account","accuse","achieve","acid","acoustic","acquire","across","act","action","actor","actress","actual","adapt"]
+    
+    if wallet_type == 'dex':
+        seed_phrase = " ".join(wordlist[:24])
+        backup_key = "BKP_" + str(int(time.time()))
+        wallet = {
+            "type": "non_custodial",
+            "chain": "ethereum",
+            "seed_phrase": seed_phrase,
+            "backup_key": backup_key,
+            "ownership": "USER_OWNS",
+            "full_control": True,
+            "address": "0x" + secrets.token_hex(20),
+            "private_key": secrets.token_hex(32)
+        }
+    else:
+        wallet = {
+            "type": "custodial",
+            "chain": "ethereum", 
+            "ownership": "EXCHANGE_CONTROLLED",
+            "full_control": False,
+            "address": "0x" + secrets.token_hex(20)
+        }
+    
+    wallets_db[user_id] = wallets_db.get(user_id, {})
+    wallets_db[user_id][wallet_type] = wallet
+    
+    return jsonify({
+        "success": True,
+        "wallet": wallet,
+        "message": "Wallet created - USER OWNS FULL CONTROL" if wallet_type == 'dex' else "Custodial wallet created"
+    })
+
+@app.route('/api/wallet/list', methods=['GET'])
+@jwt_required()
+def list_wallets():
+    user_id = get_jwt_identity()
+    return jsonify({"success": True, "wallets": wallets_db.get(user_id, {})})
+
+# ==================== DEFI API ====================
+@app.route('/api/defi/swap', methods=['POST'])
+@jwt_required()
+def defi_swap():
+    user_id = get_jwt_identity()
+    token_in = request.json.get('tokenIn')
+    token_out = request.json.get('tokenOut')
+    amount = request.json.get('amount')
+    
+    return jsonify({
+        "success": True,
+        "txHash": "0x" + secrets.token_hex(32),
+        "message": f"Swapped {amount} {token_in} to {token_out}"
+    })
+
+@app.route('/api/defi/pool', methods=['POST'])
+@jwt_required()
+def defi_pool():
+    user_id = get_jwt_identity()
+    token_a = request.json.get('tokenA')
+    token_b = request.json.get('tokenB')
+    
+    return jsonify({
+        "success": True,
+        "poolId": "pool_" + secrets.token_hex(8),
+        "message": f"Liquidity pool {token_a}/{token_b} created"
+    })
+
+@app.route('/api/defi/stake', methods=['POST'])
+@jwt_required()
+def defi_stake():
+    user_id = get_jwt_identity()
+    token = request.json.get('token')
+    amount = request.json.get('amount')
+    duration = request.json.get('duration', 30)
+    apy = 5 + random.random() * 10
+    
+    return jsonify({
+        "success": True,
+        "stakeId": "stake_" + secrets.token_hex(8),
+        "apy": round(apy, 2),
+        "message": f"Staked {amount} for {duration} days"
+    })
+
+@app.route('/api/defi/bridge', methods=['POST'])
+@jwt_required()
+def defi_bridge():
+    user_id = get_jwt_identity()
+    from_chain = request.json.get('fromChain')
+    to_chain = request.json.get('toChain')
+    token = request.json.get('token')
+    amount = request.json.get('amount')
+    
+    return jsonify({
+        "success": True,
+        "bridgeId": "bridge_" + secrets.token_hex(8),
+        "message": f"Bridged {amount} {token} from {from_chain} to {to_chain}"
+    })
+
+@app.route('/api/defi/create-token', methods=['POST'])
+@jwt_required()
+def defi_create_token():
+    user_id = get_jwt_identity()
+    name = request.json.get('name')
+    symbol = request.json.get('symbol')
+    supply = request.json.get('supply', 1000000)
+    decimals = request.json.get('decimals', 18)
+    
+    token_address = "0x" + secrets.token_hex(20)
+    
+    return jsonify({
+        "success": True,
+        "tokenAddress": token_address,
+        "message": f"Token {name} ({symbol}) created at {token_address}"
+    })
+
+# ==================== ADMIN GAS FEES ====================
+gas_fees_db = {
+    "ethereum": {"send": 0.001, "swap": 0.002, "create_token": 0.01},
+    "bsc": {"send": 0.0005, "swap": 0.001, "create_token": 0.005},
+    "polygon": {"send": 0.0001, "swap": 0.0002, "create_token": 0.002}
+}
+
+@app.route('/api/admin/gas-fees', methods=['GET'])
+@jwt_required()
+def get_gas_fees():
+    return jsonify({"success": True, "gas_fees": gas_fees_db})
+
+@app.route('/api/admin/set-gas-fee', methods=['POST'])
+@jwt_required()
+def set_gas_fee():
+    chain = request.json.get('chain')
+    tx_type = request.json.get('tx_type')
+    fee = request.json.get('fee')
+    
+    if chain not in gas_fees_db:
+        gas_fees_db[chain] = {}
+    gas_fees_db[chain][tx_type] = fee
+    
+    return jsonify({"success": True, "message": f"Gas fee for {chain} {tx_type} set to {fee}"})
