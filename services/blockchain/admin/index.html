@@ -1,1 +1,102 @@
-<!DOCTYPE html><html><head><title>blockchain Admin</title><script src="https://cdn.tailwindcss.com"></script></head><body class="bg-gray-900 min-h-screen p-6"><h1 class="text-3xl font-bold text-yellow-500">blockchain Admin</h1><p class="text-gray-400 mt-4">Admin panel operational</p></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>blockchain Admin - TigerEx</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-900 min-h-screen">
+    <!-- Header -->
+    <div class="bg-gray-800 border-b border-gray-700 px-6 py-4">
+        <div class="flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-yellow-500"><i class="fas fa-shield-alt"></i> blockchain Admin</h1>
+            <div class="flex items-center gap-4">
+                <span class="text-gray-400">Admin Panel</span>
+                <button class="bg-red-600 px-4 py-2 rounded text-white">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="container mx-auto px-6 py-6">
+        <div class="grid grid-cols-4 gap-4 mb-6">
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                <p class="text-gray-400 text-sm">Total Users</p>
+                <p class="text-2xl font-bold text-white" id="users">-</p>
+            </div>
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                <p class="text-gray-400 text-sm">Wallets</p>
+                <p class="text-2xl font-bold text-white" id="wallets">-</p>
+            </div>
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                <p class="text-gray-400 text-sm">Transactions</p>
+                <p class="text-2xl font-bold text-white" id="transactions">-</p>
+            </div>
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                <p class="text-gray-400 text-sm">Revenue</p>
+                <p class="text-2xl font-bold text-green-500" id="revenue">$0</p>
+            </div>
+        </div>
+
+        <!-- Admin Actions -->
+        <div class="grid grid-cols-2 gap-4">
+            <!-- User Management -->
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                <h2 class="text-xl font-bold text-white mb-4"><i class="fas fa-users"></i> User Management</h2>
+                <div class="space-y-2">
+                    <button class="w-full bg-blue-600 py-2 rounded text-white text-left px-4">View All Users</button>
+                    <button class="w-full bg-blue-600 py-2 rounded text-white text-left px-4">Approve KYC</button>
+                    <button class="w-full bg-blue-600 py-2 rounded text-white text-left px-4">Ban Users</button>
+                    <button class="w-full bg-blue-600 py-2 rounded text-white text-left px-4">View Activity Logs</button>
+                </div>
+            </div>
+
+            <!-- System Management -->
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                <h2 class="text-xl font-bold text-white mb-4"><i class="fas fa-cogs"></i> System Management</h2>
+                <div class="space-y-2">
+                    <button class="w-full bg-yellow-600 py-2 rounded text-white text-left px-4">Manage Settings</button>
+                    <button class="w-full bg-yellow-600 py-2 rounded text-white text-left px-4">View Analytics</button>
+                    <button class="w-full bg-yellow-600 py-2 rounded text-white text-left px-4">System Logs</button>
+                    <button class="w-full bg-yellow-600 py-2 rounded text-white text-left px-4">Backups</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="bg-gray-800 p-4 rounded-xl border border-gray-700 mt-6">
+            <h2 class="text-xl font-bold text-white mb-4">Recent Activity</h2>
+            <div id="activity" class="space-y-2">
+                <div class="bg-gray-700 p-3 rounded flex justify-between">
+                    <span class="text-white">New user registered</span>
+                    <span class="text-gray-400 text-sm">2 min ago</span>
+                </div>
+                <div class="bg-gray-700 p-3 rounded flex justify-between">
+                    <span class="text-white">Transaction completed</span>
+                    <span class="text-gray-400 text-sm">5 min ago</span>
+                </div>
+                <div class="bg-gray-700 p-3 rounded flex justify-between">
+                    <span class="text-white">KYC approved</span>
+                    <span class="text-gray-400 text-sm">10 min ago</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load stats from backend
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/admin/stats');
+                const data = await res.json();
+                document.getElementById('users').innerText = data.users || 0;
+                document.getElementById('wallets').innerText = data.wallets || 0;
+                document.getElementById('transactions').innerText = data.transactions || 0;
+            } catch(e) { console.log('Backend not running'); }
+        }
+        loadStats();
+    </script>
+</body>
+</html>

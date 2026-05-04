@@ -1,1 +1,188 @@
-<!DOCTYPE html><html><head><title>block-explorer User</title><script src="https://cdn.tailwindcss.com"></script></head><body class="bg-gray-900 min-h-screen p-6"><h1 class="text-3xl font-bold text-yellow-500">block-explorer User</h1><p class="text-gray-400 mt-4">User panel operational</p></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>block-explorer - TigerEx</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-900 min-h-screen">
+    <!-- Login Section -->
+    <div id="login" class="container mx-auto px-4 py-6">
+        <div class="max-w-md mx-auto bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <h1 class="text-3xl font-bold text-yellow-500 text-center mb-2">🐯 TigerEx</h1>
+            <h2 class="text-2xl font-bold text-white text-center mb-6">block-explorer</h2>
+
+            <!-- Social Login -->
+            <div class="mb-4">
+                <p class="text-gray-400 text-center mb-2">Continue with</p>
+                <div class="flex gap-2 justify-center">
+                    <button onclick="socialLogin('google')" class="w-12 h-12 bg-red-500 rounded-full text-white font-bold">G</button>
+                    <button onclick="socialLogin('facebook')" class="w-12 h-12 bg-blue-600 rounded-full text-white font-bold">f</button>
+                    <button onclick="socialLogin('apple')" class="w-12 h-12 bg-gray-700 rounded-full text-white">🍎</button>
+                </div>
+            </div>
+
+            <div class="flex items-center my-4">
+                <div class="flex-1 border-t border-gray-600"></div>
+                <span class="px-3 text-gray-500">or</span>
+                <div class="flex-1 border-t border-gray-600"></div>
+            </div>
+
+            <!-- Email Login -->
+            <input type="email" id="email" placeholder="Email" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
+            <input type="password" id="password" placeholder="Password" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
+            <button onclick="login()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg">Login / Register</button>
+        </div>
+    </div>
+
+    <!-- Bind Email/Phone Modal -->
+    <div id="bind-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-gray-800 rounded-xl p-6 max-w-md w-full">
+            <h3 class="text-xl font-bold text-white mb-4">Complete Your Profile</h3>
+            <p class="text-gray-400 mb-4">Bind your email and phone after social login</p>
+            <input type="email" id="bind-email" placeholder="Email" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
+            <button onclick="sendEmailCode()" class="w-full bg-blue-600 text-white py-2 rounded mb-3">Send Email Code</button>
+            <input type="text" id="email-code" placeholder="Email Code" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
+            <input type="tel" id="bind-phone" placeholder="Phone (+1234567890)" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
+            <button onclick="sendPhoneCode()" class="w-full bg-green-600 text-white py-2 rounded mb-3">Send Phone Code</button>
+            <input type="text" id="phone-code" placeholder="Phone Code" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
+            <button onclick="verifyAll()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg">Verify & Login</button>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden container mx-auto px-4 py-6">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-yellow-500">🐯 block-explorer</h1>
+            <div class="flex items-center gap-4">
+                <span class="text-gray-400" id="user-email">user@email.com</span>
+                <button onclick="logout()" class="bg-red-600 px-4 py-2 rounded text-white">Logout</button>
+            </div>
+        </div>
+
+        <!-- Balance -->
+        <div class="grid grid-cols-4 gap-4 mb-6">
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                <p class="text-gray-400 text-sm">Total Balance</p>
+                <p class="text-2xl font-bold text-green-500" id="balance">$0.00</p>
+            </div>
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                <p class="text-gray-400 text-sm">Available</p>
+                <p class="text-2xl font-bold text-white" id="available">$0.00</p>
+            </div>
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                <p class="text-gray-400 text-sm">In Orders</p>
+                <p class="text-2xl font-bold text-yellow-500" id="orders">$0.00</p>
+            </div>
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                <p class="text-gray-400 text-sm">Trading Vol</p>
+                <p class="text-2xl font-bold text-blue-500" id="volume">$0.00</p>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="grid grid-cols-4 gap-4 mb-6">
+            <button onclick="showDeposit()" class="bg-green-600 p-4 rounded-xl text-white">
+                <i class="fas fa-arrow-down text-2xl mb-2 block"></i> Deposit
+            </button>
+            <button onclick="showWithdraw()" class="bg-red-600 p-4 rounded-xl text-white">
+                <i class="fas fa-arrow-up text-2xl mb-2 block"></i> Withdraw
+            </button>
+            <button onclick="showTransfer()" class="bg-blue-600 p-4 rounded-xl text-white">
+                <i class="fas fa-paper-plane text-2xl mb-2 block"></i> Transfer
+            </button>
+            <button onclick="showTrade()" class="bg-yellow-600 p-4 rounded-xl text-white">
+                <i class="fas fa-exchange-alt text-2xl mb-2 block"></i> Trade
+            </button>
+        </div>
+
+        <!-- Wallets / Holdings -->
+        <div class="bg-gray-800 p-4 rounded-xl border border-gray-700 mb-6">
+            <h2 class="text-xl font-bold text-white mb-4">My Wallets</h2>
+            <div id="wallets" class="space-y-2">
+                <div class="bg-gray-700 p-3 rounded flex justify-between">
+                    <span class="text-yellow-500">ETH</span>
+                    <span class="text-white">0.0000</span>
+                </div>
+                <div class="bg-gray-700 p-3 rounded flex justify-between">
+                    <span class="text-yellow-500">USDT</span>
+                    <span class="text-white">0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+            <h2 class="text-xl font-bold text-white mb-4">Recent Transactions</h2>
+            <div id="transactions" class="space-y-2">
+                <div class="bg-gray-700 p-3 rounded flex justify-between">
+                    <span class="text-white">Deposit ETH</span>
+                    <span class="text-green-500">+0.5</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let sessionId = '';
+        
+        function socialLogin(provider) {
+            document.getElementById('bind-modal').classList.remove('hidden');
+        }
+        
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const res = await fetch('/api/user/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({email, password})
+                });
+                const data = await res.json();
+                if (data.status === 'logged_in') {
+                    sessionId = data.session_id;
+                    document.getElementById('login').classList.add('hidden');
+                    document.getElementById('dashboard').classList.remove('hidden');
+                    document.getElementById('user-email').innerText = email;
+                } else {
+                    // Register new user
+                    await fetch('/api/user/register', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({email, password})
+                    });
+                    login(); // Try login again
+                }
+            } catch(e) {
+                // Demo mode
+                document.getElementById('login').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                document.getElementById('user-email').innerText = email;
+            }
+        }
+        
+        function sendEmailCode() { alert('Email code sent!'); }
+        function sendPhoneCode() { alert('Phone code sent!'); }
+        function verifyAll() {
+            document.getElementById('bind-modal').classList.add('hidden');
+            login();
+        }
+        
+        function showDeposit() { alert('Deposit modal'); }
+        function showWithdraw() { alert('Withdraw modal'); }
+        function showTransfer() { alert('Transfer modal'); }
+        function showTrade() { alert('Trade modal'); }
+        
+        function logout() {
+            sessionId = '';
+            document.getElementById('login').classList.remove('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
