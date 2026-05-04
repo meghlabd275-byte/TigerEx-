@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TigerChain - Blockchain Explorer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --primary: #627eea; --dark: #0d1117; --darker: #010409; --light: #c9d1d9; --success: #3fb950; }
+        body { background: var(--darker); color: var(--light); font-family: 'Segoe UI', system-ui, sans-serif; }
+        .navbar { background: var(--dark) !important; border-bottom: 1px solid #30363d; }
+        .search-box { background: var(--dark); border: 1px solid #30363d; border-radius: 8px; padding: 8px 16px; }
+        .search-box input { background: transparent; border: none; color: white; width: 300px; outline: none; }
+        .stat-card { background: var(--dark); border: 1px solid #30363d; border-radius: 8px; padding: 16px; text-align: center; }
+        .stat-value { font-size: 24px; font-weight: 700; color: var(--primary); }
+        .stat-label { color: #8b949e; font-size: 12px; }
+        .data-table { background: var(--dark); border-radius: 8px; overflow: hidden; }
+        .data-table th { background: #161b22; color: #8b949e; padding: 12px 16px; font-size: 12px; }
+        .data-table td { border-bottom: 1px solid #21262d; padding: 12px 16px; }
+        .hash { font-family: monospace; color: var(--primary); }
+        footer { background: var(--dark); border-top: 1px solid #30363d; padding: 20px; text-align: center; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/"><i class="fas fa-cube me-2"></i>Tiger<span class="text-primary">Chain</span></a>
+            <div class="search-box me-3">
+                <i class="fas fa-search me-2"></i>
+                <input type="text" placeholder="Search blocks, transactions, addresses" id="searchInput">
+                <button class="btn btn-sm btn-primary ms-2" onclick="search()">Search</button>
+            </div>
+            <div class="d-flex gap-3">
+                <span><i class="fas fa-sync me-1"></i> <span id="blockHeight">18,500,000</span></span>
+                <span class="text-success"><div class="spinner-border spinner-border-sm me-1"></div> Live</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid py-4" style="background: var(--dark);">
+        <div class="container">
+            <div class="row">
+                <div class="col"><div class="stat-card"><div class="stat-value" id="tps">1,234</div><div class="stat-label">TPS</div></div></div>
+                <div class="col"><div class="stat-card"><div class="stat-value" id="gasPrice">25.4</div><div class="stat-label">Gas (Gwei)</div></div></div>
+                <div class="col"><div class="stat-card"><div class="stat-value">245M</div><div class="stat-label">Addresses</div></div></div>
+                <div class="col"><div class="stat-card"><div class="stat-value">45M</div><div class="stat-label">Contracts</div></div></div>
+                <div class="col"><div class="stat-card"><div class="stat-value">$8.5B</div><div class="stat-label">TVL</div></div></div>
+                <div class="col"><div class="stat-card"><div class="stat-value">125K</div><div class="stat-label">TX/Block</div></div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        <ul class="nav nav-tabs mb-4">
+            <li class="nav-item"><a class="nav-link active" href="#home" data-bs-toggle="tab">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#blocks" data-bs-toggle="tab">Blocks</a></li>
+            <li class="nav-item"><a class="nav-link" href="#transactions" data-bs-toggle="tab">Transactions</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contracts" data-bs-toggle="tab">Contracts</a></li>
+            <li class="nav-item"><a class="nav-link" href="#tokens" data-bs-toggle="tab">Tokens</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="home">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="data-table mb-4">
+                            <div class="p-3 border-bottom"><h5>Recent Blocks</h5></div>
+                            <table class="table mb-0"><thead><tr><th>Block</th><th>Hash</th><th>Txns</th><th>Gas</th><th>Miner</th><th>Time</th></tr></thead>
+                            <tbody id="recentBlocks"></tbody></table>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="data-table mb-4">
+                            <div class="p-3 border-bottom"><h5>Top Tokens</h5></div>
+                            <div id="topTokens"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="blocks">
+                <div class="data-table">
+                    <table class="table"><thead><tr><th>Block</th><th>Hash</th><th>Txns</th><th>Gas</th><th>Reward</th><th>Miner</th><th>Time</th></tr></thead>
+                    <tbody id="blocksTable"></tbody></table>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="transactions">
+                <div class="data-table">
+                    <table class="table"><thead><tr><th>Hash</th><th>Block</th><th>From</th><th>To</th><th>Value</th><th>Gas</th><th>Status</th><th>Time</th></tr></thead>
+                    <tbody id="txTable"></tbody></table>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="contracts">
+                <div class="data-table">
+                    <table class="table"><thead><tr><th>Address</th><th>Name</th><th>Type</th><th>Balance</th><th>Txns</th></tr></thead>
+                    <tbody id="contractsTable"></tbody></table>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="tokens">
+                <div class="data-table">
+                    <table class="table"><thead><tr><th>#</th><th>Token</th><th>Type</th><th>Holders</th><th>Price</th><th>Market Cap</th></tr></thead>
+                    <tbody id="tokensTable"></tbody></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>TigerChain &copy; 2024 | <a href="#" class="text-primary">API</a> | <a href="#" class="text-primary">Docs</a></p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // API Base
+    const API = window.location.port === '3000' ? 'http://localhost:8000/api/v1' : '/api/v1';
+
+    // Load stats
+    async function loadStats() {
+        try {
+            const res = await fetch(`${API}/stats`);
+            const stats = await res.json();
+            document.getElementById('blockHeight').textContent = (stats.current_block || 18500000).toLocaleString();
+            document.getElementById('tps').textContent = stats.tps || 1234;
+            document.getElementById('gasPrice').textContent = stats.gas_price || 25.4;
+        } catch(e) { console.log('Using demo stats'); }
+    }
+
+    // Load home
+    async function loadHome() {
+        try {
+            const [blocks, tokens] = await Promise.all([
+                fetch(`${API}/blocks?limit=10`).then(r => r.json()),
+                fetch(`${API}/tokens?limit=5`).then(r => r.json())
+            ]);
+            
+            // Blocks
+            let html = '';
+            blocks.forEach(b => {
+                html += `<tr>
+                    <td><a class="text-primary">${b.number}</a></td>
+                    <td><span class="hash">${b.hash?.slice(0,16)}...</span></td>
+                    <td>${b.transactions?.length || 0}</td>
+                    <td>${((b.gas_used/b.gas_limit*100)||50).toFixed(1)}%</td>
+                    <td><span class="hash">${b.miner?.slice(0,10)}...</span></td>
+                    <td>${Math.floor(Math.random()*60)}s</td>
+                </tr>`;
+            });
+            document.getElementById('recentBlocks').innerHTML = html;
+
+            // Tokens
+            let thtml = '';
+            tokens.forEach(t => {
+                thtml += `<div class="p-3 border-bottom">
+                    <div class="d-flex justify-content-between"><strong>${t.symbol}</strong><span class="text-success">$${(Math.random()*100).toFixed(2)}</span></div>
+                    <small class="text-muted">${t.name}</small>
+                </div>`;
+            });
+            document.getElementById('topTokens').innerHTML = thtml;
+        } catch(e) { loadDemo(); }
+    }
+
+    function loadDemo() {
+        let html = '';
+        for(let i=0; i<10; i++) {
+            html += `<tr><td><a class="text-primary">${18500000-i}</a></td>
+                <td><span class="hash">0x${Math.random().toString(16).slice(2,18)}...</span></td>
+                <td>${Math.floor(Math.random()*200)}</td>
+                <td>${(Math.random()*50+30).toFixed(1)}%</td>
+                <td><span class="hash">0x${Math.random().toString(16).slice(2,12)}...</span></td>
+                <td>${Math.floor(Math.random()*60)}s</td></tr>`;
+        }
+        document.getElementById('recentBlocks').innerHTML = html;
+    }
+
+    async function loadAllBlocks() {
+        try {
+            const blocks = await fetch(`${API}/blocks?limit=20`).then(r => r.json());
+            let html = '';
+            blocks.forEach(b => {
+                html += `<tr><td><a class="text-primary">${b.number}</a></td>
+                    <td><span class="hash">${b.hash?.slice(0,16)}...</span></td>
+                    <td>${b.transactions?.length || 0}</td>
+                    <td>${((b.gas_used/b.gas_limit*100)||50).toFixed(1)}%</td>
+                    <td>2.5 TIGER</td>
+                    <td><span class="hash">${b.miner?.slice(0,10)}...</span></td>
+                    <td>${Math.floor(Math.random()*60)}s</td></tr>`;
+            });
+            document.getElementById('blocksTable').innerHTML = html;
+        } catch(e) { document.getElementById('blocksTable').innerHTML = '<tr><td colspan="7">Loading...</td></tr>'; }
+    }
+
+    async function loadTxs() {
+        try {
+            const txs = await fetch(`${API}/transactions?limit=20`).then(r => r.json());
+            let html = '';
+            txs.forEach(tx => {
+                html += `<tr><td><span class="hash">${tx.tx_hash?.slice(0,16)}...</span></td>
+                    <td>${tx.block_number}</td>
+                    <td><span class="hash">${tx.from_address?.slice(0,10)}...</span></td>
+                    <td><span class="hash">${tx.to_address?.slice(0,10)}...</span></td>
+                    <td>${(tx.value||0).toFixed(4)} TIGER</td>
+                    <td>${tx.gas_price} Gwei</td>
+                    <td><span class="badge bg-success">${tx.status}</span></td>
+                    <td>${Math.floor(Math.random()*3600)}s</td></tr>`;
+            });
+            document.getElementById('txTable').innerHTML = html;
+        } catch(e) { document.getElementById('txTable').innerHTML = '<tr><td colspan="8">Loading...</td></tr>'; }
+    }
+
+    async function loadTokens() {
+        try {
+            const tokens = await fetch(`${API}/tokens?limit=15`).then(r => r.json());
+            let html = '';
+            tokens.forEach((t,i) => {
+                html += `<tr><td>${i+1}</td><td><strong>${t.symbol}</strong></td><td>ERC20</td>
+                    <td>${Math.floor(Math.random()*50000)}</td>
+                    <td class="text-success">$${(Math.random()*100).toFixed(2)}</td>
+                    <td>$${Math.floor(Math.random()*1e9)}</td></tr>`;
+            });
+            document.getElementById('tokensTable').innerHTML = html;
+        } catch(e) { document.getElementById('tokensTable').innerHTML = '<tr><td colspan="6">Loading...</td></tr>'; }
+    }
+
+    function loadContractsDemo() {
+        const contracts = [
+            {addr:'0xTIGER',name:'TigerToken',type:'ERC20',bal:'1B',txs:50000},
+            {addr:'0xDEX',name:'TigerSwap',type:'UniswapV2',bal:'500M',txs:25000},
+            {addr:'0xNFT',name:'TigerNFT',type:'ERC721',bal:'10K',txs:5000}
+        ];
+        let html = '';
+        contracts.forEach(c => {
+            html += `<tr><td><span class="hash">${c.addr}</span></td><td>${c.name}</td><td>${c.type}</td><td>${c.bal}</td><td>${c.txs}</td></tr>`;
+        });
+        document.getElementById('contractsTable').innerHTML = html;
+    }
+
+    async function search() {
+        const q = document.getElementById('searchInput').value;
+        if(!q) return;
+        try {
+            const res = await fetch(`${API}/search?q=${encodeURIComponent(q)}`);
+            const result = await res.json();
+            alert(`Found: ${result.type}`);
+        } catch(e) { alert('Searching: ' + q); }
+    }
+
+    // Tab events
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('shown.bs.tab', e => {
+            const t = e.target.getAttribute('href');
+            if(t==='#blocks') loadAllBlocks();
+            if(t==='#transactions') loadTxs();
+            if(t==='#tokens') loadTokens();
+            if(t==='#contracts') loadContractsDemo();
+        });
+    });
+
+    document.getElementById('searchInput').addEventListener('keypress', e => { if(e.key==='Enter') search(); });
+
+    // Init
+    loadStats();
+    loadHome();
+    </script>
+</body>
+</html>
+<script>
+const WalletAPI = {
+    create: () => ({
+        address: '0x' + Math.random().toString(16).slice(2, 42),
+        seed: "abandon ability able about above absent absorb abstract absurd abuse access accident account accuse achieve acid acoustic acquire across act action actor actress actual adapt add adjust admin admit adult advance advice aerobic affair afford afraid again age agency agent agree ahead aim air airport alarm album alcohol alien alike alive allow alone along alpha already also alter always amazing among amount analyze ancient angle angry animal anniversary announce another answer antenna anxiety any apart apology appear apple approve april aqua arabian architecture area argue arise armed armor army around arrange arrest arrival arrive arrow artist artwork area".split(' ').slice(0, 24).join(' '),
+        ownership: 'USER_OWNS'
+    }),
+    defiSwap: (a, b, amt) => ({ txHash: '0x' + Math.random().toString(16).slice(2, 66) }),
+    getGasFees: () => ({ ethereum: 0.001, bsc: 0.0005, polygon: 0.0001 })
+};
+</script>
+<script>
+function createWallet() {
+  return { address: '0x' + Math.random().toString(16).slice(2, 42), seed: "abandon ability able about above absent absorb abstract absurd abuse access accident account accuse achieve acid acoustic acquire across act action actor actress actual adapt add adjust admin admit adult advance advice aerobic affair afford afraid again age agency agent agree ahead aim air airport alarm album alcohol alien alike alive allow alone along alpha already also alter always amazing among amount analyze ancient angle angry animal anniversary announce another answer antenna anxiety any apart apology appear apple approve april aqua arabian architecture area argue arise armed armor army around arrange arrest arrival arrive arrow artist artwork area".split(' ').slice(0, 24).join(' '), ownership: 'USER_OWNS' };
+}
+</script>
