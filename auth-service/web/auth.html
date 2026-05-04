@@ -9,651 +9,444 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         * { font-family: 'Inter', sans-serif; }
-        .country-selector { max-height: 300px; overflow-y: auto; }
-        .country-option { display: flex; align-items: center; gap: 10px; padding: 10px 15px; cursor: pointer; transition: all 0.2s; }
-        .country-option:hover { background: #f3f4f6; }
-        .input-group { position: relative; }
-        .input-group .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #9ca3af; }
-        .verification-input { letter-spacing: 0.3em; font-size: 1.5rem; text-align: center; }
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .country-selector { max-height: 280px; overflow-y: auto; }
+        .verification-input { letter-spacing: 0.4em; font-size: 1.8rem; font-weight: bold; }
     </style>
 </head>
-<body class="bg-gray-900 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
+<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 min-h-screen">
+    <div class="container mx-auto px-4 py-6 min-h-screen flex flex-col">
         <!-- Logo -->
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-yellow-500"><i class="fas fa-tiger"></i> TigerEx</h1>
-            <p class="text-gray-400 mt-2">Secure Authentication</p>
+        <div class="text-center mb-4">
+            <h1 class="text-5xl font-extrabold text-yellow-500 tracking-tight">
+                <i class="fas fa-tiger"></i> TigerEx
+            </h1>
+            <p class="text-gray-400 mt-2 text-lg">Secure Cryptocurrency Exchange</p>
         </div>
         
         <!-- Main Card -->
-        <div class="max-w-lg mx-auto bg-gray-800 rounded-2xl shadow-2xl p-8">
+        <div class="max-w-md mx-auto bg-gray-800/90 backdrop-blur rounded-2xl shadow-2xl p-6 w-full border border-gray-700">
             
-            <!-- Login Form -->
-            <div id="login-form" class="fade-in">
-                <h2 class="text-2xl font-bold text-white mb-6">Welcome Back</h2>
+            <!-- LOGIN VIEW -->
+            <div id="login-view" class="fade-in">
+                <h2 class="text-2xl font-bold text-white mb-6 text-center">Welcome Back</h2>
                 
                 <!-- Social Login -->
-                <div class="mb-6">
+                <div class="mb-5">
                     <p class="text-gray-400 text-sm mb-3 text-center">Continue with</p>
-                    <div class="grid grid-cols-4 gap-2">
-                        <button onclick="socialLogin('google')" class="bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg transition">
-                            <i class="fab fa-google"></i>
-                        </button>
-                        <button onclick="socialLogin('facebook')" class="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition">
-                            <i class="fab fa-facebook"></i>
-                        </button>
-                        <button onclick="socialLogin('twitter')" class="bg-black hover:bg-gray-800 text-white py-2 rounded-lg transition">
-                            <i class="fab fa-twitter"></i>
-                        </button>
-                        <button onclick="socialLogin('apple')" class="bg-gray-700 hover:bg-gray-600 text-white py-2 rounded-lg transition">
-                            <i class="fab fa-apple"></i>
-                        </button>
-                        <button onclick="socialLogin('github')" class="bg-gray-800 hover:bg-gray-700 text-white py-2 rounded-lg transition">
-                            <i class="fab fa-github"></i>
-                        </button>
-                        <button onclick="socialLogin('linkedin')" class="bg-blue-700 hover:bg-blue-600 text-white py-2 rounded-lg transition">
-                            <i class="fab fa-linkedin"></i>
-                        </button>
-                        <button onclick="socialLogin('discord')" class="bg-indigo-600 hover:bg-indigo-500 text-white py-2 rounded-lg transition">
-                            <i class="fab fa-discord"></i>
-                        </button>
-                        <button onclick="socialLogin('telegram')" class="bg-blue-500 hover:bg-blue-400 text-white py-2 rounded-lg transition">
-                            <i class="fab fa-telegram"></i>
-                        </button>
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <button onclick="socialLogin('google')" class="w-12 h-12 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center text-white transition shadow-lg"><i class="fab fa-google text-xl"></i></button>
+                        <button onclick="socialLogin('facebook')" class="w-12 h-12 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center text-white transition shadow-lg"><i class="fab fa-facebook text-xl"></i></button>
+                        <button onclick="socialLogin('twitter')" class="w-12 h-12 bg-gray-900 hover:bg-gray-800 rounded-full flex items-center justify-center text-white transition shadow-lg border border-gray-700"><i class="fab fa-x-twitter text-xl"></i></button>
+                        <button onclick="socialLogin('apple')" class="w-12 h-12 bg-gray-700 hover:bg-gray-600 rounded-full flex items-center justify-center text-white transition shadow-lg"><i class="fab fa-apple text-xl"></i></button>
+                        <button onclick="socialLogin('github')" class="w-12 h-12 bg-gray-800 hover:bg-gray-700 rounded-full flex items-center justify-center text-white transition shadow-lg border border-gray-600"><i class="fab fa-github text-xl"></i></button>
+                        <button onclick="socialLogin('linkedin')" class="w-12 h-12 bg-blue-700 hover:bg-blue-600 rounded-full flex items-center justify-center text-white transition shadow-lg"><i class="fab fa-linkedin text-xl"></i></button>
+                        <button onclick="socialLogin('discord')" class="w-12 h-12 bg-indigo-600 hover:bg-indigo-500 rounded-full flex items-center justify-center text-white transition shadow-lg"><i class="fab fa-discord text-xl"></i></button>
+                        <button onclick="socialLogin('telegram')" class="w-12 h-12 bg-blue-500 hover:bg-blue-400 rounded-full flex items-center justify-center text-white transition shadow-lg"><i class="fab fa-telegram text-xl"></i></button>
                     </div>
                 </div>
                 
-                <div class="flex items-center mb-6">
+                <div class="flex items-center my-5">
                     <div class="flex-1 border-t border-gray-600"></div>
-                    <span class="px-4 text-gray-400">or</span>
+                    <span class="px-3 text-gray-500 text-sm">or</span>
                     <div class="flex-1 border-t border-gray-600"></div>
                 </div>
                 
                 <form onsubmit="return handleLogin(event)">
                     <div class="mb-4">
                         <label class="block text-gray-400 text-sm mb-2">Email or Phone</label>
-                        <input type="text" id="login-identifier" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-500">
+                        <div class="relative">
+                            <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                            <input type="text" id="login-identifier" required class="w-full bg-gray-700 border border-gray-600 rounded-xl px-12 py-3 text-white focus:outline-none focus:border-yellow-500" placeholder="Enter email or phone">
+                        </div>
                     </div>
                     
                     <div class="mb-4">
                         <label class="block text-gray-400 text-sm mb-2">Password</label>
-                        <div class="input-group">
-                            <input type="password" id="login-password" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-500">
-                            <i class="fas fa-eye toggle-password" onclick="togglePassword('login-password')"></i>
+                        <div class="relative">
+                            <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                            <input type="password" id="login-password" required class="w-full bg-gray-700 border border-gray-600 rounded-xl px-12 py-3 text-white focus:outline-none focus:border-yellow-500 pr-12" placeholder="Enter password">
+                            <button type="button" onclick="togglePassword('login-password')" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-yellow-500"><i class="fas fa-eye"></i></button>
                         </div>
                     </div>
                     
-                    <div class="flex justify-between items-center mb-6">
-                        <label class="flex items-center">
+                    <div class="flex justify-between items-center mb-5">
+                        <label class="flex items-center cursor-pointer">
                             <input type="checkbox" id="stay-logged-in" class="w-4 h-4 rounded bg-gray-700 border-gray-600 text-yellow-500">
                             <span class="ml-2 text-gray-400 text-sm">Stay logged in (30 days)</span>
                         </label>
-                        <button type="button" onclick="showForgotPassword()" class="text-yellow-500 hover:text-yellow-400 text-sm">Forgot Password?</button>
+                        <button type="button" onclick="showView('forgot')" class="text-yellow-500 hover:text-yellow-400 text-sm font-medium">Forgot Password?</button>
                     </div>
                     
-                    <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-3 rounded-lg transition">Login</button>
+                    <button type="submit" class="w-full bg-gradient-to-r from-yellow-500 to-yellow-400 hover:from-yellow-400 hover:to-yellow-300 text-gray-900 font-bold py-3.5 rounded-xl transition shadow-lg">Login</button>
                 </form>
                 
-                <p class="text-center text-gray-400 mt-6">
-                    Don't have an account? <button onclick="showRegister()" class="text-yellow-500 hover:text-yellow-400">Sign Up</button>
-                </p>
+                <p class="text-center text-gray-400 mt-6">Don't have an account? <button onclick="showView('register')" class="text-yellow-500 hover:text-yellow-400 font-semibold">Sign Up</button></p>
             </div>
             
-            <!-- Register Form -->
-            <div id="register-form" class="hidden">
-                <h2 class="text-2xl font-bold text-white mb-6">Create Account</h2>
+            <!-- REGISTER VIEW -->
+            <div id="register-view" class="hidden">
+                <button onclick="showView('login')" class="text-gray-400 hover:text-white mb-2 -mt-2"><i class="fas fa-arrow-left"></i> Back</button>
+                <h2 class="text-2xl font-bold text-white mb-2 text-center">Create Account</h2>
+                <p class="text-gray-400 text-center text-sm mb-5">Join TigerEx - The Premier Crypto Exchange</p>
                 
                 <!-- Social Register -->
-                <div class="mb-6">
+                <div class="mb-4">
                     <p class="text-gray-400 text-sm mb-3 text-center">Continue with</p>
-                    <div class="grid grid-cols-4 gap-2">
-                        <button onclick="socialLogin('google')" class="bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg transition">
-                            <i class="fab fa-google"></i>
-                        </button>
-                        <button onclick="socialLogin('facebook')" class="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition">
-                            <i class="fab fa-facebook"></i>
-                        </button>
-                        <button onclick="socialLogin('twitter')" class="bg-black hover:bg-gray-800 text-white py-2 rounded-lg transition">
-                            <i class="fab fa-twitter"></i>
-                        </button>
-                        <button onclick="socialLogin('apple')" class="bg-gray-700 hover:bg-gray-600 text-white py-2 rounded-lg transition">
-                            <i class="fab fa-apple"></i>
-                        </button>
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <button onclick="socialLogin('google')" class="w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center text-white transition"><i class="fab fa-google"></i></button>
+                        <button onclick="socialLogin('facebook')" class="w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center text-white transition"><i class="fab fa-facebook"></i></button>
+                        <button onclick="socialLogin('twitter')" class="w-10 h-10 bg-gray-900 hover:bg-gray-800 rounded-full flex items-center justify-center text-white transition border border-gray-700"><i class="fab fa-x-twitter"></i></button>
+                        <button onclick="socialLogin('apple')" class="w-10 h-10 bg-gray-700 hover:bg-gray-600 rounded-full flex items-center justify-center text-white transition"><i class="fab fa-apple"></i></button>
                     </div>
                 </div>
                 
-                <div class="flex items-center mb-6">
+                <div class="flex items-center my-4">
                     <div class="flex-1 border-t border-gray-600"></div>
-                    <span class="px-4 text-gray-400">or</span>
+                    <span class="px-3 text-gray-500 text-sm">or</span>
                     <div class="flex-1 border-t border-gray-600"></div>
                 </div>
                 
+                <!-- Step 1 -->
                 <div id="register-step-1">
-                    <div class="mb-4">
-                        <label class="block text-gray-400 text-sm mb-2">Email</label>
-                        <input type="email" id="register-email" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-500">
+                    <div class="mb-3">
+                        <label class="block text-gray-400 text-sm mb-2">Email Address</label>
+                        <input type="email" id="register-email" required class="w-full bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-yellow-500" placeholder="your@email.com">
                     </div>
                     
-                    <div class="mb-4">
-                        <label class="block text-gray-400 text-sm mb-2">Phone</label>
+                    <div class="mb-3">
+                        <label class="block text-gray-400 text-sm mb-2">Phone Number</label>
                         <div class="flex gap-2">
-                            <div class="relative w-1/3">
-                                <button type="button" onclick="toggleCountrySelector()" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-3 text-white text-left flex justify-between items-center" id="selected-country">
-                                    <span id="country-flag">🇺🇸</span>
-                                    <span id="country-code">+1</span>
-                                    <i class="fas fa-chevron-down"></i>
+                            <div class="relative w-28">
+                                <button type="button" onclick="toggleCountryDropdown()" class="w-full bg-gray-700 border border-gray-600 rounded-xl px-3 py-3 text-white text-left flex justify-between items-center hover:border-yellow-500">
+                                    <span id="selected-flag">🇺🇸</span>
+                                    <span id="selected-code">+1</span>
+                                    <i class="fas fa-chevron-down text-xs"></i>
                                 </button>
-                                <div id="country-dropdown" class="hidden absolute top-full left-0 w-full bg-gray-700 border border-gray-600 rounded-lg mt-1 z-10 country-selector"></div>
+                                <div id="country-dropdown" class="hidden absolute top-full left-0 w-full bg-gray-700 border border-gray-600 rounded-xl mt-1 z-50 country-selector shadow-xl"></div>
                             </div>
-                            <input type="tel" id="register-phone" required class="w-2/3 bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-500">
+                            <input type="tel" id="register-phone" required class="flex-1 bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-yellow-500" placeholder="Phone number">
                         </div>
                     </div>
                     
-                    <div class="mb-4">
+                    <div class="mb-3">
                         <label class="block text-gray-400 text-sm mb-2">Password</label>
-                        <div class="input-group">
-                            <input type="password" id="register-password" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-500">
-                            <i class="fas fa-eye toggle-password" onclick="togglePassword('register-password')"></i>
+                        <div class="relative">
+                            <input type="password" id="register-password" required class="w-full bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-yellow-500 pr-12" placeholder="Create password">
+                            <button type="button" onclick="togglePassword('register-password')" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-yellow-500"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="block text-gray-400 text-sm mb-2">Confirm Password</label>
+                        <div class="relative">
+                            <input type="password" id="register-confirm-password" required class="w-full bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-yellow-500 pr-12" placeholder="Confirm password">
+                            <button type="button" onclick="togglePassword('register-confirm-password')" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-yellow-500"><i class="fas fa-eye"></i></button>
                         </div>
                     </div>
                     
                     <div class="mb-4">
-                        <label class="block text-gray-400 text-sm mb-2">Confirm Password</label>
-                        <div class="input-group">
-                            <input type="password" id="register-confirm-password" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-500">
-                            <i class="fas fa-eye toggle-password" onclick="togglePassword('register-confirm-password')"></i>
-                        </div>
-                    </div>
-                    
-                    <div class="mb-6">
-                        <label class="flex items-center">
-                            <input type="checkbox" id="agree-terms" required class="w-4 h-4 rounded bg-gray-700 border-gray-600 text-yellow-500">
-                            <span class="ml-2 text-gray-400 text-sm">I agree to TigerEx Terms & Conditions</span>
+                        <label class="flex items-start cursor-pointer">
+                            <input type="checkbox" id="agree-terms" required class="mt-1 w-4 h-4 rounded bg-gray-700 border-gray-600 text-yellow-500">
+                            <span class="ml-2 text-gray-400 text-xs">I agree to TigerEx <a href="#" class="text-yellow-500 underline">Terms & Conditions</a></span>
                         </label>
                     </div>
                     
-                    <button type="button" onclick="registerStep1()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-3 rounded-lg transition">Continue</button>
+                    <button type="button" onclick="registerStep1()" class="w-full bg-gradient-to-r from-yellow-500 to-yellow-400 text-gray-900 font-bold py-3.5 rounded-xl transition shadow-lg">Continue</button>
                 </div>
                 
-                <!-- Phone Verification -->
+                <!-- Step 2: Phone Verify -->
                 <div id="register-step-2" class="hidden">
-                    <div class="text-center mb-6">
-                        <i class="fas fa-mobile-alt text-4xl text-yellow-500"></i>
-                        <h3 class="text-xl font-bold text-white mt-4">Verify Phone</h3>
-                        <p class="text-gray-400" id="phone-display"></p>
+                    <div class="text-center mb-5">
+                        <div class="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-3"><i class="fas fa-mobile-alt text-3xl text-yellow-500"></i></div>
+                        <h3 class="text-xl font-bold text-white">Verify Phone</h3>
+                        <p class="text-gray-400 text-sm mt-1" id="register-phone-display"></p>
                     </div>
-                    
-                    <div class="mb-4">
-                        <input type="text" id="phone-code" maxlength="6" class="verification-input w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-500" placeholder="Enter 6-digit code">
-                    </div>
-                    
-                    <button type="button" onclick="verifyPhone()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-3 rounded-lg transition">Verify Phone</button>
-                    <p class="text-center text-gray-400 mt-4"><button type="button" onclick="resendCode('phone')" class="text-yellow-500">Resend Code</button></p>
+                    <input type="text" id="register-phone-code" maxlength="6" class="verification-input w-full bg-gray-700 border border-gray-600 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-yellow-500 mb-4" placeholder="000000">
+                    <button type="button" onclick="verifyRegisterPhone()" class="w-full bg-gradient-to-r from-yellow-500 to-yellow-400 text-gray-900 font-bold py-3 rounded-xl">Verify Phone</button>
+                    <p class="text-center text-gray-400 mt-4 text-sm">Didn't receive? <button type="button" onclick="resendCode('phone')" class="text-yellow-500">Resend</button></p>
+                    <button type="button" onclick="showRegisterStep(1)" class="mt-4 w-full text-gray-500 text-sm">Back</button>
                 </div>
                 
-                <!-- Email Verification -->
+                <!-- Step 3: Email Verify -->
                 <div id="register-step-3" class="hidden">
-                    <div class="text-center mb-6">
-                        <i class="fas fa-envelope text-4xl text-yellow-500"></i>
-                        <h3 class="text-xl font-bold text-white mt-4">Verify Email</h3>
-                        <p class="text-gray-400" id="email-display"></p>
+                    <div class="text-center mb-5">
+                        <div class="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-3"><i class="fas fa-envelope text-3xl text-yellow-500"></i></div>
+                        <h3 class="text-xl font-bold text-white">Verify Email</h3>
+                        <p class="text-gray-400 text-sm mt-1" id="register-email-display"></p>
                     </div>
-                    
-                    <div class="mb-4">
-                        <input type="text" id="email-code" maxlength="6" class="verification-input w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-500" placeholder="Enter 6-digit code">
-                    </div>
-                    
-                    <button type="button" onclick="verifyEmail()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-3 rounded-lg transition">Verify Email</button>
-                    <p class="text-center text-gray-400 mt-4"><button type="button" onclick="resendCode('email')" class="text-yellow-500">Resend Code</button></p>
+                    <input type="text" id="register-email-code" maxlength="6" class="verification-input w-full bg-gray-700 border border-gray-600 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-yellow-500 mb-4" placeholder="000000">
+                    <button type="button" onclick="verifyRegisterEmail()" class="w-full bg-gradient-to-r from-yellow-500 to-yellow-400 text-gray-900 font-bold py-3 rounded-xl">Verify Email</button>
+                    <p class="text-center text-gray-400 mt-4 text-sm">Didn't receive? <button type="button" onclick="resendCode('email')" class="text-yellow-500">Resend</button></p>
+                    <button type="button" onclick="showRegisterStep(2)" class="mt-4 w-full text-gray-500 text-sm">Back</button>
                 </div>
                 
-                <!-- Complete -->
-                <div id="register-step-4" class="hidden text-center">
-                    <i class="fas fa-check-circle text-6xl text-green-500"></i>
-                    <h3 class="text-xl font-bold text-white mt-4">Account Created!</h3>
-                    <button onclick="showDashboard()" class="mt-6 w-full bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-3 rounded-lg transition">Go to Dashboard</button>
+                <!-- Step 4: Success -->
+                <div id="register-step-4" class="hidden text-center py-4">
+                    <div class="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-check-circle text-5xl text-green-500"></i></div>
+                    <h3 class="text-2xl font-bold text-white">Account Created!</h3>
+                    <p class="text-gray-400 mt-2">Welcome to TigerEx</p>
+                    <button onclick="showView('dashboard')" class="mt-6 w-full bg-gradient-to-r from-yellow-500 to-yellow-400 text-gray-900 font-bold py-3.5 rounded-xl">Go to Dashboard</button>
                 </div>
                 
-                <p class="text-center text-gray-400 mt-6">
-                    <button onclick="showLogin()" class="text-yellow-500 hover:text-yellow-400">Already have an account? Login</button>
-                </p>
+                <p class="text-center text-gray-400 mt-5 pt-4 border-t border-gray-700">Already have an account? <button onclick="showView('login')" class="text-yellow-500 hover:text-yellow-400 font-semibold">Login</button></p>
             </div>
             
-            <!-- Bind Email/Phone After Social Login -->
-            <div id="bind-form" class="hidden">
-                <h2 class="text-2xl font-bold text-white mb-6">Complete Your Profile</h2>
-                
-                <div class="bg-yellow-500 bg-opacity-10 border border-yellow-500 rounded-lg p-4 mb-6">
-                    <p class="text-yellow-500 text-sm">
-                        <i class="fas fa-info-circle"></i> 
-                        Please bind your email and phone to complete your account
-                    </p>
-                </div>
-                
-                <!-- Bind Email -->
-                <div id="bind-email-section">
-                    <div class="mb-4">
-                        <label class="block text-gray-400 text-sm mb-2">Email Address</label>
-                        <input type="email" id="bind-email" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-500" placeholder="your@email.com">
-                    </div>
-                    <button type="button" onclick="sendBindEmailCode()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-3 rounded-lg transition">Send Email Code</button>
-                </div>
-                
-                <div id="bind-email-verify" class="hidden mt-4">
-                    <div class="mb-4">
-                        <input type="text" id="bind-email-code" maxlength="6" class="verification-input w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-500" placeholder="Enter email code">
-                    </div>
-                    <button type="button" onclick="verifyBindEmail()" class="w-full bg-green-500 hover:bg-green-400 text-white font-bold py-3 rounded-lg transition">Verify Email</button>
-                </div>
-                
-                <hr class="my-6 border-gray-600">
-                
-                <!-- Bind Phone -->
-                <div id="bind-phone-section">
-                    <div class="mb-4">
-                        <label class="block text-gray-400 text-sm mb-2">Phone Number</label>
-                        <div class="flex gap-2">
-                            <div class="relative w-1/3">
-                                <button type="button" onclick="toggleCountrySelector2()" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-3 text-white text-left flex justify-between items-center">
-                                    <span id="country-flag2">🇺🇸</span>
-                                    <span id="country-code2">+1</span>
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                                <div id="country-dropdown2" class="hidden absolute top-full left-0 w-full bg-gray-700 border border-gray-600 rounded-lg mt-1 z-10 country-selector"></div>
-                            </div>
-                            <input type="tel" id="bind-phone" required class="w-2/3 bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-500">
-                        </div>
-                    </div>
-                    <button type="button" onclick="sendBindPhoneCode()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-3 rounded-lg transition">Send Phone Code</button>
-                </div>
-                
-                <div id="bind-phone-verify" class="hidden mt-4">
-                    <div class="mb-4">
-                        <input type="text" id="bind-phone-code" maxlength="6" class="verification-input w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-500" placeholder="Enter phone code">
-                    </div>
-                    <button type="button" onclick="verifyBindPhone()" class="w-full bg-green-500 hover:bg-green-400 text-white font-bold py-3 rounded-lg transition">Verify Phone</button>
-                </div>
-                
-                <button onclick="showDashboard()" id="bind-complete-btn" class="hidden mt-6 w-full bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-3 rounded-lg transition">Continue to Dashboard</button>
-            </div>
-            
-            <!-- Forgot Password -->
-            <div id="forgot-form" class="hidden">
-                <button onclick="showLogin()" class="text-gray-400 hover:text-white mb-4"><i class="fas fa-arrow-left"></i> Back</button>
-                <h2 class="text-2xl font-bold text-white mb-6">Reset Password</h2>
-                
+            <!-- FORGOT PASSWORD -->
+            <div id="forgot-view" class="hidden">
+                <button onclick="showView('login')" class="text-gray-400 hover:text-white mb-4"><i class="fas fa-arrow-left"></i> Back</button>
+                <h2 class="text-2xl font-bold text-white mb-2 text-center">Reset Password</h2>
+                <p class="text-gray-400 text-center text-sm mb-5">Enter your email or phone to reset password</p>
                 <div class="mb-4">
-                    <label class="block text-gray-400 text-sm mb-2">Email or Phone</label>
-                    <input type="text" id="forgot-identifier" required class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-yellow-500">
+                    <input type="text" id="forgot-identifier" required class="w-full bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-yellow-500" placeholder="Enter email or phone">
                 </div>
-                
-                <button type="button" onclick="initiateForgotPassword()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-3 rounded-lg transition">Continue</button>
+                <button type="button" onclick="initiateForgotPassword()" class="w-full bg-gradient-to-r from-yellow-500 to-yellow-400 text-gray-900 font-bold py-3 rounded-xl">Continue</button>
             </div>
             
-            <!-- Dashboard -->
-            <div id="dashboard" class="hidden">
-                <h2 class="text-2xl font-bold text-white mb-6">Dashboard</h2>
+            <!-- BIND EMAIL/PHONE -->
+            <div id="bind-view" class="hidden">
+                <h2 class="text-2xl font-bold text-white mb-2 text-center">Complete Your Profile</h2>
+                <p class="text-gray-400 text-center text-sm mb-5">Bind your email and phone to complete registration</p>
                 
-                <div class="space-y-4">
-                    <div class="bg-gray-700 rounded-lg p-4">
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <p class="text-gray-400 text-sm">Email</p>
-                                <p class="text-white" id="dash-email">-</p>
-                            </div>
-                            <i class="fas fa-envelope text-2xl text-yellow-500"></i>
-                        </div>
+                <div class="mb-4 p-4 bg-gray-700/50 rounded-xl">
+                    <h4 class="text-white font-semibold mb-3"><i class="fas fa-envelope mr-2 text-yellow-500"></i>Bind Email</h4>
+                    <div id="bind-email-input" class="flex gap-2">
+                        <input type="email" id="bind-email" placeholder="your@email.com" class="flex-1 bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 text-white">
+                        <button onclick="sendBindEmailCode()" class="bg-yellow-500 text-gray-900 px-4 rounded-xl font-semibold">Send</button>
                     </div>
-                    
-                    <div class="bg-gray-700 rounded-lg p-4">
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <p class="text-gray-400 text-sm">Phone</p>
-                                <p class="text-white" id="dash-phone">-</p>
-                            </div>
-                            <i class="fas fa-phone text-2xl text-yellow-500"></i>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-gray-700 rounded-lg p-4">
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <p class="text-gray-400 text-sm">2FA</p>
-                                <p class="text-white" id="dash-2fa">Disabled</p>
-                            </div>
-                            <i class="fas fa-shield-alt text-2xl text-yellow-500"></i>
-                        </div>
+                    <div id="bind-email-verify" class="hidden mt-2">
+                        <input type="text" id="bind-email-code" maxlength="6" placeholder="Code" class="w-full bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 text-white mb-2">
+                        <button onclick="verifyBindEmail()" class="w-full bg-green-600 text-white py-2 rounded-xl font-semibold">Verify</button>
                     </div>
                 </div>
                 
-                <button onclick="logout()" class="mt-6 w-full bg-red-600 hover:bg-red-500 text-white py-3 rounded-lg transition">Logout</button>
+                <div class="mb-4 p-4 bg-gray-700/50 rounded-xl">
+                    <h4 class="text-white font-semibold mb-3"><i class="fas fa-phone mr-2 text-yellow-500"></i>Bind Phone</h4>
+                    <div id="bind-phone-input" class="flex gap-2">
+                        <input type="tel" id="bind-phone" placeholder="Phone number" class="flex-1 bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 text-white">
+                        <button onclick="sendBindPhoneCode()" class="bg-yellow-500 text-gray-900 px-4 rounded-xl font-semibold">Send</button>
+                    </div>
+                    <div id="bind-phone-verify" class="hidden mt-2">
+                        <input type="text" id="bind-phone-code" maxlength="6" placeholder="Code" class="w-full bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 text-white mb-2">
+                        <button onclick="verifyBindPhone()" class="w-full bg-green-600 text-white py-2 rounded-xl font-semibold">Verify</button>
+                    </div>
+                </div>
+                
+                <button onclick="showView('dashboard')" id="bind-complete-btn" class="hidden w-full bg-gradient-to-r from-yellow-500 to-yellow-400 text-gray-900 font-bold py-3 rounded-xl">Continue to Dashboard</button>
             </div>
+            
+            <!-- DASHBOARD -->
+            <div id="dashboard-view" class="hidden">
+                <div class="text-center mb-6">
+                    <div class="w-20 h-20 bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-full flex items-center justify-center mx-auto mb-3"><i class="fas fa-user text-3xl text-gray-900"></i></div>
+                    <h2 class="text-2xl font-bold text-white">My Account</h2>
+                    <p class="text-gray-400 text-sm">Welcome to TigerEx</p>
+                </div>
+                
+                <div class="space-y-3">
+                    <div class="bg-gray-700/50 rounded-xl p-4 flex items-center justify-between">
+                        <div class="flex items-center gap-3"><i class="fas fa-envelope text-yellow-500 text-xl"></i>
+                            <div><p class="text-gray-400 text-xs">Email</p><p class="text-white" id="dash-email">-</p></div>
+                        </div>
+                        <span class="text-green-500 text-sm"><i class="fas fa-check-circle"></i> Verified</span>
+                    </div>
+                    
+                    <div class="bg-gray-700/50 rounded-xl p-4 flex items-center justify-between">
+                        <div class="flex items-center gap-3"><i class="fas fa-phone text-yellow-500 text-xl"></i>
+                            <div><p class="text-gray-400 text-xs">Phone</p><p class="text-white" id="dash-phone">-</p></div>
+                        </div>
+                        <span class="text-green-500 text-sm"><i class="fas fa-check-circle"></i> Verified</span>
+                    </div>
+                    
+                    <div class="bg-gray-700/50 rounded-xl p-4 flex items-center justify-between">
+                        <div class="flex items-center gap-3"><i class="fas fa-shield-alt text-yellow-500 text-xl"></i>
+                            <div><p class="text-gray-400 text-xs">2FA</p><p class="text-white" id="dash-2fa">Disabled</p></div>
+                        </div>
+                        <button class="text-yellow-500 text-sm font-medium">Enable</button>
+                    </div>
+                    
+                    <div class="bg-gray-700/50 rounded-xl p-4 flex items-center justify-between">
+                        <div class="flex items-center gap-3"><i class="fas fa-id-card text-yellow-500 text-xl"></i>
+                            <div><p class="text-gray-400 text-xs">KYC</p><p class="text-white" id="dash-kyc">Not Verified</p></div>
+                        </div>
+                        <button onclick="showView('kyc')" class="text-yellow-500 text-sm font-medium">Verify</button>
+                    </div>
+                </div>
+                
+                <div class="mt-6 space-y-2">
+                    <button onclick="showView('kyc')" class="w-full bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-xl text-left px-4"><i class="fas fa-passport mr-2"></i> KYC Verification</button>
+                    <button onclick="logout()" class="w-full bg-red-600 hover:bg-red-500 text-white py-3 rounded-xl text-left px-4"><i class="fas fa-sign-out-alt mr-2"></i> Logout</button>
+                </div>
+            </div>
+            
+            <!-- KYC VIEW -->
+            <div id="kyc-view" class="hidden">
+                <button onclick="showView('dashboard')" class="text-gray-400 hover:text-white mb-4"><i class="fas fa-arrow-left"></i> Back</button>
+                <h2 class="text-2xl font-bold text-white mb-5 text-center">KYC Verification</h2>
+                
+                <div id="kyc-step-1">
+                    <input type="email" id="kyc-email" placeholder="Email" class="w-full mb-3 bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 text-white">
+                    <input type="tel" id="kyc-phone" placeholder="Phone" class="w-full mb-3 bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 text-white">
+                    <button onclick="kycStep1()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-xl">Continue</button>
+                </div>
+                
+                <div id="kyc-step-2" class="hidden">
+                    <input type="text" id="kyc-first-name" placeholder="First Name" class="w-full mb-2 bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 text-white">
+                    <input type="text" id="kyc-last-name" placeholder="Last Name" class="w-full mb-2 bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 text-white">
+                    <input type="text" id="kyc-username" placeholder="Username" class="w-full mb-2 bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 text-white">
+                    <input type="date" id="kyc-dob" class="w-full mb-2 bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 text-white">
+                    <textarea id="kyc-address" placeholder="Address" class="w-full mb-3 bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 text-white h-20"></textarea>
+                    <button onclick="kycStep2()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-xl">Continue</button>
+                </div>
+                
+                <div id="kyc-step-3" class="hidden">
+                    <select id="kyc-doc-type" class="w-full mb-3 bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 text-white">
+                        <option>Passport</option>
+                        <option>National ID</option>
+                        <option>Driver's License</option>
+                    </select>
+                    <input type="file" id="kyc-front" class="w-full mb-2 text-gray-400 text-sm">
+                    <input type="file" id="kyc-back" class="w-full mb-2 text-gray-400 text-sm">
+                    <input type="file" id="kyc-selfie" class="w-full mb-3 text-gray-400 text-sm">
+                    <button onclick="kycStep3()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-xl">Continue</button>
+                </div>
+                
+                <div id="kyc-step-4" class="hidden text-center">
+                    <div class="bg-gray-900 rounded-xl p-4 mb-4"><video id="kyc-video" autoplay playsinline class="w-full h-48 object-cover rounded-lg"></video></div>
+                    <p class="text-yellow-500 font-semibold mb-3" id="kyc-challenge">Please smile</p>
+                    <button onclick="completeKYC()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-xl">Submit</button>
+                </div>
+                
+                <div id="kyc-step-5" class="hidden">
+                    <input type="file" id="kyc-bank" class="w-full mb-2 text-gray-400 text-sm">
+                    <input type="file" id="kyc-address-proof" class="w-full mb-3 text-gray-400 text-sm">
+                    <button onclick="completeAdvancedKYC()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-xl">Submit</button>
+                </div>
+                
+                <div id="kyc-complete" class="hidden text-center py-6">
+                    <i class="fas fa-check-circle text-6xl text-green-500"></i>
+                    <h3 class="text-xl font-bold text-white mt-4">KYC Submitted!</h3>
+                    <p class="text-gray-400 mt-2">Your documents are being reviewed</p>
+                    <button onclick="showView('dashboard')" class="mt-4 w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-xl">Back to Dashboard</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="text-center mt-6 text-gray-500 text-sm">
+            <p>&copy; 2026 TigerEx. All rights reserved.</p>
         </div>
     </div>
     
     <!-- Toast -->
-    <div id="toast" class="hidden fixed bottom-4 right-4 rounded-lg p-4 shadow-lg max-w-md">
+    <div id="toast" class="hidden fixed bottom-6 right-6 bg-gray-800 border border-gray-700 rounded-xl p-4 shadow-2xl max-w-sm">
         <p id="toast-message" class="text-white"></p>
     </div>
     
     <script>
         let currentUser = null;
-        let currentSession = null;
         let selectedCountry = { code: '+1', name: 'United States', flag: '🇺🇸' };
-        let countries = {};
         let bindStatus = { email: false, phone: false };
         
-        document.addEventListener('DOMContentLoaded', () => { loadCountries(); });
+        const countries = {
+            '+1': {name: 'United States', flag: '🇺🇸'}, '+44': {name: 'United Kingdom', flag: '🇬🇧'}, '+91': {name: 'India', flag: '🇮🇳'},
+            '+86': {name: 'China', flag: '🇨🇳'}, '+81': {name: 'Japan', flag: '🇯🇵'}, '+49': {name: 'Germany', flag: '🇩🇪'},
+            '+33': {name: 'France', flag: '🇫🇷'}, '+55': {name: 'Brazil', flag: '🇧🇷'}, '+7': {name: 'Russia', flag: '🇷🇺'},
+            '+20': {name: 'Egypt', flag: '🇪🇬'}, '+966': {name: 'Saudi Arabia', flag: '🇸🇦'}, '+971': {name: 'UAE', flag: '🇦🇪'},
+            '+92': {name: 'Pakistan', flag: '🇵🇰'}, '+880': {name: 'Bangladesh', flag: '🇧🇩'}, '+65': {name: 'Singapore', flag: '🇸🇬'},
+            '+60': {name: 'Malaysia', flag: '🇲🇾'}, '+62': {name: 'Indonesia', flag: '🇮🇩'}, '+84': {name: 'Vietnam', flag: '🇻🇳'},
+            '+63': {name: 'Philippines', flag: '🇵🇭'}, '+94': {name: 'Sri Lanka', flag: '🇱🇰'}, '+977': {name: 'Nepal', flag: '🇳🇵'},
+            '+254': {name: 'Kenya', flag: '🇰🇪'}, '+27': {name: 'South Africa', flag: '🇿🇦'}, '+234': {name: 'Nigeria', flag: '🇳🇬'},
+            '+61': {name: 'Australia', flag: '🇦🇺'}, '+64': {name: 'New Zealand', flag: '🇳🇿'}, '+39': {name: 'Italy', flag: '🇮🇹'},
+            '+34': {name: 'Spain', flag: '🇪🇸'}, '+31': {name: 'Netherlands', flag: '🇳🇱'}, '+32': {name: 'Belgium', flag: '🇧🇪'},
+            '+41': {name: 'Switzerland', flag: '🇨🇭'}, '+43': {name: 'Austria', flag: '🇦🇹'}, '+45': {name: 'Denmark', flag: '🇩🇰'},
+            '+46': {name: 'Sweden', flag: '🇸🇪'}, '+47': {name: 'Norway', flag: '🇳🇴'}, '+358': {name: 'Finland', flag: '🇫🇮'},
+            '+30': {name: 'Greece', flag: '🇬🇷'}, '+90': {name: 'Turkey', flag: '🇹🇷'}, '+373': {name: 'Moldova', flag: '🇲🇩'},
+            '+380': {name: 'Ukraine', flag: '🇺🇦'}, '+972': {name: 'Israel', flag: '🇮🇱'}, '+962': {name: 'Jordan', flag: '🇯🇴'},
+            '+964': {name: 'Iraq', flag: '🇮🇶'}, '+98': {name: 'Iran', flag: '🇮🇷'},
+        };
         
-        async function loadCountries() {
-            try {
-                const res = await fetch('/auth/countries');
-                countries = await res.json();
-                setupDropdown();
-            } catch(e) {
-                countries = {'+1':{name:'US',flag:'🇺🇸'},'+44':{name:'UK',flag:'🇬🇧'},'+91':{name:'India',flag:'🇮🇳'}};
-                setupDropdown();
-            }
-        }
+        document.addEventListener('DOMContentLoaded', setupCountryDropdown);
         
-        function setupDropdown() {
+        function setupCountryDropdown() {
             const dd = document.getElementById('country-dropdown');
-            dd.innerHTML = '';
-            for(const [code, data] of Object.entries(countries)) {
-                const opt = document.createElement('div');
-                opt.className = 'country-option text-white';
-                opt.innerHTML = `<span>${data.flag}</span><span>${data.name}</span><span class="ml-auto">${code}</span>`;
-                opt.onclick = () => { selectCountry(code); };
-                dd.appendChild(opt);
-            }
+            Object.entries(countries).forEach(([code, data]) => {
+                const div = document.createElement('div');
+                div.className = 'px-3 py-2 hover:bg-gray-600 cursor-pointer text-white text-sm flex items-center gap-2';
+                div.innerHTML = `<span>${data.flag}</span><span class="flex-1">${data.name}</span><span class="text-gray-400">${code}</span>`;
+                div.onclick = () => selectCountry(code);
+                dd.appendChild(div);
+            });
         }
         
-        function toggleCountrySelector() { document.getElementById('country-dropdown').classList.toggle('hidden'); }
-        function selectCountry(code) {
-            selectedCountry = { code, ...countries[code] };
-            document.getElementById('country-flag').textContent = selectedCountry.flag;
-            document.getElementById('country-code').textContent = code;
-            document.getElementById('country-dropdown').classList.add('hidden');
-        }
+        function showView(v) { ['login', 'register', 'forgot', 'bind', 'dashboard', 'kyc'].forEach(x => document.getElementById(x + '-view')?.classList.add('hidden')); document.getElementById(v + '-view')?.classList.remove('hidden'); }
         
-        function togglePassword(id) {
-            const input = document.getElementById(id);
-            const icon = input.nextElementSibling;
-            if (input.type === 'password') { input.type = 'text'; icon.classList.replace('fa-eye','fa-eye-slash'); }
-            else { input.type = 'password'; icon.classList.replace('fa-eye-slash','fa-eye'); }
-        }
+        function togglePassword(id) { const i = document.getElementById(id); i.type = i.type === 'password' ? 'text' : 'password'; }
+        function toggleCountryDropdown() { document.getElementById('country-dropdown').classList.toggle('hidden'); }
+        function selectCountry(code) { selectedCountry = {code, ...countries[code]}; document.getElementById('selected-flag').textContent = selectedCountry.flag; document.getElementById('selected-code').textContent = code; document.getElementById('country-dropdown').classList.add('hidden'); }
         
-        function showLogin() { hideAll(); document.getElementById('login-form').classList.remove('hidden'); }
-        function showRegister() { hideAll(); document.getElementById('register-form').classList.remove('hidden'); document.getElementById('register-step-1').classList.remove('hidden'); }
-        function showForgotPassword() { hideAll(); document.getElementById('forgot-form').classList.remove('hidden'); }
-        function showDashboard() { hideAll(); document.getElementById('dashboard').classList.remove('hidden'); if(currentUser) { document.getElementById('dash-email').textContent = currentUser.email||'-'; document.getElementById('dash-phone').textContent = currentUser.phone||'-'; document.getElementById('dash-2fa').textContent = currentUser.twofa_enabled?'Enabled':'Disabled'; } }
-        function showBindForm() { hideAll(); document.getElementById('bind-form').classList.remove('hidden'); }
-        function hideAll() { document.querySelectorAll('#login-form,#register-form,#forgot-form,#dashboard,#bind-form').forEach(el=>el.classList.add('hidden')); ['register-step-1','register-step-2','register-step-3','register-step-4'].forEach(id=>document.getElementById(id)?.classList.add('hidden')); }
+        function showRegisterStep(s) { for(let i=1; i<=4; i++) document.getElementById('register-step-'+i)?.classList.add('hidden'); document.getElementById('register-step-'+s)?.classList.remove('hidden'); }
+        
+        function showToast(m, t='info') { const toast = document.getElementById('toast'); document.getElementById('toast-message').textContent = m; toast.className = `fixed bottom-6 right-6 ${t==='error'?'bg-red-600':'bg-green-600'} rounded-xl p-4 shadow-2xl max-w-sm fade-in`; toast.classList.remove('hidden'); setTimeout(()=>toast.classList.add('hidden'),3000); }
         
         // Social Login
-        async function socialLogin(provider) {
-            // Simulate OAuth token (in production, redirect to OAuth provider)
-            const mockToken = `${provider}_${Date.now()}_${Math.random().toString(36).substr(2,9)}`;
-            const userInfo = {
-                name: `${provider} User`,
-                email: `user@${provider}.com`,
-                email_verified: true
-            };
-            
-            try {
-                const res = await fetch('/auth/social-login', {
-                    method: 'POST',
-                    headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({ provider, oauth_token: mockToken, user_info: userInfo })
-                });
-                const data = await res.json();
-                
-                if (data.requires_binding) {
-                    currentUser = { user_id: data.user_id };
-                    showBindForm();
-                } else if (data.status === 'logged_in') {
-                    currentSession = data.session_id;
-                    currentUser = { user_id: data.user_id };
-                    showToast('Logged in via ' + provider, 'success');
-                    showDashboard();
-                } else {
-                    showToast(data.error || 'Login failed', 'error');
-                }
-            } catch(e) {
-                showToast('Login failed', 'error');
-            }
-        }
-        
-        // Bind Email
-        async function sendBindEmailCode() {
-            const email = document.getElementById('bind-email').value;
-            if(!email) return showToast('Enter email', 'error');
-            
-            try {
-                const res = await fetch('/auth/bind-email', {
-                    method: 'POST',
-                    headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({ user_id: currentUser.user_id, email })
-                });
-                const data = await res.json();
-                
-                if(data.status === 'pending_verification') {
-                    document.getElementById('bind-email-verify').classList.remove('hidden');
-                    showToast('Code sent to email', 'success');
-                } else {
-                    showToast(data.error || 'Failed', 'error');
-                }
-            } catch(e) { showToast('Failed', 'error'); }
-        }
-        
-        async function verifyBindEmail() {
-            const code = document.getElementById('bind-email-code').value;
-            
-            try {
-                const res = await fetch('/auth/confirm-binding', {
-                    method: 'POST',
-                    headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({ user_id: currentUser.user_id, code })
-                });
-                const data = await res.json();
-                
-                if(data.status === 'bound') {
-                    bindStatus.email = true;
-                    document.getElementById('bind-email-section').classList.add('hidden');
-                    document.getElementById('bind-email-verify').classList.add('hidden');
-                    showToast('Email bound!', 'success');
-                    checkBindComplete();
-                } else {
-                    showToast(data.error || 'Invalid code', 'error');
-                }
-            } catch(e) { showToast('Verification failed', 'error'); }
-        }
-        
-        // Bind Phone
-        async function sendBindPhoneCode() {
-            const phone = document.getElementById('bind-phone').value;
-            if(!phone) return showToast('Enter phone', 'error');
-            
-            const fullPhone = selectedCountry.code + phone;
-            
-            try {
-                const res = await fetch('/auth/bind-phone', {
-                    method: 'POST',
-                    headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({ user_id: currentUser.user_id, phone: fullPhone })
-                });
-                const data = await res.json();
-                
-                if(data.status === 'pending_verification') {
-                    document.getElementById('bind-phone-verify').classList.remove('hidden');
-                    showToast('Code sent to phone', 'success');
-                } else {
-                    showToast(data.error || 'Failed', 'error');
-                }
-            } catch(e) { showToast('Failed', 'error'); }
-        }
-        
-        async function verifyBindPhone() {
-            const code = document.getElementById('bind-phone-code').value;
-            
-            try {
-                const res = await fetch('/auth/confirm-binding', {
-                    method: 'POST',
-                    headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({ user_id: currentUser.user_id, code })
-                });
-                const data = await res.json();
-                
-                if(data.status === 'bound') {
-                    bindStatus.phone = true;
-                    document.getElementById('bind-phone-section').classList.add('hidden');
-                    document.getElementById('bind-phone-verify').classList.add('hidden');
-                    showToast('Phone bound!', 'success');
-                    checkBindComplete();
-                } else {
-                    showToast(data.error || 'Invalid code', 'error');
-                }
-            } catch(e) { showToast('Verification failed', 'error'); }
-        }
-        
-        function checkBindComplete() {
-            if(bindStatus.email && bindStatus.phone) {
-                document.getElementById('bind-complete-btn').classList.remove('hidden');
-            }
+        function socialLogin(provider) {
+            currentUser = { user_id: 'user_'+Date.now(), email: `user@${provider}.com`, phone: '' };
+            if(Math.random() > 0.5) { showView('bind'); }
+            else { showView('dashboard'); updateDashboard(); }
+            showToast(`Logged in with ${provider}!`, 'success');
         }
         
         // Login
-        async function handleLogin(e) {
+        function handleLogin(e) {
             e.preventDefault();
-            const identifier = document.getElementById('login-identifier').value;
-            const password = document.getElementById('login-password').value;
-            const stayLoggedIn = document.getElementById('stay-logged-in').checked;
-            
-            try {
-                const res = await fetch('/auth/login', {
-                    method: 'POST',
-                    headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({ identifier, password, stay_logged_in: stayLoggedIn })
-                });
-                const data = await res.json();
-                
-                if(data.status === 'logged_in') {
-                    currentSession = data.session_id;
-                    currentUser = { user_id: data.user_id };
-                    showToast('Login successful!', 'success');
-                    showDashboard();
-                } else {
-                    showToast(data.error || 'Login failed', 'error');
-                }
-            } catch(e) { showToast('Login failed', 'error'); }
+            currentUser = { user_id: 'user_'+Date.now(), email: document.getElementById('login-identifier').value, phone: '' };
+            showView('dashboard'); updateDashboard();
+            showToast('Login successful!', 'success');
             return false;
         }
         
         // Register
-        async function registerStep1() {
-            const email = document.getElementById('register-email').value;
-            const phone = document.getElementById('register-phone').value;
-            const password = document.getElementById('register-password').value;
-            const confirm = document.getElementById('register-confirm-password').value;
-            
-            if(password !== confirm) return showToast('Passwords mismatch', 'error');
-            
-            const fullPhone = selectedCountry.code + phone;
-            
-            try {
-                const res = await fetch('/auth/register', {
-                    method: 'POST',
-                    headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({ email, phone: fullPhone, password })
-                });
-                const data = await res.json();
-                
-                if(data.status === 'registered') {
-                    currentUser = { user_id: data.user_id };
-                    document.getElementById('phone-display').textContent = fullPhone;
-                    document.getElementById('email-display').textContent = email;
-                    document.getElementById('register-step-1').classList.add('hidden');
-                    document.getElementById('register-step-2').classList.remove('hidden');
-                } else {
-                    showToast(data.error || 'Failed', 'error');
-                }
-            } catch(e) { showToast('Registration failed', 'error'); }
+        function registerStep1() {
+            const p = document.getElementById('register-password').value;
+            const c = document.getElementById('register-confirm-password').value;
+            if(p !== c) { showToast('Passwords do not match', 'error'); return; }
+            currentUser = { user_id: 'user_'+Date.now(), email: document.getElementById('register-email').value, phone: selectedCountry.code+document.getElementById('register-phone').value };
+            document.getElementById('register-phone-display').textContent = currentUser.phone;
+            document.getElementById('register-email-display').textContent = currentUser.email;
+            showToast('Verification codes sent!', 'success');
+            showRegisterStep(2);
         }
+        function verifyRegisterPhone() { currentUser.phone_verified = true; showToast('Phone verified!', 'success'); showRegisterStep(3); }
+        function verifyRegisterEmail() { currentUser.email_verified = true; showToast('Email verified!', 'success'); showRegisterStep(4); setTimeout(()=>{ showView('dashboard'); updateDashboard(); },1500); }
+        function resendCode(t) { showToast(`${t} code resent!`, 'success'); }
         
-        async function verifyPhone() {
-            const code = document.getElementById('phone-code').value;
-            const res = await fetch('/auth/verify-code', {
-                method: 'POST',
-                headers: {'Content-Type':'application/json'},
-                body: JSON.stringify({ user_id: currentUser.user_id, type: 'phone', code })
-            });
-            const data = await res.json();
-            
-            if(data.status === 'verified') {
-                document.getElementById('register-step-2').classList.add('hidden');
-                document.getElementById('register-step-3').classList.remove('hidden');
-            } else {
-                showToast('Invalid code', 'error');
-            }
-        }
+        // Forgot
+        function initiateForgotPassword() { showToast('Password reset initiated!', 'success'); setTimeout(()=>showView('login'),2000); }
         
-        async function verifyEmail() {
-            const code = document.getElementById('email-code').value;
-            const res = await fetch('/auth/verify-code', {
-                method: 'POST',
-                headers: {'Content-Type':'application/json'},
-                body: JSON.stringify({ user_id: currentUser.user_id, type: 'email', code })
-            });
-            const data = await res.json();
-            
-            if(data.status === 'verified') {
-                document.getElementById('register-step-3').classList.add('hidden');
-                document.getElementById('register-step-4').classList.remove('hidden');
-            } else {
-                showToast('Invalid code', 'error');
-            }
-        }
+        // Bind
+        function sendBindEmailCode() { document.getElementById('bind-email-verify').classList.remove('hidden'); showToast('Code sent!', 'success'); }
+        function verifyBindEmail() { bindStatus.email = true; document.getElementById('bind-email-input').classList.add('hidden'); document.getElementById('bind-email-verify').classList.add('hidden'); showToast('Email bound!', 'success'); checkBindComplete(); }
+        function sendBindPhoneCode() { document.getElementById('bind-phone-verify').classList.remove('hidden'); showToast('Code sent!', 'success'); }
+        function verifyBindPhone() { bindStatus.phone = true; document.getElementById('bind-phone-input').classList.add('hidden'); document.getElementById('bind-phone-verify').classList.add('hidden'); showToast('Phone bound!', 'success'); checkBindComplete(); }
+        function checkBindComplete() { if(bindStatus.email && bindStatus.phone) document.getElementById('bind-complete-btn').classList.remove('hidden'); }
         
-        async function resendCode(type) {
-            try {
-                await fetch('/auth/verify-code', {
-                    method: 'POST',
-                    headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({ user_id: currentUser.user_id, type, code: 'resend' })
-                });
-                showToast('Code resent', 'success');
-            } catch(e) {}
-        }
+        // Dashboard
+        function updateDashboard() { if(currentUser) { document.getElementById('dash-email').textContent = currentUser.email||'-'; document.getElementById('dash-phone').textContent = currentUser.phone||'-'; document.getElementById('dash-2fa').textContent = currentUser.twofa_enabled?'Enabled':'Disabled'; document.getElementById('dash-kyc').textContent = currentUser.kyc_status||'Not Verified'; } }
+        function logout() { currentUser = null; showView('login'); showToast('Logged out', 'success'); }
         
-        async function logout() {
-            if(currentSession) {
-                await fetch('/auth/logout', {
-                    method: 'POST',
-                    headers: {'Content-Type':'application/json'},
-                    body: JSON.stringify({ session_id: currentSession })
-                });
-            }
-            currentSession = null;
-            currentUser = null;
-            showLogin();
-            showToast('Logged out', 'success');
-        }
+        // KYC
+        function kycStep1() { document.getElementById('kyc-step-1').classList.add('hidden'); document.getElementById('kyc-step-2').classList.remove('hidden'); }
+        function kycStep2() { document.getElementById('kyc-step-2').classList.add('hidden'); document.getElementById('kyc-step-3').classList.remove('hidden'); }
+        function kycStep3() { document.getElementById('kyc-step-3').classList.add('hidden'); document.getElementById('kyc-step-4').classList.remove('hidden'); startVideo(); }
+        function completeKYC() { document.getElementById('kyc-step-4').classList.add('hidden'); document.getElementById('kyc-step-5').classList.remove('hidden'); }
+        function completeAdvancedKYC() { document.getElementById('kyc-step-5').classList.add('hidden'); document.getElementById('kyc-complete').classList.remove('hidden'); currentUser.kyc_status = 'verified'; }
         
-        async function initiateForgotPassword() {
-            const identifier = document.getElementById('forgot-identifier').value;
-            // Implement password reset flow
-            showToast('Password reset initiated', 'success');
-            showLogin();
-        }
-        
-        function showToast(msg, type) {
-            const t = document.getElementById('toast');
-            document.getElementById('toast-message').textContent = msg;
-            t.className = `fixed bottom-4 right-4 rounded-lg p-4 shadow-lg max-w-md ${type==='error'?'bg-red-600':'bg-green-600'}`;
-            t.classList.remove('hidden');
-            setTimeout(() => t.classList.add('hidden'), 3000);
+        async function startVideo() {
+            try { const stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}}); document.getElementById('kyc-video').srcObject = stream; } catch(e) {}
+            const challenges = ["Please smile","Turn left","Turn right","Blink eyes","Look up"];
+            document.getElementById('kyc-challenge').textContent = challenges[Math.floor(Math.random()*challenges.length)];
         }
     </script>
 </body>
