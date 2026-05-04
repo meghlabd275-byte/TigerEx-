@@ -3,18 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>blockchain - TigerEx</title>
+    <title>TigerEx - Login / Register</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');* { font-family: 'Inter', sans-serif; }</style>
 </head>
 <body class="bg-gray-900 min-h-screen">
-    <!-- Login Section -->
-    <div id="login" class="container mx-auto px-4 py-6">
+    <!-- LOGIN PAGE -->
+    <div id="login-page" class="container mx-auto px-4 py-6">
         <div class="max-w-md mx-auto bg-gray-800 rounded-xl p-6 border border-gray-700">
-            <h1 class="text-3xl font-bold text-yellow-500 text-center mb-2">🐯 TigerEx</h1>
-            <h2 class="text-2xl font-bold text-white text-center mb-6">blockchain</h2>
-
+            <h1 class="text-4xl font-bold text-yellow-500 text-center mb-2">🐯 TigerEx</h1>
+            <h2 class="text-2xl font-bold text-white text-center mb-6">Welcome Back</h2>
+            
             <!-- Social Login -->
+            <div class="mb-4">
+                <p class="text-gray-400 text-center mb-2">Continue with</p>
+                <div class="flex gap-2 justify-center">
+                    <button onclick="socialLogin('google')" class="w-12 h-12 bg-red-500 rounded-full text-white font-bold hover:bg-red-600">G</button>
+                    <button onclick="socialLogin('facebook')" class="w-12 h-12 bg-blue-600 rounded-full text-white font-bold hover:bg-blue-700">f</button>
+                    <button onclick="socialLogin('apple')" class="w-12 h-12 bg-gray-700 rounded-full text-white hover:bg-gray-600">🍎</button>
+                    <button onclick="socialLogin('twitter')" class="w-12 h-12 bg-black rounded-full text-white font-bold hover:bg-gray-800">𝕏</button>
+                </div>
+            </div>
+            
+            <div class="flex items-center my-4"><div class="flex-1 border-t border-gray-600"></div><span class="px-3 text-gray-500 text-sm">or</span><div class="flex-1 border-t border-gray-600"></div></div>
+            
+            <!-- Phone/Email Input -->
+            <div class="mb-3">
+                <label class="text-gray-400 text-sm mb-1 block">Email or Phone</label>
+                <input type="text" id="login-email" placeholder="email@example.com or +1234567890" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:border-yellow-500 focus:outline-none">
+            </div>
+            
+            <!-- Password -->
+            <div class="mb-3">
+                <label class="text-gray-400 text-sm mb-1 block">Password</label>
+                <div class="relative">
+                    <input type="password" id="login-password" placeholder="Enter password" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:border-yellow-500 focus:outline-none pr-12">
+                    <button type="button" onclick="togglePassword('login-password', 'eye-login')" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-yellow-500"><i id="eye-login" class="fas fa-eye"></i></button>
+                </div>
+            </div>
+            
+            <!-- Forgot Password Link -->
+            <div class="text-right mb-3">
+                <button onclick="showForgotPassword()" class="text-yellow-500 hover:text-yellow-400 text-sm">Forgot Password?</button>
+            </div>
+            
+            <!-- Stay Logged In -->
+            <div class="mb-4">
+                <label class="flex items-center cursor-pointer">
+                    <input type="checkbox" id="stay-logged" class="w-4 h-4 rounded bg-gray-700 border-gray-600 text-yellow-500">
+                    <span class="ml-2 text-gray-400 text-sm">Stay logged in (30 days)</span>
+                </label>
+            </div>
+            
+            <!-- Login Button -->
+            <button onclick="handleLogin()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg hover:bg-yellow-400 mb-4">Login</button>
+            
+            <!-- Switch to Register -->
+            <p class="text-center text-gray-400">Don't have an account? <button onclick="showRegister()" class="text-yellow-500 hover:text-yellow-400 font-bold">Sign Up</button></p>
+        </div>
+    </div>
+    
+    <!-- REGISTER PAGE -->
+    <div id="register-page" class="hidden container mx-auto px-4 py-6">
+        <div class="max-w-md mx-auto bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <button onclick="showLogin()" class="text-gray-400 hover:text-white mb-2">← Back</button>
+            <h1 class="text-4xl font-bold text-yellow-500 text-center mb-2">🐯 TigerEx</h1>
+            <h2 class="text-2xl font-bold text-white text-center mb-6">Create Account</h2>
+            
+            <!-- Social Register -->
             <div class="mb-4">
                 <p class="text-gray-400 text-center mb-2">Continue with</p>
                 <div class="flex gap-2 justify-center">
@@ -23,166 +80,397 @@
                     <button onclick="socialLogin('apple')" class="w-12 h-12 bg-gray-700 rounded-full text-white">🍎</button>
                 </div>
             </div>
-
-            <div class="flex items-center my-4">
-                <div class="flex-1 border-t border-gray-600"></div>
-                <span class="px-3 text-gray-500">or</span>
-                <div class="flex-1 border-t border-gray-600"></div>
+            
+            <div class="flex items-center my-4"><div class="flex-1 border-t border-gray-600"></div><span class="px-3 text-gray-500 text-sm">or</span><div class="flex-1 border-t border-gray-600"></div></div>
+            
+            <!-- Phone with Country -->
+            <div class="mb-3">
+                <label class="text-gray-400 text-sm mb-1 block">Phone</label>
+                <div class="flex gap-2">
+                    <select id="country-code" class="bg-gray-700 border border-gray-600 rounded-lg px-2 py-3 text-white text-sm">
+                        <option value="+1">🇺🇸 +1</option><option value="+1">🇨🇦 +1</option><option value="+44">🇬🇧 +44</option><option value="+91">🇮🇳 +91</option>
+                        <option value="+86">🇨🇳 +86</option><option value="+81">🇯🇵 +81</option><option value="+49">🇩🇪 +49</option><option value="+33">🇫🇷 +33</option>
+                        <option value="+55">🇧🇷 +55</option><option value="+7">🇷🇺 +7</option><option value="+20">🇪🇬 +20</option><option value="+966">🇸🇦 +966</option>
+                        <option value="+971">🇦🇪 +971</option><option value="+92">🇵🇰 +92</option><option value="+880">🇧🇩 +880</option><option value="+65">🇸🇬 +65</option>
+                        <option value="+60">🇲🇾 +60</option><option value="+62">🇮🇩 +62</option><option value="+84">🇻🇳 +84</option><option value="+63">🇵🇭 +63</option>
+                        <option value="+94">🇱🇰 +94</option><option value="+977">🇳🇵 +977</option><option value="+254">🇰🇪 +254</option><option value="+27">🇿🇦 +27</option>
+                        <option value="+234">🇳🇬 +234</option><option value="+61">🇦🇺 +61</option><option value="+64">🇳🇿 +64</option>
+                    </select>
+                    <input type="tel" id="reg-phone" placeholder="Phone number" class="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white">
+                </div>
             </div>
-
-            <!-- Email Login -->
-            <input type="email" id="email" placeholder="Email" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
-            <input type="password" id="password" placeholder="Password" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
-            <button onclick="login()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg">Login / Register</button>
+            
+            <!-- Email -->
+            <div class="mb-3">
+                <label class="text-gray-400 text-sm mb-1 block">Email</label>
+                <input type="email" id="reg-email" placeholder="email@example.com" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white">
+            </div>
+            
+            <!-- Password -->
+            <div class="mb-3">
+                <label class="text-gray-400 text-sm mb-1 block">Password</label>
+                <div class="relative">
+                    <input type="password" id="reg-password" placeholder="Create password" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white pr-12">
+                    <button type="button" onclick="togglePassword('reg-password', 'eye-reg')" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-yellow-500"><i id="eye-reg" class="fas fa-eye"></i></button>
+                </div>
+            </div>
+            
+            <!-- Confirm Password -->
+            <div class="mb-3">
+                <label class="text-gray-400 text-sm mb-1 block">Confirm Password</label>
+                <div class="relative">
+                    <input type="password" id="reg-confirm-password" placeholder="Confirm password" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white pr-12">
+                    <button type="button" onclick="togglePassword('reg-confirm-password', 'eye-reg2')" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-yellow-500"><i id="eye-reg2" class="fas fa-eye"></i></button>
+                </div>
+            </div>
+            
+            <!-- Terms -->
+            <div class="mb-4">
+                <label class="flex items-start cursor-pointer">
+                    <input type="checkbox" id="agree-terms" class="w-4 h-4 mt-1 rounded bg-gray-700 border-gray-600 text-yellow-500">
+                    <span class="ml-2 text-gray-400 text-xs">I agree to TigerEx Terms & Conditions</span>
+                </label>
+            </div>
+            
+            <!-- Register Button -->
+            <button onclick="handleRegister()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg hover:bg-yellow-400 mb-4">Sign Up</button>
+            
+            <!-- Switch to Login -->
+            <p class="text-center text-gray-400">Already have an account? <button onclick="showLogin()" class="text-yellow-500 hover:text-yellow-400 font-bold">Login</button></p>
         </div>
     </div>
-
-    <!-- Bind Email/Phone Modal -->
+    
+    <!-- VERIFY EMAIL -->
+    <div id="verify-email-page" class="hidden container mx-auto px-4 py-6">
+        <div class="max-w-md mx-auto bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <h2 class="text-2xl font-bold text-white mb-4 text-center">Verify Email</h2>
+            <p class="text-gray-400 text-center mb-4">Enter the 6-digit code sent to your email</p>
+            <input type="text" id="email-code-input" maxlength="6" placeholder="000000" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-4 text-white text-center text-2xl tracking-widest mb-4">
+            <button onclick="verifyEmail()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg mb-2">Verify Email</button>
+            <button onclick="resendEmailCode()" class="w-full bg-gray-700 text-gray-400 py-2 rounded-lg text-sm">Resend Code</button>
+        </div>
+    </div>
+    
+    <!-- VERIFY PHONE -->
+    <div id="verify-phone-page" class="hidden container mx-auto px-4 py-6">
+        <div class="max-w-md mx-auto bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <h2 class="text-2xl font-bold text-white mb-4 text-center">Verify Phone</h2>
+            <p class="text-gray-400 text-center mb-4">Enter the 6-digit code sent to your phone</p>
+            <input type="text" id="phone-code-input" maxlength="6" placeholder="000000" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-4 text-white text-center text-2xl tracking-widest mb-4">
+            <button onclick="verifyPhone()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg mb-2">Verify Phone</button>
+            <button onclick="resendPhoneCode()" class="w-full bg-gray-700 text-gray-400 py-2 rounded-lg text-sm">Resend Code</button>
+        </div>
+    </div>
+    
+    <!-- 2FA VERIFY -->
+    <div id="verify-2fa-page" class="hidden container mx-auto px-4 py-6">
+        <div class="max-w-md mx-auto bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <h2 class="text-2xl font-bold text-white mb-4 text-center">2FA Authentication</h2>
+            <p class="text-gray-400 text-center mb-4">Enter 6-digit code from Google Authenticator</p>
+            <input type="text" id="2fa-code-input" maxlength="6" placeholder="000000" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-4 text-white text-center text-2xl tracking-widest mb-4">
+            <button onclick="verify2FA()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg">Verify 2FA</button>
+        </div>
+    </div>
+    
+    <!-- FORGOT PASSWORD -->
+    <div id="forgot-page" class="hidden container mx-auto px-4 py-6">
+        <div class="max-w-md mx-auto bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <button onclick="showLogin()" class="text-gray-400 hover:text-white mb-2">← Back</button>
+            <h2 class="text-2xl font-bold text-white mb-4 text-center">Reset Password</h2>
+            <div class="mb-3">
+                <label class="text-gray-400 text-sm mb-1 block">Email or Phone</label>
+                <input type="text" id="forgot-input" placeholder="email@example.com or +1234567890" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white">
+            </div>
+            <button onclick="forgotContinue()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg mb-4">Continue</button>
+        </div>
+    </div>
+    
+    <!-- 2FA RESET -->
+    <div id="reset-2fa-page" class="hidden container mx-auto px-4 py-6">
+        <div class="max-w-md mx-auto bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <h2 class="text-2xl font-bold text-white mb-4 text-center">Reset 2FA</h2>
+            <p class="text-gray-400 text-center mb-4">Lost 2FA? Verify your identity</p>
+            <div class="mb-3">
+                <input type="text" id="reset-2fa-email" placeholder="Email or Phone" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
+            </div>
+            <button onclick="reset2FAContinue()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg mb-4">Continue</button>
+        </div>
+    </div>
+    
+    <!-- KYC PAGE -->
+    <div id="kyc-page" class="hidden container mx-auto px-4 py-6">
+        <div class="max-w-md mx-auto bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <h2 class="text-2xl font-bold text-white mb-4 text-center">KYC Verification</h2>
+            <div id="kyc-step-1">
+                <input type="text" id="kyc-first-name" placeholder="First Name" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
+                <input type="text" id="kyc-middle-name" placeholder="Middle Name (optional)" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
+                <input type="text" id="kyc-last-name" placeholder="Last Name" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
+                <input type="text" id="kyc-username" placeholder="Username" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
+                <input type="date" id="kyc-dob" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
+                <textarea id="kyc-address" placeholder="Personal Address" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3"></textarea>
+                <button onclick="kycStep2()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg">Continue</button>
+            </div>
+            <div id="kyc-step-2" class="hidden">
+                <p class="text-gray-400 mb-2">Front of ID</p>
+                <input type="file" id="kyc-doc-front" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
+                <p class="text-gray-400 mb-2">Back of ID</p>
+                <input type="file" id="kyc-doc-back" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
+                <p class="text-gray-400 mb-2">Selfie with ID</p>
+                <input type="file" id="kyc-selfie" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
+                <button onclick="kycStep3()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg">Continue</button>
+            </div>
+            <div id="kyc-step-3" class="hidden">
+                <div class="bg-gray-700 p-4 rounded-lg mb-4 text-center">
+                    <p class="text-white mb-2">Live Verification Required</p>
+                    <p class="text-gray-400 text-sm">Please look at the camera and blink</p>
+                </div>
+                <video id="kyc-video" autoplay class="w-full rounded-lg mb-3"></video>
+                <button onclick="submitKYC()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg">Submit</button>
+            </div>
+            <div id="kyc-status" class="hidden text-center">
+                <p class="text-yellow-500 text-xl mb-2" id="status-text">Pending</p>
+                <p class="text-gray-400 text-sm">Verification in progress</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- BIND MODAL -->
     <div id="bind-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-gray-800 rounded-xl p-6 max-w-md w-full">
-            <h3 class="text-xl font-bold text-white mb-4">Complete Your Profile</h3>
-            <p class="text-gray-400 mb-4">Bind your email and phone after social login</p>
-            <input type="email" id="bind-email" placeholder="Email" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
-            <button onclick="sendEmailCode()" class="w-full bg-blue-600 text-white py-2 rounded mb-3">Send Email Code</button>
-            <input type="text" id="email-code" placeholder="Email Code" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
-            <input type="tel" id="bind-phone" placeholder="Phone (+1234567890)" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
-            <button onclick="sendPhoneCode()" class="w-full bg-green-600 text-white py-2 rounded mb-3">Send Phone Code</button>
-            <input type="text" id="phone-code" placeholder="Phone Code" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
-            <button onclick="verifyAll()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg">Verify & Login</button>
+        <div class="bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4">
+            <h3 class="text-xl font-bold text-white mb-2">Complete Your Profile</h3>
+            <p class="text-gray-400 text-sm mb-4">Bind email and phone after social login</p>
+            <input type="email" id="bind-email" placeholder="Email" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-2">
+            <button onclick="sendEmailCode()" class="w-full bg-blue-600 text-white py-2 rounded-lg text-sm mb-3">Send Email Code</button>
+            <input type="text" id="bind-email-code" placeholder="Email Code" maxlength="6" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
+            <input type="tel" id="bind-phone" placeholder="Phone (+1234567890)" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-2">
+            <button onclick="sendPhoneCode()" class="w-full bg-green-600 text-white py-2 rounded-lg text-sm mb-3">Send Phone Code</button>
+            <input type="text" id="bind-phone-code" placeholder="Phone Code" maxlength="6" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
+            <button onclick="submitBind()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg">Verify & Continue</button>
         </div>
     </div>
-
-    <!-- Dashboard -->
-    <div id="dashboard" class="hidden container mx-auto px-4 py-6">
-        <!-- Header -->
+    
+    <!-- ADMIN INVITE MODAL -->
+    <div id="admin-invite-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4">
+            <h3 class="text-xl font-bold text-white mb-2">Create Admin Account</h3>
+            <p class="text-gray-400 text-sm mb-4">Invite-only registration (Super Admin only)</p>
+            <input type="text" id="invite-email" placeholder="Admin Email" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
+            <input type="text" id="invite-code" placeholder="Admin Invite Code" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white mb-3">
+            <button onclick="submitAdminInvite()" class="w-full bg-yellow-500 text-gray-900 font-bold py-3 rounded-lg">Create Admin</button>
+        </div>
+    </div>
+    
+    <!-- DASHBOARD -->
+    <div id="dashboard-page" class="hidden container mx-auto px-4 py-6">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-yellow-500">🐯 blockchain</h1>
+            <h1 class="text-2xl font-bold text-yellow-500">🐯 TigerEx</h1>
             <div class="flex items-center gap-4">
-                <span class="text-gray-400" id="user-email">user@email.com</span>
+                <span class="text-gray-400" id="user-display">user@example.com</span>
                 <button onclick="logout()" class="bg-red-600 px-4 py-2 rounded text-white">Logout</button>
             </div>
         </div>
-
-        <!-- Balance -->
+        
+        <!-- Stats -->
         <div class="grid grid-cols-4 gap-4 mb-6">
-            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
-                <p class="text-gray-400 text-sm">Total Balance</p>
-                <p class="text-2xl font-bold text-green-500" id="balance">$0.00</p>
-            </div>
-            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
-                <p class="text-gray-400 text-sm">Available</p>
-                <p class="text-2xl font-bold text-white" id="available">$0.00</p>
-            </div>
-            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
-                <p class="text-gray-400 text-sm">In Orders</p>
-                <p class="text-2xl font-bold text-yellow-500" id="orders">$0.00</p>
-            </div>
-            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
-                <p class="text-gray-400 text-sm">Trading Vol</p>
-                <p class="text-2xl font-bold text-blue-500" id="volume">$0.00</p>
-            </div>
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700"><p class="text-gray-400 text-sm">Total Balance</p><p class="text-2xl font-bold text-green-500">$0.00</p></div>
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700"><p class="text-gray-400 text-sm">Available</p><p class="text-2xl font-bold text-white">$0.00</p></div>
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700"><p class="text-gray-400 text-sm">In Orders</p><p class="text-2xl font-bold text-yellow-500">$0.00</p></div>
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700"><p class="text-gray-400 text-sm">Volume</p><p class="text-2xl font-bold text-blue-500">$0.00</p></div>
         </div>
-
+        
         <!-- Actions -->
         <div class="grid grid-cols-4 gap-4 mb-6">
-            <button onclick="showDeposit()" class="bg-green-600 p-4 rounded-xl text-white">
-                <i class="fas fa-arrow-down text-2xl mb-2 block"></i> Deposit
-            </button>
-            <button onclick="showWithdraw()" class="bg-red-600 p-4 rounded-xl text-white">
-                <i class="fas fa-arrow-up text-2xl mb-2 block"></i> Withdraw
-            </button>
-            <button onclick="showTransfer()" class="bg-blue-600 p-4 rounded-xl text-white">
-                <i class="fas fa-paper-plane text-2xl mb-2 block"></i> Transfer
-            </button>
-            <button onclick="showTrade()" class="bg-yellow-600 p-4 rounded-xl text-white">
-                <i class="fas fa-exchange-alt text-2xl mb-2 block"></i> Trade
-            </button>
+            <button onclick="showDeposit()" class="bg-green-600 p-4 rounded-xl text-white text-center"><i class="fas fa-arrow-down text-2xl mb-2 block"></i> Deposit</button>
+            <button onclick="showWithdraw()" class="bg-red-600 p-4 rounded-xl text-white text-center"><i class="fas fa-arrow-up text-2xl mb-2 block"></i> Withdraw</button>
+            <button onclick="showTransfer()" class="bg-blue-600 p-4 rounded-xl text-white text-center"><i class="fas fa-paper-plane text-2xl mb-2 block"></i> Transfer</button>
+            <button onclick="showTrade()" class="bg-yellow-600 p-4 rounded-xl text-white text-center"><i class="fas fa-exchange-alt text-2xl mb-2 block"></i> Trade</button>
         </div>
-
-        <!-- Wallets / Holdings -->
+        
+        <!-- Admin Panel Button (if admin) -->
+        <div id="admin-panel-btn" class="hidden grid grid-cols-4 gap-4 mb-6">
+            <button onclick="showAdminPanel()" class="bg-purple-600 p-4 rounded-xl text-white text-center"><i class="fas fa-cogs text-2xl mb-2 block"></i> Admin Panel</button>
+        </div>
+        
+        <!-- Wallets -->
         <div class="bg-gray-800 p-4 rounded-xl border border-gray-700 mb-6">
             <h2 class="text-xl font-bold text-white mb-4">My Wallets</h2>
-            <div id="wallets" class="space-y-2">
-                <div class="bg-gray-700 p-3 rounded flex justify-between">
-                    <span class="text-yellow-500">ETH</span>
-                    <span class="text-white">0.0000</span>
-                </div>
-                <div class="bg-gray-700 p-3 rounded flex justify-between">
-                    <span class="text-yellow-500">USDT</span>
-                    <span class="text-white">0.00</span>
-                </div>
+            <div id="wallet-list" class="space-y-2">
+                <div class="bg-gray-700 p-3 rounded flex justify-between"><span class="text-yellow-500">ETH</span><span class="text-white">0.0000</span></div>
+                <div class="bg-gray-700 p-3 rounded flex justify-between"><span class="text-yellow-500">USDT</span><span class="text-white">0.00</span></div>
             </div>
         </div>
-
-        <!-- Recent Transactions -->
+        
+        <!-- Transactions -->
         <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
             <h2 class="text-xl font-bold text-white mb-4">Recent Transactions</h2>
-            <div id="transactions" class="space-y-2">
-                <div class="bg-gray-700 p-3 rounded flex justify-between">
-                    <span class="text-white">Deposit ETH</span>
-                    <span class="text-green-500">+0.5</span>
-                </div>
+            <div class="space-y-2">
+                <div class="bg-gray-700 p-3 rounded flex justify-between"><span class="text-white">Login</span><span class="text-gray-400 text-sm">Just now</span></div>
             </div>
         </div>
     </div>
-
+    
+    <!-- ADMIN DASHBOARD -->
+    <div id="admin-dashboard-page" class="hidden container mx-auto px-4 py-6">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-yellow-500">🐯 Admin Panel</h1>
+            <div class="flex items-center gap-4">
+                <span class="text-gray-400">Super Admin</span>
+                <button onclick="showDashboard()" class="bg-gray-600 px-4 py-2 rounded text-white">User View</button>
+                <button onclick="logout()" class="bg-red-600 px-4 py-2 rounded text-white">Logout</button>
+            </div>
+        </div>
+        
+        <!-- Stats -->
+        <div class="grid grid-cols-4 gap-4 mb-6">
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700"><p class="text-gray-400 text-sm">Total Users</p><p class="text-2xl font-bold text-white">0</p></div>
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700"><p class="text-gray-400 text-sm">Total Admins</p><p class="text-2xl font-bold text-white">0</p></div>
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700"><p class="text-gray-400 text-sm">Total Revenue</p><p class="text-2xl font-bold text-green-500">$0</p></div>
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700"><p class="text-gray-400 text-sm">Pending KYC</p><p class="text-2xl font-bold text-yellow-500">0</p></div>
+        </div>
+        
+        <!-- Admin Actions -->
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                <h2 class="text-xl font-bold text-white mb-4">User Management</h2>
+                <div class="space-y-2">
+                    <button class="w-full bg-blue-600 py-2 rounded text-white text-left px-4">View All Users</button>
+                    <button class="w-full bg-blue-600 py-2 rounded text-white text-left px-4">Approve KYC</button>
+                    <button class="w-full bg-blue-600 py-2 rounded text-white text-left px-4">Ban Users</button>
+                </div>
+            </div>
+            <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+                <h2 class="text-xl font-bold text-white mb-4">Admin Management</h2>
+                <div class="space-y-2">
+                    <button onclick="showAdminInvite()" class="w-full bg-purple-600 py-2 rounded text-white text-left px-4">Create Admin</button>
+                    <button class="w-full bg-purple-600 py-2 rounded text-white text-left px-4">View Admins</button>
+                    <button class="w-full bg-purple-600 py-2 rounded text-white text-left px-4">Manage Permissions</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- System -->
+        <div class="bg-gray-800 p-4 rounded-xl border border-gray-700">
+            <h2 class="text-xl font-bold text-white mb-4">System</h2>
+            <div class="space-y-2">
+                <button class="w-full bg-yellow-600 py-2 rounded text-white text-left px-4">Settings</button>
+                <button class="w-full bg-yellow-600 py-2 rounded text-white text-left px-4">Analytics</button>
+                <button class="w-full bg-yellow-600 py-2 rounded text-white text-left px-4">Logs</button>
+            </div>
+        </div>
+    </div>
+    
     <script>
-        let sessionId = '';
+    let currentUser = null;
+    let sessionId = '';
+    let isAdmin = false;
+    let userData = { emailVerified: false, phoneVerified: false, twoFAEnabled: false, kycStatus: 'none' };
+    
+    function showLogin() { hideAll(); document.getElementById('login-page').classList.remove('hidden'); }
+    function showRegister() { hideAll(); document.getElementById('register-page').classList.remove('hidden'); }
+    function showDashboard() { hideAll(); document.getElementById('dashboard-page').classList.remove('hidden'); }
+    function showAdminDashboard() { hideAll(); document.getElementById('admin-dashboard-page').classList.remove('hidden'); }
+    function showVerifyEmail() { hideAll(); document.getElementById('verify-email-page').classList.remove('hidden'); }
+    function showVerifyPhone() { hideAll(); document.getElementById('verify-phone-page').classList.remove('hidden'); }
+    function showVerify2FA() { hideAll(); document.getElementById('verify-2fa-page').classList.remove('hidden'); }
+    function showForgotPassword() { hideAll(); document.getElementById('forgot-page').classList.remove('hidden'); }
+    function showReset2FA() { hideAll(); document.getElementById('reset-2fa-page').classList.remove('hidden'); }
+    function showKYC() { hideAll(); document.getElementById('kyc-page').classList.remove('hidden'); }
+    function showAdminInvite() { document.getElementById('admin-invite-modal').classList.remove('hidden'); }
+    
+    function hideAll() {
+        const ids = ['login-page','register-page','verify-email-page','verify-phone-page','verify-2fa-page','forgot-page','reset-2fa-page','kyc-page','dashboard-page','admin-dashboard-page'];
+        ids.forEach(id => document.getElementById(id).classList.add('hidden'));
+    }
+    
+    function togglePassword(inputId, eyeId) {
+        const input = document.getElementById(inputId);
+        const eye = document.getElementById(eyeId);
+        if (input.type === 'password') { input.type = 'text'; eye.className = 'fas fa-eye-slash'; }
+        else { input.type = 'password'; eye.className = 'fas fa-eye'; }
+    }
+    
+    // Check if admin account
+    function checkIfAdmin(email) {
+        // In production, check against admin database
+        return email.includes('admin@') || email.includes('@tigerex.admin');
+    }
+    
+    async function handleLogin() {
+        const identifier = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        if (!identifier || !password) { alert('Please fill all fields'); return; }
         
-        function socialLogin(provider) {
-            document.getElementById('bind-modal').classList.remove('hidden');
+        // Check if admin
+        if (checkIfAdmin(identifier)) {
+            isAdmin = true;
+            showAdminDashboard();
+            return;
         }
         
-        async function login() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            try {
-                const res = await fetch('/api/user/login', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({email, password})
-                });
-                const data = await res.json();
-                if (data.status === 'logged_in') {
-                    sessionId = data.session_id;
-                    document.getElementById('login').classList.add('hidden');
-                    document.getElementById('dashboard').classList.remove('hidden');
-                    document.getElementById('user-email').innerText = email;
-                } else {
-                    // Register new user
-                    await fetch('/api/user/register', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({email, password})
-                    });
-                    login(); // Try login again
-                }
-            } catch(e) {
-                // Demo mode
-                document.getElementById('login').classList.add('hidden');
-                document.getElementById('dashboard').classList.remove('hidden');
-                document.getElementById('user-email').innerText = email;
-            }
-        }
+        if (userData.twoFAEnabled) { showVerify2FA(); return; }
+        sessionId = 'sess_' + Date.now();
+        currentUser = identifier;
+        document.getElementById('user-display').textContent = identifier;
+        showDashboard();
+    }
+    
+    async function handleRegister() {
+        const phone = document.getElementById('country-code').value + document.getElementById('reg-phone').value;
+        const email = document.getElementById('reg-email').value;
+        const password = document.getElementById('reg-password').value;
+        const confirmPassword = document.getElementById('reg-confirm-password').value;
+        const agreeTerms = document.getElementById('agree-terms').checked;
         
-        function sendEmailCode() { alert('Email code sent!'); }
-        function sendPhoneCode() { alert('Phone code sent!'); }
-        function verifyAll() {
-            document.getElementById('bind-modal').classList.add('hidden');
-            login();
-        }
+        if ((!phone && !email) || !password) { alert('Please fill all fields'); return; }
+        if (password !== confirmPassword) { alert('Passwords do not match'); return; }
+        if (!agreeTerms) { alert('Please accept terms and conditions'); return; }
         
-        function showDeposit() { alert('Deposit modal'); }
-        function showWithdraw() { alert('Withdraw modal'); }
-        function showTransfer() { alert('Transfer modal'); }
-        function showTrade() { alert('Trade modal'); }
-        
-        function logout() {
-            sessionId = '';
-            document.getElementById('login').classList.remove('hidden');
-            document.getElementById('dashboard').classList.add('hidden');
-        }
+        showVerifyEmail();
+    }
+    
+    function verifyEmail() {
+        const code = document.getElementById('email-code-input').value;
+        if (code.length === 6) { userData.emailVerified = true; showVerifyPhone(); }
+        else { alert('Invalid code'); }
+    }
+    function resendEmailCode() { alert('Email code resent!'); }
+    function verifyPhone() {
+        const code = document.getElementById('phone-code-input').value;
+        if (code.length === 6) { userData.phoneVerified = true; showDashboard(); }
+        else { alert('Invalid code'); }
+    }
+    function resendPhoneCode() { alert('Phone code resent!'); }
+    function verify2FA() {
+        const code = document.getElementById('2fa-code-input').value;
+        if (code.length === 6) { sessionId = 'sess_' + Date.now(); showDashboard(); }
+        else { alert('Invalid 2FA code'); }
+    }
+    
+    function socialLogin(provider) { document.getElementById('bind-modal').classList.remove('hidden'); }
+    function submitBind() { document.getElementById('bind-modal').classList.add('hidden'); showVerifyEmail(); }
+    function forgotContinue() { showVerifyEmail(); }
+    function reset2FAContinue() { showVerifyEmail(); }
+    function submitAdminInvite() {
+        const email = document.getElementById('invite-email').value;
+        const code = document.getElementById('invite-code').value;
+        if (!email || !code) { alert('Fill all fields'); return; }
+        // In production, validate invite code
+        alert('Admin account created!');
+        document.getElementById('admin-invite-modal').classList.add('hidden');
+    }
+    
+    function kycStep2() { document.getElementById('kyc-step-1').classList.add('hidden'); document.getElementById('kyc-step-2').classList.remove('hidden'); }
+    function kycStep3() { document.getElementById('kyc-step-2').classList.add('hidden'); document.getElementById('kyc-step-3').classList.remove('hidden');
+        navigator.mediaDevices.getUserMedia({ video: true }).then(stream => { document.getElementById('kyc-video').srcObject = stream; }); }
+    function submitKYC() { document.getElementById('kyc-step-3').classList.add('hidden'); document.getElementById('kyc-status').classList.remove('hidden'); userData.kycStatus = 'pending'; }
+    
+    function showDeposit() { alert('Deposit'); }
+    function showWithdraw() { alert('Withdraw'); }
+    function showTransfer() { alert('Transfer'); }
+    function showTrade() { alert('Trade'); }
+    function showAdminPanel() { showAdminDashboard(); }
+    
+    function logout() { sessionId = ''; currentUser = null; isAdmin = false; showLogin(); }
     </script>
 </body>
 </html>
